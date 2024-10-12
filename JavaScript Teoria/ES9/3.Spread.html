@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <script>
+const bar = {
+    name: "test",
+    age: 23,
+    a: 10,
+    b: 12
+};
+// Tworzy obiekt 'bar' z czterema właściwościami: 'name', 'age', 'a', i 'b'.
+
+const obj = {
+    a: 1000,
+    ...bar,
+    c: 7
+};
+// Tworzy nowy obiekt 'obj', w którym:
+// - Wartość 'a' jest najpierw ustawiona na 1000.
+// - Operator spread ('...bar') kopiuje wszystkie właściwości z obiektu 'bar' do nowego obiektu 'obj'.
+// - Następnie dodaje właściwość 'c' o wartości 7.
+// Wartości z obiektu 'bar' nadpisują wcześniej ustawioną wartość 'a' (zostaje ona nadpisana przez 'a: 10' z 'bar').
+
+console.log(obj); 
+// Wypisuje finalny obiekt 'obj', który zawiera wszystkie właściwości z 'bar', ale z nadpisaną wartością 'a' z 'bar'.
+// Wynik: {a: 10, name: "test", age: 23, b: 12, c: 7}
+
+    </script>
+</body>
+</html>

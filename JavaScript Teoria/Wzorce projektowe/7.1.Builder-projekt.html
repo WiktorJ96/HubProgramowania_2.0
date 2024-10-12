@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="../styles.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/themes/prism-tomorrow.min.css" rel="stylesheet" />
+    <title>Formularz Builder</title>
+</head>
+<body>
+    <div class="container">
+    <h1>Dynamiczny Formularz</h1>
+    <div id="form-container"></div>
+
+    <h2>Kod HTML i JavaScript:</h2>
+
+    <pre><code class="language-javascript">
+        &lt;h1&gt;Dynamiczny Formularz&lt;/h1&gt;
+        &lt;div id="form-container"&gt;&lt;/div&gt;
+
+        &lt;script&gt;
+        class Form {
+            constructor() {
+                this.fields = [];
+            }
+
+            addField(field) {
+                this.fields.push(field);
+                return this;
+            }
+
+            build() {
+                return this.fields;
+            }
+        }
+
+        const formBuilder = new Form();
+        const myForm = formBuilder
+            .addField({ label: "Imię", type: "text", value: "" })
+            .addField({ label: "Email", type: "email", value: "" })
+            .build();
+
+        // Funkcja do dynamicznego renderowania formularza na stronie
+        function renderForm(fields) {
+            const formContainer = document.getElementById('form-container');
+            const formElement = document.createElement('form');
+
+            fields.forEach(field => {
+                const label = document.createElement('label');
+                label.textContent = field.label;
+
+                const input = document.createElement('input');
+                input.type = field.type;
+                input.value = field.value;
+
+                formElement.appendChild(label);
+                formElement.appendChild(input);
+                formElement.appendChild(document.createElement('br'));
+            });
+
+            formContainer.appendChild(formElement);
+        }
+
+        // Wyświetlamy formularz
+        renderForm(myForm);
+        </code></pre>
+    </div>
+
+    <script>
+        class Form {
+            constructor() {
+                this.fields = [];
+            }
+
+            addField(field) {
+                this.fields.push(field);
+                return this;
+            }
+
+            build() {
+                return this.fields;
+            }
+        }
+
+        const formBuilder = new Form();
+        const myForm = formBuilder
+            .addField({ label: "Imię", type: "text", value: "" })
+            .addField({ label: "Email", type: "email", value: "" })
+            .build();
+
+        // Funkcja do dynamicznego renderowania formularza na stronie
+        function renderForm(fields) {
+            const formContainer = document.getElementById('form-container');
+            const formElement = document.createElement('form');
+
+            fields.forEach(field => {
+                const label = document.createElement('label');
+                label.textContent = field.label;
+
+                const input = document.createElement('input');
+                input.type = field.type;
+                input.value = field.value;
+
+                formElement.appendChild(label);
+                formElement.appendChild(input);
+                formElement.appendChild(document.createElement('br'));
+            });
+
+            formContainer.appendChild(formElement);
+        }
+
+        // Wyświetlamy formularz
+        renderForm(myForm);
+    </script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/prism.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/components/prism-javascript.min.js"></script>
+</body>
+</html>

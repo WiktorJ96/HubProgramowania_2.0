@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pobieranie elementów DOM w JavaScript</title>
+    <link rel="stylesheet" href="../styles.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/themes/prism-tomorrow.min.css" rel="stylesheet" />
+</head>
+<body>
+    <div class="container">
+        <h1>Pobieranie elementów DOM w JavaScript</h1>
+
+        <p>DOM (Document Object Model) reprezentuje strukturę dokumentu HTML jako drzewa z elementami, które można modyfikować za pomocą JavaScript. Pobieranie elementów z DOM jest kluczowe w manipulacjach na stronie i istnieje kilka metod, które pozwalają na uzyskanie dostępu do elementów HTML.</p>
+
+        <h2>Metody pobierania elementów DOM</h2>
+        <p>Najczęściej używane metody do pobierania elementów z DOM to:</p>
+
+        <h3><code>document.getElementById()</code></h3>
+        <p>Metoda <code>getElementById()</code> pozwala na pobranie elementu o określonym <code>id</code>. Jest to jedna z najszybszych metod, ponieważ <code>id</code> jest unikalnym identyfikatorem dla elementów w dokumencie.</p>
+        <pre><code class="language-javascript">
+const element = document.getElementById('header');
+console.log(element); // Zwraca element o id 'header'
+        </code></pre>
+
+        <h3><code>document.getElementsByClassName()</code></h3>
+        <p>Metoda <code>getElementsByClassName()</code> zwraca listę elementów, które mają określoną klasę. Zwracana lista jest dynamiczna, co oznacza, że zmiany w DOM są odzwierciedlane automatycznie.</p>
+        <pre><code class="language-javascript">
+const elements = document.getElementsByClassName('menu-item');
+console.log(elements); // Zwraca kolekcję elementów o klasie 'menu-item'
+        </code></pre>
+
+        <h3><code>document.getElementsByTagName()</code></h3>
+        <p>Metoda <code>getElementsByTagName()</code> zwraca wszystkie elementy o określonym tagu (np. <code>&lt;div&gt;</code> lub <code>&lt;p&gt;</code>). Zwracana kolekcja również jest dynamiczna.</p>
+        <pre><code class="language-javascript">
+const paragraphs = document.getElementsByTagName('p');
+console.log(paragraphs); // Zwraca wszystkie elementy <p> na stronie
+        </code></pre>
+
+        <h3><code>document.querySelector()</code></h3>
+        <p>Metoda <code>querySelector()</code> zwraca pierwszy element, który pasuje do określonego selektora CSS. Możemy używać selektorów klas, id, a także kombinacji selektorów CSS.</p>
+        <pre><code class="language-javascript">
+const firstMenuItem = document.querySelector('.menu-item');
+console.log(firstMenuItem); // Zwraca pierwszy element z klasą 'menu-item'
+        </code></pre>
+
+        <h3><code>document.querySelectorAll()</code></h3>
+        <p>Metoda <code>querySelectorAll()</code> zwraca statyczną listę wszystkich elementów, które pasują do określonego selektora. W przeciwieństwie do metod zwracających dynamiczne listy (jak <code>getElementsByClassName()</code>), <code>querySelectorAll()</code> nie reaguje na zmiany w DOM po pobraniu elementów.</p>
+        <pre><code class="language-javascript">
+const menuItems = document.querySelectorAll('.menu-item');
+console.log(menuItems); // Zwraca wszystkie elementy z klasą 'menu-item'
+        </code></pre>
+
+        <h2>Porównanie metod</h2>
+        <p>W zależności od tego, co chcemy osiągnąć, możemy wybrać odpowiednią metodę. Oto krótkie porównanie:</p>
+        <ul>
+            <li><code>getElementById()</code> - Zwraca pojedynczy element o unikalnym <code>id</code>. Szybka i wydajna.</li>
+            <li><code>getElementsByClassName()</code> - Zwraca dynamiczną listę elementów o określonej klasie.</li>
+            <li><code>getElementsByTagName()</code> - Zwraca dynamiczną listę elementów o określonym tagu.</li>
+            <li><code>querySelector()</code> - Zwraca pierwszy element pasujący do selektora CSS.</li>
+            <li><code>querySelectorAll()</code> - Zwraca statyczną listę elementów pasujących do selektora CSS.</li>
+        </ul>
+
+        <h2>Podsumowanie</h2>
+        <ul>
+            <li>DOM (Document Object Model) reprezentuje strukturę dokumentu HTML i pozwala na manipulowanie jego elementami.</li>
+            <li>Różne metody, takie jak <code>getElementById()</code>, <code>querySelector()</code>, oraz <code>getElementsByClassName()</code>, umożliwiają pobieranie elementów z DOM w zależności od potrzeb.</li>
+            <li>Wybór odpowiedniej metody zależy od tego, czy potrzebujesz unikalnego elementu, czy listy elementów, oraz czy lista ma być dynamiczna czy statyczna.</li>
+        </ul>
+
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/prism.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/components/prism-javascript.min.js"></script>
+</body>
+</html>
+
+</body>
+</html>

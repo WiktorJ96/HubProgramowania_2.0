@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Funkcje i return w JavaScript</title>
+    <link rel="stylesheet" href="../styles.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/themes/prism-tomorrow.min.css" rel="stylesheet" />
+</head>
+<body>
+    <div class="container">
+        <h1>Funkcje i <code>return</code> w JavaScript</h1>
+
+        <p>Funkcje w JavaScript mogą zwracać wartości za pomocą słowa kluczowego <code>return</code>. Gdy funkcja napotka instrukcję <code>return</code>, natychmiast kończy swoje działanie i zwraca określoną wartość do miejsca, z którego funkcja została wywołana.</p>
+
+        <h2>Podstawowe użycie <code>return</code></h2>
+        <p>Funkcje mogą zwracać różne typy danych. Poniżej przedstawiamy przykład, w którym funkcja zwraca wartość liczbową:</p>
+
+        <h3>Przykład zwracania liczby</h3>
+        <pre><code class="language-javascript">
+function add(a, b) {
+    return a + b;
+}
+
+const result = add(5, 10);
+console.log(result); // 15
+        </code></pre>
+        <p>Funkcja <code>add</code> przyjmuje dwa argumenty <code>a</code> i <code>b</code>, a następnie zwraca ich sumę. Wartość <code>15</code> jest wynikiem działania funkcji i zostaje przypisana do zmiennej <code>result</code>.</p>
+
+        <h2>Zwracanie wartości złożonych</h2>
+        <p>Za pomocą <code>return</code> możemy również zwracać bardziej złożone wartości, takie jak obiekty, tablice czy inne funkcje.</p>
+
+        <h3>Przykład zwracania obiektu</h3>
+        <pre><code class="language-javascript">
+function createUser(name, age) {
+    return {
+        name: name,
+        age: age
+    };
+}
+
+const user = createUser('Anna', 25);
+console.log(user); // { name: 'Anna', age: 25 }
+        </code></pre>
+        <p>Funkcja <code>createUser</code> zwraca obiekt zawierający informacje o użytkowniku. W tym przypadku, obiekt <code>user</code> zawiera nazwę i wiek użytkownika.</p>
+
+        <h2>Przerywanie działania funkcji</h2>
+        <p>Instrukcja <code>return</code> nie tylko zwraca wartość, ale także natychmiast przerywa działanie funkcji. Instrukcje po <code>return</code> nie zostaną wykonane.</p>
+
+        <pre><code class="language-javascript">
+function checkNumber(num) {
+    if (num > 10) {
+        return 'Liczba jest większa niż 10';
+    }
+    // Ta część kodu zostanie pominięta, jeśli num > 10
+    return 'Liczba jest 10 lub mniejsza';
+}
+
+console.log(checkNumber(15)); // 'Liczba jest większa niż 10'
+console.log(checkNumber(5));  // 'Liczba jest 10 lub mniejsza'
+        </code></pre>
+        <p>W tym przykładzie, jeśli liczba <code>num</code> jest większa niż 10, funkcja natychmiast zwróci odpowiedni komunikat i zakończy działanie.</p>
+
+        <h2>Zwracanie funkcji</h2>
+        <p>Funkcja w JavaScript może zwracać inną funkcję, co pozwala na tworzenie bardziej złożonych struktur, takich jak fabryki funkcji czy domknięcia (closures).</p>
+
+        <pre><code class="language-javascript">
+function multiplyBy(factor) {
+    return function(number) {
+        return number * factor;
+    };
+}
+
+const multiplyBy3 = multiplyBy(3);
+console.log(multiplyBy3(10)); // 30
+        </code></pre>
+        <p>W tym przykładzie funkcja <code>multiplyBy</code> zwraca inną funkcję, która wykonuje mnożenie liczby przez określony czynnik (<code>factor</code>). Jest to przykład funkcji wyższego rzędu (ang. higher-order function).</p>
+
+        <h2>Podsumowanie</h2>
+        <ul>
+            <li>Instrukcja <code>return</code> zwraca wartość i natychmiast przerywa działanie funkcji.</li>
+            <li>Funkcje mogą zwracać dowolne typy danych, w tym liczby, ciągi znaków, obiekty, tablice, a nawet inne funkcje.</li>
+            <li>Instrukcja <code>return</code> jest kluczowa w konstrukcji logiki funkcji, umożliwiając przerywanie wykonywania kodu po spełnieniu określonych warunków.</li>
+        </ul>
+
+    </div>
+    <script>
+
+        function foo(name){
+            if(name === 'Kasia') {
+                console.log('Witaj, Kasia!');
+                return; //przerywamy dzialanie funkcji 
+            } else {
+                console.log('Witaj,:', name); // Jesli przekazany argument w console.log bedzie inny niz Kasia wyswietli ten argument
+            }
+
+            return null // Jesli chcemy zwrocic jakas domyslna wartosc np. null lub cokolwiek innego mozemy na koncu uzyc return
+
+        }
+
+        console.log(foo('Kasia'));
+        console.log(foo('Anna'));
+    </script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/prism.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/components/prism-javascript.min.js"></script>
+</body>
+</html>

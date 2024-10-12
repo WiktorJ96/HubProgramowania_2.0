@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Wzorzec projektowy Module w JavaScript</title>
+    <link rel="stylesheet" href="../styles.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/themes/prism-tomorrow.min.css" rel="stylesheet" />
+</head>
+<body>
+    <div class="container">
+        <h1>Wzorzec Projektowy Module w JavaScript</h1>
+
+        <p>Wzorzec **Module** pozwala na organizowanie kodu w odrębne moduły, które mają własny zakres, co pozwala na ukrycie szczegółów implementacji i wystawienie na zewnątrz tylko tych elementów, które są potrzebne. Moduły są często stosowane, aby zapobiegać kolizjom nazw oraz lepiej organizować kod.</p>
+
+        <h2>Jak działa wzorzec Module?</h2>
+        <p>Wzorzec Module wykorzystuje funkcje samowywołujące się (IIFE), aby stworzyć prywatny zakres dla zmiennych i funkcji, co umożliwia kontrolowanie tego, co jest widoczne na zewnątrz modułu. Elementy, które chcemy udostępnić na zewnątrz, są zwracane przez moduł w postaci obiektu.</p>
+
+        <h3>Przykład prostego modułu</h3>
+        <pre><code class="language-javascript">
+// Definicja modułu za pomocą IIFE
+const myModule = (function() {
+    // Zmienna prywatna
+    let privateVar = "To jest zmienna prywatna";
+
+    // Funkcja prywatna
+    function privateMethod() {
+        console.log("To jest metoda prywatna");
+    }
+
+    // Zwracamy obiekt, który udostępnia publiczne metody i zmienne
+    return {
+        publicVar: "To jest zmienna publiczna",
+
+        publicMethod: function() {
+            console.log("To jest metoda publiczna");
+            privateMethod();  // Wywołanie funkcji prywatnej
+        }
+    };
+})();
+
+console.log(myModule.publicVar); // "To jest zmienna publiczna"
+myModule.publicMethod(); // "To jest metoda publiczna" + "To jest metoda prywatna"
+        </code></pre>
+        <p>W powyższym przykładzie zmienna <code>privateVar</code> oraz funkcja <code>privateMethod</code> są prywatne i niedostępne na zewnątrz modułu. Udostępniona jest tylko zmienna <code>publicVar</code> oraz metoda <code>publicMethod</code>, które można wywołać spoza modułu.</p>
+
+        <h2>ES6 Modules</h2>
+        <p>Od momentu wprowadzenia modułów w ES6, możemy organizować kod w pliki i używać <code>import</code> oraz <code>export</code>, aby zarządzać modułami w sposób natywny. Moduły ES6 są teraz standardem w organizacji kodu w JavaScript.</p>
+
+        <h3>Przykład użycia modułów ES6</h3>
+        <pre><code class="language-javascript">
+        // --- utils.js ---
+export const add = (a, b) => a + b;
+export const subtract = (a, b) => a - b;
+
+        // --- main.js ---
+import { add, subtract } from './utils.js';
+
+console.log(add(5, 3)); // 8
+console.log(subtract(5, 3)); // 2
+        </code></pre>
+        <p>W tym przykładzie moduł <code>utils.js</code> eksportuje dwie funkcje: <code>add</code> oraz <code>subtract</code>, które są później importowane w pliku <code>main.js</code>. Dzięki temu możemy rozdzielić funkcjonalności na mniejsze, niezależne moduły.</p>
+
+        <h2>Zastosowanie wzorca Module</h2>
+        <p>Wzorzec Module jest szczególnie przydatny, gdy chcemy zarządzać złożonym kodem aplikacji, zapobiegać kolizjom nazw i utrzymywać prywatność danych. Moduły umożliwiają budowanie łatwiejszych do zarządzania, wielokrotnego użytku komponentów, które mogą być łatwo łączone w większe aplikacje.</p>
+
+        <h2>Zalety wzorca Module</h2>
+        <ul>
+            <li>Zapewnienie prywatności danych i funkcji.</li>
+            <li>Modularność i łatwość zarządzania kodem.</li>
+            <li>Unikanie kolizji nazw w większych projektach.</li>
+            <li>Łatwe rozszerzanie i ponowne użycie kodu.</li>
+        </ul>
+
+        <h2>Podsumowanie</h2>
+        <ul>
+            <li>Wzorzec Module pozwala na organizowanie kodu w oddzielne moduły, co wspiera modularność i kontrolę nad prywatnością.</li>
+            <li>Za pomocą IIFE możemy tworzyć moduły w starszych wersjach JavaScript, natomiast w ES6 mamy natywną obsługę modułów za pomocą <code>import</code> i <code>export</code>.</li>
+            <li>Moduły są szeroko stosowane w aplikacjach do zarządzania kodem i unikania kolizji nazw.</li>
+        </ul>
+        <a href="./4.1Module-projekt.html"><button>Przykładowy projekt</button></a>
+    </div>
+    <script>
+        const myModule = (function() {
+  // Prywatne właściwości i metody
+  let privateVar = 'This is a private variable';
+
+  function privateMethod() {
+    console.log('This is a private method');
+  }
+
+  // Publiczne API (to co zwracamy)
+  return {
+    // Publiczna właściwość
+    publicVar: 'This is a public variable',
+
+    // Publiczna metoda
+    publicMethod: function() {
+      console.log('This is a public method');
+    },
+
+    // Publiczna metoda, która może używać prywatnych zasobów
+    accessPrivate: function() {
+      console.log(privateVar);
+      privateMethod();
+    }
+  };
+})();
+
+// Dostęp do publicznych właściwości i metod
+console.log(myModule.publicVar); // Wyświetli: "This is a public variable"
+myModule.publicMethod();          // Wyświetli: "This is a public method"
+
+// Próbujemy uzyskać dostęp do prywatnych elementów (błąd)
+console.log(myModule.privateVar); // undefined
+myModule.privateMethod();         // TypeError: myModule.privateMethod is not a function
+
+// Użycie publicznej metody do dostępu do prywatnych danych
+myModule.accessPrivate();         // Wyświetli: "This is a private variable" i "This is a private method"
+
+    </script>
+           <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/prism.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/components/prism-javascript.min.js"></script>
+</body>
+</html>

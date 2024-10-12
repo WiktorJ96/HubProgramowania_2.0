@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Closures i Currying w JavaScript</title>
+    <link rel="stylesheet" href="/JavaScript Teoria/styles.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/themes/prism-tomorrow.min.css" rel="stylesheet" />
+</head>
+<body>
+    <div class="container">
+        <h1>Closures i Currying w JavaScript</h1>
+
+        <p>W JavaScript closures i currying są często używane razem, szczególnie w programowaniu funkcyjnym. Closures pozwala funkcjom wewnętrznym na dostęp do zmiennych funkcji zewnętrznej, a currying to technika, która umożliwia rozbijanie funkcji na serię funkcji przyjmujących jeden argument.</p>
+
+        <h2>Closures – przypomnienie</h2>
+        <p>Jak wspomniano wcześniej, closure to mechanizm, który pozwala funkcji wewnętrznej na dostęp do zmiennych funkcji zewnętrznej nawet po zakończeniu jej działania. Domknięcia są kluczowe w programowaniu funkcyjnym i przy używaniu technik takich jak currying.</p>
+
+        <h3>Przykład Closure</h3>
+        <pre><code class="language-javascript">
+function outerFunction(x) {
+    return function innerFunction(y) {
+        return x + y;
+    };
+}
+
+const add5 = outerFunction(5);
+console.log(add5(10)); // 15
+        </code></pre>
+        <p>W tym przykładzie funkcja <code>innerFunction</code> korzysta ze zmiennej <code>x</code>, która należy do funkcji zewnętrznej <code>outerFunction</code>. Tworzy to closure, gdzie zmienna <code>x</code> jest "zapamiętana".</p>
+
+        <h2>Currying – co to jest?</h2>
+        <p><strong>Currying</strong> to technika przekształcania funkcji przyjmującej wiele argumentów w funkcję, która przyjmuje jeden argument, zwraca nową funkcję, która oczekuje kolejnego argumentu, i tak dalej. Jest to szczególnie przydatne, gdy chcemy stworzyć specjalizowane funkcje na bazie bardziej ogólnych funkcji.</p>
+
+        <h3>Przykład Currying</h3>
+        <pre><code class="language-javascript">
+// Standardowa funkcja przyjmująca wiele argumentów
+function multiply(a, b, c) {
+    return a * b * c;
+}
+
+// Curried version
+function curriedMultiply(a) {
+    return function(b) {
+        return function(c) {
+            return a * b * c;
+        };
+    };
+}
+
+const multiplyBy2 = curriedMultiply(2);
+const multiplyBy2And3 = multiplyBy2(3);
+console.log(multiplyBy2And3(4)); // 24
+        </code></pre>
+        <p>W tym przykładzie funkcja <code>curriedMultiply</code> przekształca wieloargumentową funkcję w serię funkcji, z których każda przyjmuje jeden argument. Dzięki temu można częściowo stosować funkcję z już ustalonymi wartościami.</p>
+
+        <h2>Przykład łączenia closures i currying</h2>
+        <p>Technika currying i closures często współpracują, gdy używamy zamknięcia do zachowywania stanu i tworzenia specjalizowanych funkcji.</p>
+        <pre><code class="language-javascript">
+function curriedAdd(a) {
+    return function(b) {
+        return function(c) {
+            return a + b + c;
+        };
+    };
+}
+
+const add5 = curriedAdd(5); // Zamknięcie zachowuje wartość 'a' jako 5
+console.log(add5(10)(20)); // 35
+        </code></pre>
+        <p>W tym przykładzie closure i currying współpracują, aby funkcja <code>curriedAdd</code> mogła stopniowo przyjmować argumenty i sumować je, zachowując wartość pierwszego argumentu <code>a</code> dzięki closure.</p>
+
+        <h2>Podsumowanie</h2>
+        <ul>
+            <li>Closure pozwala funkcji wewnętrznej na dostęp do zmiennych funkcji zewnętrznej nawet po jej zakończeniu.</li>
+            <li>Currying przekształca funkcję wieloargumentową w serię funkcji, z których każda przyjmuje jeden argument.</li>
+            <li>Łączenie closures i currying pozwala tworzyć bardziej elastyczne i specjalizowane funkcje w programowaniu funkcyjnym.</li>
+        </ul>
+
+    </div>
+    <script>
+        function test(x) {
+    // Funkcja "test" przyjmuje jeden argument "x".
+    
+    return function(y) {
+        // Zwraca nową funkcję, która przyjmuje jeden argument "y".
+        
+        console.log(x, y);
+        // Funkcja wyświetla wartości "x" (z funkcji zewnętrznej "test") oraz "y" (z funkcji wewnętrznej).
+    }
+}
+
+let show = test(12);
+// Wywołujemy funkcję "test" z argumentem 12.
+// Funkcja "test" zwraca funkcję wewnętrzną, która jest przypisana do zmiennej "show".
+// Zmienna "x" przyjmuje wartość 12 i jest zamknięta (zapamiętana) w tej funkcji wewnętrznej.
+
+show(15); // Output: 12 15
+// Wywołujemy funkcję "show" z argumentem 15.
+// Funkcja wyświetla "x" (12) oraz "y" (15).
+
+show(20); // Output: 12 20
+// Wywołujemy funkcję "show" z argumentem 20.
+// Funkcja wyświetla "x" (12) oraz "y" (20).
+
+show(25); // Output: 12 25
+// Wywołujemy funkcję "show" z argumentem 25.
+// Funkcja wyświetla "x" (12) oraz "y" (25).
+
+    </script>
+     <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/prism.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/components/prism-javascript.min.js"></script>
+</body>
+</html>

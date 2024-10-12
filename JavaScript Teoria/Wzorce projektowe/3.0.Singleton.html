@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Wzorzec projektowy Singleton w JavaScript</title>
+    <link rel="stylesheet" href="../styles.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/themes/prism-tomorrow.min.css" rel="stylesheet" />
+</head>
+<body>
+    <div class="container">
+        <h1>Wzorzec Projektowy Singleton w JavaScript</h1>
+
+        <p>Wzorzec **Singleton** zapewnia, że dany obiekt lub instancja klasy zostanie utworzony tylko raz w trakcie działania programu. Jest to przydatne, gdy chcemy mieć globalną instancję, która jest współdzielona pomiędzy różnymi częściami aplikacji.</p>
+
+        <h2>Jak działa wzorzec Singleton?</h2>
+        <p>Wzorzec Singleton tworzy jedną, unikalną instancję obiektu. Jeśli próbujemy utworzyć nową instancję, zamiast tego zwracana jest instancja, która już istnieje. Dzięki temu mamy kontrolę nad tworzeniem i zarządzaniem tylko jedną instancją klasy.</p>
+
+        <h3>Przykład implementacji Singleton</h3>
+        <pre><code class="language-javascript">
+const Singleton = (function() {
+    let instance;
+
+    function createInstance() {
+        const object = new Object("I am the instance");
+        return object;
+    }
+
+    return {
+        getInstance: function() {
+            if (!instance) {
+                instance = createInstance();
+            }
+            return instance;
+        }
+    };
+})();
+
+const instance1 = Singleton.getInstance();
+const instance2 = Singleton.getInstance();
+
+console.log(instance1 === instance2); // true
+        </code></pre>
+        <p>W powyższym przykładzie wzorzec Singleton jest implementowany za pomocą funkcji samowywołującej się (IIFE). Funkcja <code>createInstance</code> tworzy instancję obiektu, ale obiekt jest tworzony tylko raz. Obie zmienne <code>instance1</code> i <code>instance2</code> wskazują na tę samą instancję.</p>
+
+        <h2>Użycie klas ES6 do implementacji Singleton</h2>
+        <p>W nowszych wersjach JavaScript możemy użyć klas ES6 do implementacji wzorca Singleton. Jest to bardziej przejrzyste i zgodne z nowoczesnym stylem pisania kodu.</p>
+
+        <h3>Przykład Singleton z użyciem klas ES6</h3>
+        <pre><code class="language-javascript">
+class Singleton {
+    constructor() {
+        if (Singleton.instance) {
+            return Singleton.instance;
+        }
+
+        this.data = "I am the instance";
+        Singleton.instance = this;
+        return this;
+    }
+
+    getData() {
+        return this.data;
+    }
+}
+
+const instance1 = new Singleton();
+const instance2 = new Singleton();
+
+console.log(instance1 === instance2); // true
+        </code></pre>
+        <p>W tym przykładzie klasa <code>Singleton</code> używa właściwości statycznej <code>Singleton.instance</code>, aby upewnić się, że zawsze istnieje tylko jedna instancja obiektu. Gdy klasa jest inicjalizowana po raz pierwszy, instancja jest zapisywana, a każde kolejne wywołanie zwraca tę samą instancję.</p>
+
+        <h2>Zastosowanie wzorca Singleton</h2>
+        <p>Singleton jest często używany do zarządzania zasobami, które powinny być współdzielone pomiędzy różnymi częściami aplikacji. Może to być globalny logger, obiekt konfiguracji lub połączenie z bazą danych.</p>
+
+        <h2>Zalety wzorca Singleton</h2>
+        <ul>
+            <li>Gwarantuje istnienie tylko jednej instancji obiektu w trakcie działania programu.</li>
+            <li>Może być stosowany do zarządzania globalnymi zasobami, takimi jak konfiguracje, połączenia sieciowe lub logowanie.</li>
+            <li>Eliminuje konieczność tworzenia wielu instancji obiektu, co może poprawić wydajność aplikacji.</li>
+        </ul>
+
+        <h2>Podsumowanie</h2>
+        <ul>
+            <li>Wzorzec Singleton umożliwia tworzenie jednej globalnej instancji obiektu, która jest współdzielona pomiędzy różnymi częściami aplikacji.</li>
+            <li>Implementacja wzorca może być wykonana przy użyciu funkcji lub klas ES6.</li>
+            <li>Jest często stosowany w aplikacjach do zarządzania zasobami, które wymagają centralnej kontroli, np. konfiguracje lub połączenia sieciowe.</li>
+        </ul>
+        <a href="./3.1.Singleton-projekt.html"><button>Przykładowy projekt</button></a>
+    </div>
+    <script>
+        class Singleton {
+  constructor() {
+    // Sprawdzenie, czy instancja już istnieje
+    if (Singleton.instance) {
+      return Singleton.instance;
+    }
+    
+    // Tworzymy właściwości Singletona
+    this.data = "Singleton Data";
+    
+    // Przypisujemy instancję do statycznej właściwości
+    Singleton.instance = this;
+
+    // Zwracamy instancję
+    return this;
+  }
+
+  getData() {
+    return this.data;
+  }
+}
+
+// Próba utworzenia kilku instancji
+const instance1 = new Singleton();
+const instance2 = new Singleton();
+
+console.log(instance1 === instance2); // Wyświetli: true
+console.log(instance1.getData());     // Wyświetli: "Singleton Data"
+console.log(instance2.getData());     // Wyświetli: "Singleton Data"
+
+    </script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/prism.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/components/prism-javascript.min.js"></script>
+</body>
+</html>

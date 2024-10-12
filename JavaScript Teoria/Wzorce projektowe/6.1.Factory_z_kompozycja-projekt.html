@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="../styles.css"> 
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/themes/prism-tomorrow.min.css" rel="stylesheet" />
+    <title>Generowanie Postaci RPG - Factory z Kompozycją</title>
+</head>
+<body>
+    <div class="container">
+        <h1>Generowanie Postaci RPG - Factory z Kompozycją</h1>
+        <div id="character-container"></div>
+
+        <h2>Kod HTML i JavaScript:</h2>
+        <pre><code class="language-html">
+        &lt;h1&gt;Generowanie Postaci RPG - Factory z Kompozycją&lt;/h1&gt;
+        &lt;div id="character-container"&gt;&lt;/div&gt;
+        
+        &lt;script&gt;
+        class Weapon {
+            constructor(type, damage) {
+                this.type = type;
+                this.damage = damage;
+            }
+
+            describe() {
+                return `Broń: ${this.type}, Obrażenia: ${this.damage}`;
+            }
+        }
+
+        class Armor {
+            constructor(type, defense) {
+                this.type = type;
+                this.defense = defense;
+            }
+
+            describe() {
+                return `Zbroja: ${this.type}, Obrona: ${this.defense}`;
+            }
+        }
+
+        class Character {
+            constructor(type, strength, intelligence, agility, weapon, armor) {
+                this.type = type;
+                this.strength = strength;
+                this.intelligence = intelligence;
+                this.agility = agility;
+                this.weapon = weapon;
+                this.armor = armor;
+            }
+
+            describe() {
+                return `Typ: ${this.type}, Siła: ${this.strength}, Inteligencja: ${this.intelligence}, Zwinność: ${this.agility}
+                ${this.weapon.describe()}
+                ${this.armor.describe()}`;
+            }
+        }
+
+        class CharacterFactory {
+            static createCharacter(type) {
+                let weapon, armor;
+                switch (type) {
+                    case 'Wojownik':
+                        weapon = new Weapon('Miecz', 50);
+                        armor = new Armor('Płytowa', 80);
+                        return new Character(type, 80, 30, 50, weapon, armor);
+                    case 'Mag':
+                        weapon = new Weapon('Kostur', 90);
+                        armor = new Armor('Szata', 20);
+                        return new Character(type, 20, 90, 40, weapon, armor);
+                    case 'Łucznik':
+                        weapon = new Weapon('Łuk', 40);
+                        armor = new Armor('Skórzana', 60);
+                        return new Character(type, 50, 40, 80, weapon, armor);
+                    default:
+                        throw new Error('Nieznany typ postaci: ' + type);
+                }
+            }
+        }
+
+        const characters = [
+            CharacterFactory.createCharacter('Wojownik'),
+            CharacterFactory.createCharacter('Mag'),
+            CharacterFactory.createCharacter('Łucznik')
+        ];
+
+        const characterContainer = document.getElementById('character-container');
+        characters.forEach(character => {
+            const p = document.createElement('p');
+            p.textContent = character.describe();
+            characterContainer.appendChild(p);
+        });
+        &lt;/script&gt;
+        </code></pre>
+    </div>
+
+    <script>
+        // Obiekt broni
+        class Weapon {
+            constructor(type, damage) {
+                this.type = type;
+                this.damage = damage;
+            }
+
+            describe() {
+                return `Broń: ${this.type}, Obrażenia: ${this.damage}`;
+            }
+        }
+
+        // Obiekt zbroi
+        class Armor {
+            constructor(type, defense) {
+                this.type = type;
+                this.defense = defense;
+            }
+
+            describe() {
+                return `Zbroja: ${this.type}, Obrona: ${this.defense}`;
+            }
+        }
+
+        // Klasa Character z kompozycją
+        class Character {
+            constructor(type, strength, intelligence, agility, weapon, armor) {
+                this.type = type;
+                this.strength = strength;
+                this.intelligence = intelligence;
+                this.agility = agility;
+                this.weapon = weapon; // Kompozycja - obiekt broni
+                this.armor = armor;   // Kompozycja - obiekt zbroi
+            }
+
+            describe() {
+                return `Typ: ${this.type}, Siła: ${this.strength}, Inteligencja: ${this.intelligence}, Zwinność: ${this.agility}
+                ${this.weapon.describe()}
+                ${this.armor.describe()}`;
+            }
+        }
+
+        // Fabryka postaci
+        class CharacterFactory {
+            static createCharacter(type) {
+                let weapon, armor;
+                switch (type) {
+                    case 'Wojownik':
+                        weapon = new Weapon('Miecz', 50);
+                        armor = new Armor('Płytowa', 80);
+                        return new Character(type, 80, 30, 50, weapon, armor);
+                    case 'Mag':
+                        weapon = new Weapon('Kostur', 90);
+                        armor = new Armor('Szata', 20);
+                        return new Character(type, 20, 90, 40, weapon, armor);
+                    case 'Łucznik':
+                        weapon = new Weapon('Łuk', 40);
+                        armor = new Armor('Skórzana', 60);
+                        return new Character(type, 50, 40, 80, weapon, armor);
+                    default:
+                        throw new Error('Nieznany typ postaci: ' + type);
+                }
+            }
+        }
+
+        // Tworzenie postaci
+        const characters = [
+            CharacterFactory.createCharacter('Wojownik'),
+            CharacterFactory.createCharacter('Mag'),
+            CharacterFactory.createCharacter('Łucznik')
+        ];
+
+        // Wyświetlanie postaci
+        const characterContainer = document.getElementById('character-container');
+        characters.forEach(character => {
+            const p = document.createElement('p');
+            p.textContent = character.describe();
+            characterContainer.appendChild(p);
+        });
+    </script>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/prism.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/components/prism-javascript.min.js"></script>
+</body>
+</html>

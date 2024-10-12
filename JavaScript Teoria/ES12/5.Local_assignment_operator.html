@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <script>
+
+        let a = 10 // Zmienna 'a' jest ustawiona na wartość 10.
+let b = 20 // Zmienna 'b' jest ustawiona na wartość 20.
+
+if (a) a = b 
+// Jeśli 'a' ma wartość "truthy" (czyli nie jest 0, null, undefined, false), przypisujemy do 'a' wartość 'b'.
+// Ponieważ 'a' jest równe 10 (wartość prawdziwa), przypisujemy do 'a' wartość 'b', czyli 20.
+
+a &&= b 
+// Operator logiczny AND z przypisaniem (&&=) oznacza: jeśli 'a' ma wartość "truthy", przypisz wartość 'b' do 'a'.
+// Ponieważ 'a' jest teraz równe 20 (wartość "truthy"), przypisujemy do 'a' wartość 'b', czyli 20 (nic się nie zmienia).
+
+console.log(a) 
+// Wypisuje wartość 'a', czyli 20.
+
+let c = null // Zmienna 'c' jest ustawiona na wartość null.
+let d = 10   // Zmienna 'd' jest ustawiona na wartość 10.
+
+c ||= d 
+// Operator OR z przypisaniem (||=) oznacza: jeśli 'c' ma wartość "falsy" (czyli null, undefined, 0, false), przypisz wartość 'd' do 'c'.
+// Ponieważ 'c' jest null (wartość "falsy"), przypisujemy do 'c' wartość 'd', czyli 10.
+
+console.log(c) 
+// Wypisuje wartość 'c', czyli 10.
+
+let e = undefined // Zmienna 'e' jest ustawiona na wartość undefined.
+let f = 34        // Zmienna 'f' jest ustawiona na wartość 34.
+
+e ??= f 
+// Operator nullish z przypisaniem (??=) oznacza: przypisz wartość 'f' do 'e' TYLKO jeśli 'e' jest null lub undefined.
+// Ponieważ 'e' jest undefined (wartość "nullish"), przypisujemy do 'e' wartość 'f', czyli 34.
+
+console.log(e) 
+// Wypisuje wartość 'e', czyli 34.
+
+    </script>
+</body>
+</html>

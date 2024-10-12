@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    
+    <script>
+if (1 === 1) {
+    // Sprawdza, czy warunek jest prawdziwy. Ponieważ '1 === 1' jest zawsze prawdą, blok kodu zostanie wykonany.
+    
+    import("import modulu")
+    // Próbuje dynamicznie zaimportować moduł o nazwie "import modulu". Jednak ta nazwa nie jest poprawna,
+    // więc zostanie wywołany błąd, chyba że istnieje moduł o takiej nazwie w rzeczywistym środowisku.
+    
+    .then(obj => console.log(obj))
+    // Jeśli import zakończy się sukcesem, załadowany moduł (obj) zostanie wypisany w konsoli.
+
+    .catch(err => console.log(err));
+    // Jeśli import zakończy się błędem (np. gdy moduł nie istnieje), błąd zostanie przechwycony i wypisany w konsoli.
+}
+
+async function loadCode() {
+    // Definiuje funkcję asynchroniczną 'loadCode'.
+
+    let { add, multipy } = await import("import modulu");
+    // Próbuje asynchronicznie zaimportować moduł "import modulu" i rozpakować dwie funkcje: 'add' i 'multipy'.
+    // Zawartość importu będzie oczekiwana dzięki 'await'. Jeśli moduł nie istnieje, wywoła błąd.
+
+    let result = add(2, 10);
+    // Używa zaimportowanej funkcji 'add', aby dodać dwie liczby 2 i 10. Wynik przypisywany do zmiennej 'result'.
+
+    console.log(result);
+    // Wypisuje wynik operacji dodawania (powinno to być 12, jeśli funkcja 'add' działa poprawnie).
+}
+
+loadCode();
+// Wywołuje funkcję asynchroniczną 'loadCode', która próbuje zaimportować moduł i wykonać operację dodawania.
+
+    </script>
+</body>
+</html>

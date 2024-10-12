@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    
+    <pre style="display: flex; justify-content: center; font-size: 18px;">
+        Wyjaśnienie:
+
+globalThis: To nowy, uniwersalny sposób na odwołanie się do obiektu globalnego w różnych środowiskach JavaScript. 
+Został wprowadzony, aby ujednolicić dostęp do globalnego obiektu, bez względu na to, czy kod działa w przeglądarce, 
+Node.js, czy w innych środowiskach.
+
+window: W przeglądarkach window odnosi się do globalnego obiektu, 
+który reprezentuje okno lub zakładkę, w której działa skrypt.
+
+W przeglądarkach:
+globalThis i window odnoszą się do tego samego globalnego obiektu, 
+dlatego globalThis === window zwróci true.
+Jednak w innych środowiskach, takich jak Node.js, nie istnieje obiekt window. 
+Zamiast tego używa się obiektu global, który pełni funkcję obiektu globalnego. 
+Dlatego w takich środowiskach wyrażenie globalThis === window spowoduje błąd, 
+ponieważ window nie jest zdefiniowane.
+
+Podsumowując:
+
+Wyrażenie działa tylko w środowiskach przeglądarki, gdzie globalThis i window odnoszą się do tego samego obiektu globalnego.
+    </pre>
+    <script>
+
+        console.log(globalThis === window); // true 
+    </script>
+</body>
+</html>

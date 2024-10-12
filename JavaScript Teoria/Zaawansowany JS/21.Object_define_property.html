@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Object.defineProperty() w JavaScript</title>
+    <link rel="stylesheet" href="/JavaScript Teoria/styles.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/themes/prism-tomorrow.min.css" rel="stylesheet" />
+</head>
+<body>
+    <div class="container">
+        <h1>Metoda <code>Object.defineProperty()</code> w JavaScript</h1>
+
+        <p>Metoda <code>Object.defineProperty()</code> umożliwia zdefiniowanie nowej właściwości na obiekcie lub modyfikację istniejącej właściwości. Oferuje kontrolę nad szczegółowymi atrybutami, takimi jak <code>enumerable</code>, <code>writable</code> i <code>configurable</code>, które determinują, czy właściwość może być iterowana, zmieniana czy usuwana.</p>
+
+        <h2>Składnia</h2>
+        <pre><code class="language-javascript">
+Object.defineProperty(objekt, 'właściwość', {
+  value: wartość,
+  writable: true | false,
+  enumerable: true | false,
+  configurable: true | false
+});
+        </code></pre>
+        <p>Metoda przyjmuje trzy argumenty: obiekt, nazwę właściwości, oraz obiekt zawierający atrybuty tej właściwości.</p>
+
+        <h2>Przykład podstawowy</h2>
+        <p>W tym przykładzie tworzymy nową właściwość <code>age</code> na obiekcie <code>person</code>, ustawiając jej wartość na 30 i pozwalając na jej modyfikację, ale nie umożliwiając enumeracji (czyli wyświetlania jej w pętli <code>for...in</code>).</p>
+        <pre><code class="language-javascript">
+const person = {};
+Object.defineProperty(person, 'age', {
+  value: 30,
+  writable: true,
+  enumerable: false,
+  configurable: true
+});
+
+console.log(person.age); // 30
+for (let key in person) {
+  console.log(key); // brak, 'age' nie jest wyliczalna
+}
+        </code></pre>
+        <p>Właściwość <code>age</code> została dodana do obiektu, ale ponieważ <code>enumerable</code> zostało ustawione na <code>false</code>, nie jest widoczna podczas iteracji po obiekcie.</p>
+
+        <h2>Atrybuty właściwości</h2>
+        <p>Możemy określić różne atrybuty dla zdefiniowanej właściwości:</p>
+        <ul>
+            <li><code>writable</code> - Określa, czy wartość właściwości może być zmieniona.</li>
+            <li><code>enumerable</code> - Określa, czy właściwość pojawi się podczas iteracji po obiekcie.</li>
+            <li><code>configurable</code> - Określa, czy właściwość może być usunięta lub jej atrybuty mogą być zmienione.</li>
+            <li><code>value</code> - Ustawia wartość właściwości.</li>
+            <li><code>get</code> - Definiuje funkcję, która zwraca wartość właściwości (getter).</li>
+            <li><code>set</code> - Definiuje funkcję, która ustawia wartość właściwości (setter).</li>
+        </ul>
+
+        <h2>Użycie z getterami i setterami</h2>
+        <p>Metoda <code>Object.defineProperty()</code> może być używana do tworzenia getterów i setterów, aby dynamicznie obliczać wartości lub reagować na zmiany właściwości.</p>
+        <pre><code class="language-javascript">
+const person = { firstName: 'Jan', lastName: 'Kowalski' };
+
+Object.defineProperty(person, 'fullName', {
+  get() {
+    return `${this.firstName} ${this.lastName}`;
+  },
+  set(value) {
+    [this.firstName, this.lastName] = value.split(' ');
+  }
+});
+
+console.log(person.fullName); // Jan Kowalski
+person.fullName = 'Anna Nowak';
+console.log(person.fullName); // Anna Nowak
+console.log(person.firstName); // Anna
+        </code></pre>
+        <p>W tym przykładzie zdefiniowaliśmy właściwość <code>fullName</code> jako właściwość obliczaną dynamicznie. Za pomocą gettera możemy pobrać pełne imię i nazwisko, a setter pozwala zmieniać je w obiekcie poprzez rozdzielanie wartości.</p>
+
+        <h2>Zmiana istniejących właściwości</h2>
+        <p>Za pomocą <code>Object.defineProperty()</code> możemy zmienić atrybuty już istniejącej właściwości:</p>
+        <pre><code class="language-javascript">
+const car = { brand: 'Ford' };
+
+// Modyfikacja istniejącej właściwości
+Object.defineProperty(car, 'brand', {
+  writable: false // Uniemożliwia zmianę wartości
+});
+
+car.brand = 'Toyota'; // Nie zmieni wartości
+console.log(car.brand); // 'Ford'
+        </code></pre>
+        <p>W tym przykładzie zmieniliśmy istniejącą właściwość <code>brand</code>, ustawiając atrybut <code>writable</code> na <code>false</code>, co uniemożliwia dalsze modyfikacje tej wartości.</p>
+
+        <h2>Podsumowanie</h2>
+        <ul>
+            <li><code>Object.defineProperty()</code> pozwala na precyzyjne definiowanie właściwości obiektu, kontrolując ich atrybuty takie jak <code>writable</code>, <code>enumerable</code> i <code>configurable</code>.</li>
+            <li>Można używać getterów i setterów do dynamicznego pobierania i ustawiania wartości.</li>
+            <li>Metoda umożliwia również modyfikację już istniejących właściwości obiektu.</li>
+        </ul>
+    </div>
+    <script>
+
+        // Tworzymy obiekt `obj` z właściwościami `a` i `b`
+let obj = {
+    a: 12,
+    b: 15
+}
+
+// Dodajemy nową właściwość `c` do obiektu `obj`
+obj.c = 14;
+
+// Używamy `Object.defineProperty`, aby dodać nową właściwość `prop` do obiektu `obj`
+// Właściwość `prop` ma wartość 16 i jej właściwości są zdefiniowane w następujący sposób:
+// - `writable: false`: Wartość właściwości nie może być zmieniona.
+// - `enumerable: true`: Właściwość jest widoczna podczas iteracji, np. w pętli `for...in`.
+// - `configurable: true`: Można usunąć tę właściwość z obiektu lub zmienić jej atrybuty (np. `writable`).
+Object.defineProperty(obj, "prop", {
+    value: 16,
+    writable: false,
+    enumerable: true,
+    configurable: true
+});
+
+// Wyświetlamy obiekt `obj` w konsoli
+console.log(obj); 
+// Wynik: { a: 12, b: 15, c: 14, prop: 16 }
+// Właściwość `prop` została dodana i jest widoczna (dzięki `enumerable: true`).
+
+// Usuwamy właściwość `prop` z obiektu `obj` za pomocą `delete`
+delete obj.prop;
+
+// Ponownie wyświetlamy obiekt `obj` w konsoli
+console.log(obj); 
+// Wynik: { a: 12, b: 15, c: 14 }
+// Właściwość `prop` została pomyślnie usunięta, ponieważ miała ustawiony atrybut `configurable: true`.
+
+    </script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/prism.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/components/prism-javascript.min.js"></script>
+</body>
+</html>

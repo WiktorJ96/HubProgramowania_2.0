@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Funkcje i obiekty w JavaScript</title>
+    <link rel="stylesheet" href="../styles.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/themes/prism-tomorrow.min.css" rel="stylesheet" />
+</head>
+<body>
+    <div class="container">
+        <h1>Funkcje i Obiekty w JavaScript</h1>
+
+        <p>W JavaScript, funkcje i obiekty są ze sobą ściśle powiązane. Funkcje mogą być przypisywane do obiektów jako metody, mogą tworzyć obiekty i operować na nich. Zrozumienie, jak funkcje i obiekty współdziałają, jest kluczowe w pracy z JavaScript.</p>
+
+        <h2>Tworzenie obiektów w funkcjach</h2>
+        <p>Funkcje mogą tworzyć nowe obiekty i zwracać je. Jest to popularne w programowaniu obiektowym w JavaScript, gdzie funkcje działają jako "fabryki" tworzące nowe instancje obiektów.</p>
+
+        <h3>Przykład tworzenia obiektu w funkcji</h3>
+        <pre><code class="language-javascript">
+function createPerson(name, age) {
+    return {
+        name: name,
+        age: age,
+        greet: function() {
+            return `Cześć, mam na imię ${this.name} i mam ${this.age} lat.`;
+        }
+    };
+}
+
+const person1 = createPerson('Anna', 30);
+console.log(person1.greet()); // Cześć, mam na imię Anna i mam 30 lat.
+        </code></pre>
+        <p>W tym przykładzie funkcja <code>createPerson</code> tworzy obiekt, który zawiera właściwości <code>name</code> i <code>age</code>, a także metodę <code>greet</code>, która wykorzystuje te właściwości.</p>
+
+        <h2>Przypisywanie funkcji jako metod do obiektów</h2>
+        <p>Funkcje mogą być przypisane jako metody obiektów. W JavaScript każda funkcja może zostać przypisana do właściwości obiektu i wywołana jako jego metoda.</p>
+
+        <h3>Przykład przypisywania funkcji jako metody</h3>
+        <pre><code class="language-javascript">
+const car = {
+    brand: 'Ford',
+    model: 'Mustang',
+    year: 1969,
+    start: function() {
+        return `Samochód ${this.brand} ${this.model} jest gotowy do jazdy!`;
+    }
+};
+
+console.log(car.start()); // Samochód Ford Mustang jest gotowy do jazdy!
+        </code></pre>
+        <p>Funkcja <code>start</code> jest przypisana jako metoda do obiektu <code>car</code>. Dzięki temu mamy dostęp do właściwości obiektu przez słowo kluczowe <code>this</code>.</p>
+
+        <h2>Funkcje jako konstruktory obiektów</h2>
+        <p>W JavaScript możemy używać funkcji jako konstruktorów obiektów. Używając słowa kluczowego <code>new</code>, możemy utworzyć nowe instancje obiektów na podstawie funkcji.</p>
+
+        <h3>Przykład użycia funkcji jako konstruktora</h3>
+        <pre><code class="language-javascript">
+function Person(name, age) {
+    this.name = name;
+    this.age = age;
+    this.greet = function() {
+        return `Cześć, mam na imię ${this.name} i mam ${this.age} lat.`;
+    };
+}
+
+const person2 = new Person('Jan', 40);
+console.log(person2.greet()); // Cześć, mam na imię Jan i mam 40 lat.
+        </code></pre>
+        <p>Funkcja <code>Person</code> działa jako konstruktor obiektu, a słowo kluczowe <code>new</code> tworzy nową instancję obiektu na jej podstawie.</p>
+
+        <h2>Złożone operacje na obiektach</h2>
+        <p>Funkcje mogą wykonywać różne operacje na obiektach, takie jak dodawanie nowych właściwości, modyfikowanie istniejących lub usuwanie danych z obiektów.</p>
+
+        <h3>Przykład operacji na obiekcie</h3>
+        <pre><code class="language-javascript">
+const book = {
+    title: 'JavaScript: The Good Parts',
+    author: 'Douglas Crockford',
+    year: 2008
+};
+
+// Dodanie nowej właściwości
+book.publisher = 'O\'Reilly Media';
+
+// Modyfikacja istniejącej właściwości
+book.year = 2020;
+
+// Usunięcie właściwości
+delete book.author;
+
+console.log(book); 
+        </code></pre>
+        <p>W tym przykładzie dodajemy, modyfikujemy i usuwamy właściwości obiektu <code>book</code>, pokazując, jak funkcje mogą modyfikować obiekty w czasie rzeczywistym.</p>
+
+        <h2>Podsumowanie</h2>
+        <ul>
+            <li>Funkcje w JavaScript mogą tworzyć obiekty i zwracać je.</li>
+            <li>Funkcje mogą być przypisywane jako metody do obiektów i korzystać z ich właściwości za pomocą <code>this</code>.</li>
+            <li>Funkcje mogą działać jako konstruktory, pozwalając na tworzenie nowych instancji obiektów przy użyciu słowa kluczowego <code>new</code>.</li>
+            <li>Funkcje mogą modyfikować obiekty, dodając nowe właściwości, modyfikując je lub je usuwając.</li>
+        </ul>
+
+    </div>
+    <script>
+        function hireEmployees (name, surname, email, phone, profession) {
+
+            if(name.length < 3) return null;
+            if (!/^\d{9}$/.test(phone)) return null;   //sprawdza czy numer ma 9 cyfr i nie ma innych znakow niz cyfry
+            if (!email.includes('@')) return null;          // sprawdza czy email zawiera znak @
+            if (profession != 'programmer' 
+                && profession != 'menager'
+                && profession != 'developer'
+            ) return null;
+
+
+            let employeeHired = {
+                name: name,
+                surname: surname,
+                email: email,
+                phone: phone,
+                profession: profession
+            }
+
+            return employeeHired;
+        }
+
+        const employee = hireEmployees('Kasie', 'Babbol', 'kacha.wp.pl', 987265462, 'menager')   // blad w emailu
+        const employee2 = hireEmployees('Ania', 'Doruchania', 'anka@onet.pl', 9473827461, 'programmer') //blad w numerze telefonu
+        const employee3 = hireEmployees('Zbigniew', "Brzeczyszczykiewicz", 'zbychu@interia.pl', 983712345, 'developer') //poprawny
+
+        console.log(employee,employee2,employee3)
+        //zostanie zwrocony tylko employee3
+
+    </script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/prism.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/components/prism-javascript.min.js"></script>
+</body>
+</html>

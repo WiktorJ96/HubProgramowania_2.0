@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Funkcje i argumenty w JavaScript</title>
+    <link rel="stylesheet" href="../styles.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/themes/prism-tomorrow.min.css" rel="stylesheet" />
+</head>
+<body>
+    <div class="container">
+        <h1>Funkcje i Argumenty w JavaScript</h1>
+
+        <p>W JavaScript funkcje są podstawową metodą grupowania kodu, który możemy wielokrotnie wywoływać. Funkcje mogą przyjmować argumenty, które przekazują dane do funkcji, i zwracać wartości po wykonaniu obliczeń lub operacji.</p>
+
+        <h2>Definiowanie funkcji</h2>
+        <p>Funkcje mogą być definiowane na różne sposoby. Najpopularniejsze sposoby to deklaracja funkcji za pomocą słowa kluczowego <code>function</code> oraz funkcje strzałkowe (arrow functions). Oto przykłady:</p>
+
+        <h3>Standardowa funkcja</h3>
+        <pre><code class="language-javascript">
+function greet(name) {
+    return 'Cześć, ' + name + '!';
+}
+
+console.log(greet('Anna')); // Cześć, Anna!
+        </code></pre>
+        <p>W powyższym przykładzie funkcja <code>greet</code> przyjmuje jeden argument <code>name</code> i zwraca powitanie.</p>
+
+        <h3>Funkcja strzałkowa</h3>
+        <pre><code class="language-javascript">
+const greet = (name) => 'Cześć, ' + name + '!';
+
+console.log(greet('Marek')); // Cześć, Marek!
+        </code></pre>
+        <p>Funkcje strzałkowe są bardziej zwięzłą formą zapisu funkcji, a także mają inne zachowanie w odniesieniu do wartości <code>this</code>.</p>
+
+        <h2>Argumenty funkcji</h2>
+        <p>Funkcje mogą przyjmować argumenty, które przekazujemy do nich w momencie wywołania. Argumenty są dostępne wewnątrz funkcji i mogą być używane do wykonywania obliczeń.</p>
+
+        <h3>Przykład z wieloma argumentami</h3>
+        <pre><code class="language-javascript">
+function add(a, b) {
+    return a + b;
+}
+
+console.log(add(5, 10)); // 15
+        </code></pre>
+        <p>Funkcja <code>add</code> przyjmuje dwa argumenty <code>a</code> i <code>b</code> i zwraca ich sumę.</p>
+
+        <h2>Domyślne wartości argumentów</h2>
+        <p>W JavaScript możemy ustawiać domyślne wartości dla argumentów. Jeśli argument nie zostanie przekazany, funkcja użyje wartości domyślnej.</p>
+
+        <pre><code class="language-javascript">
+function greet(name = 'Gość') {
+    return 'Cześć, ' + name + '!';
+}
+
+console.log(greet()); // Cześć, Gość!
+        </code></pre>
+        <p>Jeśli w powyższym przykładzie nie przekażemy argumentu do funkcji <code>greet</code>, zostanie użyta domyślna wartość <code>'Gość'</code>.</p>
+
+        <h2>Argumenty z użyciem operatora rest</h2>
+        <p>Funkcje mogą przyjmować zmienną liczbę argumentów za pomocą operatora rest (<code>...</code>), co pozwala na elastyczne przekazywanie dowolnej liczby wartości.</p>
+
+        <pre><code class="language-javascript">
+function sum(...numbers) {
+    return numbers.reduce((total, num) => total + num, 0);
+}
+
+console.log(sum(1, 2, 3, 4, 5)); // 15
+        </code></pre>
+        <p>W tym przykładzie funkcja <code>sum</code> przyjmuje dowolną liczbę argumentów, które są przekazywane jako tablica, a następnie zwraca ich sumę.</p>
+
+        <h2>Funkcja z argumentami obiektu</h2>
+        <p>Argumenty funkcji mogą być przekazywane jako obiekty, co umożliwia przekazywanie wielu parametrów w jednym wywołaniu.</p>
+
+        <pre><code class="language-javascript">
+function createUser({name, age, city}) {
+    return `Nazwa: ${name}, Wiek: ${age}, Miasto: ${city}`;
+}
+
+console.log(createUser({name: 'Anna', age: 25, city: 'Warszawa'}));
+// Nazwa: Anna, Wiek: 25, Miasto: Warszawa
+        </code></pre>
+        <p>W tym przykładzie przekazujemy jeden argument jako obiekt, co pozwala na bardziej zrozumiałe przekazywanie wielu parametrów do funkcji.</p>
+
+        <h2>Podsumowanie</h2>
+        <ul>
+            <li>Funkcje w JavaScript mogą przyjmować argumenty, które przekazują dane do funkcji.</li>
+            <li>Argumenty mogą mieć wartości domyślne, jeśli nie zostaną przekazane przy wywołaniu.</li>
+            <li>Za pomocą operatora rest (<code>...</code>) możemy przekazywać zmienną liczbę argumentów do funkcji.</li>
+            <li>Funkcje mogą także przyjmować argumenty jako obiekty, co umożliwia łatwiejsze zarządzanie większą liczbą parametrów.</li>
+        </ul>
+
+    </div>
+    <script>
+// Podstawianie argumentow funkcji i dzialania na argumentach
+
+        //spsob 1 
+        function multiply (a, b) {
+            let wynik = a*b;
+            console.log(wynik);
+        }
+        multiply(5, 6);
+        
+        //sposob 2
+        function multiply2 (a, b) {
+            const wynik = a*b;
+            return wynik;
+        }
+        console.log(multiply2(2,6));
+    
+    </script>
+
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/prism.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/components/prism-javascript.min.js"></script>
+</body>
+</html>

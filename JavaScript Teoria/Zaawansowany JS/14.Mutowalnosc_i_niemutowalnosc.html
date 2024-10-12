@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mutowalność i Niemutowalność w JavaScript</title>
+    <link rel="stylesheet" href="/JavaScript Teoria/styles.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/themes/prism-tomorrow.min.css" rel="stylesheet" />
+</head>
+<body>
+    <div class="container">
+        <h1>Mutowalność i Niemutowalność w JavaScript</h1>
+
+        <p>Mutowalność i niemutowalność to podstawowe pojęcia w programowaniu. Mutowalne dane można zmieniać po ich stworzeniu, natomiast niemutowalne pozostają niezmienne. W JavaScript prymitywy, takie jak <code>string</code>, <code>number</code>, i <code>boolean</code>, są niemutowalne, podczas gdy obiekty i tablice są mutowalne.</p>
+
+        <h2>Niemutowalność prymitywów</h2>
+        <pre><code class="language-javascript">
+// Przykład niemutowalności stringa
+let str = "Hello";
+str[0] = "J"; // Nie można zmienić pojedynczego znaku w stringu
+console.log(str); // 'Hello'
+        </code></pre>
+        <p>W powyższym przykładzie próbujemy zmienić pierwszy znak w stringu <code>str</code>, ale nie możemy tego zrobić, ponieważ stringi są niemutowalne. Każda zmiana w stringu tworzy nowy obiekt.</p>
+
+        <h2>Mutowalność obiektów i tablic</h2>
+        <pre><code class="language-javascript">
+// Przykład mutowalności obiektu
+let person = { name: "Alice", age: 25 };
+person.age = 26; // Modyfikacja wartości wewnątrz obiektu
+console.log(person.age); // 26
+
+// Przykład mutowalności tablicy
+let arr = [1, 2, 3];
+arr.push(4); // Dodanie nowego elementu do tablicy
+console.log(arr); // [1, 2, 3, 4]
+        </code></pre>
+        <p>Obiekty i tablice są mutowalne w JavaScript. Oznacza to, że możemy zmieniać ich zawartość bez konieczności tworzenia nowych obiektów. W przykładzie zmieniliśmy wartość <code>age</code> w obiekcie <code>person</code> oraz dodaliśmy nowy element do tablicy <code>arr</code>.</p>
+
+        <h2>Niemutowalność za pomocą <code>Object.freeze()</code></h2>
+        <pre><code class="language-javascript">
+let car = { brand: "Ford", model: "Mustang" };
+Object.freeze(car);
+
+car.model = "Fiesta"; // Nie można zmienić zamrożonego obiektu
+console.log(car.model); // 'Mustang'
+        </code></pre>
+        <p>Chociaż obiekty w JavaScript są domyślnie mutowalne, można je "zamrozić" za pomocą <code>Object.freeze()</code>. Po zamrożeniu obiekt nie może być modyfikowany – ani jego właściwości, ani struktura.</p>
+
+        <h2>Tworzenie niemutowalnych danych przez kopiowanie</h2>
+        <pre><code class="language-javascript">
+let numbers = [1, 2, 3];
+let newNumbers = [...numbers, 4]; // Tworzymy nową tablicę przez kopiowanie
+console.log(newNumbers); // [1, 2, 3, 4]
+console.log(numbers);    // [1, 2, 3] (oryginalna tablica niezmieniona)
+        </code></pre>
+        <p>Zamiast modyfikować oryginalną tablicę, możemy stworzyć kopię, dodając do niej nowe elementy. W tym przykładzie używamy operatora rozproszenia (<code>spread operator</code>) do utworzenia nowej tablicy na podstawie istniejącej, zachowując oryginalną tablicę nietkniętą.</p>
+
+        <h2>Podsumowanie</h2>
+        <ul>
+            <li>Prymitywne wartości w JavaScript (np. <code>string</code>, <code>number</code>, <code>boolean</code>) są niemutowalne – nie można ich zmieniać po utworzeniu.</li>
+            <li>Obiekty i tablice są mutowalne, co oznacza, że ich zawartość można zmieniać bez tworzenia nowych instancji.</li>
+            <li>Możemy stworzyć niemutowalne obiekty za pomocą <code>Object.freeze()</code>, który blokuje modyfikacje obiektu.</li>
+            <li>Tworzenie kopii obiektów lub tablic to dobry sposób na pracę z niemutowalnymi danymi.</li>
+        </ul>
+
+    </div>
+    <script>
+        // Przykład 1: Niemutowalność stringów
+let str = "Hello, world!";
+str[0] = "R";  // Ta operacja nie ma efektu, stringi są niemutowalne
+console.log(str[0]); // Wyświetli: "H"
+// Próba zmiany pojedynczego znaku w stringu nie powoduje błędu, ale też nie zmienia stringu
+
+// Możemy jednak utworzyć nowy string na bazie starego
+str = str + "!!!!!!!!!";
+console.log(str); // Wyświetli: "Hello, world!!!!!!!!!"
+// Operacja konkatenacji tworzy nowy string, nie modyfikuje oryginalnego
+
+// Przykład 2: Mutowalność tablic i zachowanie const
+const arr = ["H", "E", "L", "L", "O"];
+arr[0] = "R";  // Ta operacja jest dozwolona, tablice są mutowalne
+console.log(arr[0]); // Wyświetli: "R"
+// Możemy modyfikować zawartość tablicy, nawet jeśli jest zadeklarowana jako const
+
+arr = {};  // To spowoduje błąd: "Assignment to constant variable"
+// Nie możemy przypisać nowej wartości do zmiennej const
+
+// Kluczowe pojęcia:
+// 1. Niemutowalność stringów: Nie możemy zmienić pojedynczych znaków w stringu
+// 2. Mutowalność tablic: Możemy modyfikować elementy tablicy
+// 3. Zachowanie const: 
+//    - Zapobiega ponownemu przypisaniu wartości do zmiennej
+//    - Nie zapobiega modyfikacji zawartości obiektów lub tablic
+// 4. Różnica między modyfikacją a ponownym przypisaniem
+    </script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/prism.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/components/prism-javascript.min.js"></script>
+</body>
+</html>

@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <script>
+
+let arr = [1, 2, 3, 4, 5, 6];
+// Tworzy tablicę 'arr' zawierającą liczby od 1 do 6.
+
+arr.forEach(el => {
+    let r = el * 2;
+    // Dla każdego elementu w tablicy 'arr', mnoży go przez 2 i przypisuje wynik do 'r'.
+    console.log(r);
+    // Wypisuje wynik 'r' w konsoli.
+});
+// Metoda forEach() iteruje po każdym elemencie tablicy i wykonuje podaną funkcję.
+// Wynik: 2, 4, 6, 8, 10, 12
+
+const arr2 = arr.map(el => el * 3);
+// Metoda map() tworzy nową tablicę, mnożąc każdy element tablicy 'arr' przez 3.
+console.log(arr2);
+// Wynik: [3, 6, 9, 12, 15, 18]
+
+const arr3 = arr2.filter(el => el > 10);
+// Metoda filter() zwraca nową tablicę z elementami z 'arr2', które są większe niż 10.
+console.log(arr3);
+// Wynik: [12, 15, 18]
+
+const sum = arr.reduce((acc, curr) => acc + curr, 0);
+// Metoda reduce() sumuje wszystkie elementy tablicy 'arr'.
+// 'acc' to akumulator, 'curr' to bieżący element, a 0 to początkowa wartość akumulatora.
+console.log(sum);
+// Wynik: 21 (bo 1+2+3+4+5+6 = 21)
+
+const found = arr.find(el => el > 4);
+// Metoda find() zwraca pierwszy element, który jest większy niż 4.
+console.log(found);
+// Wynik: 5 (pierwszy element większy niż 4)
+
+const foundIndex = arr.findIndex(el => el > 4);
+// Metoda findIndex() zwraca indeks pierwszego elementu większego niż 4.
+console.log(foundIndex);
+// Wynik: 4 (indeks elementu 5)
+
+const numbers = [1, 2, 3, 4, 5, 6, 7, 8];
+// Tworzy tablicę 'numbers' z liczbami od 1 do 8.
+
+const info = numbers.every(el => el >= 1);
+// Metoda every() sprawdza, czy wszystkie elementy w tablicy spełniają warunek (czy każdy element jest większy lub równy 1).
+console.log(info);
+// Wynik: true (wszystkie elementy są większe lub równe 1)
+
+const atLeastOne = numbers.some(el => el > 7);
+// Metoda some() sprawdza, czy przynajmniej jeden element spełnia warunek (czy jest większy niż 7).
+console.log(atLeastOne);
+// Wynik: true (jest przynajmniej jeden element większy niż 7, czyli 8)
+
+    </script>
+</body>
+</html>

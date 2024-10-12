@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    
+    <script>
+const strData = "Hello, Anna, Kasia, Jola, Anna, Antonina, Ola";
+// Definiuje ciąg znaków 'strData', który zawiera różne imiona, w tym powtarzające się imię 'Anna'.
+
+const regExp = new RegExp("An[a-z]*", "g");
+// Tworzy wyrażenie regularne, które szuka ciągów zaczynających się od "An" i zawierających dowolne litery od 'a' do 'z'.
+// Flaga 'g' oznacza globalne dopasowanie, więc wyrażenie regularne będzie szukać wszystkich dopasowań w ciągu, a nie tylko pierwszego.
+
+let match;
+while ((match = regExp.exec(strData)) !== null) {
+    // Pętla 'while' wykonuje się dopóki funkcja 'regExp.exec()' znajduje kolejne dopasowania.
+    // 'regExp.exec()' zwraca obiekt dopasowania lub 'null', jeśli nie ma więcej dopasowań.
+
+    console.log(`${match[0]} at index: ${match.index}`);
+    // Wypisuje dopasowany fragment tekstu (match[0]) oraz jego indeks w oryginalnym ciągu znaków.
+}
+
+    </script>
+</body>
+</html>

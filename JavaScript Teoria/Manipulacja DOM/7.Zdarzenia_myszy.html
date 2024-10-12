@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Aliquid blanditiis, fugiat id, alias tempore hic ratione nihil deleniti quia nemo voluptates maxime non error sit autem voluptatibus eos amet odit.</p>
+    <script>
+
+
+let p = document.getElementsByTagName('p')[0];
+
+p.addEventListener("mouseenter", function(e) {
+    console.log("Mouse Enter");   
+})
+
+p.addEventListener("mouseleave", function(e) {
+    console.log("Mouse Leave");    
+})
+
+p.addEventListener("mousemove", function(e) {
+    console.log("Mouse Move");   
+})
+    </script>
+</body>
+</html>

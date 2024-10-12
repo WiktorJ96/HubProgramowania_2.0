@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Funkcje i Callbacki w JavaScript</title>
+    <link rel="stylesheet" href="../styles.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/themes/prism-tomorrow.min.css" rel="stylesheet" />
+</head>
+<body>
+    <div class="container">
+        <h1>Funkcje i Callbacki w JavaScript</h1>
+
+        <p>Callbacki to funkcje, które są przekazywane jako argumenty do innych funkcji i wywoływane po zakończeniu określonego zadania. Są one kluczowe dla programowania asynchronicznego w JavaScript, umożliwiając wykonywanie kodu po zakończeniu operacji takich jak zapytania sieciowe, czytanie plików lub interakcje z użytkownikiem.</p>
+
+        <h2>Podstawowe użycie callbacków</h2>
+        <p>Wyobraźmy sobie, że mamy funkcję, która wykonuje pewną operację, a po jej zakończeniu chcemy wywołać inną funkcję. Możemy to zrobić za pomocą callbacków.</p>
+
+        <h3>Przykład funkcji z callbackiem</h3>
+        <pre><code class="language-javascript">
+// Funkcja, która przyjmuje inny callback jako argument
+function processUserInput(callback) {
+    const name = 'Kasia';
+    callback(name);
+}
+
+// Definiujemy funkcję, którą przekażemy jako callback
+function greet(name) {
+    console.log('Cześć, ' + name + '!');
+}
+
+// Przekazujemy funkcję greet jako callback
+processUserInput(greet); // Cześć, Kasia!
+        </code></pre>
+        <p>W tym przykładzie funkcja <code>processUserInput</code> przyjmuje funkcję <code>greet</code> jako callback i wywołuje ją z przekazanym argumentem. Callback <code>greet</code> jest wykonywany po pobraniu imienia użytkownika.</p>
+
+        <h2>Callbacki w operacjach asynchronicznych</h2>
+        <p>Callbacki są często używane w operacjach asynchronicznych, takich jak obsługa zapytań sieciowych lub operacje na plikach. JavaScript jest językiem jednordzeniowym (ang. single-threaded), więc za pomocą callbacków możemy obsługiwać zdarzenia, które zajmują dłuższy czas, bez blokowania dalszego wykonywania programu.</p>
+
+        <h3>Przykład użycia callbacków z <code>setTimeout</code></h3>
+        <pre><code class="language-javascript">
+// Funkcja setTimeout używa callbacka, aby wykonać kod po opóźnieniu
+setTimeout(function() {
+    console.log('To jest asynchroniczny callback');
+}, 2000); // Kod zostanie wykonany po 2 sekundach
+        </code></pre>
+        <p>W tym przykładzie <code>setTimeout</code> używa callbacka, aby wywołać przekazaną funkcję po upływie 2 sekund.</p>
+
+        <h2>Callbacki w zapytaniach sieciowych</h2>
+        <p>W zapytaniach sieciowych za pomocą Fetch API lub starszej metody <code>XMLHttpRequest</code>, callbacki są wykorzystywane do obsługi odpowiedzi serwera. Zamiast czekać na odpowiedź i blokować wykonywanie kodu, możemy przekazać callback, który zostanie wykonany po zakończeniu operacji.</p>
+
+        <h3>Przykład użycia callbacków z Fetch API</h3>
+        <pre><code class="language-javascript">
+// Pobieranie danych z serwera i użycie callbacka do obsługi odpowiedzi
+fetch('https://jsonplaceholder.typicode.com/posts')
+    .then(function(response) {
+        return response.json();
+    })
+    .then(function(data) {
+        console.log('Dane pobrane z serwera:', data);
+    })
+    .catch(function(error) {
+        console.error('Błąd:', error);
+    });
+        </code></pre>
+        <p>W tym przykładzie używamy Fetch API, które wykorzystuje callbacki do obsługi odpowiedzi i błędów. Dzięki temu możemy obsługiwać dane z serwera bez blokowania dalszego działania programu.</p>
+
+        <h2>Zagnieżdżone callbacki i "callback hell"</h2>
+        <p>Kiedy mamy wiele zagnieżdżonych operacji asynchronicznych, możemy wpaść w tzw. "callback hell", gdzie kod staje się trudny do czytania i utrzymania. Oto przykład:</p>
+
+        <h3>Przykład "callback hell"</h3>
+        <pre><code class="language-javascript">
+setTimeout(function() {
+    console.log('Pierwszy callback');
+    setTimeout(function() {
+        console.log('Drugi callback');
+        setTimeout(function() {
+            console.log('Trzeci callback');
+        }, 1000);
+    }, 1000);
+}, 1000);
+        </code></pre>
+        <p>W powyższym przykładzie widzimy zagnieżdżone callbacki, co prowadzi do kodu, który jest trudny do zrozumienia. Zamiast tego, warto używać takich technik, jak <code>Promise</code> lub <code>async/await</code>, aby lepiej zarządzać asynchronicznymi operacjami.</p>
+
+        <h2>Podsumowanie</h2>
+        <ul>
+            <li>Callbacki to funkcje przekazywane jako argumenty do innych funkcji i wywoływane po zakończeniu określonej operacji.</li>
+            <li>Callbacki są kluczowe dla obsługi operacji asynchronicznych, takich jak zapytania sieciowe, interakcje z użytkownikiem czy operacje na plikach.</li>
+            <li>Unikanie "callback hell" jest możliwe dzięki użyciu <code>Promise</code> oraz <code>async/await</code>, co pozwala na bardziej czytelny i łatwiejszy do utrzymania kod.</li>
+        </ul>
+
+    </div>
+    <script>
+        function show(txt) {
+            console.log(txt);
+        }
+
+        function showArr (arr, callback) {
+            for(let i = 0; i < arr.length; i++) {
+                const num = arr[i];
+                callback(num);
+            }
+        }
+
+        
+        const tab = [1,2,3,4,5,6,7,8]
+        showArr(tab, show);
+    </script>
+                <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/prism.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/components/prism-javascript.min.js"></script>
+</body>
+</html>

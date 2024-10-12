@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Funkcje Konstruujące w JavaScript</title>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="/JavaScript Teoria/styles.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/themes/prism-tomorrow.min.css" rel="stylesheet" />
+</head>
+<body>
+    <div class="container">
+        <h1>Funkcje Konstruujące w JavaScript</h1>
+
+        <p>Funkcja konstruująca w JavaScript to specjalna funkcja używana do tworzenia nowych obiektów. Służy jako szablon, który definiuje właściwości i metody dla nowych instancji obiektów. Konwencjonalnie, nazwy funkcji konstruujących zaczynają się wielką literą, aby odróżnić je od zwykłych funkcji.</p>
+
+        <h2>Podstawowa funkcja konstruująca</h2>
+        <pre><code class="language-javascript">
+        // Funkcja konstruująca dla obiektu Person
+        function Person(name, age) {
+            this.name = name;
+            this.age = age;
+        }
+
+        // Tworzenie nowych instancji obiektu Person
+        const person1 = new Person("John", 30);
+        const person2 = new Person("Alice", 25);
+
+        console.log(person1.name); // 'John'
+        console.log(person2.age);  // 25
+        </code></pre>
+        <p>W tym przykładzie funkcja <code>Person</code> działa jako konstruktor. Słowo kluczowe <code>this</code> odnosi się do nowo utworzonego obiektu, a instancje <code>person1</code> i <code>person2</code> mają swoje własne właściwości <code>name</code> i <code>age</code>.</p>
+
+        <h2>Dodawanie metod do prototypu</h2>
+        <p>W JavaScript każda funkcja konstruująca ma prototyp, który może być używany do definiowania metod współdzielonych przez wszystkie instancje. Dzięki temu metody są przechowywane w jednym miejscu w pamięci, zamiast tworzyć osobne kopie dla każdej instancji.</p>
+        <pre><code class="language-javascript">
+        // Dodawanie metody do prototypu funkcji konstruującej
+        Person.prototype.greet = function() {
+            console.log("Cześć, mam na imię " + this.name);
+        };
+
+        person1.greet(); // 'Cześć, mam na imię John'
+        person2.greet(); // 'Cześć, mam na imię Alice'
+        </code></pre>
+        <p>W powyższym przykładzie metoda <code>greet</code> jest dodana do prototypu funkcji <code>Person</code>, dzięki czemu wszystkie obiekty utworzone za pomocą tej funkcji mogą korzystać z tej metody.</p>
+
+        <h2>Sprawdzanie typu obiektu</h2>
+        <p>Możemy sprawdzić, czy dany obiekt został utworzony przy użyciu określonej funkcji konstruującej za pomocą operatora <code>instanceof</code>:</p>
+        <pre><code class="language-javascript">
+        console.log(person1 instanceof Person); // true
+        console.log(person2 instanceof Object); // true
+        </code></pre>
+        <p>Operator <code>instanceof</code> sprawdza, czy obiekt jest instancją danej funkcji konstruującej lub czy dziedziczy z prototypu tej funkcji.</p>
+
+        <h2>Użycie klas ES6 jako alternatywy dla funkcji konstruujących</h2>
+        <p>Wprowadzenie klas w ECMAScript 6 (ES6) oferuje bardziej zwięzłą i czytelną składnię do tworzenia funkcji konstruujących. Oto przykład funkcji konstruującej przepisanej za pomocą klasy:</p>
+        <pre><code class="language-javascript">
+        class Person {
+            constructor(name, age) {
+                this.name = name;
+                this.age = age;
+            }
+
+            greet() {
+                console.log("Cześć, mam na imię " + this.name);
+            }
+        }
+
+        const person1 = new Person("John", 30);
+        const person2 = new Person("Alice", 25);
+
+        person1.greet(); // 'Cześć, mam na imię John'
+        </code></pre>
+        <p>W powyższym przykładzie używamy nowoczesnej składni klas w JavaScript, która działa podobnie jak funkcje konstruujące, ale jest bardziej intuicyjna i łatwiejsza do zrozumienia.</p>
+
+        <h2>Zalety funkcji konstruujących</h2>
+        <ul>
+            <li>Ułatwiają tworzenie wielu instancji tego samego typu obiektu.</li>
+            <li>Pozwalają na łatwe rozszerzanie obiektów o wspólne metody poprzez prototyp.</li>
+            <li>Możliwość wykorzystania dziedziczenia przez prototypy.</li>
+        </ul>
+
+    </div>
+    <script>
+        let data = new Date();
+        console.log(data);
+
+
+        // Funkcja konstruujaca - definicja funkcji
+        function Car(brand, name, color){
+            this.brand = brand;
+            this.name = name;
+            this.color = color;
+            this.year = new Date();
+
+            this.printData = function(){
+                console.log(this.brand, this.name, this.color, this.year);
+            }
+        }
+
+
+        //Instancja obiektu - egzemplarz obiektu stworzony na bazie funkcji konstruujacej 
+        let myCar = new Car("Toyota", "Camry", "Black");
+        myCar.printData();
+        console.log(myCar);
+
+        let car2 = new Car("Porsche", "Carrera", "Red");
+        car2.printData();
+        console.log(car2);
+
+
+                    /*
+            BRAK 'NEW' PRZY WYWOLANIU INSTANCJI OBIEKTU
+
+            CO TO ROBI?
+            Ten fragment kodu pomaga naprawić błąd, który może się zdarzyć, gdy tworzymy nowy obiekt.
+                
+            JAKI BŁĄD?
+            Kiedy tworzymy nowy obiekt, powinniśmy używać słowa 'new'. Ale czasem można o tym zapomnieć.
+                
+            JAK TO NAPRAWIA?
+            Kod sprawdza, czy użyto 'new'. Jeśli nie, automatycznie używa 'new' za nas.
+                
+            JAK TO DZIAŁA?
+            1. Sprawdza, czy obiekt został stworzony poprawnie (z 'new').
+            2. Jeśli nie, tworzy nowy obiekt prawidłowo.
+            */
+                
+            PRZYKŁAD:
+                
+            function Car(marka) {
+                if (!(this instanceof Car)) {
+                    return new Car(marka);
+                }
+                this.marka = marka;
+            }
+            
+            // Teraz oba sposoby działają:
+            let auto1 = new Car("Toyota");  // Dobrze
+            let auto2 = Car("Honda");       // Też dobrze, choć bez 'new'
+            
+            /*
+            DLACZEGO TO WAŻNE?
+            Dzięki temu nasz kod jest bardziej odporny na błędy. Nawet jeśli ktoś zapomni użyć 'new', 
+            wszystko będzie działać jak należy.
+            */
+    </script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/prism.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/components/prism-javascript.min.js"></script>
+</body>
+</html>

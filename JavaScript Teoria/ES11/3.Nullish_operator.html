@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <script>
+
+const x = null || 10;
+console.log(x); // 10
+// Operator logiczny '||' zwraca pierwszą wartość "truthy" (prawdziwą), jaką napotka.
+// Ponieważ 'null' jest wartością "falsy" (fałszywą), zostanie zwrócona wartość 10.
+
+const str = "  " || "TXT"; 
+// Tutaj jest mała nieścisłość: "  " (ciąg zawierający spacje) nie jest wartością "falsy". 
+// Spacje są traktowane jako "truthy", więc 'str' będzie równe "  " (nie "TXT").
+console.log(str); // "  "
+
+const y = null ?? 22;
+console.log(y); // 22
+// Operator '??' (nullish coalescing) zwraca pierwszą wartość, która nie jest null lub undefined.
+// Ponieważ 'y' jest równe 'null', operator '??' zwróci 22.
+
+const txt = "" ?? "TXT";
+// Ponieważ '' (pusty string) nie jest 'null' ani 'undefined', operator '??' nie użyje wartości "TXT".
+console.log(txt.length); // 0
+// Wynik: długość pustego stringa ('') to 0, więc 'txt.length' zwraca 0.
+
+
+    </script>
+</body>
+</html>

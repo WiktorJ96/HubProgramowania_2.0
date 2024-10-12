@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="../styles.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/themes/prism-tomorrow.min.css" rel="stylesheet" />
+    <title>System Zarządzania Użytkownikami - Wzorzec Konstruktor</title>
+</head>
+<body>
+    <div class="container">
+        <h1>System Zarządzania Użytkownikami - Wzorzec Konstruktor</h1>
+        <form id="userForm">
+            <label for="firstName">Imię:</label>
+            <input type="text" id="firstName" required>
+            
+            <label for="lastName">Nazwisko:</label>
+            <input type="text" id="lastName" required>
+            
+            <label for="role">Rola:</label>
+            <select id="role">
+                <option value="Administrator">Administrator</option>
+                <option value="Użytkownik">Użytkownik</option>
+            </select>
+            
+            <button type="submit">Dodaj użytkownika</button>
+        </form>
+
+        <h2>Lista Użytkowników:</h2>
+        <div id="user-container"></div>
+
+        <h2>Kod HTML i JavaScript:</h2>
+        <pre><code class="language-html">
+        &lt;h1&gt;System Zarządzania Użytkownikami - Wzorzec Konstruktor&lt;/h1&gt;
+        &lt;form id="userForm"&gt;
+            &lt;label for="firstName"&gt;Imię:&lt;/label&gt;
+            &lt;input type="text" id="firstName" required&gt;
+            
+            &lt;label for="lastName"&gt;Nazwisko:&lt;/label&gt;
+            &lt;input type="text" id="lastName" required&gt;
+            
+            &lt;label for="role"&gt;Rola:&lt;/label&gt;
+            &lt;select id="role"&gt;
+                &lt;option value="Administrator"&gt;Administrator&lt;/option&gt;
+                &lt;option value="Użytkownik"&gt;Użytkownik&lt;/option&gt;
+            &lt;/select&gt;
+            
+            &lt;button type="submit"&gt;Dodaj użytkownika&lt;/button&gt;
+        &lt;/form&gt;
+
+        &lt;h2&gt;Lista Użytkowników:&lt;/h2&gt;
+        &lt;div id="user-container"&gt;&lt;/div&gt;
+
+        &lt;script&gt;
+        function User(firstName, lastName, role) {
+            this.firstName = firstName;
+            this.lastName = lastName;
+            this.role = role;
+
+            this.displayInfo = function() {
+                return `Użytkownik: ${this.firstName} ${this.lastName}, Rola: ${this.role}`;
+            };
+
+            this.changeRole = function(newRole) {
+                this.role = newRole;
+            };
+        }
+
+        document.getElementById('userForm').addEventListener('submit', function(event) {
+            event.preventDefault();
+            
+            const firstName = document.getElementById('firstName').value;
+            const lastName = document.getElementById('lastName').value;
+            const role = document.getElementById('role').value;
+
+            const newUser = new User(firstName, lastName, role); // Tworzenie nowego użytkownika
+
+            const userContainer = document.getElementById('user-container');
+            const userElement = document.createElement('p');
+            userElement.textContent = newUser.displayInfo(); // Wyświetlanie informacji o użytkowniku
+            userContainer.appendChild(userElement);
+        });
+        &lt;/script&gt;
+        </code></pre>
+    </div>
+
+    <script>
+        // Funkcja Konstruktor dla Użytkownika
+        function User(firstName, lastName, role) {
+            this.firstName = firstName;
+            this.lastName = lastName;
+            this.role = role;
+
+            // Metoda wyświetlająca informacje o użytkowniku
+            this.displayInfo = function() {
+                return `Użytkownik: ${this.firstName} ${this.lastName}, Rola: ${this.role}`;
+            };
+
+            // Metoda zmieniająca rolę użytkownika
+            this.changeRole = function(newRole) {
+                this.role = newRole;
+            };
+        }
+
+        // Obsługa formularza dodawania użytkownika
+        document.getElementById('userForm').addEventListener('submit', function(event) {
+            event.preventDefault(); // Zapobieganie przeładowaniu strony
+            
+            // Pobieranie wartości z formularza
+            const firstName = document.getElementById('firstName').value;
+            const lastName = document.getElementById('lastName').value;
+            const role = document.getElementById('role').value;
+
+            // Tworzenie nowego użytkownika za pomocą konstruktora
+            const newUser = new User(firstName, lastName, role);
+
+            // Wyświetlanie użytkownika na stronie
+            const userContainer = document.getElementById('user-container');
+            const userElement = document.createElement('p');
+            userElement.textContent = newUser.displayInfo();
+            userContainer.appendChild(userElement);
+        });
+    </script>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/prism.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/components/prism-javascript.min.js"></script>
+</body>
+</html>

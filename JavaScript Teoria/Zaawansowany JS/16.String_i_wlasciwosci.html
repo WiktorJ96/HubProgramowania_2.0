@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Obiekt String i jego Właściwości w JavaScript</title>
+    <link rel="stylesheet" href="/JavaScript Teoria/styles.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/themes/prism-tomorrow.min.css" rel="stylesheet" />
+</head>
+<body>
+    <div class="container">
+        <h1>Obiekt <code>String</code> i jego Właściwości w JavaScript</h1>
+
+        <p>W JavaScript obiekt <code>String</code> reprezentuje ciągi znaków i dostarcza wielu metod umożliwiających manipulację tekstem. Pomimo że stringi są niemutowalne (nie można ich zmieniać po stworzeniu), obiekt <code>String</code> oferuje liczne narzędzia do pracy z tekstem.</p>
+
+        <h2>Podstawowe właściwości obiektu <code>String</code></h2>
+        <p>Obiekt <code>String</code> posiada kilka ważnych właściwości, które pomagają pracować z danymi tekstowymi:</p>
+        <ul>
+            <li><code>length</code> - Zwraca długość ciągu znaków.</li>
+        </ul>
+
+        <h2>Przykład użycia właściwości <code>length</code></h2>
+        <pre><code class="language-javascript">
+// Przykład użycia length
+let text = "JavaScript";
+console.log(text.length); // 10
+        </code></pre>
+        <p>W powyższym przykładzie <code>text.length</code> zwraca liczbę znaków w ciągu tekstowym <code>"JavaScript"</code>.</p>
+
+        <h2>Najczęściej używane metody obiektu <code>String</code></h2>
+        <ul>
+            <li><code>toUpperCase()</code> - Konwertuje wszystkie litery w ciągu na wielkie.</li>
+            <li><code>toLowerCase()</code> - Konwertuje wszystkie litery w ciągu na małe.</li>
+            <li><code>charAt(index)</code> - Zwraca znak na określonej pozycji w ciągu.</li>
+            <li><code>includes(substring)</code> - Sprawdza, czy ciąg zawiera określony podciąg.</li>
+            <li><code>slice(start, end)</code> - Wyodrębnia część ciągu między podanymi indeksami.</li>
+            <li><code>split(separator)</code> - Dzieli ciąg na części, tworząc tablicę elementów.</li>
+            <li><code>trim()</code> - Usuwa białe znaki (spacje) z początku i końca ciągu.</li>
+        </ul>
+
+        <h2>Przykłady użycia metod</h2>
+        <pre><code class="language-javascript">
+// Konwersja na wielkie litery
+let lowerText = "hello world";
+console.log(lowerText.toUpperCase()); // "HELLO WORLD"
+
+// Sprawdzanie, czy ciąg zawiera podciąg
+let text = "JavaScript is great!";
+console.log(text.includes("great")); // true
+
+// Wyodrębnianie części ciągu
+let str = "JavaScript";
+console.log(str.slice(0, 4)); // "Java"
+
+// Dzielenie ciągu na części
+let sentence = "Learn, code, repeat";
+let words = sentence.split(", ");
+console.log(words); // ["Learn", "code", "repeat"]
+
+// Usuwanie białych znaków
+let spacedText = "  JavaScript  ";
+console.log(spacedText.trim()); // "JavaScript"
+        </code></pre>
+        <p>Metody takie jak <code>toUpperCase()</code> i <code>toLowerCase()</code> są używane do zmiany wielkości liter. Metody <code>includes()</code>, <code>slice()</code>, i <code>split()</code> umożliwiają manipulację ciągami, a <code>trim()</code> usuwa zbędne spacje.</p>
+
+        <h2>Tworzenie nowych ciągów znaków</h2>
+        <p>Ponieważ stringi w JavaScript są niemutowalne, operacje na ciągach zawsze tworzą nowy ciąg, a oryginalny tekst pozostaje niezmieniony. Na przykład:</p>
+        <pre><code class="language-javascript">
+let originalText = "hello";
+let upperText = originalText.toUpperCase();
+
+console.log(originalText); // "hello" (oryginalny ciąg niezmieniony)
+console.log(upperText); // "HELLO" (nowy ciąg)
+        </code></pre>
+
+        <h2>Podsumowanie</h2>
+        <ul>
+            <li><code>String</code> to wbudowany obiekt w JavaScript, który umożliwia pracę z danymi tekstowymi.</li>
+            <li>Stringi są niemutowalne – wszelkie operacje na stringach zwracają nowe ciągi, a oryginał pozostaje niezmieniony.</li>
+            <li>Obiekt <code>String</code> oferuje wiele metod, takich jak <code>toUpperCase()</code>, <code>slice()</code>, i <code>split()</code>, które ułatwiają manipulację tekstem.</li>
+        </ul>
+
+    </div>
+    <script>
+
+        let str = "Hello";
+        console.log(str);
+
+        str = str.toUpperCase();
+        console.log(str);
+
+        str = str.toLowerCase();
+        console.log(str);
+
+        console.log(str.charAt(0).toLowerCase()); // H
+
+        console.log(str.charCodeAt(0)); // 104 - ta metoda zwraca Unicode kazdego znaku 
+
+        str = " a b c d e f";
+        console.log(str.split(" ")); // ["a", "b", "c", "d", "e", "f"]
+
+        const data = "1 2 3 4 5 6".split(" ");
+        console.log(data);
+
+        let resut = data.join("|"); 
+        console.log(resut); // [1|2|3|4|5|6]
+
+        str = " A B C D E F D E A A D";
+        str = str.replace("D", "test")
+        console.log(str); // A B C test E F test E A A test
+
+        str = str.replace(/D/g, "TEST");  // wyrazenie regularne ktore zamienia wszystkie wystapienia litery D na TEST. /g oznacza global
+        console.log(str); // A B C TEST E F TEST E A TEST
+
+        str = "0123456789"
+        console.log(str.substring(2)) // 23456789 .Wcyina wartosc od podanego indexu do konca stringa. 
+        console.log(str.substring(2, 5)) // 234 .Wycina string od 2 do 4 znaku. Podane wartosci dzialaja na bazie liczenia indexu czyli od 0
+
+
+        console.log(str.substr(2)) // 23456789
+        console.log(str.substr(2, 5)) // 23456 .Dziala inaczej niz poprzednia metoda.
+        // Tutaj wskazujemy dlugosc lancucha do pobrania tzn. od indexu 2 wlacznie jest liczone 5 znakow ktore sa pobierane.
+
+        console.log(str.substr(-3)); // 789 .Podaje ostatnie 3 znaki tego lancucha
+        
+        str = "Ala ma kota, Ala ma tez psa";
+        console.log(str.indexOf("Ala")); // Podaje index łancucha znakow czyli 0
+        console.log(str.indexOf("Ala", 2)); // Podaje index lancucha znakow zaczynajac od 2 indexu. Otrzymana wartosc to 13.
+        
+        console.log(str.lastIndexOf("Ala")); // Podaje index lancucha znakow liczac od konca. Otrzymana wartosc to 13.
+        console.log(str.lastIndexOf("Kasia")); // -1 .Zwraca -1 kiedy nie ma takiego lancucha znakow w stringu.
+
+        let str2 = str.substring(str.lastIndexOf("Ala"));
+        console.log(str2); // Ala ma tez psa.
+
+        </script>
+         <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/prism.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/components/prism-javascript.min.js"></script>
+</body>
+</html>

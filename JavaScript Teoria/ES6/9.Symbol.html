@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <script>
+let symbol1 = Symbol("Symbol1"); 
+// Tworzymy unikalny symbol o opisie "Symbol1". Symbole w JavaScript są zawsze unikalne, nawet jeśli mają ten sam opis.
+
+let symbol2 = Symbol("Symbol1");
+// Tworzymy kolejny unikalny symbol, również z opisem "Symbol1". Jednak będzie to inny symbol niż symbol1.
+
+console.log(symbol1 === symbol2); 
+// Zwraca `false`, ponieważ symbole są zawsze unikalne, nawet jeśli ich opisy są takie same.
+
+console.log(symbol1 == symbol2);  
+// Również zwróci `false`, ponieważ symbole nie są równe ani pod względem wartości, ani typu.
+
+let obj =  { 
+    a:10 
+}; 
+// Tworzymy obiekt o jednej właściwości `a` z wartością `10`.
+
+obj[symbol1] = 1000; 
+// Dodajemy nową właściwość do obiektu, której kluczem jest symbol `symbol1`, a wartością `1000`. 
+// Symbole mogą być używane jako unikalne klucze w obiektach.
+
+console.log(obj[symbol1]); 
+// Wyświetla wartość właściwości przypisanej do `symbol1`, czyli `1000`.
+
+for(const v in obj) console.log(v); 
+// Pętla `for...in` iteruje po kluczach obiektu, ale symbole są niewidoczne dla tej pętli. 
+// W tym przypadku wyświetli tylko `a`, ponieważ symbole nie są wyliczalne (enumerable).
+
+console.log(Object.getOwnPropertySymbols(obj)); 
+// `Object.getOwnPropertySymbols` zwraca tablicę symboli używanych jako klucze w obiekcie.
+// W tym przypadku zwróci tablicę zawierającą `symbol1` (czyli [Symbol("Symbol1")]).
+
+    </script>
+</body>
+</html>

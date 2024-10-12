@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Metody call(), apply() i bind() w JavaScript</title>
+    <link rel="stylesheet" href="/JavaScript Teoria/styles.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/themes/prism-tomorrow.min.css" rel="stylesheet" />
+</head>
+<body>
+    <div class="container">
+        <h1>Metody <code>call()</code>, <code>apply()</code> i <code>bind()</code> w JavaScript</h1>
+
+        <p>Metody <code>call()</code>, <code>apply()</code> i <code>bind()</code> służą do kontrolowania kontekstu (wartości <code>this</code>) dla funkcji. Umożliwiają wywołanie funkcji w określonym kontekście obiektu lub tworzenie nowej funkcji związanej z określonym kontekstem.</p>
+
+        <h2>Metoda <code>call()</code></h2>
+        <p>Metoda <code>call()</code> wywołuje funkcję, przypisując jej <code>this</code> do obiektu przekazanego jako pierwszy argument. Dodatkowe argumenty są przekazywane do funkcji osobno, jako kolejne argumenty.</p>
+
+        <h3>Przykład użycia <code>call()</code></h3>
+        <pre><code class="language-javascript">
+function greet(greeting, punctuation) {
+    console.log(greeting + ', ' + this.name + punctuation);
+}
+
+const person = { name: 'Anna' };
+
+greet.call(person, 'Cześć', '!'); // Cześć, Anna!
+        </code></pre>
+        <p>W tym przykładzie metoda <code>call()</code> przypisuje <code>this</code> do obiektu <code>person</code>, a następnie wywołuje funkcję <code>greet</code>, przekazując do niej argumenty <code>'Cześć'</code> i <code>'!'</code>.</p>
+
+        <h2>Metoda <code>apply()</code></h2>
+        <p>Metoda <code>apply()</code> działa podobnie do <code>call()</code>, ale różni się tym, że argumenty funkcji są przekazywane jako tablica.</p>
+
+        <h3>Przykład użycia <code>apply()</code></h3>
+        <pre><code class="language-javascript">
+function greet(greeting, punctuation) {
+    console.log(greeting + ', ' + this.name + punctuation);
+}
+
+const person = { name: 'Krzysztof' };
+
+greet.apply(person, ['Witaj', '?']); // Witaj, Krzysztof?
+        </code></pre>
+        <p>W tym przykładzie metoda <code>apply()</code> również przypisuje <code>this</code> do obiektu <code>person</code>, ale argumenty są przekazywane w tablicy <code>['Witaj', '?']</code>.</p>
+
+        <h2>Metoda <code>bind()</code></h2>
+        <p>Metoda <code>bind()</code> tworzy nową funkcję, która ma przypisane na stałe <code>this</code> do obiektu, przekazanego jako pierwszy argument. W przeciwieństwie do <code>call()</code> i <code>apply()</code>, metoda <code>bind()</code> nie wywołuje funkcji natychmiast – zwraca nową funkcję z ustawionym kontekstem.</p>
+
+        <h3>Przykład użycia <code>bind()</code></h3>
+        <pre><code class="language-javascript">
+function greet(greeting, punctuation) {
+    console.log(greeting + ', ' + this.name + punctuation);
+}
+
+const person = { name: 'Marta' };
+
+const boundGreet = greet.bind(person);
+
+boundGreet('Hej', '.'); // Hej, Marta.
+        </code></pre>
+        <p>W tym przykładzie metoda <code>bind()</code> tworzy nową funkcję <code>boundGreet</code>, która ma na stałe przypisane <code>this</code> do obiektu <code>person</code>. Funkcja <code>boundGreet</code> może być wywoływana wielokrotnie z różnymi argumentami.</p>
+
+        <h2>Różnice między <code>call()</code>, <code>apply()</code> i <code>bind()</code></h2>
+        <ul>
+            <li><code>call()</code> i <code>apply()</code> natychmiast wywołują funkcję, przypisując jej <code>this</code>, przy czym <code>call()</code> przyjmuje argumenty oddzielnie, a <code>apply()</code> jako tablicę.</li>
+            <li><code>bind()</code> zwraca nową funkcję z przypisanym <code>this</code>, ale nie wywołuje jej natychmiast.</li>
+        </ul>
+
+        <h2>Podsumowanie</h2>
+        <ul>
+            <li><code>call()</code> natychmiast wywołuje funkcję, przypisując jej określony kontekst <code>this</code>.</li>
+            <li><code>apply()</code> działa podobnie jak <code>call()</code>, ale argumenty przekazywane są jako tablica.</li>
+            <li><code>bind()</code> tworzy nową funkcję z przypisanym na stałe kontekstem <code>this</code>, ale nie wywołuje jej natychmiast.</li>
+        </ul>
+
+    </div>
+    <script>
+
+        // Tworzymy obiekt `employee`, który zawiera różne właściwości i metody
+const employee = {
+    name: 'John Doe',         // Imię i nazwisko pracownika
+    age: 30,                  // Wiek pracownika
+    department: 'IT',         // Dział, w którym pracuje
+    salary: 5000,             // Wynagrodzenie pracownika
+    hireDate: new Date('2020-01-01'),  // Data zatrudnienia
+    getFullName: function(name, lastName) {
+        console.log(`${name} ${lastName}`);  // Wyświetla pełne imię i nazwisko
+    },
+    raiseSalary: function(percentage) {
+        // Podnosi wynagrodzenie o określony procent
+        this.salary += (this.salary * percentage) / 100;
+    }
+}
+
+// Wywołanie metody `getFullName` obiektu `employee` z przekazanymi argumentami "Jurek" i "Ogórek"
+employee.getFullName("Jurek", "Ogorek");  // Wynik: "Jurek Ogorek"
+
+// Używamy `call` do wywołania metody `getFullName` z innym kontekstem (`user`) i przekazujemy argumenty
+// `call` wywołuje funkcję natychmiast, z pierwszym argumentem jako kontekstem (this)
+const user = {name: "Jan"};
+employee.getFullName.call(user, user.name, "Adamski");  // Wynik: "Jan Adamski"
+
+// Używamy `apply` do wywołania tej samej metody z innym kontekstem (`user`), ale tym razem przekazujemy argumenty w formie tablicy
+// `apply` działa podobnie do `call`, ale argumenty są przekazywane jako tablica
+employee.getFullName.apply(user, [user.name, "Kowalski"]);  // Wynik: "Jan Kowalski"
+
+// Używamy `bind` do stworzenia nowej funkcji, która jest powiązana z określonym kontekstem (`user`) i argumentami
+// `bind` nie wywołuje funkcji natychmiast, tylko tworzy nową funkcję, którą można wywołać później
+let userInfo = employee.getFullName.bind(user, user.name, "Adamczewski");
+
+// Wywołujemy nową funkcję, która już została związana z kontekstem `user` i przekazanymi argumentami
+userInfo();  // Wynik: "Jan Adamczewski"
+userInfo();  // Wynik: "Jan Adamczewski"
+userInfo();  // Wynik: "Jan Adamczewski"
+
+        
+    </script>
+     <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/prism.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/components/prism-javascript.min.js"></script>
+</body>
+</html>

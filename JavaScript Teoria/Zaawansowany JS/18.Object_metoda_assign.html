@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Metoda Object.assign() w JavaScript</title>
+    <link rel="stylesheet" href="/JavaScript Teoria/styles.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/themes/prism-tomorrow.min.css" rel="stylesheet" />
+</head>
+<body>
+    <div class="container">
+        <h1>Metoda <code>Object.assign()</code> w JavaScript</h1>
+
+        <p>Metoda <code>Object.assign()</code> kopiuje wyliczalne właściwości z jednego lub więcej obiektów źródłowych do obiektu docelowego. Właściwości z obiektów źródłowych nadpisują właściwości o tej samej nazwie w obiekcie docelowym. Metoda zwraca obiekt docelowy, który został zmodyfikowany.</p>
+
+        <h2>Podstawowa składnia</h2>
+        <pre><code class="language-javascript">
+        Object.assign(cel, źródło1, źródło2, ...);
+        </code></pre>
+        <p>Metoda przyjmuje jako pierwszy argument obiekt docelowy, a kolejne argumenty to obiekty źródłowe, których właściwości będą kopiowane do obiektu docelowego.</p>
+
+        <h2>Przykład użycia <code>Object.assign()</code></h2>
+        <pre><code class="language-javascript">
+// Obiekt docelowy
+let target = { a: 1, b: 2 };
+
+// Obiekty źródłowe
+let source1 = { b: 4, c: 5 };
+let source2 = { d: 6 };
+
+// Kopiowanie właściwości
+Object.assign(target, source1, source2);
+
+console.log(target); // { a: 1, b: 4, c: 5, d: 6 }
+        </code></pre>
+        <p>W tym przykładzie właściwości z obiektów <code>source1</code> i <code>source2</code> zostały skopiowane do obiektu <code>target</code>. Właściwość <code>b</code> z obiektu <code>source1</code> nadpisała wartość <code>b</code> w obiekcie <code>target</code>.</p>
+
+        <h2>Kopiowanie obiektu za pomocą <code>Object.assign()</code></h2>
+        <p>Metoda <code>Object.assign()</code> może być używana do tworzenia płytkiej kopii obiektu:</p>
+        <pre><code class="language-javascript">
+let original = { name: "Alice", age: 25 };
+let copy = Object.assign({}, original);
+
+console.log(copy); // { name: "Alice", age: 25 }
+        </code></pre>
+        <p>W tym przykładzie tworzona jest płytka kopia obiektu <code>original</code>. Oznacza to, że wszelkie zmiany w obiekcie <code>copy</code> nie będą miały wpływu na obiekt <code>original</code>, o ile kopiowane właściwości zawierają wartości prymitywne.</p>
+
+        <h2>Płytka kopia a głęboka kopia</h2>
+        <p>Metoda <code>Object.assign()</code> tworzy **płytką kopię** obiektu. Oznacza to, że jeśli obiekt źródłowy zawiera właściwości będące obiektami, zostanie skopiowana tylko referencja do tych obiektów, a nie same obiekty. Zmiana zagnieżdżonego obiektu w jednej kopii wpłynie na inne kopie:</p>
+        <pre><code class="language-javascript">
+let obj1 = { a: 1, b: { x: 10 } };
+let obj2 = Object.assign({}, obj1);
+
+obj2.b.x = 20;
+console.log(obj1.b.x); // 20 (referencja do tego samego obiektu)
+        </code></pre>
+        <p>Aby uniknąć takich sytuacji, należy tworzyć głęboką kopię, na przykład za pomocą rekurencji lub narzędzi takich jak <code>JSON.parse(JSON.stringify(obj))</code>.</p>
+
+        <h2>Przypadek z domyślnymi wartościami</h2>
+        <p>Możemy użyć <code>Object.assign()</code> do ustawiania domyślnych wartości w obiekcie. Jeżeli właściwość nie istnieje w obiekcie docelowym, zostanie skopiowana z obiektu źródłowego:</p>
+        <pre><code class="language-javascript">
+let defaultSettings = { theme: "light", notifications: true };
+let userSettings = { theme: "dark" };
+
+let finalSettings = Object.assign({}, defaultSettings, userSettings);
+
+console.log(finalSettings); // { theme: "dark", notifications: true }
+        </code></pre>
+        <p>W powyższym przykładzie ustawienia użytkownika <code>userSettings</code> nadpisały domyślne ustawienia <code>theme</code>, ale właściwość <code>notifications</code> pozostała domyślna.</p>
+
+        <h2>Podsumowanie</h2>
+        <ul>
+            <li><code>Object.assign()</code> kopiuje wyliczalne właściwości z jednego lub więcej obiektów źródłowych do obiektu docelowego.</li>
+            <li>Metoda tworzy płytką kopię obiektu – obiekty zagnieżdżone są kopiowane przez referencję.</li>
+            <li>Jest to przydatne do scalania obiektów, kopiowania obiektów lub ustawiania domyślnych wartości.</li>
+        </ul>
+    </div>
+    <script>
+       // Tworzymy obiekt `obj` zawierający różne typy danych: liczby, tekst, tablicę oraz zagnieżdżony obiekt
+let obj = {a: 1, b: 2, str: "txt", arr: [1, 2, 3], info: {o: 1}};
+
+// Tworzymy obiekt `data` zawierający jedną właściwość `test`
+let data = {test: 333};
+
+// Używamy Object.assign, aby połączyć obiekty `data` i `obj`, wynik przypisujemy do `result`
+// `data` zostaje zmodyfikowany poprzez dodanie właściwości z `obj`
+let result = Object.assign(data, obj);
+
+// Wyświetlamy wynik połączenia obiektów
+// `result` (i tym samym `data`) zawiera teraz wszystkie właściwości z obiektu `obj`
+console.log(result); // {test: 333, a: 1, b: 2, str: "txt", arr: [1, 2, 3], info: {o: 1}}
+
+// Sprawdzamy, czy `data` i `obj` to ten sam obiekt w pamięci
+// Wynik: false, ponieważ `data` i `obj` to dwa różne obiekty
+console.log(obj === data); // false
+
+// Sprawdzamy, czy tablice `arr` wewnątrz `obj` i `data` odnoszą się do tej samej referencji w pamięci
+// Wynik: true, ponieważ Object.assign kopiuje referencję do tablicy, a nie tworzy jej kopii
+console.log(obj.arr === data.arr); // true
+
+// Sprawdzamy, czy zagnieżdżony obiekt `info` w `obj` i `data` to ten sam obiekt w pamięci
+// Wynik: true, ponieważ Object.assign kopiuje referencję do obiektu, a nie tworzy nowej instancji
+console.log(obj.info === data.info); // true
+
+// Tworzymy kilka obiektów `o1`, `o2` i `o3`, każdy z innymi właściwościami
+let o1 = {a: 1, b: 2};
+let o2 = {c: 10};
+let o3 = {txt: "test"};
+
+// Używamy Object.assign, aby połączyć te obiekty w nowy obiekt `obj2`
+// `obj2` będzie zawierać właściwości z `o1`, `o2` i `o3`
+let obj2 = Object.assign({}, o1, o2, o3);
+
+// Wyświetlamy wynikowy obiekt `obj2`
+// `obj2` zawiera wszystkie właściwości z `o1`, `o2` i `o3`
+console.log(obj2); // {a: 1, b: 2, c: 10, txt: "test"}
+
+
+    </script>
+     <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/prism.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/components/prism-javascript.min.js"></script>
+</body>
+</html>

@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    
+
+    <script>
+/* DESTRUKTURYZACJA TABLICY */
+
+        // [12, "Ania", {b:16}] przykladowa tablica 
+
+        const [num, name, obj] = [12, "Ania", {b:16}]   // destrukturyzacja pozwala przypisac obiekty z tablicy do zmiennych
+
+        console.log(num); // 12
+        console.log(name); // Ania
+        console.log(obj); // {b: 16}
+
+        const [a, ,c] = [12, "Ania", {b:"arek"}];   // taki zapis pozwala pominac wartosci ktorych nie chcemy przypisac do zmiennej
+        console.log(a); // 12
+        console.log(c); // arek
+
+/* DESTRUKTURYZACJA OBIEKTU */
+
+const {username, password , city="KRK"} = {username:"Ania", password:"qwerty"}
+console.log(username); // Ania
+console.log(password); // qwerty
+console.log(city); // KRK
+
+/* DESTRUKTURYZACJA FUNKCJI */
+
+/* 1 */
+function getDetails({user, pass, town="Kraków"}) {
+
+    /* Inna mozliwosc zapisu danych */
+// const user = "Kasia"  
+// const pass = "abc123"
+// const town = "Kraków"
+
+    return {
+    user,
+    pass,
+    town
+    } // ES6 automatycznie przypisuje wartosci do zmiennych w return
+}
+console.log(getDetails({user:"Kasia", pass:"abc123"})); // Username: Kasia, Password: abc123, City: Kraków
+
+/* 2 */
+const userDetail = {
+    name:"Karol",
+    surname:"Kowalski",
+    age:30,
+}
+
+function getInfo({name,surname}){  // typ destrukturyzacji obiektu przekazujac dane z obiektu do funkcji
+    console.log(name,surname)
+}
+
+getInfo(userDetail); 
+
+
+/* 3 */
+const employee = {
+    name:"Ola",
+    surname:"Nowak",
+    age:35,
+    job:"developer",
+    adress:{   
+        country:"Poland",
+            street:{
+                // streetName: "Wilcza"
+            }        
+    }
+}
+
+const{age, adress:{country}} = employee;
+console.log(age,country); // 35, Poland
+
+const{adress:{street:streetName}} = employee;
+console.log(streetName) // Wilcza
+
+const{adress:{street:{streetName: other = "Polna"}}} = employee;  // nadpisuje streetName kiedy jest niewidoczna
+console.log(other) 
+    </script>
+</body>
+</html>

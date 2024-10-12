@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Operator Spread w JavaScript</title>
+    <link rel="stylesheet" href="/JavaScript Teoria/styles.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/themes/prism-tomorrow.min.css" rel="stylesheet" />
+</head>
+<body>
+    <div class="container">
+        <h1>Wyjaśnienie działania operatora spread</h1>
+        
+        <p>Operator <strong>spread</strong> (<code>...</code>) w JavaScript umożliwia "rozpakowywanie" elementów z tablic, obiektów lub iterowalnych struktur danych na pojedyncze elementy. Operator ten pozwala np. na rozdzielenie tablic na poszczególne wartości, co jest przydatne podczas kopiowania lub łączenia tablic.</p>
+        
+        <h2>Przykład użycia operatora spread</h2>
+        <pre><code class="language-javascript">
+        const arr1 = [1, 2, 3];
+        const arr2 = [...arr1, 4, 5, 6];
+
+        console.log(arr2); // [1, 2, 3, 4, 5, 6]
+        </code></pre>
+        <p>W tym przykładzie operator <code>spread</code> rozpakowuje elementy z tablicy <code>arr1</code> i dodaje je do nowej tablicy <code>arr2</code>, co umożliwia szybkie kopiowanie i dodawanie elementów.</p>
+
+        <h2>Rozpakowywanie obiektów</h2>
+        <pre><code class="language-javascript">
+        const person = { name: "John", age: 25 };
+        const newPerson = { ...person, city: "New York" };
+
+        console.log(newPerson); // { name: "John", age: 25, city: "New York" }
+        </code></pre>
+        <p>Podobnie jak w przypadku tablic, operator <code>spread</code> pozwala na rozpakowywanie właściwości obiektu, co ułatwia tworzenie nowych obiektów poprzez kopiowanie istniejących właściwości.</p>
+
+        <h2>Zastosowanie operatora spread</h2>
+        <p>Operator <strong>spread</strong> ma wiele zastosowań, takich jak:</p>
+        <ul>
+            <li>Kopiowanie tablic lub obiektów bez zmieniania oryginałów.</li>
+            <li>Łączenie wielu tablic w jedną.</li>
+            <li>Przekazywanie elementów tablicy jako argumentów funkcji.</li>
+        </ul>
+    </div>
+    <script>
+
+        function test(a, b, c ,d) {
+            console.log(a,b,c,d);
+        }
+
+        const arr = [1,2,3,4]
+        test(...arr); // spread operator, przekazuje elementy z tablicy arr do funkcji test 
+
+
+        let data = {
+            name: 'John',
+            age: 30,
+            greet() {
+                console.log(`Hello, my name is ${this.name} and I'm ${this.age} years old.`);
+            }
+        };
+
+        let obj = {  // nowy obiekt ktory kopiuje wlasciwosci z objektu data i przypisuje nowe wlasciwosci 
+            ...data,
+            city: 'London',
+            favColor: 'black'    
+        };
+
+        console.log(obj);
+    </script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/prism.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/components/prism-javascript.min.js"></script>
+</body>
+</html>

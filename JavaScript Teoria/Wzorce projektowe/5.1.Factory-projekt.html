@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="../styles.css"> 
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/themes/prism-tomorrow.min.css" rel="stylesheet" />
+    <title>Generowanie Pojazdów - Wzorzec Factory</title>
+</head>
+<body>
+    <div class="container">
+        <h1>Generowanie Pojazdów - Wzorzec Factory</h1>
+        <div id="vehicle-container"></div>
+
+        <h2>Kod HTML i JavaScript:</h2>
+        <pre><code class="language-html">
+        &lt;h1&gt;Generowanie Pojazdów - Wzorzec Factory&lt;/h1&gt;
+        &lt;div id="vehicle-container"&gt;&lt;/div&gt;
+        
+        &lt;script&gt;
+        class Vehicle {
+            constructor(type, speed) {
+                this.type = type;
+                this.speed = speed;
+            }
+
+            describe() {
+                return `Typ pojazdu: ${this.type}, Prędkość maksymalna: ${this.speed} km/h`;
+            }
+        }
+
+        class VehicleFactory {
+            static createVehicle(type) {
+                switch (type) {
+                    case 'Samochód':
+                        return new Vehicle(type, 200);
+                    case 'Motocykl':
+                        return new Vehicle(type, 180);
+                    case 'Rower':
+                        return new Vehicle(type, 30);
+                    default:
+                        throw new Error('Nieznany typ pojazdu: ' + type);
+                }
+            }
+        }
+
+        const vehicles = [
+            VehicleFactory.createVehicle('Samochód'),
+            VehicleFactory.createVehicle('Motocykl'),
+            VehicleFactory.createVehicle('Rower')
+        ];
+
+        const vehicleContainer = document.getElementById('vehicle-container');
+        vehicles.forEach(vehicle => {
+            const p = document.createElement('p');
+            p.textContent = vehicle.describe();
+            vehicleContainer.appendChild(p);
+        });
+        &lt;/script&gt;
+        </code></pre>
+    </div>
+
+    <script>
+        // Klasa Vehicle reprezentująca pojazd
+        class Vehicle {
+            constructor(type, speed) {
+                this.type = type;
+                this.speed = speed;
+            }
+
+            describe() {
+                return `Typ pojazdu: ${this.type}, Prędkość maksymalna: ${this.speed} km/h`;
+            }
+        }
+
+        // Fabryka pojazdów
+        class VehicleFactory {
+            static createVehicle(type) {
+                switch (type) {
+                    case 'Samochód':
+                        return new Vehicle(type, 200);
+                    case 'Motocykl':
+                        return new Vehicle(type, 180);
+                    case 'Rower':
+                        return new Vehicle(type, 30);
+                    default:
+                        throw new Error('Nieznany typ pojazdu: ' + type);
+                }
+            }
+        }
+
+        // Tworzymy kilka pojazdów przy użyciu fabryki
+        const vehicles = [
+            VehicleFactory.createVehicle('Samochód'),
+            VehicleFactory.createVehicle('Motocykl'),
+            VehicleFactory.createVehicle('Rower')
+        ];
+
+        // Renderowanie pojazdów w interfejsie użytkownika
+        const vehicleContainer = document.getElementById('vehicle-container');
+        vehicles.forEach(vehicle => {
+            const p = document.createElement('p');
+            p.textContent = vehicle.describe();
+            vehicleContainer.appendChild(p);
+        });
+    </script>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/prism.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/components/prism-javascript.min.js"></script>
+</body>
+</html>

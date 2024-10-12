@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <script>
+
+const arr = [1, 2, 5, [6, 4, 2, [5, 3, 2]]];
+// Tworzy tablicę 'arr', która zawiera liczby oraz zagnieżdżoną tablicę wewnątrz niej.
+
+console.log(arr.flat());
+// Używa metody flat() z domyślną głębokością (1), aby "spłaszczyć" tablicę tylko o jeden poziom.
+// Wynik: [1, 2, 5, 6, 4, 2, [5, 3, 2]] (wewnętrzna tablica z elementami [5, 3, 2] pozostaje niezmieniona).
+
+console.log(arr.flat(2));
+// Używa flat(2), aby spłaszczyć tablicę do głębokości dwóch poziomów, co oznacza, że wszystkie zagnieżdżone tablice zostaną całkowicie "spłaszczone".
+// Wynik: [1, 2, 5, 6, 4, 2, 5, 3, 2]
+
+console.log([1, 3, 5].flatMap(x => [x, x * 2, [x * 3]]));
+// Metoda flatMap() najpierw stosuje funkcję mapującą (w tym przypadku: mnożenie wartości przez 2 i 3) 
+// do każdego elementu, a następnie spłaszcza wynik o jeden poziom.
+// Wynik: [1, 2, [3], 3, 6, [9], 5, 10, [15]] 
+// Wartości są pomnożone przez 2 i 3, ale tylko pierwszy poziom zagnieżdżenia jest spłaszczony (tablice wewnętrzne pozostają).
+
+    </script>
+</body>
+</html>

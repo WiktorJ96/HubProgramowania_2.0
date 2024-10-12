@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    
+    <script>
+ let obj = {
+    a: 10,
+    b: 20,
+    str: "test"
+};
+// Tworzy obiekt 'obj' z trzema właściwościami: 'a' (10), 'b' (20) i 'str' ("test").
+
+const handler = {
+    get(target, prop, receiver) {
+        // Funkcja 'get' zostaje wywołana, kiedy właściwość jest odczytywana za pomocą 'proxy1'.
+        if (prop === "a") return "A!!!";
+        // Jeśli odczytywana jest właściwość 'a', zwraca "A!!!" zamiast rzeczywistej wartości.
+        return target[prop] + "!";
+        // W przeciwnym razie zwraca wartość właściwości z dodanym znakiem '!' na końcu.
+    },
+
+    set(target, prop, value) {
+        // Funkcja 'set' zostaje wywołana, kiedy próbujesz zmienić wartość właściwości obiektu za pomocą 'proxy1'.
+        if (prop === "a" || prop === "b") {
+            // Dla właściwości 'a' i 'b':
+            if (Number.isInteger(value)) {
+                // Sprawdza, czy nowa wartość jest liczbą całkowitą.
+                target[prop] = value;
+                // Jeśli jest, zmienia wartość właściwości na nową.
+            }
+        } else if (prop === "str" && typeof value === "string") {
+            // Jeśli modyfikujesz 'str', sprawdza, czy nowa wartość jest łańcuchem tekstowym.
+            target[prop] = value;
+            // Jeśli jest, zmienia wartość właściwości na nową.
+        } else {
+            console.log("wrong data ");
+            // Jeśli warunki nie są spełnione, wypisuje komunikat "wrong data".
+        }
+    }
+};
+
+const proxy1 = new Proxy(obj, handler);
+// Tworzy obiekt proxy 'proxy1', który obudowuje oryginalny obiekt 'obj' za pomocą obsługi dostępu 'handler'.
+
+console.log(proxy1.a); // A!!!
+// Kiedy próbujesz odczytać 'proxy1.a', funkcja 'get' zwraca "A!!!" (zamiast rzeczywistej wartości 10).
+
+console.log(proxy1.b); // 20!
+// Kiedy próbujesz odczytać 'proxy1.b', funkcja 'get' zwraca "20!" (wartość właściwości 'b' z dodanym znakiem '!' na końcu).
+
+console.log(obj.a); // 10
+// Odczytanie wartości 'a' bezpośrednio z 'obj' (oryginalnego obiektu) zwraca prawdziwą wartość 10, ponieważ proxy nie ma na to wpływu.
+
+console.log(Reflect.get(proxy1, "str"));
+// Używa 'Reflect.get()', aby odczytać wartość 'str' z 'proxy1'. Wartość będzie 'test'.
+
+proxy1.b = 112;
+console.log(proxy1.b); // 112!
+// Zmienia wartość 'b' na 112 za pomocą proxy. Następnie wyświetla '112!' zgodnie z zasadą dodawania '!' w 'get'.
+
+proxy1.str = "new_test";
+console.log(proxy1.str); // new_test
+// Zmienia wartość 'str' na "new_test". Ponieważ jest to prawidłowy łańcuch tekstowy, wartość zostaje zmieniona bez problemu.
+
+proxy1.str = 23;
+console.log(proxy1.str); // wrong data
+// Próbuje zmienić 'str' na liczbę, co jest niedozwolone (tylko ciągi znaków są akceptowane). Wypisuje komunikat "wrong data".
+
+    </script>
+</body>
+</html>

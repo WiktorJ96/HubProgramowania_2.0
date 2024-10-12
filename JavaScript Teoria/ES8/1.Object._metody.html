@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    
+    <script>
+const obj = {
+    name: 'John',
+    age: 30,
+    address: {
+        street: '123 Main St',
+        city: 'New York'
+    }
+};
+// Tworzy obiekt 'obj' z trzema właściwościami: 'name', 'age', i 'address' (które również jest obiektem).
+
+console.log(Object.values(obj));
+// Object.values() zwraca tablicę wartości właściwości obiektu 'obj'.
+// Wynik: ['John', 30, {street: '123 Main St', city: 'New York'}]
+
+console.log(Object.entries(obj));
+// Object.entries() zwraca tablicę tablic, gdzie każdy element zawiera parę [klucz, wartość] obiektu 'obj'.
+// Wynik: [['name', 'John'], ['age', 30], ['address', {street: '123 Main St', city: 'New York'}]]
+
+async function getData() {
+    const response = await fetch("https://api.chucknorris.io/jokes/random");
+    // Używa funkcji fetch() do pobrania danych z API Chucka Norrisa.
+    const data = await response.json();
+    // Czeka na odpowiedź w formacie JSON.
+    console.log(data);
+    // Wypisuje pobrane dane (losowy żart Chucka Norrisa).
+}
+
+getData();
+// Wywołuje funkcję getData(), która pobiera i wypisuje żart Chucka Norrisa z API.
+
+console.log(Object.getOwnPropertyDescriptors(obj));
+// Object.getOwnPropertyDescriptors() zwraca wszystkie właściwości obiektu 'obj' wraz z ich deskryptorami (opisami), 
+// które zawierają informacje o właściwościach takich jak 'writable', 'enumerable', 'configurable', itd.
+// Wynik: Obiekt zawierający szczegółowe informacje o każdej właściwości obiektu 'obj'.
+
+let str = "Hello".padStart(10, 0);
+// Metoda padStart() wypełnia ciąg znaków "Hello" do długości 10, dodając '0' na początku.
+// Wynik: '00000Hello'
+console.log(str);
+
+str = str.padEnd(20, "!");
+// Metoda padEnd() wypełnia ciąg znaków '00000Hello' do długości 20, dodając '!' na końcu.
+// Wynik: '00000Hello!!!!!!!!!!'
+console.log(str);
+
+    </script>
+</body>
+</html>

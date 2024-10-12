@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <script>
+const entries = new Map([
+    ['a', 20],
+    ['str', 'text'],
+    ['obj', { data: 10 }]
+]);
+// Tworzy mapę 'entries' z trzema kluczami ('a', 'str', 'obj') i ich odpowiednimi wartościami (20, 'text', {data: 10}).
+
+const obj = Object.fromEntries(entries);
+// Używa metody Object.fromEntries(), aby przekształcić mapę 'entries' w zwykły obiekt.
+// Każda para klucz-wartość z mapy zostanie przekształcona na odpowiednią właściwość obiektu.
+
+console.log(obj);
+// Wynik: { a: 20, str: 'text', obj: { data: 10 } }
+// Wypisuje nowy obiekt, który został utworzony na podstawie mapy 'entries'.
+
+    </script>
+</body>
+</html>

@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Funkcje i Obiekt Arguments w JavaScript</title>
+      <link rel="stylesheet" href="../styles.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/themes/prism-tomorrow.min.css" rel="stylesheet" />
+</head>
+<body>
+    <div class="container">
+        <h1>Funkcje i Obiekt <code>arguments</code> w JavaScript</h1>
+
+        <p>W JavaScript obiekt <code>arguments</code> to specjalna kolekcja, która zawiera wszystkie argumenty przekazane do funkcji. Dzięki temu możemy pracować z dowolną liczbą argumentów bez konieczności jawnego deklarowania parametrów w definicji funkcji.</p>
+
+        <h2>Podstawowe użycie obiektu <code>arguments</code></h2>
+        <p>Obiekt <code>arguments</code> jest dostępny wewnątrz każdej funkcji, nawet jeśli nie zdefiniowano żadnych parametrów. Jest to obiekt tablicopodobny, co oznacza, że nie jest prawdziwą tablicą, ale ma indeksowane wartości, do których można uzyskać dostęp jak w tablicy.</p>
+
+        <h3>Przykład z użyciem <code>arguments</code></h3>
+        <pre><code class="language-javascript">
+function sum() {
+    let total = 0;
+    for (let i = 0; i < arguments.length; i++) {
+        total += arguments[i];
+    }
+    return total;
+}
+
+console.log(sum(1, 2, 3, 4)); // 10
+console.log(sum(10, 20));     // 30
+        </code></pre>
+        <p>W powyższym przykładzie funkcja <code>sum</code> może przyjmować dowolną liczbę argumentów. Obiekt <code>arguments</code> pozwala iterować po przekazanych wartościach i obliczyć ich sumę.</p>
+
+        <h2>Tablicopodobny charakter obiektu <code>arguments</code></h2>
+        <p>Choć <code>arguments</code> wygląda jak tablica, nie jest prawdziwą tablicą i nie ma dostępu do metod tablicowych, takich jak <code>forEach()</code> czy <code>map()</code>. Możemy jednak przekształcić go w tablicę, używając funkcji takich jak <code>Array.from()</code> lub operatora <code>spread</code>.</p>
+
+        <h3>Przykład przekształcenia obiektu <code>arguments</code> w tablicę</h3>
+        <pre><code class="language-javascript">
+function logArguments() {
+    const argsArray = Array.from(arguments); // Konwersja do tablicy
+    argsArray.forEach(arg => console.log(arg));
+}
+
+logArguments('JavaScript', 42, true);
+// JavaScript
+// 42
+// true
+        </code></pre>
+        <p>W tym przykładzie konwertujemy obiekt <code>arguments</code> na tablicę za pomocą <code>Array.from()</code>, co umożliwia korzystanie z metod tablicowych, takich jak <code>forEach()</code>.</p>
+
+        <h2>Użycie operatora rest jako alternatywa</h2>
+        <p>Od ES6 mamy możliwość używania operatora **rest** (<code>...</code>), który daje bardziej czytelny sposób obsługi zmiennej liczby argumentów. Operator rest jest zalecany zamiast <code>arguments</code>, ponieważ tworzy prawdziwą tablicę z przekazanych argumentów.</p>
+
+        <h3>Przykład z użyciem operatora rest</h3>
+        <pre><code class="language-javascript">
+function sum(...numbers) {
+    return numbers.reduce((total, num) => total + num, 0);
+}
+
+console.log(sum(1, 2, 3, 4)); // 10
+console.log(sum(10, 20));     // 30
+        </code></pre>
+        <p>W tym przykładzie operator <code>rest</code> przyjmuje dowolną liczbę argumentów i przechowuje je w tablicy <code>numbers</code>, co umożliwia bezpośrednie użycie metod tablicowych.</p>
+
+        <h2>Porównanie obiektu <code>arguments</code> i operatora <code>rest</code></h2>
+        <ul>
+            <li><strong>Obiekt <code>arguments</code>:</strong> dostępny w funkcjach tradycyjnych, nie działa z funkcjami strzałkowymi, tworzy tablicopodobny obiekt.</li>
+            <li><strong>Operator <code>rest</code>:</strong> dostępny od ES6, działa z funkcjami strzałkowymi, tworzy prawdziwą tablicę, zalecany do użycia.</li>
+        </ul>
+
+        <h2>Podsumowanie</h2>
+        <ul>
+            <li>Obiekt <code>arguments</code> pozwala na dostęp do wszystkich argumentów przekazanych do funkcji, nawet jeśli nie zdefiniowano parametrów.</li>
+            <li>Obiekt <code>arguments</code> jest tablicopodobny, co oznacza, że nie jest prawdziwą tablicą i nie ma metod takich jak <code>map()</code> czy <code>forEach()</code>.</li>
+            <li>Od ES6 preferowanym rozwiązaniem jest używanie operatora <code>rest</code>, który jest bardziej elastyczny i działa lepiej z nowoczesnym JavaScriptem.</li>
+        </ul>
+
+    </div>
+    <script>
+        function sumAl() {
+            let result = 0;
+            for (let i = 0; i < arguments.length; i++) {
+                result += arguments[i];
+            }
+
+            return result;
+        }
+
+            console.log(sumAl(1,2,3));
+            console.log(sumAl(1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17));
+    </script>
+
+       <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/prism.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/components/prism-javascript.min.js"></script>
+</body>
+</html>

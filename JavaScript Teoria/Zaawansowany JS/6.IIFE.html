@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>IIFE w JavaScript</title>
+    <link rel="stylesheet" href="/JavaScript Teoria/styles.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/themes/prism-tomorrow.min.css" rel="stylesheet" />
+</head>
+<body>
+    <div class="container">
+        <h1>IIFE (Immediately Invoked Function Expression) w JavaScript</h1>
+
+        <p>IIFE, czyli <strong>Immediately Invoked Function Expression</strong>, to funkcje w JavaScript, które są wywoływane natychmiast po ich zdefiniowaniu. Są one przydatne do tworzenia zakresów (scope) i unikania konfliktów nazw zmiennych w kodzie, szczególnie w starszych wersjach JavaScript, przed wprowadzeniem <code>let</code> i <code>const</code>.</p>
+
+        <h2>Podstawowa składnia IIFE</h2>
+        <pre><code class="language-javascript">
+        (function() {
+            console.log("Ta funkcja została wywołana natychmiast!");
+        })();
+        </code></pre>
+        <p>W powyższym przykładzie funkcja anonimowa (bez nazwy) jest otoczona nawiasami <code>(...)</code>, co zmienia ją w wyrażenie funkcyjne, a następnie natychmiast wywoływana przez <code>()</code>. W efekcie widzimy komunikat w konsoli bez konieczności ręcznego wywoływania funkcji później.</p>
+
+        <h2>Przykład z przekazywaniem argumentów</h2>
+        <pre><code class="language-javascript">
+        (function(name) {
+            console.log("Witaj, " + name + "!");
+        })("Ania");
+        </code></pre>
+        <p>IIFE mogą przyjmować argumenty, które są przekazywane podczas ich natychmiastowego wywołania. W tym przykładzie funkcja przyjmuje jeden argument, <code>name</code>, i wypisuje powitanie z przekazaną wartością.</p>
+
+        <h2>Zastosowania IIFE</h2>
+        <p>IIFE były szczególnie popularne przed wprowadzeniem <code>let</code> i <code>const</code>, ponieważ pozwalały na tworzenie zakresów blokowych i ochronę zmiennych przed wyciekiem do globalnego zasięgu. Oto przykład:</p>
+        <pre><code class="language-javascript">
+        var counter = (function() {
+            var count = 0;
+            return function() {
+                return count++;
+            };
+        })();
+
+        console.log(counter()); // 0
+        console.log(counter()); // 1
+        console.log(counter()); // 2
+        </code></pre>
+        <p>W tym przykładzie zmienna <code>count</code> jest chroniona przed dostępem z zewnątrz, ponieważ znajduje się wewnątrz IIFE. Funkcja zwraca wewnętrzną funkcję, która ma dostęp do zmiennej <code>count</code> dzięki mechanizmowi zamknięcia (closure).</p>
+
+        <h2>Alternatywy dla IIFE we współczesnym JavaScript</h2>
+        <p>We współczesnym JavaScript, dzięki wprowadzeniu <code>let</code> i <code>const</code>, często nie ma potrzeby używania IIFE, aby stworzyć zakres zmiennej. Przykład z użyciem <code>let</code>:</p>
+        <pre><code class="language-javascript">
+        {
+            let counter = 0;
+            console.log(counter); // 0
+        }
+        // Zmienna counter jest dostępna tylko wewnątrz bloku
+        </code></pre>
+        <p>Zmienna <code>counter</code> jest teraz ograniczona do bloku dzięki <code>let</code>, co działa podobnie jak IIFE w starszych wersjach JavaScript.</p>
+
+        <h2>Zalety IIFE</h2>
+        <ul>
+            <li>Uniknięcie zanieczyszczania globalnego zasięgu (scope).</li>
+            <li>Tworzenie prywatnych zmiennych dostępnych tylko w ramach danej funkcji.</li>
+            <li>Natychmiastowe wykonanie logiki bez tworzenia globalnych funkcji.</li>
+        </ul>
+    </div>
+    <script>
+
+        
+        if(true){ 
+    // Warunek "if" jest zawsze prawdziwy, więc kod w bloku zostanie wykonany
+    var a = 5; 
+    // Zmienna 'a' jest deklarowana za pomocą 'var', więc ma zasięg globalny (lub funkcyjny, gdyby była wewnątrz funkcji)
+}
+
+console.log(a); 
+// 'a' jest dostępna poza blokiem 'if', więc wynik to 5
+
+(function(data){
+    // Tworzysz i natychmiastowo wywołujesz funkcję anonimową (IIFE)
+    console.log(data); 
+    // Wyświetli wartość argumentu 'data', który wynosi "test"
+    
+    var b = 10; 
+    // Deklarujesz zmienną 'b' lokalnie w funkcji, przypisując jej wartość 10
+
+    console.log("b:", b); 
+    // Wyświetla tekst "b:" oraz wartość zmiennej 'b', czyli 10
+})("test"); 
+// Funkcja anonimowa jest wywoływana z argumentem "test"
+
+
+
+
+    </script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/prism.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/components/prism-javascript.min.js"></script>
+</body>
+</html>

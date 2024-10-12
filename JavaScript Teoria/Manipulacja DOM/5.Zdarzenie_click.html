@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Obsługa zdarzeń w JavaScript</title>
+    <link rel="stylesheet" href="../styles.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/themes/prism-tomorrow.min.css" rel="stylesheet" />
+</head>
+<body>
+    <div class="container">
+        <h1>Obsługa zdarzeń w JavaScript</h1>
+
+        <p>W JavaScript zdarzenia to sygnały wysyłane przez przeglądarkę w odpowiedzi na różne akcje użytkownika. Za pomocą zdarzeń możemy wywołać odpowiednie funkcje, które reagują na te akcje. Przykładowe zdarzenia obejmują <code>click</code>, <code>mouseover</code>, <code>keydown</code> i wiele innych.</p>
+
+        <h2>Dodawanie nasłuchiwania zdarzeń za pomocą <code>addEventListener()</code></h2>
+        <p>Najbardziej uniwersalnym sposobem dodawania zdarzeń jest metoda <code>addEventListener()</code>. Pozwala ona na nasłuchiwanie różnych typów zdarzeń i uruchamianie określonych funkcji w odpowiedzi.</p>
+
+        <h3>Przykład dodania zdarzenia kliknięcia</h3>
+        <pre><code class="language-javascript">
+// Pobranie elementu z DOM
+const button = document.querySelector('#myButton');
+
+// Funkcja, która zostanie wywołana po kliknięciu
+function handleClick() {
+    console.log('Przycisk został kliknięty!');
+}
+
+// Dodanie nasłuchiwania na zdarzenie 'click'
+button.addEventListener('click', handleClick);
+        </code></pre>
+        <p>W tym przykładzie nasłuchujemy na kliknięcie przycisku <code>#myButton</code>. Gdy użytkownik kliknie na przycisk, wywołana zostanie funkcja <code>handleClick()</code>, która wyświetli komunikat w konsoli.</p>
+
+        <h2>Usuwanie nasłuchiwania zdarzeń</h2>
+        <p>Aby usunąć nasłuchiwanie zdarzeń, możemy skorzystać z metody <code>removeEventListener()</code>, która usuwa wcześniej zarejestrowany nasłuchiwacz.</p>
+        <pre><code class="language-javascript">
+button.removeEventListener('click', handleClick);
+        </code></pre>
+        <p>W tym przypadku usuwamy nasłuchiwanie na kliknięcie, co oznacza, że po wywołaniu tej funkcji przycisk nie będzie już reagował na kliknięcia.</p>
+
+        <h2>Zdarzenia w formularzach</h2>
+        <p>W formularzach internetowych możemy nasłuchiwać na zdarzenia, takie jak <code>submit</code>, które wywołuje się, gdy użytkownik wysyła dane z formularza. Oto przykład obsługi zdarzenia przesłania formularza:</p>
+        <pre><code class="language-javascript">
+// Pobranie formularza
+const form = document.querySelector('#myForm');
+
+// Funkcja obsługująca przesyłanie formularza
+function handleSubmit(event) {
+    event.preventDefault(); // Zapobiega domyślnemu przesłaniu formularza
+    console.log('Formularz został przesłany!');
+}
+
+// Dodanie nasłuchiwania na zdarzenie 'submit'
+form.addEventListener('submit', handleSubmit);
+        </code></pre>
+        <p>W tym przykładzie nasłuchujemy na przesłanie formularza, ale blokujemy jego domyślne działanie za pomocą <code>event.preventDefault()</code>, aby móc przechwycić dane i np. wysłać je asynchronicznie.</p>
+
+        <h2>Zdarzenia myszki</h2>
+        <p>Zdarzenia związane z myszką są bardzo popularne w interakcji użytkownika z elementami strony. Oto kilka przykładów:</p>
+        <ul>
+            <li><code>click</code> - Wywoływane po kliknięciu na element.</li>
+            <li><code>mouseover</code> - Wywoływane po najechaniu myszką na element.</li>
+            <li><code>mouseout</code> - Wywoływane po opuszczeniu kursorem elementu.</li>
+        </ul>
+        <pre><code class="language-javascript">
+// Funkcja obsługująca najechanie myszką
+function handleMouseOver() {
+    console.log('Najechano na element!');
+}
+
+const div = document.querySelector('#myDiv');
+div.addEventListener('mouseover', handleMouseOver);
+        </code></pre>
+
+        <h2>Zdarzenia klawiatury</h2>
+        <p>Możemy także nasłuchiwać zdarzeń związanych z klawiaturą, np. gdy użytkownik naciska klawisz:</p>
+        <pre><code class="language-javascript">
+// Funkcja obsługująca naciśnięcie klawisza
+function handleKeyPress(event) {
+    console.log(`Naciśnięto klawisz: ${event.key}`);
+}
+
+document.addEventListener('keydown', handleKeyPress);
+        </code></pre>
+        <p>W tym przypadku nasłuchujemy na zdarzenie <code>keydown</code>, które wywołuje się, gdy użytkownik naciśnie dowolny klawisz na klawiaturze.</p>
+
+        <h2>Podsumowanie</h2>
+        <ul>
+            <li>Zdarzenia w JavaScript pozwalają na interakcję użytkownika z elementami strony.</li>
+            <li>Metoda <code>addEventListener()</code> służy do dodawania nasłuchiwania zdarzeń na określone elementy.</li>
+            <li>Typowe zdarzenia obejmują: <code>click</code>, <code>mouseover</code>, <code>submit</code> oraz <code>keydown</code>.</li>
+            <li>Zdarzenia można także usunąć za pomocą metody <code>removeEventListener()</code>.</li>
+        </ul>
+
+    </div>
+    <script>
+
+        let p = document.createElement('p');
+
+        p.innerHTML = 'Click me';
+
+        document.body.appendChild(p);
+
+        addEventListener('click', function(event) {
+            console.log(event);
+            console.log(event.clientX, event.clientY);
+        })
+
+        p.addEventListener('mouseenter', function(event) {
+                console.log("p clicked");
+    })
+
+    </script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/prism.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/components/prism-javascript.min.js"></script>
+</body>
+</html>

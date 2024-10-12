@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Serializacja danych w JavaScript</title>
+    <link rel="stylesheet" href="/JavaScript Teoria/styles.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/themes/prism-tomorrow.min.css" rel="stylesheet" />
+</head>
+<body>
+    <div class="container">
+        <h1>Serializacja danych w JavaScript</h1>
+
+        <p>Serializacja to proces przekształcania obiektów JavaScript w format, który może być łatwo przechowywany lub przesyłany. W JavaScript najczęściej używa się formatu <code>JSON</code> (JavaScript Object Notation) do serializacji danych.</p>
+
+        <h2>Serializacja z użyciem <code>JSON.stringify()</code></h2>
+        <p>Metoda <code>JSON.stringify()</code> służy do serializacji obiektów JavaScript do formatu JSON. Przekształca obiekty, tablice i inne struktury danych na ciąg znaków, który może być przesyłany lub przechowywany.</p>
+
+        <h3>Przykład użycia <code>JSON.stringify()</code></h3>
+        <pre><code class="language-javascript">
+const user = {
+    name: "Anna",
+    age: 28,
+    city: "Kraków"
+};
+
+const serializedData = JSON.stringify(user);
+console.log(serializedData); // {"name":"Anna","age":28,"city":"Kraków"}
+        </code></pre>
+        <p>W tym przykładzie obiekt <code>user</code> został przekonwertowany na ciąg znaków w formacie JSON, co pozwala go przesyłać jako dane tekstowe.</p>
+
+        <h2>Deserializacja z użyciem <code>JSON.parse()</code></h2>
+        <p>Proces deserializacji polega na przekształceniu ciągu znaków (w formacie JSON) z powrotem w obiekt JavaScript. W tym celu używamy metody <code>JSON.parse()</code>.</p>
+
+        <h3>Przykład użycia <code>JSON.parse()</code></h3>
+        <pre><code class="language-javascript">
+const jsonData = '{"name":"Anna","age":28,"city":"Kraków"}';
+const userObject = JSON.parse(jsonData);
+
+console.log(userObject.name); // "Anna"
+        </code></pre>
+        <p>W tym przykładzie ciąg znaków w formacie JSON został przekonwertowany z powrotem na obiekt JavaScript, który można łatwo odczytać i używać w kodzie.</p>
+
+        <h2>Obsługa danych złożonych</h2>
+        <p>Podczas serializacji obiektów, które zawierają funkcje lub referencje do innych obiektów, funkcje te zostaną pominięte, a referencje nie będą serializowane. Przykładowo:</p>
+        <pre><code class="language-javascript">
+const complexObject = {
+    name: "Anna",
+    greet: function() { console.log("Hello!"); }, // Funkcja nie zostanie zserializowana
+    nested: { key: "value" }
+};
+
+const serializedComplex = JSON.stringify(complexObject);
+console.log(serializedComplex); // {"name":"Anna","nested":{"key":"value"}}
+        </code></pre>
+        <p>Funkcja <code>greet</code> nie została zserializowana, ponieważ format JSON nie obsługuje funkcji. JSON serializuje tylko dane, takie jak liczby, teksty, tablice i obiekty.</p>
+
+        <h2>Własne funkcje serializacji za pomocą <code>replacer</code></h2>
+        <p>Metoda <code>JSON.stringify()</code> umożliwia użycie opcjonalnego parametru <code>replacer</code>, który pozwala na zdefiniowanie, jakie właściwości powinny zostać zserializowane.</p>
+        <pre><code class="language-javascript">
+const user = {
+    name: "Anna",
+    age: 28,
+    city: "Kraków",
+    password: "secret"
+};
+
+const serializedWithFilter = JSON.stringify(user, ['name', 'city']);
+console.log(serializedWithFilter); // {"name":"Anna","city":"Kraków"}
+        </code></pre>
+        <p>W tym przykładzie do serializacji wybrano tylko właściwości <code>name</code> i <code>city</code>, a inne (jak <code>password</code>) zostały pominięte.</p>
+
+        <h2>Podsumowanie</h2>
+        <ul>
+            <li>Serializacja to proces konwertowania obiektów na format JSON, który może być łatwo przechowywany lub przesyłany.</li>
+            <li>Metoda <code>JSON.stringify()</code> konwertuje obiekt na ciąg znaków w formacie JSON.</li>
+            <li>Metoda <code>JSON.parse()</code> odwraca proces, przekształcając JSON z powrotem w obiekt JavaScript.</li>
+            <li>Funkcje i złożone referencje nie są serializowane przez <code>JSON.stringify()</code>.</li>
+            <li>Możliwe jest dostosowanie serializacji za pomocą opcjonalnego parametru <code>replacer</code>.</li>
+        </ul>
+
+    </div>
+    <script>
+
+        // Tworzymy obiekt `source` z różnymi typami danych, w tym stringiem, liczbą, obiektem zagnieżdżonym, tablicą oraz obiektem Date
+let source = {
+    str: "hello",
+    a: 24,
+    data: {
+        b: 111,
+        arr: [1, 2, 3, 4, 5, 6, 7, 8, 9]
+    },
+    date: new Date(),  // Obiekt typu Date
+}
+
+// Używamy `JSON.stringify`, aby przekonwertować obiekt `source` na ciąg JSON
+let strData = JSON.stringify(source);
+console.log(strData);  
+// Wynik: Ciąg JSON, np. '{"str":"hello","a":24,"data":{"b":111,"arr":[1,2,3,4,5,6,7,8,9]},"date":"2024-01-01T12:34:56.789Z"}'
+// Ważne: `Date` zostaje przekonwertowany na string w formacie ISO podczas serializacji do JSON
+
+// Używamy `JSON.parse`, aby przekonwertować ciąg JSON z powrotem na obiekt JavaScript
+let parsedData = JSON.parse(strData);
+console.log(parsedData);  
+// Wynik: Obiekt z wartościami odtworzonymi z JSON, ale `date` jest teraz stringiem, a nie obiektem `Date`
+
+// Ręcznie konwertujemy właściwość `date` z powrotem na obiekt typu `Date`
+parsedData.date = new Date(parsedData.date);
+console.log(parsedData);  
+// Wynik: Obiekt `parsedData`, gdzie właściwość `date` jest teraz prawdziwym obiektem `Date`
+
+// Sprawdzamy, czy `parsedData.date` jest instancją obiektu `Date`
+console.log(parsedData.date instanceof Date);  // Wynik: true, ponieważ ręcznie skonwertowaliśmy string na obiekt `Date`
+
+// Sprawdzamy, czy `source.date` i `parsedData.date` to ten sam obiekt w pamięci
+console.log(source.date === parsedData.date);  // Wynik: false, ponieważ `parsedData.date` to nowy obiekt `Date` utworzony z tej samej wartości, ale nie jest tym samym obiektem co `source.date`
+
+    </script>
+
+     <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/prism.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/components/prism-javascript.min.js"></script>
+</body>
+</html>

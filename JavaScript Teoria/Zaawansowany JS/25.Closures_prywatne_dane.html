@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Closures i prywatne dane w JavaScript</title>
+    <link rel="stylesheet" href="/JavaScript Teoria/styles.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/themes/prism-tomorrow.min.css" rel="stylesheet" />
+</head>
+<body>
+    <div class="container">
+        <h1>Closures i Prywatne Dane w JavaScript</h1>
+
+        <p>W JavaScript nie ma wbudowanej koncepcji prywatnych zmiennych tak, jak w niektórych innych językach programowania. Jednak możemy wykorzystać mechanizm closures do symulacji prywatnych danych. Closure pozwala funkcji zachować dostęp do zmiennych funkcji zewnętrznej, nawet po zakończeniu jej wykonania. Dzięki temu możemy stworzyć prywatne zmienne, które będą dostępne tylko dla określonych funkcji.</p>
+
+        <h2>Tworzenie prywatnych zmiennych za pomocą closures</h2>
+        <p>Aby utworzyć prywatne zmienne, możemy zdefiniować funkcję zewnętrzną, która przechowuje zmienne, a następnie zwraca funkcję wewnętrzną, która ma dostęp do tych zmiennych. W ten sposób zmienne są zamknięte w środowisku funkcji zewnętrznej, a z zewnątrz nie można się do nich odwołać.</p>
+
+        <h3>Przykład prywatnych zmiennych</h3>
+        <pre><code class="language-javascript">
+function createCounter() {
+    let count = 0; // Prywatna zmienna
+
+    return {
+        increment: function() {
+            count++; // Możemy modyfikować prywatną zmienną
+            console.log(count);
+        },
+        reset: function() {
+            count = 0; // Możemy zresetować prywatną zmienną
+            console.log("Counter reset");
+        }
+    };
+}
+
+const counter = createCounter();
+counter.increment(); // 1
+counter.increment(); // 2
+counter.reset(); // Counter reset
+        </code></pre>
+        <p>W tym przykładzie zmienna <code>count</code> jest prywatna dla funkcji <code>createCounter()</code> i nie można się do niej odwołać bezpośrednio spoza tej funkcji. Jednak funkcje <code>increment()</code> i <code>reset()</code> mają dostęp do tej zmiennej przez closure.</p>
+
+        <h2>Użycie closures do zabezpieczenia danych</h2>
+        <p>Możemy używać closures, aby zabezpieczać dane, które nie powinny być modyfikowane bezpośrednio. Zmienna, która jest dostępna tylko przez funkcje zwrócone przez closure, jest chroniona przed zewnętrznymi manipulacjami, co daje większą kontrolę nad tym, jak dane są modyfikowane.</p>
+
+        <h3>Przykład zabezpieczenia prywatnych danych</h3>
+        <pre><code class="language-javascript">
+function createBankAccount(initialBalance) {
+    let balance = initialBalance; // Prywatna zmienna
+
+    return {
+        deposit: function(amount) {
+            if (amount > 0) {
+                balance += amount;
+                console.log(`Wpłacono: ${amount}. Stan konta: ${balance}`);
+            } else {
+                console.log("Kwota musi być dodatnia!");
+            }
+        },
+        withdraw: function(amount) {
+            if (amount > 0 && amount <= balance) {
+                balance -= amount;
+                console.log(`Wypłacono: ${amount}. Stan konta: ${balance}`);
+            } else {
+                console.log("Nieprawidłowa kwota!");
+            }
+        },
+        getBalance: function() {
+            console.log(`Stan konta: ${balance}`);
+        }
+    };
+}
+
+const account = createBankAccount(1000);
+account.deposit(500); // Wpłacono: 500. Stan konta: 1500
+account.withdraw(300); // Wypłacono: 300. Stan konta: 1200
+account.getBalance(); // Stan konta: 1200
+        </code></pre>
+        <p>W tym przykładzie zmienna <code>balance</code> jest prywatna i nie można jej bezpośrednio zmienić z zewnątrz. Funkcje <code>deposit()</code>, <code>withdraw()</code> oraz <code>getBalance()</code> są jedynymi sposobami na manipulację i dostęp do zmiennej <code>balance</code>.</p>
+
+        <h2>Dlaczego closures są przydatne?</h2>
+        <ul>
+            <li>**Ukrywanie danych**: Dzięki closures możemy ukryć pewne dane przed nieautoryzowanym dostępem i modyfikacją, co zapewnia większą kontrolę nad danymi.</li>
+            <li>**Zachowanie stanu**: Closures pozwala funkcjom na zachowanie stanu w obrębie ich zakresu, co jest przydatne w przypadku liczników, interfejsów użytkownika czy asynchronicznych operacji.</li>
+            <li>**Modularność kodu**: Closures mogą pomóc w tworzeniu modułowych bloków kodu, gdzie każda część posiada swoje własne prywatne zmienne i metody, które są niedostępne z zewnątrz.</li>
+        </ul>
+
+        <h2>Podsumowanie</h2>
+        <ul>
+            <li>Closures w JavaScript pozwalają funkcjom wewnętrznym na dostęp do prywatnych danych funkcji zewnętrznej, nawet po jej zakończeniu.</li>
+            <li>Dzięki closures możemy tworzyć prywatne zmienne, które są chronione przed bezpośrednim dostępem i modyfikacją z zewnątrz.</li>
+            <li>Closures są przydatne w sytuacjach, gdy chcemy kontrolować dostęp do danych oraz tworzyć funkcje z zachowaniem stanu.</li>
+        </ul>
+
+    </div>
+    
+    <script>
+
+        function test() {
+    let privateData = "hello world";
+    // Tworzymy zmienną lokalną "privateData" z początkową wartością "hello world".
+    // Ta zmienna jest prywatna i dostępna tylko w ramach funkcji "test" oraz funkcji, które są w jej zasięgu.
+
+    function showPrivData() {
+        console.log(privateData);
+        // Funkcja "showPrivData" wyświetla aktualną wartość zmiennej "privateData".
+    }
+
+    function setData(value) {
+        privateData = value;
+        // Funkcja "setData" zmienia wartość zmiennej "privateData" na nową wartość podaną w argumencie "value".
+    }
+
+    return {
+        showData: showPrivData,
+        // Zwracamy funkcję "showPrivData" jako metodę "showData" w obiekcie.
+        setData: setData
+        // Zwracamy funkcję "setData" jako metodę "setData" w obiekcie.
+    };
+}
+
+const obj = test();
+// Wywołujemy funkcję "test" i przypisujemy zwrócony obiekt do zmiennej "obj".
+// "obj" ma teraz dwie metody: "showData" i "setData".
+
+console.log(obj);
+// Wyświetla obiekt z metodami "showData" oraz "setData".
+
+obj.showData();
+// Wywołuje metodę "showData", która jest referencją do funkcji "showPrivData".
+// Funkcja wyświetla wartość zmiennej "privateData", czyli "hello world".
+
+obj.setData("EBE EBE");
+// Wywołuje metodę "setData", która jest referencją do funkcji "setData".
+// Funkcja zmienia wartość zmiennej "privateData" na "EBE EBE".
+
+obj.showData();
+// Ponownie wywołuje metodę "showData", która teraz wyświetla zaktualizowaną wartość "privateData", czyli "EBE EBE".
+
+    </script>
+     <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/prism.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/components/prism-javascript.min.js"></script>
+</body>
+</html>

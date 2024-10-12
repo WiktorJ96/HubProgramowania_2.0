@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            margin: 0 auto;
+            width: 80%;
+            font-size: large;
+        }
+        h1 {
+            color: #2c3e50;
+        }
+        code {
+            background-color: #f4f4f4;
+            padding: 2px 5px;
+            border-radius: 5px;
+        }
+        .example {
+            background-color: #f9f9f9;
+            padding: 15px;
+            border-radius: 8px;
+            border: 1px solid #ddd;
+            width: 40%;
+            font-size: larger;
+        }
+    </style>
+</head>
+<body>
+    
+<h1>Metody Instancyjne i Statyczne w JavaScript</h1>
+    
+    <p>W JavaScript istnieją dwa rodzaje metod:</p>
+    <ul>
+        <li><strong>Metody instancyjne</strong>: Są powiązane z konkretnym obiektem utworzonym na podstawie klasy.</li>
+        <li><strong>Metody statyczne</strong>: Są powiązane z klasą jako całością, a nie z jej instancją.</li>
+    </ul>
+
+    <h2>Metody Instancyjne</h2>
+    <p>Metody instancyjne muszą być wywoływane na konkretnym obiekcie klasy. Mają dostęp do właściwości i metod tej instancji.</p>
+    <div class="example">
+        <code>class Car {<br>
+            &nbsp;&nbsp;constructor(name) {<br>
+            &nbsp;&nbsp;&nbsp;&nbsp;this.name = name;<br>
+            &nbsp;&nbsp;}<br><br>
+            &nbsp;&nbsp;start() {<br>
+            &nbsp;&nbsp;&nbsp;&nbsp;console.log(this.name + " started!");<br>
+            &nbsp;&nbsp;}<br>
+        }<br><br>
+        const car1 = new Car("Toyota");<br>
+        car1.start();  // Wynik: Toyota started!<br>
+        </code>
+    </div>
+
+    <h2>Metody Statyczne</h2>
+    <p>Metody statyczne są wywoływane bezpośrednio na klasie. Nie mają dostępu do instancji klasy (nie mają dostępu do <code>this</code>).</p>
+    <div class="example">
+        <code>class MathHelper {<br>
+            &nbsp;&nbsp;static add(a, b) {<br>
+            &nbsp;&nbsp;&nbsp;&nbsp;return a + b;<br>
+            &nbsp;&nbsp;}<br>
+        }<br><br>
+        console.log(MathHelper.add(5, 10));  // Wynik: 15<br>
+        </code>
+    </div>
+
+    <h2>Różnice</h2>
+    <p>
+        <strong>Metody instancyjne:</strong> Działają na obiektach klasy, mają dostęp do jej właściwości.<br>
+        <strong>Metody statyczne:</strong> Działają na samej klasie, nie mają dostępu do właściwości instancji, ale mogą być używane jako metody pomocnicze.
+    </p>
+
+
+    <script>
+
+        // Definicja klasy Car
+class Car {
+    // Konstruktor klasy Car inicjalizujący właściwości name i year
+    constructor(name, year) {
+        this.name = name;
+        this.year = year;
+    }
+
+    // Metoda, która wypisuje nazwę samochodu i rok produkcji
+    print() {
+        console.log(`Car name: ${this.name}, year: ${this.year}`);
+    }
+}
+
+// Tworzymy nowy obiekt car1 na podstawie klasy Car
+let car1 = new Car('Toyota', 2020);
+// Wywołujemy metodę print, która wypisuje informacje o samochodzie
+car1.print();  // Wynik: Car name: Toyota, year: 2020
+
+// Definicja klasy BasicAnimal, zdefiniowanej w zmiennej Animal
+let Animal = class BasicAnimal {
+    // Prywatna właściwość #age (dostępna tylko wewnątrz klasy)
+    #age;
+
+    // Konstruktor klasy BasicAnimal, inicjalizujący nazwę i ustawiający początkowy wiek na 1
+    constructor(name) {
+        this.name = name;
+        this.#age = 1;
+
+        // Inicjalizacja licznika zwierząt statyczną właściwością count (jeśli nie istnieje)
+        if (Animal.count === undefined) Animal.count = 0;
+        Animal.count++;  // Zwiększamy licznik zwierząt przy każdym utworzeniu nowego obiektu
+    }
+
+    // Getter, który zwraca nazwę zwierzęcia
+    getName = () => {
+        return this.name;
+    }
+
+    // Setter, który pozwala ustawić wiek zwierzęcia, ale tylko wtedy, gdy wiek jest większy niż 0
+    setAge(value) {
+        if (value > 0) {
+            this.#age = value;  // Ustawienie prywatnej właściwości #age
+        }
+    }
+    
+    // Getter, który zwraca wiek zwierzęcia
+    get age() {
+        return this.#age;
+    }
+
+    // Statyczna metoda, która zwraca nowy obiekt Animal z nazwą "New Animal"
+    static getNewAnimal() {
+        return new Animal("New Animal");
+    }
+
+    // Statyczna metoda, która zwraca liczbę utworzonych zwierząt (wartość count)
+    static getAnimalCount() {
+        return Animal.count;
+    }
+}
+
+// Tworzymy nowy obiekt animal1 na podstawie klasy BasicAnimal
+const animal1 = new Animal("Tiger");
+// Wywołujemy metodę getName, która zwraca nazwę zwierzęcia
+console.log(animal1.getName());  // Wynik: Tiger
+
+// Wyświetlamy nazwę klasy (dla klasy zdefiniowanej w zmiennej jest to BasicAnimal)
+console.log(Animal.name);  // Wynik: BasicAnimal
+
+// Ustawiamy wiek zwierzęcia na 10 za pomocą metody setAge
+animal1.setAge(10);
+// Wyświetlamy wiek zwierzęcia za pomocą gettera age
+console.log(animal1.age);  // Wynik: 10
+
+// Tworzymy nowy obiekt animal2 przy użyciu statycznej metody getNewAnimal
+const animal2 = Animal.getNewAnimal();
+// Wywołujemy metodę getName, aby wyświetlić nazwę nowo utworzonego zwierzęcia
+console.log(animal2.getName());  // Wynik: New Animal
+
+// Wyświetlamy strukturę klasy Animal, aby zobaczyć jej właściwości i metody
+console.dir(Animal);
+
+// Wywołujemy statyczną metodę getAnimalCount, która zwraca liczbę utworzonych obiektów klasy Animal
+console.log(Animal.getAnimalCount());  // Wynik: 2
+
+    </script>
+</body>
+</html>

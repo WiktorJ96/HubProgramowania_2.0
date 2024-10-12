@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    
+    <script>
+ async function *getData() {
+    // Funkcja asynchroniczna ze znacznikiem '*' to generator, który pozwala na zwracanie wartości w sposób asynchroniczny.
+    yield await Promise.resolve("OK 1");
+    // Zwraca wartość "OK 1" po zakończeniu asynchronicznej operacji (Promise.resolve symuluje zakończenie).
+    yield await Promise.resolve("OK 2");
+    // Zwraca wartość "OK 2".
+    yield await Promise.resolve("OK 3");
+    // Zwraca wartość "OK 3".
+    yield await Promise.resolve("OK 4");
+    // Zwraca wartość "OK 4".
+    yield await Promise.resolve("OK 5");
+    // Zwraca wartość "OK 5".
+}
+
+let dataIter = getData();
+// Tworzy iterator 'dataIter', który obsługuje funkcję asynchronicznego generatora.
+
+dataIter.next().then(v => console.log(v.value));
+// Wywołuje metodę next() na iteratorze i wypisuje pierwszą zwróconą wartość ("OK 1") po zakończeniu Promise.
+dataIter.next().then(v => console.log(v.value));
+// Wypisuje drugą wartość ("OK 2").
+dataIter.next().then(v => console.log(v.value));
+// Wypisuje trzecią wartość ("OK 3").
+dataIter.next().then(v => console.log(v.value));
+// Wypisuje czwartą wartość ("OK 4").
+dataIter.next().then(v => console.log(v.value));
+// Wypisuje piątą wartość ("OK 5").
+
+async function testIter() {
+    let dataIter2 = getData();
+    // Tworzy nowy iterator 'dataIter2' na podstawie funkcji generatora.
+    
+    for await (let value of dataIter2) {
+        // Używa pętli for-await-of, aby iterować po wszystkich wartościach zwróconych przez generator.
+        console.log("Test iter:", value);
+        // Wypisuje każdą wartość zwróconą przez generator ("OK 1", "OK 2", "OK 3", "OK 4", "OK 5").
+    }
+}
+
+testIter();
+// Wywołuje funkcję 'testIter', która w pętli iteruje po wszystkich wartościach generatora i wypisuje je.
+
+    </script>
+</body>
+</html>

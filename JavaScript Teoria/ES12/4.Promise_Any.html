@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <script>
+
+// Tworzymy tablicę zawierającą trzy promisy.
+// - Promise.resolve("ok"): Tworzy promis, który zostaje natychmiast rozstrzygnięty (spełniony) z wartością "ok".
+// - Promise.reject("error"): Tworzy promis, który zostaje natychmiast odrzucony (zawiedziony) z wartością "error".
+// - Promise.resolve("ok again"): Tworzy promis, który zostaje natychmiast rozstrzygnięty (spełniony) z wartością "ok again".
+const promises = [
+    Promise.resolve("ok"),
+    Promise.reject("error"),
+    Promise.resolve("ok again")
+]
+
+// Używamy Promise.all(), aby spróbować poczekać na rozstrzygnięcie wszystkich promisów w tablicy.
+// - Promise.all(promises) zwraca promis, który zostaje spełniony, jeśli WSZYSTKIE promisy w tablicy zostaną spełnione.
+// - Jeśli którykolwiek promis zostanie odrzucony, Promise.all natychmiast zostaje odrzucony z wartością pierwszego odrzuconego promisa.
+let result = Promise.all(promises)
+    // W przypadku, gdyby wszystkie promisy zostały spełnione, ich wyniki byłyby dostępne tutaj w tablicy 'result'.
+    .then(result => console.log(result)) // To nigdy się nie wydarzy, ponieważ jeden z promisów jest odrzucony.
+    // W wyniku odrzucenia co najmniej jednego promisa z tablicy, ten blok nie zostanie wykonany.
+
+console.log(result) 
+// Ta linia wypisuje obiekt promisa, ponieważ Promise.all() zwraca promis natychmiast (ale ten promis jeszcze nie został spełniony ani odrzucony).
+// Na tym etapie 'result' to obiekt promisa (Promise object), a jego stan jest "pending" (oczekujący).
+
+    </script>
+</body>
+</html>

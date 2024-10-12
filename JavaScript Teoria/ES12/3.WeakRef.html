@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <script>
+// Tworzymy słabe odwołanie (WeakRef) do obiektu, który ma dwie właściwości: 'data' i 'str'
+const obj = new WeakRef({
+    data: 10, // Pierwsza właściwość obiektu
+    str: "txt" // Druga właściwość obiektu
+})
+
+// Próba wypisania odwołania do obiektu za pomocą metody 'deref'.
+// 'deref()' zwraca oryginalny obiekt, o ile nie został usunięty przez Garbage Collector (GC).
+console.log(obj.deref()) // Zwróci cały obiekt {data: 10, str: "txt"} lub 'undefined', jeśli GC go usunie.
+
+// Próba wypisania właściwości 'data' obiektu, o ile obiekt jeszcze istnieje.
+// Najpierw odwołujemy się do obiektu przez 'deref()', a następnie do jego właściwości 'data'.
+console.log(obj.deref().data) // Zwróci 10 lub błąd, jeśli GC usunął obiekt, ponieważ wtedy 'deref()' zwróci 'undefined'.
+
+    </script>
+</body>
+</html>

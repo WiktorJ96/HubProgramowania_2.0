@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Petla for in</title>
+</head>
+<body>
+    <style>
+    .forin-description {
+        font-family: Arial, sans-serif;
+        max-width: 800px;
+        margin: 20px auto;
+        background-color: #f8f9fa;
+        padding: 20px;
+        border-radius: 8px;
+        box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    }
+    .forin-description h2 {
+        color: #2c3e50;
+        border-bottom: 2px solid #3498db;
+        padding-bottom: 10px;
+    }
+    .forin-description p {
+        line-height: 1.6;
+    }
+    .forin-description code {
+        background-color: #e9ecef;
+        padding: 2px 4px;
+        border-radius: 4px;
+        font-family: 'Courier New', Courier, monospace;
+    }
+    .forin-description ul {
+        list-style-type: none;
+        padding-left: 0;
+    }
+    .forin-description ul li:before {
+        content: "•";
+        color: #3498db;
+        font-weight: bold;
+        display: inline-block;
+        width: 1em;
+        margin-left: -1em;
+    }
+    .forin-example {
+        background-color: #e9ecef;
+        padding: 15px;
+        border-radius: 4px;
+        margin-top: 20px;
+    }
+</style>
+
+<div class="forin-description">
+    <h2>Pętla for...in w JavaScript</h2>
+
+    <p>Pętla <code>for...in</code> służy do iteracji po właściwościach obiektu.</p>
+
+    <h3>Składnia:</h3>
+    <code>
+        for (let key in object) {
+            // kod do wykonania
+        }
+    </code>
+
+    <h3>Cechy pętli for...in:</h3>
+    <ul>
+        <li>Iteruje po wszystkich wyliczalnych właściwościach obiektu.</li>
+        <li>Obejmuje właściwości z łańcucha prototypów.</li>
+        <li>Kolejność iteracji nie jest gwarantowana.</li>
+        <li>Nie zalecana do iteracji po tablicach.</li>
+    </ul>
+
+    <h3>Zastosowania:</h3>
+    <ul>
+        <li>Przeglądanie właściwości obiektów.</li>
+        <li>Debugowanie - wyświetlanie wszystkich właściwości obiektu.</li>
+        <li>Kopiowanie lub klonowanie obiektów.</li>
+    </ul>
+
+    <h3>Uwagi:</h3>
+    <ul>
+        <li>Używaj <code>Object.hasOwnProperty()</code> do sprawdzania, czy właściwość należy bezpośrednio do obiektu.</li>
+        <li>Dla tablic, lepiej używać standardowej pętli <code>for</code> lub metod tablicowych.</li>
+    </ul>
+    <script>
+        // Definiowanie tablicy liczb
+const arr = [12, 30, 153, 123];
+
+// Pętla for...in dla tablicy
+// UWAGA: Używanie for...in dla tablic nie jest zalecane, gdyż iteruje po indeksach, nie wartościach
+for (const v in arr) {
+    console.log(v); // Wypisze indeksy: '0', '1', '2', '3'
+}
+
+// Definiowanie stringa
+const str = "STRING";
+
+// Pętla for...in dla stringa
+// Podobnie jak z tablicą, iteruje po indeksach znaków
+for (const i in str) {
+    console.log(i); // Wypisze indeksy: '0', '1', '2', '3', '4', '5'
+}
+
+// Definiowanie obiektu
+const obj = {name: "John", age: 30, city: "New York"};
+
+// Dodawanie nowej właściwości do obiektu za pomocą Object.defineProperty
+Object.defineProperty(obj, "newAge", {
+    value: 45,
+    configurable: true, // Właściwość może być usunięta
+    enumerable: true,   // Właściwość będzie widoczna w pętlach for...in
+    writable: true,     // Wartość właściwości może być zmieniona
+});
+
+// Usuwanie właściwości 'age' z obiektu
+delete obj.age;
+
+// Wyświetlanie zmodyfikowanego obiektu
+console.log(obj); // Wypisze: {name: "John", city: "New York", newAge: 45}
+
+// Pętla for...in dla obiektu
+for (const key in obj) {
+    console.log(key); // Wypisze nazwy właściwości: 'name', 'city', 'newAge'
+    
+    // Sprawdzanie, czy dana właściwość jest wyliczalna (enumerable)
+    console.log(obj.propertyIsEnumerable(key)); // Wypisze true dla wszystkich właściwości
+}
+
+
+
+    </script>
+</body>
+</html>

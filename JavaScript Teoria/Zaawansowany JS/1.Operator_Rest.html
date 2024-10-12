@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Operator Rest w JavaScript</title>
+    <link rel="stylesheet" href="../styles.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/themes/prism-tomorrow.min.css" rel="stylesheet" />
+</head>
+<body>
+    <div class="container">
+        <h1>Wyjaśnienie działania operatora rest</h1>
+        
+        <p>Operator <strong>rest</strong> (trzy kropki: <code>...</code>) w JavaScript umożliwia zbieranie wszystkich pozostałych argumentów funkcji lub elementów tablicy/obiektu, które nie zostały przypisane do innych zmiennych. To pozwala na bardziej elastyczne operowanie na zmiennej liczbie argumentów oraz łatwiejszą manipulację danymi.</p>
+        
+        <h2>Przykład w funkcji</h2>
+        <pre><code class="language-javascript">
+        function sum(...numbers) {
+            return numbers.reduce((acc, curr) => acc + curr, 0);
+        }
+
+        console.log(sum(1, 2, 3, 4)); // 10
+        </code></pre>
+        <p>W powyższym przykładzie operator <code>rest</code> zbiera wszystkie przekazane argumenty i zamienia je w tablicę <code>numbers</code>. Dzięki temu funkcja może przyjmować dowolną liczbę argumentów.</p>
+
+        <h2>Przykład w destrukturyzacji obiektu</h2>
+        <pre><code class="language-javascript">
+        const user = { name: 'Ania', age: 30, city: 'Kraków', country: 'Polska' };
+        const { name, ...rest } = user;
+
+        console.log(name); // 'Ania'
+        console.log(rest); // { age: 30, city: 'Kraków', country: 'Polska' }
+        </code></pre>
+        <p>W tym przypadku operator <code>rest</code> pozwala na wyodrębnienie wartości <code>name</code> z obiektu, a pozostałe właściwości są zebrane w nowy obiekt <code>rest</code>.</p>
+
+        <h2>Zastosowanie</h2>
+        <p>Operator <strong>rest</strong> jest szczególnie przydatny, gdy nie znamy z góry liczby argumentów funkcji lub chcemy pracować z obiektami/tablicami, wyciągając z nich pewne wartości, a resztę przypisując do nowej struktury. Znajduje on również zastosowanie w destrukturyzacji, czyniąc kod bardziej elastycznym i zwięzłym.</p>
+
+        <ul>
+            <li>Umożliwia operacje na dowolnej liczbie argumentów funkcji.</li>
+            <li>Ułatwia destrukturyzację obiektów i tablic, pozwalając na efektywne rozdzielanie danych.</li>
+        </ul>
+    </div>
+    <script>
+        function foo (...params) {  // ... to operator Rest ktory przekazuje wszystkie argumenty do funkcji
+            console.log(...params);
+        }
+
+        foo(1,2,3,4,5,6,7)
+    </script>
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/prism.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/components/prism-javascript.min.js"></script>
+</body>
+</html>

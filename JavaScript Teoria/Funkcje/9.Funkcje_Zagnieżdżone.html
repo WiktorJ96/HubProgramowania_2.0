@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Funkcje Zagnieżdżone w JavaScript</title>
+     <link rel="stylesheet" href="../styles.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/themes/prism-tomorrow.min.css" rel="stylesheet" />
+</head>
+<body>
+    <div class="container">
+        <h1>Funkcje Zagnieżdżone w JavaScript</h1>
+
+        <p>Funkcje zagnieżdżone w JavaScript to funkcje, które są zdefiniowane wewnątrz innych funkcji. Dzięki temu funkcje wewnętrzne mają dostęp do zmiennych i parametrów funkcji nadrzędnych, co umożliwia tworzenie bardziej złożonych struktur, takich jak domknięcia (closures).</p>
+
+        <h2>Podstawowe użycie funkcji zagnieżdżonych</h2>
+        <p>Funkcje zagnieżdżone mogą być używane do modularizacji kodu, co pozwala na lepszą organizację i czytelność. Funkcja wewnętrzna ma dostęp do zmiennych z funkcji zewnętrznej, co pozwala na tworzenie bardziej złożonych zależności między danymi.</p>
+
+        <h3>Przykład funkcji zagnieżdżonej</h3>
+        <pre><code class="language-javascript">
+function outerFunction(outerVariable) {
+    const innerVariable = 'Zmienna wewnętrzna';
+
+    function innerFunction() {
+        console.log(outerVariable); // Dostęp do zmiennej funkcji zewnętrznej
+        console.log(innerVariable); // Dostęp do zmiennej funkcji wewnętrznej
+    }
+
+    innerFunction();
+}
+
+outerFunction('Zmienna zewnętrzna');
+        </code></pre>
+        <p>W powyższym przykładzie funkcja <code>innerFunction</code> ma dostęp zarówno do zmiennej <code>outerVariable</code> z funkcji zewnętrznej, jak i do własnej zmiennej <code>innerVariable</code>. Jest to przykład zagnieżdżenia funkcji, gdzie wewnętrzna funkcja może korzystać z kontekstu funkcji nadrzędnej.</p>
+
+        <h2>Funkcje zagnieżdżone a domknięcia</h2>
+        <p>Kiedy funkcja zagnieżdżona "zapamiętuje" zmienne z funkcji nadrzędnej, nawet po jej zakończeniu, mamy do czynienia z tzw. **domknięciem** (closure). Dzięki domknięciom funkcja wewnętrzna może mieć dostęp do zmiennych zewnętrznych nawet po zakończeniu wykonania funkcji nadrzędnej.</p>
+
+        <h3>Przykład domknięcia</h3>
+        <pre><code class="language-javascript">
+function createCounter() {
+    let count = 0;
+
+    return function() {
+        count++;
+        return count;
+    };
+}
+
+const counter = createCounter();
+
+console.log(counter()); // 1
+console.log(counter()); // 2
+console.log(counter()); // 3
+        </code></pre>
+        <p>W tym przykładzie funkcja <code>createCounter</code> tworzy zmienną <code>count</code> i zwraca funkcję, która ją inkrementuje. Dzięki domknięciu funkcja zagnieżdżona ma dostęp do zmiennej <code>count</code>, nawet po zakończeniu wykonania funkcji <code>createCounter</code>.</p>
+
+        <h2>Domknięcia a prywatność danych</h2>
+        <p>Domknięcia mogą być używane do tworzenia prywatnych zmiennych, które są dostępne tylko dla funkcji wewnętrznej. Dzięki temu możemy ukryć dane przed dostępem z zewnątrz, co jest przydatne w kontekście enkapsulacji (ang. encapsulation).</p>
+
+        <h3>Przykład prywatności danych za pomocą domknięcia</h3>
+        <pre><code class="language-javascript">
+function createSecretMessage(secret) {
+    return function() {
+        console.log('Sekretna wiadomość: ' + secret);
+    };
+}
+
+const showMessage = createSecretMessage('To jest sekret');
+showMessage(); // Sekretna wiadomość: To jest sekret
+        </code></pre>
+        <p>Funkcja <code>createSecretMessage</code> przyjmuje argument <code>secret</code> i zwraca funkcję, która ma dostęp do tej wartości. Wartość <code>secret</code> jest prywatna i nie można jej zmienić z zewnątrz, co zapewnia ochronę danych.</p>
+
+        <h2>Zagnieżdżanie wielu funkcji</h2>
+        <p>Możliwe jest także zagnieżdżanie wielu funkcji w sobie nawzajem, tworząc złożone struktury zależności, gdzie każda funkcja ma dostęp do zmiennych z funkcji nadrzędnych.</p>
+
+        <h3>Przykład zagnieżdżania wielu funkcji</h3>
+        <pre><code class="language-javascript">
+function outerFunction(a) {
+    return function middleFunction(b) {
+        return function innerFunction(c) {
+            return a + b + c;
+        };
+    };
+}
+
+const result = outerFunction(1)(2)(3);
+console.log(result); // 6
+        </code></pre>
+        <p>W tym przykładzie mamy trzy zagnieżdżone funkcje. Funkcja <code>innerFunction</code> ma dostęp do argumentów z funkcji nadrzędnych, co pozwala na obliczenie sumy trzech wartości przekazanych do każdej z funkcji.</p>
+
+        <h2>Podsumowanie</h2>
+        <ul>
+            <li>Zagnieżdżone funkcje mogą mieć dostęp do zmiennych i parametrów z funkcji nadrzędnych.</li>
+            <li>Domknięcia (closures) pozwalają funkcjom zagnieżdżonym na dostęp do zmiennych zewnętrznych nawet po zakończeniu wykonania funkcji nadrzędnej.</li>
+            <li>Zagnieżdżanie funkcji jest przydatne do modularizacji kodu oraz tworzenia prywatnych zmiennych, niedostępnych z zewnątrz.</li>
+        </ul>
+
+    </div>
+    <script>
+        function test(arr){
+
+            function show(data) {   //funkcja odpowiedzialna za wyswietlanie w konsoli obliczen na tablicy przekazanej jako argument w funkci test
+                console.log(data);
+            }
+
+            for(let i = 0; i < arr.length; i++) {
+                show(arr[i] * 2);
+            }
+        }
+
+        test([1,2,3,4,5,6])
+    </script>
+     <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/prism.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/components/prism-javascript.min.js"></script>
+</body>
+</html>

@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hoisting w JavaScript</title>
+    <link rel="stylesheet" href="/JavaScript Teoria/styles.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/themes/prism-tomorrow.min.css" rel="stylesheet" />
+</head>
+<body>
+    <div class="container">
+        <h1>Hoisting w JavaScript</h1>
+
+        <p>Hoisting, czyli unoszenie, to mechanizm w JavaScript, który powoduje, że deklaracje zmiennych i funkcji są „unoszone” na początek swojego zakresu (scope), zanim kod zostanie wykonany. W praktyce oznacza to, że możemy odwołać się do zmiennej lub funkcji, zanim zostanie zadeklarowana w kodzie.</p>
+
+        <h2>Hoisting zmiennych deklarowanych za pomocą <code>var</code></h2>
+        <pre><code class="language-javascript">
+// Przykład z var
+console.log(x); // undefined
+var x = 10;
+console.log(x); // 10
+        </code></pre>
+        <p>W tym przykładzie zmienna <code>x</code> jest odwoływana przed jej deklaracją. Dzięki hoistingowi JavaScript automatycznie „unosi” deklarację zmiennej na początek, dlatego wynik pierwszego <code>console.log</code> to <code>undefined</code>, a nie błąd.</p>
+
+        <h2>Hoisting w przypadku funkcji</h2>
+        <pre><code class="language-javascript">
+// Przykład z funkcją
+greet(); // 'Hello!'
+function greet() {
+    console.log('Hello!');
+}
+        </code></pre>
+        <p>Hoisting dotyczy także funkcji deklarowanych za pomocą <code>function</code>. W powyższym przykładzie funkcja <code>greet</code> jest wywoływana przed jej zdefiniowaniem w kodzie, ale działa poprawnie, ponieważ deklaracje funkcji są unoszone na początek.</p>
+
+        <h2>Brak hoistingu w przypadku <code>let</code> i <code>const</code></h2>
+        <pre><code class="language-javascript">
+// Przykład z let i const
+console.log(y); // Błąd: Cannot access 'y' before initialization
+let y = 20;
+
+console.log(z); // Błąd: Cannot access 'z' before initialization
+const z = 30;
+        </code></pre>
+        <p>W przeciwieństwie do <code>var</code>, zmienne zadeklarowane za pomocą <code>let</code> i <code>const</code> nie są hoistowane w ten sam sposób. Próbując uzyskać dostęp do nich przed ich deklaracją, otrzymamy błąd <code>ReferenceError</code>. Zmiennym <code>let</code> i <code>const</code> przydzielany jest tzw. „tymczasowy martwy obszar” (TDZ, Temporal Dead Zone), dopóki nie zostaną zainicjalizowane.</p>
+
+        <h2>Hoisting a przypisanie wartości</h2>
+        <pre><code class="language-javascript">
+console.log(a); // undefined
+var a = 5;
+
+var b;
+console.log(b); // undefined
+b = 10;
+        </code></pre>
+        <p>Hoisting dotyczy wyłącznie deklaracji zmiennych, a nie ich przypisania wartości. W przypadku zmiennej <code>a</code>, hoisting podnosi jej deklarację, ale przypisanie <code>a = 5</code> pozostaje na swoim miejscu.</p>
+
+        <h2>Podsumowanie działania hoistingu</h2>
+        <ul>
+            <li>Zarówno deklaracje funkcji, jak i zmiennych zadeklarowanych za pomocą <code>var</code> są unoszone na początek ich zakresu.</li>
+            <li>Zmiennym zadeklarowanym za pomocą <code>let</code> i <code>const</code> przydzielany jest „tymczasowy martwy obszar” (TDZ), zanim zostaną zainicjalizowane.</li>
+            <li>Hoisting dotyczy jedynie deklaracji, a nie przypisania wartości do zmiennych.</li>
+        </ul>
+    </div>
+    <script>
+        // Przykład 1: Hoisting z 'var'
+        function test1(){
+            console.log(a); // Wyświetli: undefined
+            // 'a' jest hoistowane, ale nie zainicjalizowane
+            var a = 10;
+            console.log(a); // Wyświetli: 10
+        }
+
+        // To samo co test1, ale pokazuje, jak JavaScript interpretuje kod
+        function test1InPractice(){
+            var a; // Deklaracja 'a' jest hoistowana na początek funkcji
+            console.log(a); // Wyświetli: undefined
+            a = 10; // Teraz przypisujemy wartość
+            console.log(a); // Wyświetli: 10
+        }
+
+        test1(); // Wywołanie funkcji test1
+
+        // Przykład 2: Próba użycia 'let' zamiast 'var'
+        function test2(){
+            console.log(a); // Błąd: Cannot access 'a' before initialization
+            // 'let' nie podlega hoistingowi w taki sam sposób jak 'var'
+            let a = 10;
+            console.log(a); // Ten kod nigdy nie zostanie wykonany z powodu błędu wyżej
+        }
+
+        // test2(); // To wywołanie jest zakomentowane, bo spowodowałoby błąd
+
+        // Przykład 3: Hoisting deklaracji funkcji
+        test3(); // To zadziała, ponieważ deklaracje funkcji są w pełni hoistowane
+        function test3(){
+            console.log(a); // Wyświetli: undefined
+            var a = 10;
+            console.log(a); // Wyświetli: 10
+        }
+
+        // Przykład 4: Próba użycia zmiennej przed jej deklaracją
+        console.log(data); // Błąd: Cannot access 'data' before initialization
+        // 'let' nie pozwala na dostęp do zmiennej przed jej deklaracją
+        let data;
+    </script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/prism.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/components/prism-javascript.min.js"></script>
+</body>
+</html>

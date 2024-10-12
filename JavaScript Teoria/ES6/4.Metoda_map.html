@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Metoda map</title>
+</head>
+<body>
+    <style>
+    .map-description {
+        font-family: Arial, sans-serif;
+        max-width: 800px;
+        margin: 20px auto;
+        background-color: #f8f9fa;
+        padding: 20px;
+        border-radius: 8px;
+        box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    }
+    .map-description h2 {
+        color: #2c3e50;
+        border-bottom: 2px solid #3498db;
+        padding-bottom: 10px;
+    }
+    .map-description ol {
+        padding-left: 20px;
+    }
+    .map-description li {
+        margin-bottom: 10px;
+    }
+    .map-description code {
+        background-color: #e9ecef;
+        padding: 2px 4px;
+        border-radius: 4px;
+        font-family: 'Courier New', Courier, monospace;
+    }
+    .map-description ul {
+        list-style-type: none;
+        padding-left: 0;
+    }
+    .map-description ul li:before {
+        content: "•";
+        color: #3498db;
+        font-weight: bold;
+        display: inline-block;
+        width: 1em;
+        margin-left: -1em;
+    }
+    .map-example {
+        background-color: #e9ecef;
+        padding: 15px;
+        border-radius: 4px;
+        margin-top: 20px;
+    }
+</style>
+
+<div class="map-description">
+    <h2>Map w JavaScript</h2>
+
+    <ol>
+        <li><strong>Tworzenie:</strong><br>
+            <code>const map = new Map();</code>
+        </li>
+
+        <li><strong>Dodawanie elementów:</strong><br>
+            <code>map.set(key, value);</code>
+            <ul>
+                <li>Klucz może być dowolnego typu (string, number, obiekt, funkcja).</li>
+                <li>Jeśli klucz istnieje, jego wartość zostanie nadpisana.</li>
+            </ul>
+        </li>
+
+        <li><strong>Pobieranie wartości:</strong><br>
+            <code>const value = map.get(key);</code>
+            <ul>
+                <li>Zwraca undefined, jeśli klucz nie istnieje.</li>
+            </ul>
+        </li>
+
+        <li><strong>Sprawdzanie istnienia klucza:</strong><br>
+            <code>const hasKey = map.has(key);</code>
+        </li>
+
+        <li><strong>Usuwanie elementów:</strong><br>
+            <code>map.delete(key);</code>
+        </li>
+
+        <li><strong>Czyszczenie mapy:</strong><br>
+            <code>map.clear();</code>
+        </li>
+
+        <li><strong>Rozmiar mapy:</strong><br>
+            <code>const size = map.size;</code>
+        </li>
+
+        <li><strong>Iteracja:</strong>
+            <ul>
+                <li>Po parach: <code>for (const [key, value] of map) { ... }</code></li>
+                <li>Po kluczach: <code>for (const key of map.keys()) { ... }</code></li>
+                <li>Po wartościach: <code>for (const value of map.values()) { ... }</code></li>
+            </ul>
+        </li>
+    </ol>
+
+    <h3>Cechy Map:</h3>
+    <ul>
+        <li>Zachowuje kolejność dodawania elementów.</li>
+        <li>Klucze są unikalne.</li>
+        <li>Klucze mogą być dowolnego typu.</li>
+        <li>Wydajna dla częstych operacji dodawania/usuwania.</li>
+        <li>Łatwa iteracja.</li>
+    </ul>
+
+<script>
+// Tworzy nową, pustą mapę
+const map1 = new Map();
+
+// Dodaje do mapy parę klucz-wartość: klucz 'name' z wartością 'John'
+map1.set('name', 'John');
+
+// Dodaje do mapy parę klucz-wartość: klucz 'age' z wartością 30
+map1.set('age', 30);
+
+// Dodaje do mapy parę klucz-wartość: klucz 'city' z wartością 'New York'
+map1.set('city', 'New York');
+
+// Wyświetla w konsoli liczbę par klucz-wartość w mapie (powinno być 3)
+console.log(map1.size);
+
+// Pobiera i wyświetla wartość przypisaną do klucza 'name' (powinno być 'John')
+console.log(map1.get('name'));
+
+// Sprawdza i wyświetla, czy mapa zawiera klucz 'city' (powinno być true)
+console.log(map1.has('city'));
+
+// Usuwa parę klucz-wartość dla klucza 'age' i wyświetla wynik operacji (true, jeśli usunięto)
+console.log(map1.delete('age'));
+
+// Próbuje pobrać wartość dla usuniętego klucza 'age' (powinno być undefined)
+console.log(map1.get('age'));
+
+// Pobiera i wyświetla wartość dla klucza 'city' (powinno być 'New York')
+console.log(map1.get('city'));
+
+// Tworzy nowy obiekt
+const apple = {name:'apple'};
+
+// Używa obiektu apple jako klucza w mapie, przypisując mu wartość {name:'pine-apple'}
+map1.set(apple, {name:'pine-apple'});
+
+// Pobiera i wyświetla wartość przypisaną do klucza apple (powinno być {name:'pine-apple'})
+console.log(map1.get(apple));
+
+// Tworzy iterator dla par klucz-wartość w mapie
+const iterator1 = map1.entries();
+
+// Pobiera pierwszą parę klucz-wartość z iteratora
+let result = iterator1.next();
+
+// Iteruje przez wszystkie pary klucz-wartość w mapie
+while (!result.done) {
+    console.log(result.value);  // Wyświetla aktualną parę klucz-wartość
+    result = iterator1.next();  // Przechodzi do następnej pary
+}
+
+// Iteruje przez mapę, destrukturyzując każdą parę na klucz i wartość
+for (const [key, value] of map1) {
+    console.log(`Key: ${key}, Value: ${value}`);  // Wyświetla każdą parę klucz-wartość
+}
+
+// Tworzy nową mapę z tablicy par klucz-wartość
+const map2 = new Map([["key1", 2], ["key2", 10]]);
+
+// Iteruje przez map2 używając metody forEach
+map2.forEach(function(value, key) {
+    console.log(`Key: ${key}, Value: ${value}`);  // Wyświetla każdą parę klucz-wartość
+});
+
+console.log("MERGED:");
+const map3 = new Map([...map1, ...map2]);
+
+map3.forEach(function(value, key) {
+    console.log(key, value);  // Wyświetla pary klucz-wartość z map3
+});
+</script>
+</body>
+</html>

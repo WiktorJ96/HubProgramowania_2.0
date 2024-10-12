@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Petla for of</title>
+</head>
+<body>
+
+    <div class="2"></div>
+    <div class="2"></div>
+    <div class="2"></div>
+    <script>
+// Tworzenie nowej mapy
+const map1 = new Map();
+
+// Dodawanie pary klucz-wartość do mapy, gdzie kluczem jest string, a wartością obiekt
+map1.set("Obiekt", {id: 1, name: "Jurek"});
+
+// Tworzenie obiektu car
+const car = {car: "Ford"};
+
+// Dodawanie pary klucz-wartość do mapy, gdzie kluczem jest obiekt car, a wartością inny obiekt
+map1.set(car, {topspeed: 150});
+
+// Pobieranie i wyświetlanie wartości z mapy dla klucza "Obiekt"
+console.log(map1.get("Obiekt")); // Wypisze: {id: 1, name: "Jurek"}
+
+// Pobieranie i wyświetlanie wartości z mapy dla klucza car
+console.log(map1.get(car)); // Wypisze: {topspeed: 150}
+
+// Iteracja po mapie, wyświetlanie par klucz-wartość
+for (const entry of map1) {
+    console.log(entry);
+    // Wypisze:
+    // ["Obiekt", {id: 1, name: "Jurek"}]
+    // [{car: "Ford"}, {topspeed: 150}]
+}
+
+// Iteracja po mapie z destrukturyzacją par klucz-wartość
+for (const [key, value] of map1) {
+    console.log(key, value);
+    // Wypisze:
+    // Obiekt {id: 1, name: "Jurek"}
+    // {car: "Ford"} {topspeed: 150}
+}
+
+const obj2 = {
+    id: 2,
+    name: "Anna",
+    print:function(){
+        console.log(`Id: ${this.id}, Name: ${this.name}`);
+    }
+}
+
+//Pozwala przejsc wyswietlic wartosci wlasciwosci obiektu
+for(const key of Object.values(obj2)){
+    console.log(key);
+    // Wypisze: 2, "Anna", [Function: print]
+}
+
+// Tworzenie nowego Set z tablicy zawierającej powtarzające się elementy
+const set = new Set([1, 1, 2, 3, 3, 3, 4, 5, 5, 6]);
+
+// Iteracja po Set, wyświetlanie unikalnych wartości
+for (const v of set) {
+    console.log(v);
+    // Wypisze: 1, 2, 3, 4, 5, 6 (każda liczba tylko raz)
+}
+
+// Pobieranie wszystkich elementów div z dokumentu
+const elements = document.getElementsByClassName('2');
+
+// Iteracja po NodeList elementów div
+for (const d of elements) {
+    d.innerHTML = "test"; // Zmiana zawartości każdego div na "test"
+}
+    </script>
+</body>
+</html>
+
+
+
+<!-- 
+
+Map w JavaScript:
+
+1. Tworzenie:
+   const map = new Map();
+
+2. Dodawanie elementów:
+   map.set(key, value);
+   - Klucz może być dowolnego typu (string, number, obiekt, funkcja).
+   - Jeśli klucz istnieje, jego wartość zostanie nadpisana.
+
+3. Pobieranie wartości:
+   const value = map.get(key);
+   - Zwraca undefined, jeśli klucz nie istnieje.
+
+4. Sprawdzanie istnienia klucza:
+   const hasKey = map.has(key);
+
+5. Usuwanie elementów:
+   map.delete(key);
+
+6. Czyszczenie mapy:
+   map.clear();
+
+7. Rozmiar mapy:
+   const size = map.size;
+
+8. Iteracja:
+   - Po parach: for (const [key, value] of map) { ... }
+   - Po kluczach: for (const key of map.keys()) { ... }
+   - Po wartościach: for (const value of map.values()) { ... }
+
+Cechy Map:
+- Zachowuje kolejność dodawania elementów.
+- Klucze są unikalne.
+- Klucze mogą być dowolnego typu.
+- Wydajna dla częstych operacji dodawania/usuwania.
+- Łatwa iteracja.
+
+Przykład:
+const userMap = new Map();
+userMap.set('user1', { name: 'Jan', age: 30 });
+userMap.set('user2', { name: 'Anna', age: 25 });
+console.log(userMap.get('user1')); // { name: 'Jan', age: 30 }
+
+
+-->

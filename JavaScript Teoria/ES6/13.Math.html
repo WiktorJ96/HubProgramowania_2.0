@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    
+    <script>
+console.log(Math.trunc(3.8)); 
+// Math.trunc() usuwa część ułamkową liczby i zwraca samą część całkowitą.
+// Wynik: 3
+
+console.log(Math.trunc(7.2)); 
+// Zwraca część całkowitą liczby 7.2.
+// Wynik: 7
+
+console.log(Math.sign(3)); 
+// Math.sign() zwraca 1, jeśli liczba jest dodatnia, 0, jeśli równa 0, oraz -1, jeśli ujemna.
+// Wynik: 1 (bo 3 jest dodatnie)
+
+console.log(Math.sign(0)); 
+// Zwraca 0, ponieważ wartość wynosi 0.
+// Wynik: 0
+
+console.log(Math.sign(-1)); 
+// Zwraca -1, ponieważ wartość jest ujemna.
+// Wynik: -1
+
+console.log(Math.cbrt(27)); 
+// Math.cbrt() zwraca pierwiastek sześcienny liczby.
+// Wynik: 3 (bo 3 * 3 * 3 = 27)
+
+console.log(Math.cbrt(8)); 
+// Zwraca pierwiastek sześcienny z 8.
+// Wynik: 2 (bo 2 * 2 * 2 = 8)
+
+console.log(Math.hypot(3, 4, 5)); 
+// Math.hypot() zwraca pierwiastek kwadratowy sumy kwadratów wszystkich argumentów (twierdzenie Pitagorasa).
+// Wynik: 7.071 (bo sqrt(3^2 + 4^2 + 5^2) ≈ 7.071)
+
+console.log(Math.hypot(3, 4)); 
+// Zwraca pierwiastek kwadratowy sumy kwadratów 3 i 4 (odpowiednik długości przeciwprostokątnej w trójkącie prostokątnym).
+// Wynik: 5 (bo sqrt(3^2 + 4^2) = 5)
+
+console.log(Math.imul(5, 6)); 
+// Math.imul() wykonuje 32-bitowe mnożenie bez znaku.
+// Wynik: 30 (bo 5 * 6 = 30)
+
+console.log(Math.imul(0, 6)); 
+// Wynik: 0 (bo 0 * 6 = 0)
+
+console.log(Math.imul(5, -6)); 
+// Wynik: -30 (bo 5 * -6 = -30)
+
+console.log(Math.log10(100)); 
+// Math.log10() zwraca logarytm dziesiętny liczby.
+// Wynik: 2 (bo log10(100) = 2)
+
+console.log(Math.log10(1)); 
+// Wynik: 0 (bo log10(1) = 0)
+
+console.log(Number.EPSILON); 
+// Number.EPSILON reprezentuje najmniejszą różnicę między dwiema liczbami zmiennoprzecinkowymi, 
+// która jest większa niż zero.
+// Wynik: 2.220446049250313e-16 (bardzo mała liczba)
+
+console.log(Number.MAX_SAFE_INTEGER); 
+// Number.MAX_SAFE_INTEGER to największa liczba całkowita, która może być bezpiecznie reprezentowana w JavaScript.
+// Wynik: 9007199254740991
+
+console.log(Number.MIN_SAFE_INTEGER); 
+// Number.MIN_SAFE_INTEGER to najmniejsza liczba całkowita, która może być bezpiecznie reprezentowana w JavaScript.
+// Wynik: -9007199254740991
+
+console.log(Number.isInteger(10)); 
+// Number.isInteger() sprawdza, czy liczba jest liczbą całkowitą.
+// Wynik: true (10 jest liczbą całkowitą)
+
+console.log(Number.isSafeInteger(10.5)); 
+// Number.isSafeInteger() sprawdza, czy liczba jest liczbą całkowitą w zakresie bezpiecznych liczb.
+// Wynik: false (10.5 nie jest liczbą całkowitą)
+
+console.log(Number.isFinite(Infinity)); 
+// Number.isFinite() sprawdza, czy liczba jest skończona.
+// Wynik: false (Infinity nie jest liczbą skończoną)
+
+console.log(Number.isFinite(NaN)); 
+// Wynik: false (NaN nie jest liczbą skończoną)
+
+console.log(Number.isFinite(0/0)); 
+// Wynik: false (0/0 zwraca NaN, więc nie jest liczbą skończoną)
+
+    </script>
+</body>
+</html>

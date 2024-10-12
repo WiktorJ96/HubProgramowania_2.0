@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <script>
+        let szkola = {
+            name: "Szkola nr 1",
+            address: "ul. Kwiatowa 12",
+            students: [],
+            addStudent: function addStudent(name, age, grad){
+                const student = {
+                    name: name, 
+                    age: age,
+                    grad: grad 
+                }
+
+                this.students[this.students.length] = student;
+            },
+            showStudent: function showStudent(){
+                // console.log("Studenci:", this.students)
+                if(this.students.length === 0) {
+                    console.log("Ta szkola nie ma studentow")
+                }
+                for(let i = 0; i < this.students; i++){
+                    const s = this.students[i];
+                    console.log(s.name, s.age, s.grad)
+                }
+            },
+            showStudentByName: function showStudentByName(name) {
+                const students = this.students.filter(student => student.name === name);
+
+                //.filter(): Jest to metoda tablicowa, która tworzy nową tablicę zawierającą wszystkie elementy, które spełniają określony warunek. W tym przypadku iteruje przez każdy element tablicy students i sprawdza, czy dany student ma właściwość name równą przekazanemu argumentowi name.
+    
+                if (students.length > 0) {
+                    console.log(students);
+                } else {
+                    console.log(`Student o imieniu ${name} nie został znaleziony.`);
+                }
+            },
+
+            getNumStudents: function getNumStudents() {
+                console.log("Ilosc studentow:", this.students.length)
+            },
+            resetStudents: function resetStudents() {
+                this.students = [];
+                console.log(this.students)
+            }
+         }
+
+         szkola.addStudent('Darek', 'Romanski', '1c')
+         szkola.addStudent('Zbigniew', 'Boniek', '2b')
+         szkola.addStudent('Michal', 'Kleks', '3a')
+         szkola.addStudent('Darek', 'Kwiot', '1a')
+         console.log(szkola)
+         
+         console.log(szkola.students)
+         szkola.showStudent()
+         szkola.showStudentByName('Darek')
+         console.log(szkola.getNumStudents())
+         console.log(szkola.resetStudents())
+         console.log(szkola.getNumStudents())         
+    </script>
+</body>
+</html>

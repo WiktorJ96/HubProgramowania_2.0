@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <ul id="menu">
+        <li class="menu-item">11233</li>
+        <li class="menu-item">11233</li>
+        <li class="menu-item">11233</li>
+        <li class="menu-item current">11233</li>
+        <li class="menu-item">11233</li>
+        <li class="menu-item">11233</li>
+    </ul>
+    <script>
+
+let liItem = document.querySelector('li.menu-item');
+
+console.log(liItem);
+
+liItem.style.backgroundColor = 'red';
+
+let liList = document.querySelectorAll('ul li.menu-item');
+
+for(let i=0; i<liList.length; i++){
+    liList[i].style.fontSize = '24px';
+    }
+    </script>
+</body>
+</html>

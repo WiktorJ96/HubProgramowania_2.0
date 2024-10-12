@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    
+
+    <script>
+function *foo(){
+    // Generator 'foo', który zwraca wartości w sekwencji za pomocą 'yield'.
+    yield 'test 1'; // Pierwsze wywołanie zwróci 'test 1'.
+    yield 'test 2'; // Drugie wywołanie zwróci 'test 2'.
+    yield 'test 3'; // Trzecie wywołanie zwróci 'test 3'.
+}
+
+const testIter = foo();
+// Tworzy iterator 'testIter' dla generatora 'foo'.
+
+console.log(testIter.next());
+// Wywołuje 'next()' na generatorze, co zwraca obiekt {value: 'test 1', done: false}.
+console.log('test');
+// Wypisuje 'test'.
+console.log(testIter.next());
+// Wywołuje kolejne 'next()', które zwraca {value: 'test 2', done: false}.
+console.log(testIter.next());
+// Wywołuje kolejne 'next()', które zwraca {value: 'test 3', done: false}.
+console.log(testIter.next());
+// Ponieważ generator zakończył wszystkie 'yield', zwróci {value: undefined, done: true}.
+
+function *getRandomId() {
+    while(true) {
+        let v = Math.trunc(Math.random() * 100);
+        // Generator, który w nieskończonej pętli generuje losowe liczby od 0 do 99 (Math.random * 100).
+        yield v; // Zwraca losową liczbę.
+    }
+}
+
+const randomID = getRandomId();
+// Tworzy iterator 'randomID' dla generatora 'getRandomId'.
+
+console.log(randomID.next());
+// Wywołuje 'next()', który zwraca losową liczbę.
+console.log(randomID.next());
+// Kolejne wywołania zwracają kolejne losowe liczby.
+console.log(randomID.next());
+console.log(randomID.next());
+console.log(randomID.next());
+
+function *getRandomMaxId() {
+    while(true) {
+        const maxValue = yield;
+        // Generator czeka na wejściową wartość 'maxValue'.
+        let v = Math.trunc(Math.random() * maxValue);
+        // Generuje losową liczbę od 0 do maxValue-1.
+        yield v; // Zwraca tę liczbę.
+    }
+}
+
+const arr = Array.from(Array(10).keys());
+// Tworzy tablicę 'arr' zawierającą liczby od 0 do 9.
+
+const randomNumMaxIter = getRandomMaxIdMaxId();
+// Tworzy iterator dla generatora 'getRandomMaxId'.
+
+array.forEach((el) => {
+    // Iteruje po każdym elemencie tablicy 'arr'.
+    randomNumMaxIter.next();
+    // Wywołuje 'next()', aby przejść do kroku, w którym generator czeka na wartość 'maxValue'.
+
+    const random = randomNumMaxIter.next(150);
+    // Przekazuje 150 jako maksymalną wartość do generatora.
+    console.log("random:", random.value);
+    // Wypisuje losową liczbę od 0 do 149.
+});
+
+    </script>
+</body>
+</html>

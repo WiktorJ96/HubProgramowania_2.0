@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    
+    <script>
+        let o = {
+            a:10,
+            obj: {
+                b:23,
+                data: {
+                    str: "txt"
+                }
+            }
+        }
+
+        console.log(o?.obj?.data?.str); // txt
+        console.log(o?.obj?.data2?.str); // undefined
+
+
+        
+    </script>
+</body>
+</html>

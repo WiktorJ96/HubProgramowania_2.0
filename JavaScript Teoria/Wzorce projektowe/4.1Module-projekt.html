@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="../styles.css"> 
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/themes/prism-tomorrow.min.css" rel="stylesheet" />
+    <title>Kalkulator Walutowy - Wzorzec Module</title>
+</head>
+<body>
+    <div class="container">
+        <h1>Kalkulator Walutowy - Wzorzec Module</h1>
+        <div>
+            <label for="currency">Wybierz walutę:</label>
+            <select id="currency">
+                <option value="usd">USD</option>
+                <option value="eur">EUR</option>
+                <option value="gbp">GBP</option>
+            </select>
+
+            <label for="amount">Kwota:</label>
+            <input type="number" id="amount" value="100">
+
+            <button id="convertBtn">na PLN</button>
+
+            <p id="result">Wynik: </p>
+        </div>
+
+        <h2>Kod HTML i JavaScript:</h2>
+        <pre><code class="language-html">
+        &lt;h1&gt;Kalkulator Walutowy - Wzorzec Module&lt;/h1&gt;
+        &lt;div&gt;
+            &lt;label for="currency"&gt;Wybierz walutę:&lt;/label&gt;
+            &lt;select id="currency"&gt;
+                &lt;option value="usd"&gt;USD&lt;/option&gt;
+                &lt;option value="eur"&gt;EUR&lt;/option&gt;
+                &lt;option value="gbp"&gt;GBP&lt;/option&gt;
+            &lt;/select&gt;
+
+            &lt;label for="amount"&gt;Kwota:&lt;/label&gt;
+            &lt;input type="number" id="amount" value="100"&gt;
+
+            &lt;button id="convertBtn"&gt;Przelicz na PLN&lt;/button&gt;
+
+            &lt;p id="result"&gt;Wynik: &lt;/p&gt;
+        &lt;/div&gt;
+
+        &lt;script&gt;
+        const CurrencyConverter = (function() {
+            const exchangeRates = {
+                usd: 4.5,
+                eur: 4.9,
+                gbp: 5.6
+            };
+
+            function convert(currency, amount) {
+                const rate = exchangeRates[currency];
+                return (amount * rate).toFixed(2);
+            }
+
+            return {
+                convertToPLN: function(currency, amount) {
+                    return convert(currency, amount);
+                }
+            };
+        })();
+
+        document.getElementById('convertBtn').addEventListener('click', function() {
+            const currency = document.getElementById('currency').value;
+            const amount = document.getElementById('amount').value;
+            const result = CurrencyConverter.convertToPLN(currency, amount);
+            document.getElementById('result').textContent = `Wynik: ${result} PLN`;
+        });
+        &lt;/script&gt;
+        </code></pre>
+    </div>
+
+    <script>
+        // Moduł CurrencyConverter z prywatnymi danymi wewnątrz
+        const CurrencyConverter = (function() {
+            const exchangeRates = {
+                usd: 4.5,
+                eur: 4.9,
+                gbp: 5.6
+            };
+
+            // Prywatna funkcja do przeliczania
+            function convert(currency, amount) {
+                const rate = exchangeRates[currency];
+                return (amount * rate).toFixed(2); // Zaokrąglamy do dwóch miejsc po przecinku
+            }
+
+            // Publiczne API modułu
+            return {
+                convertToPLN: function(currency, amount) {
+                    return convert(currency, amount);
+                }
+            };
+        })();
+
+        // Logika interfejsu użytkownika
+        document.getElementById('convertBtn').addEventListener('click', function() {
+            const currency = document.getElementById('currency').value;
+            const amount = document.getElementById('amount').value;
+            const result = CurrencyConverter.convertToPLN(currency, amount);
+            document.getElementById('result').textContent = `Wynik: ${result} PLN`;
+        });
+    </script>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/prism.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/components/prism-javascript.min.js"></script>
+</body>
+</html>

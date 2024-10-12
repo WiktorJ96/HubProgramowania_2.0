@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Wzorzec projektowy Builder w JavaScript</title>
+    <link rel="stylesheet" href="../styles.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/themes/prism-tomorrow.min.css" rel="stylesheet" />
+</head>
+<body>
+    <div class="container">
+        <h1>Wzorzec Projektowy Builder w JavaScript</h1>
+
+        <p>**Wzorzec Builder** umożliwia stopniowe budowanie złożonych obiektów poprzez dodawanie po kolei elementów, zamiast przekazywania wszystkich właściwości w jednym kroku. Dzięki temu możemy tworzyć bardziej elastyczne obiekty, które są łatwiejsze do zrozumienia i modyfikacji.</p>
+
+        <h2>Jak działa wzorzec Builder?</h2>
+        <p>Wzorzec Builder oddziela proces budowania obiektu od jego reprezentacji. Stosujemy krokowy proces, który umożliwia stworzenie obiektu z wieloma konfigurowalnymi właściwościami, często z możliwością pomijania niektórych kroków.</p>
+
+        <h3>Przykład implementacji wzorca Builder</h3>
+        <pre><code class="language-javascript">
+class Car {
+    constructor() {
+        this.doors = 0;
+        this.engine = "";
+        this.color = "";
+    }
+}
+
+class CarBuilder {
+    constructor() {
+        this.car = new Car();
+    }
+
+    addDoors(doors) {
+        this.car.doors = doors;
+        return this;  // Umożliwia wywołania łańcuchowe
+    }
+
+    addEngine(engine) {
+        this.car.engine = engine;
+        return this;
+    }
+
+    addColor(color) {
+        this.car.color = color;
+        return this;
+    }
+
+    build() {
+        return this.car;  // Zwracamy kompletny obiekt
+    }
+}
+
+// Użycie Buildera
+const myCar = new CarBuilder()
+    .addDoors(4)
+    .addEngine("V8")
+    .addColor("Czerwony")
+    .build();
+
+console.log(myCar);
+// Output: Car { doors: 4, engine: 'V8', color: 'Czerwony' }
+        </code></pre>
+
+        <p>W powyższym przykładzie użyliśmy klasy <code>CarBuilder</code>, aby krok po kroku zbudować obiekt <code>Car</code>. Każda metoda dodaje określoną właściwość do obiektu i zwraca samego siebie, co umożliwia wywołania łańcuchowe (tzw. fluent interface). Dzięki temu możemy elastycznie budować obiekt, dodając tylko te elementy, które są potrzebne.</p>
+
+        <h2>Zalety wzorca Builder</h2>
+        <ul>
+            <li>Oddzielenie procesu tworzenia obiektu od jego reprezentacji, co daje większą elastyczność.</li>
+            <li>Łatwość w zarządzaniu obiektami z wieloma opcjonalnymi parametrami.</li>
+            <li>Czytelniejszy kod, dzięki możliwości budowania obiektów krok po kroku i użyciu wywołań łańcuchowych.</li>
+            <li>Możliwość łatwego dodawania nowych kroków budowania bez modyfikowania istniejącego kodu.</li>
+        </ul>
+
+        <h2>Zastosowanie wzorca Builder</h2>
+        <p>Wzorzec Builder znajduje zastosowanie wszędzie tam, gdzie mamy do czynienia z obiektami, które mogą mieć wiele opcjonalnych właściwości lub złożoną strukturę. Przykłady obejmują tworzenie skomplikowanych formularzy, konfiguracji dla dużych systemów lub obiektów o wielu atrybutach, takich jak samochody, komputery, domy, itp.</p>
+
+        <h2>Przykład Buildera dla formularza</h2>
+        <pre><code class="language-javascript">
+class Form {
+    constructor() {
+        this.fields = [];
+    }
+
+    addField(field) {
+        this.fields.push(field);
+        return this;
+    }
+
+    build() {
+        return this.fields;
+    }
+}
+
+const formBuilder = new Form();
+const myForm = formBuilder
+    .addField({ label: "Imię", type: "text", value: "" })
+    .addField({ label: "Email", type: "email", value: "" })
+    .build();
+
+console.log(myForm);
+// Output: [ { label: 'Imię', type: 'text', value: '' }, { label: 'Email', type: 'email', value: '' } ]
+        </code></pre>
+
+        <p>W tym przykładzie zastosowaliśmy wzorzec Builder do budowania dynamicznego formularza. Dodawanie pól formularza odbywa się krok po kroku, a wynikowy formularz można wygenerować dopiero po zakończeniu budowania.</p>
+
+        <h2>Podsumowanie</h2>
+        <ul>
+            <li>Wzorzec Builder pozwala na krokowe tworzenie obiektów złożonych, co daje większą elastyczność i kontrolę nad procesem budowy.</li>
+            <li>Wzorzec ten jest szczególnie użyteczny, gdy obiekty mają wiele opcjonalnych właściwości lub wymagają konfigurowania w trakcie budowania.</li>
+            <li>Umożliwia wywołania łańcuchowe, co sprawia, że kod staje się bardziej czytelny i zrozumiały.</li>
+        </ul>
+        <a href="./7.1.Builder-projekt.html"><button>Przykładowy projekt</button></a>
+    </div>
+
+    <script>
+        // Klasa House
+class House {
+  constructor() {
+    this.rooms = 0;
+    this.garage = false;
+    this.pool = false;
+    this.garden = false;
+  }
+}
+
+// Klasa Buildera
+class HouseBuilder {
+  constructor() {
+    this.house = new House();  // Tworzymy nową instancję House
+  }
+
+  // Dodawanie liczby pokoi
+  setRooms(rooms) {
+    this.house.rooms = rooms;
+    return this;  // Umożliwia chainowanie (wywoływanie metod jeden po drugim)
+  }
+
+  // Dodawanie garażu
+  setGarage(hasGarage) {
+    this.house.garage = hasGarage;
+    return this;  // Umożliwia chainowanie
+  }
+
+  // Dodawanie basenu
+  setPool(hasPool) {
+    this.house.pool = hasPool;
+    return this;  // Umożliwia chainowanie
+  }
+
+  // Dodawanie ogrodu
+  setGarden(hasGarden) {
+    this.house.garden = hasGarden;
+    return this;  // Umożliwia chainowanie
+  }
+
+  // Zwracanie gotowego obiektu
+  build() {
+    return this.house;
+  }
+}
+
+// Użycie wzorca Builder do zbudowania domu
+const house1 = new HouseBuilder()
+  .setRooms(4)
+  .setGarage(true)
+  .setPool(false)
+  .setGarden(true)
+  .build();
+
+const house2 = new HouseBuilder()
+  .setRooms(2)
+  .setGarage(false)
+  .setPool(true)
+  .build();
+
+console.log(house1);  // Wyświetli: { rooms: 4, garage: true, pool: false, garden: true }
+console.log(house2);  // Wyświetli: { rooms: 2, garage: false, pool: true, garden: false }
+
+    </script>
+     <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/prism.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/components/prism-javascript.min.js"></script>
+</body>
+</html>

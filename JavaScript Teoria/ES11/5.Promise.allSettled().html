@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    
+    <script>
+const promiseArr = [
+    Promise.resolve(20),
+    Promise.reject(new Error('Błąd w pierwszej promisie')),
+    Promise.resolve(30),
+    Promise.reject(new Error('Błąd w drugiej promisie')),
+    Promise.resolve(40)
+];
+// Tworzy tablicę 'promiseArr', która zawiera różne promisy:
+// - Część promis jest rozwiązywana z wartościami (20, 30, 40),
+// - Część promis jest odrzucana z błędami (np. 'Błąd w pierwszej promisie').
+
+Promise.allSettled(promiseArr)
+    .then(result => {
+        console.log("All promises settled", result);
+        result.forEach(e => console.log(e.status, e.value));
+        // Wywołuje 'Promise.allSettled()', która czeka, aż wszystkie promisy zostaną rozwiązane lub odrzucone.
+        // Zwraca tablicę obiektów z informacjami o stanie każdej promisy (czy została rozwiązana lub odrzucona).
+    });
+
+    </script>
+</body>
+</html>

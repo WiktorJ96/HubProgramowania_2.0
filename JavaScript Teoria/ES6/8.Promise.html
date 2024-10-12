@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    
+
+    <script>
+// Funkcja, która przetwarza i wyświetla dane
+function processData(data) {
+    console.log(data);  // Wyświetla dane w konsoli
+}
+
+// Funkcja obsługująca błędy
+function error(err) {
+    console.error(err);  // Wyświetla błąd w konsoli
+}
+
+// Użycie fetch API do pobrania dowcipu z API
+fetch("https://api.chucknorris.io/jokes/random")
+    .then(response => response.json())  // Odpowiedź zamieniana jest na format JSON
+    .then(data => processData(data))    // Dane są przetwarzane przez funkcję processData
+    .catch(err => error(err));          // Obsługa błędów, jeśli wystąpią podczas zapytania
+
+// Funkcja pobierająca dowcip za pomocą XMLHttpRequest
+function getJoke() {
+    // Tworzy nową obietnicę (Promise)
+    return new Promise(function(resolve, reject) {  
+        const req = new XMLHttpRequest();  // Tworzy nowy obiekt XMLHttpRequest
+        const apiUrl = "https://api.chucknorris.io/jokes/random";  // URL API
+        req.open("GET", apiUrl);  // Otwiera zapytanie GET do API
+        req.onload = function() {  // Kiedy zapytanie zakończy się
+            if (req.status == 200) {  // Sprawdza czy status odpowiedzi to 200 (OK)
+                resolve(req.responseText); // Jeśli tak, rozwiązuje obietnicę, przekazując odpowiedź
+            } else {
+                reject(req.responseText);  // Jeśli status nie jest 200, odrzuca obietnicę
+            }
+        };
+        req.onerror = function() {
+            reject(new Error("Network error"));  // Obsługuje błąd sieci
+        };
+
+        req.send();  // Wysyła zapytanie
+    });
+}
+
+// Wywołanie funkcji getJoke, która zwraca Promise
+getJoke()
+    .then(data => {  // Kiedy obietnica zostanie rozwiązana (dane zostaną pobrane)
+        let json = JSON.parse(data);  // Konwertuje pobrane dane z tekstu na JSON
+        console.log(json);  // Wyświetla pobrane dane w konsoli
+    })
+
+
+
+                /* WERSJA KROTSZA */
+                
+// Asynchroniczna funkcja używająca async/await do pobrania danych z API
+async function getData() {
+    try { 
+        // Pobiera dane z API za pomocą fetch i czeka na odpowiedź
+        const response = await fetch("https://api.chucknorris.io/jokes/random");  
+        // Konwertuje odpowiedź na JSON
+        const data = await response.json();  
+        // Wyświetla dane w konsoli
+        console.log(data);  
+    } catch (error) {
+        // Jeśli wystąpi błąd, wyświetla go w konsoli
+        console.log(error);  
+    }
+}
+
+    </script>
+</body>
+</html>

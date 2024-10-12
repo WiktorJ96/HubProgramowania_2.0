@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <pre style="font-size: 18px;">
+Reflect.has(): Sprawdza, czy obiekt ma określoną właściwość, podobnie jak operator in.
+Reflect.set(): Ustawia wartość właściwości obiektu, tutaj dodaje nową właściwość 'brand'.
+Reflect.ownKeys(): Zwraca wszystkie klucze (zarówno właściwości zwykłe, jak i symbole) obiektu.
+Reflect.defineProperty(): Definiuje lub modyfikuje właściwości obiektu. W tym przypadku nie ma zmian, ponieważ nie podano szczegółów.
+Reflect.construct(): Tworzy nowy obiekt, działając jak operator new, ale w bardziej dynamiczny sposób.
+</pre>
+    <script>
+const car = {
+    name: "Ford",
+    topSpeed: 200,
+    printInfo: function() {
+        console.log(this.name, this.topSpeed);
+    }
+};
+// Tworzy obiekt 'car' z trzema właściwościami: 'name', 'topSpeed' i funkcją 'printInfo'.
+
+console.log(Reflect.has(car, "name"));
+// Używa metody Reflect.has(), aby sprawdzić, czy obiekt 'car' posiada właściwość 'name'.
+// Wynik: true (bo 'name' istnieje w obiekcie 'car').
+
+console.log(Reflect.has(car, "brand"));
+// Sprawdza, czy obiekt 'car' posiada właściwość 'brand'.
+// Wynik: false (bo 'brand' nie istnieje w obiekcie 'car').
+
+Reflect.set(car, "brand", "test");
+// Używa metody Reflect.set(), aby dodać nową właściwość 'brand' do obiektu 'car' z wartością "test".
+
+console.log(Reflect.has(car, "brand"));
+// Ponownie sprawdza, czy obiekt 'car' posiada właściwość 'brand'.
+// Wynik: true (bo 'brand' został dodany przez Reflect.set()).
+
+console.log(Reflect.ownKeys(car));
+// Używa Reflect.ownKeys(), aby zwrócić tablicę wszystkich własnych kluczy (właściwości) obiektu 'car'.
+// Wynik: ["name", "topSpeed", "printInfo", "brand"]
+
+Reflect.defineProperty(car, "brand");
+// Próbuje zdefiniować właściwość 'brand' za pomocą Reflect.defineProperty().
+// W tym przypadku nic się nie zmienia, bo 'brand' już istnieje, a argumenty metody nie określają żadnych zmian.
+
+console.log(Reflect.has(car, "brand"));
+// Sprawdza, czy właściwość 'brand' nadal istnieje po wywołaniu Reflect.defineProperty().
+// Wynik: true (bo 'brand' nadal istnieje).
+
+function Test(a, b) {
+    this.a = a;
+    this.b = b;
+}
+// Definiuje funkcję 'Test', która przypisuje wartości do właściwości 'a' i 'b' na obiekcie utworzonym przez new.
+
+const obj = Reflect.construct(Test, [1, 5]);
+// Używa Reflect.construct(), aby utworzyć nowy obiekt z klasy 'Test', przekazując argumenty [1, 5].
+// To jest równoważne użyciu 'new Test(1, 5)'.
+
+console.log(obj);
+// Wypisuje nowo utworzony obiekt 'obj', który będzie miał właściwości 'a' równe 1 i 'b' równe 5.
+// Wynik: {a: 1, b: 5}
+
+    </script>
+</body>
+</html>

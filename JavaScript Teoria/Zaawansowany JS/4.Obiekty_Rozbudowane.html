@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Rozbudowane Obiekty w JavaScript</title>
+    <link rel="stylesheet" href="/JavaScript Teoria/styles.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/themes/prism-tomorrow.min.css" rel="stylesheet" />
+</head>
+<body>
+    <div class="container">
+        <h1>Rozbudowane Obiekty w JavaScript</h1>
+
+        <p>Rozbudowane obiekty w JavaScript mogą zawierać zagnieżdżone struktury, metody oraz dynamicznie modyfikowane właściwości. Można także manipulować obiektami w bardziej zaawansowany sposób, np. za pomocą <code>this</code>, referencji do innych obiektów czy delegowania metod.</p>
+
+        <h2>Zagnieżdżone obiekty</h2>
+        <pre><code class="language-javascript">
+        const company = {
+            name: "Tech Corp",
+            employees: [
+                { name: "Alice", role: "Developer" },
+                { name: "Bob", role: "Designer" }
+            ],
+            address: {
+                street: "Main St",
+                city: "Warsaw"
+            }
+        };
+
+        console.log(company.employees[0].name); // 'Alice'
+        console.log(company.address.city);      // 'Warsaw'
+        </code></pre>
+        <p>Obiekty mogą mieć zagnieżdżone struktury, takie jak tablice i inne obiekty. W powyższym przykładzie obiekt <code>company</code> zawiera zarówno tablicę pracowników, jak i obiekt reprezentujący adres.</p>
+
+        <h2>Metody w zagnieżdżonych obiektach</h2>
+        <pre><code class="language-javascript">
+        const company = {
+            name: "Tech Corp",
+            employees: [
+                { name: "Alice", role: "Developer" },
+                { name: "Bob", role: "Designer" }
+            ],
+            getEmployeeNames: function() {
+                return this.employees.map(emp => emp.name);
+            }
+        };
+
+        console.log(company.getEmployeeNames()); // ['Alice', 'Bob']
+        </code></pre>
+        <p>Obiekty mogą mieć metody, które operują na ich właściwościach. W tym przykładzie metoda <code>getEmployeeNames</code> zwraca tablicę z imionami pracowników, wykorzystując metodę <code>map</code> na zagnieżdżonej tablicy <code>employees</code>.</p>
+
+        <h2>Dodawanie dynamicznych właściwości i metod</h2>
+        <pre><code class="language-javascript">
+        const car = {
+            brand: "Tesla",
+            model: "Model S",
+            year: 2022
+        };
+
+        // Dynamiczne dodanie nowej właściwości
+        car.color = "Red";
+
+        // Dynamiczne dodanie nowej metody
+        car.getDetails = function() {
+            return `${this.brand} ${this.model}, ${this.year}, Color: ${this.color}`;
+        };
+
+        console.log(car.getDetails()); // 'Tesla Model S, 2022, Color: Red'
+        </code></pre>
+        <p>W JavaScript możemy dynamicznie dodawać nowe właściwości i metody do istniejących obiektów. W tym przykładzie dodano właściwość <code>color</code> i metodę <code>getDetails</code>, która wykorzystuje nowe dane do generowania opisu obiektu.</p>
+
+        <h2>Praca z prototypami</h2>
+        <p>JavaScript korzysta z mechanizmu prototypów, który pozwala dziedziczyć właściwości i metody między obiektami. Możemy tworzyć obiekty na bazie innych, rozszerzając ich funkcjonalność:</p>
+        <pre><code class="language-javascript">
+        const person = {
+            greet: function() {
+                console.log("Hello, my name is " + this.name);
+            }
+        };
+
+        const alice = Object.create(person);
+        alice.name = "Alice";
+        alice.greet(); // 'Hello, my name is Alice'
+        </code></pre>
+        <p>Obiekt <code>alice</code> dziedziczy metodę <code>greet</code> z obiektu <code>person</code>, ale ma także swoje unikalne właściwości, takie jak <code>name</code>.</p>
+    </div>
+    <script>
+        const tvFactory = {
+            name: 'Factory',
+            city: 'San Francisco',
+            employees:[],
+            brand: 'Philips',
+            addEmployee: function(name, surname) {
+                const obj = {
+                    name: name,
+                    surname: surname,
+                    email: `${name.toLowerCase()}.${surname.toLowerCase()}@gmail.com`
+                };
+
+                this.employees[this.employees.length] = obj;
+        },
+        showEmployees: function(){
+            console.log(this.name, "employees:");
+
+            for(let i=0; i<this.employees.length; i){
+                const e = this.employees[i];
+                console.log(`${e.name} ${e.surname} - ${e.email}`);
+            }
+        },
+        makeTv: function(model, color) {
+            return {
+                id:`${this.brand}-${model}-tv-${color}`,
+                brand: this.brand,
+                model: model,
+                color: color,
+                
+            }
+        }
+    };
+
+    tvFactory.addEmployee('John', 'Doe');
+    tvFactory.addEmployee('Darek', 'Grzyb');
+    console.log(tvFactory.employees);
+
+    let tv1 = tvFactory.makeTv('x1', 'silver');
+    let tv2 = tvFactory.makeTv('pw10', 'black');
+
+    console.log(tv1, tv2);
+
+    tvFactory.name = "Factory Sp.Z.o.o"  // zmiana nazwy firmy
+
+    console.log(tvFactory)
+
+
+    // druga opcja zmiany nazwy firmy
+    const factoryName = "name"
+    tvFactory[factoryName] = "Sharp Tv Factory"
+
+    console.log(tvFactory)
+    </script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/prism.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/components/prism-javascript.min.js"></script>
+</body>
+</html>

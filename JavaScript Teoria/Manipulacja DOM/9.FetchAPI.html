@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Fetch API w JavaScript</title>
+    <link rel="stylesheet" href="../styles.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/themes/prism-tomorrow.min.css" rel="stylesheet" />
+</head>
+<body>
+    <div class="container">
+        <h1>Fetch API w JavaScript</h1>
+
+        <p><strong>Fetch API</strong> umożliwia łatwe wysyłanie zapytań HTTP z JavaScript i obsługę odpowiedzi w asynchroniczny sposób, za pomocą obietnic (<code>Promise</code>). Używanie Fetch API jest nowocześniejszym rozwiązaniem w porównaniu do starszego obiektu <code>XMLHttpRequest</code>.</p>
+
+        <h2>Podstawowe użycie Fetch API</h2>
+        <p>Podstawowa składnia Fetch API jest bardzo prosta. Za pomocą metody <code>fetch()</code> można wysłać żądanie do serwera i obsłużyć odpowiedź:</p>
+
+        <h3>Przykład pobierania danych za pomocą Fetch API</h3>
+        <pre><code class="language-javascript">
+// Podstawowe użycie Fetch API
+fetch('https://jsonplaceholder.typicode.com/posts')
+    .then(response => {
+        if (!response.ok) {
+            throw new Error('Błąd sieci!');
+        }
+        return response.json(); // Konwertowanie odpowiedzi do formatu JSON
+    })
+    .then(data => {
+        console.log(data); // Obsługa danych
+    })
+    .catch(error => {
+        console.error('Wystąpił problem:', error); // Obsługa błędów
+    });
+        </code></pre>
+        <p>W tym przykładzie wysyłamy żądanie <code>GET</code> do serwera i obsługujemy odpowiedź. Gdy dane są dostępne, konwertujemy je na format JSON, a następnie przetwarzamy. W przypadku błędu wywołujemy <code>catch</code>, aby obsłużyć ewentualne problemy.</p>
+
+        <h2>Wysyłanie danych za pomocą Fetch API</h2>
+        <p>Za pomocą Fetch API można również wysyłać dane na serwer, np. podczas przesyłania formularza. Aby to zrobić, należy określić metodę <code>POST</code> oraz dodać dane do ciała zapytania.</p>
+
+        <h3>Przykład wysyłania danych</h3>
+        <pre><code class="language-javascript">
+// Wysyłanie danych na serwer za pomocą POST
+fetch('https://jsonplaceholder.typicode.com/posts', {
+    method: 'POST',
+    headers: {
+        'Content-Type': 'application/json'
+    },
+    body: JSON.stringify({
+        title: 'Nowy post',
+        body: 'To jest przykładowa treść',
+        userId: 1
+    })
+})
+    .then(response => response.json())
+    .then(data => {
+        console.log('Post zapisany:', data);
+    })
+    .catch(error => {
+        console.error('Wystąpił problem:', error);
+    });
+        </code></pre>
+        <p>W tym przykładzie wysyłamy zapytanie <code>POST</code>, dołączając dane w formacie JSON w ciele zapytania. Odpowiedź jest następnie przetwarzana tak samo, jak w przypadku żądania <code>GET</code>.</p>
+
+        <h2>Obsługa nagłówków i opcji zapytania</h2>
+        <p>Możemy ustawiać dodatkowe opcje i nagłówki w zapytaniu, takie jak <code>Authorization</code>, <code>Content-Type</code>, czy inne metadane.</p>
+
+        <pre><code class="language-javascript">
+fetch('https://api.example.com/data', {
+    method: 'GET',
+    headers: {
+        'Authorization': 'Bearer token123',
+        'Content-Type': 'application/json'
+    }
+})
+    .then(response => response.json())
+    .then(data => console.log(data))
+    .catch(error => console.error('Błąd:', error));
+        </code></pre>
+        <p>W tym przykładzie dodajemy nagłówki <code>Authorization</code> i <code>Content-Type</code>, które są często używane w aplikacjach do autoryzacji oraz wysyłania danych.</p>
+
+        <h2>Obsługa błędów sieciowych</h2>
+        <p>Fetch API nie zgłasza błędów HTTP (np. 404 lub 500) jako błędów JavaScript, więc musimy samodzielnie sprawdzić, czy odpowiedź była poprawna. Możemy to zrobić, sprawdzając właściwość <code>response.ok</code>.</p>
+
+        <pre><code class="language-javascript">
+fetch('https://api.example.com/non-existent-endpoint')
+    .then(response => {
+        if (!response.ok) {
+            throw new Error(`Błąd HTTP: ${response.status}`);
+        }
+        return response.json();
+    })
+    .then(data => console.log(data))
+    .catch(error => console.error('Wystąpił problem:', error));
+        </code></pre>
+        <p>W tym przykładzie ręcznie sprawdzamy, czy odpowiedź była sukcesem (sprawdzamy kod odpowiedzi HTTP), a jeśli nie, zgłaszamy odpowiedni błąd.</p>
+
+        <h2>Podsumowanie</h2>
+        <ul>
+            <li><code>fetch()</code> jest nowoczesną metodą do komunikacji z serwerem, zastępującą starszy <code>XMLHttpRequest</code>.</li>
+            <li>Fetch API działa asynchronicznie i zwraca obietnice (<code>Promise</code>), dzięki czemu możemy łatwo obsługiwać odpowiedzi i błędy.</li>
+            <li>Za pomocą Fetch API możemy wysyłać zarówno żądania <code>GET</code>, jak i <code>POST</code>, a także ustawiać niestandardowe nagłówki i opcje zapytań.</li>
+        </ul>
+
+    </div>
+    <script>
+        // Definiujemy URL, z którego chcemy pobrać dane
+// W tym przypadku to API Star Wars (SWAPI), konkretnie dane o postaci o ID 1
+const url = "https://swapi.dev/api/people/1/";
+
+// Używamy metody fetch do wysłania żądania GET do podanego URL
+fetch(url)
+    // Pierwszy .then() - przetwarzamy odpowiedź na format JSON
+    .then(response => response.json())
+    // Drugi .then() - przekazujemy przetworzone dane do funkcji showData
+    .then(showData);
+
+// Definiujemy funkcję showData, która zostanie wywołana z pobranymi danymi
+function showData(data) {
+    // Wyświetlamy pobrane dane w konsoli
+    console.log(data);
+}
+
+// Uwaga: Ten kod jest asynchroniczny. Wykonanie nie zostanie wstrzymane
+// podczas oczekiwania na odpowiedź z serwera.
+    </script>
+
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/prism.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/components/prism-javascript.min.js"></script>
+</body>
+</html>

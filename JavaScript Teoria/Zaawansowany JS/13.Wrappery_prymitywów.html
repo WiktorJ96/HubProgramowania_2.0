@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Wrapery Prymitywów w JavaScript</title>
+    <link rel="stylesheet" href="/JavaScript Teoria/styles.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/themes/prism-tomorrow.min.css" rel="stylesheet" />
+</head>
+<body>
+    <div class="container">
+        <h1>Wrapery Prymitywów w JavaScript</h1>
+
+        <p>W JavaScript mamy pięć prymitywnych typów danych: <code>string</code>, <code>number</code>, <code>boolean</code>, <code>null</code>, i <code>undefined</code>. Zazwyczaj prymitywy są traktowane jako proste wartości, ale JavaScript automatycznie tworzy tymczasowe obiekty z prymitywów, tzw. wrapery, które umożliwiają korzystanie z metod obiektowych.</p>
+
+        <h2>Czym są wrapery prymitywów?</h2>
+        <p>Wrapery prymitywów to obiekty wbudowane w JavaScript, które "opakowują" prymitywy, umożliwiając korzystanie z metod obiektowych. Istnieją trzy główne obiekty-wrapppery dla prymitywów:</p>
+        <ul>
+            <li><code>String</code> – obiekt opakowujący dla wartości tekstowych</li>
+            <li><code>Number</code> – obiekt opakowujący dla liczb</li>
+            <li><code>Boolean</code> – obiekt opakowujący dla wartości logicznych</li>
+        </ul>
+
+        <h2>Przykład z <code>String</code></h2>
+        <pre><code class="language-javascript">
+// String prymitywny
+let strPrimitive = "Hello, world!";
+
+// Tymczasowy wrapper String
+console.log(strPrimitive.length); // 13
+console.log(strPrimitive.toUpperCase()); // 'HELLO, WORLD!'
+        </code></pre>
+        <p>W powyższym przykładzie <code>strPrimitive</code> jest wartością prymitywną typu <code>string</code>, ale możemy na niej wywołać metody, takie jak <code>toUpperCase()</code>. Dzieje się tak, ponieważ JavaScript automatycznie tworzy tymczasowy obiekt <code>String</code> w tle, który dostarcza dostęp do metod obiektowych.</p>
+
+        <h2>Przykład z <code>Number</code></h2>
+        <pre><code class="language-javascript">
+// Number prymitywny
+let numPrimitive = 42;
+
+// Tymczasowy wrapper Number
+console.log(numPrimitive.toFixed(2)); // '42.00'
+        </code></pre>
+        <p>Podobnie jak w przypadku <code>String</code>, prymityw <code>number</code> może korzystać z metod obiektowych, takich jak <code>toFixed()</code>, dzięki obiektowi <code>Number</code>.</p>
+
+        <h2>Przykład z <code>Boolean</code></h2>
+        <pre><code class="language-javascript">
+// Boolean prymitywny
+let boolPrimitive = true;
+
+// Tymczasowy wrapper Boolean
+console.log(boolPrimitive.toString()); // 'true'
+        </code></pre>
+        <p>Obiekt <code>Boolean</code> umożliwia dostęp do metod, takich jak <code>toString()</code>, które normalnie są dostępne dla obiektów.</p>
+
+        <h2>Różnice między prymitywami a obiektami</h2>
+        <pre><code class="language-javascript">
+let str1 = "test";
+let str2 = new String("test");
+
+console.log(typeof str1); // 'string'
+console.log(typeof str2); // 'object'
+
+console.log(str1 === str2); // false (prymityw vs obiekt)
+        </code></pre>
+        <p>Podczas gdy prymitywne wartości, takie jak <code>"test"</code>, są typu <code>string</code>, ręcznie utworzony obiekt <code>String</code> jest typu <code>object</code>. Nawet jeśli wartości wydają się takie same, są one różnymi typami danych, co widać przy porównywaniu za pomocą operatora <code>===</code>.</p>
+
+        <h2>Podsumowanie</h2>
+        <ul>
+            <li>Wrapery prymitywów, takie jak <code>String</code>, <code>Number</code>, i <code>Boolean</code>, są automatycznie tworzone przez JavaScript, aby umożliwić korzystanie z metod obiektowych na prymitywach.</li>
+            <li>Ręcznie utworzone obiekty, takie jak <code>new String()</code>, różnią się od prymitywnych wartości i są typu <code>object</code>.</li>
+            <li>Choć wrapery umożliwiają korzystanie z metod obiektowych na prymitywach, lepiej unikać tworzenia obiektów za pomocą <code>new</code> dla prymitywów, aby uniknąć nieoczekiwanych rezultatów.</li>
+        </ul>
+
+    </div>
+    <script>
+
+        // Deklaracja zmiennej typu string (typ prosty)
+let txt = "TXT";
+
+// Tworzenie obiektu String na podstawie zmiennej txt
+let str = new String(txt); 
+// 'str' jest teraz obiektem String, a nie typem prostym
+
+// Wywołanie metody toLowerCase() na obiekcie String
+str = str.toLowerCase();
+console.log(str);
+// Wyświetli: "txt"
+// Uwaga: mimo że str jest obiektem, console.log wyświetli jego wartość jako string
+
+// Bezpośrednie wywołanie toLowerCase() na zmiennej txt (typ prosty)
+str = txt.toLowerCase();
+console.log(str);
+// Wyświetli: "txt"
+// JavaScript automatycznie "opakowuje" txt w obiekt String, aby wywołać metodę
+
+// Operacje na liczbach (typ Number)
+let num = 123.12333;
+// 'num' jest zmienną typu number (typ prosty)
+
+num = num.toFixed(2);
+// toFixed(2) zaokrągla liczbę do 2 miejsc po przecinku i zwraca wynik jako string
+console.log(num);
+// Wyświetli: "123.12" (uwaga: jest to teraz string, nie number)
+
+// Tworzenie obiektu Number
+let num2 = new Number(123.12333);
+// 'num2' jest obiektem Number, a nie typem prostym
+
+num2 = num2.toFixed(2);
+// Podobnie jak wyżej, toFixed(2) zwraca string
+console.log(num2);
+// Wyświetli: "123.12" (string)
+
+// Kluczowe pojęcia:
+// 1. Typy proste vs Obiekty: 
+//    String literal (txt) vs String object (str)
+//    Number literal (num) vs Number object (num2)
+// 2. Metody stringów: toLowerCase() działa tak samo na typach prostych i obiektach
+// 3. Metody liczb: toFixed() zawsze zwraca string, niezależnie czy wywołana na typie prostym czy obiekcie
+// 4. Auto-boxing: JavaScript automatycznie opakowuje typy proste w obiekty przy wywołaniu metod
+    </script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/prism.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/components/prism-javascript.min.js"></script>
+</body>
+</html>

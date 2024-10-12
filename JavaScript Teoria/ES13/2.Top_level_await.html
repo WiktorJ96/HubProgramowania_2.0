@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <script>
+
+        // Funkcja asynchroniczna symulująca pobieranie danych
+function fetchData() {
+    return new Promise((resolve) => {
+        setTimeout(() => {
+            resolve("Data received");
+        }, 2000); // Symulacja opóźnienia 2 sekundy
+    });
+}
+
+// Użycie top-level await
+const data = await fetchData(); // "Czekamy" na wynik asynchronicznej funkcji bez używania async
+
+console.log(data); // Wypisze: "Data received"
+console.log("Dalsze operacje po otrzymaniu danych...");
+
+// Kolejne użycie await na poziomie globalnym
+const moreData = await Promise.resolve("More data received");
+console.log(moreData); // Wypisze: "More data received"
+
+    </script>
+</body>
+</html>

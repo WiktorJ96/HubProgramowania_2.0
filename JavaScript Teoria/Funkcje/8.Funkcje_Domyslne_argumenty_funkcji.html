@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Funkcje i domyślne argumenty w JavaScript</title>
+    <link rel="stylesheet" href="../styles.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/themes/prism-tomorrow.min.css" rel="stylesheet" />
+</head>
+<body>
+    <div class="container">
+        <h1>Funkcje i Domyślne Argumenty w JavaScript</h1>
+
+        <p>Od ES6 JavaScript wspiera **domyślne argumenty** w funkcjach, co umożliwia przypisywanie wartości domyślnych do argumentów, jeśli nie zostały one przekazane podczas wywołania funkcji. Dzięki temu możemy pisać bardziej elastyczne funkcje, które automatycznie przyjmują określone wartości, jeśli nie dostarczono ich podczas wywołania.</p>
+
+        <h2>Podstawowe użycie domyślnych argumentów</h2>
+        <p>Domyślne argumenty można ustawić, przypisując im wartość bezpośrednio w definicji funkcji. Jeśli podczas wywołania funkcji nie zostanie przekazana wartość dla argumentu, funkcja użyje wartości domyślnej.</p>
+
+        <h3>Przykład z domyślnymi argumentami</h3>
+        <pre><code class="language-javascript">
+function greet(name = 'Gość') {
+    return 'Cześć, ' + name + '!';
+}
+
+console.log(greet());       // Cześć, Gość!
+console.log(greet('Ania')); // Cześć, Ania!
+        </code></pre>
+        <p>W powyższym przykładzie, gdy funkcja <code>greet</code> zostanie wywołana bez argumentu, użyje domyślnej wartości <code>'Gość'</code>. Gdy przekażemy argument, jak np. <code>'Ania'</code>, funkcja użyje tej przekazanej wartości.</p>
+
+        <h2>Domyślne argumenty zależne od innych argumentów</h2>
+        <p>Możemy także ustawić domyślne wartości argumentów na podstawie innych argumentów przekazanych do funkcji.</p>
+
+        <h3>Przykład zależnych domyślnych argumentów</h3>
+        <pre><code class="language-javascript">
+function calculatePrice(price, discount = price * 0.1) {
+    return price - discount;
+}
+
+console.log(calculatePrice(100));  // 90
+console.log(calculatePrice(100, 15)); // 85
+        </code></pre>
+        <p>W tym przykładzie, jeśli nie podamy zniżki, funkcja automatycznie ustawi ją na 10% ceny. Gdy jednak podamy zniżkę, funkcja użyje przekazanej wartości.</p>
+
+        <h2>Ostrzeżenia dotyczące domyślnych argumentów</h2>
+        <p>Warto zauważyć, że domyślne wartości argumentów są obliczane tylko raz, gdy funkcja jest wywoływana, co może prowadzić do nieoczekiwanych rezultatów w przypadku, gdy domyślne wartości są obiektami lub tablicami.</p>
+
+        <h3>Przykład z obiektem jako domyślnym argumentem</h3>
+        <pre><code class="language-javascript">
+function addItem(item, list = []) {
+    list.push(item);
+    return list;
+}
+
+console.log(addItem('jabłko'));  // ['jabłko']
+console.log(addItem('banan'));   // ['banan']
+        </code></pre>
+        <p>W tym przykładzie lista (<code>list</code>) jest resetowana za każdym razem, gdy funkcja <code>addItem</code> jest wywoływana, ponieważ tworzymy nową tablicę jako wartość domyślną. Warto uważać na takie zachowania, szczególnie gdy używamy obiektów jako domyślnych wartości.</p>
+
+        <h2>Używanie wartości <code>null</code> i <code>undefined</code></h2>
+        <p>Warto pamiętać, że tylko przekazanie wartości <code>undefined</code> spowoduje użycie wartości domyślnej. Przekazanie wartości <code>null</code> będzie traktowane jak normalna wartość.</p>
+
+        <h3>Przykład z <code>null</code> i <code>undefined</code></h3>
+        <pre><code class="language-javascript">
+function printMessage(message = 'Domyślny komunikat') {
+    console.log(message);
+}
+
+printMessage(undefined); // Domyślny komunikat
+printMessage(null);      // null
+        </code></pre>
+        <p>W tym przypadku przekazanie <code>undefined</code> skutkuje użyciem wartości domyślnej, ale przekazanie <code>null</code> traktowane jest jako przekazanie normalnej wartości.</p>
+
+        <h2>Podsumowanie</h2>
+        <ul>
+            <li>Domyślne argumenty umożliwiają automatyczne ustawienie wartości, gdy funkcja jest wywoływana bez przekazania danego argumentu.</li>
+            <li>Domyślne argumenty mogą być obliczane na podstawie innych argumentów.</li>
+            <li>Uważaj na używanie obiektów lub tablic jako domyślnych wartości, ponieważ mogą one prowadzić do nieoczekiwanych rezultatów.</li>
+            <li>Przekazanie <code>undefined</code> wywołuje użycie wartości domyślnej, ale <code>null</code> nie.</li>
+        </ul>
+
+    </div>
+    <script>
+        function createEmployee(name = "unknown", surname = "unknown", email = "unknown@example.com",){  //domyslne argumenty unknown
+            return {
+                name: name,
+                surname: surname,
+                email: email,
+            };
+        }
+
+        console.log(createEmployee());
+        console.log(createEmployee("John", "Doe", "johndoe@example.com"));
+        console.log(createEmployee("Jane", "Smith"));
+    </script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/prism.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/components/prism-javascript.min.js"></script>
+</body>
+</html>

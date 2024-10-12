@@ -1,0 +1,175 @@
+/* Stylowanie ogólne */
+body {
+    font-family: 'Roboto', sans-serif; /* Nowoczesny font */
+    background-color: #121212; /* Ciemne, minimalistyczne tło */
+    color: #e0e0e0; /* Jasnoszary kolor tekstu dla lepszej czytelności */
+    margin: 0;
+    padding: 20px;
+    line-height: 1.8;
+    display: flex;
+    justify-content: center;
+    flex-direction: column;
+}
+
+/* Stylowanie głównego kontenera */
+.container {
+    max-width: 720px;
+    background-color: #1e1e1e; /* Stonowane tło w stylu edytorów kodu */
+    padding: 30px;
+    border-radius: 15px; /* Większe zaokrąglenia dla nowoczesnego wyglądu */
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.5); /* Mocniejszy cień */
+    width: 90%;
+    margin: auto;
+    transition: transform 0.2s ease-in-out; /* Dodanie płynnej animacji */
+}
+
+/* Stylowanie nagłówków */
+h1 {
+    background-color: hsla(45, 94%, 64%, 0.856); /* Żółty kolor z logo JavaScript */
+    color: #1e1e1e; /* Kontrastujący ciemny tekst */
+    padding: 15px;
+    text-align: center;
+    border-radius: 12px;
+    margin-bottom: 40px;
+    font-size: 2rem;
+}
+
+h2 {
+    color: hsla(45, 94%, 64%, 0.856); /* Delikatny niebieski akcent */
+    border-bottom: 2px solid hsla(45, 94%, 64%, 0.856);
+    padding-bottom: 10px;
+    margin-bottom: 20px;
+    font-size: 1.5rem;
+}
+
+/* Stylowanie paragrafów */
+p {
+    color: #b0bec5; /* Lżejszy szary kolor dla tekstu */
+    line-height: 1.7;
+    font-size: 1.1rem;
+    margin-bottom: 25px;
+    transition: color 0.3s ease-in-out; /* Subtelna zmiana koloru na hover */
+}
+
+p:hover {
+    color: #d6d6d6; /* Rozjaśnienie tekstu po najechaniu */
+}
+
+/* Stylowanie bloków kodu */
+pre {
+    background-color: #2d2d2d;
+    color: #f1f1f1;
+    padding: 20px;
+    border-radius: 12px;
+    font-size: 1rem;
+    overflow-x: auto;
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.4); /* Mocniejszy cień */
+}
+
+code {
+    background-color: #37474f; /* Ciemniejsze tło dla kodu inline */
+    padding: 4px 6px;
+    border-radius: 6px;
+    font-size: 0.9rem;
+    color: #ffcc80; /* Ciepły odcień dla kodu inline */
+}
+
+/* Stylowanie list */
+ul {
+    padding-left: 25px;
+    color: #b0bec5;
+}
+
+ul li {
+    margin-bottom: 15px;
+    font-size: 1.1rem;
+    list-style: decimal;
+}
+
+ul li {
+    margin-bottom: 15px;
+    font-size: 1.1rem;
+    padding: 10px;
+    background-color: #2d2d2d; /* Tło podobne do kodu */
+    border-radius: 8px; /* Zaokrąglenia dla nowoczesnego wyglądu */
+    transition: background-color 0.3s ease-in-out, transform 0.2s ease-in-out;
+}
+
+ul li:hover {
+    background-color: #37474f; /* Zmiana tła po najechaniu */
+    transform: translateX(10px); /* Lekki ruch w prawo po najechaniu */
+}
+
+/* Stylowanie linków */
+a {
+    color: #ffcc80; /* Ciepły odcień koloru dla linków */
+    text-decoration: none; /* Usunięcie podkreślenia */
+    font-weight: bold; /* Podkreślenie wizualne przez grubszy tekst */
+    transition: color 0.3s ease-in-out, transform 0.2s ease-in-out; /* Płynna animacja koloru i transformacji */
+}
+
+a:hover {
+    color: #ffe0b2; /* Jaśniejszy odcień na hover */
+    transform: scale(1.05); /* Delikatne powiększenie przy najechaniu */
+    text-decoration: underline; /* Podkreślenie tekstu po najechaniu */
+}
+
+a:active {
+    color: #ffab40; /* Ciemniejszy odcień w momencie kliknięcia */
+    transform: scale(0.98); /* Minimalne zmniejszenie, by dać efekt kliknięcia */
+}
+
+.accordion-item {
+    margin-bottom: 10px;
+    border-radius: 5px;
+}
+
+.accordion-header {
+    padding: 10px;
+    cursor: pointer;
+    font-size: 1.2em;
+}
+
+.accordion-content {
+    padding: 0 20px;
+    max-height: 0;
+    overflow: hidden;
+    transition: max-height 0.3s ease;
+}
+
+/* Stylowanie przycisku */
+button {
+    background-color: #ffcc80; /* Ciepły, przyciągający wzrok kolor */
+    color: #1e1e1e; /* Kontrastujący ciemny tekst */
+    border: none; /* Usunięcie domyślnej ramki */
+    padding: 10px 10px; /* Dobre proporcje paddingu dla wygody użytkownika */
+    border-radius: 8px; /* Delikatne zaokrąglenia */
+    font-size:0.9rem; /* Czytelny rozmiar tekstu */
+    font-weight: bold; /* Grubszy tekst dla wyróżnienia */
+    cursor: pointer; /* Zmiana kursora na wskaźnik */
+    transition: background-color 0.3s ease-in-out, transform 0.2s ease-in-out; /* Płynna animacja */
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.4); /* Lekki cień dla efektu głębi */
+    outline: none; /* Usunięcie domyślnego konturu */
+}
+
+button:hover {
+    background-color: #ffe0b2; /* Jaśniejszy odcień przy najechaniu */
+    transform: scale(1.05); /* Delikatne powiększenie przy najechaniu */
+}
+
+button:active {
+    background-color: #ffab40; /* Ciemniejszy odcień przy kliknięciu */
+    transform: scale(0.98); /* Minimalne zmniejszenie dla efektu kliknięcia */
+}
+
+
+/* Responsywność */
+@media (min-width: 768px) {
+    p, ul {
+        font-size: 1.2rem;
+    }
+
+    pre {
+        font-size: 1.1rem;
+    }
+}

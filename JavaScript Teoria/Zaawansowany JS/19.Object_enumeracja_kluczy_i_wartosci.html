@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Enumeracja kluczy i wartości obiektów w JavaScript</title>
+    <link rel="stylesheet" href="/JavaScript Teoria/styles.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/themes/prism-tomorrow.min.css" rel="stylesheet" />
+</head>
+<body>
+    <div class="container">
+        <h1>Enumeracja kluczy i wartości w obiektach JavaScript</h1>
+
+        <p>W JavaScript obiekty składają się z par klucz-wartość, gdzie kluczem jest ciąg znaków (string), a wartością może być dowolny typ danych. Aby przejść przez wszystkie klucze lub wartości w obiekcie, możemy użyć wbudowanych metod takich jak <code>Object.keys()</code>, <code>Object.values()</code>, i <code>Object.entries()</code>.</p>
+
+        <h2>Metoda <code>Object.keys()</code></h2>
+        <p>Metoda <code>Object.keys()</code> zwraca tablicę zawierającą wszystkie klucze (nazwy właściwości) obiektu. Jest szczególnie przydatna do iteracji po kluczach obiektu:</p>
+        <pre><code class="language-javascript">
+const car = { brand: 'Ford', model: 'Mustang', year: 1969 };
+const keys = Object.keys(car);
+console.log(keys); // ['brand', 'model', 'year']
+        </code></pre>
+        <p>W tym przykładzie metoda <code>Object.keys()</code> zwraca tablicę wszystkich kluczy (nazw właściwości) obiektu <code>car</code>.</p>
+
+        <h2>Metoda <code>Object.values()</code></h2>
+        <p>Metoda <code>Object.values()</code> zwraca tablicę wszystkich wartości obiektu. Jest użyteczna, gdy chcemy iterować po wartościach właściwości obiektu:</p>
+        <pre><code class="language-javascript">
+const car = { brand: 'Ford', model: 'Mustang', year: 1969 };
+const values = Object.values(car);
+console.log(values); // ['Ford', 'Mustang', 1969]
+        </code></pre>
+        <p>Metoda <code>Object.values()</code> zwraca tablicę wszystkich wartości obiektu <code>car</code>.</p>
+
+        <h2>Metoda <code>Object.entries()</code></h2>
+        <p>Metoda <code>Object.entries()</code> zwraca tablicę par [klucz, wartość], co pozwala na iterację po zarówno kluczach, jak i wartościach obiektu:</p>
+        <pre><code class="language-javascript">
+const car = { brand: 'Ford', model: 'Mustang', year: 1969 };
+const entries = Object.entries(car);
+console.log(entries); // [['brand', 'Ford'], ['model', 'Mustang'], ['year', 1969]]
+        </code></pre>
+        <p>Dzięki tej metodzie możemy iterować po parach klucz-wartość, co jest przydatne np. w sytuacjach, gdy musimy jednocześnie operować na kluczach i wartościach.</p>
+
+        <h2>Iteracja z <code>for...in</code></h2>
+        <p>Alternatywnie, możemy użyć pętli <code>for...in</code>, aby przechodzić po wszystkich wyliczalnych właściwościach obiektu:</p>
+        <pre><code class="language-javascript">
+const car = { brand: 'Ford', model: 'Mustang', year: 1969 };
+
+for (let key in car) {
+  if (car.hasOwnProperty(key)) {
+    console.log(`${key}: ${car[key]}`);
+  }
+}
+        </code></pre>
+        <p>Pętla <code>for...in</code> iteruje po wszystkich kluczach obiektu. Metoda <code>hasOwnProperty()</code> sprawdza, czy właściwość należy bezpośrednio do obiektu (a nie została odziedziczona).</p>
+
+        <h2>Przykłady zaawansowane</h2>
+        <p>Możemy także łączyć metody takie jak <code>Object.entries()</code> z innymi funkcjami wyższego rzędu, takimi jak <code>map()</code>:</p>
+        <pre><code class="language-javascript">
+const car = { brand: 'Ford', model: 'Mustang', year: 1969 };
+const formattedEntries = Object.entries(car).map(([key, value]) => `${key}: ${value}`);
+console.log(formattedEntries); // ['brand: Ford', 'model: Mustang', 'year: 1969']
+        </code></pre>
+        <p>W powyższym przykładzie użyliśmy <code>Object.entries()</code>, aby przejść przez wszystkie pary klucz-wartość i sformatować je jako ciągi znaków.</p>
+
+        <h2>Podsumowanie</h2>
+        <ul>
+            <li><code>Object.keys()</code> zwraca tablicę kluczy obiektu.</li>
+            <li><code>Object.values()</code> zwraca tablicę wartości obiektu.</li>
+            <li><code>Object.entries()</code> zwraca tablicę par [klucz, wartość].</li>
+            <li>Pętla <code>for...in</code> pozwala na iterację po wszystkich wyliczalnych właściwościach obiektu.</li>
+        </ul>
+
+    </div>
+    <script>
+
+      // Tworzymy obiekt `obj` z różnymi właściwościami: liczbą, stringiem, funkcją, tablicą oraz zagnieżdżonym obiektem
+let obj = {
+    num: 123,                    // Właściwość numeryczna
+    str: "txt",                  // Właściwość typu string
+    printData: function() {      // Właściwość, która jest funkcją
+        console.log("Hello");
+    },
+    arr: [1, 2, 3, 4, 5],        // Właściwość typu tablica
+    data: {                      // Zagnieżdżony obiekt
+        a: 1,
+        b: 2
+    }
+};
+
+// Używamy `Object.keys()` do uzyskania tablicy kluczy (właściwości) obiektu `obj`
+const objKeys = Object.keys(obj);
+console.log(objKeys);  // Wynik: ["num", "str", "printData", "arr", "data"]
+
+// Iterujemy po kluczach obiektu `obj` i wypisujemy zarówno klucz, jak i odpowiadającą mu wartość
+for (const key of objKeys) {
+    console.log("Key:", key, "Value:", obj[key]);  
+    // Wynik:
+    // Key: num Value: 123
+    // Key: str Value: txt
+    // Key: printData Value: [Function: printData]
+    // Key: arr Value: [1, 2, 3, 4, 5]
+    // Key: data Value: { a: 1, b: 2 }
+}
+
+// Używamy `Object.values()` do uzyskania tablicy wartości obiektu `obj`
+const objValues = Object.values(obj);
+console.log(objValues);  
+// Wynik: [123, "txt", [Function: printData], [1, 2, 3, 4, 5], { a: 1, b: 2 }]
+
+// Używamy `Object.entries()` do uzyskania tablicy par klucz-wartość (tablicy tablic), gdzie każdy element zawiera parę klucz-wartość obiektu
+const objEntries = Object.entries(obj);
+console.log(objEntries);  
+// Wynik: [["num", 123], ["str", "txt"], ["printData", [Function: printData]], ["arr", [1, 2, 3, 4, 5]], ["data", { a: 1, b: 2 }]]
+
+// Iterujemy po parach klucz-wartość (destrukturyzacja), wyświetlamy klucz i wartość dla każdej pary
+for (const [key, value] of objEntries) {
+    console.log("Key:", key, "Value:", value);  
+    // Wynik:
+    // Key: num Value: 123
+    // Key: str Value: txt
+    // Key: printData Value: [Function: printData]
+    // Key: arr Value: [1, 2, 3, 4, 5]
+    // Key: data Value: { a: 1, b: 2 }
+}
+
+
+    </script>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/prism.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/components/prism-javascript.min.js"></script>
+</body>
+</html>

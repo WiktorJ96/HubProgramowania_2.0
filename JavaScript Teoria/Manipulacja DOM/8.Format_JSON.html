@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    
+
+    <script>
+        let data = {
+    name: 'John Doe',
+    age: 30,
+    address: {
+        street: '123 Main St',
+        city: 'New York',
+        state: 'NY',
+        zip: '10001'
+    },
+    hobbies: ['reading', 'painting', 'coding'],
+    greet() {
+        console.log(`Hello, my name is ${this.name} and Im ${this.age} years old.`);
+    }
+}
+;
+
+
+
+// Konwersja obiektu JavaScript na string JSON
+let jsonSTR = JSON.stringify(data, null, 4);
+console.log(jsonSTR);
+
+// Konwersja stringa JSON z powrotem na obiekt JavaScript
+let obj = JSON.parse(jsonSTR);
+console.log(obj);
+console.log(obj.name); // Poprawione z obj.user.name na obj.name
+
+// Metoda greet nie będzie dostępna w obj po parsowaniu JSON
+    </script>
+</body>
+</html>

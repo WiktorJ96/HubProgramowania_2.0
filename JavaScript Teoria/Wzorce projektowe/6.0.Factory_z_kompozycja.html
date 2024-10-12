@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Wzorzec projektowy Factory z kompozycją w JavaScript</title>
+    <link rel="stylesheet" href="../styles.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/themes/prism-tomorrow.min.css" rel="stylesheet" />
+</head>
+<body>
+    <div class="container">
+        <h1>Wzorzec Projektowy Factory z kompozycją w JavaScript</h1>
+
+        <p>**Wzorzec Factory z kompozycją** to odmiana wzorca Factory, która zamiast stosowania dziedziczenia, korzysta z kompozycji do dynamicznego tworzenia obiektów, łącząc różne moduły lub funkcje. To rozwiązanie zwiększa elastyczność i modularność aplikacji, ponieważ poszczególne komponenty mogą być wielokrotnie używane w różnych obiektach.</p>
+
+        <h2>Jak działa Factory z kompozycją?</h2>
+        <p>Kompozycja pozwala na dynamiczne łączenie funkcji i właściwości z różnych komponentów w jeden obiekt. Dzięki temu możemy stworzyć obiekty o bardziej elastycznych strukturach, uniezależniając się od klasycznej hierarchii dziedziczenia.</p>
+
+        <h3>Przykład implementacji Factory z kompozycją</h3>
+        <pre><code class="language-javascript">
+// Komponent odpowiedzialny za jazdę
+function canDrive() {
+    return {
+        drive() {
+            console.log('Jedzie!');
+        }
+    };
+}
+
+// Komponent odpowiedzialny za pływanie
+function canSwim() {
+    return {
+        swim() {
+            console.log('Płynie!');
+        }
+    };
+}
+
+// Komponent odpowiedzialny za latanie
+function canFly() {
+    return {
+        fly() {
+            console.log('Leci!');
+        }
+    };
+}
+
+// Fabryka z kompozycją
+function createVehicle(type) {
+    let vehicle = {};
+
+    if (type === 'amphibious') {
+        return Object.assign(vehicle, canDrive(), canSwim());
+    } else if (type === 'plane') {
+        return Object.assign(vehicle, canFly());
+    } else if (type === 'car') {
+        return Object.assign(vehicle, canDrive());
+    }
+}
+
+const amphibiousVehicle = createVehicle('amphibious');
+amphibiousVehicle.drive(); // Jedzie!
+amphibiousVehicle.swim(); // Płynie!
+
+const car = createVehicle('car');
+car.drive(); // Jedzie!
+
+const plane = createVehicle('plane');
+plane.fly(); // Leci!
+        </code></pre>
+        <p>W tym przykładzie fabryka <code>createVehicle</code> dynamicznie łączy różne komponenty w zależności od typu pojazdu. Dla pojazdu typu <code>amphibious</code> (amfibia) obiekt może zarówno jeździć, jak i pływać, ponieważ do obiektu są dodawane komponenty <code>canDrive</code> i <code>canSwim</code>.</p>
+
+        <h2>Zalety wzorca Factory z kompozycją</h2>
+        <ul>
+            <li>Brak sztywnej hierarchii dziedziczenia – komponenty mogą być dowolnie komponowane w zależności od potrzeb.</li>
+            <li>Łatwiejsze rozszerzanie aplikacji – można dodawać nowe funkcje przez tworzenie nowych komponentów, bez modyfikacji istniejących klas.</li>
+            <li>Reużywalność – komponenty mogą być używane wielokrotnie w różnych obiektach, co sprzyja modularności.</li>
+        </ul>
+
+        <h2>Zastosowanie wzorca Factory z kompozycją</h2>
+        <p>Wzorzec Factory z kompozycją znajduje zastosowanie w systemach, gdzie obiekty mogą mieć różne, zmienne zestawy funkcjonalności, a dziedziczenie może prowadzić do zbyt skomplikowanej struktury. Jest to często używane w systemach gier (np. tworzenie postaci lub pojazdów), aplikacjach złożonych z różnych modułów oraz w systemach, gdzie chcemy oddzielić logikę tworzenia obiektów od ich implementacji.</p>
+
+        <h2>Podsumowanie</h2>
+        <ul>
+            <li>Factory z kompozycją umożliwia dynamiczne tworzenie obiektów, łącząc różne komponenty w zależności od potrzeb.</li>
+            <li>Kompozycja pozwala na większą elastyczność niż dziedziczenie, ponieważ komponenty mogą być dowolnie łączone i reużywane.</li>
+            <li>Wzorzec ten jest przydatny, gdy mamy wiele typów obiektów, które mogą korzystać z różnych zestawów funkcji.</li>
+        </ul>
+
+        <a href="./6.1.Factory_z_kompozycja-projekt.html"><button>Przykładowy projekt</button></a>
+    </div>
+    <script>
+        // Moduły, które będą "komponowane" w obiektach
+
+// Moduł silnika
+function engineModule() {
+  return {
+    startEngine: function() {
+      console.log("Engine started");
+    },
+    stopEngine: function() {
+      console.log("Engine stopped");
+    }
+  };
+}
+
+// Moduł kół
+function wheelsModule() {
+  return {
+    rotateWheels: function() {
+      console.log("Wheels are rotating");
+    }
+  };
+}
+
+// Moduł klaksonu
+function hornModule() {
+  return {
+    honk: function() {
+      console.log("Honk honk!");
+    }
+  };
+}
+
+// Fabryka tworząca pojazdy złożone z różnych modułów
+function VehicleFactory() {
+  this.createVehicle = function(type) {
+    let vehicle;
+
+    // Każdy pojazd ma silnik i koła
+    switch (type) {
+      case 'car':
+        vehicle = Object.assign({}, engineModule(), wheelsModule(), hornModule());
+        vehicle.type = 'Car';
+        break;
+      case 'bike':
+        vehicle = Object.assign({}, engineModule(), wheelsModule());
+        vehicle.type = 'Bike';
+        break;
+      default:
+        throw new Error('Unknown vehicle type');
+    }
+
+    return vehicle;
+  };
+}
+
+// Tworzenie instancji fabryki
+const factory = new VehicleFactory();
+
+// Tworzenie pojazdów
+const car = factory.createVehicle('car');
+const bike = factory.createVehicle('bike');
+
+// Używanie pojazdów
+console.log(car.type);           // Wyświetli: "Car"
+car.startEngine();               // Wyświetli: "Engine started"
+car.rotateWheels();              // Wyświetli: "Wheels are rotating"
+car.honk();                      // Wyświetli: "Honk honk!"
+
+console.log(bike.type);          // Wyświetli: "Bike"
+bike.startEngine();              // Wyświetli: "Engine started"
+bike.rotateWheels();             // Wyświetli: "Wheels are rotating"
+try {
+  bike.honk();                   // Wywoła błąd, ponieważ bike nie ma modułu klaksonu
+} catch (e) {
+  console.log(e.message);        // Wyświetli: "bike.honk is not a function"
+}
+
+    </script>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/prism.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/components/prism-javascript.min.js"></script>
+</body>
+</html>

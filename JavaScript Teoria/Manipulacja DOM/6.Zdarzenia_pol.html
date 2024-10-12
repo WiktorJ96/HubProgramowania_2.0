@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <input type="text" name="email" id="email">
+    <textarea name="email" id="email-area" placeholder="Tutaj jest tresc twoje e-maila"></textarea>
+    <script>
+
+        // Pobieranie referencji do elementów HTML
+const emailInput = document.getElementById('email');     // Znajduje element input o id 'email'
+const emailArea = document.getElementById('email-area'); // Znajduje element (prawdopodobnie textarea) o id 'email-area'
+
+// Dodawanie nasłuchiwacza zdarzeń do elementu input
+emailInput.addEventListener('input', function(event) {
+    // Ta funkcja zostanie wywołana za każdym razem, gdy użytkownik wprowadzi lub zmieni tekst w polu input
+
+    // Aktualizacja wartości elementu email-area
+    emailArea.value = event.target.value;
+    // 'event.target' odnosi się do elementu, który wywołał zdarzenie (w tym przypadku emailInput)
+    // 'value' to aktualna wartość pola input
+    // Przypisujemy tę wartość do pola 'value' elementu email-area, synchronizując oba pola
+
+    // Logowanie aktualnej wartości do konsoli
+    console.log(event.target.value);
+    // Wyświetla aktualną wartość pola input w konsoli przeglądarki
+    // Przydatne do debugowania i śledzenia zmian
+});
+
+
+    </script>
+</body>
+</html>

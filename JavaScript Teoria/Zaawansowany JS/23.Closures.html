@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Closures w JavaScript</title>
+    <link rel="stylesheet" href="/JavaScript Teoria/styles.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/themes/prism-tomorrow.min.css" rel="stylesheet" />
+</head>
+<body>
+    <div class="container">
+        <h1>Closures w JavaScript</h1>
+
+        <p>Closures (domknięcia) to jedna z najważniejszych koncepcji w JavaScript, która pozwala funkcjom wewnętrznym na "zapamiętanie" i dostęp do zmiennych oraz parametrów funkcji zewnętrznej, nawet po zakończeniu jej działania. Closure powstaje, gdy funkcja wewnętrzna zachowuje dostęp do środowiska, w którym została stworzona.</p>
+
+        <h2>Jak działa closure?</h2>
+        <p>Funkcja wewnętrzna ma dostęp do:</p>
+        <ul>
+            <li>Własnego zakresu (zmienne zdefiniowane w niej samej).</li>
+            <li>Zakresu funkcji zewnętrznej (zmienne zdefiniowane w funkcji, w której się znajduje).</li>
+            <li>Zakresu globalnego (zmienne zdefiniowane w przestrzeni globalnej).</li>
+        </ul>
+
+        <h3>Przykład prostego closure</h3>
+        <pre><code class="language-javascript">
+function outerFunction() {
+    let outerVariable = 'Jestem zmienną zewnętrzną';
+
+    function innerFunction() {
+        console.log(outerVariable); // Ma dostęp do zmiennej funkcji zewnętrznej
+    }
+
+    return innerFunction;
+}
+
+const closure = outerFunction();
+closure(); // "Jestem zmienną zewnętrzną"
+        </code></pre>
+        <p>W tym przykładzie <code>innerFunction()</code> jest zamknięta nad <code>outerFunction()</code>, co oznacza, że funkcja wewnętrzna ma dostęp do zmiennej <code>outerVariable</code>, nawet po zakończeniu działania funkcji zewnętrznej.</p>
+
+        <h2>Zastosowanie closures</h2>
+        <p>Closures są niezwykle przydatne w wielu sytuacjach. Oto kilka przykładów:</p>
+
+        <h3>Prywatne zmienne i funkcje</h3>
+        <p>Dzięki closure można tworzyć funkcje z prywatnymi zmiennymi, które nie są dostępne z zewnątrz, co pozwala na tworzenie danych, które są "ukryte" dla innych części programu:</p>
+        <pre><code class="language-javascript">
+function counter() {
+    let count = 0;
+
+    return function() {
+        count++;
+        console.log(count);
+    };
+}
+
+const increment = counter();
+increment(); // 1
+increment(); // 2
+increment(); // 3
+        </code></pre>
+        <p>W tym przypadku zmienna <code>count</code> jest dostępna tylko dla funkcji wewnętrznej, tworząc prywatną zmienną, do której nie można dostać się bezpośrednio z zewnątrz.</p>
+
+        <h3>Funkcje zwrotne i asynchroniczność</h3>
+        <p>Closures są często używane w funkcjach zwrotnych (callback) oraz w programowaniu asynchronicznym. Pomagają "zapamiętać" stan, nawet gdy funkcja została wywołana później w programie:</p>
+        <pre><code class="language-javascript">
+function createTimer() {
+    let startTime = Date.now();
+
+    return function() {
+        let elapsed = Date.now() - startTime;
+        console.log(`Czas upłynął: ${elapsed} ms`);
+    };
+}
+
+const timer = createTimer();
+setTimeout(timer, 1000); // Czas upłynął: 1000 ms
+        </code></pre>
+        <p>W tym przykładzie closure pozwala funkcji wewnętrznej zachować dostęp do zmiennej <code>startTime</code>, nawet po zakończeniu wykonania funkcji zewnętrznej.</p>
+
+        <h2>Podsumowanie</h2>
+        <ul>
+            <li>Closures w JavaScript pozwalają na "zapamiętanie" kontekstu, w którym funkcja została stworzona.</li>
+            <li>Funkcje wewnętrzne mają dostęp do zmiennych funkcji zewnętrznej, nawet po zakończeniu jej działania.</li>
+            <li>Domknięcia są przydatne do tworzenia prywatnych zmiennych, funkcji zwrotnych oraz w programowaniu asynchronicznym.</li>
+        </ul>
+
+    </div>
+    
+    <script>
+let d = 99;
+// Zmienna globalna "d" o wartości 99. Jest dostępna wszędzie w kodzie.
+
+function bar(){
+    let e = 12;
+    // Zmienna lokalna "e" wewnątrz funkcji "bar" o wartości 12. Jest dostępna tylko w funkcji "bar" i jej wewnętrznych funkcjach.
+
+    function test(){
+        let num = 45;
+        // Zmienna lokalna "num" wewnątrz funkcji "test" o wartości 45. Jest dostępna tylko w tej funkcji.
+        
+        console.log(`d:${d} e:${e} num:${num}`);
+        // Wypisuje wartości zmiennych "d", "e" i "num".
+        // "d" to zmienna globalna, "e" to zmienna lokalna funkcji "bar", a "num" to zmienna lokalna funkcji "test".
+        // Wynik to: d:99 e:12 num:45
+    }
+    
+    return test;
+    // Funkcja "bar" zwraca funkcję "test". 
+}
+
+let show = bar();
+// Przypisanie zmiennej "show" wartości zwróconej przez funkcję "bar". 
+// Wartością jest funkcja "test", ponieważ funkcja "bar" zwraca "test".
+
+console.log(show);
+// Wyświetla definicję funkcji "test", ponieważ "show" jest referencją do tej funkcji.
+
+show();
+// Wywołuje funkcję "show", która jest w rzeczywistości funkcją "test".
+// Funkcja "test" ma dostęp do zmiennych "d", "e" oraz "num", ponieważ działa w tzw. closure (domknięciu). 
+// Wypisuje "d:99 e:12 num:45".
+
+    </script>
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/prism.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/components/prism-javascript.min.js"></script>
+</body>
+</html>

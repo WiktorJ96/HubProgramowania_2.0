@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    
+
+    <script>
+        class Animal {
+    #type  // Prywatna właściwość #type, dostępna tylko wewnątrz klasy Animal
+
+    constructor(name) {
+        this.name = name;  // Ustawienie nazwy zwierzęcia (np. "Olek")
+
+        // Sprawdzanie, czy statyczna zmienna count istnieje, jeśli nie, inicjalizujemy ją jako 0
+        if (Animal.count === undefined) Animal.count = 0;
+
+        this.id = Animal.count;  // Ustawienie id zwierzęcia na wartość zmiennej count
+        Animal.count++;  // Zwiększenie statycznej zmiennej count, aby śledzić liczbę instancji
+
+        this.#type = "Animal";  // Ustawienie prywatnej właściwości #type na wartość "Animal"
+    }
+
+    // Setter do modyfikacji prywatnej właściwości #type
+    set type(str) {
+        if (typeof str === "string") {
+            this.#type = str;  // Jeśli przekazany argument to string, ustawiamy nową wartość #type
+        }
+    }
+
+    // Getter do uzyskiwania wartości prywatnej właściwości #type
+    get type() {
+        return this.#type;  // Zwracamy wartość prywatnej właściwości #type
+    }
+
+    // Metoda instancyjna, która wypisuje nazwę zwierzęcia
+    printName() {
+        console.log("Animal:", this.name);  // Wypisuje "Animal: [nazwa]", np. "Animal: Olek"
+    }
+}
+
+// Klasa Human dziedziczy po klasie Animal
+class Human extends Animal {
+    constructor(name) {
+        super(name);  // Wywołanie konstruktora klasy Animal i przekazanie nazwy (np. "Olek")
+    }
+
+    // Przeciążenie (nadpisanie) metody printName z klasy Animal
+    printName() {
+        // Wywołanie metody printName z klasy Animal (super)
+        super.printName();  // Wypisuje "Animal: Olek"
+
+        // Dodatkowy kod w metodzie Human, który wypisuje również "Human: Olek"
+        console.log("Human:", this.name);  // Wypisuje "Human: Olek"
+    }
+}
+
+// Tworzymy nową instancję klasy Human o nazwie "Olek"
+const human1 = new Human("Olek");
+
+// Wywołujemy metodę printName na obiekcie human1
+human1.printName();  // Wypisuje: 
+// "Animal: Olek"
+// "Human: Olek"
+
+// Wyświetlamy statyczną zmienną count z klasy Animal, która przechowuje liczbę utworzonych instancji
+console.log(Animal.count);  // Wynik: 1 (ponieważ została utworzona jedna instancja)
+
+
+    </script>
+</body>
+</html>

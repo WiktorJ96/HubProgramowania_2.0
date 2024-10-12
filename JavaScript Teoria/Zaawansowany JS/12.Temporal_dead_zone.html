@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Temporal Dead Zone w JavaScript</title>
+    <link rel="stylesheet" href="/JavaScript Teoria/styles.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/themes/prism-tomorrow.min.css" rel="stylesheet" />
+</head>
+<body>
+    <div class="container">
+        <h1>Temporal Dead Zone (TDZ) w JavaScript</h1>
+
+        <p>„Temporal Dead Zone” (TDZ) to termin związany z zachowaniem zmiennych zadeklarowanych za pomocą <code>let</code> i <code>const</code>. TDZ odnosi się do okresu czasu od momentu, gdy zmienna została zadeklarowana, ale jeszcze nie została zainicjalizowana. Próbując uzyskać dostęp do takiej zmiennej przed jej inicjalizacją, otrzymasz błąd <code>ReferenceError</code>.</p>
+
+        <h2>Przykład TDZ z <code>let</code></h2>
+        <pre><code class="language-javascript">
+        // Przykład z let
+        console.log(x); // ReferenceError: Cannot access 'x' before initialization
+        let x = 10;
+        console.log(x); // 10
+        </code></pre>
+        <p>W powyższym przykładzie zmienna <code>x</code> została zadeklarowana za pomocą <code>let</code>, ale próba uzyskania dostępu do niej przed inicjalizacją skutkuje błędem <code>ReferenceError</code>. Okres przed zainicjalizowaniem zmiennej to właśnie <strong>Temporal Dead Zone</strong>.</p>
+
+        <h2>TDZ z <code>const</code></h2>
+        <pre><code class="language-javascript">
+        console.log(y); // ReferenceError: Cannot access 'y' before initialization
+        const y = 20;
+        console.log(y); // 20
+        </code></pre>
+        <p>Podobnie jak w przypadku <code>let</code>, zmienne zadeklarowane za pomocą <code>const</code> również mają TDZ. Zmienna <code>y</code> nie jest dostępna przed jej inicjalizacją, co powoduje błąd <code>ReferenceError</code>.</p>
+
+        <h2>Dlaczego TDZ występuje?</h2>
+        <p>TDZ istnieje, aby zapewnić większą przewidywalność i spójność kodu. Kiedy zmienne są zadeklarowane za pomocą <code>let</code> lub <code>const</code>, hoisting unosi ich deklarację na początek ich zakresu, ale nie pozwala na ich użycie przed inicjalizacją. Chroni to przed przypadkowym użyciem zmiennej, zanim zostanie jej przypisana odpowiednia wartość.</p>
+
+        <h2>Różnice między <code>var</code>, <code>let</code> i <code>const</code></h2>
+        <pre><code class="language-javascript">
+// Przykład z var
+console.log(a); // undefined (brak TDZ, ale zmienna nie jest zainicjalizowana)
+var a = 5;
+
+// Przykład z let
+console.log(b); // ReferenceError (TDZ)
+let b = 10;
+
+// Przykład z const
+console.log(c); // ReferenceError (TDZ)
+const c = 15;
+        </code></pre>
+        <p>W przypadku <code>var</code>, zmienna jest dostępna przed inicjalizacją, ale jej wartość to <code>undefined</code>, co czasami prowadzi do błędów w kodzie. <code>let</code> i <code>const</code> natomiast zapewniają większą przewidywalność dzięki TDZ.</p>
+
+        <h2>Podsumowanie działania Temporal Dead Zone</h2>
+        <ul>
+            <li>TDZ istnieje dla zmiennych zadeklarowanych za pomocą <code>let</code> i <code>const</code>, aby zapobiec używaniu zmiennych przed ich inicjalizacją.</li>
+            <li>Zmienna znajduje się w TDZ od momentu deklaracji do momentu jej inicjalizacji.</li>
+            <li>Próba dostępu do zmiennej w TDZ prowadzi do błędu <code>ReferenceError</code>.</li>
+            <li>Zmienna <code>var</code> nie ma TDZ, ale może być użyta przed inicjalizacją z wartością <code>undefined</code>.</li>
+        </ul>
+
+    </div>
+    <script>
+        // Deklaracja zmiennej 'y' w zakresie globalnym
+let y = 10;
+
+if (1 == 1) { // Ten warunek zawsze jest prawdziwy, więc blok zawsze się wykona
+    // Tutaj zaczyna się nowy zakres blokowy
+
+    console.log(y); // To spowoduje błąd: Cannot access 'y' before initialization
+    // Mimo że istnieje globalna zmienna 'y', 
+    // ta linia odnosi się do lokalnej zmiennej 'y' zadeklarowanej poniżej.
+    // Jest to przykład Temporal Dead Zone (TDZ)
+
+    // TDZ dla lokalnej zmiennej 'y' trwa od początku bloku do tej linii:
+    let y = 20; // Ta deklaracja tworzy nową, lokalną zmienną 'y'
+    // Ta lokalna zmienna 'y' przesłania globalną zmienną 'y'
+    
+    // Gdyby ta linia była odkomentowana, wyświetliłaby 20:
+    // console.log(y);
+}
+
+// Tutaj znowu mamy dostęp do globalnej zmiennej 'y'
+// console.log(y); // Gdyby ta linia była odkomentowana, wyświetliłaby 10
+
+// Kluczowe pojęcia:
+// 1. Temporal Dead Zone (TDZ) - obszar w kodzie, gdzie zmienna istnieje, 
+//    ale nie można się do niej odwołać przed jej faktyczną deklaracją.
+// 2. Zakres blokowy - zmienna zadeklarowana za pomocą 'let' jest widoczna 
+//    tylko wewnątrz bloku, w którym została zadeklarowana.
+// 3. Przesłanianie zmiennych - zmienna lokalna o tej samej nazwie 
+//    przesłania zmienną z szerszego zakresu.
+    </script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/prism.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/components/prism-javascript.min.js"></script>
+</body>
+</html>

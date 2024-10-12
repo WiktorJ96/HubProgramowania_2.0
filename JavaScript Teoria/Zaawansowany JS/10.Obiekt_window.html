@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Obiekt Window w JavaScript</title>
+    <link rel="stylesheet" href="/JavaScript Teoria/styles.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/themes/prism-tomorrow.min.css" rel="stylesheet" />
+</head>
+<body>
+    <div class="container">
+        <h1>Obiekt <code>window</code> w JavaScript</h1>
+
+        <p>Obiekt <code>window</code> w JavaScript jest globalnym obiektem, który reprezentuje przeglądarkę internetową i jej okno. Daje on dostęp do wielu funkcji i metod pozwalających na interakcję z przeglądarką, zarządzanie elementami dokumentu HTML, obsługę zdarzeń i wiele więcej. Każda strona internetowa w przeglądarce ma swój obiekt <code>window</code>, co pozwala na wykonywanie operacji związanych z oknem przeglądarki.</p>
+
+        <h2>Globalny obiekt</h2>
+        <pre><code class="language-javascript">
+// Przykład globalnego dostępu
+console.log(window);
+console.log(window === this); // true
+        </code></pre>
+        <p>Obiekt <code>window</code> jest dostępny globalnie w kontekście przeglądarki. Możesz odnosić się do niego po prostu jako <code>window</code> lub przez <code>this</code>, gdy działasz w kontekście globalnym.</p>
+
+        <h2>Metody związane z przeglądarką</h2>
+        <p>Obiekt <code>window</code> zapewnia dostęp do metod, które umożliwiają interakcję z oknem przeglądarki, takich jak zmiana rozmiaru, przewijanie, otwieranie nowych okien itp.</p>
+        <pre><code class="language-javascript">
+// Przewinięcie okna do góry
+window.scrollTo(0, 0);
+
+// Otwieranie nowego okna
+window.open("https://www.example.com");
+
+// Zamykanie okna
+window.close();
+        </code></pre>
+        <p>Metody takie jak <code>scrollTo()</code>, <code>open()</code>, i <code>close()</code> pozwalają na manipulację oknem przeglądarki. Należy pamiętać, że niektóre z tych metod mogą być ograniczone przez politykę bezpieczeństwa przeglądarki.</p>
+
+        <h2>Właściwości obiektu <code>window</code></h2>
+        <pre><code class="language-javascript">
+console.log(window.innerHeight);  // Wysokość okna przeglądarki
+console.log(window.innerWidth);   // Szerokość okna przeglądarki
+
+console.log(window.location.href); // URL aktualnej strony
+console.log(window.navigator.userAgent); // Informacje o przeglądarce
+        </code></pre>
+        <p>Obiekt <code>window</code> zawiera wiele właściwości, takich jak <code>innerHeight</code> i <code>innerWidth</code>, które informują o wymiarach okna, oraz <code>location</code>, która daje dostęp do adresu URL i innych informacji związanych z nawigacją. <code>navigator</code> umożliwia dostęp do informacji o przeglądarce, takich jak wersja i system operacyjny.</p>
+
+        <h2>Praca z obiektem <code>window.document</code></h2>
+        <p>Obiekt <code>document</code> jest częścią obiektu <code>window</code>, który zapewnia dostęp do całego drzewa DOM (Document Object Model) strony internetowej. Dzięki temu możemy manipulować elementami HTML, dodawać nowe elementy i reagować na zdarzenia.</p>
+        <pre><code class="language-javascript">
+console.log(window.document.title); // Pobranie tytułu strony
+
+// Zmiana tytułu strony
+window.document.title = "Nowy Tytuł";
+        </code></pre>
+        <p>Obiekt <code>window.document</code> umożliwia dostęp do elementów strony, co pozwala na ich dynamiczną modyfikację.</p>
+
+        <h2>Metody <code>alert</code>, <code>confirm</code> i <code>prompt</code></h2>
+        <pre><code class="language-javascript">
+// Wyświetlenie prostego alertu
+window.alert("To jest wiadomość alertu!");
+
+// Potwierdzenie przez użytkownika
+const result = window.confirm("Czy chcesz kontynuować?");
+console.log(result); // true lub false
+
+// Pobranie danych od użytkownika
+const name = window.prompt("Jak masz na imię?");
+console.log(name);
+        </code></pre>
+        <p>Obiekt <code>window</code> oferuje także metody do interakcji z użytkownikiem, takie jak <code>alert</code> (wyświetla komunikat), <code>confirm</code> (prosi o potwierdzenie), i <code>prompt</code> (prosi o wprowadzenie danych).</p>
+
+        <h2>Zdarzenia związane z obiektem <code>window</code></h2>
+        <pre><code class="language-javascript">
+// Obsługa zmiany rozmiaru okna
+window.addEventListener('resize', () => {
+    console.log('Rozmiar okna został zmieniony.');
+});
+
+// Obsługa przewijania okna
+window.addEventListener('scroll', () => {
+    console.log('Strona jest przewijana.');
+});
+        </code></pre>
+        <p>Obiekt <code>window</code> pozwala także na reagowanie na różne zdarzenia, takie jak zmiana rozmiaru okna lub przewijanie strony. Do tego celu używamy metody <code>addEventListener</code>, która nasłuchuje na określone zdarzenia.</p>
+
+    </div>
+    <script>
+        console.log(innerWidth);
+        console.log(innerHeight);
+
+        setTimeout(function() {
+            console.log("After timeout");
+        },800);
+
+        let i = 0;
+        let intervalId = setInterval(() => {
+            console.log(i);
+            i++
+        }, 500);
+
+        let useInput = prompt("Podaj liczbe");
+        let floatNum = parseFloat(useInput);
+
+        console.log("Wynik dodawania " + floatNum + 100);
+
+
+
+        
+        // Metoda 1: Przypisanie funkcji do właściwości 'onload' obiektu window
+window.onload = function(){
+    // Ta funkcja zostanie wywołana, gdy strona i wszystkie jej zasoby (obrazy, skrypty, style) zostaną w pełni załadowane
+    // console.log("Strona została załadowana");
+    // Uwaga: Ta linia jest zakomentowana, więc nic nie zostanie wyświetlone w konsoli
+}
+
+// Metoda 2: Przypisanie funkcji do właściwości 'onresize' obiektu window
+window.onresize = function(){
+    // Ta funkcja będzie wywoływana za każdym razem, gdy rozmiar okna przeglądarki zostanie zmieniony
+    // console.log(window.innerWidth, window.innerHeight);
+    // Uwaga: Ta linia jest zakomentowana, więc wymiary okna nie będą wyświetlane w konsoli
+}
+
+// Metoda 3: Użycie addEventListener do nasłuchiwania zdarzenia 'load'
+window.addEventListener("load", function(){
+    // Ta funkcja zostanie wywołana, gdy strona i wszystkie jej zasoby zostaną załadowane
+    // Jest to alternatywny sposób obsługi zdarzenia 'load'
+    console.log("Website downloaded and parsed");
+    // Ta linia wyświetli komunikat w konsoli po pełnym załadowaniu strony
+});
+
+// Metoda 4: Użycie addEventListener z funkcją strzałkową do nasłuchiwania zdarzenia 'resize'
+window.addEventListener("resize", () => {
+    // Ta funkcja będzie wywoływana przy każdej zmianie rozmiaru okna przeglądarki
+    // Jest to alternatywny sposób obsługi zdarzenia 'resize', używający składni funkcji strzałkowej (arrow function)
+    // console.log(window.innerWidth, window.innerHeight);
+    // Uwaga: Ta linia jest zakomentowana, więc wymiary okna nie będą wyświetlane w konsoli
+})
+
+// Uwagi ogólne:
+// 1. Metody onload i onresize pozwalają przypisać tylko jedną funkcję obsługi do danego zdarzenia.
+//    Jeśli przypiszesz nową funkcję, zastąpi ona poprzednią.
+// 2. Metoda addEventListener pozwala dodać wiele funkcji obsługi do tego samego zdarzenia,
+//    nie nadpisując istniejących. Jest to bardziej elastyczne podejście.
+// 3. Zdarzenie 'load' jest wywoływane, gdy cała strona wraz z zasobami zostanie załadowana.
+// 4. Zdarzenie 'resize' jest wywoływane za każdym razem, gdy zmienia się rozmiar okna przeglądarki.
+// 5. Zakomentowane linie (z //) nie będą wykonywane. Możesz je odkomentować, usuwając //,
+//    jeśli chcesz zobaczyć ich działanie.
+    </script>
+     <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/prism.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/components/prism-javascript.min.js"></script>
+</body>
+</html>

@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>JavaScript - Strona Główna</title>
+    <link rel="stylesheet" href="styles.css">
+
+</head>
+<style>
+
+
+
+
+</style>
+<body>
+    <div class="container">
+        <h1>Witaj na stronie JavaScript</h1>
+        <p>Wybierz temat, aby dowiedzieć się więcej o różnych aspektach JavaScript.</p>
+
+        <div class="accordion">
+            <div class="accordion-item">
+                <h2 class="accordion-header">Manipulacja DOM</h2>
+                <div class="accordion-content">
+                    <ul>
+                        <li><a href="dom-element-selection.html">Pobieranie Elementów DOM</a></li>
+                        <li><a href="dom-element-creation.html">Tworzenie Nowych Elementów DOM</a></li>
+                        <li><a href="dom-events.html">Obsługa Zdarzeń w DOM</a></li>
+                        <li><a href="fetch-api.html">Fetch API</a></li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="accordion-item">
+                <h2 class="accordion-header">Funkcje</h2>
+                <div class="accordion-content">
+                    <ul>
+                        <li><a href="function-arguments.html">Funkcje i Argumenty</a></li>
+                        <li><a href="function-return.html">Funkcje i Return</a></li>
+                        <li><a href="nested-functions.html">Funkcje Zagnieżdżone</a></li>
+                        <li><a href="default-arguments.html">Domyślne Argumenty w Funkcjach</a></li>
+                        <li><a href="function-callbacks.html">Funkcje i Callbacki</a></li>
+                        <li><a href="function-spread-rest.html">Operator Rest i Spread w Funkcjach</a></li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="accordion-item">
+                <h2 class="accordion-header">Zaawansowany JavaScript</h2>
+                <div class="accordion-content">
+                    <ul>
+            <li><a href="./Zaawansowany JS/1.Operator_Rest.html">Operator rest</a></li>
+            <li><a href="./Zaawansowany JS/2.Operator_Spread.html">Operator spread</a></li>
+            <li><a href="./Zaawansowany JS/3.Obiekty_Metody.html">Obiekty i metody</a></li>
+            <li><a href="./Zaawansowany JS/4.Obiekty_Rozbudowane.html">Obiekty rozbudowane</a></li>
+            <li><a href="./Zaawansowany JS/5.Funkcja_strzalkowa.html">Funkcja strzałkowa</a></li>
+            <li><a href="./Zaawansowany JS/6.IIFE.html">IIFE</a></li>
+            <li><a href="./Zaawansowany JS/7.Funkcja_konstruujaca.html">Funkcja konstruujaca</a></li>
+            <li><a href="./Zaawansowany JS/8.Przegladanie_wlasciwosci_obiektu.html">Własciwosci obiektu</a></li>
+            <li><a href="./Zaawansowany JS/9.Objekty_Gettery_Settery.html">Obiekty Gettery i Settery</a></li>
+            <li><a href="./Zaawansowany JS/10.Obiekt_window.html">Obiekt window</a></li>
+            <li><a href="./Zaawansowany JS/11.Hoisting.html">Hoisting</a></li>
+            <li><a href="./Zaawansowany JS/12.Temporal_dead_zone.html">Temporal dead zone</a></li>
+            <li><a href="./Zaawansowany JS/13.Wrappery_prymitywów.html">Wrappery prymitywów</a></li>
+            <li><a href="./Zaawansowany JS/14.Mutowalnosc_i_niemutowalnosc.html">Mutowalność i niemutowalność</a></li>
+            <li><a href="./Zaawansowany JS/15.Number_i_wlasciwosci.html">Number i właściwości</a></li>
+            <li><a href="./Zaawansowany JS/16.String_i_wlasciwosci.html">String i właściwości</a></li>
+            <li><a href="./Zaawansowany JS/17.Tablice_i_wlasciwosci.html">Tablice i własciwosci</a></li>
+            <li><a href="./Zaawansowany JS/18.Object_metoda_assign.html">Object metoda assign</a></li>
+            <li><a href="./Zaawansowany JS/19.Object_enumeracja_kluczy_i_wartosci.html">Object enumeracja kluczy i wartości</a></li>
+            <li><a href="./Zaawansowany JS/20.Object_serializacja_danych.html">Object serializacja danych</a></li>
+            <li><a href="./Zaawansowany JS/21.Object_define_property.html">Object define property</a></li>
+            <li><a href="./Zaawansowany JS/22.Call_Apply_Bind.html">Call, Apply, Bind</a></li>
+            <li><a href="./Zaawansowany JS/23.Closures.html">Closures</a></li>
+            <li><a href="./Zaawansowany JS/24.Closures_carrying.html">Closures - carrying</a></li>
+            <li><a href="./Zaawansowany JS/25.Closures_prywatne_dane.html">Closures - prywatne dane</a></li>
+            <li><a href="./Zaawansowany JS/26.Closures_var_let_const.html">Closures - var, let, const</a></li>
+         
+        </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+        <script>
+        document.querySelectorAll('.accordion-header').forEach(header => {
+    header.addEventListener('click', function() {
+        const accordionContent = this.nextElementSibling;
+
+        if (accordionContent.style.maxHeight) {
+            accordionContent.style.maxHeight = null; // Zwijanie
+        } else {
+            accordionContent.style.maxHeight = accordionContent.scrollHeight + "px"; // Rozwijanie
+        }
+    });
+});
+
+    </script>
+</body>
+</html>

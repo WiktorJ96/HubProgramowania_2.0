@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Funkcje Strzałkowe w JavaScript</title>
+    <link rel="stylesheet" href="/JavaScript Teoria/styles.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/themes/prism-tomorrow.min.css" rel="stylesheet" />
+</head>
+<body>
+    <div class="container">
+        <h1>Funkcje Strzałkowe w JavaScript</h1>
+
+        <p>Funkcje strzałkowe w JavaScript to krótsza i bardziej elegancka składnia dla funkcji. Wprowadzone w ECMAScript 6 (ES6), pozwalają one na bardziej zwięzły zapis funkcji i mają specyficzny sposób działania ze zmiennym kontekstem <code>this</code>. Funkcje strzałkowe są często używane w metodach wyższego rzędu, takich jak <code>map</code>, <code>filter</code> czy <code>reduce</code>.</p>
+
+        <h2>Podstawowa składnia funkcji strzałkowej</h2>
+        <pre><code class="language-javascript">
+        // Tradycyjna funkcja
+        function add(a, b) {
+            return a + b;
+        }
+
+        // Funkcja strzałkowa
+        const addArrow = (a, b) => a + b;
+
+        console.log(add(2, 3));       // 5
+        console.log(addArrow(2, 3));  // 5
+        </code></pre>
+        <p>Funkcje strzałkowe mają uproszczoną składnię w porównaniu do tradycyjnych funkcji. W przykładzie powyżej funkcja <code>addArrow</code> jest skróconą wersją tradycyjnej funkcji <code>add</code>. Gdy funkcja strzałkowa zwraca tylko jedną linię kodu, można pominąć nawiasy klamrowe <code>{}</code> oraz słowo kluczowe <code>return</code>.</p>
+
+        <h2>Funkcje strzałkowe i kontekst <code>this</code></h2>
+        <p>Jedną z kluczowych różnic między funkcjami strzałkowymi a tradycyjnymi jest to, jak radzą sobie z kontekstem <code>this</code>. Funkcje strzałkowe nie wiążą swojego własnego <code>this</code>, lecz dziedziczą go z otaczającego kontekstu.</p>
+        <pre><code class="language-javascript">
+        const car = {
+            brand: "Tesla",
+            model: "Model S",
+            year: 2022,
+            getCarInfo: function() {
+                console.log(`${this.brand} ${this.model}, ${this.year}`);
+            },
+            getCarInfoArrow: () => {
+                console.log(`${this.brand} ${this.model}, ${this.year}`);
+            }
+        };
+
+        car.getCarInfo();       // 'Tesla Model S, 2022'
+        car.getCarInfoArrow();  // 'undefined undefined, undefined'
+        </code></pre>
+        <p>W tym przykładzie funkcja <code>getCarInfo</code> poprawnie uzyskuje dostęp do właściwości obiektu <code>car</code>, ponieważ tradycyjna funkcja ma swoje własne <code>this</code>. Z kolei <code>getCarInfoArrow</code> nie działa poprawnie, ponieważ funkcje strzałkowe dziedziczą <code>this</code> z otaczającego kontekstu, co w tym przypadku prowadzi do nieoczekiwanych rezultatów.</p>
+
+        <h2>Funkcje strzałkowe w metodach wyższego rzędu</h2>
+        <pre><code class="language-javascript">
+        const numbers = [1, 2, 3, 4, 5];
+
+        // Użycie tradycyjnej funkcji
+        const doubledTraditional = numbers.map(function(num) {
+            return num * 2;
+        });
+
+        // Użycie funkcji strzałkowej
+        const doubledArrow = numbers.map(num => num * 2);
+
+        console.log(doubledTraditional); // [2, 4, 6, 8, 10]
+        console.log(doubledArrow);       // [2, 4, 6, 8, 10]
+        </code></pre>
+        <p>Funkcje strzałkowe są często używane w metodach wyższego rzędu, takich jak <code>map</code>, <code>filter</code> czy <code>reduce</code>, co sprawia, że kod staje się bardziej zwięzły i czytelny.</p>
+
+        <h2>Zastosowania i ograniczenia funkcji strzałkowych</h2>
+        <p>Funkcje strzałkowe są idealne do zwięzłego zapisu prostych operacji, jednak mają pewne ograniczenia:</p>
+        <ul>
+            <li>Funkcje strzałkowe nie mają własnego <code>this</code>, co może prowadzić do problemów w kontekście obiektów.</li>
+            <li>Nie można używać funkcji strzałkowych jako funkcji konstruktorów (<code>new</code>).</li>
+            <li>Funkcje strzałkowe nie mają własnego obiektu <code>arguments</code>.</li>
+        </ul>
+    </div>
+    <script>
+        function test(a, b){
+            return a * b;
+        }
+
+        let multiply = (a, b) => a*b; // zapis powyzszej funkcji za pomoca funkcji strzalkowej
+
+        console.log(multiply(3,10));
+        console.log(test(5,10));
+
+        const substract = (a, b) => {
+            return a - b;
+        }
+
+        console.log(substract(15,10));
+
+       /* Funkcja strzalkowa nie ma dostepu do obiekt arguments, ale mozemy uzyc operator rest do pobrania wszysktich
+        przekazanych argumentow  */
+
+      /*  let show = () => console.log(arguments);
+        show(1,2,3,4,5); 
+
+        ReferenceError: arguments is not defined  */
+
+        const show = (...args) => console.log(args);
+        show(1,2,3,4,5);  // [1,2,3,4,5]
+
+        
+
+        
+        /* Definicja funkcji strzałkowej `getObj` przyjmującej parametr `data`
+           Funkcja zwraca nowy obiekt, który zawiera wszystkie właściwości z obiektu `data` 
+           oraz dodaje nową właściwość `info` z wartością "Some object". */
+        let getObj = (data) => {
+            return {
+                ...data, // Rozpakowuje właściwości obiektu `data` za pomocą operatora rozproszenia (...).
+                info: "Some object" // Dodaje nową właściwość `info` z wartością "Some object".
+            };
+        };
+
+        // Definicja obiektu `obj` z dwoma właściwościami: `a` i `b`.
+        const data = {
+            a: 1,
+            b: 2,
+        };
+
+        // Wywołuje funkcję `getObj` z obiektem `obj` i wypisuje wynik w konsoli.
+        // Wynikiem będzie nowy obiekt zawierający właściwości `a` i `b` z obiektu `obj` oraz nową właściwość `info`.
+        console.log(getObj(data)); // Wyjście: { a: 1, b: 2, info: "Some object" }
+
+        // Definicja funkcji strzałkowej `getObj2`, która również przyjmuje parametr `data`.
+        // W tej wersji funkcji zwracanie obiektu odbywa się w sposób bardziej zwięzły, w jednej linii.
+        // Zwraca nowy obiekt zawierający właściwości obiektu `data` oraz dodaje nową właściwość `info` z wartością "another".
+        let getObj2 = (data) => ({ ...data, info: "another" });
+
+        // Wywołuje funkcję `getObj2` z obiektem `obj` i wypisuje wynik w konsoli.
+        // Wynikiem będzie nowy obiekt zawierający właściwości `a` i `b` z obiektu `obj` oraz nową właściwość `info`.
+        console.log(getObj2(data)); // Wyjście: { a: 1, b: 2, info: "another" }
+
+
+
+
+let objTest = {                                                                         
+    data:"hello",
+    foo: function () {
+        setTimeout(function() {
+            console.log(this) // niepoprawnie dzialajacy this wskazuje obiekt window  
+            // Window {window: Window, self: Window, document: document, name: '', location: Location, …}      
+        }, 500);
+    }
+}
+
+objTest.foo();
+
+
+        let objTest2 = {
+            data:"hello",
+            foo: function () {
+                setTimeout(() => {          // zamiast zwyklej funkcji trzeba uzyc funkcji strzalkowej
+                    console.log(this.data) // poprawnie dzialajacy this wskazuje zawartosc data 
+                }, 500);
+            }
+        }
+        
+        objTest.foo();
+    </script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/prism.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/components/prism-javascript.min.js"></script>
+</body>
+</html>

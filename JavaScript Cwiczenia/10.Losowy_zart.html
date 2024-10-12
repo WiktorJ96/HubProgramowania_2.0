@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chuck Norris Joke</title>
+</head>
+<body>
+    
+    <div id="joke"></div>
+    <script>
+// Definiujemy URL API, z którego będziemy pobierać losowe żarty o Chucku Norrisie
+const url = "https://api.chucknorris.io/jokes/random";
+
+// Funkcja window.onload zapewnia, że kod zostanie wykonany dopiero po pełnym załadowaniu strony
+window.onload = function () {
+    // Pobieramy referencję do elementu DOM o id "joke", gdzie będziemy wyświetlać żarty
+    const div = document.getElementById("joke");
+    
+    // Wywołujemy funkcję fetchJoke, aby natychmiast pobrać i wyświetlić pierwszy żart
+    fetchJoke(); 
+    
+    // Ustawiamy interwał, który będzie wywoływał fetchJoke co 10 sekund (10000 ms)
+    // Dzięki temu żart będzie automatycznie odświeżany
+    setInterval(fetchJoke, 10000); 
+
+    // Funkcja fetchJoke odpowiada za pobranie żartu z API
+    function fetchJoke() {
+        // Używamy fetch API do wysłania żądania GET do zdefiniowanego wcześniej URL
+        fetch(url)
+            // Kiedy otrzymamy odpowiedź, konwertujemy ją na format JSON
+            .then(response => response.json())
+            // Następnie przekazujemy sparsowane dane do funkcji displayJoke
+            .then(displayJoke)
+            // W przypadku błędu, wyświetlamy go w konsoli
+            .catch(error => console.error('Error:', error));
+    }
+
+    // Funkcja displayJoke aktualizuje zawartość elementu div nowym żartem
+    function displayJoke(data) {
+        // Ustawiamy innerHTML elementu div, wstawiając tekst żartu z otrzymanych danych
+        div.innerHTML = `<p>${data.value}</p>`;
+    }
+}
+
+    </script>
+</body>
+</html>

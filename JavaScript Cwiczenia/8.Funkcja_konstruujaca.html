@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <script>
+        function Czasopismo(name, nr, description, adverts){
+            this.name = name;
+            this.nr = nr;
+            this.description = description;
+            this.adverts = adverts || [];
+
+            this.advert = function addAdvert(){
+                let advert1 = {
+                    title: "Chcesz miec takiego ...",
+                    content: "Zadzwon pod numer 912948123"
+                }
+
+                this.adverts.push(advert1);
+            }
+
+            this.printAdvert = function printAdvert(){
+                console.log(this.adverts)
+            }
+        }
+        
+        let magazyn = new Czasopismo("Magazyn", 1234, "Opis magazynu");
+        magazyn.advert();
+        magazyn.printAdvert();
+        console.log(magazyn);
+    </script>
+</body>
+</html>

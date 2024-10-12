@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    
+
+    <script>
+fetch("https://api.chucknorris.io/jokes/random")
+    // Wywołuje funkcję fetch(), która wykonuje żądanie HTTP do podanego adresu URL (API Chucka Norrisa).
+    .then(response => response.json())
+    // Otrzymuje odpowiedź i konwertuje ją na format JSON. `response.json()` zwraca obietnicę (Promise),
+    // która po zakończeniu zawiera dane w formacie JSON.
+    .then(c => console.log(c))
+    // Po zakończeniu operacji (gdy dane zostaną przekonwertowane na JSON), wypisuje te dane w konsoli.
+    // Wypisze obiekt z losowym żartem Chucka Norrisa.
+    .catch(error => console.error("Error:", error))
+    // W przypadku wystąpienia błędu (np. problem z połączeniem), obsługuje go i wypisuje wiadomość o błędzie w konsoli.
+    .finally(() => {
+        console.log("Fetch operation completed");
+        // Blok finally() zostanie wykonany bez względu na wynik operacji (sukces lub błąd).
+        // Wypisuje komunikat "Fetch operation completed", sygnalizując zakończenie operacji.
+    });
+
+            
+
+    </script>
+</body>
+</html>

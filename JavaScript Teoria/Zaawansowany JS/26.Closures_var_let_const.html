@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Closures z var, let i const w JavaScript</title>
+    <link rel="stylesheet" href="/JavaScript Teoria/styles.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/themes/prism-tomorrow.min.css" rel="stylesheet" />
+</head>
+<body>
+    <div class="container">
+        <h1>Closures z <code>var</code>, <code>let</code> i <code>const</code> w JavaScript</h1>
+
+        <p>W JavaScript sposób deklaracji zmiennych (<code>var</code>, <code>let</code>, <code>const</code>) ma istotny wpływ na sposób działania domknięć (closures). Warto wiedzieć, jak te deklaracje zmiennych różnią się w zakresie, hoistingu oraz wiązaniu wartości w kontekście tworzenia domknięć.</p>
+
+        <h2><code>var</code> i closures</h2>
+        <p>Zmienne zadeklarowane za pomocą <code>var</code> mają **zasięg funkcyjny** (nie blokowy) i są przenoszone do góry zakresu (hoisting). To może prowadzić do nieoczekiwanych rezultatów w przypadku użycia domknięć w pętlach.</p>
+
+        <h3>Przykład problemu z <code>var</code> w pętli</h3>
+        <pre><code class="language-javascript">
+function createCounters() {
+    var counters = [];
+    for (var i = 0; i < 3; i++) {
+        counters[i] = function() {
+            console.log(i);
+        };
+    }
+    return counters;
+}
+
+const myCounters = createCounters();
+myCounters[0](); // 3
+myCounters[1](); // 3
+myCounters[2](); // 3
+        </code></pre>
+        <p>W tym przykładzie wszystkie funkcje zwrócą wartość 3, ponieważ <code>var</code> ma zasięg funkcyjny i wartość <code>i</code> zostaje "zapamiętana" jako końcowa wartość pętli (3).</p>
+
+        <h2>Rozwiązanie z <code>let</code></h2>
+        <p>Zmienne zadeklarowane za pomocą <code>let</code> mają **zasięg blokowy**, co oznacza, że ich wartość jest poprawnie wiązana dla każdej iteracji pętli. Użycie <code>let</code> w pętlach eliminuje problem związany z hoistingiem.</p>
+
+        <h3>Poprawione działanie z <code>let</code></h3>
+        <pre><code class="language-javascript">
+function createCounters() {
+    let counters = [];
+    for (let i = 0; i < 3; i++) {
+        counters[i] = function() {
+            console.log(i);
+        };
+    }
+    return counters;
+}
+
+const myCounters = createCounters();
+myCounters[0](); // 0
+myCounters[1](); // 1
+myCounters[2](); // 2
+        </code></pre>
+        <p>W tym przykładzie <code>let</code> powoduje, że każda funkcja zapamiętuje wartość <code>i</code> z jej konkretnej iteracji, co prowadzi do oczekiwanych rezultatów: 0, 1 i 2.</p>
+
+        <h2><code>const</code> w closures</h2>
+        <p>Zmienne zadeklarowane za pomocą <code>const</code> mają również zasięg blokowy, tak jak <code>let</code>. Różnica polega na tym, że zmienne <code>const</code> nie mogą być ponownie przypisane, ale są zachowywane w closures tak samo jak <code>let</code>.</p>
+
+        <h3>Przykład użycia <code>const</code> w closures</h3>
+        <pre><code class="language-javascript">
+function createCounter() {
+    const count = 0;
+
+    return function() {
+        console.log(count);
+    };
+}
+
+const counter = createCounter();
+counter(); // 0
+        </code></pre>
+        <p>W tym przykładzie zmienna <code>count</code> jest zachowana w closure, ponieważ została zadeklarowana jako <code>const</code>. Chociaż jej wartość nie może być zmieniona, jest bezpiecznie dostępna wewnątrz funkcji zwróconej przez <code>createCounter()</code>.</p>
+
+        <h2>Podsumowanie różnic</h2>
+        <ul>
+            <li><code>var</code> ma zasięg funkcyjny i jest podatny na problemy związane z hoistingiem w pętlach.</li>
+            <li><code>let</code> ma zasięg blokowy, co rozwiązuje problemy z hoistingiem i pozwala na poprawne tworzenie closures w pętlach.</li>
+            <li><code>const</code> działa podobnie do <code>let</code> w kontekście closures, ale zmienne zadeklarowane jako <code>const</code> nie mogą być ponownie przypisane.</li>
+        </ul>
+
+    </div>
+    <script>
+
+        for(var i=0; i<10; i++) {
+            setTimeout(function() {
+            console.log(i);        
+            },500);
+        }   
+
+        // Zmienna i jest zadeklarowana jako zmienna globalna, dlatego wynik jest równy 10 dla każdej iteracji
+
+        
+        // Jeśli chcemy aby każda iteracja miała swoją własną zmienną, to musimy użyć let i zadeklarować ją wewnątrz pętli
+
+        for(let i=0; i<10; i++) {
+            setTimeout(function() {
+            console.log(i);        
+            },500);
+        }
+
+
+    </script>
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/prism.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/components/prism-javascript.min.js"></script>
+</body>
+</html>

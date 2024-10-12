@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="../styles.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/themes/prism-tomorrow.min.css" rel="stylesheet" />
+    <title>Menedżer Zadań - Wzorzec Prototype</title>
+</head>
+<body>
+    <div class="container">
+        <h1>Menedżer Zadań - Wzorzec Prototype</h1>
+        <button id="addTaskBtn">Dodaj zadanie</button>
+        <div id="task-container"></div>
+
+        <h2>Kod HTML i JavaScript:</h2>
+        <pre><code class="language-html">
+        &lt;h1&gt;Menedżer Zadań - Wzorzec Prototype&lt;/h1&gt;
+        &lt;button id="addTaskBtn"&gt;Dodaj zadanie&lt;/button&gt;
+        &lt;div id="task-container"&gt;&lt;/div&gt;
+
+        &lt;script&gt;
+        const TaskPrototype = {
+            title: "Zadanie domyślne",
+            description: "Opis domyślnego zadania",
+            priority: "normalne",
+            clone: function() {
+                return Object.create(this); // Klonowanie prototypu
+            },
+            setTaskDetails: function(title, description, priority) {
+                this.title = title;
+                this.description = description;
+                this.priority = priority;
+            },
+            displayTask: function() {
+                return `Zadanie: ${this.title}, Opis: ${this.description}, Priorytet: ${this.priority}`;
+            }
+        };
+
+        document.getElementById('addTaskBtn').addEventListener('click', () => {
+            const newTask = TaskPrototype.clone(); // Klonowanie zadania
+            const taskTitle = prompt('Podaj tytuł zadania: ', 'Nowe zadanie');
+            const taskDescription = prompt('Podaj opis zadania: ', 'Opis zadania');
+            const taskPriority = prompt('Podaj priorytet zadania (niski, normalne, wysoki): ', 'normalne');
+            
+            newTask.setTaskDetails(taskTitle, taskDescription, taskPriority); // Ustawianie szczegółów zadania
+
+            const taskContainer = document.getElementById('task-container');
+            const taskElement = document.createElement('p');
+            taskElement.textContent = newTask.displayTask();
+            taskContainer.appendChild(taskElement);
+        });
+        &lt;/script&gt;
+        </code></pre>
+    </div>
+
+    <script>
+        // Prototyp zadania
+        const TaskPrototype = {
+            title: "Zadanie domyślne",
+            description: "Opis domyślnego zadania",
+            priority: "normalne",
+            // Metoda klonowania zadania
+            clone: function() {
+                return Object.create(this); // Klonowanie prototypu
+            },
+            // Metoda ustawiająca szczegóły zadania
+            setTaskDetails: function(title, description, priority) {
+                this.title = title;
+                this.description = description;
+                this.priority = priority;
+            },
+            // Wyświetlanie zadania
+            displayTask: function() {
+                return `Zadanie: ${this.title}, Opis: ${this.description}, Priorytet: ${this.priority}`;
+            }
+        };
+
+        // Obsługa przycisku "Dodaj zadanie"
+        document.getElementById('addTaskBtn').addEventListener('click', () => {
+            const newTask = TaskPrototype.clone(); // Klonowanie zadania
+            const taskTitle = prompt('Podaj tytuł zadania: ', 'Nowe zadanie');
+            const taskDescription = prompt('Podaj opis zadania: ', 'Opis zadania');
+            const taskPriority = prompt('Podaj priorytet zadania (niski, normalne, wysoki): ', 'normalne');
+            
+            // Ustawienie szczegółów zadania
+            newTask.setTaskDetails(taskTitle, taskDescription, taskPriority);
+
+            // Wyświetlanie zadania w interfejsie
+            const taskContainer = document.getElementById('task-container');
+            const taskElement = document.createElement('p');
+            taskElement.textContent = newTask.displayTask();
+            taskContainer.appendChild(taskElement);
+        });
+    </script>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/prism.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/components/prism-javascript.min.js"></script>
+</body>
+</html>

@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <script>
+const foo = {
+    name: "Ania",
+    city: "KRK",
+    country: "Poland"
+};
+// Tworzy obiekt 'foo' z trzema właściwościami: 'name', 'city' i 'country'.
+
+const {name, ...data} = foo;
+// Destrukturyzacja obiektu 'foo' - zmienna 'name' otrzymuje wartość 'name' z obiektu 'foo', 
+// a zmienna 'data' otrzymuje resztę właściwości ('city' i 'country') w formie nowego obiektu.
+
+console.log(name); // "Ania"
+// Wypisuje wartość zmiennej 'name' - czyli "Ania".
+
+console.log(data); // {city: "KRK", country: "Poland"}
+// Wypisuje obiekt 'data', który zawiera resztę właściwości z 'foo' (bez 'name').
+
+function userData({name, country, ...params}) {
+    // Funkcja 'userData' przyjmuje obiekt jako argument i wykonuje destrukturyzację:
+    // 'name' otrzymuje wartość 'name' z obiektu,
+    // 'country' otrzymuje wartość 'country' z obiektu,
+    // a reszta właściwości (w tym przypadku 'city') trafia do obiektu 'params'.
+    
+    console.log(name); // "Ania"
+    // Wypisuje wartość 'name', która wynosi "Ania".
+    
+    console.log(params);
+    // Wypisuje obiekt 'params', który zawiera wszystkie pozostałe właściwości (w tym przypadku 'city').
+}
+
+userData(foo); 
+// Wywołuje funkcję 'userData' z obiektem 'foo' jako argumentem.
+// Wynik: Wypisuje "Ania" oraz obiekt {city: "KRK"}.
+
+    </script>
+</body>
+</html>

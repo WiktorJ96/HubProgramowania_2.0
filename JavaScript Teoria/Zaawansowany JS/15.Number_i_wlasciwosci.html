@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Number i jego Właściwości w JavaScript</title>
+    <link rel="stylesheet" href="/JavaScript Teoria/styles.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/themes/prism-tomorrow.min.css" rel="stylesheet" />
+</head>
+<body>
+    <div class="container">
+        <h1>Obiekt <code>Number</code> i jego Właściwości w JavaScript</h1>
+
+        <p>W JavaScript <code>Number</code> jest wbudowanym obiektem służącym do pracy z wartościami liczbowymi. Obejmuje on zarówno liczby całkowite, jak i zmiennoprzecinkowe (liczby z ułamkami). Obiekt <code>Number</code> dostarcza wiele przydatnych właściwości i metod do pracy z liczbami.</p>
+
+        <h2>Właściwości obiektu <code>Number</code></h2>
+        <p>Obiekt <code>Number</code> ma kilka wbudowanych stałych, które są przydatne do pracy z liczbami w JavaScript:</p>
+        <ul>
+            <li><code>Number.MAX_VALUE</code> - Największa możliwa wartość liczby, jaką można reprezentować w JavaScript.</li>
+            <li><code>Number.MIN_VALUE</code> - Najmniejsza dodatnia wartość liczby większa niż 0.</li>
+            <li><code>Number.POSITIVE_INFINITY</code> - Reprezentuje wartość nieskończoną, wynik dzielenia przez 0.</li>
+            <li><code>Number.NEGATIVE_INFINITY</code> - Reprezentuje wartość ujemną nieskończoności.</li>
+            <li><code>Number.NaN</code> - Reprezentuje wartość <em>Not-a-Number</em> (nie jest liczbą), wynik operacji matematycznych, które nie zwracają liczby.</li>
+        </ul>
+
+        <h2>Przykłady użycia właściwości</h2>
+        <pre><code class="language-javascript">
+// Wartości maksymalne i minimalne
+console.log(Number.MAX_VALUE); // 1.7976931348623157e+308
+console.log(Number.MIN_VALUE); // 5e-324
+
+// Przykłady nieskończoności
+console.log(Number.POSITIVE_INFINITY); // Infinity
+console.log(Number.NEGATIVE_INFINITY); // -Infinity
+
+// Sprawdzanie wartości NaN
+let result = 0 / 0;
+console.log(result === Number.NaN); // false (NaN nie jest równe sobie)
+console.log(isNaN(result)); // true
+        </code></pre>
+        <p>W powyższych przykładach pokazano, jak można uzyskać dostęp do wartości skrajnych w JavaScript, takich jak maksymalna i minimalna liczba, a także jak pracować z nieskończonościami oraz sprawdzać, czy wynik operacji matematycznej jest <code>NaN</code>.</p>
+
+        <h2>Metody obiektu <code>Number</code></h2>
+        <p>Obiekt <code>Number</code> zawiera kilka metod pomocnych w pracy z liczbami:</p>
+        <ul>
+            <li><code>Number.isFinite()</code> - Sprawdza, czy wartość jest liczbą skończoną (czy nie jest <code>Infinity</code>).</li>
+            <li><code>Number.isInteger()</code> - Sprawdza, czy wartość jest liczbą całkowitą.</li>
+            <li><code>Number.isNaN()</code> - Sprawdza, czy wartość jest <code>NaN</code>.</li>
+            <li><code>Number.parseFloat()</code> - Konwertuje ciąg znaków na liczbę zmiennoprzecinkową.</li>
+            <li><code>Number.parseInt()</code> - Konwertuje ciąg znaków na liczbę całkowitą.</li>
+        </ul>
+
+        <h2>Przykłady użycia metod</h2>
+        <pre><code class="language-javascript">
+// Sprawdzanie, czy liczba jest skończona
+console.log(Number.isFinite(10)); // true
+console.log(Number.isFinite(Infinity)); // false
+
+// Sprawdzanie, czy liczba jest całkowita
+console.log(Number.isInteger(10)); // true
+console.log(Number.isInteger(10.5)); // false
+
+// Sprawdzanie, czy wartość jest NaN
+console.log(Number.isNaN(NaN)); // true
+console.log(Number.isNaN(10)); // false
+
+// Konwersja ciągu znaków na liczbę zmiennoprzecinkową
+console.log(Number.parseFloat('3.14')); // 3.14
+
+// Konwersja ciągu znaków na liczbę całkowitą
+console.log(Number.parseInt('42')); // 42
+console.log(Number.parseInt('42px')); // 42 (ignoruje tekst po liczbie)
+        </code></pre>
+        <p>Metody takie jak <code>Number.isFinite()</code>, <code>Number.isInteger()</code> i <code>Number.isNaN()</code> pozwalają na walidację liczb, podczas gdy <code>parseFloat()</code> i <code>parseInt()</code> konwertują ciągi znaków na liczby.</p>
+
+        <h2>Podsumowanie</h2>
+        <ul>
+            <li>Obiekt <code>Number</code> oferuje szereg przydatnych właściwości, które pozwalają na pracę z liczbami, w tym maksymalne i minimalne wartości oraz nieskończoności.</li>
+            <li>Metody obiektu <code>Number</code> umożliwiają walidację liczb oraz ich konwersję z ciągów znaków.</li>
+            <li><code>Number.NaN</code> jest specjalną wartością oznaczającą wynik operacji, która nie zwraca liczby, a <code>Number.isNaN()</code> pozwala na jej sprawdzenie.</li>
+        </ul>
+
+    </div>
+    <script>
+        let num = Number(1231.123123);
+        
+        console.log(Number.MAX_SAFE_INTEGER);
+        console.log(Number.MIN_SAFE_INTEGER);
+        console.log(Number.MAX_VALUE);
+        console.log(Number.MIN_VALUE);
+
+        console.log(Number.parseInt("123456") + 1000);
+        console.log(Number.parseFloat("123.1233") + 1000);
+        console.log(Number.isInteger(123));
+        console.log(Number.isInteger(123.456));
+
+        // Sprawdzenie czy liczba jest nieskonczona
+        let a = -1/0; // Infinity 
+        console.log(a);
+        console.log(Number.isFinite(a)); // false
+        console.log(Number.isFinite(1)); // true
+
+
+        // Zaokraglenie do najblizszej liczby calkowitej
+        console.log(Math.round(12.54)) //13
+        console.log(Math.round(12.50)) //13
+        console.log(Math.round(12.49)) //12
+
+
+        //Zaokraglenie w gore
+        console.log(Math.ceil(14.49)) //15
+        console.log(Math.ceil(14.001)) //15
+        
+
+        // Zaokraglenie w dol
+        console.log(Math.floor(14.49)) //14
+        console.log(Math.floor(14.99)) //14
+
+        console.log(Math.random()) // 0 <= x < 1,  Może zwrócić np. 0.123456789, ale nigdy 1
+        console.log(Math.random() *5) // Liczba od 0 do 4.99...
+ 
+        console.log(Math.sqrt(16)) // 4
+
+        console.log(Math.trunc(113.123123)) // 113
+
+        console.log(123.12312.toFixed(1)) // do jednego miejsca po przecinku = 123.1
+        console.log(123.12312.toFixed(3)) // do trzech miejsc po przecinku = 123.123 
+        // itd.
+
+        </script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/prism.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/components/prism-javascript.min.js"></script>
+</body>
+</html>

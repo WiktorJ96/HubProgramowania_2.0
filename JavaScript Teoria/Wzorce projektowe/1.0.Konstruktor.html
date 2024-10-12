@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Wzorzec projektowy Constructor w JavaScript</title>
+    <link rel="stylesheet" href="../styles.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/themes/prism-tomorrow.min.css" rel="stylesheet" />
+</head>
+<body>
+    <div class="container">
+        <h1>Wzorzec Projektowy Constructor w JavaScript</h1>
+
+        <p>Wzorzec **Constructor** (Konstruktor) jest stosowany do tworzenia nowych obiektów i definiowania ich właściwości oraz metod. W JavaScript możemy używać funkcji jako konstruktorów obiektów, co pozwala na tworzenie wielu instancji obiektów o tej samej strukturze, ale z różnymi danymi.</p>
+
+        <h2>Jak działa wzorzec Constructor?</h2>
+        <p>Funkcja konstruktor jest wywoływana za pomocą słowa kluczowego <code>new</code>. W momencie jej wywołania tworzona jest nowa instancja obiektu. Konstruktor przypisuje wartości do właściwości tego obiektu oraz umożliwia definiowanie metod.</p>
+
+        <h3>Przykład podstawowy</h3>
+        <pre><code class="language-javascript">
+function Car(brand, model, year) {
+    this.brand = brand;
+    this.model = model;
+    this.year = year;
+
+    this.getInfo = function() {
+        return `${this.brand} ${this.model}, wyprodukowany w roku ${this.year}`;
+    };
+}
+
+const myCar = new Car('Ford', 'Mustang', 1969);
+console.log(myCar.getInfo()); // Ford Mustang, wyprodukowany w roku 1969
+        </code></pre>
+        <p>W powyższym przykładzie, funkcja <code>Car</code> działa jako konstruktor. W momencie utworzenia nowego obiektu za pomocą <code>new</code>, konstruktor przypisuje wartości do właściwości <code>brand</code>, <code>model</code> i <code>year</code>, oraz dodaje metodę <code>getInfo</code> do instancji obiektu.</p>
+
+        <h2>Użycie Prototype z konstruktorem</h2>
+        <p>Każdy konstruktor w JavaScript automatycznie ma dostęp do obiektu <code>prototype</code>, który umożliwia współdzielenie metod między wszystkimi instancjami obiektu, co jest bardziej efektywne pamięciowo.</p>
+
+        <h3>Przykład użycia prototype</h3>
+        <pre><code class="language-javascript">
+function Person(name, age) {
+    this.name = name;
+    this.age = age;
+}
+
+Person.prototype.greet = function() {
+    return `Cześć, mam na imię ${this.name} i mam ${this.age} lat.`;
+};
+
+const person1 = new Person('Kasia', 25);
+const person2 = new Person('Jan', 30);
+
+console.log(person1.greet()); // Cześć, mam na imię Kasia i mam 25 lat.
+console.log(person2.greet()); // Cześć, mam na imię Jan i mam 30 lat.
+        </code></pre>
+        <p>W tym przykładzie, metoda <code>greet</code> jest dodana do prototypu konstruktora <code>Person</code>, dzięki czemu jest współdzielona przez wszystkie instancje obiektów stworzonych za pomocą tego konstruktora.</p>
+
+        <h2>Zastosowanie wzorca Constructor</h2>
+        <p>Wzorzec Constructor jest szczególnie przydatny w sytuacjach, gdzie chcemy tworzyć wiele instancji podobnych obiektów, np. w aplikacjach zarządzających danymi użytkowników, pojazdów, produktów, itp. Pozwala on na łatwe rozszerzanie funkcjonalności poprzez dodawanie nowych właściwości i metod.</p>
+
+        <h2>Zalety wzorca Constructor</h2>
+        <ul>
+            <li>Modularność: Możliwość tworzenia wielu instancji obiektów o podobnej strukturze.</li>
+            <li>Efektywność: W połączeniu z <code>prototype</code> umożliwia współdzielenie metod między instancjami.</li>
+            <li>Elastyczność: Łatwość w dodawaniu nowych właściwości i metod do obiektów.</li>
+        </ul>
+
+        <h2>Podsumowanie</h2>
+        <ul>
+            <li>Wzorzec Constructor służy do tworzenia nowych obiektów za pomocą funkcji.</li>
+            <li>Obiekty są tworzone przy użyciu słowa kluczowego <code>new</code>, co wywołuje funkcję konstruktora.</li>
+            <li>Konstruktor może przypisywać wartości do właściwości obiektów oraz dodawać metody.</li>
+            <li>Korzystanie z <code>prototype</code> umożliwia bardziej efektywne zarządzanie pamięcią i współdzielenie metod.</li>
+        </ul>
+        <a href="./1.1.Konstruktor-projekt.html"><button>Przykładowy projekt</button></a>
+    </div>
+    <script>
+
+        // Klasa bazowa
+class Vehicle {
+  constructor(brand, year) {
+    this.brand = brand;  // Marka pojazdu
+    this.year = year;    // Rok produkcji
+  }
+
+  // Metoda klasy bazowej
+  getVehicleInfo() {
+    return `${this.brand} from ${this.year}`;
+  }
+}
+
+// Klasa pochodna (dziedzicząca po klasie Vehicle)
+class Car extends Vehicle {
+  constructor(brand, year, model) {
+    // Wywołanie konstruktora klasy bazowej z użyciem super()
+    super(brand, year);   // Przekazujemy brand i year do klasy bazowej
+
+    // Dodatkowe właściwości klasy pochodnej
+    this.model = model;   // Model samochodu
+  }
+
+  // Metoda klasy pochodnej
+  getCarInfo() {
+    // Możemy użyć metody z klasy bazowej za pomocą super.getVehicleInfo()
+    return `${super.getVehicleInfo()} - model: ${this.model}`;
+  }
+}
+
+// Tworzenie nowego obiektu Car
+const myCar = new Car('Toyota', 2020, 'Corolla');
+
+// Wywołanie metody obiektu
+console.log(myCar.getCarInfo()); // Wyświetli: "Toyota from 2020 - model: Corolla"
+
+    </script>
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/prism.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/components/prism-javascript.min.js"></script>
+</body>
+</html>

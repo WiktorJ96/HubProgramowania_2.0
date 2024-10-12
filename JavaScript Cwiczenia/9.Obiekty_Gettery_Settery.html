@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <script>
+
+        let truck = {
+            _brand: null,
+            _model: null,
+            _topSpeed: 0,
+
+            set brand(Brand){
+            this._brand = Brand;
+            },
+
+            set model(Model){
+            this._model = Model;
+            },
+
+            set topSpeed(TopSpeed){
+                if(TopSpeed > 0){
+                    this._topSpeed = TopSpeed;
+                } else
+                console.log("Za mała prędkość")
+            },
+
+            get model(){
+                return this._model;
+            },
+        
+            get topSpeed(){
+                return this._topSpeed;
+            },
+
+            get brand(){
+                return this._brand;
+            },
+        }
+
+        truck.topSpeed = 10;
+        truck.model = "Skania 123";
+        truck.brand = "Skania";
+        console.log("Marka:" + truck.brand, "Model:" + truck.model,"Predkosc:" + truck.topSpeed);
+    </script>
+</body>
+</html>

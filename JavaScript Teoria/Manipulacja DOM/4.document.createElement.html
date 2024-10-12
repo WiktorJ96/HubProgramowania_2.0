@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tworzenie nowych elementów DOM w JavaScript</title>
+    <link rel="stylesheet" href="../styles.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/themes/prism-tomorrow.min.css" rel="stylesheet" />
+</head>
+<body>
+    <div class="container">
+        <h1>Tworzenie nowych elementów DOM w JavaScript</h1>
+
+        <p>W JavaScript możemy dynamicznie tworzyć i dodawać nowe elementy do DOM. Poniżej znajdziesz różne metody tworzenia i manipulacji elementami DOM w czasie rzeczywistym.</p>
+
+        <h2>Tworzenie nowego elementu za pomocą <code>document.createElement()</code></h2>
+        <p>Metoda <code>createElement()</code> pozwala na tworzenie nowego elementu DOM na podstawie nazwy tagu, np. <code>&lt;div&gt;</code> lub <code>&lt;p&gt;</code>.</p>
+        <pre><code class="language-javascript">
+// Tworzenie nowego elementu <div>
+const newDiv = document.createElement('div');
+
+// Ustawienie treści tekstowej w nowym elemencie
+newDiv.textContent = 'To jest nowy element DIV!';
+
+// Dodanie klasy do nowego elementu
+newDiv.classList.add('new-div');
+
+// Dodanie elementu do dokumentu
+document.body.appendChild(newDiv);
+        </code></pre>
+        <p>W powyższym przykładzie tworzymy nowy element <code>&lt;div&gt;</code>, przypisujemy do niego treść tekstową i klasę, a następnie dodajemy go do <code>&lt;body&gt;</code> dokumentu.</p>
+
+        <h2>Ustawianie atrybutów elementu</h2>
+        <p>Za pomocą metody <code>setAttribute()</code> możemy ustawiać atrybuty HTML dla nowo utworzonego elementu.</p>
+        <pre><code class="language-javascript">
+// Tworzenie nowego linku
+const newLink = document.createElement('a');
+
+// Ustawienie atrybutów href i target
+newLink.setAttribute('href', 'https://www.example.com');
+newLink.setAttribute('target', '_blank');
+
+// Ustawienie tekstu linku
+newLink.textContent = 'Kliknij tutaj!';
+
+// Dodanie linku do <body>
+document.body.appendChild(newLink);
+        </code></pre>
+        <p>W tym przykładzie tworzymy nowy element <code>&lt;a&gt;</code> (link), ustawiamy jego atrybuty <code>href</code> i <code>target</code>, a następnie dodajemy go do dokumentu.</p>
+
+        <h2>Tworzenie zagnieżdżonych elementów</h2>
+        <p>Możemy także tworzyć zagnieżdżone elementy DOM, dodając jeden element do drugiego.</p>
+        <pre><code class="language-javascript">
+// Tworzenie nowego <ul> i kilku <li>
+const newList = document.createElement('ul');
+
+const listItem1 = document.createElement('li');
+listItem1.textContent = 'Pierwszy element listy';
+
+const listItem2 = document.createElement('li');
+listItem2.textContent = 'Drugi element listy';
+
+// Dodanie <li> do <ul>
+newList.appendChild(listItem1);
+newList.appendChild(listItem2);
+
+// Dodanie <ul> do <body>
+document.body.appendChild(newList);
+        </code></pre>
+        <p>W tym przykładzie tworzymy nową listę <code>&lt;ul&gt;</code> i dodajemy do niej dwa elementy <code>&lt;li&gt;</code>, które następnie zostają dodane do dokumentu.</p>
+
+        <h2>Usuwanie elementów z DOM</h2>
+        <p>Możemy usunąć elementy z DOM za pomocą metody <code>remove()</code>:</p>
+        <pre><code class="language-javascript">
+// Pobieranie elementu do usunięcia
+const elementToRemove = document.querySelector('.new-div');
+
+// Usunięcie elementu
+elementToRemove.remove();
+        </code></pre>
+        <p>W tym przykładzie usuwamy element <code>&lt;div&gt;</code> o klasie <code>new-div</code>.</p>
+
+        <h2>Podsumowanie</h2>
+        <ul>
+            <li><code>document.createElement()</code> - Służy do tworzenia nowych elementów DOM.</li>
+            <li><code>setAttribute()</code> - Umożliwia ustawianie atrybutów HTML dla elementu.</li>
+            <li><code>appendChild()</code> - Dodaje nowo utworzony element do drzewa DOM.</li>
+            <li><code>remove()</code> - Usuwa element z drzewa DOM.</li>
+        </ul>
+
+    </div>
+    <script>
+        document.body.style.backgroundColor = '#222';
+
+        let element = document.createElement('div');
+
+        element.textContent = 'Hello World!';
+        element.style.color = '#fff';
+
+        document.body.appendChild(element);
+    </script>
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/prism.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/components/prism-javascript.min.js"></script>
+</body>
+</html>

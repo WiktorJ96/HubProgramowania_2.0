@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Funkcje i Przekazywanie Danych w JavaScript</title>
+     <link rel="stylesheet" href="../styles.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/themes/prism-tomorrow.min.css" rel="stylesheet" />
+</head>
+<body>
+    <div class="container">
+        <h1>Funkcje i Przekazywanie Danych w JavaScript</h1>
+
+        <p>W JavaScript dane mogą być przekazywane do funkcji na dwa główne sposoby: <strong>przez wartość</strong> i <strong>przez referencję</strong>. Różnica między nimi polega na tym, jak przekazywane są dane proste (np. liczby, stringi) oraz złożone (np. obiekty, tablice).</p>
+
+        <h2>Przekazywanie przez wartość</h2>
+        <p>Typy proste w JavaScript, takie jak liczby, stringi czy booleany, są przekazywane do funkcji **przez wartość**. Oznacza to, że przekazywana jest kopia wartości, a zmiany wewnątrz funkcji nie mają wpływu na pierwotną wartość zmiennej.</p>
+
+        <h3>Przykład przekazywania przez wartość</h3>
+        <pre><code class="language-javascript">
+function changeValue(x) {
+    x = 20;
+    console.log('Wewnątrz funkcji:', x); // 20
+}
+
+let a = 10;
+changeValue(a);
+console.log('Po wywołaniu funkcji:', a); // 10
+        </code></pre>
+        <p>W tym przykładzie zmienna <code>a</code> jest przekazywana do funkcji jako kopia. Zmiana wartości <code>x</code> wewnątrz funkcji nie wpływa na pierwotną wartość <code>a</code>.</p>
+
+        <h2>Przekazywanie przez referencję</h2>
+        <p>Typy złożone, takie jak obiekty i tablice, są przekazywane do funkcji **przez referencję**. Oznacza to, że funkcja otrzymuje odniesienie do oryginalnego obiektu, a wszelkie zmiany w funkcji będą miały wpływ na oryginalne dane.</p>
+
+        <h3>Przykład przekazywania przez referencję</h3>
+        <pre><code class="language-javascript">
+function changeObject(obj) {
+    obj.name = 'Nowa wartość';
+}
+
+const myObj = { name: 'Stara wartość' };
+changeObject(myObj);
+console.log(myObj.name); // Nowa wartość
+        </code></pre>
+        <p>W tym przykładzie obiekt <code>myObj</code> jest przekazywany przez referencję. Zmiana wewnątrz funkcji wpływa na pierwotny obiekt, ponieważ funkcja działa na tej samej referencji.</p>
+
+        <h2>Uważaj na niechciane zmiany</h2>
+        <p>Kiedy przekazujesz obiekty lub tablice przez referencję, musisz być ostrożny, aby nie wprowadzać niechcianych zmian w oryginalnych danych. Jeśli chcesz uniknąć modyfikacji oryginału, możesz skopiować obiekt lub tablicę przed przekazaniem go do funkcji.</p>
+
+        <h3>Przykład kopiowania obiektu przed modyfikacją</h3>
+        <pre><code class="language-javascript">
+function changeObjectSafely(obj) {
+    const newObj = { ...obj }; // Kopiowanie obiektu
+    newObj.name = 'Nowa wartość';
+    return newObj;
+}
+
+const myObj = { name: 'Stara wartość' };
+const modifiedObj = changeObjectSafely(myObj);
+
+console.log(myObj.name); // Stara wartość
+console.log(modifiedObj.name); // Nowa wartość
+        </code></pre>
+        <p>W tym przypadku używamy operatora <code>spread</code>, aby skopiować obiekt przed jego modyfikacją. Dzięki temu oryginalny obiekt nie zostanie zmodyfikowany, a zmiany są widoczne tylko w nowym obiekcie.</p>
+
+        <h2>Przekazywanie tablic przez referencję</h2>
+        <p>Podobnie jak w przypadku obiektów, tablice są przekazywane przez referencję. Oznacza to, że zmiany dokonane na tablicy wewnątrz funkcji będą miały wpływ na oryginalną tablicę.</p>
+
+        <h3>Przykład przekazywania tablic przez referencję</h3>
+        <pre><code class="language-javascript">
+function addItem(arr) {
+    arr.push('Nowy element');
+}
+
+const myArray = ['Element 1', 'Element 2'];
+addItem(myArray);
+console.log(myArray); // ['Element 1', 'Element 2', 'Nowy element']
+        </code></pre>
+        <p>W tym przykładzie funkcja <code>addItem</code> dodaje nowy element do tablicy. Zmiany dokonane wewnątrz funkcji modyfikują pierwotną tablicę, ponieważ jest przekazywana przez referencję.</p>
+
+        <h2>Podsumowanie</h2>
+        <ul>
+            <li>Typy proste, takie jak liczby czy stringi, są przekazywane przez wartość, co oznacza, że zmiany wewnątrz funkcji nie wpływają na oryginalne dane.</li>
+            <li>Typy złożone, takie jak obiekty i tablice, są przekazywane przez referencję, co oznacza, że zmiany wewnątrz funkcji wpływają na oryginalne dane.</li>
+            <li>Aby uniknąć niechcianych zmian, można skopiować obiekt lub tablicę przed przekazaniem ich do funkcji.</li>
+        </ul>
+
+    </div>
+    <script>
+        function foo(num, obj) {
+            num = 17;                //zmiana wartosci zmiennej 'a' na 17 ale tylko lokalnie poniewaz zmienne sa przekazywane
+                                     //za pomoca kopi obiektu tzn. nie zmienaja wartosci globalnie tylko lokalnie
+
+            obj.data = "new text";  // zmiana wartosci obiektu data, globalnie poniewaz objekty sa przekazywane przez referencje 
+        }
+
+        let a = 7;
+        let data = {data: "text"};
+        foo(a, data);
+
+        console.log("A:", a);
+        console.log("Data:", data);
+
+    </script>
+       <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/prism.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/components/prism-javascript.min.js"></script>
+</body>
+</html>

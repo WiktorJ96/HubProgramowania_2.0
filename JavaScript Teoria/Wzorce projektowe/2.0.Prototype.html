@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Wzorzec projektowy Prototype w JavaScript</title>
+    <link rel="stylesheet" href="../styles.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/themes/prism-tomorrow.min.css" rel="stylesheet" />
+</head>
+<body>
+    <div class="container">
+        <h1>Wzorzec Projektowy Prototype w JavaScript</h1>
+
+        <p>Wzorzec **Prototype** w JavaScript umożliwia dzielenie metod i właściwości pomiędzy obiektami, bez konieczności duplikowania ich dla każdej instancji. Wszystkie obiekty w JavaScript mogą dziedziczyć metody i właściwości z prototypu swojego konstruktora.</p>
+
+        <h2>Jak działa wzorzec Prototype?</h2>
+        <p>W JavaScript każda funkcja konstruktora ma własny obiekt <code>prototype</code>. Ten obiekt jest współdzielony przez wszystkie instancje obiektów utworzonych za pomocą tego konstruktora. Metody i właściwości, które są przypisane do prototypu, są dostępne dla każdej instancji.</p>
+
+        <h3>Przykład użycia Prototype</h3>
+        <pre><code class="language-javascript">
+function Person(name, age) {
+    this.name = name;
+    this.age = age;
+}
+
+// Definiowanie metody w prototypie
+Person.prototype.greet = function() {
+    return `Cześć, jestem ${this.name} i mam ${this.age} lat.`;
+};
+
+const person1 = new Person('Anna', 25);
+const person2 = new Person('Tomek', 30);
+
+console.log(person1.greet()); // Cześć, jestem Anna i mam 25 lat.
+console.log(person2.greet()); // Cześć, jestem Tomek i mam 30 lat.
+        </code></pre>
+        <p>W powyższym przykładzie funkcja <code>Person</code> jest konstruktorem, a metoda <code>greet</code> jest zdefiniowana na jej prototypie. Dzięki temu wszystkie instancje obiektów typu <code>Person</code> mogą używać tej metody, bez konieczności duplikowania jej w każdej instancji.</p>
+
+        <h2>Prototypowe dziedziczenie</h2>
+        <p>JavaScript wspiera dziedziczenie prototypowe, co oznacza, że obiekty mogą dziedziczyć właściwości i metody z innych obiektów. Mechanizm ten pozwala na dynamiczne rozszerzanie funkcji obiektów.</p>
+
+        <h3>Przykład dziedziczenia prototypowego</h3>
+        <pre><code class="language-javascript">
+// Klasa bazowa
+function Animal(type) {
+    this.type = type;
+}
+
+Animal.prototype.getType = function() {
+    return this.type;
+};
+
+// Klasa pochodna
+function Dog(name) {
+    Animal.call(this, 'Pies'); // Dziedziczenie właściwości z klasy Animal
+    this.name = name;
+}
+
+// Dziedziczenie metod z prototypu Animal
+Dog.prototype = Object.create(Animal.prototype);
+Dog.prototype.constructor = Dog;
+
+Dog.prototype.bark = function() {
+    return `${this.name} szczeka!`;
+};
+
+const dog1 = new Dog('Burek');
+console.log(dog1.getType()); // Pies
+console.log(dog1.bark()); // Burek szczeka!
+        </code></pre>
+        <p>W tym przykładzie <code>Dog</code> dziedziczy po <code>Animal</code> za pomocą prototypowego dziedziczenia. Dzięki temu instancje <code>Dog</code> mogą korzystać zarówno z metod zdefiniowanych w <code>Animal</code>, jak i własnych metod, takich jak <code>bark</code>.</p>
+
+        <h2>Zastosowanie wzorca Prototype</h2>
+        <p>Wzorzec Prototype jest szeroko stosowany w JavaScript, ponieważ umożliwia optymalizację pamięci poprzez współdzielenie metod i właściwości. Jest to kluczowy wzorzec programowania obiektowego w JavaScript, który wspiera dziedziczenie i reużywalność kodu.</p>
+
+        <h2>Zalety wzorca Prototype</h2>
+        <ul>
+            <li>Efektywność pamięci: Metody są współdzielone przez wszystkie instancje, co zapobiega duplikowaniu kodu.</li>
+            <li>Dziedziczenie prototypowe: Pozwala na dynamiczne rozszerzanie funkcji obiektów poprzez dodawanie metod do prototypu.</li>
+            <li>Elastyczność: Możliwość modyfikacji prototypu w trakcie działania aplikacji.</li>
+        </ul>
+
+        <h2>Podsumowanie</h2>
+        <ul>
+            <li>Wzorzec Prototype w JavaScript pozwala na współdzielenie metod i właściwości pomiędzy obiektami.</li>
+            <li>Każdy obiekt utworzony przez funkcję konstruktora ma dostęp do prototypu tej funkcji.</li>
+            <li>Dziedziczenie prototypowe umożliwia współdzielenie metod między różnymi klasami obiektów.</li>
+            <li>Jest to efektywne podejście do zarządzania pamięcią i modularności kodu.</li>
+        </ul>
+        <a href="./2.1.Prototype-projekt.html"><button>Przykładowy projekt</button></a>
+    </div>
+    <script>
+
+// Definicja funkcji konstruktora
+function Car(brand, model, year) {
+  this.brand = brand;  // Marka samochodu
+  this.model = model;  // Model samochodu
+  this.year = year;    // Rok produkcji
+}
+
+// Metoda w prototypie
+Car.prototype.getCarInfo = function() {
+  return `${this.brand} ${this.model} from ${this.year}`;
+};
+
+// Definicja nowego obiektu
+const bike = {
+  brand: 'Yamaha',
+  model: 'MT-07',
+  year: 2021
+};
+
+// Wywołanie metody getCarInfo dla obiektu bike za pomocą call()
+console.log(Car.prototype.getCarInfo.call(bike)); // Wyświetli: "Yamaha MT-07 from 2021"
+
+
+    </script>
+   <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/prism.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/components/prism-javascript.min.js"></script>
+</body>
+</html>

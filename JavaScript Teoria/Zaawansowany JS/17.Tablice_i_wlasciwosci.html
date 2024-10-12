@@ -1,0 +1,267 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Obiekt Array i jego Właściwości w JavaScript</title>
+    <link rel="stylesheet" href="/JavaScript Teoria/styles.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/themes/prism-tomorrow.min.css" rel="stylesheet" />
+</head>
+<body>
+    <div class="container">
+        <h1>Obiekt <code>Array</code> i jego Właściwości w JavaScript</h1>
+
+        <p>Tablice (<code>Array</code>) w JavaScript są dynamicznymi strukturami danych, które mogą przechowywać wiele elementów różnych typów danych. Każdy element tablicy jest przypisany do indeksu, co pozwala na szybki dostęp do danych. Obiekt <code>Array</code> w JavaScript oferuje wiele metod i właściwości do manipulacji danymi.</p>
+
+        <h2>Właściwość <code>length</code></h2>
+        <p>Właściwość <code>length</code> zwraca liczbę elementów w tablicy:</p>
+        <pre><code class="language-javascript">
+        let fruits = ['jabłko', 'banan', 'pomarańcza'];
+        console.log(fruits.length); // 3
+        </code></pre>
+        <p>W tym przykładzie <code>length</code> zwraca liczbę elementów w tablicy <code>fruits</code>, która wynosi 3.</p>
+
+        <h2>Najczęściej używane metody obiektu <code>Array</code></h2>
+        <ul>
+            <li><code>push()</code> - Dodaje nowy element na końcu tablicy.</li>
+            <li><code>pop()</code> - Usuwa ostatni element z tablicy.</li>
+            <li><code>shift()</code> - Usuwa pierwszy element z tablicy.</li>
+            <li><code>unshift()</code> - Dodaje nowy element na początku tablicy.</li>
+            <li><code>concat()</code> - Łączy dwie lub więcej tablic w jedną.</li>
+            <li><code>slice()</code> - Wyodrębnia część tablicy, tworząc nową tablicę.</li>
+            <li><code>splice()</code> - Dodaje, usuwa lub zamienia elementy w tablicy.</li>
+            <li><code>indexOf()</code> - Zwraca pierwszy indeks, pod którym znajduje się dany element.</li>
+            <li><code>forEach()</code> - Wykonuje funkcję dla każdego elementu tablicy.</li>
+            <li><code>map()</code> - Tworzy nową tablicę, wykonując funkcję na każdym elemencie tablicy.</li>
+            <li><code>filter()</code> - Tworzy nową tablicę z elementami, które spełniają warunki określone w funkcji.</li>
+            <li><code>reduce()</code> - Zmniejsza tablicę do pojedynczej wartości, wykonując funkcję na kolejnych elementach.</li>
+        </ul>
+
+        <h2>Przykłady użycia metod tablic</h2>
+        <pre><code class="language-javascript">
+// Dodawanie elementów
+let numbers = [1, 2, 3];
+numbers.push(4);
+console.log(numbers); // [1, 2, 3, 4]
+
+// Usuwanie elementów
+numbers.pop();
+console.log(numbers); // [1, 2, 3]
+
+// Przekształcanie tablicy za pomocą map
+let squares = numbers.map(n => n * n);
+console.log(squares); // [1, 4, 9]
+
+// Filtrowanie tablicy
+let evenNumbers = numbers.filter(n => n % 2 === 0);
+console.log(evenNumbers); // [2]
+
+// Łączenie tablic
+let moreNumbers = [4, 5];
+let combined = numbers.concat(moreNumbers);
+console.log(combined); // [1, 2, 3, 4, 5]
+
+// Zmniejszanie tablicy do sumy wszystkich elementów
+let sum = numbers.reduce((acc, curr) => acc + curr, 0);
+console.log(sum); // 6
+        </code></pre>
+        <p>W powyższych przykładach pokazano kilka najczęściej używanych metod pracy z tablicami, takich jak dodawanie i usuwanie elementów (<code>push</code>, <code>pop</code>), przekształcanie tablic za pomocą <code>map()</code>, filtrowanie za pomocą <code>filter()</code>, oraz sumowanie elementów za pomocą <code>reduce()</code>.</p>
+
+        <h2>Praca z indeksami w tablicy</h2>
+        <p>Każdy element tablicy jest dostępny przez przypisany indeks, który zaczyna się od 0:</p>
+        <pre><code class="language-javascript">
+let fruits = ['jabłko', 'banan', 'pomarańcza'];
+console.log(fruits[0]); // 'jabłko'
+console.log(fruits[1]); // 'banan'
+        </code></pre>
+
+        <h2>Podsumowanie</h2>
+        <ul>
+            <li><code>Array</code> to dynamiczna struktura danych w JavaScript, która może przechowywać wiele elementów.</li>
+            <li>Właściwość <code>length</code> zwraca liczbę elementów w tablicy.</li>
+            <li>Tablice oferują wiele metod do manipulowania danymi, w tym dodawanie, usuwanie, filtrowanie, mapowanie i redukowanie elementów.</li>
+            <li>Elementy w tablicy są dostępne poprzez indeksy, zaczynając od 0.</li>
+        </ul>
+
+    </div>
+    <script>
+                                            /* TWORZENIE I MANIPULACJA TABLICAMI */
+
+
+// Tworzy nową tablicę z pięcioma elementami
+let myArray = [1, 2, 3, 4, 5];
+
+// Tworzy nową tablicę używając konstruktora Array(), zawierającą różne typy danych
+let tab = new Array(1, 2, 3, 4, { a: 12 }, [], "sdsad");
+
+// Nadpisuje zmienną tab, tworząc nową tablicę dwuwymiarową (tablicę tablic)
+tab = [
+    [1, 2, 3],
+    [3, 2, 3],
+    [6, 5, 3]
+];
+
+// Nadpisuje zmienną tab, tworząc tablicę obiektów
+tab = [
+    { name: "Asia", favColor: "red" },
+    { name: "Zosia", favColor: "green" }
+];
+
+// Zmienia pierwszy obiekt w tablicy
+tab[0] = { name: "Karolina", favColor: "green" };
+
+// Tworzy nową tablicę z pięcioma elementami
+tab = [1, 2, 3, 4, 5];
+
+// Dodaje elementy na początek tablicy
+tab.unshift(-3, -1, -5);
+
+// Usuwa pierwszy element tablicy
+let firstEl = tab.shift();
+
+// Tworzy nową tablicę z sześcioma literami
+let data = ["a", "b", "c", "d", "e", "f"];
+
+// Usuwa 3 elementy zaczynając od indeksu 2 i zwraca usunięte elementy
+let res = data.splice(2, 3);
+
+// Wstawia nowe elementy zaczynając od indeksu 1, nie usuwając żadnych istniejących elementów
+data.splice(1, 0, "ola", 1, 2, 3, 4, 5);
+
+
+                                                /* DODAWANIE I USUWANIE ELEMENTOW */
+
+// Dodaje elementy na koniec tablicy
+tab.push(6);
+tab.push(7);
+
+// Usuwa ostatni element tablicy
+let element = tab.pop();
+
+
+                                                    /* ITERACJE PRZEZ TABLICE */
+
+// Iteruje przez tablicę używając pętli for
+for (let i = 0; i < tab.length; i++) {
+    const el = tab[i];
+    console.log(el);
+}
+
+// Iteruje przez tablicę używając pętli for...of
+for (let el of tab) {
+    console.log(el);
+}
+
+// Iteruje przez tablicę używając metody forEach
+tab.forEach(function(el, index, array) {
+    console.log(index + " " + el);
+});
+
+
+                                                    /* WYSZUKIWANIE ELEMENTOW */
+
+// Znajduje indeks pierwszego wystąpienia "ania"
+let pos = tab.indexOf("ania");
+
+// Znajduje indeks ostatniego wystąpienia "adam"
+pos = tab.lastIndexOf("adam");
+
+// Sprawdza, czy tablica zawiera dany element
+console.log(tab.includes("ania"));
+console.log(tab.includes("zbyszek"));
+
+
+                                                /* SORTOWANIE I ODWRACANIE TABLIC */
+
+// Sortuje tablicę alfabetycznie
+tab = tab.sort();
+
+// Odwraca kolejność elementów w tablicy
+tab = tab.reverse();
+
+// Sortuje tablicę numerycznie rosnąco
+tab = tab.sort(function(a, b) {
+    return a - b;
+});
+
+
+                                                /* ŁĄCZENIE MODYFIKACJA TABLIC */
+
+// Łączy aktualną tablicę z nową tablicą [10,11,12]
+tab = tab.concat([10, 11, 12]);
+
+// Łączy wszystkie elementy tablicy w jeden string, używając przecinka jako separatora
+let str = tab.join(',');
+
+// Odwraca kolejność elementów w tablicy
+tab = tab.reverse();
+
+
+                                                    /* PRACA Z OBIEKTAMI */
+
+// Tworzy nową tablicę o długości 7 (wszystkie elementy są undefined)
+tab = new Array(7);
+
+// Tworzy nową tablicę o długości 5 i wypełnia wszystkie elementy wartością 2
+tab = new Array(5).fill(2);
+
+
+                                                /* METODY MAP, FILTER, REDUCE, EVERY */
+
+// MAP
+
+let arr = ["Ola", "Ania", "Kasia", "Ola", "Asia", "Zuza"];
+
+// Użycie metody map, aby dodać "!" na końcu każdego imienia
+let newArr = arr.map(function (value, index, arr) {
+    return value + "!"; // Każda wartość w tablicy (np. "Ola") ma dodany znak "!" (np. "Ola!")
+});
+
+console.log(newArr); // Wyświetla nową tablicę: ["Ola!", "Ania!", "Kasia!", "Ola!", "Asia!", "Zuza!"]
+
+// Użycie skróconej funkcji strzałkowej (arrow function) do tego samego zadania
+newArr = arr.map((value) => value + "!");
+console.log(newArr); // Wynik jest taki sam: ["Ola!", "Ania!", "Kasia!", "Ola!", "Asia!", "Zuza!"]
+
+// Użycie metody map z wbudowaną funkcją Math.sqrt, która oblicza pierwiastek kwadratowy każdego elementu
+newArr = [1, 2, 3, 4, 5, 6, 7, 8].map(Math.sqrt);
+console.log(newArr); // Wynik: [1, 1.414, 1.732, 2, 2.236, 2.449, 2.646, 2.828]
+
+
+// FILTER
+
+// Użycie metody filter, aby wybrać imiona o długości większej lub równej 4 znaki
+let filtered = arr.filter(function (v) {
+    return v.length >= 4; // Sprawdza, czy długość imienia jest większa lub równa 4
+});
+
+console.log(filtered); // Wynik: ["Ola", "Ania", "Kasia", "Ola", "Asia", "Zuza"]
+
+
+// REDUCE
+
+// Użycie metody reduce do zsumowania wszystkich elementów tablicy
+let reduced = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10].reduce(function (acc, currValue) {
+    return acc + currValue; // Dodaje bieżącą wartość do akumulatora
+});
+
+console.log(reduced); // Wynik: 55 (suma wszystkich liczb w tablicy)
+
+
+// EVERY
+
+const arr2 = [1, 2, 3, 4, 5, 6, 7, 8];
+
+// Użycie metody every do sprawdzenia, czy wszystkie elementy są większe niż 0
+console.log(arr2.every(v => v > 0)); // true (wszystkie liczby są większe niż 0)
+
+// Użycie metody every do sprawdzenia, czy wszystkie elementy są większe niż 3
+console.log(arr2.every(v => v > 3)); // false (nie wszystkie liczby są większe niż 3)
+
+
+
+    </script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/prism.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/components/prism-javascript.min.js"></script>
+</body>
+</html>

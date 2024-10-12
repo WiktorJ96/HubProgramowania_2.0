@@ -1,0 +1,117 @@
+
+    <!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Obiekty i Metody na Obiektach w JavaScript</title>
+    <link rel="stylesheet" href="/JavaScript Teoria/styles.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/themes/prism-tomorrow.min.css" rel="stylesheet" />
+</head>
+<body>
+    <div class="container">
+        <h1>Obiekty i Metody na Obiektach w JavaScript</h1>
+        
+        <p>Obiekt w JavaScript to struktura danych, która pozwala przechowywać pary klucz-wartość. Obiekty są fundamentalną częścią języka, a ich zastosowanie obejmuje tworzenie bardziej zaawansowanych struktur, takich jak klasy, które później można wykorzystać do tworzenia instancji obiektów. Obiekty można dynamicznie rozszerzać, dodając nowe właściwości lub metody.</p>
+        
+        <h2>Tworzenie Obiektów</h2>
+        <pre><code class="language-javascript">
+        // Prosty obiekt z właściwościami
+        const person = {
+            name: "John",
+            age: 30,
+            city: "New York"
+        };
+
+        console.log(person.name); // 'John'
+        </code></pre>
+        <p>W powyższym przykładzie tworzymy prosty obiekt <code>person</code> z trzema właściwościami: <code>name</code>, <code>age</code> i <code>city</code>. Dostęp do tych właściwości uzyskujemy za pomocą notacji kropkowej.</p>
+
+        <h2>Dodawanie Metod do Obiektów</h2>
+        <pre><code class="language-javascript">
+        const person = {
+            name: "John",
+            age: 30,
+            greet: function() {
+                console.log("Hello, my name is " + this.name);
+            }
+        };
+
+        person.greet(); // 'Hello, my name is John'
+        </code></pre>
+        <p>Możemy dodać funkcje do obiektów, które stają się metodami tego obiektu. W powyższym przykładzie dodaliśmy metodę <code>greet</code>, która odwołuje się do właściwości <code>name</code> za pomocą słowa kluczowego <code>this</code>.</p>
+
+        <h2>Metody Wbudowane w Obiekty</h2>
+        <p>JavaScript dostarcza wiele wbudowanych metod dla obiektów, które ułatwiają pracę z nimi. Oto kilka popularnych metod:</p>
+        <ul>
+            <li><code>Object.keys(obj)</code> - Zwraca tablicę kluczy danego obiektu.</li>
+            <li><code>Object.values(obj)</code> - Zwraca tablicę wartości danego obiektu.</li>
+            <li><code>Object.entries(obj)</code> - Zwraca tablicę par [klucz, wartość] dla danego obiektu.</li>
+        </ul>
+        <pre><code class="language-javascript">
+        const person = {
+            name: "John",
+            age: 30,
+            city: "New York"
+        };
+
+        console.log(Object.keys(person));   // ['name', 'age', 'city']
+        console.log(Object.values(person)); // ['John', 30, 'New York']
+        console.log(Object.entries(person));// [['name', 'John'], ['age', 30], ['city', 'New York']]
+        </code></pre>
+        <p>Wbudowane metody takie jak <code>Object.keys</code>, <code>Object.values</code> i <code>Object.entries</code> pozwalają szybko uzyskać dostęp do kluczy, wartości i par klucz-wartość w obiekcie.</p>
+
+        <h2>Przykładowe Zastosowania</h2>
+        <p>Obiekty są często używane w JavaScript do reprezentowania rzeczywistych encji, takich jak użytkownicy, produkty, czy dane z formularzy. Dzięki dynamicznemu charakterowi obiektów możemy dodawać, usuwać lub modyfikować ich właściwości w trakcie działania programu.</p>
+
+        <pre><code class="language-javascript">
+        const car = {
+            brand: "Tesla",
+            model: "Model 3",
+            year: 2021,
+            start: function() {
+                console.log(this.brand + " " + this.model + " is starting...");
+            }
+        };
+
+        car.start(); // 'Tesla Model 3 is starting...'
+        </code></pre>
+        <p>W tym przykładzie obiekt <code>car</code> reprezentuje samochód z właściwościami i metodą <code>start</code>, która wypisuje komunikat o uruchomieniu samochodu.</p>
+    </div>
+    <script>
+        let phone = {
+            brand: "Apple",
+            model: "iPhone 12 Pro Max",
+            color: "Space Gray",
+            price: 1099,
+            screenSize: 6.1,
+            camera: {
+                primary: "12 MP",
+                secondary: "12 MP"
+            },
+            battery: {
+                type: "Li-Ion",
+                capacity: 3000
+            },
+            storage: {
+                internal: "512GB SSD",
+                external: "1TB HDD"
+            },
+            connect: function(contact){
+                console.log(`Your message:`, contact);
+            },
+            getInfo: function(){
+                console.log(this.brand, this.model, this.color, this.price, this.screenSize, this.camera, this.battery, this.storage); 
+                // odwoluje sie do elementow tego konkretnego obiektu
+            }
+        }
+
+        phone.getInfo()
+        phone.connect("Hello, how are you?")
+    </script>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/prism.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/components/prism-javascript.min.js"></script>
+</body>
+</body>
+</html>

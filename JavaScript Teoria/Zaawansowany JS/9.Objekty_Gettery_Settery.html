@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gettery i Settery w JavaScript</title>
+    <link rel="stylesheet" href="/JavaScript Teoria/styles.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/themes/prism-tomorrow.min.css" rel="stylesheet" />
+</head>
+<body>
+    <div class="container">
+        <h1>Gettery i Settery w JavaScript</h1>
+
+        <p>Gettery i settery w JavaScript to specjalne metody pozwalające kontrolować dostęp do właściwości obiektu. Zamiast bezpośredniego odczytu lub zapisu wartości, możemy korzystać z getterów, by pobrać wartość, oraz z setterów, aby tę wartość ustawić z dodatkową logiką, taką jak walidacja danych czy przetwarzanie wartości.</p>
+
+        <h2>Definiowanie gettera</h2>
+        <pre><code class="language-javascript">
+        const person = {
+            firstName: 'John',
+            lastName: 'Doe',
+            get fullName() {
+                return `${this.firstName} ${this.lastName}`;
+            }
+        };
+
+        console.log(person.fullName); // 'John Doe'
+        </code></pre>
+        <p>W tym przykładzie getter <code>fullName</code> zwraca połączone wartości <code>firstName</code> i <code>lastName</code>. Użycie gettera pozwala na wygodne pobranie wartości tej pochodnej właściwości bez konieczności wywoływania funkcji.</p>
+
+        <h2>Definiowanie settera</h2>
+        <pre><code class="language-javascript">
+        const person = {
+            firstName: 'John',
+            lastName: 'Doe',
+            set fullName(value) {
+                const parts = value.split(' ');
+                this.firstName = parts[0];
+                this.lastName = parts[1];
+            }
+        };
+
+        person.fullName = 'Jane Smith';
+        console.log(person.firstName); // 'Jane'
+        console.log(person.lastName);  // 'Smith'
+        </code></pre>
+        <p>Setter <code>fullName</code> w tym przykładzie pozwala ustawić zarówno <code>firstName</code>, jak i <code>lastName</code> za pomocą jednej operacji. Wartość przekazywana do settera jest dzielona na części, które są następnie przypisywane do odpowiednich właściwości obiektu.</p>
+
+        <h2>Kombinacja gettera i settera</h2>
+        <pre><code class="language-javascript">
+        const person = {
+            firstName: 'John',
+            lastName: 'Doe',
+            get fullName() {
+                return `${this.firstName} ${this.lastName}`;
+            },
+            set fullName(value) {
+                const parts = value.split(' ');
+                this.firstName = parts[0];
+                this.lastName = parts[1];
+            }
+        };
+
+        console.log(person.fullName);  // 'John Doe'
+        person.fullName = 'Jane Smith';
+        console.log(person.fullName);  // 'Jane Smith'
+        </code></pre>
+        <p>Możemy jednocześnie definiować zarówno getter, jak i setter dla tej samej właściwości, co pozwala kontrolować zarówno sposób odczytywania, jak i ustawiania wartości. W tym przykładzie mamy pełną kontrolę nad wartością <code>fullName</code>.</p>
+
+        <h2>Walidacja w setterze</h2>
+        <p>Settery mogą być również używane do walidacji danych przed zapisaniem wartości. Przykład poniżej pokazuje, jak możemy sprawdzić, czy przekazywana wartość jest poprawna:</p>
+        <pre><code class="language-javascript">
+        const person = {
+            ageValue: 30,
+            get age() {
+                return this.ageValue;
+            },
+            set age(value) {
+                if (typeof value === 'number' && value > 0) {
+                    this.ageValue = value;
+                } else {
+                    console.log('Podaj poprawny wiek.');
+                }
+            }
+        };
+
+        person.age = 35;
+        console.log(person.age);  // 35
+
+        person.age = -5;          // 'Podaj poprawny wiek.'
+        console.log(person.age);  // 35
+        </code></pre>
+        <p>W tym przykładzie setter <code>age</code> sprawdza, czy przekazywana wartość jest liczbą dodatnią. Jeśli nie, wyświetla komunikat o błędzie, a wartość nie jest aktualizowana.</p>
+
+        <h2>Zalety getterów i setterów</h2>
+        <ul>
+            <li>Kontrola nad dostępem do właściwości i możliwość dodania logiki (np. walidacji).</li>
+            <li>Możliwość używania właściwości pochodnych, które zależą od innych danych w obiekcie.</li>
+            <li>Poprawa czytelności kodu poprzez prostszy dostęp do danych, bez konieczności wywoływania metod.</li>
+        </ul>
+    </div>
+    <script>
+        const user = {
+            _name: null,  // zgodnie z konwencja zapisujemy przed nazwa wartosci '_'
+
+            set name(newValue){
+                //setter
+                if(newValue.length > 2){
+                    this._name = newValue;  // wartosc _name przechowuje teraz argument podany przy wywolywniu user.name 
+                } else {
+                    console.log("Nazwa musi mieć minimum 3 znaki");
+            }
+        },
+
+        get name(){
+            // getter
+            return this._name;
+        }
+    }
+
+    user.name = "John";
+    console.log(user.name); // Output: John
+    </script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/prism.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/components/prism-javascript.min.js"></script>
+</body>
+</html>

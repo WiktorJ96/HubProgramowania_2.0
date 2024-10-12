@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <script>
+        class Person {
+    // Definicja prywatnych pól za pomocą symbolu #
+    #name;
+    #age;
+
+    constructor(name, age) {
+        this.#name = name; // Przypisanie wartości do prywatnego pola #name
+        this.#age = age;   // Przypisanie wartości do prywatnego pola #age
+    }
+
+    // Metoda publiczna do odczytu prywatnego pola #name
+    getName() {
+        return this.#name;
+    }
+
+    // Metoda publiczna do ustawienia nowej wartości dla prywatnego pola #age
+    setAge(newAge) {
+        if (newAge > 0) {
+            this.#age = newAge;
+        } else {
+            console.log("Wiek musi być liczbą dodatnią.");
+        }
+    }
+
+    // Metoda publiczna do odczytu prywatnego pola #age
+    getAge() {
+        return this.#age;
+    }
+}
+
+// Tworzenie nowej instancji klasy Person
+const person = new Person("John", 30);
+
+// Próba dostępu do prywatnych pól z zewnątrz - nie zadziała
+console.log(person.name); // undefined
+console.log(person.age);  // undefined
+
+// Korzystanie z metod publicznych do dostępu do prywatnych pól
+console.log(person.getName()); // John
+console.log(person.getAge());  // 30
+
+// Zmiana wieku za pomocą publicznej metody
+person.setAge(35);
+console.log(person.getAge());  // 35
+
+// Próba ustawienia nieprawidłowej wartości wieku
+person.setAge(-5); // Wypisze: Wiek musi być liczbą dodatnią.
+
+    </script>
+</body>
+</html>

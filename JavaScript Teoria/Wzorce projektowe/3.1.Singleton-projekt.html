@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="../styles.css"> 
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/themes/prism-tomorrow.min.css" rel="stylesheet" />
+    <title>Logger - Wzorzec Singleton</title>
+</head>
+<body>
+    <div class="container">
+        <h1>Logger - Wzorzec Singleton</h1>
+        <button id="logBtn">Dodaj log</button>
+        <div id="log-container"></div>
+
+        <h2>Kod HTML i JavaScript:</h2>
+        <pre><code class="language-html">
+        &lt;h1&gt;Logger - Wzorzec Singleton&lt;/h1&gt;
+        &lt;button id="logBtn"&gt;Dodaj log&lt;/button&gt;
+        &lt;div id="log-container"&gt;&lt;/div&gt;
+
+        &lt;script&gt;
+        class Logger {
+            constructor() {
+                if (Logger.instance) {
+                    return Logger.instance;
+                }
+                this.logs = [];
+                Logger.instance = this;
+            }
+
+            addLog(message) {
+                const timestamp = new Date().toLocaleTimeString();
+                this.logs.push(`[${timestamp}] ${message}`);
+                this.displayLogs();
+            }
+
+            displayLogs() {
+                const logContainer = document.getElementById('log-container');
+                logContainer.innerHTML = '';
+                this.logs.forEach(log => {
+                    const logElement = document.createElement('p');
+                    logElement.textContent = log;
+                    logContainer.appendChild(logElement);
+                });
+            }
+        }
+
+        const logger = new Logger();
+
+        document.getElementById('logBtn').addEventListener('click', () => {
+            logger.addLog('Nowy log został dodany.');
+        });
+        &lt;/script&gt;
+        </code></pre>
+    </div>
+
+    <script>
+        // Wzorzec Singleton dla Loggera
+        class Logger {
+            constructor() {
+                if (Logger.instance) {
+                    return Logger.instance; // Zwracamy istniejącą instancję, jeśli została już utworzona
+                }
+                this.logs = []; // Lista logów
+                Logger.instance = this; // Zapisujemy instancję
+            }
+
+            // Dodaje nowy log
+            addLog(message) {
+                const timestamp = new Date().toLocaleTimeString();
+                this.logs.push(`[${timestamp}] ${message}`);
+                this.displayLogs(); // Wyświetla logi na stronie
+            }
+
+            // Wyświetla wszystkie logi na stronie
+            displayLogs() {
+                const logContainer = document.getElementById('log-container');
+                logContainer.innerHTML = ''; // Czyszczenie kontenera
+                this.logs.forEach(log => {
+                    const logElement = document.createElement('p');
+                    logElement.textContent = log; // Tworzenie elementu dla każdego logu
+                    logContainer.appendChild(logElement);
+                });
+            }
+        }
+
+        // Inicjalizacja Singletona
+        const logger = new Logger();
+
+        // Obsługa przycisku "Dodaj log"
+        document.getElementById('logBtn').addEventListener('click', () => {
+            logger.addLog('Nowy log został dodany.'); // Dodanie nowego logu do Loggera
+        });
+    </script>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/prism.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/components/prism-javascript.min.js"></script>
+</body>
+</html>

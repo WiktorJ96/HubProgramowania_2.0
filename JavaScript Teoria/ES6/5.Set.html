@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <script>
+        // Tworzymy nowy zbiór (Set) o nazwie set1
+const set1 = new Set();
+
+// Dodajemy różne wartości do zbioru set1
+set1.add(2);         // Dodajemy liczbę 2
+set1.add('anana');    // Dodajemy ciąg znaków 'anana'
+set1.add(NaN);        // Dodajemy wartość NaN (Not-a-Number)
+set1.add({a: 10});    // Dodajemy obiekt {a: 10}
+
+// Usuwamy wartość 2 ze zbioru set1
+set1.delete(2);
+
+// Sprawdzamy, czy zbiór zawiera wartość 'anana'
+console.log(set1.has('anana'));  // Wynik: true, ponieważ 'anana' jest w zbiorze
+
+// Wyświetlamy rozmiar zbioru set1 (ilość elementów)
+console.log(set1.size);  // Wynik: 3, ponieważ pozostały trzy elementy w zbiorze: 'anana', NaN, {a: 10}
+
+// Iterujemy przez wszystkie elementy zbioru set1 i wyświetlamy je
+for (const nowa of set1) {
+    console.log(nowa); // Wypisze: 'anana', NaN, {a: 10} (w dowolnej kolejności)
+}
+
+// Tworzymy nową tablicę arr i kopiujemy elementy ze zbioru set1 do nowej tablicy arr2
+const arr = new Array();  // Tworzymy pustą tablicę arr (nieużywaną w kodzie)
+let arr2 = [...set1];     // Tworzymy nową tablicę arr2, która zawiera wszystkie elementy ze zbioru set1
+console.log(arr2);        // Wyświetlamy zawartość arr2: ['anana', NaN, {a: 10}]
+
+// Tworzymy nowy zbiór set2, który zawiera elementy ze zbioru set1 oraz dodatkowe wartości
+const set2 = new Set([...set1, 10, 20, 3, {}, true]); 
+// Zbiór set2 będzie zawierał elementy z set1 ('anana', NaN, {a: 10}) oraz dodatkowo liczby 10, 20, 3, nowy pusty obiekt {} oraz wartość logiczną true
+console.log(set2);  // Wyświetlamy zawartość set2: ['anana', NaN, {a: 10}, 10, 20, 3, {}, true]
+
+    </script>
+</body>
+</html>

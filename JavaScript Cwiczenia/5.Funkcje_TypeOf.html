@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <script>
+        function createUser(name, contact){
+            let user = {
+                name: name,
+                // mozna tez przypisac wlasciwosci email i phone i dac i wartosc null
+            }
+          
+            if (typeof contact === "string") {
+               
+                user.email = contact 
+
+            } else if (typeof contact === "number") {
+               
+                user.phone = contact;
+            }
+
+
+            return user;
+        }
+
+        console.log(createUser("Ola","ola@example.com"))
+        console.log(createUser("Janek",987654321))
+    </script>
+</body>
+</html>

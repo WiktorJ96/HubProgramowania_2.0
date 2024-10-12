@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    
+    <script>
+const user = {name: 'John', city: 'Albuquerque'}; 
+// Tworzy obiekt 'user' z dwoma właściwościami: 'name' o wartości 'John' i 'city' o wartości 'Albuquerque'.
+
+const txt = `Hello ${user.name} from ${user.city} ${2+2}`;
+// Tworzy zmienną 'txt' za pomocą template string (szablonowego łańcucha tekstowego).
+// Używa interpolacji, by wstawić wartości 'user.name' i 'user.city', a także wynik wyrażenia 2+2.
+
+console.log(txt); // Output: Hello John from Albuquerque 4
+// Wypisuje tekst: "Hello John from Albuquerque 4". Zmienna 'txt' łączy statyczny tekst z dynamicznymi wartościami.
+
+function uppercase(strings, ...values) {
+    // Funkcja 'uppercase' przyjmuje parametry: 'strings' (tablica statycznych fragmentów tekstu)
+    // oraz '...values' (reszta parametrów, czyli dynamiczne wartości).
+    console.log(strings); 
+    // Wypisuje tablicę statycznych fragmentów tekstu.
+    console.log(values); 
+    // Wypisuje tablicę dynamicznych wartości.
+
+    let result = ""; 
+    // Tworzy pusty łańcuch tekstowy, który będzie zawierał finalny wynik.
+
+    for (let i = 0; i < strings.length; i++) { 
+        // Pętla iteruje po tablicy 'strings' (statycznych części tekstu).
+        result += strings[i]; 
+        // Do zmiennej 'result' dodawana jest kolejna część statyczna tekstu.
+        if (i < values.length) { 
+            // Sprawdza, czy w tej iteracji istnieje dynamiczna wartość do dodania (czyli, czy 'i' jest mniejsze od liczby dynamicznych wartości).
+            let v = values[i]; 
+            // Pobiera aktualną dynamiczną wartość.
+            if (typeof v === "string") v = v.toUpperCase(); 
+            // Jeśli dynamiczna wartość jest łańcuchem tekstowym, zamienia ją na wielkie litery.
+            result += v; 
+            // Dodaje dynamiczną wartość (lub jej wersję z wielkimi literami) do zmiennej 'result'.
+        }
+    }
+    return result; 
+    // Zwraca finalny połączony wynik (statyczne i dynamiczne fragmenty).
+}
+
+const txt2 = uppercase`Hello ${user.name} from ${user.city} ${2+2}`;
+// Wywołuje funkcję 'uppercase' z template stringiem. Statyczne fragmenty są przekazywane jako 'strings',
+// a dynamiczne wartości (user.name, user.city, 2+2) są przekazywane jako 'values'.
+
+console.log(txt2); 
+// Wypisuje wynik działania funkcji 'uppercase', który przetworzył tekst, 
+// zmieniając dynamiczne łańcuchy tekstowe na wielkie litery.
+// Output: "Hello JOHN from ALBUQUERQUE 4"
+
+const text = "Hello World";
+// Tworzy zmienną 'text' o wartości "Hello World".
+
+console.log(text.includes("World")); 
+// Sprawdza, czy w zmiennej 'text' znajduje się ciąg znaków "World".
+// Wypisuje wartość 'true', ponieważ ciąg "World" znajduje się w 'text'.
+
+    </script>
+</body>
+</html>

@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Funkcje i wyrażenia funkcyjne w JavaScript</title>
+    <link rel="stylesheet" href="../styles.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/themes/prism-tomorrow.min.css" rel="stylesheet" />
+</head>
+<body>
+    <div class="container">
+        <h1>Funkcje i Wyrażenia Funkcyjne w JavaScript</h1>
+
+        <p>Funkcje w JavaScript mogą być tworzone nie tylko jako deklaracje, ale także jako wyrażenia. Wyrażenia funkcyjne to funkcje przypisywane do zmiennych, które mogą być anonimowe (bez nazwy) lub nazwane. Pozwalają na bardziej dynamiczne operacje na funkcjach i są często wykorzystywane w programowaniu funkcyjnym.</p>
+
+        <h2>Wyrażenia funkcyjne</h2>
+        <p>Wyrażenia funkcyjne to funkcje, które są definiowane w miejscu i przypisywane do zmiennej. W przeciwieństwie do funkcji zadeklarowanych za pomocą słowa kluczowego <code>function</code>, wyrażenia funkcyjne nie muszą mieć nazwy i są często używane do tworzenia funkcji anonimowych.</p>
+
+        <h3>Przykład wyrażenia funkcyjnego</h3>
+        <pre><code class="language-javascript">
+// Tworzenie funkcji jako wyrażenia funkcyjnego
+const greet = function(name) {
+    return 'Cześć, ' + name + '!';
+};
+
+console.log(greet('Kasia')); // Cześć, Kasia!
+        </code></pre>
+        <p>W powyższym przykładzie funkcja jest przypisana do zmiennej <code>greet</code>. Zamiast deklaracji funkcji, mamy wyrażenie funkcyjne, które tworzy funkcję i przypisuje ją do zmiennej.</p>
+
+        <h2>Anonimowe wyrażenia funkcyjne</h2>
+        <p>Wyrażenia funkcyjne mogą być anonimowe, co oznacza, że funkcja nie ma nazwy. Anonimowe wyrażenia funkcyjne są szczególnie przydatne, gdy chcemy przekazać funkcję jako argument do innej funkcji.</p>
+
+        <h3>Przykład anonimowego wyrażenia funkcyjnego</h3>
+        <pre><code class="language-javascript">
+setTimeout(function() {
+    console.log('To jest anonimowa funkcja!');
+}, 1000);
+        </code></pre>
+        <p>Funkcja w powyższym przykładzie jest anonimowa, ponieważ nie ma nazwy. Jest przekazywana jako argument do funkcji <code>setTimeout</code>, która wywołuje ją po 1 sekundzie.</p>
+
+        <h2>Różnica między deklaracją funkcji a wyrażeniem funkcyjnym</h2>
+        <p>Główna różnica między deklaracją funkcji a wyrażeniem funkcyjnym polega na tym, jak te funkcje są hoistowane. Funkcje zadeklarowane za pomocą <code>function</code> są hoistowane, co oznacza, że mogą być wywoływane przed ich deklaracją w kodzie. Wyrażenia funkcyjne nie są hoistowane, więc muszą być zadeklarowane przed ich użyciem.</p>
+
+        <h3>Przykład hoistingu</h3>
+        <pre><code class="language-javascript">
+// Deklaracja funkcji - działa nawet przed deklaracją
+console.log(sayHello('Jan')); // Cześć, Jan!
+
+function sayHello(name) {
+    return 'Cześć, ' + name + '!';
+}
+
+// Wyrażenie funkcyjne - nie zadziała przed deklaracją
+console.log(sayGoodbye('Ania')); // Błąd: Cannot access 'sayGoodbye' before initialization
+
+const sayGoodbye = function(name) {
+    return 'Do widzenia, ' + name + '!';
+};
+        </code></pre>
+        <p>W powyższym przykładzie funkcja <code>sayHello</code> może być wywoływana przed jej deklaracją, ponieważ jest hoistowana. Natomiast wyrażenie funkcyjne <code>sayGoodbye</code> nie jest hoistowane, więc musi być zadeklarowane przed użyciem.</p>
+
+        <h2>Wyrażenia funkcyjne nazwane</h2>
+        <p>Wyrażenia funkcyjne mogą mieć nazwę, co może być przydatne podczas debugowania lub w rekurencji.</p>
+
+        <h3>Przykład nazwanych wyrażeń funkcyjnych</h3>
+        <pre><code class="language-javascript">
+const factorial = function fact(n) {
+    if (n <= 1) return 1;
+    return n * fact(n - 1); // Rekurencja z użyciem nazwy funkcji
+};
+
+console.log(factorial(5)); // 120
+        </code></pre>
+        <p>W tym przykładzie funkcja <code>fact</code> jest wyrażeniem funkcyjnym nazwanym. Umożliwia to rekurencyjne wywoływanie funkcji w jej własnym ciele.</p>
+
+        <h2>Podsumowanie</h2>
+        <ul>
+            <li>Wyrażenia funkcyjne pozwalają na przypisywanie funkcji do zmiennych lub przekazywanie ich jako argumenty do innych funkcji.</li>
+            <li>Funkcje anonimowe nie mają nazwy i są często używane w sytuacjach, gdzie funkcja jest przekazywana jako argument.</li>
+            <li>W przeciwieństwie do deklaracji funkcji, wyrażenia funkcyjne nie są hoistowane, więc muszą być zadeklarowane przed użyciem.</li>
+            <li>Wyrażenia funkcyjne mogą być nazwane, co jest przydatne w rekurencji i debugowaniu.</li>
+        </ul>
+
+    </div>
+    <script>
+        let foo = function(a, b) {
+            return a + b;
+        }
+
+        console.log(foo(5, 10));
+
+        let foo2 = function(a, b) {
+            return a - b;
+        }
+        console.log(foo2(5, 10));
+    </script>
+            <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/prism.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/components/prism-javascript.min.js"></script>
+</body>
+</html>

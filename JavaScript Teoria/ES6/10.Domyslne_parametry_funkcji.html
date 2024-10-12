@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    
+
+    <script>
+function test1 (v) {
+    // Funkcja test1 przyjmuje jeden argument 'v'.
+    // Sprawdza, czy typ 'v' jest 'undefined' (czy argument nie został przekazany).
+    if (typeof v == 'undefined') {
+        v = 23; // Jeśli 'v' jest niezdefiniowane, przypisuje wartość 23.
+        console.log(v); // Wypisuje wartość 'v', czyli 23.
+    }
+}
+
+test1(); // Wywołuje test1 bez argumentu, więc 'v' będzie undefined i wyświetli się 23.
+
+function test2(a, b = 44, c = {test: "text"}) {
+    // Funkcja test2 przyjmuje trzy argumenty: 'a', 'b' (domyślnie 44), i 'c' (domyślnie obiekt z kluczem 'test' o wartości 'text').
+    console.log(a, b, c); // Wypisuje wartości argumentów 'a', 'b' i 'c'.
+}
+
+test2(10); // Wywołuje test2 z 'a' równym 10, 'b' pozostaje domyślne 44, 'c' domyślnie {test: "text"}.
+test2(5, 77); // Wywołuje test2 z 'a' równym 5, 'b' równym 77, 'c' domyślnie {test: "text"}.
+
+function test3([a=1, b=2]) {
+    // Funkcja test3 przyjmuje tablicę z dwoma elementami. 
+    // Jeśli elementy nie są podane, 'a' domyślnie wynosi 1, a 'b' domyślnie 2.
+    console.log(a, b); // Wypisuje wartości 'a' i 'b'.
+}
+
+test3([10, 99]); // Przekazuje tablicę [10, 99], więc 'a' to 10, a 'b' to 99.
+test3([]); // Przekazuje pustą tablicę, więc 'a' i 'b' przyjmują domyślne wartości 1 i 2.
+test3(); // Brak argumentu powoduje błąd, ponieważ funkcja spodziewa się tablicy.
+
+function test3([a=1, b=2] = [500, 1000]) {
+    // Poprawiona funkcja test3 z domyślną wartością całej tablicy [500, 1000].
+    // Jeśli funkcja nie otrzyma argumentu, użyje tej tablicy.
+    console.log(a, b); // Wypisuje wartości 'a' i 'b'.
+}
+
+test3(); // Brak argumentu oznacza użycie domyślnej tablicy [500, 1000], więc 'a' to 500, a 'b' to 1000.
+
+function test5([a=1, b=2] = [500, 1000]) {
+    // Funkcja test5 działa jak test3, ale wypisuje inne wartości przy wywołaniu bez argumentów.
+    console.log(a, b); // Wypisuje wartości 'a' i 'b'.
+}
+
+test5(); // Brak argumentu oznacza użycie tablicy [500, 1000], ale 'b' ma domyślną wartość 2, więc 'a' to 500, a 'b' to 2.
+
+function test6({a=1, b=2}) {
+    // Funkcja test6 przyjmuje obiekt z kluczami 'a' i 'b'.
+    // 'a' i 'b' mają domyślne wartości odpowiednio 1 i 2, jeśli nie są przekazane w obiekcie.
+    console.log(a, b, c); // Wypisuje wartości 'a', 'b', ale 'c' nie jest zdefiniowane tutaj.
+}
+
+test6({a: 10, b: 99, c: 200}); // Przekazuje obiekt {a: 10, b: 99, c: 200}, ale 'c' nie zostanie poprawnie obsłużone, bo nie jest w strukturze argumentów funkcji.
+test6({a: 10}); // 'a' wynosi 10, 'b' ma domyślną wartość 2.
+test6(); // Błąd, bo brak argumentu, a funkcja nie obsługuje niezdefiniowanego obiektu.
+
+    </script>
+</body>
+</html>

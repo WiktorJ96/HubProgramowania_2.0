@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Wzorzec projektowy Factory w JavaScript</title>
+    <link rel="stylesheet" href="../styles.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/themes/prism-tomorrow.min.css" rel="stylesheet" />
+</head>
+<body>
+    <div class="container">
+        <h1>Wzorzec Projektowy Factory w JavaScript</h1>
+
+        <p>Wzorzec **Factory** jest używany do tworzenia obiektów bez konieczności znajomości ich dokładnej klasy. Pozwala to na uproszczenie procesu tworzenia obiektów w złożonych systemach oraz na bardziej dynamiczne podejście do tworzenia obiektów zależnie od kontekstu.</p>
+
+        <h2>Jak działa wzorzec Factory?</h2>
+        <p>Wzorzec Factory dostarcza metodę, która tworzy i zwraca nowe obiekty na podstawie podanych parametrów. Zamiast bezpośrednio używać konstruktora, metoda fabryczna decyduje, jaki rodzaj obiektu zostanie utworzony, na podstawie logiki, która może być zawarta w funkcji fabrycznej.</p>
+
+        <h3>Przykład implementacji Factory</h3>
+        <pre><code class="language-javascript">
+function CarFactory() {
+    this.createCar = function(type) {
+        let car;
+
+        if (type === "sedan") {
+            car = new Sedan();
+        } else if (type === "suv") {
+            car = new SUV();
+        }
+
+        car.type = type;
+
+        car.drive = function() {
+            console.log(`Jadę moim ${this.type}`);
+        };
+
+        return car;
+    };
+}
+
+function Sedan() {
+    this.doors = 4;
+}
+
+function SUV() {
+    this.doors = 5;
+}
+
+// Tworzenie fabryki
+const factory = new CarFactory();
+
+const sedan = factory.createCar("sedan");
+const suv = factory.createCar("suv");
+
+sedan.drive(); // "Jadę moim sedan"
+suv.drive(); // "Jadę moim suv"
+        </code></pre>
+        <p>W powyższym przykładzie, klasa <code>CarFactory</code> zawiera metodę <code>createCar</code>, która na podstawie przekazanego typu obiektu (np. <code>sedan</code> lub <code>suv</code>) tworzy odpowiednią instancję obiektu. Funkcja fabryczna decyduje, jaki rodzaj obiektu zostanie utworzony.</p>
+
+        <h2>Zalety wzorca Factory</h2>
+        <ul>
+            <li>Rozdzielenie procesu tworzenia obiektów od ich klas – nie musimy znać szczegółów implementacji klasy, aby stworzyć jej instancję.</li>
+            <li>Możliwość dynamicznego tworzenia obiektów na podstawie warunków lub parametrów.</li>
+            <li>Łatwość w rozszerzaniu systemu o nowe typy obiektów, poprzez dodanie nowych klas bez zmiany logiki tworzenia obiektów.</li>
+        </ul>
+
+        <h2>Wzorzec Factory w ES6 z użyciem klas</h2>
+        <p>W nowszych wersjach JavaScript, wzorzec Factory może być implementowany przy użyciu klas ES6. Jest to bardziej zorganizowany sposób na strukturyzowanie kodu.</p>
+
+        <h3>Przykład Factory z klasami ES6</h3>
+        <pre><code class="language-javascript">
+class Car {
+    constructor(type) {
+        this.type = type;
+    }
+
+    drive() {
+        console.log(`Jadę moim ${this.type}`);
+    }
+}
+
+class Sedan extends Car {
+    constructor() {
+        super("sedan");
+        this.doors = 4;
+    }
+}
+
+class SUV extends Car {
+    constructor() {
+        super("suv");
+        this.doors = 5;
+    }
+}
+
+class CarFactory {
+    createCar(type) {
+        if (type === "sedan") {
+            return new Sedan();
+        } else if (type === "suv") {
+            return new SUV();
+        }
+    }
+}
+
+const factory = new CarFactory();
+const mySedan = factory.createCar("sedan");
+mySedan.drive(); // Jadę moim sedan
+        </code></pre>
+
+        <h2>Gdzie używać wzorca Factory?</h2>
+        <p>Wzorzec Factory jest szczególnie przydatny, gdy mamy do czynienia z różnymi typami obiektów, ale nie chcemy bezpośrednio manipulować ich konstrukcją. Przykładami mogą być systemy zarządzania zamówieniami, systemy pojazdów, czy aplikacje, które obsługują wiele rodzajów produktów.</p>
+
+        <h2>Podsumowanie</h2>
+        <ul>
+            <li>Wzorzec Factory umożliwia dynamiczne tworzenie obiektów na podstawie przekazanych parametrów lub warunków.</li>
+            <li>Zapewnia elastyczność w zarządzaniu obiektami i ułatwia rozszerzanie systemów o nowe typy obiektów.</li>
+            <li>Można go używać zarówno w starszym stylu za pomocą funkcji, jak i w nowszym, używając klas ES6.</li>
+        </ul>
+        <a href="./5.1.Factory-projekt.html"><button>Przykładowy projekt</button></a>
+    </div>
+    <script>
+        // Definicja konstruktora Car
+function Car(brand, model) {
+  this.brand = brand;
+  this.model = model;
+  this.type = 'Car';
+}
+
+// Definicja konstruktora Bike
+function Bike(brand, model) {
+  this.brand = brand;
+  this.model = model;
+  this.type = 'Bike';
+}
+
+// Fabryka tworząca pojazdy
+function VehicleFactory() {
+  this.createVehicle = function(type, brand, model) {
+    switch (type) {
+      case 'car':
+        return new Car(brand, model);
+      case 'bike':
+        return new Bike(brand, model);
+      default:
+        return null;
+    }
+  };
+}
+
+// Tworzenie instancji fabryki
+const factory = new VehicleFactory();
+
+// Tworzenie różnych pojazdów za pomocą fabryki
+const car = factory.createVehicle('car', 'Toyota', 'Corolla');
+const bike = factory.createVehicle('bike', 'Yamaha', 'MT-07');
+
+// Wyświetlanie wyników
+console.log(car);  // Wyświetli: Car { brand: 'Toyota', model: 'Corolla', type: 'Car' }
+console.log(bike); // Wyświetli: Bike { brand: 'Yamaha', model: 'MT-07', type: 'Bike' }
+
+    </script>
+       <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/prism.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/components/prism-javascript.min.js"></script>
+</body>
+</html>
