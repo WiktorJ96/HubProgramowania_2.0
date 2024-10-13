@@ -1,5 +1,0 @@
-Chain of Responsibility (Łańcuch zobowiązań) – przekazuje żądanie przez ciąg obiektów, aż któryś z nich obsłuży to żądanie.
-Command (Polecenie) – pozwala zamknąć żądanie w obiekcie jako polecenie, które można później wykonać, co umożliwia operacje typu undo/redo.
-Iterator (Iterator) – umożliwia sekwencyjne przetwarzanie elementów kolekcji bez ujawniania wewnętrznej struktury tej kolekcji.
-Observer (Obserwator) – definiuje mechanizm powiadamiania obiektów o zmianach stanu innego obiektu.
-Strategy (Strategia) – pozwala zdefiniować rodzinę algorytmów i umożliwia wybór jednego z nich podczas działania programu.

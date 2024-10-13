@@ -1,0 +1,210 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="../styles.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/themes/prism-tomorrow.min.css" rel="stylesheet" />
+    <title>System Weryfikacji Płatności - Wzorzec Chain of Responsibility</title>
+</head>
+<body>
+    <div class="container">
+        <h1>System Weryfikacji Płatności - Wzorzec Chain of Responsibility</h1>
+        <div>
+            <label for="amount">Kwota płatności:</label>
+            <input type="number" id="amount" value="100">
+            <button id="processPaymentBtn">Przetwórz płatność</button>
+        </div>
+        <p id="paymentStatus"></p>
+
+        <h2>Kod HTML i JavaScript:</h2>
+        <pre><code class="language-html">
+        &lt;h1&gt;System Weryfikacji Płatności - Wzorzec Chain of Responsibility&lt;/h1&gt;
+        &lt;div&gt;
+            &lt;label for="amount"&gt;Kwota płatności:&lt;/label&gt;
+            &lt;input type="number" id="amount" value="100"&gt;
+            &lt;button id="processPaymentBtn"&gt;Przetwórz płatność&lt;/button&gt;
+        &lt;/div&gt;
+        &lt;p id="paymentStatus"&gt;&lt;/p&gt;
+
+        &lt;script&gt;
+// Klasa abstrakcyjna dla wszystkich procesorów płatności
+class PaymentProcessor {
+    constructor() {
+        this.nextProcessor = null;  // Następny procesor w łańcuchu
+    }
+
+    // Ustawienie następnego procesora płatności
+    setNextProcessor(processor) {
+        this.nextProcessor = processor;
+        return processor;  // Umożliwia łańcuchowe ustawianie procesorów
+    }
+
+    // Metoda przetwarzania płatności
+    process(amount) {
+        if (this.nextProcessor) {
+            return this.nextProcessor.process(amount);  // Przekazanie żądania do następnego procesora
+        }
+        return "Płatność nie została przetworzona.";  // Domyślna wiadomość, jeśli nie ma dalszego przetwarzania
+    }
+}
+
+// Procesor sprawdzający saldo użytkownika
+class BalanceChecker extends PaymentProcessor {
+    constructor(userBalance) {
+        super();
+        this.userBalance = userBalance;  // Ustawienie salda użytkownika
+    }
+
+    process(amount) {
+        if (amount <= this.userBalance) {
+            return super.process(amount);  // Przekazanie do następnego procesora, jeśli saldo jest wystarczające
+        } else {
+            return `Błąd: Niewystarczające środki na koncie.`;  // Błąd, jeśli saldo jest niewystarczające
+        }
+    }
+}
+
+// Procesor sprawdzający dzienny limit płatności
+class DailyLimitChecker extends PaymentProcessor {
+    constructor(dailyLimit) {
+        super();
+        this.dailyLimit = dailyLimit;  // Ustawienie dziennego limitu płatności
+    }
+
+    process(amount) {
+        if (amount <= this.dailyLimit) {
+            return super.process(amount);  // Przekazanie do następnego procesora, jeśli limit nie został przekroczony
+        } else {
+            return `Błąd: Przekroczono dzienny limit płatności.`;  // Błąd, jeśli limit został przekroczony
+        }
+    }
+}
+
+// Procesor sprawdzający poprawność danych karty
+class CardValidator extends PaymentProcessor {
+    constructor(cardValid) {
+        super();
+        this.cardValid = cardValid;  // Sprawdzenie, czy karta jest ważna
+    }
+
+    process(amount) {
+        if (this.cardValid) {
+            return `Sukces: Płatność w wysokości ${amount} PLN została przetworzona.`;  // Sukces, jeśli karta jest poprawna
+        } else {
+            return `Błąd: Nieprawidłowe dane karty.`;  // Błąd, jeśli karta jest nieprawidłowa
+        }
+    }
+}
+
+// Obsługa kliknięcia przycisku płatności
+document.getElementById('processPaymentBtn').addEventListener('click', () => {
+    const amount = parseFloat(document.getElementById('amount').value);  // Pobranie kwoty z inputu
+
+    // Tworzenie procesorów płatności
+    const balanceChecker = new BalanceChecker(500);  // Użytkownik ma 500 PLN
+    const dailyLimitChecker = new DailyLimitChecker(300);  // Limit dzienny to 300 PLN
+    const cardValidator = new CardValidator(true);  // Karta jest prawidłowa
+
+    // Ustawienie łańcucha odpowiedzialności
+    balanceChecker.setNextProcessor(dailyLimitChecker).setNextProcessor(cardValidator);
+
+    // Uruchomienie procesu płatności
+    const paymentStatus = balanceChecker.process(amount);  // Przetwarzanie płatności
+    document.getElementById('paymentStatus').textContent = paymentStatus;  // Wyświetlanie wyniku płatności
+});
+
+        &lt;/script&gt;
+        </code></pre>
+    </div>
+
+    <script>
+        // Klasa abstrakcyjna dla wszystkich procesorów płatności
+        class PaymentProcessor {
+            constructor() {
+                this.nextProcessor = null;
+            }
+
+            setNextProcessor(processor) {
+                this.nextProcessor = processor;
+                return processor; // Umożliwia łańcuchowe ustawianie procesorów
+            }
+
+            process(amount) {
+                if (this.nextProcessor) {
+                    return this.nextProcessor.process(amount); // Przekazanie żądania do następnego procesora
+                }
+                return "Płatność nie została przetworzona.";
+            }
+        }
+
+        // Procesor sprawdzający saldo użytkownika
+        class BalanceChecker extends PaymentProcessor {
+            constructor(userBalance) {
+                super();
+                this.userBalance = userBalance;
+            }
+
+            process(amount) {
+                if (amount <= this.userBalance) {
+                    return super.process(amount); // Przekazanie do następnego procesora
+                } else {
+                    return `Błąd: Niewystarczające środki na koncie.`;
+                }
+            }
+        }
+
+        // Procesor sprawdzający dzienny limit płatności
+        class DailyLimitChecker extends PaymentProcessor {
+            constructor(dailyLimit) {
+                super();
+                this.dailyLimit = dailyLimit;
+            }
+
+            process(amount) {
+                if (amount <= this.dailyLimit) {
+                    return super.process(amount); // Przekazanie do następnego procesora
+                } else {
+                    return `Błąd: Przekroczono dzienny limit płatności.`;
+                }
+            }
+        }
+
+        // Procesor sprawdzający poprawność danych karty
+        class CardValidator extends PaymentProcessor {
+            constructor(cardValid) {
+                super();
+                this.cardValid = cardValid;
+            }
+
+            process(amount) {
+                if (this.cardValid) {
+                    return `Sukces: Płatność w wysokości ${amount} PLN została przetworzona.`;
+                } else {
+                    return `Błąd: Nieprawidłowe dane karty.`;
+                }
+            }
+        }
+
+        // Obsługa przycisku "Przetwórz płatność"
+        document.getElementById('processPaymentBtn').addEventListener('click', () => {
+            const amount = parseFloat(document.getElementById('amount').value);
+
+            // Tworzymy procesory płatności
+            const balanceChecker = new BalanceChecker(500); // Użytkownik ma 500 PLN
+            const dailyLimitChecker = new DailyLimitChecker(300); // Limit dzienny to 300 PLN
+            const cardValidator = new CardValidator(true); // Karta jest prawidłowa
+
+            // Ustawienie łańcucha odpowiedzialności
+            balanceChecker.setNextProcessor(dailyLimitChecker).setNextProcessor(cardValidator);
+
+            // Uruchomienie procesu płatności
+            const paymentStatus = balanceChecker.process(amount);
+            document.getElementById('paymentStatus').textContent = paymentStatus; // Wyświetlanie wyniku
+        });
+    </script>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/prism.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/components/prism-javascript.min.js"></script>
+</body>
+</html>

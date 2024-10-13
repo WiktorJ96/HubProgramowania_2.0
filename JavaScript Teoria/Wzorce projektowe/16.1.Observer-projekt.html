@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="../styles.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/themes/prism-tomorrow.min.css" rel="stylesheet" />
+    <title>System Pogodowy - Wzorzec Observer</title>
+</head>
+<body>
+    <div class="container">
+        <h1>System Pogodowy - Wzorzec Observer</h1>
+        <div>
+            <button id="updateWeatherBtn">Aktualizuj pogodę</button>
+            <button id="subscribeBtn">Dodaj subskrybenta</button>
+            <button id="unsubscribeBtn">Usuń subskrybenta</button>
+        </div>
+        <ul id="weatherUpdates"></ul>
+
+        <h2>Kod HTML i JavaScript:</h2>
+        <pre><code class="language-html">
+        &lt;h1&gt;System Pogodowy - Wzorzec Observer&lt;/h1&gt;
+        &lt;div&gt;
+            &lt;button id="updateWeatherBtn"&gt;Aktualizuj pogodę&lt;/button&gt;
+            &lt;button id="subscribeBtn"&gt;Dodaj subskrybenta&lt;/button&gt;
+            &lt;button id="unsubscribeBtn"&gt;Usuń subskrybenta&lt;/button&gt;
+        &lt;/div&gt;
+        &lt;ul id="weatherUpdates"&gt;&lt;/ul&gt;
+
+        &lt;script&gt;
+// Klasa Subject (Podmiot) - stacja pogodowa
+class WeatherStation {
+    constructor() {
+        this.observers = [];  // Lista obserwatorów
+        this.temperature = 20;  // Początkowa temperatura
+        this.humidity = 50;  // Początkowa wilgotność
+    }
+
+    // Dodaj obserwatora
+    addObserver(observer) {
+        this.observers.push(observer);  // Dodaje obserwatora do listy
+    }
+
+    // Usuń obserwatora
+    removeObserver(observer) {
+        this.observers = this.observers.filter(obs => obs !== observer);  // Usuwa obserwatora z listy
+    }
+
+    // Powiadom wszystkich obserwatorów o zmianach
+    notifyObservers() {
+        this.observers.forEach(observer => observer.update(this.temperature, this.humidity));  // Powiadamia każdego obserwatora
+    }
+
+    // Aktualizuj dane pogodowe
+    updateWeather() {
+        this.temperature = Math.floor(Math.random() * 35) + 1;  // Losowa temperatura od 1 do 35°C
+        this.humidity = Math.floor(Math.random() * 100) + 1;  // Losowa wilgotność od 1 do 100%
+        this.notifyObservers();  // Powiadomienie obserwatorów o nowych danych pogodowych
+    }
+}
+
+// Klasa Obserwatora
+class WeatherObserver {
+    constructor(name) {
+        this.name = name;  // Nazwa obserwatora
+    }
+
+    // Metoda aktualizacji danych pogodowych, wywoływana przez stację pogodową
+    update(temperature, humidity) {
+        const weatherUpdates = document.getElementById('weatherUpdates');  // Pobieranie elementu HTML do wyświetlania powiadomień
+        const li = document.createElement('li');  // Tworzenie nowego elementu listy  &lt;li&gt;
+        li.textContent = `${this.name} został powiadomiony: Temperatura = ${temperature}°C, Wilgotność = ${humidity}%`;  // Ustawianie treści powiadomienia
+        weatherUpdates.appendChild(li);  // Dodanie powiadomienia do listy w HTML
+    }
+}
+
+// Tworzymy instancję stacji pogodowej
+const weatherStation = new WeatherStation();
+let subscriberCount = 0;  // Licznik subskrybentów
+
+// Obsługa przycisku aktualizacji pogody
+document.getElementById('updateWeatherBtn').addEventListener('click', () => {
+    weatherStation.updateWeather();  // Aktualizuj pogodę i powiadom subskrybentów
+});
+
+// Obsługa przycisku subskrypcji
+document.getElementById('subscribeBtn').addEventListener('click', () => {
+    subscriberCount++;  // Zwiększ licznik subskrybentów
+    const newObserver = new WeatherObserver(`Subskrybent ${subscriberCount}`);  // Tworzenie nowego obserwatora
+    weatherStation.addObserver(newObserver);  // Dodaj nowego subskrybenta do stacji pogodowej
+    alert(`Dodano: Subskrybent ${subscriberCount}`);  // Powiadomienie o dodaniu subskrybenta
+});
+
+// Obsługa przycisku usunięcia subskrypcji
+document.getElementById('unsubscribeBtn').addEventListener('click', () => {
+    if (subscriberCount > 0) {
+        weatherStation.removeObserver(weatherStation.observers[subscriberCount - 1]);  // Usuń ostatniego subskrybenta z listy
+        subscriberCount--;  // Zmniejsz licznik subskrybentów
+        alert(`Usunięto ostatniego subskrybenta`);  // Powiadomienie o usunięciu subskrybenta
+    } else {
+        alert('Brak subskrybentów do usunięcia.');  // Informacja, że nie ma subskrybentów do usunięcia
+    }
+});
+
+        &lt;/script&gt;
+        </code></pre>
+    </div>
+
+    <script>
+        // Klasa Subject (Podmiot)
+        class WeatherStation {
+            constructor() {
+                this.observers = [];
+                this.temperature = 20;
+                this.humidity = 50;
+            }
+
+            // Dodaj obserwatora
+            addObserver(observer) {
+                this.observers.push(observer);
+            }
+
+            // Usuń obserwatora
+            removeObserver(observer) {
+                this.observers = this.observers.filter(obs => obs !== observer);
+            }
+
+            // Powiadom wszystkich obserwatorów o zmianach
+            notifyObservers() {
+                this.observers.forEach(observer => observer.update(this.temperature, this.humidity));
+            }
+
+            // Aktualizuj dane pogodowe
+            updateWeather() {
+                this.temperature = Math.floor(Math.random() * 35) + 1; // Losowa temperatura 1-35°C
+                this.humidity = Math.floor(Math.random() * 100) + 1; // Losowa wilgotność 1-100%
+                this.notifyObservers(); // Powiadom wszystkich obserwatorów
+            }
+        }
+
+        // Klasa Obserwatora
+        class WeatherObserver {
+            constructor(name) {
+                this.name = name;
+            }
+
+            // Metoda aktualizacji danych pogodowych
+            update(temperature, humidity) {
+                const weatherUpdates = document.getElementById('weatherUpdates');
+                const li = document.createElement('li');
+                li.textContent = `${this.name} został powiadomiony: Temperatura = ${temperature}°C, Wilgotność = ${humidity}%`;
+                weatherUpdates.appendChild(li);
+            }
+        }
+
+        // Tworzymy instancję stacji pogodowej
+        const weatherStation = new WeatherStation();
+        let subscriberCount = 0;
+
+        // Aktualizuj pogodę
+        document.getElementById('updateWeatherBtn').addEventListener('click', () => {
+            weatherStation.updateWeather(); // Aktualizuj pogodę i powiadom subskrybentów
+        });
+
+        // Dodaj nowego subskrybenta
+        document.getElementById('subscribeBtn').addEventListener('click', () => {
+            subscriberCount++;
+            const newObserver = new WeatherObserver(`Subskrybent ${subscriberCount}`);
+            weatherStation.addObserver(newObserver);
+            alert(`Dodano: Subskrybent ${subscriberCount}`);
+        });
+
+        // Usuń subskrybenta
+        document.getElementById('unsubscribeBtn').addEventListener('click', () => {
+            if (subscriberCount > 0) {
+                weatherStation.removeObserver(weatherStation.observers[subscriberCount - 1]); // Usuń ostatniego subskrybenta
+                subscriberCount--;
+                alert(`Usunięto ostatniego subskrybenta`);
+            } else {
+                alert('Brak subskrybentów do usunięcia.');
+            }
+        });
+    </script>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/prism.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/components/prism-javascript.min.js"></script>
+</body>
+</html>

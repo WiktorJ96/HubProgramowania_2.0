@@ -1,0 +1,229 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Wzorzec projektowy Observer w JavaScript</title>
+    <link rel="stylesheet" href="../styles.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/themes/prism-tomorrow.min.css" rel="stylesheet" />
+</head>
+<body>
+    <div class="container">
+        <h1>Wzorzec Projektowy Observer w JavaScript</h1>
+
+        <p>**Wzorzec Observer** pozwala na utworzenie dynamicznej relacji między obiektami, gdzie jeden obiekt (obserwowany) powiadamia wiele innych obiektów (obserwatorów) o zmianach swojego stanu. Dzięki temu można budować systemy reagujące na zdarzenia bez tworzenia ścisłych zależności między obiektami.</p>
+
+        <h2>Jak działa wzorzec Observer?</h2>
+        <p>Obiekt obserwowany utrzymuje listę swoich obserwatorów i powiadamia ich o zmianach stanu, gdy te nastąpią. Obserwatorzy mogą zarejestrować się, aby otrzymywać powiadomienia, oraz wyrejestrować, kiedy już nie chcą być powiadamiani.</p>
+
+        <h3>Przykład implementacji wzorca Observer</h3>
+        <pre><code class="language-javascript">
+// Klasa Obserwowany (Subject)
+class Subject {
+    constructor() {
+        this.observers = [];  // Lista obserwatorów (subskrybentów)
+    }
+
+    // Metoda do dodawania obserwatora do listy
+    subscribe(observer) {
+        this.observers.push(observer);  // Dodaje obserwatora do listy
+    }
+
+    // Metoda do usuwania obserwatora z listy
+    unsubscribe(observer) {
+        this.observers = this.observers.filter(obs => obs !== observer);  // Usuwa obserwatora z listy
+    }
+
+    // Metoda do powiadamiania wszystkich obserwatorów
+    notify(data) {
+        this.observers.forEach(observer => observer.update(data));  // Powiadamia każdego obserwatora
+    }
+}
+
+// Klasa Obserwator (Observer)
+class Observer {
+    constructor(name) {
+        this.name = name;  // Nazwa obserwatora
+    }
+
+    // Metoda, którą wywołuje Subject, gdy powiadamia obserwatora
+    update(data) {
+        console.log(`${this.name} otrzymał powiadomienie: ${data}`);  // Wyświetla powiadomienie
+    }
+}
+
+// Użycie wzorca Observer
+const subject = new Subject();  // Tworzenie instancji Obserwowanego (Subject)
+
+const observer1 = new Observer('Obserwator 1');  // Tworzenie pierwszego obserwatora
+const observer2 = new Observer('Obserwator 2');  // Tworzenie drugiego obserwatora
+
+subject.subscribe(observer1);  // Subskrypcja (dodanie) Obserwatora 1
+subject.subscribe(observer2);  // Subskrypcja (dodanie) Obserwatora 2
+
+// Powiadomienie wszystkich obserwatorów
+subject.notify('Zdarzenie 1');  // Obserwator 1 i Obserwator 2 otrzymują powiadomienie
+
+subject.unsubscribe(observer2);  // Usunięcie Obserwatora 2 z listy subskrybentów
+
+// Powiadomienie pozostałych obserwatorów
+subject.notify('Zdarzenie 2');  // Tylko Obserwator 1 otrzymuje powiadomienie
+
+        </code></pre>
+
+        <p>W powyższym przykładzie mamy klasę <code>Subject</code>, która utrzymuje listę obserwatorów i powiadamia ich, gdy nastąpi jakaś zmiana. Klasa <code>Observer</code> reprezentuje obserwatorów, którzy otrzymują powiadomienia za pomocą metody <code>update()</code>. Obserwatorzy mogą subskrybować lub zrezygnować z subskrypcji powiadomień.</p>
+
+        <h2>Zalety wzorca Observer</h2>
+        <ul>
+            <li>Luźna zależność między obiektami – obiekty nie muszą bezpośrednio znać się nawzajem, co zwiększa elastyczność systemu.</li>
+            <li>Łatwość rozbudowy – możemy dynamicznie dodawać i usuwać obserwatorów, co sprawia, że system jest bardziej modularny.</li>
+            <li>Obsługa wielu zdarzeń – wzorzec Observer świetnie nadaje się do systemów, które muszą reagować na zmiany w wielu obiektach (np. UI reagujące na interakcje użytkownika).</li>
+        </ul>
+
+        <h2>Zastosowanie wzorca Observer</h2>
+        <p>Wzorzec Observer jest często stosowany w systemach, które muszą reagować na zmiany stanu lub zdarzenia, np. w interfejsach użytkownika, systemach notyfikacji czy aplikacjach czasu rzeczywistego (np. komunikatory, systemy powiadomień). Dzięki temu wzorcowi możliwe jest łatwe powiązanie różnych części aplikacji, bez tworzenia zbyt dużych zależności między nimi.</p>
+
+        <h2>Przykład zastosowania wzorca Observer w rzeczywistym projekcie</h2>
+        <pre><code class="language-javascript">
+// Klasa Product - Obserwowany (Subject)
+class Product {
+    constructor(price) {
+        this.price = price;  // Ustawienie początkowej ceny produktu
+        this.observers = [];  // Lista obserwatorów (klientów)
+    }
+
+    // Dodanie obserwatora (klienta) do listy
+    subscribe(observer) {
+        this.observers.push(observer);  // Dodaje obserwatora do listy
+    }
+
+    // Usunięcie obserwatora (klienta) z listy
+    unsubscribe(observer) {
+        this.observers = this.observers.filter(obs => obs !== observer);  // Usuwa obserwatora z listy
+    }
+
+    // Zmiana ceny produktu
+    setPrice(newPrice) {
+        this.price = newPrice;  // Ustawia nową cenę produktu
+        this.notify();  // Powiadamia wszystkich obserwatorów o zmianie ceny
+    }
+
+    // Powiadamianie wszystkich obserwatorów o nowej cenie
+    notify() {
+        this.observers.forEach(observer => observer.update(this.price));  // Powiadomienie każdego obserwatora o nowej cenie
+    }
+}
+
+// Klasa Customer - Obserwator (Observer)
+class Customer {
+    constructor(name) {
+        this.name = name;  // Ustawienie nazwy klienta
+    }
+
+    // Metoda wywoływana, gdy produkt zmienia cenę
+    update(price) {
+        console.log(`${this.name} został powiadomiony o nowej cenie: ${price}`);  // Wyświetlenie powiadomienia o nowej cenie
+    }
+}
+
+// Tworzenie produktu i klientów
+const product = new Product(100);  // Tworzenie produktu o początkowej cenie 100
+
+const customer1 = new Customer('Klient 1');  // Tworzenie pierwszego klienta
+const customer2 = new Customer('Klient 2');  // Tworzenie drugiego klienta
+
+// Subskrypcja klientów do powiadomień o zmianach cen produktu
+product.subscribe(customer1);  // Klient 1 subskrybuje zmiany cen
+product.subscribe(customer2);  // Klient 2 subskrybuje zmiany cen
+
+// Zmiana ceny produktu i powiadomienie klientów
+product.setPrice(120);  // Klient 1 i Klient 2 otrzymują powiadomienie o nowej cenie
+
+// Klient 1 rezygnuje z subskrypcji
+product.unsubscribe(customer1);
+
+// Kolejna zmiana ceny i powiadomienie pozostałych klientów
+product.setPrice(90);  // Tylko Klient 2 otrzymuje powiadomienie o nowej cenie
+
+        </code></pre>
+
+        <p>W tym przykładzie wzorzec Observer jest używany do śledzenia zmian cen produktów. Klienci (obserwatorzy) są powiadamiani o zmianie ceny, kiedy cena produktu (obserwowany) ulega zmianie.</p>
+
+        <h2>Podsumowanie</h2>
+        <ul>
+            <li>Wzorzec Observer umożliwia tworzenie systemów, w których obiekty są dynamicznie powiadamiane o zmianach stanu innych obiektów.</li>
+            <li>Systemy oparte na zdarzeniach, notyfikacjach i interakcjach w czasie rzeczywistym często wykorzystują ten wzorzec.</li>
+            <li>Observer jest jednym z kluczowych wzorców w architekturach MVC, gdzie widoki są aktualizowane w odpowiedzi na zmiany w modelach danych.</li>
+        </ul>
+          <a href="./16.1.Observer-projekt.html"><button>Przykładowy projekt</button></a>
+    </div>
+    <script>
+        // Klasa Subject (Sklep internetowy)
+class OnlineStore {
+  constructor() {
+    this.observers = [];  // Lista subskrybentów (obserwatorów)
+    this.promotion = null; // Aktualna promocja
+  }
+
+  // Rejestracja klienta jako obserwatora
+  registerObserver(observer) {
+    this.observers.push(observer);
+  }
+
+  // Usunięcie klienta z subskrypcji
+  removeObserver(observer) {
+    this.observers = this.observers.filter(obs => obs !== observer);
+  }
+
+  // Powiadamianie klientów o nowej promocji
+  notifyObservers() {
+    this.observers.forEach(observer => observer.update(this.promotion));
+  }
+
+  // Ustawianie nowej promocji
+  setPromotion(promotion) {
+    this.promotion = promotion;
+    this.notifyObservers();  // Powiadomienie subskrybentów o nowej promocji
+  }
+}
+
+// Klasa Observer (Klient)
+class Customer {
+  constructor(name) {
+    this.name = name;
+  }
+
+  update(promotion) {
+    console.log(`${this.name}, new promotion: ${promotion}`);
+  }
+}
+
+// Użycie wzorca Observer w systemie promocji
+const store = new OnlineStore();
+
+const customer1 = new Customer('Alice');
+const customer2 = new Customer('Bob');
+
+// Klienci subskrybują powiadomienia o promocjach
+store.registerObserver(customer1);
+store.registerObserver(customer2);
+
+// Nowa promocja
+store.setPromotion('50% off on all items!');
+// Wyświetli:
+// Alice, new promotion: 50% off on all items!
+// Bob, new promotion: 50% off on all items!
+
+// Bob rezygnuje z subskrypcji
+store.removeObserver(customer2);
+
+// Nowa promocja, Bob nie otrzyma powiadomienia
+store.setPromotion('Buy one get one free!');
+// Wyświetli:
+// Alice, new promotion: Buy one get one free!
+
+    </script>
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/prism.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/components/prism-javascript.min.js"></script>
+</body>
+</html>

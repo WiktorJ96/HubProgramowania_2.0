@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Wzorzec projektowy Iterator w JavaScript</title>
+    <link rel="stylesheet" href="../styles.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/themes/prism-tomorrow.min.css" rel="stylesheet" />
+</head>
+<body>
+    <div class="container">
+        <h1>Wzorzec Projektowy Iterator w JavaScript</h1>
+
+        <p>**Wzorzec Iterator** umożliwia przechodzenie przez kolekcje w sposób sekwencyjny, bez ujawniania jej wewnętrznej struktury. Każdy element kolekcji może być zwracany po kolei, co pozwala na jego przetwarzanie niezależnie od tego, jak kolekcja została zaimplementowana.</p>
+
+        <h2>Jak działa wzorzec Iterator?</h2>
+        <p>Iterator udostępnia standardowy interfejs do iteracji przez kolekcje. Główne metody w interfejsie iteratora to <code>next()</code>, który zwraca kolejne elementy, oraz <code>done</code>, który informuje, czy zostały jeszcze elementy do przetworzenia.</p>
+
+        <h3>Przykład implementacji wzorca Iterator</h3>
+        <pre><code class="language-javascript">
+// Klasa SimpleIterator, która iteruje po kolekcji
+class SimpleIterator {
+    constructor(collection) {
+        this.collection = collection;  // Przechowuje kolekcję elementów
+        this.index = 0;  // Początkowy indeks, który wskazuje na bieżący element
+    }
+
+    // Metoda next() zwraca kolejny element kolekcji i informację, czy iteracja się zakończyła
+    next() {
+        if (this.index < this.collection.length) {  // Sprawdza, czy są jeszcze elementy w kolekcji
+            return {
+                value: this.collection[this.index++],  // Zwraca bieżący element i zwiększa indeks
+                done: false  // Informuje, że iteracja się nie zakończyła
+            };
+        } else {
+            return { done: true };  // Informuje, że iteracja się zakończyła
+        }
+    }
+}
+
+// Przykładowa kolekcja
+const collection = [10, 20, 30];
+
+// Tworzenie iteratora dla kolekcji
+const iterator = new SimpleIterator(collection);
+
+// Wywołanie metody next() dla każdego elementu w kolekcji
+console.log(iterator.next()); // { value: 10, done: false }
+console.log(iterator.next()); // { value: 20, done: false }
+console.log(iterator.next()); // { value: 30, done: false }
+console.log(iterator.next()); // { done: true }
+
+        </code></pre>
+
+        <p>W powyższym przykładzie mamy prosty iterator, który przechodzi przez tablicę liczb. Iterator zwraca kolejne wartości przy każdym wywołaniu metody <code>next()</code>. Kiedy kolekcja zostanie wyczerpana, metoda <code>next()</code> zwraca obiekt z wartością <code>done: true</code>.</p>
+
+        <h2>Wbudowane iteratory w JavaScript</h2>
+        <p>JavaScript ma wbudowane wsparcie dla iteratorów w wielu strukturach danych, takich jak tablice, mapy czy zbiory. Każda z tych struktur danych implementuje interfejs <code>Iterable</code>, co umożliwia ich iterację za pomocą pętli <code>for...of</code> lub innych metod iteracyjnych.</p>
+
+        <h3>Przykład użycia wbudowanych iteratorów</h3>
+        <pre><code class="language-javascript">
+// Przykład z wbudowanym iteratorem
+const array = [1, 2, 3, 4];
+const iterator = array[Symbol.iterator]();
+
+console.log(iterator.next()); // { value: 1, done: false }
+console.log(iterator.next()); // { value: 2, done: false }
+console.log(iterator.next()); // { value: 3, done: false }
+console.log(iterator.next()); // { value: 4, done: false }
+console.log(iterator.next()); // { done: true }
+        </code></pre>
+
+        <p>W tym przykładzie używamy wbudowanego iteratora dla tablicy. Możemy uzyskać dostęp do iteratora tablicy za pomocą właściwości <code>Symbol.iterator</code>, a następnie używać metody <code>next()</code> do iteracji przez elementy tablicy.</p>
+
+        <h2>Zalety wzorca Iterator</h2>
+        <ul>
+            <li>Umożliwia jednolite podejście do iteracji przez różne kolekcje, bez względu na ich wewnętrzną strukturę.</li>
+            <li>Oddziela logikę iteracji od struktury danych, co poprawia modularność kodu.</li>
+            <li>Wspiera sekwencyjne przetwarzanie elementów kolekcji, co ułatwia obsługę dużych zbiorów danych.</li>
+        </ul>
+
+        <h2>Zastosowanie wzorca Iterator</h2>
+        <p>Wzorzec Iterator znajduje zastosowanie wszędzie tam, gdzie musimy przechodzić przez złożone struktury danych bez potrzeby ujawniania ich wewnętrznej implementacji. Może być stosowany do przetwarzania tablic, list, zbiorów, a także w bardziej złożonych strukturach, takich jak drzewa czy grafy.</p>
+
+        <h2>Przykład zastosowania Iterator w rzeczywistym projekcie</h2>
+        <pre><code class="language-javascript">
+// Klasa TreeNode reprezentująca węzeł drzewa
+class TreeNode {
+    constructor(value) {
+        this.value = value;  // Wartość węzła
+        this.children = [];  // Tablica przechowująca dzieci węzła
+    }
+
+    // Metoda dodająca dziecko do węzła
+    addChild(child) {
+        this.children.push(child);  // Dodaje nowe dziecko do tablicy children
+    }
+
+    // Definicja iteratora w obiekcie, pozwala na iterację po dzieciach węzła
+    [Symbol.iterator]() {
+        let index = 0;  // Inicjalizacja indeksu
+        let children = this.children;  // Przypisanie dzieci węzła do zmiennej
+
+        return {
+            // Metoda next() zwraca kolejne dziecko z tablicy
+            next() {
+                if (index < children.length) {  // Jeśli są jeszcze dzieci do iteracji
+                    return { value: children[index++], done: false };  // Zwraca bieżące dziecko i przechodzi do następnego
+                } else {
+                    return { done: true };  // Zwraca done: true, gdy iteracja się zakończy
+                }
+            }
+        };
+    }
+}
+
+// Tworzenie drzewa
+const root = new TreeNode('root');  // Węzeł główny
+const child1 = new TreeNode('child1');  // Pierwsze dziecko
+const child2 = new TreeNode('child2');  // Drugie dziecko
+root.addChild(child1);  // Dodanie child1 jako dziecko root
+root.addChild(child2);  // Dodanie child2 jako dziecko root
+
+// Iteracja po elementach drzewa (dzieciach węzła root)
+for (let node of root) {
+    console.log(node.value);  // Wyświetla wartości węzłów: child1, child2
+}
+
+        </code></pre>
+
+        <p>W tym przykładzie mamy prostą strukturę drzewa, w której każdy węzeł (node) ma listę dzieci. Dzięki implementacji <code>[Symbol.iterator]()</code> możemy iterować przez dzieci węzła za pomocą pętli <code>for...of</code>. Pozwala to na łatwą iterację przez bardziej złożone struktury, takie jak drzewa.</p>
+
+        <h2>Podsumowanie</h2>
+        <ul>
+            <li>Wzorzec Iterator umożliwia sekwencyjne przechodzenie przez elementy kolekcji bez ujawniania jej wewnętrznej struktury.</li>
+            <li>JavaScript ma wbudowane wsparcie dla iteratorów w strukturach danych, takich jak tablice, mapy, zbiory i inne.</li>
+            <li>Iterator jest użyteczny w kontekście przetwarzania dużych zbiorów danych oraz złożonych struktur, takich jak drzewa czy grafy.</li>
+        </ul>
+        <a href="./15.1.Iterator-projekt.html"><button>Przykładowy projekt</button></a>
+    </div>
+    <script>
+        // Kolekcja zadań
+class TaskQueue {
+  constructor() {
+    this.tasks = [];
+  }
+
+  addTask(task) {
+    this.tasks.push(task);
+  }
+
+  // Implementacja Symbol.iterator
+  [Symbol.iterator]() {
+    let currentIndex = 0;
+    const tasks = this.tasks;
+
+    return {
+      next() {
+        if (currentIndex < tasks.length) {
+          return { value: tasks[currentIndex++], done: false };
+        } else {
+          return { done: true };
+        }
+      }
+    };
+  }
+}
+
+// Użycie kolejki zadań
+const taskQueue = new TaskQueue();
+taskQueue.addTask('Task 1: Clean the house');
+taskQueue.addTask('Task 2: Prepare dinner');
+taskQueue.addTask('Task 3: Write code');
+
+for (let task of taskQueue) {
+  console.log(task);
+}
+// Wyświetli:
+// Task 1: Clean the house
+// Task 2: Prepare dinner
+// Task 3: Write code
+
+    </script>
+     <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/prism.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/components/prism-javascript.min.js"></script>
+</body>
+</html>

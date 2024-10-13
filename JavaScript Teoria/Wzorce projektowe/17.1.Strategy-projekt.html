@@ -1,0 +1,216 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="../styles.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/themes/prism-tomorrow.min.css" rel="stylesheet" />
+    <title>Kalkulator Zniżek - Wzorzec Strategy</title>
+</head>
+<body>
+    <div class="container">
+        <h1>Kalkulator Zniżek - Wzorzec Strategy</h1>
+        <div>
+            <label for="price">Cena produktu (PLN):</label>
+            <input type="number" id="price" value="100">
+            <label for="discountType">Rodzaj zniżki:</label>
+            <select id="discountType">
+                <option value="percentage">Zniżka procentowa</option>
+                <option value="fixed">Zniżka kwotowa</option>
+                <option value="loyalty">Zniżka dla lojalnych klientów</option>
+            </select>
+            <button id="calculateDiscountBtn">Oblicz zniżkę</button>
+        </div>
+        <p id="discountedPrice"></p>
+
+        <h2>Kod HTML i JavaScript:</h2>
+        <pre><code class="language-html">
+        &lt;h1&gt;Kalkulator Zniżek - Wzorzec Strategy&lt;/h1&gt;
+        &lt;div&gt;
+            &lt;label for="price"&gt;Cena produktu (PLN):&lt;/label&gt;
+            &lt;input type="number" id="price" value="100"&gt;
+            &lt;label for="discountType"&gt;Rodzaj zniżki:&lt;/label&gt;
+            &lt;select id="discountType"&gt;
+                &lt;option value="percentage"&gt;Zniżka procentowa&lt;/option&gt;
+                &lt;option value="fixed"&gt;Zniżka kwotowa&lt;/option&gt;
+                &lt;option value="loyalty"&gt;Zniżka dla lojalnych klientów&lt;/option&gt;
+            &lt;/select&gt;
+            &lt;button id="calculateDiscountBtn"&gt;Oblicz zniżkę&lt;/button&gt;
+        &lt;/div&gt;
+        &lt;p id="discountedPrice"&gt;&lt;/p&gt;
+
+        &lt;script&gt;
+// Interfejs strategii zniżki (bazowa klasa)
+class DiscountStrategy {
+    applyDiscount(price) {
+        return price;  // Domyślnie brak zniżki
+    }
+}
+
+// Strategia procentowa (zniżka procentowa)
+class PercentageDiscount extends DiscountStrategy {
+    constructor(percentage) {
+        super();
+        this.percentage = percentage;  // Ustawienie procentowej wartości zniżki
+    }
+
+    applyDiscount(price) {
+        return price - (price * (this.percentage / 100));  // Oblicza cenę po zniżce procentowej
+    }
+}
+
+// Strategia kwotowa (zniżka kwotowa)
+class FixedDiscount extends DiscountStrategy {
+    constructor(amount) {
+        super();
+        this.amount = amount;  // Ustawienie wartości zniżki kwotowej
+    }
+
+    applyDiscount(price) {
+        return price - this.amount;  // Oblicza cenę po odjęciu stałej kwoty zniżki
+    }
+}
+
+// Strategia dla lojalnych klientów (stała zniżka 20%)
+class LoyaltyDiscount extends DiscountStrategy {
+    applyDiscount(price) {
+        return price * 0.8;  // Oblicza cenę po zniżce 20% dla lojalnych klientów
+    }
+}
+
+// Klasa kontekstowa, która używa wybranej strategii zniżki
+class DiscountCalculator {
+    constructor(strategy) {
+        this.strategy = strategy;  // Ustawienie początkowej strategii
+    }
+
+    // Zmiana strategii zniżki
+    setStrategy(strategy) {
+        this.strategy = strategy;  // Ustawia nową strategię
+    }
+
+    // Obliczanie ceny po zniżce
+    calculate(price) {
+        return this.strategy.applyDiscount(price);  // Zwraca cenę po zastosowaniu strategii zniżki
+    }
+}
+
+// Obsługa kliknięcia przycisku obliczania zniżki
+document.getElementById('calculateDiscountBtn').addEventListener('click', () => {
+    const price = parseFloat(document.getElementById('price').value);  // Pobranie ceny z pola input
+    const discountType = document.getElementById('discountType').value;  // Pobranie typu zniżki z pola select
+
+    let discountStrategy;
+
+    // Wybór odpowiedniej strategii zniżki na podstawie wyboru użytkownika
+    switch (discountType) {
+        case 'percentage':
+            discountStrategy = new PercentageDiscount(10);  // Ustawia strategię procentową (10% zniżki)
+            break;
+        case 'fixed':
+            discountStrategy = new FixedDiscount(20);  // Ustawia strategię kwotową (zniżka o 20 PLN)
+            break;
+        case 'loyalty':
+            discountStrategy = new LoyaltyDiscount();  // Ustawia strategię lojalnościową (20% zniżki)
+            break;
+        default:
+            discountStrategy = new DiscountStrategy();  // Brak zniżki, domyślna strategia
+    }
+
+    const calculator = new DiscountCalculator(discountStrategy);  // Tworzy obiekt kalkulatora ze strategią
+    const discountedPrice = calculator.calculate(price);  // Oblicza cenę po zniżce
+
+    document.getElementById('discountedPrice').textContent = `Cena po zniżce: ${discountedPrice.toFixed(2)} PLN`;  // Wyświetla cenę po zniżce
+});
+
+        &lt;/script&gt;
+        </code></pre>
+    </div>
+
+    <script>
+        // Interfejs strategii
+        class DiscountStrategy {
+            applyDiscount(price) {
+                return price;
+            }
+        }
+
+        // Strategia procentowa
+        class PercentageDiscount extends DiscountStrategy {
+            constructor(percentage) {
+                super();
+                this.percentage = percentage;
+            }
+
+            applyDiscount(price) {
+                return price - (price * (this.percentage / 100));
+            }
+        }
+
+        // Strategia kwotowa
+        class FixedDiscount extends DiscountStrategy {
+            constructor(amount) {
+                super();
+                this.amount = amount;
+            }
+
+            applyDiscount(price) {
+                return price - this.amount;
+            }
+        }
+
+        // Strategia dla lojalnych klientów
+        class LoyaltyDiscount extends DiscountStrategy {
+            applyDiscount(price) {
+                return price * 0.8; // 20% zniżki dla lojalnych klientów
+            }
+        }
+
+        // Klasa kontekstu, która używa strategii
+        class DiscountCalculator {
+            constructor(strategy) {
+                this.strategy = strategy;
+            }
+
+            setStrategy(strategy) {
+                this.strategy = strategy;
+            }
+
+            calculate(price) {
+                return this.strategy.applyDiscount(price);
+            }
+        }
+
+        // Obsługa przycisku "Oblicz zniżkę"
+        document.getElementById('calculateDiscountBtn').addEventListener('click', () => {
+            const price = parseFloat(document.getElementById('price').value);
+            const discountType = document.getElementById('discountType').value;
+
+            let discountStrategy;
+
+            // Wybór odpowiedniej strategii zniżki
+            switch (discountType) {
+                case 'percentage':
+                    discountStrategy = new PercentageDiscount(10); // 10% zniżki
+                    break;
+                case 'fixed':
+                    discountStrategy = new FixedDiscount(20); // Zniżka kwotowa 20 PLN
+                    break;
+                case 'loyalty':
+                    discountStrategy = new LoyaltyDiscount(); // Zniżka lojalnościowa
+                    break;
+                default:
+                    discountStrategy = new DiscountStrategy(); // Brak zniżki
+            }
+
+            const calculator = new DiscountCalculator(discountStrategy);
+            const discountedPrice = calculator.calculate(price);
+
+            document.getElementById('discountedPrice').textContent = `Cena po zniżce: ${discountedPrice.toFixed(2)} PLN`;
+        });
+    </script>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/prism.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/components/prism-javascript.min.js"></script>
+</body>
+</html>

@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Wzorzec projektowy Strategy w JavaScript</title>
+    <link rel="stylesheet" href="../styles.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/themes/prism-tomorrow.min.css" rel="stylesheet" />
+</head>
+<body>
+    <div class="container">
+        <h1>Wzorzec Projektowy Strategy w JavaScript</h1>
+
+        <p>**Wzorzec Strategy** umożliwia definiowanie rodzin algorytmów, które mogą być zamieniane między sobą w trakcie działania programu. Algorytmy są enkapsulowane w osobnych klasach, a kontekst (obiekt, który korzysta ze strategii) decyduje, który algorytm powinien zostać użyty.</p>
+
+        <h2>Jak działa wzorzec Strategy?</h2>
+        <p>Wzorzec Strategy polega na zdefiniowaniu kilku klas reprezentujących różne strategie (algorytmy), które implementują wspólny interfejs. Obiekt kontekstu (client) korzysta z tych strategii, ale nie musi znać ich szczegółów implementacyjnych. Wystarczy, że wywoła odpowiednią strategię w odpowiednim momencie.</p>
+
+        <h3>Przykład implementacji wzorca Strategy</h3>
+        <pre><code class="language-javascript">
+// Definicja strategii dodawania
+class StrategyAdd {
+    execute(a, b) {
+        return a + b;  // Zwraca wynik dodawania
+    }
+}
+
+// Definicja strategii odejmowania
+class StrategySubtract {
+    execute(a, b) {
+        return a - b;  // Zwraca wynik odejmowania
+    }
+}
+
+// Definicja strategii mnożenia
+class StrategyMultiply {
+    execute(a, b) {
+        return a * b;  // Zwraca wynik mnożenia
+    }
+}
+
+// Klasa kontekstowa Calculator, która korzysta z różnych strategii
+class Calculator {
+    // Ustawianie strategii (np. dodawania, odejmowania, mnożenia)
+    setStrategy(strategy) {
+        this.strategy = strategy;  // Przypisuje strategię do kalkulatora
+    }
+
+    // Wykonuje obliczenia zgodnie z ustawioną strategią
+    calculate(a, b) {
+        return this.strategy.execute(a, b);  // Zwraca wynik działania strategii
+    }
+}
+
+// Użycie wzorca Strategy
+const calculator = new Calculator();  // Tworzenie instancji kalkulatora
+
+// Ustawianie strategii dodawania i wykonywanie obliczeń
+calculator.setStrategy(new StrategyAdd());
+console.log(calculator.calculate(10, 5));  // Wynik: 15
+
+// Ustawianie strategii odejmowania i wykonywanie obliczeń
+calculator.setStrategy(new StrategySubtract());
+console.log(calculator.calculate(10, 5));  // Wynik: 5
+
+// Ustawianie strategii mnożenia i wykonywanie obliczeń
+calculator.setStrategy(new StrategyMultiply());
+console.log(calculator.calculate(10, 5));  // Wynik: 50
+
+        </code></pre>
+
+        <p>W powyższym przykładzie mamy trzy klasy strategii: <code>StrategyAdd</code>, <code>StrategySubtract</code>, i <code>StrategyMultiply</code>, które reprezentują różne algorytmy matematyczne. Klasa <code>Calculator</code> działa jako kontekst, który korzysta z tych strategii w zależności od tego, jaką strategię ustawimy za pomocą metody <code>setStrategy()</code>.</p>
+
+        <h2>Zalety wzorca Strategy</h2>
+        <ul>
+            <li>Elastyczność – Umożliwia łatwą zamianę algorytmów bez modyfikacji kodu klienta.</li>
+            <li>Modularność – Każda strategia jest zamknięta w osobnej klasie, co sprawia, że kod jest bardziej czytelny i modularny.</li>
+            <li>Rozszerzalność – Nowe strategie można dodawać bez konieczności modyfikowania istniejącego kodu.</li>
+        </ul>
+
+        <h2>Zastosowanie wzorca Strategy</h2>
+        <p>Wzorzec Strategy znajduje zastosowanie wszędzie tam, gdzie mamy wiele możliwych algorytmów lub podejść do rozwiązania problemu, a decyzja o wyborze odpowiedniej strategii zależy od kontekstu. Może to być przydatne w aplikacjach finansowych (różne metody kalkulacji), systemach zarządzania danymi (różne sposoby sortowania, filtrowania) lub w grach (różne zachowania postaci zależnie od sytuacji).</p>
+
+        <h2>Przykład zastosowania Strategy w rzeczywistym projekcie</h2>
+        <pre><code class="language-javascript">
+// Strategia QuickSort
+class QuickSortStrategy {
+    sort(data) {
+        return data.sort((a, b) => a - b);  // Implementacja QuickSort, sortuje rosnąco
+    }
+}
+
+// Strategia BubbleSort
+class BubbleSortStrategy {
+    sort(data) {
+        // Implementacja BubbleSort
+        for (let i = 0; i < data.length; i++) {
+            for (let j = 0; j < data.length - i - 1; j++) {
+                if (data[j] > data[j + 1]) {
+                    // Zamiana miejscami, jeśli elementy są w złej kolejności
+                    [data[j], data[j + 1]] = [data[j + 1], data[j]];
+                }
+            }
+        }
+        return data;  // Zwraca posortowaną tablicę
+    }
+}
+
+// Klasa kontekstowa, która zarządza wyborem strategii sortowania
+class SortingContext {
+    setStrategy(strategy) {
+        this.strategy = strategy;  // Ustawienie strategii sortowania
+    }
+
+    sortData(data) {
+        return this.strategy.sort(data);  // Wywołanie metody sortowania wybranej strategii
+    }
+}
+
+// Użycie wzorca Strategy do sortowania danych
+const data = [5, 2, 9, 1, 5, 6];  // Przykładowe dane do posortowania
+
+const sortingContext = new SortingContext();  // Tworzenie kontekstu sortowania
+
+// Ustawienie strategii QuickSort i sortowanie danych
+sortingContext.setStrategy(new QuickSortStrategy());
+console.log(sortingContext.sortData([...data]));  // Wyświetli: [1, 2, 5, 5, 6, 9]
+
+// Ustawienie strategii BubbleSort i sortowanie danych
+sortingContext.setStrategy(new BubbleSortStrategy());
+console.log(sortingContext.sortData([...data]));  // Wyświetli: [1, 2, 5, 5, 6, 9]
+
+        </code></pre>
+
+        <p>W tym przykładzie mamy różne strategie sortowania danych: <code>QuickSortStrategy</code> i <code>BubbleSortStrategy</code>. Klasa <code>SortingContext</code> może używać różnych algorytmów sortowania w zależności od kontekstu, co umożliwia łatwą zamianę algorytmu w trakcie działania aplikacji.</p>
+
+        <h2>Podsumowanie</h2>
+        <ul>
+            <li>Wzorzec Strategy umożliwia enkapsulację algorytmów w osobnych klasach, co pozwala na ich elastyczne zamienianie.</li>
+            <li>Klient może wybierać między różnymi strategiami bez konieczności modyfikacji swojego kodu.</li>
+            <li>Wzorzec ten jest szczególnie przydatny tam, gdzie istnieje wiele różnych sposobów rozwiązania tego samego problemu, a wybór odpowiedniej strategii zależy od kontekstu.</li>
+        </ul>
+        <a href="./17.1.Strategy-projekt.html"><button>Przykładowy projekt</button></a>
+    </div>
+    <script>
+        // Interfejs dla strategii płatności
+class PaymentStrategy {
+  pay(amount) {}
+}
+
+// Konkretna strategia: Płatność kartą kredytową
+class CreditCardPayment extends PaymentStrategy {
+  pay(amount) {
+    console.log(`Paid ${amount} using Credit Card.`);
+  }
+}
+
+// Konkretna strategia: Płatność PayPal
+class PayPalPayment extends PaymentStrategy {
+  pay(amount) {
+    console.log(`Paid ${amount} using PayPal.`);
+  }
+}
+
+// Klient, który używa strategii płatności
+class PaymentProcessor {
+  constructor(strategy) {
+    this.strategy = strategy; // Zapisuje strategię płatności
+  }
+
+  setStrategy(strategy) {
+    this.strategy = strategy; // Pozwala na zmianę strategii
+  }
+
+  processPayment(amount) {
+    this.strategy.pay(amount); // Wywołuje metodę płatności zgodnie z wybraną strategią
+  }
+}
+
+// Użycie wzorca Strategy
+const creditCardPayment = new CreditCardPayment();
+const payPalPayment = new PayPalPayment();
+
+const paymentProcessor = new PaymentProcessor(creditCardPayment);
+paymentProcessor.processPayment(100);  // Wyświetli: Paid 100 using Credit Card.
+
+paymentProcessor.setStrategy(payPalPayment);
+paymentProcessor.processPayment(150);  // Wyświetli: Paid 150 using PayPal.
+
+    </script>
+       <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/prism.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/components/prism-javascript.min.js"></script>
+</body>
+</html>

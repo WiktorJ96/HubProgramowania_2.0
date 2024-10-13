@@ -1,0 +1,247 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Wzorzec projektowy Chain of Responsibility w JavaScript</title>
+    <link rel="stylesheet" href="../styles.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/themes/prism-tomorrow.min.css" rel="stylesheet" />
+</head>
+<body>
+    <div class="container">
+        <h1>Wzorzec Projektowy Chain of Responsibility w JavaScript</h1>
+
+        <p>**Wzorzec Chain of Responsibility** umożliwia przesyłanie żądania przez łańcuch obiektów, aż któryś z nich zdecyduje się na jego obsługę. W ten sposób można uniknąć bezpośrednich powiązań między nadawcą a odbiorcą żądania, co zwiększa elastyczność systemu.</p>
+
+        <h2>Jak działa wzorzec Chain of Responsibility?</h2>
+        <p>Wzorzec ten polega na tworzeniu łańcucha obiektów (handlerów), przez który przekazywane jest żądanie. Każdy z obiektów decyduje, czy chce obsłużyć to żądanie, czy przekazać je dalej do następnego obiektu w łańcuchu. Proces trwa, dopóki jedno z ogniw nie obsłuży żądania lub żądanie dotrze do końca łańcucha.</p>
+
+        <h3>Przykład implementacji wzorca Chain of Responsibility</h3>
+        <pre><code class="language-javascript">
+// Klasa abstrakcyjna dla handlerów (ogniw w łańcuchu)
+class Handler {
+    // Ustawianie następnego handlera w łańcuchu
+    setNext(handler) {
+        this.nextHandler = handler;
+        return handler;  // Zwraca handler, aby umożliwić łańcuchowe wywołania
+    }
+
+    // Metoda obsługująca żądanie, przekazuje je dalej, jeśli nie jest obsługiwane
+    handle(request) {
+        if (this.nextHandler) {
+            return this.nextHandler.handle(request);  // Przekazanie żądania dalej, jeśli nie zostało obsłużone
+        }
+        return null;  // Jeśli brak handlera, zwraca null
+    }
+}
+
+// Konkretne klasy handlerów
+
+// Handler do obsługi autoryzacji
+class AuthHandler extends Handler {
+    handle(request) {
+        if (request.type === 'auth') {
+            console.log('Autoryzacja zakończona sukcesem');
+        } else {
+            return super.handle(request);  // Przekazanie żądania dalej w łańcuchu
+        }
+    }
+}
+
+// Handler do obsługi przetwarzania danych
+class DataHandler extends Handler {
+    handle(request) {
+        if (request.type === 'data') {
+            console.log('Przetwarzanie danych');
+        } else {
+            return super.handle(request);  // Przekazanie żądania dalej w łańcuchu
+        }
+    }
+}
+
+// Handler do obsługi błędów
+class ErrorHandler extends Handler {
+    handle(request) {
+        if (request.type === 'error') {
+            console.log('Obsługa błędów');
+        } else {
+            return super.handle(request);  // Przekazanie żądania dalej w łańcuchu
+        }
+    }
+}
+
+// Tworzenie łańcucha odpowiedzialności
+const auth = new AuthHandler();
+const data = new DataHandler();
+const error = new ErrorHandler();
+
+// Ustawianie kolejnych ogniw w łańcuchu
+auth.setNext(data).setNext(error);
+
+// Wysyłanie żądań przez łańcuch
+auth.handle({ type: 'auth' });  // Wyświetli: Autoryzacja zakończona sukcesem
+auth.handle({ type: 'data' });  // Wyświetli: Przetwarzanie danych
+auth.handle({ type: 'error' });  // Wyświetli: Obsługa błędów
+
+        </code></pre>
+
+        <p>W powyższym przykładzie mamy trzy konkretne klasy handlerów: <code>AuthHandler</code>, <code>DataHandler</code>, i <code>ErrorHandler</code>. Każdy z nich obsługuje inne żądania, a jeśli nie jest w stanie ich obsłużyć, przekazuje żądanie dalej w łańcuchu do kolejnego handlera.</p>
+
+        <h2>Zalety wzorca Chain of Responsibility</h2>
+        <ul>
+            <li>Elastyczność – Umożliwia łatwe dodawanie nowych ogniw (handlerów) do łańcucha bez modyfikacji istniejącego kodu.</li>
+            <li>Odpowiedzialność rozproszona – Żądania są przetwarzane przez wiele obiektów, z których każdy ma swoje zadanie.</li>
+            <li>Reużywalność kodu – Możliwość ponownego wykorzystania handlerów w różnych łańcuchach lub aplikacjach.</li>
+            <li>Brak bezpośrednich zależności – Nadawca żądania nie musi znać wszystkich obiektów, które będą je przetwarzać.</li>
+        </ul>
+
+        <h2>Zastosowanie wzorca Chain of Responsibility</h2>
+        <p>Wzorzec Chain of Responsibility jest szczególnie przydatny, gdy mamy sekwencję potencjalnych działań, które muszą być wykonane, ale nie chcemy bezpośrednio wiązać obiektów odpowiedzialnych za te działania. Może być stosowany w systemach obsługi żądań, walidacji danych, zarządzaniu błędami czy autoryzacji użytkowników.</p>
+
+        <h2>Przykład użycia Chain of Responsibility w rzeczywistym projekcie</h2>
+        <pre><code class="language-javascript">
+// Klasa bazowa dla walidatorów
+class Validator {
+    // Ustawianie następnego walidatora w łańcuchu
+    setNext(validator) {
+        this.nextValidator = validator;
+        return validator;  // Umożliwia łańcuchowe wywołania
+    }
+
+    // Metoda walidacji danych, jeśli walidator nie obsłuży danych, przekazuje dalej
+    validate(data) {
+        if (this.nextValidator) {
+            return this.nextValidator.validate(data);  // Przekazanie do następnego walidatora
+        }
+        return true;  // Jeśli nie ma więcej walidatorów, walidacja jest pozytywna
+    }
+}
+
+// Walidator do sprawdzania poprawności adresu email
+class EmailValidator extends Validator {
+    validate(data) {
+        // Sprawdzanie, czy email zawiera '@'
+        if (!data.email.includes('@')) {
+            console.log('Nieprawidłowy email');  // Błąd w przypadku nieprawidłowego emaila
+            return false;
+        }
+        return super.validate(data);  // Przekazanie do kolejnego walidatora
+    }
+}
+
+// Walidator do sprawdzania długości hasła
+class PasswordValidator extends Validator {
+    validate(data) {
+        // Sprawdzanie, czy hasło ma co najmniej 8 znaków
+        if (data.password.length < 8) {
+            console.log('Hasło musi mieć co najmniej 8 znaków');  // Błąd w przypadku za krótkiego hasła
+            return false;
+        }
+        return super.validate(data);  // Przekazanie do kolejnego walidatora
+    }
+}
+
+// Tworzenie łańcucha walidacji
+const emailValidator = new EmailValidator();
+const passwordValidator = new PasswordValidator();
+
+// Łańcuch walidacji: najpierw walidacja emaila, potem hasła
+emailValidator.setNext(passwordValidator);
+
+// Walidacja formularza
+const formData = { email: 'jan.kowalski@example', password: 'pass123' };
+emailValidator.validate(formData);  // Wyświetli: Nieprawidłowy email
+
+        </code></pre>
+
+        <p>W tym przykładzie wzorzec Chain of Responsibility został użyty do walidacji danych formularza. Każdy krok walidacji (np. walidacja e-maila, hasła) jest niezależny, a błędne dane zatrzymują proces walidacji.</p>
+
+        <h2>Podsumowanie</h2>
+        <ul>
+            <li>Wzorzec Chain of Responsibility umożliwia przesyłanie żądania przez łańcuch obiektów, aż jeden z nich podejmie się jego obsługi.</li>
+            <li>Eliminuje bezpośrednie zależności między nadawcą żądania a jego odbiorcami, co zwiększa elastyczność systemu.</li>
+            <li>Jest przydatny w systemach, gdzie wiele obiektów może odpowiadać za obsługę różnych rodzajów żądań lub operacji.</li>
+        </ul>
+        <a href="./13.1.Chain of Responsibility-projekt.html"><button>Przykładowy projekt</button></a>
+    </div>
+    <script>
+        // Klasa bazowa dla handlera (obsługi wniosków)
+class ApprovalHandler {
+  constructor() {
+    this.nextHandler = null;
+  }
+
+  setNext(handler) {
+    this.nextHandler = handler;
+    return handler;
+  }
+
+  handleRequest(amount) {
+    if (this.nextHandler) {
+      return this.nextHandler.handleRequest(amount);
+    } else {
+      console.log('No one can approve this request.');
+    }
+  }
+}
+
+// Handler dla pracownika
+class EmployeeApproval extends ApprovalHandler {
+  handleRequest(amount) {
+    if (amount <= 1000) {
+      console.log(`Employee: Approved request of $${amount}`);
+    } else {
+      console.log(`Employee: Cannot approve $${amount}, forwarding to manager.`);
+      super.handleRequest(amount);
+    }
+  }
+}
+
+// Handler dla kierownika
+class ManagerApproval extends ApprovalHandler {
+  handleRequest(amount) {
+    if (amount <= 5000) {
+      console.log(`Manager: Approved request of $${amount}`);
+    } else {
+      console.log(`Manager: Cannot approve $${amount}, forwarding to director.`);
+      super.handleRequest(amount);
+    }
+  }
+}
+
+// Handler dla dyrektora
+class DirectorApproval extends ApprovalHandler {
+  handleRequest(amount) {
+    if (amount <= 10000) {
+      console.log(`Director: Approved request of $${amount}`);
+    } else {
+      console.log(`Director: Cannot approve $${amount}.`);
+      super.handleRequest(amount);
+    }
+  }
+}
+
+// Tworzenie łańcucha odpowiedzialności
+const employee = new EmployeeApproval();
+const manager = new ManagerApproval();
+const director = new DirectorApproval();
+
+employee.setNext(manager).setNext(director);
+
+// Testowanie łańcucha z różnymi kwotami
+employee.handleRequest(500);     // Wyświetli: Employee: Approved request of $500
+employee.handleRequest(3000);    // Wyświetli: Employee: Cannot approve $3000...
+                                 //           Manager: Approved request of $3000
+employee.handleRequest(8000);    // Wyświetli: Employee: Cannot approve $8000...
+                                 //           Manager: Cannot approve $8000...
+                                 //           Director: Approved request of $8000
+employee.handleRequest(15000);   // Wyświetli: Employee: Cannot approve $15000...
+                                 //           Manager: Cannot approve $15000...
+                                 //           Director: Cannot approve $15000.
+                                 //           No one can approve this request.
+
+    </script>
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/prism.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/components/prism-javascript.min.js"></script>
+</body>
+</html>

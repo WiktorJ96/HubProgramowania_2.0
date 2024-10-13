@@ -1,0 +1,358 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="../styles.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/themes/prism-tomorrow.min.css" rel="stylesheet" />
+    <title>Zdalne Sterowanie - Wzorzec Command</title>
+</head>
+<body>
+    <div class="container">
+        <h1>Zdalne Sterowanie - Wzorzec Command</h1>
+        <div id="remoteControl">
+            <button id="turnOnLightBtn">Włącz światło</button>
+            <button id="turnOffLightBtn">Wyłącz światło</button>
+            <button id="turnOnTVBtn">Włącz TV</button>
+            <button id="turnOffTVBtn">Wyłącz TV</button>
+            <button id="undoBtn">Cofnij</button>
+        </div>
+        <p id="status"></p>
+
+        <h2>Kod HTML i JavaScript:</h2>
+        <pre><code class="language-html">
+        &lt;h1&gt;Zdalne Sterowanie - Wzorzec Command&lt;/h1&gt;
+        &lt;div id="remoteControl"&gt;
+            &lt;button id="turnOnLightBtn"&gt;Włącz światło&lt;/button&gt;
+            &lt;button id="turnOffLightBtn"&gt;Wyłącz światło&lt;/button&gt;
+            &lt;button id="turnOnTVBtn"&gt;Włącz TV&lt;/button&gt;
+            &lt;button id="turnOffTVBtn"&gt;Wyłącz TV&lt;/button&gt;
+            &lt;button id="undoBtn"&gt;Cofnij&lt;/button&gt;
+        &lt;/div&gt;
+        &lt;p id="status"&gt;&lt;/p&gt;
+
+        &lt;script&gt;
+// Klasa, która reprezentuje urządzenie: Światło
+class Light {
+    // Metoda włączająca światło
+    on() {
+        return 'Światło zostało włączone.';  // Zwraca informację o włączeniu światła
+    }
+
+    // Metoda wyłączająca światło
+    off() {
+        return 'Światło zostało wyłączone.';  // Zwraca informację o wyłączeniu światła
+    }
+}
+
+// Klasa, która reprezentuje urządzenie: Telewizor
+class TV {
+    // Metoda włączająca telewizor
+    on() {
+        return 'Telewizor został włączony.';  // Zwraca informację o włączeniu telewizora
+    }
+
+    // Metoda wyłączająca telewizor
+    off() {
+        return 'Telewizor został wyłączony.';  // Zwraca informację o wyłączeniu telewizora
+    }
+}
+
+// Interfejs komendy - bazowa klasa Command
+class Command {
+    // Wykonanie polecenia
+    execute() {}
+    // Cofnięcie polecenia
+    undo() {}
+}
+
+// Konkretna komenda do włączania światła
+class LightOnCommand extends Command {
+    constructor(light) {
+        super();
+        this.light = light;  // Przypisanie obiektu światła
+    }
+
+    // Wykonanie polecenia włączenia światła
+    execute() {
+        return this.light.on();  // Wywołuje metodę włączania światła
+    }
+
+    // Cofnięcie polecenia - wyłączenie światła
+    undo() {
+        return this.light.off();  // Wywołuje metodę wyłączania światła
+    }
+}
+
+// Konkretna komenda do wyłączania światła
+class LightOffCommand extends Command {
+    constructor(light) {
+        super();
+        this.light = light;  // Przypisanie obiektu światła
+    }
+
+    // Wykonanie polecenia wyłączenia światła
+    execute() {
+        return this.light.off();  // Wywołuje metodę wyłączania światła
+    }
+
+    // Cofnięcie polecenia - włączenie światła
+    undo() {
+        return this.light.on();  // Wywołuje metodę włączania światła
+    }
+}
+
+// Konkretna komenda do włączania telewizora
+class TVOnCommand extends Command {
+    constructor(tv) {
+        super();
+        this.tv = tv;  // Przypisanie obiektu telewizora
+    }
+
+    // Wykonanie polecenia włączenia telewizora
+    execute() {
+        return this.tv.on();  // Wywołuje metodę włączania telewizora
+    }
+
+    // Cofnięcie polecenia - wyłączenie telewizora
+    undo() {
+        return this.tv.off();  // Wywołuje metodę wyłączania telewizora
+    }
+}
+
+// Konkretna komenda do wyłączania telewizora
+class TVOffCommand extends Command {
+    constructor(tv) {
+        super();
+        this.tv = tv;  // Przypisanie obiektu telewizora
+    }
+
+    // Wykonanie polecenia wyłączenia telewizora
+    execute() {
+        return this.tv.off();  // Wywołuje metodę wyłączania telewizora
+    }
+
+    // Cofnięcie polecenia - włączenie telewizora
+    undo() {
+        return this.tv.on();  // Wywołuje metodę włączania telewizora
+    }
+}
+
+// Klasa pilota zdalnego sterowania, która zarządza wykonywaniem i cofaniem poleceń
+class RemoteControl {
+    constructor() {
+        this.history = [];  // Przechowuje historię wykonanych poleceń
+    }
+
+    // Metoda do wykonywania komend
+    executeCommand(command) {
+        const result = command.execute();  // Wykonanie polecenia
+        this.history.push(command);  // Zapisanie polecenia do historii
+        return result;  // Zwrócenie wyniku działania polecenia
+    }
+
+    // Metoda cofania ostatniej komendy
+    undoCommand() {
+        const command = this.history.pop();  // Pobranie ostatniego polecenia z historii
+        if (command) {
+            return command.undo();  // Wywołanie cofnięcia ostatniego polecenia
+        }
+        return 'Brak akcji do cofnięcia.';  // Jeśli nie ma poleceń do cofnięcia
+    }
+}
+
+// Obsługa DOM po załadowaniu strony
+document.addEventListener('DOMContentLoaded', () => {
+    const statusElement = document.getElementById('status');  // Element do wyświetlania statusu
+    const light = new Light();  // Tworzenie obiektu światła
+    const tv = new TV();  // Tworzenie obiektu telewizora
+    const remoteControl = new RemoteControl();  // Tworzenie pilota
+
+    // Tworzenie poleceń dla urządzeń
+    const lightOnCommand = new LightOnCommand(light);
+    const lightOffCommand = new LightOffCommand(light);
+    const tvOnCommand = new TVOnCommand(tv);
+    const tvOffCommand = new TVOffCommand(tv);
+
+    // Obsługa przycisku włączania światła
+    document.getElementById('turnOnLightBtn').addEventListener('click', () => {
+        statusElement.textContent = remoteControl.executeCommand(lightOnCommand);  // Włączenie światła i wyświetlenie statusu
+    });
+
+    // Obsługa przycisku wyłączania światła
+    document.getElementById('turnOffLightBtn').addEventListener('click', () => {
+        statusElement.textContent = remoteControl.executeCommand(lightOffCommand);  // Wyłączenie światła i wyświetlenie statusu
+    });
+
+    // Obsługa przycisku włączania telewizora
+    document.getElementById('turnOnTVBtn').addEventListener('click', () => {
+        statusElement.textContent = remoteControl.executeCommand(tvOnCommand);  // Włączenie telewizora i wyświetlenie statusu
+    });
+
+    // Obsługa przycisku wyłączania telewizora
+    document.getElementById('turnOffTVBtn').addEventListener('click', () => {
+        statusElement.textContent = remoteControl.executeCommand(tvOffCommand);  // Wyłączenie telewizora i wyświetlenie statusu
+    });
+
+    // Obsługa przycisku cofania ostatniego polecenia
+    document.getElementById('undoBtn').addEventListener('click', () => {
+        statusElement.textContent = remoteControl.undoCommand();  // Cofnięcie ostatniego polecenia i wyświetlenie statusu
+    });
+});
+
+        &lt;/script&gt;
+        </code></pre>
+    </div>
+
+    <script>
+        // Klasa reprezentująca urządzenie: Światło
+        class Light {
+            on() {
+                return 'Światło zostało włączone.';
+            }
+
+            off() {
+                return 'Światło zostało wyłączone.';
+            }
+        }
+
+        // Klasa reprezentująca urządzenie: Telewizor
+        class TV {
+            on() {
+                return 'Telewizor został włączony.';
+            }
+
+            off() {
+                return 'Telewizor został wyłączony.';
+            }
+        }
+
+        // Interfejs komendy
+        class Command {
+            execute() {}
+            undo() {}
+        }
+
+        // Konkretna komenda do włączania światła
+        class LightOnCommand extends Command {
+            constructor(light) {
+                super();
+                this.light = light;
+            }
+
+            execute() {
+                return this.light.on();
+            }
+
+            undo() {
+                return this.light.off();
+            }
+        }
+
+        // Konkretna komenda do wyłączania światła
+        class LightOffCommand extends Command {
+            constructor(light) {
+                super();
+                this.light = light;
+            }
+
+            execute() {
+                return this.light.off();
+            }
+
+            undo() {
+                return this.light.on();
+            }
+        }
+
+        // Konkretna komenda do włączania TV
+        class TVOnCommand extends Command {
+            constructor(tv) {
+                super();
+                this.tv = tv;
+            }
+
+            execute() {
+                return this.tv.on();
+            }
+
+            undo() {
+                return this.tv.off();
+            }
+        }
+
+        // Konkretna komenda do wyłączania TV
+        class TVOffCommand extends Command {
+            constructor(tv) {
+                super();
+                this.tv = tv;
+            }
+
+            execute() {
+                return this.tv.off();
+            }
+
+            undo() {
+                return this.tv.on();
+            }
+        }
+
+        // Klasa pilota zdalnego sterowania, która wywołuje polecenia
+        class RemoteControl {
+            constructor() {
+                this.history = [];
+            }
+
+            executeCommand(command) {
+                const result = command.execute();
+                this.history.push(command); // Przechowujemy komendę w historii
+                return result;
+            }
+
+            undoCommand() {
+                const command = this.history.pop();
+                if (command) {
+                    return command.undo();
+                }
+                return 'Brak akcji do cofnięcia.';
+            }
+        }
+
+        // Obsługa przycisków na pilocie
+        document.addEventListener('DOMContentLoaded', () => {
+            const statusElement = document.getElementById('status');
+            const light = new Light();
+            const tv = new TV();
+            const remoteControl = new RemoteControl();
+
+            const lightOnCommand = new LightOnCommand(light);
+            const lightOffCommand = new LightOffCommand(light);
+            const tvOnCommand = new TVOnCommand(tv);
+            const tvOffCommand = new TVOffCommand(tv);
+
+            document.getElementById('turnOnLightBtn').addEventListener('click', () => {
+                statusElement.textContent = remoteControl.executeCommand(lightOnCommand);
+            });
+
+            document.getElementById('turnOffLightBtn').addEventListener('click', () => {
+                statusElement.textContent = remoteControl.executeCommand(lightOffCommand);
+            });
+
+            document.getElementById('turnOnTVBtn').addEventListener('click', () => {
+                statusElement.textContent = remoteControl.executeCommand(tvOnCommand);
+            });
+
+            document.getElementById('turnOffTVBtn').addEventListener('click', () => {
+                statusElement.textContent = remoteControl.executeCommand(tvOffCommand);
+            });
+
+            document.getElementById('undoBtn').addEventListener('click', () => {
+                statusElement.textContent = remoteControl.undoCommand();
+            });
+        });
+    </script>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/prism.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/components/prism-javascript.min.js"></script>
+</body>
+</html>

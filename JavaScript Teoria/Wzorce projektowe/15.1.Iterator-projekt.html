@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="../styles.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/themes/prism-tomorrow.min.css" rel="stylesheet" />
+    <title>Biblioteka Książek - Wzorzec Iterator</title>
+</head>
+<body>
+    <div class="container">
+        <h1>Biblioteka Książek - Wzorzec Iterator</h1>
+        <button id="showBooksBtn">Pokaż książki</button>
+        <ul id="bookList"></ul>
+
+        <h2>Kod HTML i JavaScript:</h2>
+        <pre><code class="language-html">
+        &lt;h1&gt;Biblioteka Książek - Wzorzec Iterator&lt;/h1&gt;
+        &lt;button id="showBooksBtn"&gt;Pokaż książki&lt;/button&gt;
+        &lt;ul id="bookList"&gt;&lt;/ul&gt;
+
+        &lt;script&gt;
+// Klasa książki
+class Book {
+    constructor(title, author) {
+        this.title = title;  // Tytuł książki
+        this.author = author;  // Autor książki
+    }
+
+    // Metoda zwracająca szczegóły książki
+    getDetails() {
+        return `${this.title} - ${this.author}`;  // Zwraca tytuł i autora
+    }
+}
+
+// Klasa kolekcji książek
+class BookCollection {
+    constructor() {
+        this.books = [];  // Inicjalizacja pustej tablicy książek
+    }
+
+    // Dodawanie książki do kolekcji
+    addBook(book) {
+        this.books.push(book);  // Dodaje książkę do tablicy
+    }
+
+    // Metoda zwracająca iterator do iterowania po kolekcji
+    createIterator() {
+        return new BookIterator(this.books);  // Zwraca nowy obiekt BookIterator
+    }
+}
+
+// Iterator do przeglądania kolekcji książek
+class BookIterator {
+    constructor(books) {
+        this.books = books;  // Przechowuje referencję do kolekcji książek
+        this.currentIndex = 0;  // Ustawia bieżący indeks na 0
+    }
+
+    // Metoda do sprawdzania, czy są kolejne elementy
+    hasNext() {
+        return this.currentIndex < this.books.length;  // Sprawdza, czy są jeszcze książki do iteracji
+    }
+
+    // Metoda do pobierania kolejnego elementu
+    next() {
+        return this.hasNext() ? this.books[this.currentIndex++] : null;  // Zwraca bieżącą książkę i przesuwa indeks
+    }
+}
+
+// Inicjalizacja kolekcji książek
+const bookCollection = new BookCollection();
+bookCollection.addBook(new Book("Władca Pierścieni", "J.R.R. Tolkien"));  // Dodanie książki do kolekcji
+bookCollection.addBook(new Book("Hobbit", "J.R.R. Tolkien"));
+bookCollection.addBook(new Book("Harry Potter", "J.K. Rowling"));
+bookCollection.addBook(new Book("Pan Tadeusz", "Adam Mickiewicz"));
+
+// Obsługa przycisku wyświetlania książek
+document.getElementById('showBooksBtn').addEventListener('click', () => {
+    const iterator = bookCollection.createIterator();  // Tworzenie iteratora dla kolekcji książek
+    const bookListElement = document.getElementById('bookList');  // Element HTML, w którym wyświetlane są książki
+    bookListElement.innerHTML = '';  // Wyczyść listę przed dodaniem książek
+
+    // Iteracja po kolekcji książek i dodawanie ich do listy
+    while (iterator.hasNext()) {
+        const book = iterator.next();  // Pobranie kolejnej książki
+        const li = document.createElement('li');  // Tworzenie elementu listy &lt;li&gt;
+        li.textContent = book.getDetails();  // Ustawianie tekstu na szczegóły książki
+        bookListElement.appendChild(li);  // Dodanie elementu &lt;li&gt; do listy
+    }
+});
+
+        &lt;/script&gt;
+        </code></pre>
+    </div>
+
+    <script>
+        // Klasa książki
+        class Book {
+            constructor(title, author) {
+                this.title = title;
+                this.author = author;
+            }
+
+            getDetails() {
+                return `${this.title} - ${this.author}`;
+            }
+        }
+
+        // Klasa kolekcji książek
+        class BookCollection {
+            constructor() {
+                this.books = [];
+            }
+
+            addBook(book) {
+                this.books.push(book);
+            }
+
+            // Metoda zwracająca iterator do iterowania po kolekcji
+            createIterator() {
+                return new BookIterator(this.books);
+            }
+        }
+
+        // Iterator do przeglądania kolekcji książek
+        class BookIterator {
+            constructor(books) {
+                this.books = books;
+                this.currentIndex = 0;
+            }
+
+            // Metoda do sprawdzania, czy są kolejne elementy
+            hasNext() {
+                return this.currentIndex < this.books.length;
+            }
+
+            // Metoda do pobierania kolejnego elementu
+            next() {
+                return this.hasNext() ? this.books[this.currentIndex++] : null;
+            }
+        }
+
+        // Inicjalizacja kolekcji książek
+        const bookCollection = new BookCollection();
+        bookCollection.addBook(new Book("Władca Pierścieni", "J.R.R. Tolkien"));
+        bookCollection.addBook(new Book("Hobbit", "J.R.R. Tolkien"));
+        bookCollection.addBook(new Book("Harry Potter", "J.K. Rowling"));
+        bookCollection.addBook(new Book("Pan Tadeusz", "Adam Mickiewicz"));
+
+        // Obsługa przycisku "Pokaż książki"
+        document.getElementById('showBooksBtn').addEventListener('click', () => {
+            const iterator = bookCollection.createIterator();
+            const bookListElement = document.getElementById('bookList');
+            bookListElement.innerHTML = ''; // Wyczyść listę przed dodaniem książek
+
+            while (iterator.hasNext()) {
+                const book = iterator.next();
+                const li = document.createElement('li');
+                li.textContent = book.getDetails();
+                bookListElement.appendChild(li);
+            }
+        });
+    </script>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/prism.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/components/prism-javascript.min.js"></script>
+</body>
+</html>

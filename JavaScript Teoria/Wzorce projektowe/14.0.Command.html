@@ -1,0 +1,231 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Wzorzec projektowy Command w JavaScript</title>
+    <link rel="stylesheet" href="../styles.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/themes/prism-tomorrow.min.css" rel="stylesheet" />
+</head>
+<body>
+    <div class="container">
+        <h1>Wzorzec Projektowy Command w JavaScript</h1>
+
+        <p>**Wzorzec Command** umożliwia zamknięcie żądania, operacji lub transakcji w obiekcie. Dzięki temu można opóźnić jego wykonanie, cofnąć operację lub zapisać ją do historii, umożliwiając np. funkcjonalność undo/redo. Oddziela on obiekt wywołujący operację od obiektu, który ją wykonuje, co zwiększa elastyczność w zarządzaniu akcjami.</p>
+
+        <h2>Jak działa wzorzec Command?</h2>
+        <p>Wzorzec Command polega na utworzeniu obiektu polecenia (command), który inkapsuluje akcję. Obiekt polecenia zawiera metodę <code>execute</code> do wykonania tej akcji oraz opcjonalnie <code>undo</code> do cofnięcia akcji. Obiekt wykonujący polecenie (invoker) przechowuje te komendy i wykonuje je w odpowiednich momentach.</p>
+
+        <h3>Przykład implementacji wzorca Command</h3>
+        <pre><code class="language-javascript">
+// Klasa Command - polecenie włączenia światła
+class LightOnCommand {
+    constructor(light) {
+        this.light = light;  // Przypisanie odbiorcy polecenia (światło)
+    }
+
+    // Wykonanie polecenia
+    execute() {
+        this.light.on();  // Włącza światło
+    }
+
+    // Cofnięcie polecenia
+    undo() {
+        this.light.off();  // Wyłącza światło
+    }
+}
+
+// Klasa Light - odbiorca polecenia
+class Light {
+    on() {
+        console.log('Światło włączone');  // Wyświetla komunikat o włączeniu światła
+    }
+
+    off() {
+        console.log('Światło wyłączone');  // Wyświetla komunikat o wyłączeniu światła
+    }
+}
+
+// Klasa Invoker - zarządza wykonywaniem poleceń
+class RemoteControl {
+    constructor() {
+        this.history = [];  // Przechowuje historię wykonanych poleceń
+    }
+
+    // Wykonuje polecenie i zapisuje je w historii
+    executeCommand(command) {
+        command.execute();  // Wykonanie polecenia
+        this.history.push(command);  // Dodanie polecenia do historii
+    }
+
+    // Cofnięcie ostatniego polecenia
+    undoCommand() {
+        const command = this.history.pop();  // Pobiera ostatnie polecenie z historii
+        if (command) {
+            command.undo();  // Cofnięcie polecenia
+        }
+    }
+}
+
+// Użycie wzorca Command
+const light = new Light();  // Tworzenie obiektu światła
+const lightOnCommand = new LightOnCommand(light);  // Tworzenie polecenia włączenia światła
+
+const remote = new RemoteControl();  // Tworzenie obiektu pilota
+remote.executeCommand(lightOnCommand);  // Światło włączone
+remote.undoCommand();  // Światło wyłączone
+
+        </code></pre>
+
+        <p>W powyższym przykładzie mamy klasę <code>Light</code> jako odbiorcę, klasę <code>LightOnCommand</code> jako konkretną implementację polecenia oraz <code>RemoteControl</code> jako wykonawcę poleceń (invoker). Polecenie <code>LightOnCommand</code> inkapsuluje operacje na obiekcie <code>Light</code>, pozwalając na włączanie i wyłączanie światła.</p>
+
+        <h2>Zalety wzorca Command</h2>
+        <ul>
+            <li>Rozdzielenie logiki wykonywania polecenia od jego nadawcy – pozwala to na większą elastyczność w zarządzaniu operacjami.</li>
+            <li>Obsługa funkcji undo/redo – wzorzec Command umożliwia łatwe cofanie wykonanych operacji.</li>
+            <li>Możliwość kolejkowania i zapisywania operacji – polecenia mogą być zapisywane, wykonywane sekwencyjnie lub opóźniane.</li>
+            <li>Zwiększenie modularności i reużywalności kodu – każda operacja jest enkapsulowana w osobnym obiekcie, co ułatwia jej ponowne wykorzystanie.</li>
+        </ul>
+
+        <h2>Zastosowanie wzorca Command</h2>
+        <p>Wzorzec Command znajduje zastosowanie w systemach, gdzie operacje muszą być wykonywane, cofnęte lub opóźnione. Można go stosować w systemach sterowania (np. sterowanie urządzeniami z poziomu pilota), w aplikacjach GUI (undo/redo), a także w systemach kolejkowania zadań.</p>
+
+        <h2>Przykład użycia Command w rzeczywistym projekcie</h2>
+        <pre><code class="language-javascript">
+// Klasa TextEditor - zarządza edytowaniem tekstu
+class TextEditor {
+    constructor() {
+        this.text = '';  // Początkowy tekst w edytorze
+    }
+
+    // Metoda do dodawania tekstu
+    write(text) {
+        this.text += text;  // Dodaje tekst na końcu obecnego tekstu
+        console.log(`Tekst: ${this.text}`);  // Wyświetla aktualny stan tekstu
+    }
+
+    // Metoda cofająca ostatnią operację dodania tekstu
+    undo(text) {
+        this.text = this.text.slice(0, -text.length);  // Usuwa ostatnio dodany tekst
+        console.log(`Cofnięto, tekst: ${this.text}`);  // Wyświetla tekst po cofnięciu operacji
+    }
+}
+
+// Klasa WriteCommand - implementuje polecenie dodania tekstu
+class WriteCommand {
+    constructor(editor, text) {
+        this.editor = editor;  // Przypisanie obiektu edytora
+        this.text = text;  // Tekst do dodania
+    }
+
+    // Metoda wykonująca polecenie dodania tekstu
+    execute() {
+        this.editor.write(this.text);  // Wywołuje metodę dodania tekstu z edytora
+    }
+
+    // Metoda cofająca dodanie tekstu
+    undo() {
+        this.editor.undo(this.text);  // Wywołuje metodę cofania tekstu z edytora
+    }
+}
+
+// Użycie w edytorze tekstu
+const editor = new TextEditor();  // Tworzenie instancji edytora tekstu
+const writeCommand = new WriteCommand(editor, 'Hello World');  // Tworzenie polecenia dodania tekstu
+
+editor.write('Start: ');  // Tekst: Start: 
+writeCommand.execute();  // Tekst: Start: Hello World
+writeCommand.undo();  // Cofnięto, tekst: Start:
+
+        </code></pre>
+
+        <p>W tym przykładzie wzorzec Command został zastosowany w kontekście edytora tekstu, gdzie użytkownik może wpisywać tekst i cofać swoje akcje (undo). Każda operacja wpisywania tekstu jest zapisywana jako polecenie, które można wykonać lub cofnąć.</p>
+
+        <h2>Podsumowanie</h2>
+        <ul>
+            <li>Wzorzec Command umożliwia enkapsulację poleceń jako obiekty, co pozwala na ich późniejsze wykonanie, cofnięcie lub zapisanie.</li>
+            <li>Oddzielenie nadawcy żądania od jego wykonawcy zwiększa elastyczność zarządzania operacjami w systemie.</li>
+            <li>Command jest szczególnie przydatny w systemach obsługujących funkcje undo/redo oraz kolejkowanie zadań.</li>
+        </ul>
+        <a href="./14.1.Command-projekt.html"><button>Przykładowy projekt</button></a>
+    </div>
+    <script>
+        // Odbiorca (Kucharz)
+class Chef {
+  cookSteak() {
+    console.log('Chef: Cooking steak.');
+  }
+
+  cookSalad() {
+    console.log('Chef: Making salad.');
+  }
+}
+
+// Interfejs dla polecenia (Command)
+class Command {
+  execute() {}
+}
+
+// Polecenie: przygotowanie steka
+class CookSteakCommand extends Command {
+  constructor(chef) {
+    super();
+    this.chef = chef;
+  }
+
+  execute() {
+    this.chef.cookSteak();
+  }
+}
+
+// Polecenie: przygotowanie sałatki
+class CookSaladCommand extends Command {
+  constructor(chef) {
+    super();
+    this.chef = chef;
+  }
+
+  execute() {
+    this.chef.cookSalad();
+  }
+}
+
+// Kelner (Invoker)
+class Waiter {
+  constructor() {
+    this.orders = [];
+  }
+
+  takeOrder(command) {
+    this.orders.push(command);
+  }
+
+  placeOrders() {
+    this.orders.forEach(order => order.execute());
+    this.orders = [];  // Czyścimy zamówienia po ich wykonaniu
+  }
+}
+
+// Tworzenie obiektu kucharza
+const chef = new Chef();
+
+// Tworzenie konkretnych zamówień (poleceń)
+const steakOrder = new CookSteakCommand(chef);
+const saladOrder = new CookSaladCommand(chef);
+
+// Kelner przyjmuje zamówienia
+const waiter = new Waiter();
+waiter.takeOrder(steakOrder);
+waiter.takeOrder(saladOrder);
+
+// Kelner przekazuje zamówienia do kuchni
+waiter.placeOrders();
+// Wyświetli:
+// Chef: Cooking steak.
+// Chef: Making salad.
+
+    </script>
+          <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/prism.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/components/prism-javascript.min.js"></script>
+</body>
+</html>
