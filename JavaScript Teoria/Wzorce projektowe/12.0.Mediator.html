@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Wzorzec projektowy Mediator w JavaScript</title>
+    <link rel="stylesheet" href="../styles.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/themes/prism-tomorrow.min.css" rel="stylesheet" />
+</head>
+<body>
+    <div class="container">
+        <h1>Wzorzec Projektowy Mediator w JavaScript</h1>
+
+        <p>**Wzorzec Mediator** pozwala na scentralizowanie komunikacji pomiędzy obiektami, eliminując potrzebę bezpośrednich połączeń między nimi. Mediator działa jako pośrednik, który zarządza interakcjami, co upraszcza strukturę systemu i zwiększa jego elastyczność.</p>
+
+        <h2>Jak działa wzorzec Mediator?</h2>
+        <p>Wzorzec Mediator wprowadza obiekt pośredniczący (mediator), który zarządza wymianą informacji pomiędzy różnymi komponentami systemu. Każdy z obiektów komunikuje się z mediatorem, który decyduje, jakie akcje należy podjąć lub które obiekty powinny zostać powiadomione.</p>
+
+        <h3>Przykład implementacji wzorca Mediator</h3>
+        <pre><code class="language-javascript">
+// Klasa Mediatora
+class ChatRoom {
+    // Metoda do wyświetlania wiadomości
+    showMessage(user, message) {
+        const time = new Date().toLocaleTimeString(); // Pobieranie aktualnej godziny
+        const sender = user.getName(); // Pobieranie nazwy użytkownika, który wysłał wiadomość
+        console.log(`[${time}] ${sender}: ${message}`); // Wyświetlanie wiadomości z czasem i nazwą użytkownika w konsoli
+    }
+}
+
+// Klasa Użytkownika, która komunikuje się za pośrednictwem Mediatora
+class User {
+    constructor(name, chatRoom) {
+        this.name = name; // Ustawienie nazwy użytkownika
+        this.chatRoom = chatRoom; // Ustawienie referencji do Mediatora (pokoju czatowego)
+    }
+
+    // Metoda do pobierania nazwy użytkownika
+    getName() {
+        return this.name; // Zwraca nazwę użytkownika
+    }
+
+    // Metoda do wysyłania wiadomości
+    sendMessage(message) {
+        this.chatRoom.showMessage(this, message);  // Przekazanie wiadomości Mediatorowi do wyświetlenia
+    }
+}
+
+// Tworzenie instancji Mediatora i Użytkowników
+const chatRoom = new ChatRoom(); // Inicjalizacja nowego pokoju czatowego
+
+const user1 = new User('Jan', chatRoom); // Tworzenie użytkownika 'Jan' i przypisanie do pokoju czatowego
+const user2 = new User('Kasia', chatRoom); // Tworzenie użytkownika 'Kasia' i przypisanie do pokoju czatowego
+
+// Wysyłanie wiadomości przez użytkowników
+user1.sendMessage('Cześć, Kasia!'); // Jan wysyła wiadomość do Kasi
+user2.sendMessage('Hej, Jan! Jak się masz?'); // Kasia odpowiada Janowi
+
+        </code></pre>
+
+        <p>W powyższym przykładzie klasa <code>ChatRoom</code> działa jako mediator, który zarządza wymianą wiadomości między użytkownikami. Obiekty <code>User</code> nie komunikują się bezpośrednio między sobą, lecz poprzez mediatora, co upraszcza strukturę kodu i pozwala łatwiej zarządzać zależnościami.</p>
+
+        <h2>Zalety wzorca Mediator</h2>
+        <ul>
+            <li>Redukcja zależności między obiektami – Obiekty nie muszą znać się nawzajem, wystarczy, że znają mediatora.</li>
+            <li>Lepsza organizacja kodu – Mediator centralizuje logikę komunikacji, co ułatwia jej zarządzanie i rozbudowę.</li>
+            <li>Łatwiejsze rozszerzanie systemu – Dodanie nowych obiektów lub zmiana istniejących interakcji nie wymaga modyfikacji wszystkich zaangażowanych klas.</li>
+        </ul>
+
+        <h2>Zastosowanie wzorca Mediator</h2>
+        <p>Wzorzec Mediator znajduje zastosowanie wszędzie tam, gdzie mamy wiele zależnych obiektów, które muszą ze sobą współpracować, ale nie powinny być ze sobą bezpośrednio połączone. Przykłady to systemy komunikacji (chaty, fora), systemy GUI (zarządzanie interakcją między komponentami UI), czy złożone systemy oparte na zdarzeniach.</p>
+
+        <h2>Przykład zastosowania w rzeczywistym projekcie</h2>
+        <pre><code class="language-javascript">
+// Mediator do obsługi formularza
+class FormMediator {
+    constructor() {
+        this.fields = {}; // Obiekt przechowujący pola formularza
+    }
+
+    // Rejestracja pola w mediatorze
+    registerField(field) {
+        this.fields[field.name] = field; // Dodanie pola do obiektu fields
+        field.setMediator(this); // Ustawienie referencji do mediatora w polu
+    }
+
+    // Metoda powiadamiania mediatora o zmianach w polach
+    notify(field, event) {
+        if (event === 'change') { // Sprawdzanie, czy zdarzenie to zmiana wartości
+            console.log(`Pole ${field.name} zostało zmienione na: ${field.value}`); // Wyświetlanie informacji o zmianie w konsoli
+        }
+    }
+}
+
+// Klasa reprezentująca pojedyncze pole formularza
+class FormField {
+    constructor(name, value) {
+        this.name = name; // Nazwa pola formularza
+        this.value = value; // Wartość początkowa pola
+        this.mediator = null; // Referencja do mediatora (początkowo brak)
+    }
+
+    // Ustawienie mediatora dla pola
+    setMediator(mediator) {
+        this.mediator = mediator; // Przypisanie mediatora do pola
+    }
+
+    // Metoda do zmiany wartości pola
+    changeValue(value) {
+        this.value = value; // Ustawienie nowej wartości pola
+        this.mediator.notify(this, 'change'); // Powiadomienie mediatora o zmianie
+    }
+}
+
+// Użycie mediatora do zarządzania formularzem
+const formMediator = new FormMediator(); // Tworzenie nowego mediatora formularza
+
+// Tworzenie dwóch pól formularza: imienia i emaila
+const nameField = new FormField('name', 'Jan'); // Pole imienia z wartością początkową "Jan"
+const emailField = new FormField('email', 'jan@example.com'); // Pole emaila z wartością początkową "jan@example.com"
+
+// Rejestracja pól w mediatorze
+formMediator.registerField(nameField); 
+formMediator.registerField(emailField);
+
+// Zmiana wartości pola imienia i powiadomienie mediatora
+nameField.changeValue('Kasia');  // Zmiana wartości pola imienia na "Kasia" i powiadomienie mediatora
+
+// Zmiana wartości pola emaila i powiadomienie mediatora
+emailField.changeValue('kasia@example.com'); // Zmiana wartości pola emaila na "kasia@example.com" i powiadomienie mediatora
+
+        </code></pre>
+
+        <p>W tym przykładzie mediator <code>FormMediator</code> zarządza zmianami wartości pól formularza, umożliwiając łatwe zarządzanie interakcją między różnymi polami, bez bezpośrednich zależności między nimi. Każde pole zgłasza zmiany do mediatora, który decyduje, jakie działania podjąć.</p>
+
+        <h2>Podsumowanie</h2>
+        <ul>
+            <li>Wzorzec Mediator centralizuje komunikację między obiektami, eliminując potrzebę bezpośrednich połączeń między nimi.</li>
+            <li>Ułatwia zarządzanie złożonymi interakcjami w systemach o wielu zależnych komponentach.</li>
+            <li>Mediator poprawia organizację kodu, czyniąc go bardziej modularnym i łatwiejszym w utrzymaniu.</li>
+        </ul>
+         <a href="./12.1.Mediator-projekt.html"><button>Przykładowy projekt</button></a>
+    </div>
+    <script>
+// Klasa Mediatora
+class ChatRoom {
+  constructor() {
+    this.users = {}; // Przechowuje zarejestrowanych użytkowników
+  }
+
+  register(user) {
+    this.users[user.name] = user; // Rejestracja użytkownika w mediatora
+    user.chatRoom = this;         // Użytkownik zna swojego mediatora
+  }
+
+  sendMessage(message, fromUser, toUser) {
+    if (toUser) {
+      // Wysyłanie wiadomości do konkretnego użytkownika
+      console.log(`${fromUser.name} to ${toUser.name}: "${message}"`);
+    } else {
+      // Wysyłanie wiadomości do wszystkich użytkowników w pokoju czatu
+      Object.keys(this.users).forEach(userName => {
+        if (this.users[userName] !== fromUser) {
+          console.log(`${fromUser.name} to everyone: "${message}"`);
+        }
+      });
+    }
+  }
+}
+
+// Klasa Użytkownika
+class User {
+  constructor(name) {
+    this.name = name;
+    this.chatRoom = null;  // Użytkownik początkowo nie zna mediatora
+  }
+
+  send(message, toUser = null) {
+    this.chatRoom.sendMessage(message, this, toUser);  // Użytkownik wysyła wiadomość przez mediatora
+  }
+}
+
+// Tworzenie mediatora (pokoju czatu)
+const chatRoom = new ChatRoom();
+
+// Tworzenie użytkowników
+const alice = new User('Alice');
+const bob = new User('Bob');
+const charlie = new User('Charlie');
+
+// Rejestracja użytkowników w pokoju czatu
+chatRoom.register(alice);
+chatRoom.register(bob);
+chatRoom.register(charlie);
+
+// Komunikacja za pomocą mediatora
+alice.send('Hello, Bob!', bob);  // Wyświetli: Alice to Bob: "Hello, Bob!"
+bob.send('Hello, Alice!');       // Wyświetli: Bob to everyone: "Hello, Alice!"
+charlie.send('Hi everyone!');    // Wyświetli: Charlie to everyone: "Hi everyone!"
+
+    </script>
+          <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/prism.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/components/prism-javascript.min.js"></script>
+</body>
+</html>

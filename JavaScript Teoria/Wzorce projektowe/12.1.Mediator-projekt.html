@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="../styles.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/themes/prism-tomorrow.min.css" rel="stylesheet" />
+    <title>System Czatowy - Wzorzec Mediator</title>
+</head>
+<body>
+    <div class="container">
+        <h1>System Czatowy - Wzorzec Mediator</h1>
+        <div id="chatWindow"></div>
+        <div>
+            <label for="username">Nazwa użytkownika:</label>
+            <input type="text" id="username">
+            <label for="message">Wiadomość:</label>
+            <input type="text" id="message">
+            <button id="sendMessageBtn">Wyślij wiadomość</button>
+        </div>
+
+<h2>Kod HTML i JavaScript:</h2>
+<pre><code class="language-html">
+<!-- Tytuł strony z nazwą wzorca projektowego -->
+&lt;h1&gt;System Czatowy - Wzorzec Mediator&lt;/h1&gt;
+
+<!-- Miejsce wyświetlania wiadomości czatu -->
+&lt;div id="chatWindow"&gt;&lt;/div&gt;
+
+<!-- Formularz do wprowadzania nazwy użytkownika i wiadomości -->
+&lt;div&gt;
+    &lt;label for="username"&gt;Nazwa użytkownika:&lt;/label&gt; <!-- Etykieta dla pola nazwy użytkownika -->
+    &lt;input type="text" id="username"&gt; <!-- Pole do wpisania nazwy użytkownika -->
+    
+    &lt;label for="message"&gt;Wiadomość:&lt;/label&gt; <!-- Etykieta dla pola wiadomości -->
+    &lt;input type="text" id="message"&gt; <!-- Pole do wpisania wiadomości -->
+    
+    &lt;button id="sendMessageBtn"&gt;Wyślij wiadomość&lt;/button&gt; <!-- Przycisk do wysłania wiadomości -->
+&lt;/div&gt;
+
+<!-- Sekcja JavaScript -->
+&lt;script&gt;
+    // Klasa Mediator
+    class ChatRoom {
+        constructor() {
+            this.users = []; // Tablica przechowująca zarejestrowanych użytkowników
+        }
+
+        // Metoda do rejestrowania użytkownika w czacie
+        registerUser(user) {
+            this.users.push(user); // Dodanie użytkownika do tablicy
+            user.setChatRoom(this); // Przypisanie mediatora użytkownikowi
+        }
+
+        // Metoda do wysyłania wiadomości
+        sendMessage(message, fromUser) {
+            // Iteracja po użytkownikach i wysyłanie wiadomości do każdego, kto nie jest nadawcą
+            this.users.forEach(user => {
+                if (user !== fromUser) {
+                    user.receiveMessage(message, fromUser); // Użytkownik odbiera wiadomość
+                }
+            });
+        }
+    }
+
+    // Klasa Użytkownik
+    class User {
+        constructor(name) {
+            this.name = name; // Imię użytkownika
+            this.chatRoom = null; // Referencja do mediatora (ChatRoom)
+        }
+
+        // Ustawienie mediatora dla użytkownika
+        setChatRoom(chatRoom) {
+            this.chatRoom = chatRoom; // Przypisanie pokoju czatowego (mediatora)
+        }
+
+        // Metoda do wysyłania wiadomości
+        sendMessage(message) {
+            if (this.chatRoom) { // Sprawdzenie, czy użytkownik jest przypisany do pokoju czatowego
+                this.chatRoom.sendMessage(message, this); // Wysyłanie wiadomości za pomocą mediatora
+            }
+        }
+
+        // Metoda do odbierania wiadomości
+        receiveMessage(message, fromUser) {
+            const chatWindow = document.getElementById('chatWindow'); // Pobranie okna czatu z HTML
+            const messageElement = document.createElement('p'); // Tworzenie nowego elementu do wyświetlenia wiadomości
+            messageElement.textContent = `${fromUser.name}: ${message}`; // Ustawienie treści wiadomości z nazwą nadawcy
+            chatWindow.appendChild(messageElement); // Dodanie wiadomości do okna czatu
+        }
+    }
+
+    // Inicjalizacja pokoju czatowego i użytkowników
+    const chatRoom = new ChatRoom(); // Tworzenie nowego pokoju czatowego
+    const user1 = new User('Anna'); // Tworzenie użytkownika 'Anna'
+    const user2 = new User('Kamil'); // Tworzenie użytkownika 'Kamil'
+    const user3 = new User('Ola'); // Tworzenie użytkownika 'Ola'
+
+    // Rejestrowanie użytkowników w pokoju czatowym
+    chatRoom.registerUser(user1); 
+    chatRoom.registerUser(user2);
+    chatRoom.registerUser(user3);
+
+    // Obsługa przycisku wysyłania wiadomości
+    document.getElementById('sendMessageBtn').addEventListener('click', () => {
+        const username = document.getElementById('username').value; // Pobranie nazwy użytkownika z pola
+        const message = document.getElementById('message').value; // Pobranie wiadomości z pola
+        let user = chatRoom.users.find(u => u.name === username); // Szukanie użytkownika po nazwie w zarejestrowanych użytkownikach
+        
+        if (user) {
+            user.sendMessage(message); // Jeśli użytkownik istnieje, wysyła wiadomość
+        } else {
+            alert('Użytkownik nie istnieje!'); // Jeśli użytkownik nie istnieje, wyświetlenie alertu
+        }
+    });
+&lt;/script&gt;
+</code></pre>
+
+    </div>
+
+    <script>
+        // Klasa Mediator (ChatRoom)
+        class ChatRoom {
+            constructor() {
+                this.users = [];
+            }
+
+            // Rejestracja użytkownika w pokoju czatowym
+            registerUser(user) {
+                this.users.push(user);
+                user.setChatRoom(this); // Ustawienie pokoju czatowego dla użytkownika
+            }
+
+            // Wysyłanie wiadomości do wszystkich użytkowników poza nadawcą
+            sendMessage(message, fromUser) {
+                this.users.forEach(user => {
+                    if (user !== fromUser) {
+                        user.receiveMessage(message, fromUser);
+                    }
+                });
+            }
+        }
+
+        // Klasa Użytkownik
+        class User {
+            constructor(name) {
+                this.name = name;
+                this.chatRoom = null;
+            }
+
+            // Ustawienie pokoju czatowego (mediatora)
+            setChatRoom(chatRoom) {
+                this.chatRoom = chatRoom;
+            }
+
+            // Wysyłanie wiadomości za pośrednictwem pokoju czatowego (mediatora)
+            sendMessage(message) {
+                if (this.chatRoom) {
+                    this.chatRoom.sendMessage(message, this);
+                }
+            }
+
+            // Odbieranie wiadomości
+            receiveMessage(message, fromUser) {
+                const chatWindow = document.getElementById('chatWindow');
+                const messageElement = document.createElement('p');
+                messageElement.textContent = `${fromUser.name}: ${message}`;
+                chatWindow.appendChild(messageElement);
+            }
+        }
+
+        // Inicjalizacja pokoju czatowego i użytkowników
+        const chatRoom = new ChatRoom();
+        const user1 = new User('Anna');
+        const user2 = new User('Kamil');
+        const user3 = new User('Ola');
+
+        chatRoom.registerUser(user1);
+        chatRoom.registerUser(user2);
+        chatRoom.registerUser(user3);
+
+        // Obsługa wysyłania wiadomości
+        document.getElementById('sendMessageBtn').addEventListener('click', () => {
+            const username = document.getElementById('username').value;
+            const message = document.getElementById('message').value;
+            let user = chatRoom.users.find(u => u.name === username);
+            
+            if (user) {
+                user.sendMessage(message);
+            } else {
+                alert('Użytkownik nie istnieje!');
+            }
+        });
+    </script>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/prism.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/components/prism-javascript.min.js"></script>
+</body>
+</html>

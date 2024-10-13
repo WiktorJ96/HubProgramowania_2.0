@@ -1,0 +1,218 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="../styles.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/themes/prism-tomorrow.min.css" rel="stylesheet" />
+    <title>System Powiadomień - Wzorzec Adapter</title>
+</head>
+<body>
+    <div class="container">
+        <h1>System Powiadomień - Wzorzec Adapter</h1>
+        <button id="sendNotificationsBtn">Wyślij Powiadomienia</button>
+        <p id="notificationStatus"></p>
+
+        <h2>Kod HTML i JavaScript:</h2>
+        <pre><code class="language-html">
+        &lt;h1&gt;System Powiadomień - Wzorzec Adapter&lt;/h1&gt;
+        &lt;button id="sendNotificationsBtn"&gt;Wyślij Powiadomienia&lt;/button&gt;
+        &lt;p id="notificationStatus"&gt;&lt;/p&gt;
+
+        &lt;script&gt;
+// Klasy, które reprezentują różne systemy powiadomień
+class SMSNotification {
+    // Metoda wysyłania wiadomości SMS
+    sendSMS(message) {
+        return `Wiadomość SMS: ${message} została wysłana.`; // Zwraca status wysłania wiadomości SMS
+    }
+}
+
+class EmailNotification {
+    // Metoda wysyłania wiadomości email
+    sendEmail(message) {
+        return `Email: ${message} został wysłany.`; // Zwraca status wysłania wiadomości email
+    }
+}
+
+class PushNotification {
+    // Metoda wysyłania powiadomienia push
+    sendPush(message) {
+        return `Powiadomienie push: ${message} zostało wysłane.`; // Zwraca status wysłania powiadomienia push
+    }
+}
+
+// Adaptery, które dopasowują interfejs każdej klasy do jednego interfejsu powiadomień
+class SMSAdapter {
+    constructor(smsNotification) {
+        this.smsNotification = smsNotification; // Przechowuje referencję do obiektu SMSNotification
+    }
+
+    // Metoda adaptera dopasowująca metodę send do SMS
+    send(message) {
+        return this.smsNotification.sendSMS(message); // Używa metody sendSMS z klasy SMSNotification
+    }
+}
+
+class EmailAdapter {
+    constructor(emailNotification) {
+        this.emailNotification = emailNotification; // Przechowuje referencję do obiektu EmailNotification
+    }
+
+    // Metoda adaptera dopasowująca metodę send do email
+    send(message) {
+        return this.emailNotification.sendEmail(message); // Używa metody sendEmail z klasy EmailNotification
+    }
+}
+
+class PushAdapter {
+    constructor(pushNotification) {
+        this.pushNotification = pushNotification; // Przechowuje referencję do obiektu PushNotification
+    }
+
+    // Metoda adaptera dopasowująca metodę send do push
+    send(message) {
+        return this.pushNotification.sendPush(message); // Używa metody sendPush z klasy PushNotification
+    }
+}
+
+// Klasa zarządzająca powiadomieniami, która używa adapterów
+class NotificationManager {
+    constructor() {
+        this.notifications = []; // Tablica przechowująca różne powiadomienia (adaptery)
+    }
+
+    // Dodaje adapter powiadomienia do listy
+    addNotification(notification) {
+        this.notifications.push(notification); // Dodaje adapter do tablicy powiadomień
+    }
+
+    // Wysyła wszystkie powiadomienia za pomocą jednego interfejsu
+    sendNotifications(message) {
+        return this.notifications.map(notification => notification.send(message)).join(' '); // Wysyła wiadomość za pomocą każdego adaptera i łączy wyniki
+    }
+}
+
+// Obsługa przycisku wysyłania powiadomień
+document.getElementById('sendNotificationsBtn').addEventListener('click', () => {
+    const notificationManager = new NotificationManager(); // Tworzenie obiektu zarządzającego powiadomieniami
+    
+    // Tworzenie systemów powiadomień
+    const smsNotification = new SMSNotification(); // System SMS
+    const emailNotification = new EmailNotification(); // System email
+    const pushNotification = new PushNotification(); // System powiadomień push
+    
+    // Tworzenie adapterów
+    const smsAdapter = new SMSAdapter(smsNotification); // Adapter dla SMS
+    const emailAdapter = new EmailAdapter(emailNotification); // Adapter dla email
+    const pushAdapter = new PushAdapter(pushNotification); // Adapter dla powiadomień push
+    
+    // Dodawanie powiadomień do managera
+    notificationManager.addNotification(smsAdapter); // Dodanie SMS
+    notificationManager.addNotification(emailAdapter); // Dodanie email
+    notificationManager.addNotification(pushAdapter); // Dodanie powiadomień push
+    
+    // Wysłanie wszystkich powiadomień za pomocą jednego interfejsu
+    const notificationStatus = notificationManager.sendNotifications('Zamówienie zostało wysłane!'); // Wiadomość do wysłania
+    document.getElementById('notificationStatus').textContent = notificationStatus; // Wyświetlenie statusu powiadomień na stronie
+});
+
+        &lt;/script&gt;
+        </code></pre>
+    </div>
+
+    <script>
+        // Klasy reprezentujące różne systemy powiadomień
+        class SMSNotification {
+            sendSMS(message) {
+                return `Wiadomość SMS: ${message} została wysłana.`;
+            }
+        }
+
+        class EmailNotification {
+            sendEmail(message) {
+                return `Email: ${message} został wysłany.`;
+            }
+        }
+
+        class PushNotification {
+            sendPush(message) {
+                return `Powiadomienie push: ${message} zostało wysłane.`;
+            }
+        }
+
+        // Adaptery, które dopasowują interfejs do jednego standardowego
+        class SMSAdapter {
+            constructor(smsNotification) {
+                this.smsNotification = smsNotification;
+            }
+
+            send(message) {
+                return this.smsNotification.sendSMS(message);
+            }
+        }
+
+        class EmailAdapter {
+            constructor(emailNotification) {
+                this.emailNotification = emailNotification;
+            }
+
+            send(message) {
+                return this.emailNotification.sendEmail(message);
+            }
+        }
+
+        class PushAdapter {
+            constructor(pushNotification) {
+                this.pushNotification = pushNotification;
+            }
+
+            send(message) {
+                return this.pushNotification.sendPush(message);
+            }
+        }
+
+        // Manager, który zarządza powiadomieniami i używa adapterów
+        class NotificationManager {
+            constructor() {
+                this.notifications = [];
+            }
+
+            addNotification(notification) {
+                this.notifications.push(notification);
+            }
+
+            sendNotifications(message) {
+                return this.notifications.map(notification => notification.send(message)).join(' ');
+            }
+        }
+
+        // Obsługa przycisku "Wyślij Powiadomienia"
+        document.getElementById('sendNotificationsBtn').addEventListener('click', () => {
+            const notificationManager = new NotificationManager();
+            
+            // Tworzenie systemów powiadomień
+            const smsNotification = new SMSNotification();
+            const emailNotification = new EmailNotification();
+            const pushNotification = new PushNotification();
+            
+            // Tworzenie adapterów
+            const smsAdapter = new SMSAdapter(smsNotification);
+            const emailAdapter = new EmailAdapter(emailNotification);
+            const pushAdapter = new PushAdapter(pushNotification);
+            
+            // Dodawanie powiadomień do managera
+            notificationManager.addNotification(smsAdapter);
+            notificationManager.addNotification(emailAdapter);
+            notificationManager.addNotification(pushAdapter);
+            
+            // Wysłanie wszystkich powiadomień
+            const notificationStatus = notificationManager.sendNotifications('Zamówienie zostało wysłane!');
+            document.getElementById('notificationStatus').textContent = notificationStatus;
+        });
+    </script>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/prism.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/components/prism-javascript.min.js"></script>
+</body>
+</html>

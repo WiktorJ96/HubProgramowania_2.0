@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Wzorzec projektowy Adapter w JavaScript</title>
+    <link rel="stylesheet" href="../styles.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/themes/prism-tomorrow.min.css" rel="stylesheet" />
+</head>
+<body>
+    <div class="container">
+        <h1>Wzorzec Projektowy Adapter w JavaScript</h1>
+
+        <p>**Wzorzec Adapter** pozwala na współpracę dwóch klas o niekompatybilnych interfejsach. Dzięki adapterowi można dopasować jeden interfejs do drugiego bez modyfikowania istniejących klas. Adapter działa jako „tłumacz”, który umożliwia współpracę między starymi i nowymi modułami w systemie.</p>
+
+        <h2>Jak działa wzorzec Adapter?</h2>
+        <p>Adapter otacza istniejącą klasę i zmienia jej interfejs, aby był zgodny z wymaganiami klienta. Pozwala to na współpracę z kodem, który w przeciwnym razie nie mógłby bezpośrednio korzystać z tej klasy.</p>
+
+        <h3>Przykład implementacji Adapter</h3>
+        <pre><code class="language-javascript">
+// Stary interfejs
+class OldPrinter {
+    // Metoda drukowania w starym interfejsie
+    print(text) {
+        console.log(`Drukuję: ${text}`);  // Wyświetla tekst w starym stylu "Drukuję"
+    }
+}
+
+// Nowy interfejs
+class NewPrinter {
+    // Metoda wyjściowa w nowym interfejsie
+    output(text) {
+        console.log(`Output: ${text}`);  // Wyświetla tekst w nowym stylu "Output"
+    }
+}
+
+// Adapter, który dopasowuje stary interfejs do nowego
+class PrinterAdapter {
+    constructor(newPrinter) {
+        this.newPrinter = newPrinter;  // Przechowuje referencję do obiektu z nowym interfejsem
+    }
+
+    // Metoda print tłumaczona na metodę output nowego interfejsu
+    print(text) {
+        this.newPrinter.output(text);  // Adapter tłumaczy metodę print na output z nowego interfejsu
+    }
+}
+
+// Klient używający starego interfejsu
+const oldPrinter = new OldPrinter();
+oldPrinter.print("Hello World!");  // Wywołuje metodę print w starym stylu "Drukuję: Hello World!"
+
+// Użycie adaptera z nowym interfejsem
+const newPrinter = new NewPrinter();
+const adapter = new PrinterAdapter(newPrinter);
+adapter.print("Hello World!");  // Adapter tłumaczy print na output "Output: Hello World!"
+
+        </code></pre>
+        <p>W powyższym przykładzie mamy dwa różne interfejsy: <code>OldPrinter</code> z metodą <code>print</code> i <code>NewPrinter</code> z metodą <code>output</code>. Aby umożliwić klientowi korzystanie z <code>NewPrinter</code> za pomocą starego interfejsu, stosujemy adapter <code>PrinterAdapter</code>, który "tłumaczy" metodę <code>print</code> na <code>output</code>.</p>
+
+        <h2>Zalety wzorca Adapter</h2>
+        <ul>
+            <li>Umożliwia współpracę klas o niekompatybilnych interfejsach.</li>
+            <li>Minimalizuje potrzebę modyfikacji istniejącego kodu.</li>
+            <li>Ułatwia integrację zewnętrznych bibliotek lub systemów z istniejącym kodem.</li>
+            <li>Pozwala na stopniowe wprowadzanie zmian w systemie, bez konieczności przepisania całego kodu na raz.</li>
+        </ul>
+
+        <h2>Zastosowanie wzorca Adapter</h2>
+        <p>Wzorzec Adapter jest często stosowany, gdy mamy do czynienia z integracją starych systemów z nowymi, które mogą mieć inne interfejsy. Jest również przydatny podczas korzystania z zewnętrznych bibliotek, które oferują funkcjonalność, ale w inny sposób, niż oczekuje tego nasza aplikacja. Zamiast modyfikować istniejące klasy, możemy stworzyć adapter, który dostosuje interfejs.</p>
+
+        <h2>Przykład użycia Adapter w rzeczywistym projekcie</h2>
+        <pre><code class="language-javascript">
+// Stary system płatności
+class OldPaymentSystem {
+    // Metoda obsługująca płatność w starym systemie
+    makePayment(amount) {
+        console.log(`Płatność na kwotę ${amount} PLN`);  // Wyświetla płatność w starym stylu
+    }
+}
+
+// Nowy system płatności (inny interfejs)
+class NewPaymentSystem {
+    // Metoda obsługująca płatność w nowym systemie
+    processPayment(amount) {
+        console.log(`Przetwarzanie płatności na kwotę ${amount} PLN`);  // Wyświetla przetwarzanie płatności w nowym stylu
+    }
+}
+
+// Adapter - dopasowuje nowy interfejs do starego
+class PaymentAdapter {
+    constructor(newPaymentSystem) {
+        this.newPaymentSystem = newPaymentSystem;  // Przechowuje referencję do nowego systemu płatności
+    }
+
+    // Metoda tłumacząca stary sposób płatności na nowy
+    makePayment(amount) {
+        this.newPaymentSystem.processPayment(amount);  // Tłumaczy metodę makePayment na processPayment
+    }
+}
+
+// Użycie adaptera
+const newPaymentSystem = new NewPaymentSystem();  // Tworzenie instancji nowego systemu płatności
+const paymentAdapter = new PaymentAdapter(newPaymentSystem);  // Tworzenie adaptera
+paymentAdapter.makePayment(100);  // Adapter tłumaczy makePayment na processPayment, wyświetli: "Przetwarzanie płatności na kwotę 100 PLN"
+
+        </code></pre>
+        <p>W tym przykładzie adapter <code>PaymentAdapter</code> dostosowuje nowy system płatności do interfejsu, który jest kompatybilny z istniejącym starym systemem. Dzięki temu możemy korzystać z nowego systemu bez zmiany starego kodu.</p>
+
+        <h2>Podsumowanie</h2>
+        <ul>
+            <li>Wzorzec Adapter umożliwia współpracę klas o niekompatybilnych interfejsach.</li>
+            <li>Minimalizuje potrzebę modyfikacji istniejącego kodu, co sprawia, że jest łatwiejszy w utrzymaniu.</li>
+            <li>Jest przydatny w systemach, które muszą integrować stare moduły z nowymi technologiami lub zewnętrznymi bibliotekami.</li>
+        </ul>
+        <a href="./9.1.Adapter-projekt.html"><button>Przykładowy projekt</button></a>
+    </div>
+    <script>
+        // Stary interfejs
+class OldPrinter {
+  print(text) {
+    console.log(`Printing: ${text}`);
+  }
+}
+
+// Nowy interfejs, który jest bardziej skomplikowany
+class NewPrinter {
+  printComplex(document) {
+    console.log(`Printing document: ${document.title}`);
+    console.log(`Content: ${document.content}`);
+  }
+}
+
+// Adapter, który tłumaczy między OldPrinter a NewPrinter
+class PrinterAdapter {
+  constructor(newPrinter) {
+    this.newPrinter = newPrinter;  // Przechowuje referencję do obiektu NewPrinter
+  }
+
+  // Adapter zmienia dane, aby pasowały do metody newPrinter.printComplex
+  print(text) {
+    const document = {
+      title: 'Converted Document',
+      content: text
+    };
+    this.newPrinter.printComplex(document);
+  }
+}
+
+// Klient, który używa starego interfejsu
+function client(printer) {
+  printer.print('Hello, world!');
+}
+
+// Używamy starego interfejsu
+const oldPrinter = new OldPrinter();
+client(oldPrinter);  // Wyświetli: Printing: Hello, world!
+
+// Używamy nowego interfejsu poprzez adapter
+const newPrinter = new NewPrinter();
+const adapter = new PrinterAdapter(newPrinter);
+client(adapter);  // Wyświetli: Printing document: Converted Document
+                  //           Content: Hello, world!
+
+    </script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/prism.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/components/prism-javascript.min.js"></script>
+</body>
+</html>

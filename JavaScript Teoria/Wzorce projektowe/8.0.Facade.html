@@ -1,0 +1,264 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Wzorzec projektowy Facade w JavaScript</title>
+    <link rel="stylesheet" href="../styles.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/themes/prism-tomorrow.min.css" rel="stylesheet" />
+</head>
+<body>
+    <div class="container">
+        <h1>Wzorzec Projektowy Facade w JavaScript</h1>
+
+        <p>**Wzorzec Facade** (Fasada) dostarcza prosty interfejs do skomplikowanego systemu lub zestawu klas, ukrywając szczegóły ich implementacji. Dzięki temu wzorzec ten pozwala na interakcję z złożonymi systemami w bardziej ujednolicony i łatwy sposób.</p>
+
+        <h2>Jak działa wzorzec Facade?</h2>
+        <p>Facade tworzy uproszczony interfejs do złożonego systemu poprzez ukrycie wewnętrznych detali, takich jak operacje na różnych podsystemach, klasach czy metodach. Klient korzysta tylko z fasady, która deleguje zadania do właściwych klas bez potrzeby znajomości ich szczegółów.</p>
+
+        <h3>Przykład implementacji Facade</h3>
+        <pre><code class="language-javascript">
+// Podsystem 1: Włączanie świateł
+class Light {
+    // Metoda włączania świateł
+    turnOn() {
+        console.log("Światła są włączone");
+    }
+
+    // Metoda wyłączania świateł
+    turnOff() {
+        console.log("Światła są wyłączone");
+    }
+}
+
+// Podsystem 2: Otwieranie drzwi
+class Door {
+    // Metoda otwierania drzwi
+    open() {
+        console.log("Drzwi są otwarte");
+    }
+
+    // Metoda zamykania drzwi
+    close() {
+        console.log("Drzwi są zamknięte");
+    }
+}
+
+// Podsystem 3: Włączanie radia
+class Radio {
+    // Metoda włączania radia
+    turnOn() {
+        console.log("Radio jest włączone");
+    }
+
+    // Metoda wyłączania radia
+    turnOff() {
+        console.log("Radio jest wyłączone");
+    }
+}
+
+// Facade: Uproszczony interfejs do zarządzania systemem samochodu
+class CarFacade {
+    constructor() {
+        // Inicjalizacja podsystemów: światła, drzwi, radio
+        this.light = new Light();
+        this.door = new Door();
+        this.radio = new Radio();
+    }
+
+    // Uproszczona metoda do uruchamiania samochodu (otwiera drzwi, włącza światła i radio)
+    startCar() {
+        this.door.open();  // Otwieranie drzwi
+        this.light.turnOn();  // Włączanie świateł
+        this.radio.turnOn();  // Włączanie radia
+    }
+
+    // Uproszczona metoda do zatrzymywania samochodu (wyłącza radio, światła i zamyka drzwi)
+    stopCar() {
+        this.radio.turnOff();  // Wyłączanie radia
+        this.light.turnOff();  // Wyłączanie świateł
+        this.door.close();  // Zamykanie drzwi
+    }
+}
+
+// Klient używa tylko Facade
+const car = new CarFacade();  // Tworzenie uproszczonego interfejsu dla samochodu
+car.startCar(); // Otwiera drzwi, włącza światła i radio
+car.stopCar();  // Wyłącza radio, światła i zamyka drzwi
+
+        </code></pre>
+        <p>W tym przykładzie mamy trzy podsystemy: <code>Light</code>, <code>Door</code> i <code>Radio</code>. Fasada <code>CarFacade</code> zapewnia uproszczony interfejs do zarządzania tymi podsystemami, dzięki czemu klient (użytkownik) nie musi martwić się o szczegóły działania poszczególnych komponentów.</p>
+
+        <h2>Zalety wzorca Facade</h2>
+        <ul>
+            <li>Uproszczenie interfejsu – Fasada ukrywa złożoność systemu, oferując uproszczony interfejs do użytkownika.</li>
+            <li>Łatwość użycia – Klient może korzystać z systemu bez znajomości jego szczegółów implementacyjnych.</li>
+            <li>Modularność – Zmiany w podsystemach nie muszą wpływać na kod klienta, jeśli interfejs fasady pozostaje taki sam.</li>
+            <li>Możliwość izolowania zależności – Fasada pozwala na izolowanie zmian w podsystemach i ograniczenie wpływu na inne części kodu.</li>
+        </ul>
+
+        <h2>Zastosowanie wzorca Facade</h2>
+        <p>Wzorzec Facade jest szczególnie użyteczny w systemach, które mają wiele podsystemów, klas lub modułów, a interakcja z nimi wymagałaby znajomości wielu szczegółów. Fasada umożliwia uproszczenie i standaryzację interakcji z tymi systemami, np. w systemach operacyjnych, bibliotekach graficznych lub aplikacjach sieciowych.</p>
+
+        <h2>Przykład zastosowania w rzeczywistym projekcie</h2>
+        <pre><code class="language-javascript">
+// Klasa reprezentująca połączenie z bazą danych
+class DatabaseConnection {
+    // Metoda łączenia się z bazą danych
+    connect() {
+        console.log("Połączenie z bazą danych zostało nawiązane.");
+    }
+
+    // Metoda rozłączania się z bazą danych
+    disconnect() {
+        console.log("Połączenie z bazą danych zostało zakończone.");
+    }
+}
+
+// Klasa odpowiedzialna za wykonywanie zapytań do bazy danych
+class DatabaseQuery {
+    // Metoda uruchamiania zapytania SQL
+    run(sql) {
+        console.log(`Wykonywanie zapytania: ${sql}`);
+        return "Wynik zapytania";
+    }
+}
+
+// Klasa odpowiedzialna za operacje transakcyjne w bazie danych
+class DatabaseTransaction {
+    // Metoda rozpoczynania transakcji
+    start() {
+        console.log("Rozpoczęto transakcję.");
+    }
+
+    // Metoda zatwierdzania transakcji
+    commit() {
+        console.log("Transakcja została zatwierdzona.");
+    }
+}
+
+// Facade dla operacji na bazie danych
+class DatabaseFacade {
+    constructor() {
+        this.connection = new DatabaseConnection();  // Inicjalizacja połączenia z bazą danych
+        this.query = new DatabaseQuery();  // Inicjalizacja zapytań do bazy danych
+        this.transaction = new DatabaseTransaction();  // Inicjalizacja operacji transakcyjnych
+    }
+
+    // Uproszczona metoda do pobierania danych z bazy
+    fetchData(sql) {
+        this.connection.connect();  // Połączenie z bazą danych
+        const result = this.query.run(sql);  // Wykonanie zapytania
+        this.connection.disconnect();  // Rozłączenie z bazą danych
+        return result;  // Zwracanie wyniku zapytania
+    }
+
+    // Uproszczona metoda do wykonywania transakcji
+    executeTransaction(actions) {
+        this.transaction.start();  // Rozpoczęcie transakcji
+        actions.forEach(action => this.query.run(action));  // Wykonanie każdego zapytania w ramach transakcji
+        this.transaction.commit();  // Zatwierdzenie transakcji
+    }
+}
+
+// Klient używa tylko Facade do interakcji z bazą danych
+const db = new DatabaseFacade();
+
+// Pobieranie danych z bazy
+db.fetchData("SELECT * FROM users");
+
+// Wykonywanie transakcji w bazie danych
+db.executeTransaction([
+    "INSERT INTO users (name) VALUES ('John')", 
+    "UPDATE users SET age = 30 WHERE name = 'John'"
+]);
+
+        </code></pre>
+        <p>W powyższym przykładzie, fasada <code>DatabaseFacade</code> upraszcza zarządzanie połączeniami do bazy danych, wykonywaniem zapytań i operacji transakcyjnych. Klient (użytkownik) korzysta jedynie z uproszczonego interfejsu fasady, bez konieczności ręcznego zarządzania połączeniami i transakcjami.</p>
+
+        <h2>Podsumowanie</h2>
+        <ul>
+            <li>Wzorzec Facade zapewnia prosty interfejs do skomplikowanego systemu lub zestawu klas, ukrywając szczegóły ich implementacji.</li>
+            <li>Fasada jest przydatna w sytuacjach, gdzie system składa się z wielu złożonych podsystemów, z którymi trzeba współpracować.</li>
+            <li>Wzorzec ten upraszcza kod klienta, pozwalając na bardziej zorganizowane i czytelne interakcje z systemami.</li>
+        </ul>
+        <a href="./8.1.Facade-projekt.html"><button>Przykładowy projekt</button></a>
+    </div>
+    <script>
+
+
+// Komponent 1: Odtwarzacz wideo
+class VideoPlayer {
+  play(video) {
+    console.log(`Playing video: ${video}`);
+  }
+  
+  stop() {
+    console.log('Stopping video');
+  }
+}
+
+// Komponent 2: Odtwarzacz audio
+class AudioPlayer {
+  play(audio) {
+    console.log(`Playing audio: ${audio}`);
+  }
+  
+  stop() {
+    console.log('Stopping audio');
+  }
+}
+
+// Komponent 3: System powiadomień
+class NotificationSystem {
+  sendNotification(message) {
+    console.log(`Sending notification: ${message}`);
+  }
+}
+
+// Fasada, która upraszcza interfejs do systemu
+class MediaFacade {
+  constructor() {
+    this.videoPlayer = new VideoPlayer();
+    this.audioPlayer = new AudioPlayer();
+    this.notificationSystem = new NotificationSystem();
+  }
+
+  playMedia(mediaType, media) {
+    if (mediaType === 'video') {
+      this.videoPlayer.play(media);
+      this.notificationSystem.sendNotification(`Now playing video: ${media}`);
+    } else if (mediaType === 'audio') {
+      this.audioPlayer.play(media);
+      this.notificationSystem.sendNotification(`Now playing audio: ${media}`);
+    } else {
+      console.log('Unsupported media type');
+    }
+  }
+
+  stopMedia(mediaType) {
+    if (mediaType === 'video') {
+      this.videoPlayer.stop();
+      this.notificationSystem.sendNotification('Video stopped');
+    } else if (mediaType === 'audio') {
+      this.audioPlayer.stop();
+      this.notificationSystem.sendNotification('Audio stopped');
+    } else {
+      console.log('Unsupported media type');
+    }
+  }
+}
+
+// Użycie fasady
+const mediaFacade = new MediaFacade();
+mediaFacade.playMedia('video', 'Nature Documentary');
+mediaFacade.stopMedia('video');
+
+mediaFacade.playMedia('audio', 'Jazz Music');
+mediaFacade.stopMedia('audio');
+
+    </script>
+       <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/prism.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/components/prism-javascript.min.js"></script>
+</body>
+</html>

@@ -22,7 +22,7 @@
 function canDrive() {
     return {
         drive() {
-            console.log('Jedzie!');
+            console.log('Jedzie!');  // Wypisuje komunikat o jeździe
         }
     };
 }
@@ -31,7 +31,7 @@ function canDrive() {
 function canSwim() {
     return {
         swim() {
-            console.log('Płynie!');
+            console.log('Płynie!');  // Wypisuje komunikat o pływaniu
         }
     };
 }
@@ -40,33 +40,42 @@ function canSwim() {
 function canFly() {
     return {
         fly() {
-            console.log('Leci!');
+            console.log('Leci!');  // Wypisuje komunikat o lataniu
         }
     };
 }
 
-// Fabryka z kompozycją
+// Fabryka z kompozycją, tworząca pojazdy o różnych możliwościach
 function createVehicle(type) {
-    let vehicle = {};
+    let vehicle = {};  // Pusty obiekt, do którego dodawane są możliwości
 
+    // Tworzenie pojazdu amfibijnego, który może jeździć i pływać
     if (type === 'amphibious') {
-        return Object.assign(vehicle, canDrive(), canSwim());
-    } else if (type === 'plane') {
-        return Object.assign(vehicle, canFly());
-    } else if (type === 'car') {
-        return Object.assign(vehicle, canDrive());
+        return Object.assign(vehicle, canDrive(), canSwim());  // Łączy metody jazdy i pływania w jednym pojeździe
+    } 
+    // Tworzenie samolotu, który może latać
+    else if (type === 'plane') {
+        return Object.assign(vehicle, canFly());  // Dodaje metodę latania
+    } 
+    // Tworzenie samochodu, który może jeździć
+    else if (type === 'car') {
+        return Object.assign(vehicle, canDrive());  // Dodaje metodę jazdy
     }
 }
 
+// Tworzenie pojazdu amfibijnego
 const amphibiousVehicle = createVehicle('amphibious');
-amphibiousVehicle.drive(); // Jedzie!
-amphibiousVehicle.swim(); // Płynie!
+amphibiousVehicle.drive(); // Wyświetli: Jedzie!
+amphibiousVehicle.swim();  // Wyświetli: Płynie!
 
+// Tworzenie samochodu
 const car = createVehicle('car');
-car.drive(); // Jedzie!
+car.drive();  // Wyświetli: Jedzie!
 
+// Tworzenie samolotu
 const plane = createVehicle('plane');
-plane.fly(); // Leci!
+plane.fly();  // Wyświetli: Leci!
+
         </code></pre>
         <p>W tym przykładzie fabryka <code>createVehicle</code> dynamicznie łączy różne komponenty w zależności od typu pojazdu. Dla pojazdu typu <code>amphibious</code> (amfibia) obiekt może zarówno jeździć, jak i pływać, ponieważ do obiektu są dodawane komponenty <code>canDrive</code> i <code>canSwim</code>.</p>
 

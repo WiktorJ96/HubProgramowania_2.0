@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Wzorzec projektowy Decorator w JavaScript</title>
+    <link rel="stylesheet" href="../styles.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/themes/prism-tomorrow.min.css" rel="stylesheet" />
+</head>
+<body>
+    <div class="container">
+        <h1>Wzorzec Projektowy Decorator w JavaScript</h1>
+
+        <p>**Wzorzec Decorator** pozwala na dynamiczne dodawanie nowych funkcji do istniejących obiektów bez konieczności zmiany ich struktury. Dekoratory opakowują istniejący obiekt, rozszerzając jego zachowanie, co pozwala na dodawanie funkcjonalności w elastyczny sposób, bez ingerencji w kod bazowy obiektu.</p>
+
+        <h2>Jak działa wzorzec Decorator?</h2>
+        <p>Dekorator otacza obiekt, dodając nowe zachowania, jednocześnie zachowując interfejs oryginalnego obiektu. Dekoratory mogą być stosowane w sposób warstwowy, co oznacza, że możemy dodać wiele funkcji do obiektu, opakowując go w różne dekoratory.</p>
+
+        <h3>Przykład implementacji wzorca Decorator</h3>
+        <pre><code class="language-javascript">
+// Prosty obiekt bazowy reprezentujący kawę
+class Coffee {
+    // Metoda zwracająca podstawowy koszt kawy
+    cost() {
+        return 5;  // Koszt podstawowej kawy
+    }
+}
+
+// Dekorator bazowy (ogólny), który rozszerza obiekt Coffee o mleko
+class MilkDecorator {
+    constructor(coffee) {
+        this.coffee = coffee;  // Przypisanie referencji do obiektu Coffee
+    }
+
+    // Metoda zwracająca koszt kawy z dodatkiem mleka
+    cost() {
+        return this.coffee.cost() + 2;  // Dodanie kosztu mleka do ceny kawy
+    }
+}
+
+// Dekorator bazowy (ogólny), który rozszerza obiekt Coffee o cukier
+class SugarDecorator {
+    constructor(coffee) {
+        this.coffee = coffee;  // Przypisanie referencji do obiektu Coffee
+    }
+
+    // Metoda zwracająca koszt kawy z dodatkiem cukru
+    cost() {
+        return this.coffee.cost() + 1;  // Dodanie kosztu cukru do ceny kawy
+    }
+}
+
+// Użycie dekoratorów
+let myCoffee = new Coffee();  // Tworzenie podstawowej kawy
+console.log(myCoffee.cost()); // Wyświetlenie kosztu podstawowej kawy: 5
+
+// Dodanie mleka jako dekoratora do kawy
+myCoffee = new MilkDecorator(myCoffee);
+console.log(myCoffee.cost()); // Wyświetlenie kosztu kawy z mlekiem: 7
+
+// Dodanie cukru jako dekoratora do kawy
+myCoffee = new SugarDecorator(myCoffee);
+console.log(myCoffee.cost()); // Wyświetlenie kosztu kawy z mlekiem i cukrem: 8
+
+        </code></pre>
+
+        <p>W powyższym przykładzie mamy obiekt bazowy <code>Coffee</code>, który można "ozdobić" dekoratorami <code>MilkDecorator</code> i <code>SugarDecorator</code>. Każdy z tych dekoratorów dodaje nową funkcjonalność (w tym przypadku zwiększa koszt kawy) bez zmiany struktury obiektu bazowego.</p>
+
+        <h2>Zalety wzorca Decorator</h2>
+        <ul>
+            <li>Elastyczność – Możliwość dynamicznego dodawania nowych funkcji do obiektów.</li>
+            <li>Reużywalność – Dekoratory mogą być wielokrotnie stosowane do różnych obiektów, co zwiększa reużywalność kodu.</li>
+            <li>Bez ingerencji w kod bazowy – Rozszerzanie funkcjonalności obiektów bez zmiany ich pierwotnej struktury lub klasy.</li>
+            <li>Możliwość stosowania wielu dekoratorów jednocześnie – Dekoratory mogą być stosowane w sposób warstwowy.</li>
+        </ul>
+
+        <h2>Zastosowanie wzorca Decorator</h2>
+        <p>Wzorzec Decorator znajduje zastosowanie wszędzie tam, gdzie chcemy dynamicznie rozszerzać funkcjonalność obiektów, ale nie chcemy zmieniać ich pierwotnego kodu. Jest to szczególnie przydatne w aplikacjach, gdzie wymagania mogą się zmieniać, a obiekty mogą potrzebować nowych funkcji w trakcie działania programu.</p>
+
+        <h2>Przykład użycia w rzeczywistym projekcie</h2>
+        <pre><code class="language-javascript">
+// Prosty system powiadomień
+class Notification {
+    // Podstawowa metoda do wysyłania powiadomienia
+    send() {
+        console.log("Wysyłanie powiadomienia"); // Wyświetlenie podstawowej wiadomości o wysyłaniu powiadomienia
+    }
+}
+
+// Dekorator bazowy dla powiadomień e-mail
+class EmailDecorator {
+    constructor(notification) {
+        this.notification = notification;  // Przypisanie obiektu Notification
+    }
+
+    // Rozszerzona metoda wysyłania powiadomienia z obsługą e-maila
+    send() {
+        this.notification.send();  // Wywołanie oryginalnej metody powiadomienia
+        console.log("Wysyłanie powiadomienia e-mail");  // Dodanie wiadomości o wysyłaniu e-maila
+    }
+}
+
+// Dekorator bazowy dla powiadomień SMS
+class SMSDecorator {
+    constructor(notification) {
+        this.notification = notification;  // Przypisanie obiektu Notification
+    }
+
+    // Rozszerzona metoda wysyłania powiadomienia z obsługą SMS
+    send() {
+        this.notification.send();  // Wywołanie oryginalnej metody powiadomienia
+        console.log("Wysyłanie powiadomienia SMS");  // Dodanie wiadomości o wysyłaniu SMS
+    }
+}
+
+// Użycie dekoratorów
+let notification = new Notification();  // Tworzenie podstawowego powiadomienia
+notification = new EmailDecorator(notification);  // Dekorowanie powiadomienia obsługą e-mail
+notification = new SMSDecorator(notification);  // Dekorowanie powiadomienia obsługą SMS
+notification.send();  // Wysyłanie powiadomienia z obsługą e-mail i SMS
+
+// Output:
+// Wysyłanie powiadomienia
+// Wysyłanie powiadomienia e-mail
+// Wysyłanie powiadomienia SMS
+
+        </code></pre>
+
+        <p>W tym przykładzie, powiadomienia można rozszerzać za pomocą dekoratorów <code>EmailDecorator</code> i <code>SMSDecorator</code>. Dzięki temu system powiadomień staje się bardziej elastyczny i można go łatwo rozszerzać o nowe rodzaje powiadomień bez konieczności zmiany pierwotnej klasy <code>Notification</code>.</p>
+
+        <h2>Podsumowanie</h2>
+        <ul>
+            <li>Wzorzec Decorator pozwala na dynamiczne rozszerzanie obiektów o nowe funkcje bez zmiany ich struktury.</li>
+            <li>Dekoratory mogą być wielokrotnie używane i stosowane warstwowo, co zwiększa elastyczność kodu.</li>
+            <li>Wzorzec ten jest przydatny, gdy wymagania systemu zmieniają się i obiekty muszą być rozszerzane w trakcie działania programu.</li>
+        </ul>
+        <a href="./10.1.Decorator-projekt.html"><button>Przykładowy projekt</button></a>
+    </div>
+    <script>
+
+        // Klasa bazowa Coffee
+class Coffee {
+  getDescription() {
+    return 'Coffee';
+  }
+
+  cost() {
+    return 5;
+  }
+}
+
+// Dekorator dodający mleko
+class Milk {
+  constructor(beverage) {
+    this.beverage = beverage;  // Referencja do dekorowanego napoju
+  }
+
+  getDescription() {
+    return `${this.beverage.getDescription()} + Milk`;
+  }
+
+  cost() {
+    return this.beverage.cost() + 1;  // Mleko kosztuje dodatkowo 1
+  }
+}
+
+// Dekorator dodający cukier
+class Sugar {
+  constructor(beverage) {
+    this.beverage = beverage;  // Referencja do dekorowanego napoju
+  }
+
+  getDescription() {
+    return `${this.beverage.getDescription()} + Sugar`;
+  }
+
+  cost() {
+    return this.beverage.cost() + 0.5;  // Cukier kosztuje dodatkowo 0.5
+  }
+}
+
+// Tworzymy podstawową kawę
+let myCoffee = new Coffee();
+console.log(myCoffee.getDescription()); // Wyświetli: "Coffee"
+console.log(myCoffee.cost());           // Wyświetli: 5
+
+// Dodajemy mleko
+myCoffee = new Milk(myCoffee);
+console.log(myCoffee.getDescription()); // Wyświetli: "Coffee + Milk"
+console.log(myCoffee.cost());           // Wyświetli: 6
+
+// Dodajemy cukier
+myCoffee = new Sugar(myCoffee);
+console.log(myCoffee.getDescription()); // Wyświetli: "Coffee + Milk + Sugar"
+console.log(myCoffee.cost());           // Wyświetli: 6.5
+
+    </script>
+     <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/prism.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/components/prism-javascript.min.js"></script>
+</body>
+</html>

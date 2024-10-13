@@ -20,36 +20,49 @@
         &lt;div id="task-container"&gt;&lt;/div&gt;
 
         &lt;script&gt;
-        const TaskPrototype = {
-            title: "Zadanie domyślne",
-            description: "Opis domyślnego zadania",
-            priority: "normalne",
-            clone: function() {
-                return Object.create(this); // Klonowanie prototypu
-            },
-            setTaskDetails: function(title, description, priority) {
-                this.title = title;
-                this.description = description;
-                this.priority = priority;
-            },
-            displayTask: function() {
-                return `Zadanie: ${this.title}, Opis: ${this.description}, Priorytet: ${this.priority}`;
-            }
-        };
+// Prototyp zadania
+const TaskPrototype = {
+    title: "Zadanie domyślne",  // Domyślny tytuł zadania
+    description: "Opis domyślnego zadania",  // Domyślny opis zadania
+    priority: "normalne",  // Domyślny priorytet zadania
 
-        document.getElementById('addTaskBtn').addEventListener('click', () => {
-            const newTask = TaskPrototype.clone(); // Klonowanie zadania
-            const taskTitle = prompt('Podaj tytuł zadania: ', 'Nowe zadanie');
-            const taskDescription = prompt('Podaj opis zadania: ', 'Opis zadania');
-            const taskPriority = prompt('Podaj priorytet zadania (niski, normalne, wysoki): ', 'normalne');
-            
-            newTask.setTaskDetails(taskTitle, taskDescription, taskPriority); // Ustawianie szczegółów zadania
+    // Metoda klonująca zadanie
+    clone: function() {
+        return Object.create(this);  // Klonowanie prototypu
+    },
 
-            const taskContainer = document.getElementById('task-container');
-            const taskElement = document.createElement('p');
-            taskElement.textContent = newTask.displayTask();
-            taskContainer.appendChild(taskElement);
-        });
+    // Metoda ustawiająca szczegóły zadania
+    setTaskDetails: function(title, description, priority) {
+        this.title = title;  // Ustawienie tytułu zadania
+        this.description = description;  // Ustawienie opisu zadania
+        this.priority = priority;  // Ustawienie priorytetu zadania
+    },
+
+    // Metoda wyświetlająca szczegóły zadania
+    displayTask: function() {
+        return `Zadanie: ${this.title}, Opis: ${this.description}, Priorytet: ${this.priority}`;  // Zwracanie szczegółów zadania
+    }
+};
+
+// Obsługa przycisku dodającego zadanie
+document.getElementById('addTaskBtn').addEventListener('click', () => {
+    const newTask = TaskPrototype.clone();  // Klonowanie zadania z prototypu
+
+    // Pobieranie szczegółów zadania od użytkownika
+    const taskTitle = prompt('Podaj tytuł zadania: ', 'Nowe zadanie');
+    const taskDescription = prompt('Podaj opis zadania: ', 'Opis zadania');
+    const taskPriority = prompt('Podaj priorytet zadania (niski, normalne, wysoki): ', 'normalne');
+    
+    // Ustawianie szczegółów zadania
+    newTask.setTaskDetails(taskTitle, taskDescription, taskPriority); 
+
+    // Wyświetlanie zadania na stronie
+    const taskContainer = document.getElementById('task-container');
+    const taskElement = document.createElement('p');  // Tworzenie elementu &lt;p&gt; dla zadania
+    taskElement.textContent = newTask.displayTask();  // Ustawianie tekstu zadania w elemencie
+    taskContainer.appendChild(taskElement);  // Dodanie zadania do kontenera
+});
+
         &lt;/script&gt;
         </code></pre>
     </div>

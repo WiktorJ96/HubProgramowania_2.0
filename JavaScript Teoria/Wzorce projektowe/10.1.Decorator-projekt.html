@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="../styles.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/themes/prism-tomorrow.min.css" rel="stylesheet" />
+    <title>Kawiarnia - Wzorzec Decorator</title>
+</head>
+<body>
+    <div class="container">
+        <h1>Kawiarnia - Wzorzec Decorator</h1>
+        <button id="orderCoffeeBtn">Zamów Kawę</button>
+        <p id="orderDetails"></p>
+
+        <h2>Kod HTML i JavaScript:</h2>
+        <pre><code class="language-html">
+        &lt;h1&gt;Kawiarnia - Wzorzec Decorator&lt;/h1&gt;
+        &lt;button id="orderCoffeeBtn"&gt;Zamów Kawę&lt;/button&gt;
+        &lt;p id="orderDetails"&gt;&lt;/p&gt;
+
+        &lt;script&gt;
+// Podstawowa klasa napoju
+class Coffee {
+    constructor() {
+        this.description = 'Kawa';  // Opis napoju
+    }
+
+    // Metoda zwracająca opis napoju
+    getDescription() {
+        return this.description;  // Zwraca opis podstawowej kawy
+    }
+
+    // Metoda zwracająca koszt podstawowej kawy
+    cost() {
+        return 5;  // Cena podstawowej kawy
+    }
+}
+
+// Dekorator - bazowa klasa, która dziedziczy z Coffee
+class CoffeeDecorator {
+    constructor(coffee) {
+        this.coffee = coffee;  // Przypisanie referencji do obiektu Coffee
+    }
+
+    // Metoda zwracająca opis napoju
+    getDescription() {
+        return this.coffee.getDescription();  // Zwraca opis kawy, potencjalnie rozszerzony przez dekorator
+    }
+
+    // Metoda zwracająca koszt napoju
+    cost() {
+        return this.coffee.cost();  // Zwraca koszt kawy, potencjalnie rozszerzony przez dekorator
+    }
+}
+
+// Konkretne dekoratory - dodatki do kawy
+
+// Dekorator dodający mleko
+class MilkDecorator extends CoffeeDecorator {
+    // Metoda zwracająca opis kawy z mlekiem
+    getDescription() {
+        return `${this.coffee.getDescription()}, Mleko`;  // Rozszerza opis kawy o "Mleko"
+    }
+
+    // Metoda zwracająca koszt kawy z mlekiem
+    cost() {
+        return this.coffee.cost() + 2;  // Dodaje koszt mleka do ceny kawy
+    }
+}
+
+// Dekorator dodający cukier
+class SugarDecorator extends CoffeeDecorator {
+    // Metoda zwracająca opis kawy z cukrem
+    getDescription() {
+        return `${this.coffee.getDescription()}, Cukier`;  // Rozszerza opis kawy o "Cukier"
+    }
+
+    // Metoda zwracająca koszt kawy z cukrem
+    cost() {
+        return this.coffee.cost() + 1;  // Dodaje koszt cukru do ceny kawy
+    }
+}
+
+// Dekorator dodający syrop
+class SyrupDecorator extends CoffeeDecorator {
+    // Metoda zwracająca opis kawy z syropem
+    getDescription() {
+        return `${this.coffee.getDescription()}, Syrop`;  // Rozszerza opis kawy o "Syrop"
+    }
+
+    // Metoda zwracająca koszt kawy z syropem
+    cost() {
+        return this.coffee.cost() + 3;  // Dodaje koszt syropu do ceny kawy
+    }
+}
+
+// Obsługa przycisku zamówienia kawy
+document.getElementById('orderCoffeeBtn').addEventListener('click', () => {
+    // Tworzenie podstawowej kawy
+    let myCoffee = new Coffee();
+    
+    // Dodanie mleka, cukru i syropu jako dekoratorów
+    myCoffee = new MilkDecorator(myCoffee);
+    myCoffee = new SugarDecorator(myCoffee);
+    myCoffee = new SyrupDecorator(myCoffee);
+    
+    // Wyświetlanie szczegółów zamówienia
+    const orderDetails = `Zamówienie: ${myCoffee.getDescription()}, Cena: ${myCoffee.cost()} PLN`;
+    document.getElementById('orderDetails').textContent = orderDetails;  // Wyświetlenie szczegółów zamówienia w elemencie HTML
+});
+
+        &lt;/script&gt;
+        </code></pre>
+    </div>
+
+    <script>
+        // Podstawowa klasa napoju
+        class Coffee {
+            constructor() {
+                this.description = 'Kawa';
+            }
+
+            getDescription() {
+                return this.description;
+            }
+
+            cost() {
+                return 5; // Cena podstawowej kawy
+            }
+        }
+
+        // Dekorator - bazowa klasa, która dziedziczy z Coffee
+        class CoffeeDecorator {
+            constructor(coffee) {
+                this.coffee = coffee;
+            }
+
+            getDescription() {
+                return this.coffee.getDescription();
+            }
+
+            cost() {
+                return this.coffee.cost();
+            }
+        }
+
+        // Konkretne dekoratory - dodatki do kawy
+        class MilkDecorator extends CoffeeDecorator {
+            getDescription() {
+                return `${this.coffee.getDescription()}, Mleko`;
+            }
+
+            cost() {
+                return this.coffee.cost() + 2; // Dodanie ceny mleka
+            }
+        }
+
+        class SugarDecorator extends CoffeeDecorator {
+            getDescription() {
+                return `${this.coffee.getDescription()}, Cukier`;
+            }
+
+            cost() {
+                return this.coffee.cost() + 1; // Dodanie ceny cukru
+            }
+        }
+
+        class SyrupDecorator extends CoffeeDecorator {
+            getDescription() {
+                return `${this.coffee.getDescription()}, Syrop`;
+            }
+
+            cost() {
+                return this.coffee.cost() + 3; // Dodanie ceny syropu
+            }
+        }
+
+        // Obsługa przycisku "Zamów Kawę"
+        document.getElementById('orderCoffeeBtn').addEventListener('click', () => {
+            // Tworzymy podstawową kawę
+            let myCoffee = new Coffee();
+            
+            // Dodajemy mleko, cukier i syrop jako dekoratory
+            myCoffee = new MilkDecorator(myCoffee);
+            myCoffee = new SugarDecorator(myCoffee);
+            myCoffee = new SyrupDecorator(myCoffee);
+            
+            // Wyświetlanie szczegółów zamówienia
+            const orderDetails = `Zamówienie: ${myCoffee.getDescription()}, Cena: ${myCoffee.cost()} PLN`;
+            document.getElementById('orderDetails').textContent = orderDetails;
+        });
+    </script>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/prism.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/components/prism-javascript.min.js"></script>
+</body>
+</html>

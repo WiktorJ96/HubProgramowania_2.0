@@ -18,18 +18,24 @@
 
         <h3>Przykład podstawowy</h3>
         <pre><code class="language-javascript">
+// Definicja funkcji konstruktora Car
 function Car(brand, model, year) {
-    this.brand = brand;
-    this.model = model;
-    this.year = year;
+    this.brand = brand;  // Marka samochodu
+    this.model = model;  // Model samochodu
+    this.year = year;  // Rok produkcji samochodu
 
+    // Metoda zwracająca informacje o samochodzie
     this.getInfo = function() {
-        return `${this.brand} ${this.model}, wyprodukowany w roku ${this.year}`;
+        return `${this.brand} ${this.model}, wyprodukowany w roku ${this.year}`;  // Zwraca opis samochodu
     };
 }
 
+// Tworzenie instancji obiektu Car
 const myCar = new Car('Ford', 'Mustang', 1969);
-console.log(myCar.getInfo()); // Ford Mustang, wyprodukowany w roku 1969
+
+// Wywoływanie metody getInfo dla samochodu
+console.log(myCar.getInfo()); // Wyświetli: Ford Mustang, wyprodukowany w roku 1969
+
         </code></pre>
         <p>W powyższym przykładzie, funkcja <code>Car</code> działa jako konstruktor. W momencie utworzenia nowego obiektu za pomocą <code>new</code>, konstruktor przypisuje wartości do właściwości <code>brand</code>, <code>model</code> i <code>year</code>, oraz dodaje metodę <code>getInfo</code> do instancji obiektu.</p>
 
@@ -38,20 +44,25 @@ console.log(myCar.getInfo()); // Ford Mustang, wyprodukowany w roku 1969
 
         <h3>Przykład użycia prototype</h3>
         <pre><code class="language-javascript">
+// Funkcja konstruktora Person
 function Person(name, age) {
-    this.name = name;
-    this.age = age;
+    this.name = name;  // Ustawienie imienia
+    this.age = age;  // Ustawienie wieku
 }
 
+// Definiowanie metody greet w prototypie, aby wszystkie instancje Person mogły ją używać
 Person.prototype.greet = function() {
-    return `Cześć, mam na imię ${this.name} i mam ${this.age} lat.`;
+    return `Cześć, mam na imię ${this.name} i mam ${this.age} lat.`;  // Zwracanie komunikatu powitalnego
 };
 
-const person1 = new Person('Kasia', 25);
-const person2 = new Person('Jan', 30);
+// Tworzenie instancji Person
+const person1 = new Person('Kasia', 25);  // Osoba o imieniu Kasia, wiek 25
+const person2 = new Person('Jan', 30);  // Osoba o imieniu Jan, wiek 30
 
-console.log(person1.greet()); // Cześć, mam na imię Kasia i mam 25 lat.
-console.log(person2.greet()); // Cześć, mam na imię Jan i mam 30 lat.
+// Wywoływanie metody greet dla każdej instancji
+console.log(person1.greet());  // Wyświetli: Cześć, mam na imię Kasia i mam 25 lat.
+console.log(person2.greet());  // Wyświetli: Cześć, mam na imię Jan i mam 30 lat.
+
         </code></pre>
         <p>W tym przykładzie, metoda <code>greet</code> jest dodana do prototypu konstruktora <code>Person</code>, dzięki czemu jest współdzielona przez wszystkie instancje obiektów stworzonych za pomocą tego konstruktora.</p>
 

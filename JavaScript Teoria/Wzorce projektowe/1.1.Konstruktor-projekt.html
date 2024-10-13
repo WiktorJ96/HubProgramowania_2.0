@@ -52,34 +52,42 @@
         &lt;div id="user-container"&gt;&lt;/div&gt;
 
         &lt;script&gt;
-        function User(firstName, lastName, role) {
-            this.firstName = firstName;
-            this.lastName = lastName;
-            this.role = role;
+// Konstruktor User
+function User(firstName, lastName, role) {
+    this.firstName = firstName;  // Imię użytkownika
+    this.lastName = lastName;  // Nazwisko użytkownika
+    this.role = role;  // Rola użytkownika
 
-            this.displayInfo = function() {
-                return `Użytkownik: ${this.firstName} ${this.lastName}, Rola: ${this.role}`;
-            };
+    // Metoda wyświetlająca informacje o użytkowniku
+    this.displayInfo = function() {
+        return `Użytkownik: ${this.firstName} ${this.lastName}, Rola: ${this.role}`;  // Zwraca informacje o użytkowniku
+    };
 
-            this.changeRole = function(newRole) {
-                this.role = newRole;
-            };
-        }
+    // Metoda do zmiany roli użytkownika
+    this.changeRole = function(newRole) {
+        this.role = newRole;  // Zmienia rolę użytkownika
+    };
+}
 
-        document.getElementById('userForm').addEventListener('submit', function(event) {
-            event.preventDefault();
-            
-            const firstName = document.getElementById('firstName').value;
-            const lastName = document.getElementById('lastName').value;
-            const role = document.getElementById('role').value;
+// Obsługa formularza tworzenia nowego użytkownika
+document.getElementById('userForm').addEventListener('submit', function(event) {
+    event.preventDefault();  // Zatrzymanie domyślnego zachowania formularza
 
-            const newUser = new User(firstName, lastName, role); // Tworzenie nowego użytkownika
+    // Pobieranie danych z formularza
+    const firstName = document.getElementById('firstName').value;  // Pobieranie imienia
+    const lastName = document.getElementById('lastName').value;  // Pobieranie nazwiska
+    const role = document.getElementById('role').value;  // Pobieranie roli
 
-            const userContainer = document.getElementById('user-container');
-            const userElement = document.createElement('p');
-            userElement.textContent = newUser.displayInfo(); // Wyświetlanie informacji o użytkowniku
-            userContainer.appendChild(userElement);
-        });
+    // Tworzenie nowego użytkownika
+    const newUser = new User(firstName, lastName, role); 
+
+    // Wyświetlanie informacji o użytkowniku na stronie
+    const userContainer = document.getElementById('user-container');
+    const userElement = document.createElement('p');
+    userElement.textContent = newUser.displayInfo();  // Wyświetlanie informacji o nowo utworzonym użytkowniku
+    userContainer.appendChild(userElement);  // Dodanie elementu do kontenera na stronie
+});
+
         &lt;/script&gt;
         </code></pre>
     </div>

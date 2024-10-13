@@ -18,44 +18,51 @@
         &lt;div id="vehicle-container"&gt;&lt;/div&gt;
         
         &lt;script&gt;
-        class Vehicle {
-            constructor(type, speed) {
-                this.type = type;
-                this.speed = speed;
-            }
+// Klasa reprezentująca pojazd
+class Vehicle {
+    constructor(type, speed) {
+        this.type = type;  // Typ pojazdu (np. Samochód, Motocykl, Rower)
+        this.speed = speed;  // Prędkość maksymalna pojazdu
+    }
 
-            describe() {
-                return `Typ pojazdu: ${this.type}, Prędkość maksymalna: ${this.speed} km/h`;
-            }
+    // Metoda opisująca pojazd
+    describe() {
+        return `Typ pojazdu: ${this.type}, Prędkość maksymalna: ${this.speed} km/h`;  // Zwraca opis pojazdu
+    }
+}
+
+// Fabryka pojazdów do tworzenia różnych typów pojazdów
+class VehicleFactory {
+    static createVehicle(type) {
+        // Tworzenie pojazdu na podstawie typu
+        switch (type) {
+            case 'Samochód':
+                return new Vehicle(type, 200);  // Tworzy samochód o prędkości 200 km/h
+            case 'Motocykl':
+                return new Vehicle(type, 180);  // Tworzy motocykl o prędkości 180 km/h
+            case 'Rower':
+                return new Vehicle(type, 30);  // Tworzy rower o prędkości 30 km/h
+            default:
+                throw new Error('Nieznany typ pojazdu: ' + type);  // Błąd, jeśli typ pojazdu nie jest rozpoznany
         }
+    }
+}
 
-        class VehicleFactory {
-            static createVehicle(type) {
-                switch (type) {
-                    case 'Samochód':
-                        return new Vehicle(type, 200);
-                    case 'Motocykl':
-                        return new Vehicle(type, 180);
-                    case 'Rower':
-                        return new Vehicle(type, 30);
-                    default:
-                        throw new Error('Nieznany typ pojazdu: ' + type);
-                }
-            }
-        }
+// Tworzenie różnych pojazdów przy użyciu fabryki
+const vehicles = [
+    VehicleFactory.createVehicle('Samochód'),  // Tworzy samochód
+    VehicleFactory.createVehicle('Motocykl'),  // Tworzy motocykl
+    VehicleFactory.createVehicle('Rower')  // Tworzy rower
+];
 
-        const vehicles = [
-            VehicleFactory.createVehicle('Samochód'),
-            VehicleFactory.createVehicle('Motocykl'),
-            VehicleFactory.createVehicle('Rower')
-        ];
+// Renderowanie pojazdów na stronie
+const vehicleContainer = document.getElementById('vehicle-container');  // Pobranie kontenera do wyświetlenia pojazdów
+vehicles.forEach(vehicle => {
+    const p = document.createElement('p');  // Tworzenie elementu &lt;p&gt; dla opisu pojazdu
+    p.textContent = vehicle.describe();  // Ustawianie opisu pojazdu w elemencie
+    vehicleContainer.appendChild(p);  // Dodawanie elementu &lt;p&gt; do kontenera na stronie
+});
 
-        const vehicleContainer = document.getElementById('vehicle-container');
-        vehicles.forEach(vehicle => {
-            const p = document.createElement('p');
-            p.textContent = vehicle.describe();
-            vehicleContainer.appendChild(p);
-        });
         &lt;/script&gt;
         </code></pre>
     </div>

@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="../styles.css"> 
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/themes/prism-tomorrow.min.css" rel="stylesheet" />
+    <title>System Zamówień - Wzorzec Facade</title>
+</head>
+<body>
+    <div class="container">
+        <h1>System Zarządzania Zamówieniami - Wzorzec Facade</h1>
+        <button id="placeOrderBtn">Złóż Zamówienie</button>
+        <p id="orderStatus"></p>
+
+        <h2>Kod HTML i JavaScript:</h2>
+        <pre><code class="language-html">
+        &lt;h1&gt;System Zarządzania Zamówieniami - Wzorzec Facade&lt;/h1&gt;
+        &lt;button id="placeOrderBtn"&gt;Złóż Zamówienie&lt;/button&gt;
+        &lt;p id="orderStatus"&gt;&lt;/p&gt;
+
+        &lt;script&gt;
+// Podsystem Płatności
+class Payment {
+    // Metoda przetwarzająca płatność
+    processPayment(amount) {
+        return `Płatność w wysokości ${amount} PLN została przetworzona.`; // Zwraca informację o przetworzonej płatności
+    }
+}
+
+// Podsystem Wysyłki
+class Shipping {
+    // Metoda organizująca wysyłkę produktu
+    arrangeShipping(product) {
+        return `Wysyłka produktu: ${product} została zorganizowana.`; // Zwraca informację o zorganizowanej wysyłce
+    }
+}
+
+// Podsystem Inwentaryzacji
+class Inventory {
+    // Metoda sprawdzająca dostępność produktu w magazynie
+    checkStock(product) {
+        return `Produkt ${product} jest dostępny w magazynie.`; // Zwraca informację o dostępności produktu
+    }
+}
+
+// Klasa Facade, która łączy wszystkie podsystemy
+class OrderFacade {
+    constructor(product, amount) {
+        this.product = product;  // Przechowuje nazwę produktu
+        this.amount = amount;  // Przechowuje kwotę zamówienia
+        this.payment = new Payment();  // Inicjalizuje podsystem płatności
+        this.shipping = new Shipping();  // Inicjalizuje podsystem wysyłki
+        this.inventory = new Inventory();  // Inicjalizuje podsystem inwentaryzacji
+    }
+
+    // Metoda do złożenia zamówienia, która korzysta z podsystemów
+    placeOrder() {
+        const stockStatus = this.inventory.checkStock(this.product);  // Sprawdza dostępność produktu w magazynie
+        const paymentStatus = this.payment.processPayment(this.amount);  // Przetwarza płatność
+        const shippingStatus = this.shipping.arrangeShipping(this.product);  // Organizuje wysyłkę
+        
+        // Zwraca skonsolidowane informacje o zamówieniu
+        return `${stockStatus} ${paymentStatus} ${shippingStatus}`;
+    }
+}
+
+// Obsługa przycisku złożenia zamówienia
+document.getElementById('placeOrderBtn').addEventListener('click', () => {
+    const orderFacade = new OrderFacade('Laptop', 2500); // Tworzenie zamówienia na produkt "Laptop" o wartości 2500 PLN
+    const orderStatus = orderFacade.placeOrder(); // Złożenie zamówienia za pomocą Facade
+    document.getElementById('orderStatus').textContent = orderStatus; // Wyświetlenie statusu zamówienia w elemencie HTML
+});
+
+        &lt;/script&gt;
+        </code></pre>
+    </div>
+
+    <script>
+        // Podsystem Płatności
+        class Payment {
+            processPayment(amount) {
+                return `Płatność w wysokości ${amount} PLN została przetworzona.`;
+            }
+        }
+
+        // Podsystem Wysyłki
+        class Shipping {
+            arrangeShipping(product) {
+                return `Wysyłka produktu: ${product} została zorganizowana.`;
+            }
+        }
+
+        // Podsystem Inwentaryzacji
+        class Inventory {
+            checkStock(product) {
+                return `Produkt ${product} jest dostępny w magazynie.`;
+            }
+        }
+
+        // Klasa Facade, która łączy wszystkie podsystemy
+        class OrderFacade {
+            constructor(product, amount) {
+                this.product = product;
+                this.amount = amount;
+                this.payment = new Payment();
+                this.shipping = new Shipping();
+                this.inventory = new Inventory();
+            }
+
+            placeOrder() {
+                const stockStatus = this.inventory.checkStock(this.product);
+                const paymentStatus = this.payment.processPayment(this.amount);
+                const shippingStatus = this.shipping.arrangeShipping(this.product);
+                
+                return `${stockStatus} ${paymentStatus} ${shippingStatus}`;
+            }
+        }
+
+        // Obsługa przycisku "Złóż Zamówienie"
+        document.getElementById('placeOrderBtn').addEventListener('click', () => {
+            const orderFacade = new OrderFacade('Laptop', 2500); // Tworzenie zamówienia
+            const orderStatus = orderFacade.placeOrder(); // Złożenie zamówienia
+            document.getElementById('orderStatus').textContent = orderStatus; // Wyświetlanie statusu zamówienia
+        });
+    </script>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/prism.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/components/prism-javascript.min.js"></script>
+</body>
+</html>

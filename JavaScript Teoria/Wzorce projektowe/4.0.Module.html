@@ -18,29 +18,33 @@
 
         <h3>Przykład prostego modułu</h3>
         <pre><code class="language-javascript">
-// Definicja modułu za pomocą IIFE
+// Definicja modułu za pomocą IIFE (Immediately Invoked Function Expression)
 const myModule = (function() {
-    // Zmienna prywatna
+    // Zmienna prywatna, dostępna tylko wewnątrz modułu
     let privateVar = "To jest zmienna prywatna";
 
-    // Funkcja prywatna
+    // Funkcja prywatna, dostępna tylko wewnątrz modułu
     function privateMethod() {
         console.log("To jest metoda prywatna");
     }
 
     // Zwracamy obiekt, który udostępnia publiczne metody i zmienne
     return {
+        // Zmienna publiczna, dostępna na zewnątrz modułu
         publicVar: "To jest zmienna publiczna",
 
+        // Metoda publiczna, dostępna na zewnątrz modułu
         publicMethod: function() {
             console.log("To jest metoda publiczna");
-            privateMethod();  // Wywołanie funkcji prywatnej
+            privateMethod();  // Wywołanie funkcji prywatnej z wnętrza metody publicznej
         }
     };
 })();
 
-console.log(myModule.publicVar); // "To jest zmienna publiczna"
-myModule.publicMethod(); // "To jest metoda publiczna" + "To jest metoda prywatna"
+// Dostęp do publicznej zmiennej i metody z zewnątrz modułu
+console.log(myModule.publicVar); // Wyświetli: "To jest zmienna publiczna"
+myModule.publicMethod(); // Wyświetli: "To jest metoda publiczna" oraz "To jest metoda prywatna"
+
         </code></pre>
         <p>W powyższym przykładzie zmienna <code>privateVar</code> oraz funkcja <code>privateMethod</code> są prywatne i niedostępne na zewnątrz modułu. Udostępniona jest tylko zmienna <code>publicVar</code> oraz metoda <code>publicMethod</code>, które można wywołać spoza modułu.</p>
 

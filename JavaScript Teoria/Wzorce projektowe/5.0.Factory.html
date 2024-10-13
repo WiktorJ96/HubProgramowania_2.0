@@ -18,42 +18,53 @@
 
         <h3>Przykład implementacji Factory</h3>
         <pre><code class="language-javascript">
+// Fabryka samochodów
 function CarFactory() {
+    // Metoda do tworzenia samochodów na podstawie ich typu
     this.createCar = function(type) {
         let car;
 
+        // Tworzenie samochodu typu sedan
         if (type === "sedan") {
             car = new Sedan();
-        } else if (type === "suv") {
+        } 
+        // Tworzenie samochodu typu SUV
+        else if (type === "suv") {
             car = new SUV();
         }
 
-        car.type = type;
+        car.type = type;  // Ustawianie typu samochodu
 
+        // Metoda jazdy, która wypisuje komunikat o jeździe danym typem samochodu
         car.drive = function() {
             console.log(`Jadę moim ${this.type}`);
         };
 
-        return car;
+        return car;  // Zwracanie gotowego obiektu samochodu
     };
 }
 
+// Klasa reprezentująca samochód typu sedan
 function Sedan() {
-    this.doors = 4;
+    this.doors = 4;  // Samochód sedan ma 4 drzwi
 }
 
+// Klasa reprezentująca samochód typu SUV
 function SUV() {
-    this.doors = 5;
+    this.doors = 5;  // Samochód SUV ma 5 drzwi
 }
 
-// Tworzenie fabryki
+// Tworzenie instancji fabryki samochodów
 const factory = new CarFactory();
 
-const sedan = factory.createCar("sedan");
-const suv = factory.createCar("suv");
+// Tworzenie samochodów przy użyciu fabryki
+const sedan = factory.createCar("sedan");  // Tworzenie samochodu typu sedan
+const suv = factory.createCar("suv");  // Tworzenie samochodu typu SUV
 
-sedan.drive(); // "Jadę moim sedan"
-suv.drive(); // "Jadę moim suv"
+// Wywoływanie metody jazdy dla każdego samochodu
+sedan.drive(); // Wyświetli: "Jadę moim sedan"
+suv.drive(); // Wyświetli: "Jadę moim suv"
+
         </code></pre>
         <p>W powyższym przykładzie, klasa <code>CarFactory</code> zawiera metodę <code>createCar</code>, która na podstawie przekazanego typu obiektu (np. <code>sedan</code> lub <code>suv</code>) tworzy odpowiednią instancję obiektu. Funkcja fabryczna decyduje, jaki rodzaj obiektu zostanie utworzony.</p>
 
@@ -69,43 +80,53 @@ suv.drive(); // "Jadę moim suv"
 
         <h3>Przykład Factory z klasami ES6</h3>
         <pre><code class="language-javascript">
+// Klasa bazowa Car, reprezentująca ogólny samochód
 class Car {
     constructor(type) {
-        this.type = type;
+        this.type = type;  // Typ samochodu (sedan, suv itp.)
     }
 
+    // Metoda do jazdy samochodem
     drive() {
-        console.log(`Jadę moim ${this.type}`);
+        console.log(`Jadę moim ${this.type}`);  // Wyświetla informację o jeździe danym typem samochodu
     }
 }
 
+// Klasa Sedan, dziedzicząca z Car
 class Sedan extends Car {
     constructor() {
-        super("sedan");
-        this.doors = 4;
+        super("sedan");  // Ustawienie typu samochodu jako "sedan" przy użyciu konstruktora klasy bazowej
+        this.doors = 4;  // Sedan ma 4 drzwi
     }
 }
 
+// Klasa SUV, dziedzicząca z Car
 class SUV extends Car {
     constructor() {
-        super("suv");
-        this.doors = 5;
+        super("suv");  // Ustawienie typu samochodu jako "suv" przy użyciu konstruktora klasy bazowej
+        this.doors = 5;  // SUV ma 5 drzwi
     }
 }
 
+// Fabryka samochodów, która tworzy odpowiedni typ samochodu
 class CarFactory {
+    // Metoda do tworzenia samochodu na podstawie typu
     createCar(type) {
         if (type === "sedan") {
-            return new Sedan();
+            return new Sedan();  // Tworzy samochód typu sedan
         } else if (type === "suv") {
-            return new SUV();
+            return new SUV();  // Tworzy samochód typu SUV
         }
     }
 }
 
+// Tworzenie fabryki samochodów
 const factory = new CarFactory();
+
+// Tworzenie samochodu typu sedan
 const mySedan = factory.createCar("sedan");
-mySedan.drive(); // Jadę moim sedan
+mySedan.drive();  // Wyświetli: Jadę moim sedan
+
         </code></pre>
 
         <h2>Gdzie używać wzorca Factory?</h2>

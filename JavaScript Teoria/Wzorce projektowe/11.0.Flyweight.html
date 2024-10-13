@@ -1,0 +1,207 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Wzorzec projektowy Flyweight w JavaScript</title>
+    <link rel="stylesheet" href="../styles.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/themes/prism-tomorrow.min.css" rel="stylesheet" />
+</head>
+<body>
+    <div class="container">
+        <h1>Wzorzec Projektowy Flyweight w JavaScript</h1>
+
+        <p>**Wzorzec Flyweight** pozwala na optymalizację pamięci poprzez współdzielenie danych między obiektami. Jest szczególnie użyteczny, gdy mamy wiele podobnych obiektów, które mogą współdzielić część swojego stanu, np. dane konfiguracyjne, właściwości wizualne lub inne niezmienne wartości.</p>
+
+        <h2>Jak działa wzorzec Flyweight?</h2>
+        <p>Wzorzec Flyweight dzieli obiekty na dwie kategorie: stan wewnętrzny i stan zewnętrzny. Stan wewnętrzny to dane, które są wspólne dla wielu obiektów i mogą być współdzielone, podczas gdy stan zewnętrzny to dane specyficzne dla każdego obiektu, które nie mogą być współdzielone. Obiekty Flyweight przechowują tylko stan wewnętrzny, a stan zewnętrzny jest przekazywany podczas działania programu.</p>
+
+        <h3>Przykład implementacji wzorca Flyweight</h3>
+        <pre><code class="language-javascript">
+// Klasa Flyweight (Pyłek)
+class Shape {
+    constructor(color) {
+        this.color = color;  // Stan wewnętrzny (współdzielony) – kolor kształtu
+    }
+
+    // Metoda rysowania kształtu w określonym położeniu
+    draw(x, y) {  // Stan zewnętrzny (zmienny) – współrzędne rysowania
+        console.log(`Rysuję ${this.color} koło w położeniu (${x}, ${y})`); // Wyświetlenie informacji o rysowaniu koła
+    }
+}
+
+// Fabryka Flyweight, zarządzająca współdzieleniem instancji
+class ShapeFactory {
+    constructor() {
+        this.shapes = {};  // Obiekt przechowujący współdzielone instancje Shape (kluczem jest kolor)
+    }
+
+    // Metoda zwracająca instancję Shape na podstawie koloru (tworzy nową, jeśli nie istnieje)
+    getShape(color) {
+        if (!this.shapes[color]) {  // Sprawdzenie, czy kształt o danym kolorze już istnieje
+            this.shapes[color] = new Shape(color); // Jeśli nie, tworzy nowy kształt i zapisuje go w kolekcji
+        }
+        return this.shapes[color]; // Zwraca kształt o danym kolorze (nowy lub istniejący)
+    }
+
+    // Metoda zwracająca liczbę utworzonych kształtów
+    getShapeCount() {
+        return Object.keys(this.shapes).length; // Zwraca liczbę kluczy (kształtów) w obiekcie shapes
+    }
+}
+
+// Klient (kod, który korzysta z Flyweight)
+const factory = new ShapeFactory(); // Tworzenie instancji fabryki kształtów
+
+// Tworzenie lub pobieranie czerwonego koła z fabryki
+const redCircle = factory.getShape('czerwony');
+redCircle.draw(10, 10); // Rysowanie czerwonego koła w położeniu (10, 10)
+
+// Tworzenie lub pobieranie niebieskiego koła z fabryki
+const blueCircle = factory.getShape('niebieski');
+blueCircle.draw(20, 20); // Rysowanie niebieskiego koła w położeniu (20, 20)
+
+// Ponowne pobranie czerwonego koła z fabryki (użycie istniejącego obiektu)
+const anotherRedCircle = factory.getShape('czerwony');
+anotherRedCircle.draw(30, 30); // Rysowanie kolejnego czerwonego koła w położeniu (30, 30)
+
+// Wyświetlenie liczby utworzonych obiektów Shape
+console.log(`Liczba utworzonych obiektów: ${factory.getShapeCount()}`); // Wyświetli "Liczba utworzonych obiektów: 2"
+
+        </code></pre>
+
+        <p>W powyższym przykładzie mamy klasę <code>Shape</code>, która reprezentuje kształty o określonym kolorze. Stan wewnętrzny (kolor) jest współdzielony, a współdzielenie jest zarządzane przez fabrykę <code>ShapeFactory</code>, która zapewnia, że dla każdego koloru jest tworzona tylko jedna instancja klasy <code>Shape</code>. Stan zewnętrzny (pozycja) jest przekazywany jako parametry do metody <code>draw</code>.</p>
+
+        <h2>Zalety wzorca Flyweight</h2>
+        <ul>
+            <li>Redukcja zużycia pamięci – Współdzielenie wspólnych danych między obiektami pozwala na oszczędność pamięci.</li>
+            <li>Optymalizacja wydajności – Zmniejszenie liczby tworzonych obiektów przyczynia się do zwiększenia efektywności systemu.</li>
+            <li>Lepsza organizacja kodu – Podział na stan wewnętrzny i zewnętrzny pozwala na lepsze zarządzanie danymi.</li>
+        </ul>
+
+        <h2>Zastosowanie wzorca Flyweight</h2>
+        <p>Wzorzec Flyweight jest często stosowany w aplikacjach, które muszą zarządzać dużą liczbą podobnych obiektów, np. w systemach graficznych (renderowanie elementów na ekranie), systemach gier (zarządzanie wieloma jednostkami), czy aplikacjach pracujących na dużych zbiorach danych.</p>
+
+        <h2>Przykład użycia Flyweight w rzeczywistym projekcie</h2>
+        <pre><code class="language-javascript">
+// Klasa reprezentująca znak, wykorzystująca wzorzec Flyweight
+class Character {
+    constructor(font) {
+        this.font = font;  // Współdzielony stan wewnętrzny (czcionka) – wspólny dla wielu znaków
+    }
+
+    // Metoda renderowania znaku z określonym stanem zewnętrznym (znak, rozmiar, kolor)
+    render(char, size, color) {
+        console.log(`Renderowanie znaku ${char} w czcionce ${this.font}, rozmiar ${size}, kolor ${color}`); // Wyświetla informacje o renderowaniu znaku
+    }
+}
+
+// Fabryka znaków, zarządzająca współdzieleniem instancji Character
+class CharacterFactory {
+    constructor() {
+        this.characters = {}; // Obiekt przechowujący współdzielone instancje Character (kluczem jest czcionka)
+    }
+
+    // Metoda zwracająca instancję Character na podstawie czcionki (tworzy nową, jeśli nie istnieje)
+    getCharacter(font) {
+        if (!this.characters[font]) {  // Sprawdzenie, czy znak z określoną czcionką już istnieje
+            this.characters[font] = new Character(font); // Jeśli nie istnieje, tworzy nową instancję Character
+        }
+        return this.characters[font]; // Zwraca istniejącą lub nową instancję Character
+    }
+}
+
+// Użycie wzorca Flyweight do zarządzania znakami graficznymi
+const charFactory = new CharacterFactory(); // Inicjalizacja fabryki znaków
+
+// Tworzenie lub pobieranie znaku z czcionką Arial
+const arialChar = charFactory.getCharacter("Arial");
+arialChar.render("A", 12, "czarny"); // Renderowanie znaku "A" w czcionce Arial, rozmiar 12, kolor czarny
+arialChar.render("B", 14, "niebieski"); // Renderowanie znaku "B" w czcionce Arial, rozmiar 14, kolor niebieski
+
+// Tworzenie lub pobieranie znaku z czcionką Times New Roman
+const timesNewRomanChar = charFactory.getCharacter("Times New Roman");
+timesNewRomanChar.render("C", 16, "czerwony"); // Renderowanie znaku "C" w czcionce Times New Roman, rozmiar 16, kolor czerwony
+
+        </code></pre>
+
+        <p>W tym przykładzie klasa <code>Character</code> reprezentuje znak z określoną czcionką. Czcionka jest stanem wewnętrznym (współdzielonym), a rozmiar i kolor są stanem zewnętrznym (zmiennym). Dzięki temu dla każdej czcionki tworzona jest tylko jedna instancja klasy <code>Character</code>, co oszczędza pamięć, szczególnie gdy renderujemy dużą liczbę znaków.</p>
+
+        <h2>Podsumowanie</h2>
+        <ul>
+            <li>Wzorzec Flyweight pozwala na optymalizację pamięci poprzez współdzielenie wspólnych danych między obiektami.</li>
+            <li>Jest przydatny, gdy mamy do czynienia z dużą liczbą podobnych obiektów, które mogą dzielić część swojego stanu.</li>
+            <li>Flyweight rozdziela dane na stan wewnętrzny (współdzielony) i stan zewnętrzny (zmienny), co pozwala na lepszą organizację i zarządzanie danymi.</li>
+        </ul>
+        <a href="./11.1.Flyweight-projekt.html"><button>Przykładowy projekt</button></a>
+    </div>
+    <script>
+
+        // Klasa Circle bez optymalizacji Flyweight
+class Circle {
+  constructor(color, x, y, radius) {
+    this.color = color;
+    this.x = x;
+    this.y = y;
+    this.radius = radius;
+  }
+
+  draw() {
+    console.log(`Drawing a ${this.color} circle at (${this.x}, ${this.y}) with radius ${this.radius}`);
+  }
+}
+
+// Tworzenie wielu kół bez współdzielenia kolorów
+const circles = [];
+for (let i = 0; i < 100000; i++) {
+  circles.push(new Circle('red', Math.random() * 100, Math.random() * 100, 10));
+}
+
+circles[0].draw();  // Wyświetli: "Drawing a red circle at (x, y) with radius 10"
+
+
+
+// Klasa Circle po zastosowaniu wzorca Flyweight
+class Circle {
+  constructor(color) {
+    this.color = color;  // Stan współdzielony (kolor)
+  }
+
+  draw(x, y, radius) {
+    console.log(`Drawing a ${this.color} circle at (${x}, ${y}) with radius ${radius}`);
+  }
+}
+
+// Fabryka Flyweight, która zarządza współdzielonymi instancjami
+class CircleFactory {
+  constructor() {
+    this.circles = {};  // Zbiór współdzielonych obiektów (wagi piórkowe)
+  }
+
+  getCircle(color) {
+    if (!this.circles[color]) {
+      this.circles[color] = new Circle(color);  // Tworzymy nową instancję tylko jeśli jeszcze jej nie ma
+      console.log(`Creating a ${color} circle`);
+    }
+    return this.circles[color];
+  }
+}
+
+// Tworzenie wielu kół z wykorzystaniem Flyweight
+const circleFactory = new CircleFactory();
+const circlesFlyweight = [];
+
+for (let i = 0; i < 100000; i++) {
+  const color = 'red';  // Wszystkie koła są czerwone
+  const circle = circleFactory.getCircle(color);
+  circlesFlyweight.push(circle);
+}
+
+// Wykorzystanie unikalnych danych (x, y, radius)
+circlesFlyweight[0].draw(Math.random() * 100, Math.random() * 100, 10);  // Wyświetli: "Drawing a red circle at (x, y) with radius 10"
+
+    </script>
+          <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/prism.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/components/prism-javascript.min.js"></script>
+</body>
+</html>

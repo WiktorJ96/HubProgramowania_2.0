@@ -18,79 +18,90 @@
         &lt;div id="character-container"&gt;&lt;/div&gt;
         
         &lt;script&gt;
-        class Weapon {
-            constructor(type, damage) {
-                this.type = type;
-                this.damage = damage;
-            }
+// Klasa reprezentująca broń
+class Weapon {
+    constructor(type, damage) {
+        this.type = type;  // Typ broni (np. miecz, łuk)
+        this.damage = damage;  // Obrażenia, jakie zadaje broń
+    }
 
-            describe() {
-                return `Broń: ${this.type}, Obrażenia: ${this.damage}`;
-            }
+    // Metoda opisująca broń
+    describe() {
+        return `Broń: ${this.type}, Obrażenia: ${this.damage}`;  // Zwraca opis broni
+    }
+}
+
+// Klasa reprezentująca zbroję
+class Armor {
+    constructor(type, defense) {
+        this.type = type;  // Typ zbroi (np. płytowa, skórzana)
+        this.defense = defense;  // Obrona, jaką zapewnia zbroja
+    }
+
+    // Metoda opisująca zbroję
+    describe() {
+        return `Zbroja: ${this.type}, Obrona: ${this.defense}`;  // Zwraca opis zbroi
+    }
+}
+
+// Klasa reprezentująca postać
+class Character {
+    constructor(type, strength, intelligence, agility, weapon, armor) {
+        this.type = type;  // Typ postaci (np. wojownik, mag, łucznik)
+        this.strength = strength;  // Siła postaci
+        this.intelligence = intelligence;  // Inteligencja postaci
+        this.agility = agility;  // Zwinność postaci
+        this.weapon = weapon;  // Broń, którą posiada postać
+        this.armor = armor;  // Zbroja, którą nosi postać
+    }
+
+    // Metoda opisująca postać
+    describe() {
+        return `Typ: ${this.type}, Siła: ${this.strength}, Inteligencja: ${this.intelligence}, Zwinność: ${this.agility}
+        ${this.weapon.describe()}  // Opis broni postaci
+        ${this.armor.describe()}`;  // Opis zbroi postaci
+    }
+}
+
+// Fabryka do tworzenia postaci różnych typów
+class CharacterFactory {
+    // Metoda tworzenia postaci na podstawie jej typu
+    static createCharacter(type) {
+        let weapon, armor;
+        switch (type) {
+            case 'Wojownik':
+                weapon = new Weapon('Miecz', 50);  // Wojownik ma miecz
+                armor = new Armor('Płytowa', 80);  // Wojownik ma zbroję płytową
+                return new Character(type, 80, 30, 50, weapon, armor);  // Zwraca postać Wojownika
+            case 'Mag':
+                weapon = new Weapon('Kostur', 90);  // Mag ma kostur
+                armor = new Armor('Szata', 20);  // Mag ma szatę
+                return new Character(type, 20, 90, 40, weapon, armor);  // Zwraca postać Maga
+            case 'Łucznik':
+                weapon = new Weapon('Łuk', 40);  // Łucznik ma łuk
+                armor = new Armor('Skórzana', 60);  // Łucznik ma zbroję skórzaną
+                return new Character(type, 50, 40, 80, weapon, armor);  // Zwraca postać Łucznika
+            default:
+                throw new Error('Nieznany typ postaci: ' + type);  // Błąd, jeśli typ postaci nie jest rozpoznany
         }
+    }
+}
 
-        class Armor {
-            constructor(type, defense) {
-                this.type = type;
-                this.defense = defense;
-            }
+// Tworzenie postaci przy użyciu fabryki
+const characters = [
+    CharacterFactory.createCharacter('Wojownik'),  // Tworzenie Wojownika
+    CharacterFactory.createCharacter('Mag'),  // Tworzenie Maga
+    CharacterFactory.createCharacter('Łucznik')  // Tworzenie Łucznika
+];
 
-            describe() {
-                return `Zbroja: ${this.type}, Obrona: ${this.defense}`;
-            }
-        }
+// Renderowanie postaci na stronie
+const characterContainer = document.getElementById('character-container');  // Pobieranie kontenera do wyświetlania postaci
+characters.forEach(character => {
+    const p = document.createElement('p');  // Tworzenie elementu &lt;p&gt; dla opisu postaci
+    p.textContent = character.describe();  // Ustawianie opisu postaci w elemencie
+    characterContainer.appendChild(p);  // Dodawanie elementu &lt;p&gt; do kontenera na stronie
+});
 
-        class Character {
-            constructor(type, strength, intelligence, agility, weapon, armor) {
-                this.type = type;
-                this.strength = strength;
-                this.intelligence = intelligence;
-                this.agility = agility;
-                this.weapon = weapon;
-                this.armor = armor;
-            }
-
-            describe() {
-                return `Typ: ${this.type}, Siła: ${this.strength}, Inteligencja: ${this.intelligence}, Zwinność: ${this.agility}
-                ${this.weapon.describe()}
-                ${this.armor.describe()}`;
-            }
-        }
-
-        class CharacterFactory {
-            static createCharacter(type) {
-                let weapon, armor;
-                switch (type) {
-                    case 'Wojownik':
-                        weapon = new Weapon('Miecz', 50);
-                        armor = new Armor('Płytowa', 80);
-                        return new Character(type, 80, 30, 50, weapon, armor);
-                    case 'Mag':
-                        weapon = new Weapon('Kostur', 90);
-                        armor = new Armor('Szata', 20);
-                        return new Character(type, 20, 90, 40, weapon, armor);
-                    case 'Łucznik':
-                        weapon = new Weapon('Łuk', 40);
-                        armor = new Armor('Skórzana', 60);
-                        return new Character(type, 50, 40, 80, weapon, armor);
-                    default:
-                        throw new Error('Nieznany typ postaci: ' + type);
-                }
-            }
-        }
-
-        const characters = [
-            CharacterFactory.createCharacter('Wojownik'),
-            CharacterFactory.createCharacter('Mag'),
-            CharacterFactory.createCharacter('Łucznik')
-        ];
-
-        const characterContainer = document.getElementById('character-container');
-        characters.forEach(character => {
-            const p = document.createElement('p');
-            p.textContent = character.describe();
-            characterContainer.appendChild(p);
-        });
         &lt;/script&gt;
         </code></pre>
     </div>

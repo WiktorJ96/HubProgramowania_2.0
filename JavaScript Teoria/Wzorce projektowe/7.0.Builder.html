@@ -18,48 +18,55 @@
 
         <h3>Przykład implementacji wzorca Builder</h3>
         <pre><code class="language-javascript">
+// Klasa reprezentująca samochód
 class Car {
     constructor() {
-        this.doors = 0;
-        this.engine = "";
-        this.color = "";
+        this.doors = 0;  // Liczba drzwi samochodu
+        this.engine = "";  // Typ silnika samochodu
+        this.color = "";  // Kolor samochodu
     }
 }
 
+// Klasa budująca samochód (Builder)
 class CarBuilder {
     constructor() {
-        this.car = new Car();
+        this.car = new Car();  // Tworzy nowy obiekt samochodu
     }
 
+    // Metoda dodająca liczbę drzwi do samochodu
     addDoors(doors) {
-        this.car.doors = doors;
-        return this;  // Umożliwia wywołania łańcuchowe
+        this.car.doors = doors;  // Ustawia liczbę drzwi
+        return this;  // Zwraca samego siebie, aby umożliwić wywołania łańcuchowe
     }
 
+    // Metoda dodająca typ silnika do samochodu
     addEngine(engine) {
-        this.car.engine = engine;
-        return this;
+        this.car.engine = engine;  // Ustawia typ silnika
+        return this;  // Zwraca samego siebie, aby umożliwić wywołania łańcuchowe
     }
 
+    // Metoda dodająca kolor do samochodu
     addColor(color) {
-        this.car.color = color;
-        return this;
+        this.car.color = color;  // Ustawia kolor samochodu
+        return this;  // Zwraca samego siebie, aby umożliwić wywołania łańcuchowe
     }
 
+    // Metoda zwracająca gotowy obiekt samochodu
     build() {
-        return this.car;  // Zwracamy kompletny obiekt
+        return this.car;  // Zwraca kompletny obiekt samochodu
     }
 }
 
 // Użycie Buildera
-const myCar = new CarBuilder()
-    .addDoors(4)
-    .addEngine("V8")
-    .addColor("Czerwony")
-    .build();
+const myCar = new CarBuilder()  // Tworzenie instancji CarBuilder
+    .addDoors(4)  // Dodawanie 4 drzwi
+    .addEngine("V8")  // Dodawanie silnika V8
+    .addColor("Czerwony")  // Dodawanie czerwonego koloru
+    .build();  // Budowanie finalnego obiektu samochodu
 
-console.log(myCar);
+console.log(myCar);  
 // Output: Car { doors: 4, engine: 'V8', color: 'Czerwony' }
+
         </code></pre>
 
         <p>W powyższym przykładzie użyliśmy klasy <code>CarBuilder</code>, aby krok po kroku zbudować obiekt <code>Car</code>. Każda metoda dodaje określoną właściwość do obiektu i zwraca samego siebie, co umożliwia wywołania łańcuchowe (tzw. fluent interface). Dzięki temu możemy elastycznie budować obiekt, dodając tylko te elementy, które są potrzebne.</p>
@@ -77,29 +84,34 @@ console.log(myCar);
 
         <h2>Przykład Buildera dla formularza</h2>
         <pre><code class="language-javascript">
+// Klasa reprezentująca formularz
 class Form {
     constructor() {
-        this.fields = [];
+        this.fields = [];  // Inicjalizacja pustej tablicy na pola formularza
     }
 
+    // Metoda dodająca pole do formularza
     addField(field) {
-        this.fields.push(field);
-        return this;
+        this.fields.push(field);  // Dodaje pole do tablicy pól formularza
+        return this;  // Zwraca samego siebie, aby umożliwić wywołania łańcuchowe
     }
 
+    // Metoda zwracająca zbudowany formularz (tablica pól)
     build() {
-        return this.fields;
+        return this.fields;  // Zwraca tablicę pól formularza
     }
 }
 
-const formBuilder = new Form();
+// Użycie FormBuildera do tworzenia formularza
+const formBuilder = new Form();  // Tworzenie nowej instancji formularza
 const myForm = formBuilder
-    .addField({ label: "Imię", type: "text", value: "" })
-    .addField({ label: "Email", type: "email", value: "" })
-    .build();
+    .addField({ label: "Imię", type: "text", value: "" })  // Dodanie pola typu "text" dla imienia
+    .addField({ label: "Email", type: "email", value: "" })  // Dodanie pola typu "email" dla adresu email
+    .build();  // Budowanie formularza (zwraca gotową tablicę pól)
 
 console.log(myForm);
 // Output: [ { label: 'Imię', type: 'text', value: '' }, { label: 'Email', type: 'email', value: '' } ]
+
         </code></pre>
 
         <p>W tym przykładzie zastosowaliśmy wzorzec Builder do budowania dynamicznego formularza. Dodawanie pól formularza odbywa się krok po kroku, a wynikowy formularz można wygenerować dopiero po zakończeniu budowania.</p>

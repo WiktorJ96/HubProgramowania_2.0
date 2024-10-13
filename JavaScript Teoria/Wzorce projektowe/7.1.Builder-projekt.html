@@ -19,50 +19,58 @@
         &lt;div id="form-container"&gt;&lt;/div&gt;
 
         &lt;script&gt;
-        class Form {
-            constructor() {
-                this.fields = [];
-            }
+// Klasa reprezentująca formularz
+class Form {
+    constructor() {
+        this.fields = [];  // Inicjalizacja pustej tablicy na pola formularza
+    }
 
-            addField(field) {
-                this.fields.push(field);
-                return this;
-            }
+    // Metoda dodająca pole do formularza
+    addField(field) {
+        this.fields.push(field);  // Dodaje pole do tablicy pól formularza
+        return this;  // Zwraca samego siebie, aby umożliwić wywołania łańcuchowe
+    }
 
-            build() {
-                return this.fields;
-            }
-        }
+    // Metoda zwracająca zbudowany formularz (tablica pól)
+    build() {
+        return this.fields;  // Zwraca tablicę pól formularza
+    }
+}
 
-        const formBuilder = new Form();
-        const myForm = formBuilder
-            .addField({ label: "Imię", type: "text", value: "" })
-            .addField({ label: "Email", type: "email", value: "" })
-            .build();
+// Użycie FormBuildera do tworzenia formularza
+const formBuilder = new Form();  // Tworzenie nowej instancji formularza
+const myForm = formBuilder
+    .addField({ label: "Imię", type: "text", value: "" })  // Dodanie pola typu "text" dla imienia
+    .addField({ label: "Email", type: "email", value: "" })  // Dodanie pola typu "email" dla adresu email
+    .build();  // Budowanie formularza (zwraca gotową tablicę pól)
 
-        // Funkcja do dynamicznego renderowania formularza na stronie
-        function renderForm(fields) {
-            const formContainer = document.getElementById('form-container');
-            const formElement = document.createElement('form');
+// Funkcja do dynamicznego renderowania formularza na stronie
+function renderForm(fields) {
+    const formContainer = document.getElementById('form-container');  // Pobieranie kontenera na formularz z DOM
+    const formElement = document.createElement('form');  // Tworzenie elementu formularza
 
-            fields.forEach(field => {
-                const label = document.createElement('label');
-                label.textContent = field.label;
+    // Iteracja po polach formularza i dynamiczne tworzenie etykiet i pól
+    fields.forEach(field => {
+        const label = document.createElement('label');  // Tworzenie elementu etykiety
+        label.textContent = field.label;  // Ustawianie tekstu etykiety
 
-                const input = document.createElement('input');
-                input.type = field.type;
-                input.value = field.value;
+        const input = document.createElement('input');  // Tworzenie elementu input
+        input.type = field.type;  // Ustawianie typu input
+        input.value = field.value;  // Ustawianie wartości input
 
-                formElement.appendChild(label);
-                formElement.appendChild(input);
-                formElement.appendChild(document.createElement('br'));
-            });
+        // Dodawanie etykiety i pola input do formularza
+        formElement.appendChild(label);
+        formElement.appendChild(input);
+        formElement.appendChild(document.createElement('br'));  // Dodawanie elementu przerwy między polami
+    });
 
-            formContainer.appendChild(formElement);
-        }
+    // Dodanie zbudowanego formularza do kontenera
+    formContainer.appendChild(formElement);
+}
 
-        // Wyświetlamy formularz
-        renderForm(myForm);
+// Wyświetlenie formularza na stronie
+renderForm(myForm);  // Przekazanie pól formularza do funkcji renderującej
+
         </code></pre>
     </div>
 

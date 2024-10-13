@@ -20,37 +20,47 @@
         &lt;div id="log-container"&gt;&lt;/div&gt;
 
         &lt;script&gt;
-        class Logger {
-            constructor() {
-                if (Logger.instance) {
-                    return Logger.instance;
-                }
-                this.logs = [];
-                Logger.instance = this;
-            }
-
-            addLog(message) {
-                const timestamp = new Date().toLocaleTimeString();
-                this.logs.push(`[${timestamp}] ${message}`);
-                this.displayLogs();
-            }
-
-            displayLogs() {
-                const logContainer = document.getElementById('log-container');
-                logContainer.innerHTML = '';
-                this.logs.forEach(log => {
-                    const logElement = document.createElement('p');
-                    logElement.textContent = log;
-                    logContainer.appendChild(logElement);
-                });
-            }
+// Klasa Logger implementująca wzorzec Singleton
+class Logger {
+    constructor() {
+        // Sprawdzenie, czy instancja Loggera już istnieje
+        if (Logger.instance) {
+            return Logger.instance;  // Jeśli istnieje, zwraca istniejącą instancję
         }
 
-        const logger = new Logger();
+        this.logs = [];  // Tablica przechowująca logi
+        Logger.instance = this;  // Przypisanie instancji do statycznej właściwości
+    }
 
-        document.getElementById('logBtn').addEventListener('click', () => {
-            logger.addLog('Nowy log został dodany.');
+    // Metoda do dodawania nowego loga
+    addLog(message) {
+        const timestamp = new Date().toLocaleTimeString();  // Pobieranie aktualnego czasu
+        this.logs.push(`[${timestamp}] ${message}`);  // Dodanie nowego loga z czasem
+        this.displayLogs();  // Wyświetlenie zaktualizowanych logów
+    }
+
+    // Metoda do wyświetlania logów w elemencie HTML
+    displayLogs() {
+        const logContainer = document.getElementById('log-container');  // Pobranie kontenera logów
+        logContainer.innerHTML = '';  // Wyczyszczenie zawartości kontenera
+
+        // Iteracja po logach i dodawanie ich do kontenera
+        this.logs.forEach(log => {
+            const logElement = document.createElement('p');  // Tworzenie elementu &lt;p&gt; dla każdego loga
+            logElement.textContent = log;  // Ustawienie treści loga
+            logContainer.appendChild(logElement);  // Dodanie elementu do kontenera
         });
+    }
+}
+
+// Tworzenie instancji loggera (Singleton)
+const logger = new Logger();
+
+// Obsługa przycisku dodającego nowy log
+document.getElementById('logBtn').addEventListener('click', () => {
+    logger.addLog('Nowy log został dodany.');  // Dodanie nowego loga
+});
+
         &lt;/script&gt;
         </code></pre>
     </div>

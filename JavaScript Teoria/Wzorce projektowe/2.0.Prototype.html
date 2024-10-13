@@ -18,21 +18,25 @@
 
         <h3>Przykład użycia Prototype</h3>
         <pre><code class="language-javascript">
+// Definicja konstruktora Person
 function Person(name, age) {
-    this.name = name;
-    this.age = age;
+    this.name = name;  // Ustawienie imienia osoby
+    this.age = age;  // Ustawienie wieku osoby
 }
 
-// Definiowanie metody w prototypie
+// Definiowanie metody w prototypie, aby wszystkie instancje Person miały dostęp do tej metody
 Person.prototype.greet = function() {
-    return `Cześć, jestem ${this.name} i mam ${this.age} lat.`;
+    return `Cześć, jestem ${this.name} i mam ${this.age} lat.`;  // Zwracanie komunikatu powitalnego
 };
 
-const person1 = new Person('Anna', 25);
-const person2 = new Person('Tomek', 30);
+// Tworzenie dwóch instancji obiektu Person
+const person1 = new Person('Anna', 25);  // Osoba o imieniu Anna i wieku 25 lat
+const person2 = new Person('Tomek', 30);  // Osoba o imieniu Tomek i wieku 30 lat
 
-console.log(person1.greet()); // Cześć, jestem Anna i mam 25 lat.
-console.log(person2.greet()); // Cześć, jestem Tomek i mam 30 lat.
+// Wywoływanie metody greet dla każdej instancji
+console.log(person1.greet()); // Wyświetli: "Cześć, jestem Anna i mam 25 lat."
+console.log(person2.greet()); // Wyświetli: "Cześć, jestem Tomek i mam 30 lat."
+
         </code></pre>
         <p>W powyższym przykładzie funkcja <code>Person</code> jest konstruktorem, a metoda <code>greet</code> jest zdefiniowana na jej prototypie. Dzięki temu wszystkie instancje obiektów typu <code>Person</code> mogą używać tej metody, bez konieczności duplikowania jej w każdej instancji.</p>
 
@@ -41,32 +45,38 @@ console.log(person2.greet()); // Cześć, jestem Tomek i mam 30 lat.
 
         <h3>Przykład dziedziczenia prototypowego</h3>
         <pre><code class="language-javascript">
-// Klasa bazowa
+// Klasa bazowa Animal
 function Animal(type) {
-    this.type = type;
+    this.type = type;  // Ustawienie typu zwierzęcia
 }
 
+// Definiowanie metody w prototypie klasy Animal
 Animal.prototype.getType = function() {
-    return this.type;
+    return this.type;  // Zwracanie typu zwierzęcia
 };
 
-// Klasa pochodna
+// Klasa pochodna Dog
 function Dog(name) {
-    Animal.call(this, 'Pies'); // Dziedziczenie właściwości z klasy Animal
-    this.name = name;
+    Animal.call(this, 'Pies');  // Wywołanie konstruktora klasy Animal, dziedziczenie typu 'Pies'
+    this.name = name;  // Ustawienie imienia psa
 }
 
-// Dziedziczenie metod z prototypu Animal
-Dog.prototype = Object.create(Animal.prototype);
-Dog.prototype.constructor = Dog;
+// Dziedziczenie metod z prototypu klasy Animal
+Dog.prototype = Object.create(Animal.prototype);  // Tworzenie prototypu Dog na bazie Animal
+Dog.prototype.constructor = Dog;  // Ustawienie właściwego konstruktora dla klasy Dog
 
+// Definiowanie dodatkowej metody dla klasy Dog
 Dog.prototype.bark = function() {
-    return `${this.name} szczeka!`;
+    return `${this.name} szczeka!`;  // Zwracanie komunikatu szczekania psa
 };
 
+// Tworzenie nowej instancji Dog
 const dog1 = new Dog('Burek');
-console.log(dog1.getType()); // Pies
-console.log(dog1.bark()); // Burek szczeka!
+
+// Wywoływanie metod
+console.log(dog1.getType());  // Wyświetli: Pies (dziedziczone z Animal)
+console.log(dog1.bark());  // Wyświetli: Burek szczeka! (metoda klasy Dog)
+
         </code></pre>
         <p>W tym przykładzie <code>Dog</code> dziedziczy po <code>Animal</code> za pomocą prototypowego dziedziczenia. Dzięki temu instancje <code>Dog</code> mogą korzystać zarówno z metod zdefiniowanych w <code>Animal</code>, jak i własnych metod, takich jak <code>bark</code>.</p>
 

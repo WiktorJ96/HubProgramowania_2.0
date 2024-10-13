@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="../styles.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/themes/prism-tomorrow.min.css" rel="stylesheet" />
+    <title>Gra Karciana - Wzorzec Flyweight</title>
+</head>
+<body>
+    <div class="container">
+        <h1>Gra Karciana - Wzorzec Flyweight</h1>
+        <button id="generateDeckBtn">Wygeneruj Talię Kart</button>
+        <div id="cardDeck"></div>
+
+        <h2>Kod HTML i JavaScript:</h2>
+        <pre><code class="language-html">
+        &lt;h1&gt;Gra Karciana - Wzorzec Flyweight&lt;/h1&gt;
+        &lt;button id="generateDeckBtn"&gt;Wygeneruj Talię Kart&lt;/button&gt;
+        &lt;div id="cardDeck"&gt;&lt;/div&gt;
+
+        &lt;script&gt;
+// Klasa Flyweight dla wspólnego stanu kart (kolor)
+class CardColor {
+    constructor(color) {
+        this.color = color;  // Przechowywanie koloru karty (stan współdzielony)
+    }
+
+    // Metoda zwracająca kolor karty
+    getColor() {
+        return this.color; // Zwraca kolor karty
+    }
+}
+
+// Fabryka Flyweight do zarządzania współdzielonymi kolorami kart
+class CardColorFactory {
+    constructor() {
+        this.colors = {};  // Obiekt przechowujący kolory kart (współdzielone instancje)
+    }
+
+    // Metoda zwracająca instancję koloru (tworzy nową, jeśli jeszcze nie istnieje)
+    getColor(color) {
+        if (!this.colors[color]) {  // Sprawdza, czy dany kolor już istnieje
+            this.colors[color] = new CardColor(color); // Tworzy nowy kolor, jeśli jeszcze go nie ma
+        }
+        return this.colors[color]; // Zwraca istniejący lub nowy kolor
+    }
+}
+
+// Klasa reprezentująca pojedynczą kartę (numer unikalny, kolor współdzielony)
+class Card {
+    constructor(number, colorFlyweight) {
+        this.number = number;  // Przechowywanie numeru karty (1-13)
+        this.color = colorFlyweight;  // Przypisanie współdzielonego koloru (Flyweight)
+    }
+
+    // Metoda zwracająca opis karty
+    getDescription() {
+        return `Karta: ${this.number} ${this.color.getColor()}`; // Zwraca opis karty (numer i kolor)
+    }
+}
+
+// Klasa do generowania talii kart
+class Deck {
+    constructor() {
+        this.cards = [];  // Przechowuje talie kart
+        this.colorFactory = new CardColorFactory();  // Inicjalizuje fabrykę kolorów kart
+    }
+
+    // Generowanie talii kart (52 karty - 4 kolory, 13 wartości)
+    generateDeck() {
+        const colors = ['♥', '♦', '♣', '♠'];  // Kolory kart: Serce, Dzwonek, Trefl, Pik
+        for (let color of colors) {  // Iteracja po kolorach
+            for (let number = 1; number <= 13; number++) {  // Iteracja po numerach kart (od 1 do 13)
+                const cardColor = this.colorFactory.getColor(color);  // Pobieranie współdzielonego koloru z fabryki
+                this.cards.push(new Card(number, cardColor));  // Tworzenie nowej karty z numerem i kolorem
+            }
+        }
+    }
+
+    // Metoda wyświetlająca opisy wszystkich kart
+    displayDeck() {
+        return this.cards.map(card => card.getDescription()).join(', ');  // Zwraca opis wszystkich kart jako ciąg tekstowy
+    }
+}
+
+// Obsługa przycisku generującego talię kart
+document.getElementById('generateDeckBtn').addEventListener('click', () => {
+    const deck = new Deck();  // Tworzenie nowej talii
+    deck.generateDeck();  // Generowanie talii kart
+    const deckDescription = deck.displayDeck();  // Pobieranie opisu talii
+    document.getElementById('cardDeck').textContent = deckDescription;  // Wyświetlanie talii kart na stronie
+});
+        &lt;/script&gt;
+        </code></pre>
+    </div>
+
+    <script>
+        // Klasa Flyweight dla wspólnego stanu kart (kolor)
+        class CardColor {
+            constructor(color) {
+                this.color = color;
+            }
+
+            getColor() {
+                return this.color;
+            }
+        }
+
+        // Fabryka Flyweight do zarządzania współdzielonymi kolorami kart
+        class CardColorFactory {
+            constructor() {
+                this.colors = {};
+            }
+
+            getColor(color) {
+                if (!this.colors[color]) {
+                    this.colors[color] = new CardColor(color); // Tworzenie nowego koloru, jeśli jeszcze nie istnieje
+                }
+                return this.colors[color];
+            }
+        }
+
+        // Klasa karty (unikalne wartości są numery kart, a kolor jest współdzielony)
+        class Card {
+            constructor(number, colorFlyweight) {
+                this.number = number;
+                this.color = colorFlyweight; // Użycie Flyweight dla koloru
+            }
+
+            getDescription() {
+                return `Karta: ${this.number} ${this.color.getColor()}`;
+            }
+        }
+
+        // Klasa do generowania talii kart
+        class Deck {
+            constructor() {
+                this.cards = [];
+                this.colorFactory = new CardColorFactory();
+            }
+
+            generateDeck() {
+                const colors = ['♥', '♦', '♣', '♠']; // Serce, Dzwonek, Trefl, Pik
+                for (let color of colors) {
+                    for (let number = 1; number <= 13; number++) {
+                        const cardColor = this.colorFactory.getColor(color); // Współdzielenie kolorów
+                        this.cards.push(new Card(number, cardColor)); // Tworzenie karty
+                    }
+                }
+            }
+
+            displayDeck() {
+                return this.cards.map(card => card.getDescription()).join(', ');
+            }
+        }
+
+        // Obsługa przycisku "Wygeneruj Talię Kart"
+        document.getElementById('generateDeckBtn').addEventListener('click', () => {
+            const deck = new Deck();
+            deck.generateDeck();
+            const deckDescription = deck.displayDeck();
+            document.getElementById('cardDeck').textContent = deckDescription; // Wyświetlanie talii kart
+        });
+    </script>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/prism.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/components/prism-javascript.min.js"></script>
+</body>
+</html>
