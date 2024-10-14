@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Przykład Display w Bootstrapie</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/css/bootstrap.min.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/themes/prism-tomorrow.min.css" rel="stylesheet">
+    <style>
+        .box {
+            background-color: #7952b3;
+            color: #ffffff;
+            padding: 10px;
+            text-align: center;
+            margin-bottom: 10px;
+        }
+
+        .example {
+            display: none;
+        }
+
+        .example.active {
+            display: block;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1 class="text-center my-4">Przykłady Display w Bootstrapie</h1>
+
+        <!-- Menu wyboru przykładów -->
+        <div class="dropdown text-center mb-4">
+            <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton" data-bs-toggle="dropdown" aria-expanded="false">
+                Wybierz przykład display
+            </button>
+            <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                <li><a class="dropdown-item" href="#" onclick="showExample('example1')">Domyślny display (block)</a></li>
+                <li><a class="dropdown-item" href="#" onclick="showExample('example2')">Display inline</a></li>
+                <li><a class="dropdown-item" href="#" onclick="showExample('example3')">Display inline-block</a></li>
+                <li><a class="dropdown-item" href="#" onclick="showExample('example4')">Display flex</a></li>
+                <li><a class="dropdown-item" href="#" onclick="showExample('example5')">Display none</a></li>
+                <li><a class="dropdown-item" href="#" onclick="showExample('example6')">Responsywne display</a></li>
+            </ul>
+        </div>
+
+        <!-- Przykład 1: Domyślny display (block) -->
+        <div id="example1" class="example active">
+            <h2>Przykład 1: Domyślny display (block)</h2>
+            <div class="box d-block">Element 1 (display: block)</div>
+            <div class="box d-block">Element 2 (display: block)</div>
+
+            <h3>Kod HTML:</h3>
+            <pre><code class="language-html">
+&lt;div class="box d-block"&gt;Element 1 (display: block)&lt;/div&gt;
+&lt;div class="box d-block"&gt;Element 2 (display: block)&lt;/div&gt;
+            </code></pre>
+        </div>
+
+        <!-- Przykład 2: Display inline -->
+        <div id="example2" class="example">
+            <h2>Przykład 2: Display inline</h2>
+            <div class="box d-inline">Element 1 (display: inline)</div>
+            <div class="box d-inline">Element 2 (display: inline)</div>
+
+            <h3>Kod HTML:</h3>
+            <pre><code class="language-html">
+&lt;div class="box d-inline"&gt;Element 1 (display: inline)&lt;/div&gt;
+&lt;div class="box d-inline"&gt;Element 2 (display: inline)&lt;/div&gt;
+            </code></pre>
+        </div>
+
+        <!-- Przykład 3: Display inline-block -->
+        <div id="example3" class="example">
+            <h2>Przykład 3: Display inline-block</h2>
+            <div class="box d-inline-block">Element 1 (display: inline-block)</div>
+            <div class="box d-inline-block">Element 2 (display: inline-block)</div>
+
+            <h3>Kod HTML:</h3>
+            <pre><code class="language-html">
+&lt;div class="box d-inline-block"&gt;Element 1 (display: inline-block)&lt;/div&gt;
+&lt;div class="box d-inline-block"&gt;Element 2 (display: inline-block)&lt;/div&gt;
+            </code></pre>
+        </div>
+
+        <!-- Przykład 4: Display flex -->
+        <div id="example4" class="example">
+            <h2>Przykład 4: Display flex</h2>
+            <div class="d-flex justify-content-around">
+                <div class="box">Element 1 (display: flex)</div>
+                <div class="box">Element 2 (display: flex)</div>
+                <div class="box">Element 3 (display: flex)</div>
+            </div>
+
+            <h3>Kod HTML:</h3>
+            <pre><code class="language-html">
+&lt;div class="d-flex justify-content-around"&gt;
+    &lt;div class="box"&gt;Element 1 (display: flex)&lt;/div&gt;
+    &lt;div class="box"&gt;Element 2 (display: flex)&lt;/div&gt;
+    &lt;div class="box"&gt;Element 3 (display: flex)&lt;/div&gt;
+&lt;/div&gt;
+            </code></pre>
+        </div>
+
+        <!-- Przykład 5: Display none -->
+        <div id="example5" class="example">
+            <h2>Przykład 5: Display none</h2>
+            <div class="box d-none">Element 1 (display: none)</div>
+            <div class="box d-none">Element 2 (display: none)</div>
+
+            <h3>Kod HTML:</h3>
+            <pre><code class="language-html">
+&lt;div class="box d-none"&gt;Element 1 (display: none)&lt;/div&gt;
+&lt;div class="box d-none"&gt;Element 2 (display: none)&lt;/div&gt;
+            </code></pre>
+        </div>
+
+        <!-- Przykład 6: Responsywne display -->
+        <div id="example6" class="example">
+            <h2>Przykład 6: Responsywne display</h2>
+            <div class="box d-none d-md-block d-lg-inline">Element 1 (d-none d-md-block d-lg-inline)</div>
+            <div class="box d-none d-md-block d-lg-inline">Element 2 (d-none d-md-block d-lg-inline)</div>
+
+            <h3>Kod HTML:</h3>
+            <pre><code class="language-html">
+&lt;div class="box d-none d-md-block d-lg-inline"&gt;Element 1 (d-none d-md-block d-lg-inline)&lt;/div&gt;
+&lt;div class="box d-none d-md-block d-lg-inline"&gt;Element 2 (d-none d-md-block d-lg-inline)&lt;/div&gt;
+            </code></pre>
+        </div>
+    </div>
+
+    <!-- Bootstrap i Prism -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/prism.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/components/prism-html.min.js"></script>
+
+    <!-- Skrypt do przełączania przykładów i podświetlania składni -->
+    <script>
+        function showExample(exampleId) {
+            const examples = document.querySelectorAll('.example');
+            examples.forEach(example => {
+                example.classList.remove('active');
+            });
+
+            document.getElementById(exampleId).classList.add('active');
+
+            // Wywołanie ponownego podświetlania po zmianie przykładu
+            Prism.highlightAll();
+        }
+    </script>
+</body>
+</html>

@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Marginesy w Bootstrap</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/css/bootstrap.min.css">
+    <link rel="stylesheet" href="../styles.css">
+</head>
+<body>
+    <div class="container">
+        <h1>Marginesy w Bootstrap</h1>
+
+        <p>Bootstrap oferuje wygodne klasy pomocnicze do zarządzania marginesami (odstępami na zewnątrz elementów) oraz paddingiem (odstępami wewnątrz elementów). Klasy marginesów umożliwiają szybkie i elastyczne ustawianie odstępów w różnych kierunkach za pomocą prostych klas, takich jak <code>m-*</code> oraz <code>mx-*</code>.</p>
+
+        <h2>Podstawowe klasy marginesów</h2>
+        <p>Bootstrap pozwala kontrolować marginesy za pomocą klas <code>m-*</code>, gdzie liczba kontroluje wielkość odstępu, a literka po <code>m</code> określa kierunek:</p>
+        <ul>
+            <li><code>m</code> – margines we wszystkich kierunkach</li>
+            <li><code>mt</code> – margines na górze (ang. *top*)</li>
+            <li><code>mb</code> – margines na dole (ang. *bottom*)</li>
+            <li><code>ms</code> – margines po lewej (ang. *start*)</li>
+            <li><code>me</code> – margines po prawej (ang. *end*)</li>
+            <li><code>mx</code> – marginesy poziome (lewo i prawo, ang. *horizontal*)</li>
+            <li><code>my</code> – marginesy pionowe (góra i dół, ang. *vertical*)</li>
+        </ul>
+
+        <h3>Przykładowe klasy marginesów</h3>
+        <pre><code class="language-html">
+&lt;!-- Margines na górze --&gt;
+&lt;div class="mt-3"&gt;Element z marginesem na górze 3&lt;/div&gt;
+
+&lt;!-- Margines poziomy --&gt;
+&lt;div class="mx-4"&gt;Element z marginesami po bokach (lewo/prawo) o wartości 4&lt;/div&gt;
+
+&lt;!-- Margines we wszystkich kierunkach --&gt;
+&lt;div class="m-2"&gt;Element z marginesem 2 we wszystkich kierunkach&lt;/div&gt;
+        </code></pre>
+        <p>W powyższych przykładach klasa <code>mt-3</code> ustawia margines na górze, <code>mx-4</code> ustawia marginesy poziome, a <code>m-2</code> dodaje marginesy we wszystkich kierunkach.</p>
+
+        <h2>Rozmiary marginesów</h2>
+        <p>Rozmiar marginesów można ustawić za pomocą wartości od <code>0</code> do <code>5</code>, gdzie <code>0</code> oznacza brak marginesu, a <code>5</code> to maksymalny margines. Przykładowo, <code>mt-5</code> ustawi duży margines na górze, a <code>m-0</code> usunie marginesy z wszystkich stron.</p>
+
+        <h3>Przykłady rozmiarów marginesów</h3>
+        <pre><code class="language-html">
+&lt;div class="m-0"&gt;Element bez marginesów&lt;/div&gt;
+&lt;div class="m-3"&gt;Element z marginesem o wartości 3&lt;/div&gt;
+&lt;div class="m-5"&gt;Element z największym marginesem (5)&lt;/div&gt;
+        </code></pre>
+
+        <h2>Auto marginesy</h2>
+        <p>Bootstrap oferuje także klasę <code>m-auto</code>, która automatycznie ustawia marginesy w taki sposób, by element był wyśrodkowany. Ta klasa jest szczególnie użyteczna w centrowaniu elementów.</p>
+
+        <h3>Przykład auto marginesu</h3>
+        <pre><code class="language-html">
+&lt;div class="mx-auto"&gt;Element wyśrodkowany poziomo&lt;/div&gt;
+        </code></pre>
+
+        <h2>Marginesy responsywne</h2>
+        <p>Możesz także używać klas marginesów responsywnych, które działają inaczej na różnych rozdzielczościach. W Bootstrapie używamy następujących punktów przerwania:</p>
+        <ul>
+            <li><code>sm</code> – dla ekranów o szerokości ≥576px</li>
+            <li><code>md</code> – dla ekranów o szerokości ≥768px</li>
+            <li><code>lg</code> – dla ekranów o szerokości ≥992px</li>
+            <li><code>xl</code> – dla ekranów o szerokości ≥1200px</li>
+        </ul>
+
+        <p>Przykład: <code>mt-md-5</code> ustawia margines górny o wartości 5 na średnich i większych ekranach, ale na mniejszych ekranach margines pozostaje domyślny.</p>
+
+        <h3>Przykład responsywnych marginesów</h3>
+        <pre><code class="language-html">
+&lt;div class="mt-5 mt-md-3"&gt;Element z różnymi marginesami na różnych ekranach&lt;/div&gt;
+        </code></pre>
+        <p>Na małych ekranach margines na górze wynosi <code>5</code>, a na średnich i większych ekranach jest zmniejszony do <code>3</code>.</p>
+
+        <h2>Podsumowanie</h2>
+        <ul>
+            <li>Bootstrap oferuje łatwe zarządzanie marginesami za pomocą klas <code>m-*</code>, <code>mx-*</code>, <code>my-*</code> itp.</li>
+            <li>Można ustawić różne marginesy w różnych kierunkach (góra, dół, lewo, prawo, poziomo, pionowo).</li>
+            <li>Bootstrap obsługuje marginesy responsywne, które dostosowują się do rozmiaru ekranu.</li>
+            <li>Używanie <code>m-auto</code> pozwala na automatyczne centrowanie elementów.</li>
+        </ul>
+
+        <a href="./6.1.Marginesy-projekt.html"><button>Przykłady</button></a>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/prism.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/components/prism-html.min.js"></script>
+</body>
+</html>

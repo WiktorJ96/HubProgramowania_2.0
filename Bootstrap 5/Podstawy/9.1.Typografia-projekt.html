@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Typografia w Bootstrapie</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/css/bootstrap.min.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/themes/prism-tomorrow.min.css" rel="stylesheet">
+    <style>
+        .example {
+            display: none;
+        }
+
+        .example.active {
+            display: block;
+        }
+
+        .highlight {
+            background-color: #f8f9fa;
+            padding: 10px;
+            margin-bottom: 20px;
+            border-left: 4px solid #007bff;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1 class="text-center my-4">Przykłady</h1>
+
+        <!-- Menu wyboru przykładów -->
+        <div class="dropdown text-center mb-4">
+            <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton" data-bs-toggle="dropdown" aria-expanded="false">
+                Wybierz przykład typografii
+            </button>
+            <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                <li><a class="dropdown-item" href="#" onclick="showExample('example1')">Nagłówki</a></li>
+                <li><a class="dropdown-item" href="#" onclick="showExample('example2')">Wyrównania tekstu</a></li>
+                <li><a class="dropdown-item" href="#" onclick="showExample('example3')">Style tekstu</a></li>
+                <li><a class="dropdown-item" href="#" onclick="showExample('example4')">Listy</a></li>
+                <li><a class="dropdown-item" href="#" onclick="showExample('example5')">Tekst pomocniczy i skróty</a></li>
+            </ul>
+        </div>
+
+        <!-- Przykład 1: Nagłówki -->
+        <div id="example1" class="example active">
+            <h2>Przykład 1: Nagłówki</h2>
+            <div class="highlight">
+                <h1>H1 Nagłówek</h1>
+                <h2>H2 Nagłówek</h2>
+                <h3>H3 Nagłówek</h3>
+                <h4>H4 Nagłówek</h4>
+                <h5>H5 Nagłówek</h5>
+                <h6>H6 Nagłówek</h6>
+            </div>
+
+            <h3>Kod HTML:</h3>
+            <pre><code class="language-html">
+&lt;h1&gt;H1 Nagłówek&lt;/h1&gt;
+&lt;h2&gt;H2 Nagłówek&lt;/h2&gt;
+&lt;h3&gt;H3 Nagłówek&lt;/h3&gt;
+&lt;h4&gt;H4 Nagłówek&lt;/h4&gt;
+&lt;h5&gt;H5 Nagłówek&lt;/h5&gt;
+&lt;h6&gt;H6 Nagłówek&lt;/h6&gt;
+            </code></pre>
+        </div>
+
+        <!-- Przykład 2: Wyrównania tekstu -->
+        <div id="example2" class="example">
+            <h2>Przykład 2: Wyrównania tekstu</h2>
+            <div class="highlight">
+                <p class="text-start">Tekst wyrównany do lewej.</p>
+                <p class="text-center">Tekst wyrównany do środka.</p>
+                <p class="text-end">Tekst wyrównany do prawej.</p>
+                <p class="text-justify">Tekst wyjustowany - wszystkie linie są równomiernie rozłożone na szerokość.</p>
+            </div>
+
+            <h3>Kod HTML:</h3>
+            <pre><code class="language-html">
+&lt;p class="text-start"&gt;Tekst wyrównany do lewej.&lt;/p&gt;
+&lt;p class="text-center"&gt;Tekst wyrównany do środka.&lt;/p&gt;
+&lt;p class="text-end"&gt;Tekst wyrównany do prawej.&lt;/p&gt;
+&lt;p class="text-justify"&gt;Tekst wyjustowany.&lt;/p&gt;
+            </code></pre>
+        </div>
+
+        <!-- Przykład 3: Style tekstu -->
+        <div id="example3" class="example">
+            <h2>Przykład 3: Style tekstu</h2>
+            <div class="highlight">
+                <p class="fw-bold">Pogrubiony tekst (fw-bold).</p>
+                <p class="fw-normal">Normalny tekst (fw-normal).</p>
+                <p class="fst-italic">Kursywa (fst-italic).</p>
+                <p class="fst-normal">Normalny styl (fst-normal).</p>
+                <p class="text-uppercase">TEKST WIELKIMI LITERAMI.</p>
+                <p class="text-lowercase">tekst małymi literami.</p>
+                <p class="text-capitalize">Pierwsza litera każdego wyrazu jest duża.</p>
+            </div>
+
+            <h3>Kod HTML:</h3>
+            <pre><code class="language-html">
+&lt;p class="fw-bold"&gt;Pogrubiony tekst (fw-bold).&lt;/p&gt;
+&lt;p class="fw-normal"&gt;Normalny tekst (fw-normal).&lt;/p&gt;
+&lt;p class="fst-italic"&gt;Kursywa (fst-italic).&lt;/p&gt;
+&lt;p class="fst-normal"&gt;Normalny styl (fst-normal).&lt;/p&gt;
+&lt;p class="text-uppercase"&gt;TEKST WIELKIMI LITERAMI.&lt;/p&gt;
+&lt;p class="text-lowercase"&gt;tekst małymi literami.&lt;/p&gt;
+&lt;p class="text-capitalize"&gt;Pierwsza litera każdego wyrazu jest duża.&lt;/p&gt;
+            </code></pre>
+        </div>
+
+        <!-- Przykład 4: Listy -->
+        <div id="example4" class="example">
+            <h2>Przykład 4: Listy</h2>
+            <div class="highlight">
+                <ul>
+                    <li>Pierwszy element listy</li>
+                    <li>Drugi element listy</li>
+                    <li>Trzeci element listy</li>
+                </ul>
+
+                <ol>
+                    <li>Pierwszy element listy numerowanej</li>
+                    <li>Drugi element listy numerowanej</li>
+                    <li>Trzeci element listy numerowanej</li>
+                </ol>
+
+                <ul class="list-unstyled">
+                    <li>Lista bez stylu (bez kropek)</li>
+                    <li>Drugi element bez stylu</li>
+                    <li>Trzeci element bez stylu</li>
+                </ul>
+
+                <ul class="list-inline">
+                    <li class="list-inline-item">Element 1 w linii</li>
+                    <li class="list-inline-item">Element 2 w linii</li>
+                    <li class="list-inline-item">Element 3 w linii</li>
+                </ul>
+            </div>
+
+            <h3>Kod HTML:</h3>
+            <pre><code class="language-html">
+&lt;ul&gt;
+    &lt;li&gt;Pierwszy element listy&lt;/li&gt;
+    &lt;li&gt;Drugi element listy&lt;/li&gt;
+    &lt;li&gt;Trzeci element listy&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;ol&gt;
+    &lt;li&gt;Pierwszy element listy numerowanej&lt;/li&gt;
+    &lt;li&gt;Drugi element listy numerowanej&lt;/li&gt;
+    &lt;li&gt;Trzeci element listy numerowanej&lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;ul class="list-unstyled"&gt;
+    &lt;li&gt;Lista bez stylu (bez kropek)&lt;/li&gt;
+    &lt;li&gt;Drugi element bez stylu&lt;/li&gt;
+    &lt;li&gt;Trzeci element bez stylu&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;ul class="list-inline"&gt;
+    &lt;li class="list-inline-item"&gt;Element 1 w linii&lt;/li&gt;
+    &lt;li class="list-inline-item"&gt;Element 2 w linii&lt;/li&gt;
+    &lt;li class="list-inline-item"&gt;Element 3 w linii&lt;/li&gt;
+&lt;/ul&gt;
+            </code></pre>
+        </div>
+
+        <!-- Przykład 5: Tekst pomocniczy i skróty -->
+        <div id="example5" class="example">
+            <h2>Przykład 5: Tekst pomocniczy i skróty</h2>
+            <div class="highlight">
+                <p>Normalny tekst z <small class="text-muted">tekstem pomocniczym</small>.</p>
+                <p>Tekst ze skrótem: <abbr title="Hypertext Markup Language">HTML</abbr></p>
+            </div>
+
+            <h3>Kod HTML:</h3>
+            <pre><code class="language-html">
+&lt;p&gt;Normalny tekst z &lt;small class="text-muted"&gt;tekstem pomocniczym&lt;/small&gt;.&lt;/p&gt;
+&lt;p&gt;Tekst ze skrótem: &lt;abbr title="Hypertext Markup Language"&gt;HTML&lt;/abbr&gt;&lt;/p&gt;
+            </code></pre>
+        </div>
+    </div>
+
+    <!-- Bootstrap i Prism -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/prism.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/components/prism-html.min.js"></script>
+
+    <!-- Skrypt do przełączania przykładów i podświetlania składni -->
+    <script>
+        function showExample(exampleId) {
+            const examples = document.querySelectorAll('.example');
+            examples.forEach(example => {
+                example.classList.remove('active');
+            });
+
+            document.getElementById(exampleId).classList.add('active');
+
+            // Wywołanie ponownego podświetlania po zmianie przykładu
+            Prism.highlightAll();
+        }
+    </script>
+</body>
+</html>

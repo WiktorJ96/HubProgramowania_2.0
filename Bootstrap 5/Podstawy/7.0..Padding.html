@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dopełnienia w Bootstrap</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/css/bootstrap.min.css">
+    <link rel="stylesheet" href="../styles.css">
+</head>
+<body>
+    <div class="container">
+        <h1>Dopełnienia w Bootstrap</h1>
+
+        <p>Dopełnienia, znane również jako <strong>padding</strong>, to odstępy wewnątrz elementu między jego zawartością a krawędziami. W Bootstrapie możemy łatwo kontrolować dopełnienia za pomocą klas <code>p-*</code>, które pozwalają szybko dodawać, usuwać lub zmieniać wielkość paddingu.</p>
+
+        <h2>Podstawowe klasy dopełnień</h2>
+        <p>Bootstrap oferuje różne klasy do zarządzania paddingiem. Używa się literki <code>p</code> (od ang. *padding*) oraz określonych wartości, aby ustawić dopełnienia:</p>
+        <ul>
+            <li><code>p</code> – dopełnienie we wszystkich kierunkach</li>
+            <li><code>pt</code> – dopełnienie na górze (ang. *top*)</li>
+            <li><code>pb</code> – dopełnienie na dole (ang. *bottom*)</li>
+            <li><code>ps</code> – dopełnienie po lewej stronie (ang. *start*)</li>
+            <li><code>pe</code> – dopełnienie po prawej stronie (ang. *end*)</li>
+            <li><code>px</code> – dopełnienia poziome (ang. *horizontal*, lewo i prawo)</li>
+            <li><code>py</code> – dopełnienia pionowe (ang. *vertical*, góra i dół)</li>
+        </ul>
+
+        <h3>Przykłady użycia podstawowych klas</h3>
+        <pre><code class="language-html">
+&lt;!-- Dopełnienie na górze --&gt;
+&lt;div class="pt-3"&gt;Element z dopełnieniem na górze 3&lt;/div&gt;
+
+&lt;!-- Dopełnienia poziome --&gt;
+&lt;div class="px-4"&gt;Element z dopełnieniami poziomymi (lewo/prawo) o wartości 4&lt;/div&gt;
+
+&lt;!-- Dopełnienia we wszystkich kierunkach --&gt;
+&lt;div class="p-2"&gt;Element z dopełnieniami we wszystkich kierunkach&lt;/div&gt;
+        </code></pre>
+        <p>W powyższych przykładach <code>pt-3</code> ustawia dopełnienie na górze, <code>px-4</code> ustawia dopełnienia poziome, a <code>p-2</code> dodaje dopełnienia we wszystkich kierunkach.</p>
+
+        <h2>Rozmiary dopełnień</h2>
+        <p>Rozmiary paddingu mogą być ustawione na wartości od <code>0</code> do <code>5</code>, gdzie <code>0</code> oznacza brak dopełnienia, a <code>5</code> to największe dopełnienie.</p>
+
+        <h3>Przykłady rozmiarów dopełnień</h3>
+        <pre><code class="language-html">
+&lt;div class="p-0"&gt;Element bez dopełnień&lt;/div&gt;
+&lt;div class="p-3"&gt;Element z dopełnieniem o wartości 3&lt;/div&gt;
+&lt;div class="p-5"&gt;Element z największym dopełnieniem (5)&lt;/div&gt;
+        </code></pre>
+        <p>Klasa <code>p-0</code> usuwa dopełnienia, a <code>p-5</code> ustawia największe możliwe dopełnienia we wszystkich kierunkach.</p>
+
+        <h2>Dopełnienia responsywne</h2>
+        <p>Bootstrap umożliwia również używanie klas responsywnych, co oznacza, że możesz dostosować dopełnienia na różnych rozdzielczościach ekranu. Oto dostępne punkty przerwania:</p>
+        <ul>
+            <li><code>sm</code> – dla małych ekranów (≥576px)</li>
+            <li><code>md</code> – dla średnich ekranów (≥768px)</li>
+            <li><code>lg</code> – dla dużych ekranów (≥992px)</li>
+            <li><code>xl</code> – dla bardzo dużych ekranów (≥1200px)</li>
+        </ul>
+
+        <h3>Przykład dopełnień responsywnych</h3>
+        <pre><code class="language-html">
+&lt;div class="py-5 py-md-3"&gt;Element z różnymi dopełnieniami na różnych ekranach&lt;/div&gt;
+        </code></pre>
+        <p>W tym przykładzie na małych ekranach (<code>py-5</code>) dopełnienie pionowe wynosi 5, natomiast na większych ekranach (<code>py-md-3</code>) zmniejsza się do 3.</p>
+
+        <h2>Podsumowanie</h2>
+        <ul>
+            <li>Bootstrap pozwala na szybkie i łatwe ustawianie dopełnień (padding) za pomocą klas <code>p-*</code>, <code>px-*</code>, <code>py-*</code> i innych.</li>
+            <li>Dopełnienia mogą być ustawiane dla góry, dołu, lewej, prawej lub we wszystkich kierunkach naraz.</li>
+            <li>Klasy responsywne pozwalają dostosować dopełnienia do różnych rozdzielczości ekranu.</li>
+            <li>Wartości dopełnień wynoszą od <code>0</code> (brak dopełnień) do <code>5</code> (maksymalne dopełnienie).</li>
+        </ul>
+
+        <a href="./7.1.Dopełnienia-projekty.html"><button>Przykłady</button></a>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/prism.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/components/prism-html.min.js"></script>
+</body>
+</html>

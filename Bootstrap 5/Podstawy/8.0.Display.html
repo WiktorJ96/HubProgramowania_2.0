@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Display w Bootstrap</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/css/bootstrap.min.css">
+    <link rel="stylesheet" href="../styles.css">
+</head>
+<body>
+    <div class="container">
+        <h1>Display w Bootstrap</h1>
+
+        <p>Bootstrap oferuje szereg klas do zarządzania wyświetlaniem elementów HTML na stronie, co umożliwia szybką zmianę stylu wyświetlania bez pisania dodatkowego CSS. Klasy <code>display</code> można używać do kontrolowania wyświetlania elementów jako blokowych, inline, ukrytych i innych.</p>
+
+        <h2>Podstawowe klasy display</h2>
+        <p>Bootstrap posiada zestaw klas <code>d-*</code>, które odpowiadają właściwościom CSS <code>display</code>. Możemy z ich pomocą szybko ustawić, w jaki sposób elementy będą wyświetlane.</p>
+        <ul>
+            <li><code>d-block</code> – Ustawia element jako blokowy (ang. *block*)</li>
+            <li><code>d-inline</code> – Ustawia element jako inline (ang. *inline*)</li>
+            <li><code>d-inline-block</code> – Ustawia element jako <code>inline-block</code></li>
+            <li><code>d-none</code> – Ukrywa element (display: none)</li>
+        </ul>
+
+        <h3>Przykład użycia klas display</h3>
+        <pre><code class="language-html">
+&lt;!-- Przykład elementu blokowego --&gt;
+&lt;div class="d-block"&gt;Ten element jest blokowy&lt;/div&gt;
+
+&lt;!-- Przykład elementu inline --&gt;
+&lt;span class="d-inline"&gt;Ten element jest inline&lt;/span&gt;
+
+&lt;!-- Przykład ukrytego elementu --&gt;
+&lt;div class="d-none"&gt;Ten element jest ukryty&lt;/div&gt;
+        </code></pre>
+
+        <h2>Display responsywny</h2>
+        <p>Możesz również kontrolować wyświetlanie elementów na różnych rozdzielczościach ekranu za pomocą responsywnych klas <code>d-*</code>, które używają punktów przerwania Bootstrap. Na przykład, <code>d-sm-block</code> ustawi element jako blokowy tylko na małych ekranach i większych.</p>
+
+        <h3>Przykład responsywnego wyświetlania</h3>
+        <pre><code class="language-html">
+&lt;!-- Element widoczny tylko na dużych ekranach --&gt;
+&lt;div class="d-none d-lg-block"&gt;Widoczny tylko na ekranach o szerokości ≥ 992px&lt;/div&gt;
+
+&lt;!-- Element ukryty na mniejszych ekranach --&gt;
+&lt;div class="d-block d-md-none"&gt;Ukryty na średnich i większych ekranach&lt;/div&gt;
+        </code></pre>
+
+        <p>W powyższym przykładzie pierwszy element jest ukryty na małych i średnich ekranach, ale staje się widoczny na dużych ekranach (<code>d-lg-block</code>). Drugi element jest widoczny na małych ekranach, ale znika na ekranach średnich i większych (<code>d-md-none</code>).</p>
+
+        <h2>Inne klasy display</h2>
+        <p>Bootstrap udostępnia również dodatkowe klasy do bardziej zaawansowanego zarządzania wyświetlaniem elementów:</p>
+        <ul>
+            <li><code>d-flex</code> – Ustawia element jako kontener Flexbox</li>
+            <li><code>d-inline-flex</code> – Ustawia element jako kontener inline Flexbox</li>
+            <li><code>d-grid</code> – Ustawia element jako kontener Grid Layout</li>
+            <li><code>d-inline-grid</code> – Ustawia element jako inline Grid Layout</li>
+        </ul>
+
+        <h3>Przykład użycia Flexboxa</h3>
+        <pre><code class="language-html">
+&lt;!-- Element Flexbox --&gt;
+&lt;div class="d-flex justify-content-center"&gt;
+    &lt;div&gt;Flexbox Kolumna 1&lt;/div&gt;
+    &lt;div&gt;Flexbox Kolumna 2&lt;/div&gt;
+&lt;/div&gt;
+        </code></pre>
+
+        <h3>Przykład użycia Grid Layout</h3>
+        <pre><code class="language-html">
+&lt;!-- Element Grid --&gt;
+&lt;div class="d-grid gap-2"&gt;
+    &lt;div&gt;Kolumna Grid 1&lt;/div&gt;
+    &lt;div&gt;Kolumna Grid 2&lt;/div&gt;
+&lt;/div&gt;
+        </code></pre>
+        <p>W powyższych przykładach klasy <code>d-flex</code> i <code>d-grid</code> zmieniają sposób wyświetlania elementów, ustawiając kontener Flexbox lub Grid Layout, który umożliwia bardziej zaawansowane zarządzanie układem elementów.</p>
+
+        <h2>Podsumowanie</h2>
+        <ul>
+            <li>Klasy <code>d-*</code> w Bootstrapie pozwalają na szybkie zarządzanie wyświetlaniem elementów.</li>
+            <li>Możesz ustawiać elementy jako blokowe, inline, inline-block, flexbox lub grid, a także je ukrywać za pomocą <code>d-none</code>.</li>
+            <li>Klasy <code>d-*</code> są dostępne w wersjach responsywnych, co umożliwia dostosowanie wyświetlania na różnych rozdzielczościach ekranu.</li>
+            <li>Bootstrap udostępnia również klasy Flexbox i Grid Layout, które dają większą kontrolę nad układem elementów na stronie.</li>
+        </ul>
+
+        <a href="./8.1.Display-projekt.html"><button>Przykłady</button></a>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/prism.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/components/prism-html.min.js"></script>
+</body>
+</html>

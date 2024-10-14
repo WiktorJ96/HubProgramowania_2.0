@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Przykład Marginesów w Bootstrapie</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/css/bootstrap.min.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/themes/prism-tomorrow.min.css" rel="stylesheet">
+    <style>
+        [class *= col] {
+            background-color: #7952b3;
+            color: #ffffff;
+            padding: 20px;
+            text-align: center;
+            margin-bottom: 10px;
+        }
+
+        .example {
+            display: none;
+        }
+
+        .example.active {
+            display: block;
+        }
+
+        .example-box {
+            border: 1px solid #333;
+            padding: 20px;
+            text-align: center;
+            margin-bottom: 20px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1 class="text-center my-4">Przykłady</h1>
+
+        <!-- Menu wyboru przykładów -->
+        <div class="dropdown text-center mb-4">
+            <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton" data-bs-toggle="dropdown" aria-expanded="false">
+                Wybierz przykład marginesów
+            </button>
+            <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                <li><a class="dropdown-item" href="#" onclick="showExample('example1')">Brak marginesów (m-0)</a></li>
+                <li><a class="dropdown-item" href="#" onclick="showExample('example2')">Marginesy małe (m-1)</a></li>
+                <li><a class="dropdown-item" href="#" onclick="showExample('example3')">Marginesy średnie (m-3)</a></li>
+                <li><a class="dropdown-item" href="#" onclick="showExample('example4')">Marginesy duże (m-5)</a></li>
+                <li><a class="dropdown-item" href="#" onclick="showExample('example5')">Marginesy poziome i pionowe (mx, my)</a></li>
+            </ul>
+        </div>
+
+        <!-- Przykład 1: Brak marginesów (m-0) -->
+        <div id="example1" class="example active">
+            <h2>Przykład 1: Brak marginesów (m-0)</h2>
+            <div class="row">
+                <div class="col-4 m-0 bg-primary text-light">Kolumna 1</div>
+                <div class="col-4 m-0 bg-secondary text-light">Kolumna 2</div>
+            </div>
+
+            <h3>Kod HTML:</h3>
+            <pre><code class="language-html">
+&lt;div class="row"&gt;
+    &lt;div class="col-4 m-0 bg-primary text-light"&gt;Kolumna 1&lt;/div&gt;
+    &lt;div class="col-4 m-0 bg-secondary text-light"&gt;Kolumna 2&lt;/div&gt;
+&lt;/div&gt;
+            </code></pre>
+        </div>
+
+        <!-- Przykład 2: Marginesy małe (m-1) -->
+        <div id="example2" class="example">
+            <h2>Przykład 2: Marginesy małe (m-1)</h2>
+            <div class="row">
+                <div class="col-4 m-1 bg-primary text-light">Kolumna 1</div>
+                <div class="col-4 m-1 bg-secondary text-light">Kolumna 2</div>
+            </div>
+
+            <h3>Kod HTML:</h3>
+            <pre><code class="language-html">
+&lt;div class="row"&gt;
+    &lt;div class="col-4 m-1 bg-primary text-light"&gt;Kolumna 1&lt;/div&gt;
+    &lt;div class="col-4 m-1 bg-secondary text-light"&gt;Kolumna 2&lt;/div&gt;
+&lt;/div&gt;
+            </code></pre>
+        </div>
+
+        <!-- Przykład 3: Marginesy średnie (m-3) -->
+        <div id="example3" class="example">
+            <h2>Przykład 3: Marginesy średnie (m-3)</h2>
+            <div class="row">
+                <div class="col-4 m-3 bg-primary text-light">Kolumna 1</div>
+                <div class="col-4 m-3 bg-secondary text-light">Kolumna 2</div>
+            </div>
+
+            <h3>Kod HTML:</h3>
+            <pre><code class="language-html">
+&lt;div class="row"&gt;
+    &lt;div class="col-4 m-3 bg-primary text-light"&gt;Kolumna 1&lt;/div&gt;
+    &lt;div class="col-4 m-3 bg-secondary text-light"&gt;Kolumna 2&lt;/div&gt;
+&lt;/div&gt;
+            </code></pre>
+        </div>
+
+        <!-- Przykład 4: Marginesy duże (m-5) -->
+        <div id="example4" class="example">
+            <h2>Przykład 4: Marginesy duże (m-5)</h2>
+            <div class="row">
+                <div class="col-4 m-5 bg-primary text-light">Kolumna 1</div>
+                <div class="col-4 m-5 bg-secondary text-light">Kolumna 2</div>
+            </div>
+
+            <h3>Kod HTML:</h3>
+            <pre><code class="language-html">
+&lt;div class="row"&gt;
+    &lt;div class="col-4 m-5 bg-primary text-light"&gt;Kolumna 1&lt;/div&gt;
+    &lt;div class="col-4 m-5 bg-secondary text-light"&gt;Kolumna 2&lt;/div&gt;
+&lt;/div&gt;
+            </code></pre>
+        </div>
+
+        <!-- Przykład 5: Marginesy poziome i pionowe (mx, my) -->
+        <div id="example5" class="example">
+            <h2>Przykład 5: Marginesy poziome i pionowe (mx, my)</h2>
+            <div class="row">
+                <div class="col-4 mx-5 my-3 bg-primary text-light">Kolumna 1</div>
+                <div class="col-4 mx-5 my-3 bg-secondary text-light">Kolumna 2</div>
+            </div>
+
+            <h3>Kod HTML:</h3>
+            <pre><code class="language-html">
+&lt;div class="row"&gt;
+    &lt;div class="col-4 mx-5 my-3 bg-primary text-light"&gt;Kolumna 1&lt;/div&gt;
+    &lt;div class="col-4 mx-5 my-3 bg-secondary text-light"&gt;Kolumna 2&lt;/div&gt;
+&lt;/div&gt;
+            </code></pre>
+        </div>
+    </div>
+
+    <!-- Bootstrap i Prism -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/prism.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/components/prism-html.min.js"></script>
+
+    <!-- Skrypt do przełączania przykładów i podświetlania składni -->
+    <script>
+        function showExample(exampleId) {
+            const examples = document.querySelectorAll('.example');
+            examples.forEach(example => {
+                example.classList.remove('active');
+            });
+
+            document.getElementById(exampleId).classList.add('active');
+
+            // Wywołanie ponownego podświetlania po zmianie przykładu
+            Prism.highlightAll();
+        }
+    </script>
+</body>
+</html>
