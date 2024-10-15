@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Komponent Breadcrumb w Bootstrapie</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/css/bootstrap.min.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/themes/prism-tomorrow.min.css" rel="stylesheet">
+    <style>
+        .example {
+            display: none;
+        }
+
+        .example.active {
+            display: block;
+        }
+
+        .highlight {
+            background-color: #f8f9fa;
+            padding: 10px;
+            margin-bottom: 20px;
+            border-left: 4px solid #007bff;
+        }
+
+        #breadcrumb-container {
+            margin-top: 20px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1 class="text-center my-4">Przykłady komponentu Breadcrumb w Bootstrapie</h1>
+
+        <!-- Menu wyboru przykładów -->
+        <div class="dropdown text-center mb-4">
+            <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton" data-bs-toggle="dropdown" aria-expanded="false">
+                Wybierz przykład Breadcrumb
+            </button>
+            <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                <li><a class="dropdown-item" href="#" onclick="showExample('example1')">Podstawowy breadcrumb</a></li>
+                <li><a class="dropdown-item" href="#" onclick="showExample('example2')">Breadcrumb z ikoną aktywnego elementu</a></li>
+                <li><a class="dropdown-item" href="#" onclick="showExample('example3')">Breadcrumb bez linków</a></li>
+            </ul>
+        </div>
+
+        <!-- Przykład 1: Podstawowy breadcrumb -->
+        <div id="example1" class="example active">
+            <h2>Przykład 1: Podstawowy breadcrumb</h2>
+            <div class="highlight">
+                <nav aria-label="breadcrumb">
+                    <ol class="breadcrumb">
+                        <li class="breadcrumb-item"><a href="#">Strona główna</a></li>
+                        <li class="breadcrumb-item"><a href="#">Kategoria</a></li>
+                        <li class="breadcrumb-item active" aria-current="page">Produkt</li>
+                    </ol>
+                </nav>
+            </div>
+
+            <h3>Kod HTML:</h3>
+            <pre><code class="language-html">
+&lt;nav aria-label="breadcrumb"&gt;
+    &lt;ol class="breadcrumb"&gt;
+        &lt;li class="breadcrumb-item"&gt;&lt;a href="#"&gt;Strona główna&lt;/a&gt;&lt;/li&gt;
+        &lt;li class="breadcrumb-item"&gt;&lt;a href="#"&gt;Kategoria&lt;/a&gt;&lt;/li&gt;
+        &lt;li class="breadcrumb-item active" aria-current="page"&gt;Produkt&lt;/li&gt;
+    &lt;/ol&gt;
+&lt;/nav&gt;
+            </code></pre>
+        </div>
+
+        <!-- Przykład 2: Breadcrumb z ikoną aktywnego elementu -->
+        <div id="example2" class="example">
+            <h2>Przykład 2: Breadcrumb z ikoną aktywnego elementu</h2>
+            <div class="highlight">
+                <nav aria-label="breadcrumb">
+                    <ol class="breadcrumb">
+                        <li class="breadcrumb-item"><a href="#">Strona główna</a></li>
+                        <li class="breadcrumb-item"><a href="#">Kategoria</a></li>
+                        <li class="breadcrumb-item active" aria-current="page"><i class="bi bi-check-circle-fill"></i> Produkt</li>
+                    </ol>
+                </nav>
+            </div>
+
+            <h3>Kod HTML:</h3>
+            <pre><code class="language-html">
+&lt;nav aria-label="breadcrumb"&gt;
+    &lt;ol class="breadcrumb"&gt;
+        &lt;li class="breadcrumb-item"&gt;&lt;a href="#"&gt;Strona główna&lt;/a&gt;&lt;/li&gt;
+        &lt;li class="breadcrumb-item"&gt;&lt;a href="#"&gt;Kategoria&lt;/a&gt;&lt;/li&gt;
+        &lt;li class="breadcrumb-item active" aria-current="page"&gt;&lt;i class="bi bi-check-circle-fill"&gt;&lt;/i&gt; Produkt&lt;/li&gt;
+    &lt;/ol&gt;
+&lt;/nav&gt;
+            </code></pre>
+        </div>
+
+        <!-- Przykład 3: Breadcrumb bez linków -->
+        <div id="example3" class="example">
+            <h2>Przykład 3: Breadcrumb bez linków</h2>
+            <div class="highlight">
+                <nav aria-label="breadcrumb">
+                    <ol class="breadcrumb">
+                        <li class="breadcrumb-item">Strona główna</li>
+                        <li class="breadcrumb-item">Kategoria</li>
+                        <li class="breadcrumb-item active" aria-current="page">Produkt</li>
+                    </ol>
+                </nav>
+            </div>
+
+            <h3>Kod HTML:</h3>
+            <pre><code class="language-html">
+&lt;nav aria-label="breadcrumb"&gt;
+    &lt;ol class="breadcrumb"&gt;
+        &lt;li class="breadcrumb-item"&gt;Strona główna&lt;/li&gt;
+        &lt;li class="breadcrumb-item"&gt;Kategoria&lt;/li&gt;
+        &lt;li class="breadcrumb-item active" aria-current="page"&gt;Produkt&lt;/li&gt;
+    &lt;/ol&gt;
+&lt;/nav&gt;
+            </code></pre>
+        </div>
+
+        
+    </div>
+
+    <!-- Bootstrap i Prism -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/prism.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/components/prism-html.min.js"></script>
+
+    <!-- Skrypt do przełączania przykładów i podświetlania składni -->
+    <script>
+        function showExample(exampleId) {
+            const examples = document.querySelectorAll('.example');
+            examples.forEach(example => {
+                example.classList.remove('active');
+            });
+
+            document.getElementById(exampleId).classList.add('active');
+
+            // Wywołanie ponownego podświetlania po zmianie przykładu
+            Prism.highlightAll();
+        }
+
+    </script>
+</body>
+</html>

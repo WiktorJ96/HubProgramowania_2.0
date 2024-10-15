@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Przyciski</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/css/bootstrap.min.css">
+    <link rel="stylesheet" href="../styles.css">
+</head>
+<body>
+    <div class="container">
+        <h1>Przyciski w Bootstrapie</h1>
+
+        <p>Przyciski (buttons) są jednym z podstawowych komponentów UI w Bootstrapie. Umożliwiają użytkownikom wykonywanie akcji, takich jak wysyłanie formularzy, zamykanie okienek modalnych, czy nawigację.</p>
+
+        <h2>Podstawowe przyciski</h2>
+        <p>Bootstrap udostępnia klasy dla różnych stylów przycisków, które można zastosować za pomocą klasy <code>.btn</code> wraz z klasą określającą kolor, np. <code>.btn-primary</code>, <code>.btn-danger</code>, itd.</p>
+
+        <h3>Przykład podstawowego przycisku</h3>
+        <pre><code class="language-html">
+&lt;button type="button" class="btn btn-primary"&gt;Przycisk podstawowy&lt;/button&gt;
+&lt;button type="button" class="btn btn-secondary"&gt;Przycisk drugorzędny&lt;/button&gt;
+&lt;button type="button" class="btn btn-danger"&gt;Przycisk niebezpieczny&lt;/button&gt;
+        </code></pre>
+
+        <p>W tym przykładzie użyto trzech przycisków z różnymi klasami kolorów: <code>.btn-primary</code>, <code>.btn-secondary</code>, i <code>.btn-danger</code>. Każdy przycisk ma inny kolor, co sygnalizuje różne znaczenie.</p>
+
+        <h2>Przyciski z różnymi kolorami</h2>
+        <p>Można używać różnych klas, aby zmieniać kolor przycisków w zależności od kontekstu, np. <code>.btn-success</code> (zielony), <code>.btn-warning</code> (żółty), <code>.btn-info</code> (niebieski) i inne.</p>
+
+        <h3>Przykłady przycisków z różnymi kolorami</h3>
+        <pre><code class="language-html">
+&lt;button type="button" class="btn btn-success"&gt;Sukces&lt;/button&gt;
+&lt;button type="button" class="btn btn-warning"&gt;Ostrzeżenie&lt;/button&gt;
+&lt;button type="button" class="btn btn-info"&gt;Informacja&lt;/button&gt;
+        </code></pre>
+
+        <h2>Przyciski z różnymi rozmiarami</h2>
+        <p>Bootstrap umożliwia kontrolowanie rozmiaru przycisków za pomocą klas <code>.btn-lg</code> (duży przycisk) i <code>.btn-sm</code> (mały przycisk).</p>
+
+        <h3>Przykład przycisków z różnymi rozmiarami</h3>
+        <pre><code class="language-html">
+&lt;button type="button" class="btn btn-primary btn-lg"&gt;Duży przycisk&lt;/button&gt;
+&lt;button type="button" class="btn btn-secondary btn-sm"&gt;Mały przycisk&lt;/button&gt;
+        </code></pre>
+
+        <h2>Przyciski z pełną szerokością</h2>
+        <p>Jeśli chcesz, aby przycisk zajmował pełną szerokość dostępnej przestrzeni, dodaj klasę <code>.btn-block</code> (w Bootstrapie 4) lub użyj klasy <code>.w-100</code> (w Bootstrapie 5).</p>
+
+        <h3>Przykład przycisku na pełnej szerokości</h3>
+        <pre><code class="language-html">
+&lt;button type="button" class="btn btn-primary w-100"&gt;Przycisk pełnej szerokości&lt;/button&gt;
+        </code></pre>
+
+        <h2>Przyciski z ikonami</h2>
+        <p>Możesz również dodać ikony do przycisków, używając ikon z bibliotek takich jak Font Awesome. Dodanie ikony obok tekstu przycisku sprawia, że interakcje są bardziej intuicyjne.</p>
+
+        <h3>Przykład przycisku z ikoną</h3>
+        <pre><code class="language-html">
+&lt;button type="button" class="btn btn-primary"&gt;
+  &lt;i class="fas fa-download"&gt;&lt;/i&gt; Pobierz
+&lt;/button&gt;
+        </code></pre>
+
+        <h2>Przyciski jako linki</h2>
+        <p>Można również zamienić element <code>&lt;a&gt;</code> w przycisk, używając klas <code>.btn</code>. To pozwala tworzyć linki, które wyglądają jak przyciski.</p>
+
+        <h3>Przykład przycisku jako link</h3>
+        <pre><code class="language-html">
+&lt;a href="#" class="btn btn-info"&gt;Link jako przycisk&lt;/a&gt;
+        </code></pre>
+
+        <h2>Przyciski aktywne i zablokowane</h2>
+        <p>Bootstrap umożliwia tworzenie przycisków aktywnych za pomocą klasy <code>.active</code> oraz przycisków zablokowanych (nieaktywnych) za pomocą atrybutu <code>disabled</code>.</p>
+
+        <h3>Przykład przycisków aktywnych i zablokowanych</h3>
+        <pre><code class="language-html">
+&lt;button type="button" class="btn btn-success active"&gt;Aktywny przycisk&lt;/button&gt;
+&lt;button type="button" class="btn btn-danger" disabled&gt;Zablokowany przycisk&lt;/button&gt;
+        </code></pre>
+
+        <h2>Podsumowanie</h2>
+        <ul>
+            <li>Przyciski w Bootstrapie są łatwe do użycia i dostępne w różnych kolorach oraz rozmiarach.</li>
+            <li>Możesz dodawać ikony, kontrolować szerokość, a także zamieniać linki na przyciski za pomocą odpowiednich klas.</li>
+            <li>Bootstrap umożliwia tworzenie aktywnych i zablokowanych przycisków, co daje pełną kontrolę nad interfejsem użytkownika.</li>
+        </ul>
+
+        <a href="./4.1.Buttons-projekt.html"><button>Przykłady</button></a>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/prism.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/components/prism-html.min.js"></script>
+</body>
+</html>

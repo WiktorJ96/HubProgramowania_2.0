@@ -21,6 +21,13 @@
             margin-bottom: 20px;
             border-left: 4px solid #007bff;
         }
+
+        .long-text {
+            width: 200px;
+            background-color: #e9ecef;
+            padding: 10px;
+            border: 1px solid #ced4da;
+        }
     </style>
 </head>
 <body>
@@ -38,6 +45,9 @@
                 <li><a class="dropdown-item" href="#" onclick="showExample('example3')">Style tekstu</a></li>
                 <li><a class="dropdown-item" href="#" onclick="showExample('example4')">Listy</a></li>
                 <li><a class="dropdown-item" href="#" onclick="showExample('example5')">Tekst pomocniczy i skróty</a></li>
+                <li><a class="dropdown-item" href="#" onclick="showExample('example6')">Zawijanie i łamanie tekstu</a></li>
+                <li><a class="dropdown-item" href="#" onclick="showExample('example7')">Dekoracje tekstu</a></li>
+                <li><a class="dropdown-item" href="#" onclick="showExample('example8')">Zmiana rozmiaru czcionki</a></li>
             </ul>
         </div>
 
@@ -179,6 +189,64 @@
 &lt;p&gt;Tekst ze skrótem: &lt;abbr title="Hypertext Markup Language"&gt;HTML&lt;/abbr&gt;&lt;/p&gt;
             </code></pre>
         </div>
+
+        <!-- Przykład 6: Zawijanie i łamanie tekstu -->
+        <div id="example6" class="example">
+            <h2>Przykład 6: Zawijanie i łamanie tekstu</h2>
+            <div class="highlight">
+                <div class="long-text text-wrap">To jest bardzo długi tekst, który zostanie zawinięty na małym obszarze.</div>
+                <div class="long-text text-nowrap">To jest bardzo długi tekst, który nie zostanie zawinięty i wyjdzie poza obszar.</div>
+                <div class="long-text text-break">Tojestbardzooooodługiesłowoktórezostaniezłamaneponieważjestznaczniktext-break.</div>
+            </div>
+
+            <h3>Kod HTML:</h3>
+            <pre><code class="language-html">
+&lt;div class="text-wrap"&gt;To jest bardzo długi tekst, który zostanie zawinięty.&lt;/div&gt;
+&lt;div class="text-nowrap"&gt;To jest bardzo długi tekst, który nie zostanie zawinięty.&lt;/div&gt;
+&lt;div class="text-break"&gt;Tojestbardzooooodługiesłowo które zostanie złamane.&lt;/div&gt;
+            </code></pre>
+        </div>
+
+        <!-- Przykład 7: Dekoracje tekstu -->
+        <div id="example7" class="example">
+            <h2>Przykład 7: Dekoracje tekstu</h2>
+            <div class="highlight">
+                <p class="text-decoration-underline">Podkreślony tekst (underline).</p>
+                <p class="text-decoration-line-through">Przekreślony tekst (line-through).</p>
+                <p class="text-decoration-none">Tekst bez dekoracji (none).</p>
+            </div>
+
+            <h3>Kod HTML:</h3>
+            <pre><code class="language-html">
+&lt;p class="text-decoration-underline"&gt;Podkreślony tekst (underline).&lt;/p&gt;
+&lt;p class="text-decoration-line-through"&gt;Przekreślony tekst (line-through).&lt;/p&gt;
+&lt;p class="text-decoration-none"&gt;Tekst bez dekoracji (none).&lt;/p&gt;
+            </code></pre>
+        </div>
+
+        <!-- Przykład 8: Zmiana rozmiaru czcionki -->
+        <div id="example8" class="example">
+            <h2>Przykład 8: Zmiana rozmiaru czcionki</h2>
+            <div class="highlight">
+                <p class="fs-1">Tekst o rozmiarze 1 (fs-1).</p>
+                <p class="fs-2">Tekst o rozmiarze 2 (fs-2).</p>
+                <p class="fs-3">Tekst o rozmiarze 3 (fs-3).</p>
+                <p class="fs-4">Tekst o rozmiarze 4 (fs-4).</p>
+                <p class="fs-5">Tekst o rozmiarze 5 (fs-5).</p>
+                <p class="fs-6">Tekst o rozmiarze 6 (fs-6).</p>
+            </div>
+
+            <h3>Kod HTML:</h3>
+            <pre><code class="language-html">
+&lt;p class="fs-1"&gt;Tekst o rozmiarze 1 (fs-1).&lt;/p&gt;
+&lt;p class="fs-2"&gt;Tekst o rozmiarze 2 (fs-2).&lt;/p&gt;
+&lt;p class="fs-3"&gt;Tekst o rozmiarze 3 (fs-3).&lt;/p&gt;
+&lt;p class="fs-4"&gt;Tekst o rozmiarze 4 (fs-4).&lt;/p&gt;
+&lt;p class="fs-5"&gt;Tekst o rozmiarze 5 (fs-5).&lt;/p&gt;
+&lt;p class="fs-6"&gt;Tekst o rozmiarze 6 (fs-6).&lt;/p&gt;
+            </code></pre>
+        </div>
+
     </div>
 
     <!-- Bootstrap i Prism -->

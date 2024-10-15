@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Alerty</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/css/bootstrap.min.css">
+    <link rel="stylesheet" href="../styles.css">
+</head>
+<body>
+    <div class="container">
+        <h1>Komponent alert w Bootstrapie</h1>
+
+        <p>Alerty w Bootstrapie to prosty sposób na wyświetlanie wiadomości o różnym znaczeniu, takich jak ostrzeżenia, sukcesy, błędy czy informacje. Bootstrap oferuje wbudowane klasy do stylizacji i kontrolowania tych komunikatów.</p>
+
+        <h2>Podstawowy alert</h2>
+        <p>Tworzenie alertu w Bootstrapie jest bardzo proste dzięki klasie <code>.alert</code>. Dodatkowo, możemy zmieniać typy alertów, korzystając z klas takich jak <code>.alert-success</code>, <code>.alert-danger</code>, <code>.alert-warning</code>, czy <code>.alert-info</code>.</p>
+
+        <h3>Przykład podstawowego alertu</h3>
+        <pre><code class="language-html">
+&lt;div class="alert alert-success" role="alert"&gt;
+  Operacja zakończona sukcesem!
+&lt;/div&gt;
+&lt;div class="alert alert-danger" role="alert"&gt;
+  Wystąpił błąd!
+&lt;/div&gt;
+        </code></pre>
+
+        <p>Każdy alert można dostosować do specyficznego znaczenia, na przykład <code>.alert-success</code> dla sukcesów, a <code>.alert-danger</code> dla błędów.</p>
+
+        <h2>Dodawanie przycisku zamykającego alert</h2>
+        <p>Bootstrap umożliwia dodanie przycisku zamykającego do każdego alertu za pomocą klasy <code>.alert-dismissible</code> oraz dodania przycisku z klasą <code>.btn-close</code>. Funkcjonalność zamykania oparta jest na JavaScript.</p>
+
+        <h3>Przykład alertu z przyciskiem zamykającym</h3>
+        <pre><code class="language-html">
+&lt;div class="alert alert-warning alert-dismissible fade show" role="alert"&gt;
+  Ostrzeżenie: Zbliżasz się do limitu.
+  &lt;button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"&gt;&lt;/button&gt;
+&lt;/div&gt;
+        </code></pre>
+
+        <p>W tym przykładzie przycisk zamykający zamyka alert za pomocą atrybutu <code>data-bs-dismiss="alert"</code>, a klasa <code>fade show</code> dodaje efekt płynnego pojawiania się i znikania alertu.</p>
+
+        <h2>Alerty z dodatkową treścią</h2>
+        <p>Do alertów można dodać więcej treści, w tym nagłówki i dodatkowe akapity, które są wyświetlane w bardziej rozbudowany sposób.</p>
+
+        <h3>Przykład rozbudowanego alertu</h3>
+        <pre><code class="language-html">
+&lt;div class="alert alert-info" role="alert"&gt;
+  &lt;h4 class="alert-heading"&gt;Informacja&lt;/h4&gt;
+  &lt;p&gt;To jest dodatkowa treść w alercie, która może zawierać dłuższy opis.&lt;/p&gt;
+  &lt;hr&gt;
+  &lt;p class="mb-0"&gt;Nie zapomnij o dodatkowych szczegółach, które mogą być istotne.&lt;/p&gt;
+&lt;/div&gt;
+        </code></pre>
+
+        <p>Rozbudowany alert zawiera nagłówek <code>&lt;h4&gt;</code>, treść oraz linię rozdzielającą <code>&lt;hr&gt;</code>, która oddziela sekcje tekstu.</p>
+
+        <h2>Kolory i warianty alertów</h2>
+        <p>Bootstrap oferuje różne kolory alertów, które są oznaczone różnymi klasami. Każdy z tych wariantów ma inne zastosowanie, co pozwala na tworzenie intuicyjnych komunikatów dla użytkowników.</p>
+
+        <ul>
+            <li><code>.alert-primary</code> – dla podstawowych informacji</li>
+            <li><code>.alert-secondary</code> – dla neutralnych informacji</li>
+            <li><code>.alert-success</code> – dla komunikatów o sukcesie</li>
+            <li><code>.alert-danger</code> – dla komunikatów o błędach</li>
+            <li><code>.alert-warning</code> – dla ostrzeżeń</li>
+            <li><code>.alert-info</code> – dla informacyjnych komunikatów</li>
+            <li><code>.alert-light</code> – dla jaśniejszych komunikatów</li>
+            <li><code>.alert-dark</code> – dla ciemniejszych komunikatów</li>
+        </ul>
+
+        <h2>Podsumowanie</h2>
+        <ul>
+            <li>Bootstrap dostarcza prostych w użyciu komponentów alertów, które można łatwo dostosować za pomocą klas.</li>
+            <li>Możliwość dodania przycisków zamykających oraz rozbudowanych treści pozwala na większą kontrolę nad treścią alertów.</li>
+            <li>Warianty kolorystyczne umożliwiają intuicyjne przekazywanie informacji użytkownikom.</li>
+        </ul>
+
+        <a href="./1.1.Komponent alert-projekt.html"><button>Przykłady</button></a>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/prism.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/components/prism-html.min.js"></script>
+</body>
+</html>

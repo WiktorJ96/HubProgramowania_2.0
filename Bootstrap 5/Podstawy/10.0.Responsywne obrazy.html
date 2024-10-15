@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Responsywne obrazy</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/css/bootstrap.min.css">
+    <link rel="stylesheet" href="../styles.css">
+</head>
+<body>
+    <div class="container">
+        <h1>Responsywne Obrazy w Bootstrap</h1>
+
+        <p>Bootstrap oferuje proste klasy do tworzenia responsywnych obrazów, które automatycznie dopasowują się do rozmiaru kontenera. Dzięki temu obrazy wyglądają dobrze na różnych urządzeniach, od telefonów po duże monitory.</p>
+
+        <h2>Klasa <code>.img-fluid</code></h2>
+        <p>Podstawową klasą do tworzenia responsywnych obrazów w Bootstrapie jest <code>.img-fluid</code>. Ustawia ona maksymalną szerokość obrazu na 100% oraz jego wysokość na auto, co pozwala na automatyczne dostosowanie się do kontenera.</p>
+
+        <h3>Przykład responsywnego obrazu</h3>
+        <pre><code class="language-html">
+&lt;img src="path/to/your/image.jpg" class="img-fluid" alt="Przykład responsywnego obrazu"&gt;
+        </code></pre>
+
+        <p>W powyższym przykładzie obraz automatycznie dostosowuje się do rozmiaru rodzica, co sprawia, że jest responsywny na wszystkich urządzeniach.</p>
+
+        <h2>Zaokrąglone obrazy</h2>
+        <p>Bootstrap pozwala również na łatwe zaokrąglanie rogów obrazów za pomocą klas takich jak <code>.rounded</code>, <code>.rounded-circle</code> (pełny okrąg), oraz <code>.rounded-pill</code> (zaokrąglone krawędzie w formie pigułki).</p>
+
+        <h3>Przykład zaokrąglonych obrazów</h3>
+        <pre><code class="language-html">
+&lt;!-- Obraz z zaokrąglonymi rogami --&gt;
+&lt;img src="path/to/your/image.jpg" class="img-fluid rounded" alt="Zaokrąglony obraz"&gt;
+
+&lt;!-- Obraz w formie okręgu --&gt;
+&lt;img src="path/to/your/image.jpg" class="img-fluid rounded-circle" alt="Okrągły obraz"&gt;
+        </code></pre>
+
+        <h2>Obrazy i tekst w Bootstrapie</h2>
+        <p>Obrazy można łatwo łączyć z treścią tekstową, używając systemu siatki Bootstrap. Dzięki temu można tworzyć estetyczne układy, w których obrazy są wyświetlane obok tekstu lub nad/pod nim, w zależności od rozdzielczości ekranu.</p>
+
+        <h3>Przykład obrazu połączonego z tekstem</h3>
+        <pre><code class="language-html">
+&lt;div class="row align-items-center"&gt;
+    &lt;div class="col-md-6"&gt;
+        &lt;img src="path/to/your/image.jpg" class="img-fluid" alt="Obraz obok tekstu"&gt;
+    &lt;/div&gt;
+    &lt;div class="col-md-6"&gt;
+        &lt;p&gt;To jest przykład tekstu, który znajduje się obok obrazu. System siatki Bootstrap pozwala na łatwe tworzenie układów graficzno-tekstowych, które automatycznie dostosowują się do rozmiaru ekranu.&lt;/p&gt;
+    &lt;/div&gt;
+&lt;/div&gt;
+        </code></pre>
+
+        <p>W tym przykładzie obraz jest umieszczony w jednej kolumnie, a tekst w drugiej. Na mniejszych ekranach elementy te będą wyświetlane jeden pod drugim, a na większych obok siebie.</p>
+
+        <h2>Responsywne karty z obrazami</h2>
+        <p>Obrazy można również łączyć z tekstem za pomocą komponentu karty Bootstrap. Klasa <code>.card-img-top</code> umieszcza obraz na górze karty, a <code>.card-img-bottom</code> na dole.</p>
+
+        <h3>Przykład karty z obrazem</h3>
+        <pre><code class="language-html">
+&lt;div class="card" style="width: 18rem;"&gt;
+  &lt;img src="path/to/your/image.jpg" class="card-img-top" alt="Obraz na karcie"&gt;
+  &lt;div class="card-body"&gt;
+    &lt;p class="card-text"&gt;To jest karta z obrazem na górze. Obraz automatycznie dopasowuje się do szerokości karty dzięki klasie <code>.card-img-top</code>.&lt;/p&gt;
+  &lt;/div&gt;
+&lt;/div&gt;
+        </code></pre>
+
+        <h2>Obrazy w tle</h2>
+        <p>Bootstrap umożliwia również stosowanie obrazów jako tła w elementach. Do tego celu można użyć CSS, łącząc obrazy z klasami Bootstrap.</p>
+
+        <h3>Przykład obrazu w tle</h3>
+        <pre><code class="language-html">
+&lt;div class="p-5 text-center" style="background-image: url('path/to/your/image.jpg'); background-size: cover;"&gt;
+    &lt;h1&gt;Tekst na tle obrazu&lt;/h1&gt;
+    &lt;p&gt;To jest przykład sekcji z obrazem w tle i tekstem umieszczonym na wierzchu.&lt;/p&gt;
+&lt;/div&gt;
+        </code></pre>
+
+        <h2>Podsumowanie</h2>
+        <ul>
+            <li>Klasa <code>.img-fluid</code> sprawia, że obrazy są responsywne i automatycznie dopasowują się do rozmiaru kontenera.</li>
+            <li>Możesz łatwo tworzyć zaokrąglone obrazy za pomocą klas <code>.rounded</code>, <code>.rounded-circle</code> i <code>.rounded-pill</code>.</li>
+            <li>Łączenie obrazów z tekstem w systemie siatki Bootstrap umożliwia tworzenie responsywnych układów graficzno-tekstowych.</li>
+            <li>Karty Bootstrap pozwalają na łatwe wstawianie obrazów i treści w jednym komponencie.</li>
+        </ul>
+
+        <a href="./10.1.Responsywne obrazy-projekt.html"><button class="btn btn-primary mt-4">Przykłady</button></a>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/prism.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/components/prism-html.min.js"></script>
+</body>
+</html>

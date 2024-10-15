@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Typografia w Bootstrap</title>
+    <title>Typografia</title>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/css/bootstrap.min.css">
     <link rel="stylesheet" href="../styles.css">
 </head>
@@ -57,13 +57,14 @@
         </code></pre>
 
         <h2>Kolory tekstu</h2>
-        <p>Kolory tekstu można łatwo kontrolować za pomocą klas takich jak <code>.text-primary</code>, <code>.text-success</code>, <code>.text-danger</code> i innych.</p>
+        <p>Kolory tekstu można łatwo kontrolować za pomocą klas takich jak <code>.text-primary</code>, <code>.text-success</code>, <code>.text-danger</code>, <code>.text-warning</code>, <code>.text-info</code>, <code>.text-dark</code>, <code>.text-body</code>, oraz <code>.text-muted</code>.</p>
 
         <h3>Przykłady kolorów tekstu</h3>
         <pre><code class="language-html">
 &lt;p class="text-primary"&gt;Tekst z kolorem primary (niebieski)&lt;/p&gt;
 &lt;p class="text-success"&gt;Tekst z kolorem success (zielony)&lt;/p&gt;
 &lt;p class="text-danger"&gt;Tekst z kolorem danger (czerwony)&lt;/p&gt;
+&lt;p class="text-muted"&gt;Przykład stonowanego tekstu (muted)&lt;/p&gt;
         </code></pre>
 
         <h2>Tekst reagujący na rozmiar ekranu</h2>
@@ -74,11 +75,30 @@
 &lt;p class="fs-3 fs-md-1"&gt;Tekst z różną wielkością na różnych ekranach&lt;/p&gt;
         </code></pre>
 
+        <h2>Inne elementy typograficzne</h2>
+        <p>Bootstrap oferuje również kilka innych przydatnych klas typograficznych, takich jak:</p>
+        <ul>
+            <li><code>.lead</code> – dla wyróżnionego, większego akapitu tekstu</li>
+            <li><code>.blockquote</code> – do tworzenia cytatów</li>
+            <li><code>.blockquote-footer</code> – do oznaczania źródła cytatu</li>
+            <li><code>.small</code> – mniejszy tekst</li>
+        </ul>
+
+        <h3>Przykłady elementów typograficznych</h3>
+        <pre><code class="language-html">
+&lt;p class="lead"&gt;To jest większy akapit, używany jako lead.&lt;/p&gt;
+&lt;blockquote class="blockquote"&gt;
+  &lt;p&gt;To jest cytat w stylu Bootstrap.&lt;/p&gt;
+  &lt;footer class="blockquote-footer"&gt;Źródło cytatu&lt;/footer&gt;
+&lt;/blockquote&gt;
+        </code></pre>
+
         <h2>Podsumowanie</h2>
         <ul>
             <li>Bootstrap oferuje wiele klas do zarządzania tekstem i typografią, co ułatwia tworzenie estetycznych i czytelnych stron.</li>
             <li>Możesz szybko zmieniać rozmiar, wyrównanie, stylizację i kolory tekstu za pomocą klas pomocniczych.</li>
             <li>Typografia w Bootstrapie jest w pełni responsywna, co pozwala na dostosowanie wyglądu tekstu na różnych urządzeniach.</li>
+            <li>Bootstrap zapewnia dodatkowe elementy typograficzne, takie jak cytaty, tekst wyróżniony i mniejsze teksty.</li>
         </ul>
 
         <a href="./9.1.Typografia-projekt.html"><button>Przykłady</button></a>
