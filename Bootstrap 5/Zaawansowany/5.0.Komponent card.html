@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Karty</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/css/bootstrap.min.css">
+    <link rel="stylesheet" href="../styles.css">
+</head>
+<body>
+    <div class="container">
+        <h1>Karty w Bootstrapie</h1>
+
+        <p>Karty (cards) to jeden z popularnych komponentów UI w Bootstrapie, który umożliwia łatwe tworzenie elementów zawierających różnorodne treści, takie jak tekst, obrazy, linki czy przyciski. Są one często używane do tworzenia siatek z treściami na stronach internetowych.</p>
+
+        <h2>Podstawowe karty</h2>
+        <p>Komponent Card można utworzyć za pomocą klasy <code>.card</code>. Wewnątrz karty możesz umieścić elementy takie jak <code>.card-header</code>, <code>.card-body</code>, oraz <code>.card-footer</code>, aby dodać strukturę i zorganizować treść.</p>
+
+        <h3>Przykład podstawowej karty</h3>
+        <pre><code class="language-html">
+&lt;div class="card" style="width: 18rem;"&gt;
+  &lt;img src="https://via.placeholder.com/150" class="card-img-top" alt="Obrazek"&gt;
+  &lt;div class="card-body"&gt;
+    &lt;h5 class="card-title"&gt;Tytuł karty&lt;/h5&gt;
+    &lt;p class="card-text"&gt;To jest przykładowa karta z krótkim opisem treści.&lt;/p&gt;
+    &lt;a href="#" class="btn btn-primary"&gt;Przejdź gdzieś&lt;/a&gt;
+  &lt;/div&gt;
+&lt;/div&gt;
+        </code></pre>
+
+        <p>W tym przykładzie karta zawiera obrazek, tytuł, krótki tekst oraz przycisk. Użyto klasy <code>.card-img-top</code>, aby obrazek pojawił się na górze karty.</p>
+
+        <h2>Karty z nagłówkami i stopkami</h2>
+        <p>Możesz również dodawać nagłówki i stopki do kart, aby bardziej zorganizować treść. Klasy <code>.card-header</code> i <code>.card-footer</code> pozwalają na dodanie tych sekcji.</p>
+
+        <h3>Przykład karty z nagłówkiem i stopką</h3>
+        <pre><code class="language-html">
+&lt;div class="card"&gt;
+  &lt;div class="card-header"&gt;
+    Nagłówek karty
+  &lt;/div&gt;
+  &lt;div class="card-body"&gt;
+    &lt;h5 class="card-title"&gt;Tytuł karty&lt;/h5&gt;
+    &lt;p class="card-text"&gt;Tutaj możesz dodać treść karty. To przykład karty z nagłówkiem i stopką.&lt;/p&gt;
+    &lt;a href="#" class="btn btn-primary"&gt;Przycisk&lt;/a&gt;
+  &lt;/div&gt;
+  &lt;div class="card-footer text-muted"&gt;
+    Stopka karty
+  &lt;/div&gt;
+&lt;/div&gt;
+        </code></pre>
+
+        <p>W tej wersji karty dodano nagłówek oraz stopkę, co pozwala na bardziej profesjonalny wygląd elementu.</p>
+
+        <h2>Karty z grupą przycisków</h2>
+        <p>Karta może również zawierać grupy przycisków za pomocą komponentu <code>.btn-group</code>, co pozwala na dodanie wielu opcji akcji w jednej karcie.</p>
+
+        <h3>Przykład karty z grupą przycisków</h3>
+        <pre><code class="language-html">
+&lt;div class="card"&gt;
+  &lt;div class="card-body"&gt;
+    &lt;h5 class="card-title"&gt;Tytuł karty&lt;/h5&gt;
+    &lt;p class="card-text"&gt;Karta z kilkoma przyciskami akcji.&lt;/p&gt;
+    &lt;div class="btn-group" role="group"&gt;
+      &lt;button type="button" class="btn btn-primary"&gt;Przycisk 1&lt;/button&gt;
+      &lt;button type="button" class="btn btn-secondary"&gt;Przycisk 2&lt;/button&gt;
+      &lt;button type="button" class="btn btn-danger"&gt;Przycisk 3&lt;/button&gt;
+    &lt;/div&gt;
+  &lt;/div&gt;
+&lt;/div&gt;
+        </code></pre>
+
+        <p>Grupy przycisków w kartach umożliwiają łatwe dodanie wielu akcji użytkownikowi bez przeładowywania strony.</p>
+
+        <h2>Karty o pełnej szerokości</h2>
+        <p>Podobnie jak w przypadku przycisków, karty mogą zajmować pełną szerokość dostępnej przestrzeni, używając klasy <code>.w-100</code>. Jest to przydatne przy tworzeniu siatek kart.</p>
+
+        <h3>Przykład karty o pełnej szerokości</h3>
+        <pre><code class="language-html">
+&lt;div class="card w-100"&gt;
+  &lt;div class="card-body"&gt;
+    &lt;h5 class="card-title"&gt;Karta pełnej szerokości&lt;/h5&gt;
+    &lt;p class="card-text"&gt;Karta, która zajmuje całą szerokość kontenera.&lt;/p&gt;
+  &lt;/div&gt;
+&lt;/div&gt;
+        </code></pre>
+
+        <p>W tym przykładzie karta zajmuje pełną szerokość, co jest przydatne w projektach, które wymagają elastycznego układu.</p>
+
+        <h2>Podsumowanie</h2>
+        <ul>
+            <li>Karty w Bootstrapie pozwalają na łatwe tworzenie dobrze wyglądających, zorganizowanych kontenerów z treścią.</li>
+            <li>Możesz dodawać do kart obrazy, nagłówki, stopki, grupy przycisków i inne elementy.</li>
+            <li>Karty mogą być zorganizowane w siatki lub przyjmować pełną szerokość, co czyni je bardzo elastycznymi w użyciu.</li>
+        </ul>
+
+        <a href="./5.1.Komponent card-projekt.html"><button>Przykłady</button></a>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/prism.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/components/prism-html.min.js"></script>
+</body>
+</html>

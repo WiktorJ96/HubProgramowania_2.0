@@ -1,0 +1,329 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Karty w Bootstrapie</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/css/bootstrap.min.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/themes/prism-tomorrow.min.css" rel="stylesheet">
+    <style>
+        .example {
+            display: none;
+        }
+
+        .example.active {
+            display: block;
+        }
+
+        .highlight {
+            background-color: #f8f9fa;
+            padding: 10px;
+            margin-bottom: 20px;
+            border-left: 4px solid #007bff;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1 class="text-center my-4">Przykłady Kart w Bootstrapie</h1>
+
+        <!-- Menu wyboru przykładów -->
+        <div class="dropdown text-center mb-4">
+            <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton" data-bs-toggle="dropdown" aria-expanded="false">
+                Wybierz przykład karty
+            </button>
+            <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                <li><a class="dropdown-item" href="#" onclick="showExample('example1')">Podstawowa karta</a></li>
+                <li><a class="dropdown-item" href="#" onclick="showExample('example2')">Karta z obrazkiem</a></li>
+                <li><a class="dropdown-item" href="#" onclick="showExample('example3')">Karta z przyciskami</a></li>
+                <li><a class="dropdown-item" href="#" onclick="showExample('example4')">Karta z linkami</a></li>
+                <li><a class="dropdown-item" href="#" onclick="showExample('example5')">Karty w układzie kolumnowym</a></li>
+                <li><a class="dropdown-item" href="#" onclick="showExample('example6')">Karta z listą</a></li>
+                <li><a class="dropdown-item" href="#" onclick="showExample('example7')">Karty responsywne</a></li>
+            </ul>
+        </div>
+
+        <!-- Przykład 1: Podstawowa karta -->
+        <div id="example1" class="example active">
+            <h2>Przykład 1: Podstawowa karta</h2>
+            <div class="highlight">
+                <div class="card mx-auto" style="width: 18rem;">
+                    <div class="card-body">
+                        <h5 class="card-title">Tytuł karty</h5>
+                        <h6 class="card-subtitle mb-2 text-muted">Podtytuł karty</h6>
+                        <p class="card-text">To jest przykładowa karta w Bootstrapie. Może zawierać dowolny tekst i elementy HTML.</p>
+                        <a href="#" class="card-link">Link karty</a>
+                        <a href="#" class="card-link">Inny link</a>
+                    </div>
+                </div>
+            </div>
+
+            <h3>Kod HTML:</h3>
+            <pre><code class="language-html">
+&lt;div class="card mx-auto" style="width: 18rem;"&gt;
+    &lt;div class="card-body"&gt;
+        &lt;h5 class="card-title"&gt;Tytuł karty&lt;/h5&gt;
+        &lt;h6 class="card-subtitle mb-2 text-muted"&gt;Podtytuł karty&lt;/h6&gt;
+        &lt;p class="card-text"&gt;To jest przykładowa karta w Bootstrapie.&lt;/p&gt;
+        &lt;a href="#" class="card-link"&gt;Link karty&lt;/a&gt;
+        &lt;a href="#" class="card-link"&gt;Inny link&lt;/a&gt;
+    &lt;/div&gt;
+&lt;/div&gt;
+            </code></pre>
+        </div>
+
+        <!-- Przykład 2: Karta z obrazkiem -->
+        <div id="example2" class="example">
+            <h2>Przykład 2: Karta z obrazkiem</h2>
+            <div class="highlight">
+                <div class="card mx-auto" style="width: 18rem;">
+                    <img src="../Podstawy/Bootstrap_logo.svg.png" class="card-img-top" alt="Przykładowy obrazek">
+                    <div class="card-body">
+                        <h5 class="card-title">Karta z obrazkiem</h5>
+                        <p class="card-text">To jest karta z obrazkiem u góry. Karty mogą również zawierać inne media, takie jak wideo.</p>
+                    </div>
+                </div>
+            </div>
+
+            <h3>Kod HTML:</h3>
+            <pre><code class="language-html">
+&lt;div class="card mx-auto" style="width: 18rem;"&gt;
+    &lt;img src="https://via.placeholder.com/286x180" class="card-img-top" alt="Przykładowy obrazek"&gt;
+    &lt;div class="card-body"&gt;
+        &lt;h5 class="card-title"&gt;Karta z obrazkiem&lt;/h5&gt;
+        &lt;p class="card-text"&gt;To jest karta z obrazkiem u góry.&lt;/p&gt;
+    &lt;/div&gt;
+&lt;/div&gt;
+            </code></pre>
+        </div>
+
+        <!-- Przykład 3: Karta z przyciskami -->
+        <div id="example3" class="example">
+            <h2>Przykład 3: Karta z przyciskami</h2>
+            <div class="highlight">
+                <div class="card mx-auto" style="width: 18rem;">
+                    <div class="card-body">
+                        <h5 class="card-title">Karta z przyciskami</h5>
+                        <p class="card-text">Możesz dodawać przyciski do kart w Bootstrapie, aby użytkownik mógł podejmować działania.</p>
+                        <button type="button" class="btn btn-primary">Przycisk 1</button>
+                        <button type="button" class="btn btn-secondary">Przycisk 2</button>
+                    </div>
+                </div>
+            </div>
+
+            <h3>Kod HTML:</h3>
+            <pre><code class="language-html">
+&lt;div class="card mx-auto" style="width: 18rem;"&gt;
+    &lt;div class="card-body"&gt;
+        &lt;h5 class="card-title"&gt;Karta z przyciskami&lt;/h5&gt;
+        &lt;p class="card-text"&gt;Możesz dodawać przyciski do kart w Bootstrapie.&lt;/p&gt;
+        &lt;button type="button" class="btn btn-primary"&gt;Przycisk 1&lt;/button&gt;
+        &lt;button type="button" class="btn btn-secondary"&gt;Przycisk 2&lt;/button&gt;
+    &lt;/div&gt;
+&lt;/div&gt;
+            </code></pre>
+        </div>
+
+        <!-- Przykład 4: Karta z linkami -->
+        <div id="example4" class="example">
+            <h2>Przykład 4: Karta z linkami</h2>
+            <div class="highlight">
+                <div class="card mx-auto" style="width: 18rem;">
+                    <div class="card-body">
+                        <h5 class="card-title">Karta z linkami</h5>
+                        <p class="card-text">Karty mogą również zawierać linki. Możesz łatwo dodać kilka linków do jednej karty.</p>
+                        <a href="#" class="btn btn-primary">Link 1</a>
+                        <a href="#" class="btn btn-secondary">Link 2</a>
+                    </div>
+                </div>
+            </div>
+
+            <h3>Kod HTML:</h3>
+            <pre><code class="language-html">
+&lt;div class="card mx-auto" style="width: 18rem;"&gt;
+    &lt;div class="card-body"&gt;
+        &lt;h5 class="card-title"&gt;Karta z linkami&lt;/h5&gt;
+        &lt;p class="card-text"&gt;Możesz dodawać linki do kart w Bootstrapie.&lt;/p&gt;
+        &lt;a href="#" class="btn btn-primary"&gt;Link 1&lt;/a&gt;
+        &lt;a href="#" class="btn btn-secondary"&gt;Link 2&lt;/a&gt;
+    &lt;/div&gt;
+&lt;/div&gt;
+            </code></pre>
+        </div>
+
+        <!-- Przykład 5: Karty w układzie kolumnowym -->
+        <div id="example5" class="example">
+            <h2>Przykład 5: Karty w układzie kolumnowym</h2>
+            <div class="highlight">
+
+                <div class="row row-cols-1 row-cols-md-2 g-2">
+
+                    <div class="col">
+                        <div class="card w-50 mx-auto">
+                            <img src="../Podstawy/Bootstrap_logo.svg.png" class="card-img-top" alt="Przykład obrazka">
+                            <div class="card-body">
+                                <h5 class="card-title">Karta 1</h5>
+                                <p class="card-text">To jest przykładowa karta w układzie kolumnowym.</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col">
+                        <div class="card w-50 mx-auto">
+                            <img src="../Podstawy/Bootstrap_logo.svg.png" class="card-img-top" alt="Przykład obrazka">
+                            <div class="card-body">
+                                <h5 class="card-title">Karta 2</h5>
+                                <p class="card-text">To jest przykładowa karta w układzie kolumnowym.</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col">
+                        <div class="card w-50 mx-auto">
+                            <img src="../Podstawy/Bootstrap_logo.svg.png" class="card-img-top" alt="Przykład obrazka">
+                            <div class="card-body">
+                                <h5 class="card-title">Karta 3</h5>
+                                <p class="card-text">To jest przykładowa karta w układzie kolumnowym.</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col">
+                        <div class="card w-50 mx-auto">
+                            <img src="../Podstawy/Bootstrap_logo.svg.png" class="card-img-top" alt="Przykład obrazka">
+                            <div class="card-body">
+                                <h5 class="card-title">Karta 4</h5>
+                                <p class="card-text">To jest przykładowa karta w układzie kolumnowym.</p>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+
+            </div>
+
+            <h3>Kod HTML:</h3>
+            <pre><code class="language-html">
+&lt;div class="row row-cols-1 row-cols-md-2 g-2"&gt;
+
+    &lt;div class="col"&gt;
+        &lt;div class="card w-50 mx-auto"&gt;
+            &lt;img src="https://via.placeholder.com/286x180" class="card-img-top" alt="..."&gt;
+            &lt;div class="card-body"&gt;
+                &lt;h5 class="card-title"&gt;Karta 1&lt;/h5&gt;
+                &lt;p class="card-text"&gt;To jest przykładowa karta w układzie kolumnowym.&lt;/p&gt;
+            &lt;/div&gt;
+        &lt;/div&gt;
+    &lt;/div&gt;
+
+    &lt;div class="col"&gt;
+        &lt;div class="card w-50 mx-auto"&gt;
+            &lt;img src="https://via.placeholder.com/286x180" class="card-img-top" alt="..."&gt;
+            &lt;div class="card-body"&gt;
+                &lt;h5 class="card-title"&gt;Karta 2&lt;/h5&gt;
+                &lt;p class="card-text"&gt;To jest inna przykładowa karta w układzie kolumnowym.&lt;/p&gt;
+            &lt;/div&gt;
+        &lt;/div&gt;
+    &lt;/div&gt;
+
+    &lt;div class="col"&gt;
+        &lt;div class="card w-50 mx-auto"&gt;
+            &lt;img src="https://via.placeholder.com/286x180" class="card-img-top" alt="..."&gt;
+            &lt;div class="card-body"&gt;
+                &lt;h5 class="card-title"&gt;Karta 3&lt;/h5&gt;
+                &lt;p class="card-text"&gt;To jest inna przykładowa karta w układzie kolumnowym.&lt;/p&gt;
+            &lt;/div&gt;
+        &lt;/div&gt;
+    &lt;/div&gt;
+
+    &lt;div class="col"&gt;
+        &lt;div class="card w-50 mx-auto"&gt;
+            &lt;img src="https://via.placeholder.com/286x180" class="card-img-top" alt="..."&gt;
+            &lt;div class="card-body"&gt;
+                &lt;h5 class="card-title"&gt;Karta 4&lt;/h5&gt;
+                &lt;p class="card-text"&gt;To jest inna przykładowa karta w układzie kolumnowym.&lt;/p&gt;
+            &lt;/div&gt;
+        &lt;/div&gt;
+    &lt;/div&gt;
+
+&lt;/div&gt;
+            </code></pre>
+        </div>
+
+        <!-- Przykład 6: Karta z listą -->
+        <div id="example6" class="example">
+            <h2>Przykład 6: Karta z listą</h2>
+            <div class="highlight">
+                <div class="card mx-auto w-25">
+                    <div class="card-header">
+                        Nagłówek listy
+                    </div>
+                    <img src="../Podstawy/Bootstrap_logo.svg.png" class="card-img-top" alt="Przykład obrazka">
+                    <ul class="list-group list-group-flush align-items-center">
+                        <li class="list-group-item">Element 1</li>
+                        <li class="list-group-item">Element 2</li>
+                        <li class="list-group-item">Element 3</li>
+                    </ul>
+                </div>
+            </div>
+
+            <h3>Kod HTML:</h3>
+            <pre><code class="language-html">
+&lt;div class="card mx-auto w-25""&gt;
+    &lt;div class="card-header"&gt;
+        Nagłówek listy
+    &lt;/div&gt;
+    &lt;img src="https://via.placeholder.com/286x180" class="card-img-top" alt="Przykład obrazka"&gt;
+    &lt;ul class="list-group list-group-flush align-items-center"&gt;
+        &lt;li class="list-group-item"&gt;Element 1&lt;/li&gt;
+        &lt;li class="list-group-item"&gt;Element 2&lt;/li&gt;
+        &lt;li class="list-group-item"&gt;Element 3&lt;/li&gt;
+    &lt;/ul&gt;
+&lt;/div&gt;
+            </code></pre>
+        </div>
+
+        <!-- Przykład 7: Karty responsywne -->
+        <div id="example7" class="example">
+            <h2>Przykład 7: Karty responsywne</h2>
+            <div class="highlight">
+                <div class="card w-100 mx-auto">
+                    <div class="card-body">
+                        <h5 class="card-title">Karta responsywna</h5>
+                        <p class="card-text">Ta karta automatycznie dopasowuje swoją szerokość do rozmiaru ekranu, dzięki klasie <code>w-100</code>.</p>
+                    </div>
+                </div>
+            </div>
+
+            <h3>Kod HTML:</h3>
+            <pre><code class="language-html">
+&lt;div class="card w-100 mx-auto"&gt;
+    &lt;div class="card-body"&gt;
+        &lt;h5 class="card-title"&gt;Karta responsywna&lt;/h5&gt;
+        &lt;p class="card-text"&gt;Ta karta automatycznie dopasowuje swoją szerokość do rozmiaru ekranu.&lt;/p&gt;
+    &lt;/div&gt;
+&lt;/div&gt;
+            </code></pre>
+        </div>
+
+    </div>
+
+    <!-- Bootstrap i Prism -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/prism.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/components/prism-html.min.js"></script>
+
+    <!-- Skrypt do przełączania przykładów i podświetlania składni -->
+    <script>
+        function showExample(exampleId) {
+            const examples = document.querySelectorAll('.example');
+            examples.forEach(example => {
+                example.classList.remove('active');
+            });
+
+            document.getElementById(exampleId).classList.add('active');
+            Prism.highlightAll();
+        }
+    </script>
+</body>
+</html>

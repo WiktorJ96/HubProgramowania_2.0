@@ -79,6 +79,38 @@
 &lt;button type="button" class="btn btn-danger" disabled&gt;Zablokowany przycisk&lt;/button&gt;
         </code></pre>
 
+        <h2>Przyciski z rozwijanym menu</h2>
+        <p>Przyciski z rozwijanym menu (dropdown) są przydatne, gdy chcesz dodać listę opcji ukrytą pod jednym przyciskiem. Bootstrap oferuje łatwe w użyciu klasy do tworzenia takich menu.</p>
+
+        <h3>Przykład przycisku z rozwijanym menu</h3>
+        <pre><code class="language-html">
+&lt;div class="dropdown"&gt;
+  &lt;button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton" data-bs-toggle="dropdown" aria-expanded="false"&gt;
+    Wybierz opcję
+  &lt;/button&gt;
+  &lt;ul class="dropdown-menu" aria-labelledby="dropdownMenuButton"&gt;
+    &lt;li&gt;&lt;a class="dropdown-item" href="#"&gt;Opcja 1&lt;/a&gt;&lt;/li&gt;
+    &lt;li&gt;&lt;a class="dropdown-item" href="#"&gt;Opcja 2&lt;/a&gt;&lt;/li&gt;
+    &lt;li&gt;&lt;a class="dropdown-item" href="#"&gt;Opcja 3&lt;/a&gt;&lt;/li&gt;
+  &lt;/ul&gt;
+&lt;/div&gt;
+        </code></pre>
+
+        <p>Ten przykład pokazuje przycisk z rozwijanym menu zawierającym trzy opcje. Możesz go łatwo dostosować, dodając więcej elementów do menu lub zmieniając styl przycisku.</p>
+
+        <h2>Przycisk połączony z polem tekstowym</h2>
+        <p>Przycisk połączony z polem tekstowym umożliwia użytkownikowi wprowadzenie tekstu i wykonanie akcji, np. wyszukiwanie lub dodawanie treści, za pomocą jednego przycisku.</p>
+
+        <h3>Przykład przycisku połączonego z polem tekstowym</h3>
+        <pre><code class="language-html">
+&lt;div class="input-group mb-3"&gt;
+  &lt;input type="text" class="form-control" placeholder="Wprowadź tekst" aria-label="Wprowadź tekst" aria-describedby="button-addon"&gt;
+  &lt;button class="btn btn-outline-secondary" type="button" id="button-addon"&gt;Wyślij&lt;/button&gt;
+&lt;/div&gt;
+        </code></pre>
+
+        <p>W tym przykładzie pole tekstowe jest połączone z przyciskiem, co może być przydatne w przypadku formularzy wyszukiwania lub innych interakcji, które wymagają jednoczesnego wprowadzenia danych i kliknięcia przycisku.</p>
+
         <h2>Podsumowanie</h2>
         <ul>
             <li>Przyciski w Bootstrapie są łatwe do użycia i dostępne w różnych kolorach oraz rozmiarach.</li>
