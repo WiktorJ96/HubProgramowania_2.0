@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dropdown</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/css/bootstrap.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.7/dist/umd/popper.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/js/bootstrap.min.js"></script>
+    <link rel="stylesheet" href="../styles.css">
+</head>
+<body>
+    <div class="container">
+        <h1>Rozwijane menu (Dropdown) w Bootstrapie</h1>
+
+        <p>Dropdown, czyli rozwijane menu, pozwala na ukrycie listy opcji pod jednym przyciskiem lub linkiem. Menu rozwija się po kliknięciu, a użytkownik może wybrać jedną z dostępnych opcji.</p>
+
+        <h2>Podstawowy przykład dropdown</h2>
+        <pre><code class="language-html">
+&lt;div class="dropdown"&gt;
+  &lt;button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton" data-bs-toggle="dropdown" aria-expanded="false"&gt;
+    Rozwijane menu
+  &lt;/button&gt;
+  &lt;ul class="dropdown-menu" aria-labelledby="dropdownMenuButton"&gt;
+    &lt;li&gt;&lt;a class="dropdown-item active" href="#"&gt;Opcja 1&lt;/a&gt;&lt;/li&gt;
+    &lt;li&gt;&lt;a class="dropdown-item" href="#"&gt;Opcja 2&lt;/a&gt;&lt;/li&gt;
+    &lt;li&gt;&lt;a class="dropdown-item" href="#"&gt;Opcja 3&lt;/a&gt;&lt;/li&gt;
+  &lt;/ul&gt;
+&lt;/div&gt;
+        </code></pre>
+
+        <p>W tym przykładzie przycisk o nazwie "Rozwijane menu" rozwija listę trzech opcji. Użytkownik może wybrać jedną z dostępnych opcji z listy.
+            W powyższym przykładzie użyta jest też klasa <code>active</code> która podświetla aktualnie wybraną opcje.
+        </p>
+
+        <h2>Dropdown z podzielonym przyciskiem</h2>
+        <p>Podzielony przycisk, gdzie jedna część wykonuje akcję, a druga rozwija dodatkowe opcje.</p>
+
+        <pre><code class="language-html">
+&lt;div class="btn-group"&gt;
+  &lt;button type="button" class="btn btn-primary"&gt;Akcja&lt;/button&gt;
+  &lt;button type="button" class="btn btn-primary dropdown-toggle dropdown-toggle-split" data-bs-toggle="dropdown" aria-expanded="false"&gt;
+    &lt;span class="visually-hidden"&gt;Rozwiń menu&lt;/span&gt;
+  &lt;/button&gt;
+  &lt;ul class="dropdown-menu"&gt;
+    &lt;li&gt;&lt;a class="dropdown-item" href="#"&gt;Opcja 1&lt;/a&gt;&lt;/li&gt;
+    &lt;li&gt;&lt;a class="dropdown-item" href="#"&gt;Opcja 2&lt;/a&gt;&lt;/li&gt;
+    &lt;li&gt;&lt;a class="dropdown-item" href="#"&gt;Opcja 3&lt;/a&gt;&lt;/li&gt;
+  &lt;/ul&gt;
+&lt;/div&gt;
+        </code></pre>
+
+        <h2>Dropdown z divider (separator)</h2>
+        <p>Możesz dodać separator w rozwijanym menu za pomocą klasy <code>.dropdown-divider</code>.</p>
+
+        <pre><code class="language-html">
+&lt;div class="dropdown"&gt;
+  &lt;button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton2" data-bs-toggle="dropdown" aria-expanded="false"&gt;
+    Menu z divider
+  &lt;/button&gt;
+  &lt;ul class="dropdown-menu" aria-labelledby="dropdownMenuButton2"&gt;
+    &lt;li&gt;&lt;a class="dropdown-item" href="#"&gt;Opcja 1&lt;/a&gt;&lt;/li&gt;
+    &lt;li&gt;&lt;a class="dropdown-item" href="#"&gt;Opcja 2&lt;/a&gt;&lt;/li&gt;
+    &lt;li&gt;&lt;hr class="dropdown-divider"&gt;&lt;/li&gt;
+    &lt;li&gt;&lt;a class="dropdown-item" href="#"&gt;Opcja 3&lt;/a&gt;&lt;/li&gt;
+  &lt;/ul&gt;
+&lt;/div&gt;
+        </code></pre>
+
+        <h2>Dropdown z drop left i drop right</h2>
+        <p>Menu rozwijane w lewo lub w prawo za pomocą klas <code>.dropstart</code> (lewo) i <code>.dropend</code> (prawo).</p>
+
+        <h3>Drop left (menu rozwijane w lewo)</h3>
+        <pre><code class="language-html">
+&lt;div class="btn-group dropstart"&gt;
+  &lt;button type="button" class="btn btn-danger dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false"&gt;
+    Menu w lewo
+  &lt;/button&gt;
+  &lt;ul class="dropdown-menu"&gt;
+    &lt;li&gt;&lt;a class="dropdown-item" href="#"&gt;Opcja 1&lt;/a&gt;&lt;/li&gt;
+    &lt;li&gt;&lt;a class="dropdown-item" href="#"&gt;Opcja 2&lt;/a&gt;&lt;/li&gt;
+  &lt;/ul&gt;
+&lt;/div&gt;
+        </code></pre>
+
+        <h3>Drop right (menu rozwijane w prawo)</h3>
+        <pre><code class="language-html">
+&lt;div class="btn-group dropend"&gt;
+  &lt;button type="button" class="btn btn-warning dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false"&gt;
+    Menu w prawo
+  &lt;/button&gt;
+  &lt;ul class="dropdown-menu"&gt;
+    &lt;li&gt;&lt;a class="dropdown-item" href="#"&gt;Opcja 1&lt;/a&gt;&lt;/li&gt;
+    &lt;li&gt;&lt;a class="dropdown-item" href="#"&gt;Opcja 2&lt;/a&gt;&lt;/li&gt;
+  &lt;/ul&gt;
+&lt;/div&gt;
+        </code></pre>
+
+        <h2>Dropdown disabled (nieaktywny przycisk)</h2>
+        <p>Możesz dezaktywować rozwijane menu, dodając atrybut <code>disabled</code> do przycisku.</p>
+
+        <pre><code class="language-html">
+&lt;div class="dropdown"&gt;
+  &lt;button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton3" data-bs-toggle="dropdown" aria-expanded="false" disabled&gt;
+    Nieaktywny przycisk
+  &lt;/button&gt;
+&lt;/div&gt;
+        </code></pre>
+
+        <h2>Dropdown header (nagłówek rozwijanego menu)</h2>
+        <p>Możesz dodać nagłówek do rozwijanego menu za pomocą klasy <code>.dropdown-header</code>.</p>
+
+        <pre><code class="language-html">
+&lt;div class="dropdown"&gt;
+  &lt;button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton4" data-bs-toggle="dropdown" aria-expanded="false"&gt;
+    Menu z nagłówkiem
+  &lt;/button&gt;
+  &lt;ul class="dropdown-menu" aria-labelledby="dropdownMenuButton4"&gt;
+    &lt;li&gt;&lt;h6 class="dropdown-header"&gt;Nagłówek menu&lt;/h6&gt;&lt;/li&gt;
+    &lt;li&gt;&lt;a class="dropdown-item" href="#"&gt;Opcja 1&lt;/a&gt;&lt;/li&gt;
+    &lt;li&gt;&lt;a class="dropdown-item" href="#"&gt;Opcja 2&lt;/a&gt;&lt;/li&gt;
+  &lt;/ul&gt;
+&lt;/div&gt;
+        </code></pre>
+
+        <h2>Podsumowanie</h2>
+        <ul>
+            <li>Dropdown umożliwia tworzenie rozwijanych list opcji w różnych kierunkach (w prawo, w lewo).</li>
+            <li>Można dodawać podzielone przyciski, separatory (divider), nagłówki i wyłączać przyciski (disabled).</li>
+            <li>Popper.js jest wymagany, aby dropdown działał prawidłowo, a Bootstrap automatycznie go ładuje.</li>
+        </ul>
+
+        <a href="./8.1.Dropdown-projekt.html"><button>Przykłady</button></a>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/prism.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/components/prism-html.min.js"></script>
+</body>
+</html>

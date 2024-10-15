@@ -1,0 +1,209 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Listy w Bootstrapie</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/css/bootstrap.min.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/themes/prism-tomorrow.min.css" rel="stylesheet">
+    <style>
+        .example {
+            display: none;
+        }
+
+        .example.active {
+            display: block;
+        }
+
+        .highlight {
+            background-color: #f8f9fa;
+            padding: 10px;
+            margin-bottom: 20px;
+            border-left: 4px solid #007bff;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1 class="text-center my-4">Przykłady</h1>
+
+        <!-- Menu wyboru przykładów -->
+        <div class="dropdown text-center mb-4">
+            <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton" data-bs-toggle="dropdown" aria-expanded="false">
+                Wybierz przykład listy
+            </button>
+            <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                <li><a class="dropdown-item" href="#" onclick="showExample('example1')">Podstawowa lista</a></li>
+                <li><a class="dropdown-item" href="#" onclick="showExample('example2')">Flush lista</a></li>
+                <li><a class="dropdown-item" href="#" onclick="showExample('example3')">Pozioma lista</a></li>
+                <li><a class="dropdown-item" href="#" onclick="showExample('example4')">Responsywna lista</a></li>
+                <li><a class="dropdown-item" href="#" onclick="showExample('example5')">Kolorowe listy</a></li>
+                <li><a class="dropdown-item" href="#" onclick="showExample('example6')">Lista z elementami formularza</a></li>
+            </ul>
+        </div>
+
+        <!-- Przykład 1: Podstawowa lista -->
+        <div id="example1" class="example active">
+            <h2>Przykład 1: Podstawowa lista</h2>
+            <div class="highlight">
+                <ul class="list-group">
+                    <li class="list-group-item">Pierwszy element</li>
+                    <li class="list-group-item">Drugi element</li>
+                    <li class="list-group-item">Trzeci element</li>
+                </ul>
+            </div>
+
+            <h3>Kod HTML:</h3>
+            <pre><code class="language-html">
+&lt;ul class="list-group"&gt;
+    &lt;li class="list-group-item"&gt;Pierwszy element&lt;/li&gt;
+    &lt;li class="list-group-item"&gt;Drugi element&lt;/li&gt;
+    &lt;li class="list-group-item"&gt;Trzeci element&lt;/li&gt;
+&lt;/ul&gt;
+            </code></pre>
+        </div>
+
+        <!-- Przykład 2: Flush lista -->
+        <div id="example2" class="example">
+            <h2>Przykład 2: Flush lista</h2>
+            <div class="highlight">
+                <ul class="list-group list-group-flush">
+                    <li class="list-group-item">Element 1</li>
+                    <li class="list-group-item">Element 2</li>
+                    <li class="list-group-item">Element 3</li>
+                </ul>
+            </div>
+
+            <h3>Kod HTML:</h3>
+            <pre><code class="language-html">
+&lt;ul class="list-group list-group-flush"&gt;
+    &lt;li class="list-group-item"&gt;Element 1&lt;/li&gt;
+    &lt;li class="list-group-item"&gt;Element 2&lt;/li&gt;
+    &lt;li class="list-group-item"&gt;Element 3&lt;/li&gt;
+&lt;/ul&gt;
+            </code></pre>
+        </div>
+
+        <!-- Przykład 3: Pozioma lista -->
+        <div id="example3" class="example">
+            <h2>Przykład 3: Pozioma lista</h2>
+            <div class="highlight">
+                <ul class="list-group list-group-horizontal">
+                    <li class="list-group-item">Element 1</li>
+                    <li class="list-group-item">Element 2</li>
+                    <li class="list-group-item">Element 3</li>
+                </ul>
+            </div>
+
+            <h3>Kod HTML:</h3>
+            <pre><code class="language-html">
+&lt;ul class="list-group list-group-horizontal"&gt;
+    &lt;li class="list-group-item"&gt;Element 1&lt;/li&gt;
+    &lt;li class="list-group-item"&gt;Element 2&lt;/li&gt;
+    &lt;li class="list-group-item"&gt;Element 3&lt;/li&gt;
+&lt;/ul&gt;
+            </code></pre>
+        </div>
+
+        <!-- Przykład 4: Responsywna lista -->
+        <div id="example4" class="example">
+            <h2>Przykład 4: Responsywna lista</h2>
+            <div class="highlight">
+                <ul class="list-group list-group-horizontal-md">
+                    <li class="list-group-item">Element 1</li>
+                    <li class="list-group-item">Element 2</li>
+                    <li class="list-group-item">Element 3</li>
+                </ul>
+                <p class="mt-2">Na mniejszych ekranach lista będzie wyświetlana pionowo.</p>
+            </div>
+
+            <h3>Kod HTML:</h3>
+            <pre><code class="language-html">
+&lt;ul class="list-group list-group-horizontal-md"&gt;
+    &lt;li class="list-group-item"&gt;Element 1&lt;/li&gt;
+    &lt;li class="list-group-item"&gt;Element 2&lt;/li&gt;
+    &lt;li class="list-group-item"&gt;Element 3&lt;/li&gt;
+&lt;/ul&gt;
+            </code></pre>
+        </div>
+
+        <!-- Przykład 5: Kolorowe listy -->
+        <div id="example5" class="example">
+            <h2>Przykład 5: Kolorowe listy</h2>
+            <div class="highlight">
+                <ul class="list-group">
+                    <li class="list-group-item list-group-item-primary">Primary element</li>
+                    <li class="list-group-item list-group-item-success">Success element</li>
+                    <li class="list-group-item list-group-item-danger">Danger element</li>
+                </ul>
+            </div>
+
+            <h3>Kod HTML:</h3>
+            <pre><code class="language-html">
+&lt;ul class="list-group"&gt;
+    &lt;li class="list-group-item list-group-item-primary"&gt;Primary element&lt;/li&gt;
+    &lt;li class="list-group-item list-group-item-success"&gt;Success element&lt;/li&gt;
+    &lt;li class="list-group-item list-group-item-danger"&gt;Danger element&lt;/li&gt;
+&lt;/ul&gt;
+            </code></pre>
+        </div>
+
+        <!-- Przykład 6: Lista z elementami formularza -->
+        <div id="example6" class="example">
+            <h2>Przykład 6: Lista z elementami formularza (checkbox)</h2>
+            <div class="highlight">
+                <ul class="list-group">
+                    <li class="list-group-item">
+                        <input class="form-check-input me-1" type="checkbox" value="" id="firstCheckbox">
+                        <label class="form-check-label" for="firstCheckbox">Pierwszy element</label>
+                    </li>
+                    <li class="list-group-item">
+                        <input class="form-check-input me-1" type="checkbox" value="" id="secondCheckbox">
+                        <label class="form-check-label" for="secondCheckbox">Drugi element</label>
+                    </li>
+                    <li class="list-group-item">
+                        <input class="form-check-input me-1" type="checkbox" value="" id="thirdCheckbox">
+                        <label class="form-check-label" for="thirdCheckbox">Trzeci element</label>
+                    </li>
+                </ul>
+            </div>
+
+            <h3>Kod HTML:</h3>
+            <pre><code class="language-html">
+&lt;ul class="list-group"&gt;
+    &lt;li class="list-group-item"&gt;
+        &lt;input class="form-check-input me-1" type="checkbox" value="" id="firstCheckbox"&gt;
+        &lt;label class="form-check-label" for="firstCheckbox"&gt;Pierwszy element&lt;/label&gt;
+    &lt;/li&gt;
+    &lt;li class="list-group-item"&gt;
+        &lt;input class="form-check-input me-1" type="checkbox" value="" id="secondCheckbox"&gt;
+        &lt;label class="form-check-label" for="secondCheckbox"&gt;Drugi element&lt;/label&gt;
+    &lt;/li&gt;
+    &lt;li class="list-group-item"&gt;
+        &lt;input class="form-check-input me-1" type="checkbox" value="" id="thirdCheckbox"&gt;
+        &lt;label class="form-check-label" for="thirdCheckbox"&gt;Trzeci element&lt;/label&gt;
+    &lt;/li&gt;
+&lt;/ul&gt;
+            </code></pre>
+        </div>
+    </div>
+
+    <!-- Bootstrap i Prism -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/prism.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/components/prism-html.min.js"></script>
+
+    <!-- Skrypt do przełączania przykładów i podświetlania składni -->
+    <script>
+        function showExample(exampleId) {
+            const examples = document.querySelectorAll('.example');
+            examples.forEach(example => {
+                example.classList.remove('active');
+            });
+
+            document.getElementById(exampleId).classList.add('active');
+            Prism.highlightAll();
+        }
+    </script>
+</body>
+</html>

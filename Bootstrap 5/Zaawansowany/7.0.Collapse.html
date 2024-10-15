@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Collapse</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/css/bootstrap.min.css">
+    <link rel="stylesheet" href="../styles.css">
+</head>
+<body>
+    <div class="container">
+        <h1>Collapse w Bootstrapie</h1>
+
+        <p>Bootstrap oferuje różne komponenty UI, które umożliwiają tworzenie estetycznych i funkcjonalnych interfejsów użytkownika. Na tej stronie omówimy takie komponenty jak karty (cards), karuzele (carousel) oraz collapse (elementy rozwijalne).</p>
+
+        <!-- Istniejące sekcje dotyczące kart, karuzeli itd. -->
+
+        <h2>Elementy rozwijalne (Collapse)</h2>
+        <p>Komponent <code>Collapse</code> pozwala na tworzenie elementów, które mogą być zwijane lub rozwijane. Jest to przydatne, gdy chcesz ukryć dodatkową treść, która będzie widoczna tylko po kliknięciu, np. w akordeonach, nawigacjach, lub formularzach.</p>
+
+        <h3>Podstawowy przykład collapse</h3>
+        <pre><code class="language-html">
+&lt;p&gt;
+  &lt;a class="btn btn-primary" data-bs-toggle="collapse" href="#collapseExample" role="button" aria-expanded="false" aria-controls="collapseExample"&gt;
+    Pokaż więcej
+  &lt;/a&gt;
+&lt;/p&gt;
+&lt;div class="collapse" id="collapseExample"&gt;
+  &lt;div class="card card-body"&gt;
+    To jest ukryta treść, która pojawia się po kliknięciu przycisku "Pokaż więcej".
+  &lt;/div&gt;
+&lt;/div&gt;
+        </code></pre>
+
+        <p>W tym przykładzie użytkownik może kliknąć przycisk, aby rozwinąć dodatkową treść. Kiedy treść jest rozwinięta, karta (card) staje się widoczna.</p>
+
+        <h2>Przykład collapse z przyciskiem</h2>
+        <p>Możesz używać przycisków lub linków do kontrolowania rozwijania i zwijania treści. Poniżej znajduje się przykład z przyciskiem, który rozwija i zwija tekst.</p>
+
+        <h3>Przykład collapse z przyciskiem</h3>
+        <pre><code class="language-html">
+&lt;button class="btn btn-success" type="button" data-bs-toggle="collapse" data-bs-target="#collapseExample2" aria-expanded="false" aria-controls="collapseExample2"&gt;
+  Rozwiń/Zwiń treść
+&lt;/button&gt;
+&lt;div class="collapse mt-3" id="collapseExample2"&gt;
+  &lt;div class="card card-body"&gt;
+    To jest przykład elementu rozwijalnego, który działa po kliknięciu przycisku. Możesz go użyć do ukrycia dodatkowych informacji.
+  &lt;/div&gt;
+&lt;/div&gt;
+        </code></pre>
+
+        <p>W tym przykładzie przycisk o zielonym kolorze kontroluje widoczność treści. Dodatkowe informacje są ukryte w karcie, która pojawia się po rozwinięciu.</p>
+
+        <h2>Grupowanie elementów rozwijalnych (akordeon)</h2>
+        <p>Bootstrap umożliwia również grupowanie wielu elementów rozwijalnych, które zachowują się jak akordeon, czyli tylko jeden element jest otwarty w danym momencie.</p>
+
+        <h3>Przykład akordeonu</h3>
+        <pre><code class="language-html">
+&lt;div class="accordion" id="accordionExample"&gt;
+  &lt;div class="accordion-item"&gt;
+    &lt;h2 class="accordion-header" id="headingOne"&gt;
+      &lt;button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne"&gt;
+        Sekcja 1
+      &lt;/button&gt;
+    &lt;/h2&gt;
+    &lt;div id="collapseOne" class="accordion-collapse collapse show" aria-labelledby="headingOne" data-bs-parent="#accordionExample"&gt;
+      &lt;div class="accordion-body"&gt;
+        To jest treść sekcji 1. Możesz umieścić tutaj dowolne informacje, które będą widoczne po rozwinięciu tej sekcji.
+      &lt;/div&gt;
+    &lt;/div&gt;
+  &lt;/div&gt;
+  &lt;div class="accordion-item"&gt;
+    &lt;h2 class="accordion-header" id="headingTwo"&gt;
+      &lt;button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo"&gt;
+        Sekcja 2
+      &lt;/button&gt;
+    &lt;/h2&gt;
+    &lt;div id="collapseTwo" class="accordion-collapse collapse" aria-labelledby="headingTwo" data-bs-parent="#accordionExample"&gt;
+      &lt;div class="accordion-body"&gt;
+        To jest treść sekcji 2. Tylko jedna sekcja akordeonu może być otwarta na raz.
+      &lt;/div&gt;
+    &lt;/div&gt;
+  &lt;/div&gt;
+  &lt;div class="accordion-item"&gt;
+    &lt;h2 class="accordion-header" id="headingThree"&gt;
+      &lt;button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseThree" aria-expanded="false" aria-controls="collapseThree"&gt;
+        Sekcja 3
+      &lt;/button&gt;
+    &lt;/h2&gt;
+    &lt;div id="collapseThree" class="accordion-collapse collapse" aria-labelledby="headingThree" data-bs-parent="#accordionExample"&gt;
+      &lt;div class="accordion-body"&gt;
+        To jest treść sekcji 3. Gdy użytkownik kliknie inną sekcję, ta zostanie zamknięta.
+      &lt;/div&gt;
+    &lt;/div&gt;
+  &lt;/div&gt;
+&lt;/div&gt;
+        </code></pre>
+
+        <p>W tym przykładzie akordeonu tylko jedna sekcja jest otwarta na raz. Kiedy użytkownik otworzy nową sekcję, poprzednia zostaje automatycznie zamknięta.</p>
+
+        <h2>Podsumowanie</h2>
+        <ul>
+            <li>Komponent <code>Collapse</code> umożliwia tworzenie elementów rozwijalnych, które mogą być kontrolowane za pomocą przycisków lub linków.</li>
+            <li>Grupowanie elementów rozwijalnych tworzy akordeon, w którym tylko jedna sekcja jest otwarta jednocześnie.</li>
+            <li>Collapse jest w pełni responsywny i łatwy do użycia, co czyni go idealnym narzędziem do dynamicznego zarządzania treścią na stronach internetowych.</li>
+        </ul>
+
+        <a href="./4.4.Collapse-projekt.html"><button>Przykłady</button></a>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/prism.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/components/prism-html.min.js"></script>
+</body>
+</html>

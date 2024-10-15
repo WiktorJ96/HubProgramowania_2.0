@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Paginacja</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/css/bootstrap.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.7/dist/umd/popper.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/js/bootstrap.min.js"></script>
+    <link rel="stylesheet" href="../styles.css">
+</head>
+<body>
+    <div class="container">
+        <h1>Paginacja w Bootstrapie</h1>
+
+        <p>Komponent <code>Pagination</code> w Bootstrapie umożliwia podział długich treści na mniejsze części za pomocą paginacji. Możesz tworzyć standardowe paginacje, paginacje z wyróżnieniem aktywnej strony, strzałki nawigacyjne oraz kontrolować rozmiar paginacji.</p>
+
+        <h2>Podstawowy przykład paginacji</h2>
+        <p>Tworzenie podstawowej paginacji z numerami stron.</p>
+
+        <pre><code class="language-html">
+&lt;nav aria-label="Paginacja"&gt;
+  &lt;ul class="pagination"&gt;
+    &lt;li class="page-item"&gt;&lt;a class="page-link" href="#"&gt;1&lt;/a&gt;&lt;/li&gt;
+    &lt;li class="page-item"&gt;&lt;a class="page-link" href="#"&gt;2&lt;/a&gt;&lt;/li&gt;
+    &lt;li class="page-item"&gt;&lt;a class="page-link" href="#"&gt;3&lt;/a&gt;&lt;/li&gt;
+  &lt;/ul&gt;
+&lt;/nav&gt;
+        </code></pre>
+
+        <p>Podstawowa paginacja składa się z elementów <code>li</code> z klasami <code>page-item</code> i <code>page-link</code>. Każda strona ma osobny link.</p>
+
+        <h2>Paginacja z wyróżnieniem aktywnej strony</h2>
+        <p>Możesz wyróżnić aktywną stronę, dodając klasę <code>.active</code> do elementu.</p>
+
+        <pre><code class="language-html">
+&lt;nav aria-label="Paginacja z aktywną stroną"&gt;
+  &lt;ul class="pagination"&gt;
+    &lt;li class="page-item"&gt;&lt;a class="page-link" href="#"&gt;1&lt;/a&gt;&lt;/li&gt;
+    &lt;li class="page-item active"&gt;&lt;a class="page-link" href="#"&gt;2&lt;/a&gt;&lt;/li&gt;
+    &lt;li class="page-item"&gt;&lt;a class="page-link" href="#"&gt;3&lt;/a&gt;&lt;/li&gt;
+  &lt;/ul&gt;
+&lt;/nav&gt;
+        </code></pre>
+
+        <p>W tym przykładzie strona numer 2 jest wyróżniona jako aktywna, co oznacza, że użytkownik znajduje się na tej stronie.</p>
+
+        <h2>Paginacja z przyciskami nawigacyjnymi (poprzednia/następna)</h2>
+        <p>Możesz dodać strzałki nawigacyjne "Poprzednia" i "Następna", aby użytkownik mógł przechodzić między stronami.</p>
+
+        <pre><code class="language-html">
+&lt;nav aria-label="Paginacja z nawigacją"&gt;
+  &lt;ul class="pagination"&gt;
+    &lt;li class="page-item"&gt;
+      &lt;a class="page-link" href="#" aria-label="Poprzednia"&gt;
+        &lt;span aria-hidden="true"&gt;&laquo;&lt;/span&gt;
+      &lt;/a&gt;
+    &lt;/li&gt;
+    &lt;li class="page-item"&gt;&lt;a class="page-link" href="#"&gt;1&lt;/a&gt;&lt;/li&gt;
+    &lt;li class="page-item active"&gt;&lt;a class="page-link" href="#"&gt;2&lt;/a&gt;&lt;/li&gt;
+    &lt;li class="page-item"&gt;&lt;a class="page-link" href="#"&gt;3&lt;/a&gt;&lt;/li&gt;
+    &lt;li class="page-item"&gt;
+      &lt;a class="page-link" href="#" aria-label="Następna"&gt;
+        &lt;span aria-hidden="true"&gt;&raquo;&lt;/span&gt;
+      &lt;/a&gt;
+    &lt;/li&gt;
+  &lt;/ul&gt;
+&lt;/nav&gt;
+        </code></pre>
+
+        <p>W tym przykładzie dodano ikony strzałek nawigacyjnych <code>&laquo;</code> (poprzednia) i <code>&raquo;</code> (następna) przed i za numerami stron.</p>
+
+        <h2>Paginacja z wyłączonymi (disabled) stronami</h2>
+        <p>Możesz wyłączyć niektóre przyciski, np. gdy użytkownik jest na pierwszej stronie i nie może przejść do poprzedniej strony.</p>
+
+        <pre><code class="language-html">
+&lt;nav aria-label="Paginacja z wyłączonymi stronami"&gt;
+  &lt;ul class="pagination"&gt;
+    &lt;li class="page-item disabled"&gt;
+      &lt;a class="page-link" href="#" tabindex="-1" aria-disabled="true"&gt;&laquo; Poprzednia&lt;/a&gt;
+    &lt;/li&gt;
+    &lt;li class="page-item"&gt;&lt;a class="page-link" href="#"&gt;1&lt;/a&gt;&lt;/li&gt;
+    &lt;li class="page-item active"&gt;&lt;a class="page-link" href="#"&gt;2&lt;/a&gt;&lt;/li&gt;
+    &lt;li class="page-item"&gt;&lt;a class="page-link" href="#"&gt;3&lt;/a&gt;&lt;/li&gt;
+    &lt;li class="page-item"&gt;
+      &lt;a class="page-link" href="#"&gt;Następna &raquo;&lt;/a&gt;
+    &lt;/li&gt;
+  &lt;/ul&gt;
+&lt;/nav&gt;
+        </code></pre>
+
+        <p>Element <code>.disabled</code> sprawia, że przycisk "Poprzednia" jest nieaktywny, ponieważ użytkownik jest na pierwszej stronie.</p>
+
+        <h2>Rozmiary paginacji</h2>
+        <p>Możesz kontrolować rozmiar paginacji za pomocą klas <code>.pagination-lg</code> i <code>.pagination-sm</code>, aby uzyskać większe lub mniejsze przyciski.</p>
+
+        <h3>Duża paginacja</h3>
+        <pre><code class="language-html">
+&lt;nav aria-label="Duża paginacja"&gt;
+  &lt;ul class="pagination pagination-lg"&gt;
+    &lt;li class="page-item"&gt;&lt;a class="page-link" href="#"&gt;1&lt;/a&gt;&lt;/li&gt;
+    &lt;li class="page-item"&gt;&lt;a class="page-link" href="#"&gt;2&lt;/a&gt;&lt;/li&gt;
+    &lt;li class="page-item"&gt;&lt;a class="page-link" href="#"&gt;3&lt;/a&gt;&lt;/li&gt;
+  &lt;/ul&gt;
+&lt;/nav&gt;
+        </code></pre>
+
+        <h3>Mała paginacja</h3>
+        <pre><code class="language-html">
+&lt;nav aria-label="Mała paginacja"&gt;
+  &lt;ul class="pagination pagination-sm"&gt;
+    &lt;li class="page-item"&gt;&lt;a class="page-link" href="#"&gt;1&lt;/a&gt;&lt;/li&gt;
+    &lt;li class="page-item"&gt;&lt;a class="page-link" href="#"&gt;2&lt;/a&gt;&lt;/li&gt;
+    &lt;li class="page-item"&gt;&lt;a class="page-link" href="#"&gt;3&lt;/a&gt;&lt;/li&gt;
+  &lt;/ul&gt;
+&lt;/nav&gt;
+        </code></pre>
+
+        <h2>Podsumowanie</h2>
+        <ul>
+            <li><strong>Paginacja</strong> w Bootstrapie umożliwia tworzenie przejrzystych nawigacji między stronami treści.</li>
+            <li>Można dodać elementy aktywne, wyłączone, strzałki nawigacyjne, a także kontrolować rozmiar przycisków.</li>
+            <li>Komponent jest elastyczny i pozwala na różne konfiguracje, zależnie od potrzeb użytkownika.</li>
+        </ul>
+
+        <a href="./12.1.Paginacja-projekt.html"><button>Przykłady</button></a>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/prism.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/components/prism-html.min.js"></script>
+</body>
+</html>

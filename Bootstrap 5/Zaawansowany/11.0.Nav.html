@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Nav</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/css/bootstrap.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.7/dist/umd/popper.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/js/bootstrap.min.js"></script>
+    <link rel="stylesheet" href="../styles.css">
+</head>
+<body>
+    <div class="container">
+        <h1>Nav w Bootstrapie</h1>
+
+        <p>Komponent <code>Nav</code> w Bootstrapie umożliwia tworzenie nawigacji poziomych i pionowych, zakładek (tabs), rozwijanych menu oraz nawigacji z nieaktywnymi elementami. Może być używany do budowy menu stron, zakładek w panelach administracyjnych lub nawigacji po sekcjach na stronie.</p>
+
+        <h2>Podstawowa nawigacja pozioma</h2>
+        <p>Tworzenie podstawowej nawigacji poziomej za pomocą komponentu <code>Nav</code>.</p>
+
+        <pre><code class="language-html">
+&lt;ul class="nav"&gt;
+  &lt;li class="nav-item"&gt;
+    &lt;a class="nav-link active" href="#"&gt;Aktywna&lt;/a&gt;
+  &lt;/li&gt;
+  &lt;li class="nav-item"&gt;
+    &lt;a class="nav-link" href="#"&gt;Link&lt;/a&gt;
+  &lt;/li&gt;
+  &lt;li class="nav-item"&gt;
+    &lt;a class="nav-link" href="#"&gt;Inny link&lt;/a&gt;
+  &lt;/li&gt;
+  &lt;li class="nav-item"&gt;
+    &lt;a class="nav-link disabled" href="#" tabindex="-1" aria-disabled="true"&gt;Nieaktywny&lt;/a&gt;
+  &lt;/li&gt;
+&lt;/ul&gt;
+        </code></pre>
+
+        <p>W tym przykładzie mamy prostą nawigację poziomą z aktywnym elementem, dwoma zwykłymi linkami oraz jednym nieaktywnym linkiem, używając klasy <code>.disabled</code>.</p>
+
+        <h2>Podstawowa nawigacja pionowa</h2>
+        <p>Przykład nawigacji pionowej, używając klasy <code>.flex-column</code>.</p>
+
+        <pre><code class="language-html">
+&lt;ul class="nav flex-column"&gt;
+  &lt;li class="nav-item"&gt;
+    &lt;a class="nav-link active" href="#"&gt;Aktywna&lt;/a&gt;
+  &lt;/li&gt;
+  &lt;li class="nav-item"&gt;
+    &lt;a class="nav-link" href="#"&gt;Link&lt;/a&gt;
+  &lt;/li&gt;
+  &lt;li class="nav-item"&gt;
+    &lt;a class="nav-link" href="#"&gt;Inny link&lt;/a&gt;
+  &lt;/li&gt;
+  &lt;li class="nav-item"&gt;
+    &lt;a class="nav-link disabled" href="#" tabindex="-1" aria-disabled="true"&gt;Nieaktywny&lt;/a&gt;
+  &lt;/li&gt;
+&lt;/ul&gt;
+        </code></pre>
+
+        <p>Nawigacja pionowa jest tworzona za pomocą klasy <code>.flex-column</code>, która ustawia elementy w kolumnie.</p>
+
+        <h2>Tabs (nawigacja w formie zakładek)</h2>
+        <p>Nawigacja w formie zakładek, gdzie aktywny element reprezentuje obecnie wybraną zakładkę.</p>
+
+        <pre><code class="language-html">
+&lt;ul class="nav nav-tabs"&gt;
+  &lt;li class="nav-item"&gt;
+    &lt;a class="nav-link active" aria-current="page" href="#"&gt;Zakładka 1&lt;/a&gt;
+  &lt;/li&gt;
+  &lt;li class="nav-item"&gt;
+    &lt;a class="nav-link" href="#"&gt;Zakładka 2&lt;/a&gt;
+  &lt;/li&gt;
+  &lt;li class="nav-item"&gt;
+    &lt;a class="nav-link" href="#"&gt;Zakładka 3&lt;/a&gt;
+  &lt;/li&gt;
+&lt;/ul&gt;
+        </code></pre>
+
+        <p>Nawigacja z zakładkami (tabs) używa klasy <code>.nav-tabs</code>, która tworzy wizualny układ w formie zakładek, typowy dla interfejsów aplikacji.</p>
+
+        <h2>Nawigacja justyfikowana (rozciągnięta na całą szerokość)</h2>
+        <p>Justyfikowana nawigacja, która rozciąga elementy na całą szerokość kontenera.</p>
+
+        <pre><code class="language-html">
+&lt;ul class="nav nav-pills nav-justified"&gt;
+  &lt;li class="nav-item"&gt;
+    &lt;a class="nav-link active" href="#"&gt;Aktywna&lt;/a&gt;
+  &lt;/li&gt;
+  &lt;li class="nav-item"&gt;
+    &lt;a class="nav-link" href="#"&gt;Link&lt;/a&gt;
+  &lt;/li&gt;
+  &lt;li class="nav-item"&gt;
+    &lt;a class="nav-link" href="#"&gt;Inny link&lt;/a&gt;
+  &lt;/li&gt;
+&lt;/ul&gt;
+        </code></pre>
+
+        <p>Justyfikowana nawigacja (<code>.nav-justified</code>) powoduje, że elementy zajmują równą szerokość, rozciągając się na całą dostępność przestrzeń.</p>
+
+        <h2>Nawigacja z dropdown</h2>
+        <p>Tworzenie rozwijanego menu w nawigacji za pomocą komponentu <code>.dropdown</code>.</p>
+
+        <pre><code class="language-html">
+&lt;ul class="nav nav-pills"&gt;
+  &lt;li class="nav-item dropdown"&gt;
+    &lt;a class="nav-link dropdown-toggle" data-bs-toggle="dropdown" href="#" role="button" aria-expanded="false"&gt;Menu&lt;/a&gt;
+    &lt;ul class="dropdown-menu"&gt;
+      &lt;li&gt;&lt;a class="dropdown-item" href="#"&gt;Opcja 1&lt;/a&gt;&lt;/li&gt;
+      &lt;li&gt;&lt;a class="dropdown-item" href="#"&gt;Opcja 2&lt;/a&gt;&lt;/li&gt;
+      &lt;li&gt;&lt;a class="dropdown-item" href="#"&gt;Opcja 3&lt;/a&gt;&lt;/li&gt;
+    &lt;/ul&gt;
+  &lt;/li&gt;
+&lt;/ul&gt;
+        </code></pre>
+
+        <h2>Responsywna nawigacja z hamburger menu</h2>
+        <p>W przypadku mniejszych ekranów nawigacja może zostać ukryta i wyświetlana jako rozwijane hamburger menu. Poniższy przykład pokazuje, jak to osiągnąć za pomocą komponentu <code>Navbar</code> w Bootstrapie.</p>
+
+        <pre><code class="language-html">
+&lt;nav class="navbar navbar-expand-lg navbar-light bg-light"&gt;
+  &lt;div class="container-fluid"&gt;
+    &lt;a class="navbar-brand" href="#"&gt;Logo&lt;/a&gt;
+    &lt;button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation"&gt;
+      &lt;span class="navbar-toggler-icon"&gt;&lt;/span&gt;
+    &lt;/button&gt;
+    &lt;div class="collapse navbar-collapse" id="navbarNav"&gt;
+      &lt;ul class="navbar-nav"&gt;
+        &lt;li class="nav-item"&gt;
+          &lt;a class="nav-link active" aria-current="page" href="#"&gt;Home&lt;/a&gt;
+        &lt;/li&gt;
+        &lt;li class="nav-item"&gt;
+          &lt;a class="nav-link" href="#"&gt;Features&lt;/a&gt;
+        &lt;/li&gt;
+        &lt;li class="nav-item"&gt;
+          &lt;a class="nav-link" href="#"&gt;Pricing&lt;/a&gt;
+        &lt;/li&gt;
+        &lt;li class="nav-item dropdown"&gt;
+          &lt;a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false"&gt;
+            Menu rozwijane
+          &lt;/a&gt;
+          &lt;ul class="dropdown-menu" aria-labelledby="navbarDropdown"&gt;
+            &lt;li&gt;&lt;a class="dropdown-item" href="#"&gt;Opcja 1&lt;/a&gt;&lt;/li&gt;
+            &lt;li&gt;&lt;a class="dropdown-item" href="#"&gt;Opcja 2&lt;/a&gt;&lt;/li&gt;
+            &lt;li&gt;&lt;hr class="dropdown-divider"&gt;&lt;/li&gt;
+            &lt;li&gt;&lt;a class="dropdown-item" href="#"&gt;Inna opcja&lt;/a&gt;&lt;/li&gt;
+          &lt;/ul&gt;
+        &lt;/li&gt;
+      &lt;/ul&gt;
+    &lt;/div&gt;
+  &lt;/div&gt;
+&lt;/nav&gt;
+        </code></pre>
+
+        <p>W tym przykładzie używamy klasy <code>navbar-expand-lg</code>, co oznacza, że nawigacja jest rozwinięta tylko na większych ekranach. Na mniejszych ekranach jest ukryta za ikoną hamburgera. Komponent <code>navbar-toggler</code> służy do rozwijania menu.</p>
+
+
+        <p>Ten przykład pokazuje, jak zintegrować rozwijane menu w nawigacji, używając klasy <code>.dropdown</code> i <code>.dropdown-menu</code> dla opcji w menu.</p>
+
+        <h2>Podsumowanie</h2>
+        <ul>
+            <li><strong>Nav</strong> w Bootstrapie jest elastycznym komponentem do budowania nawigacji poziomych, pionowych, justyfikowanych, zakładek (tabs), a także z dropdownami.</li>
+            <li>Można dodawać nieaktywne linki (disabled) oraz rozwijane menu do nawigacji.</li>
+            <li>Użycie klas <code>.nav-tabs</code> i <code>.nav-pills</code> pozwala na tworzenie zakładek i nawigacji w formie "pigułek".</li>
+        </ul>
+
+        <a href="./11.1.Nav-projekt.html"><button>Przykłady</button></a>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/prism.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/components/prism-html.min.js"></script>
+</body>
+</html>

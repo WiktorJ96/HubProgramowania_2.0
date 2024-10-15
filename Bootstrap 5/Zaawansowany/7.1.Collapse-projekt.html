@@ -1,0 +1,266 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Collapse w Bootstrapie</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/css/bootstrap.min.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/themes/prism-tomorrow.min.css" rel="stylesheet">
+    <style>
+        .example {
+            display: none;
+        }
+
+        .example.active {
+            display: block;
+        }
+
+        .highlight {
+            background-color: #f8f9fa;
+            padding: 10px;
+            margin-bottom: 20px;
+            border-left: 4px solid #007bff;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1 class="text-center my-4">Przykłady</h1>
+
+        <!-- Menu wyboru przykładów -->
+        <div class="dropdown text-center mb-4">
+            <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton" data-bs-toggle="dropdown" aria-expanded="false">
+                Wybierz przykład
+            </button>
+            <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                <li><a class="dropdown-item" href="#" onclick="showExample('example1')">Podstawowe collapse</a></li>
+                <li><a class="dropdown-item" href="#" onclick="showExample('example2')">Collapse z grupą elementów</a></li>
+                <li><a class="dropdown-item" href="#" onclick="showExample('example3')">Collapse z kartą</a></li>
+                <li><a class="dropdown-item" href="#" onclick="showExample('example4')">Accordion</a></li>
+            </ul>
+        </div>
+
+        <!-- Przykład 1: Podstawowe collapse -->
+        <div id="example1" class="example active">
+            <h2>Przykład 1: Podstawowe collapse</h2>
+            <div class="highlight">
+                <button class="btn btn-primary" type="button" data-bs-toggle="collapse" data-bs-target="#collapseExample" aria-expanded="false" aria-controls="collapseExample">
+                    Pokaż/Zwiń treść
+                </button>
+                <div class="collapse mt-3" id="collapseExample">
+                    <div class="card card-body">
+                        To jest przykładowa treść ukryta w collapse. Kliknij przycisk powyżej, aby zobaczyć lub ukryć tę treść.
+                    </div>
+                </div>
+            </div>
+
+            <h3>Kod HTML:</h3>
+            <pre><code class="language-html">
+&lt;button class="btn btn-primary" type="button" data-bs-toggle="collapse" data-bs-target="#collapseExample" aria-expanded="false" aria-controls="collapseExample"&gt;
+    Pokaż/Zwiń treść
+&lt;/button&gt;
+&lt;div class="collapse mt-3" id="collapseExample"&gt;
+    &lt;div class="card card-body"&gt;
+        To jest przykładowa treść ukryta w collapse.
+    &lt;/div&gt;
+&lt;/div&gt;
+            </code></pre>
+        </div>
+
+        <!-- Przykład 2: Collapse z grupą elementów -->
+        <div id="example2" class="example">
+            <h2>Przykład 2: Collapse z grupą elementów</h2>
+            <div class="highlight">
+                <p>
+                    <a class="btn btn-primary" data-bs-toggle="collapse" href="#multiCollapseExample1" role="button" aria-expanded="false" aria-controls="multiCollapseExample1">Pierwszy panel</a>
+                    <button class="btn btn-primary" type="button" data-bs-toggle="collapse" data-bs-target="#multiCollapseExample2" aria-expanded="false" aria-controls="multiCollapseExample2">Drugi panel</button>
+                    <button class="btn btn-primary" type="button" data-bs-toggle="collapse" data-bs-target=".multi-collapse" aria-expanded="false" aria-controls="multiCollapseExample1 multiCollapseExample2">Oba panele</button>
+                </p>
+                <div class="row">
+                    <div class="col">
+                        <div class="collapse multi-collapse" id="multiCollapseExample1">
+                            <div class="card card-body">
+                                To jest pierwszy panel grupy collapse.
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col">
+                        <div class="collapse multi-collapse" id="multiCollapseExample2">
+                            <div class="card card-body">
+                                To jest drugi panel grupy collapse.
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <h3>Kod HTML:</h3>
+            <pre><code class="language-html">
+&lt;p&gt;
+    &lt;a class="btn btn-primary" data-bs-toggle="collapse" href="#multiCollapseExample1" role="button" aria-expanded="false" aria-controls="multiCollapseExample1"&gt;Pierwszy panel&lt;/a&gt;
+    &lt;button class="btn btn-primary" type="button" data-bs-toggle="collapse" data-bs-target="#multiCollapseExample2" aria-expanded="false" aria-controls="multiCollapseExample2"&gt;Drugi panel&lt;/button&gt;
+    &lt;button class="btn btn-primary" type="button" data-bs-toggle="collapse" data-bs-target=".multi-collapse" aria-expanded="false" aria-controls="multiCollapseExample1 multiCollapseExample2"&gt;Oba panele&lt;/button&gt;
+&lt;/p&gt;
+&lt;div class="row"&gt;
+    &lt;div class="col"&gt;
+        &lt;div class="collapse multi-collapse" id="multiCollapseExample1"&gt;
+            &lt;div class="card card-body"&gt;
+                To jest pierwszy panel grupy collapse.
+            &lt;/div&gt;
+        &lt;/div&gt;
+    &lt;/div&gt;
+    &lt;div class="col"&gt;
+        &lt;div class="collapse multi-collapse" id="multiCollapseExample2"&gt;
+            &lt;div class="card card-body"&gt;
+                To jest drugi panel grupy collapse.
+            &lt;/div&gt;
+        &lt;/div&gt;
+    &lt;/div&gt;
+&lt;/div&gt;
+            </code></pre>
+        </div>
+
+        <!-- Przykład 3: Collapse z kartą -->
+        <div id="example3" class="example">
+            <h2>Przykład 3: Collapse z kartą</h2>
+            <div class="highlight">
+                <div class="card">
+                    <div class="card-header">
+                        <a class="btn btn-link" data-bs-toggle="collapse" href="#collapseCardExample" role="button" aria-expanded="false" aria-controls="collapseCardExample">
+                            Pokaż/Zwiń kartę
+                        </a>
+                    </div>
+                    <div id="collapseCardExample" class="collapse">
+                        <div class="card-body">
+                            To jest przykładowa karta z funkcją collapse. Kliknij nagłówek, aby zobaczyć lub ukryć zawartość karty.
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <h3>Kod HTML:</h3>
+            <pre><code class="language-html">
+&lt;div class="card"&gt;
+    &lt;div class="card-header"&gt;
+        &lt;a class="btn btn-link" data-bs-toggle="collapse" href="#collapseCardExample" role="button" aria-expanded="false" aria-controls="collapseCardExample"&gt;
+            Pokaż/Zwiń kartę
+        &lt;/a&gt;
+    &lt;/div&gt;
+    &lt;div id="collapseCardExample" class="collapse"&gt;
+        &lt;div class="card-body"&gt;
+            To jest przykładowa karta z funkcją collapse.
+        &lt;/div&gt;
+    &lt;/div&gt;
+&lt;/div&gt;
+            </code></pre>
+        </div>
+
+        <!-- Przykład 4: Accordion -->
+        <div id="example4" class="example">
+            <h2>Przykład 4: Accordion</h2>
+            <div class="highlight">
+                <div class="accordion" id="accordionExample">
+                    <div class="accordion-item">
+                        <h2 class="accordion-header" id="headingOne">
+                            <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
+                                Sekcja 1
+                            </button>
+                        </h2>
+                        <div id="collapseOne" class="accordion-collapse collapse show" aria-labelledby="headingOne" data-bs-parent="#accordionExample">
+                            <div class="accordion-body">
+                                To jest treść sekcji 1. Możesz umieścić tutaj dowolne informacje, które będą widoczne po rozwinięciu tej sekcji.
+                            </div>
+                        </div>
+                    </div>
+                    <div class="accordion-item">
+                        <h2 class="accordion-header" id="headingTwo">
+                            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo">
+                                Sekcja 2
+                            </button>
+                        </h2>
+                        <div id="collapseTwo" class="accordion-collapse collapse" aria-labelledby="headingTwo" data-bs-parent="#accordionExample">
+                            <div class="accordion-body">
+                                To jest treść sekcji 2. Tylko jedna sekcja akordeonu może być otwarta na raz.
+                            </div>
+                        </div>
+                    </div>
+                    <div class="accordion-item">
+                        <h2 class="accordion-header" id="headingThree">
+                            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseThree" aria-expanded="false" aria-controls="collapseThree">
+                                Sekcja 3
+                            </button>
+                        </h2>
+                        <div id="collapseThree" class="accordion-collapse collapse" aria-labelledby="headingThree" data-bs-parent="#accordionExample">
+                            <div class="accordion-body">
+                                To jest treść sekcji 3. Gdy użytkownik kliknie inną sekcję, ta zostanie zamknięta.
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <h3>Kod HTML:</h3>
+            <pre><code class="language-html">
+&lt;div class="accordion" id="accordionExample"&gt;
+    &lt;div class="accordion-item"&gt;
+        &lt;h2 class="accordion-header" id="headingOne"&gt;
+            &lt;button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne"&gt;
+                Sekcja 1
+            &lt;/button&gt;
+        &lt;/h2&gt;
+        &lt;div id="collapseOne" class="accordion-collapse collapse show" aria-labelledby="headingOne" data-bs-parent="#accordionExample"&gt;
+            &lt;div class="accordion-body"&gt;
+                To jest treść sekcji 1.
+            &lt;/div&gt;
+        &lt;/div&gt;
+    &lt;/div&gt;
+    &lt;div class="accordion-item"&gt;
+        &lt;h2 class="accordion-header" id="headingTwo"&gt;
+            &lt;button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo"&gt;
+                Sekcja 2
+            &lt;/button&gt;
+        &lt;/h2&gt;
+        &lt;div id="collapseTwo" class="accordion-collapse collapse" aria-labelledby="headingTwo" data-bs-parent="#accordionExample"&gt;
+            &lt;div class="accordion-body"&gt;
+                To jest treść sekcji 2.
+            &lt;/div&gt;
+        &lt;/div&gt;
+    &lt;/div&gt;
+    &lt;div class="accordion-item"&gt;
+        &lt;h2 class="accordion-header" id="headingThree"&gt;
+            &lt;button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseThree" aria-expanded="false" aria-controls="collapseThree"&gt;
+                Sekcja 3
+            &lt;/button&gt;
+        &lt;/h2&gt;
+        &lt;div id="collapseThree" class="accordion-collapse collapse" aria-labelledby="headingThree" data-bs-parent="#accordionExample"&gt;
+            &lt;div class="accordion-body"&gt;
+                To jest treść sekcji 3.
+            &lt;/div&gt;
+        &lt;/div&gt;
+    &lt;/div&gt;
+&lt;/div&gt;
+            </code></pre>
+        </div>
+    </div>
+
+    <!-- Bootstrap i Prism -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/prism.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/components/prism-html.min.js"></script>
+
+    <!-- Skrypt do przełączania przykładów i podświetlania składni -->
+    <script>
+        function showExample(exampleId) {
+            const examples = document.querySelectorAll('.example');
+            examples.forEach(example => {
+                example.classList.remove('active');
+            });
+
+            document.getElementById(exampleId).classList.add('active');
+
+            // Wywołanie ponownego podświetlania po zmianie przykładu
+            Prism.highlightAll();
+        }
+    </script>
+</body>
+</html>

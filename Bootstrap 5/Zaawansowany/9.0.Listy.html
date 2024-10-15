@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Listy</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/css/bootstrap.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.7/dist/umd/popper.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/js/bootstrap.min.js"></script>
+    <link rel="stylesheet" href="../styles.css">
+</head>
+<body>
+    <div class="container">
+        <h1>Listy w Bootstrapie</h1>
+
+        <p>Komponent <strong>List Group</strong> w Bootstrapie jest przydatny do tworzenia grupowanych list elementów, takich jak nawigacja, menu lub listy zadań. Oferuje on wsparcie dla różnych stylizacji, układów i zawartości, takich jak tekst, obrazy czy elementy formularzy.</p>
+
+        <h2>Podstawowy przykład listy</h2>
+        <pre><code class="language-html">
+&lt;ul class="list-group"&gt;
+  &lt;li class="list-group-item"&gt;Element listy 1&lt;/li&gt;
+  &lt;li class="list-group-item"&gt;Element listy 2&lt;/li&gt;
+  &lt;li class="list-group-item"&gt;Element listy 3&lt;/li&gt;
+&lt;/ul&gt;
+        </code></pre>
+
+        <p>Podstawowy przykład listy grupowej z trzema elementami. Każdy element listy jest otoczony klasą <code>.list-group-item</code>.</p>
+
+        <h2>Flush list (Lista flush)</h2>
+<p>Komponent <code>List Group</code> może być wyświetlany bez marginesów i obramowań między elementami, używając klasy <code>.list-group-flush</code>.</p>
+
+<pre><code class="language-html">
+&lt;ul class="list-group list-group-flush"&gt;
+  &lt;li class="list-group-item"&gt;Element 1&lt;/li&gt;
+  &lt;li class="list-group-item"&gt;Element 2&lt;/li&gt;
+  &lt;li class="list-group-item"&gt;Element 3&lt;/li&gt;
+&lt;/ul&gt;
+</code></pre>
+
+<p>W tym przykładzie lista flush usuwa marginesy i obramowania między elementami listy, tworząc bardziej zwartą i uproszczoną wersję listy.</p>
+
+
+        <h2>Listy poziome (Horizontal)</h2>
+        <p>Lista pozioma umożliwia wyświetlanie elementów w jednym wierszu. Używa klasy <code>.list-group-horizontal</code>, ale działa ona tylko na szerokich ekranach.</p>
+
+        <pre><code class="language-html">
+&lt;ul class="list-group list-group-horizontal"&gt;
+  &lt;li class="list-group-item"&gt;Element 1&lt;/li&gt;
+  &lt;li class="list-group-item"&gt;Element 2&lt;/li&gt;
+  &lt;li class="list-group-item"&gt;Element 3&lt;/li&gt;
+&lt;/ul&gt;
+        </code></pre>
+
+        <p>Lista pozioma sprawia, że elementy są wyświetlane obok siebie, zamiast jeden pod drugim. Na urządzeniach mobilnych lista powróci do układu pionowego.</p>
+
+        <h2>Responsywność listy poziomej</h2>
+        <p>Możesz również tworzyć listy poziome, które będą działać tylko w określonych rozmiarach ekranu, np. <code>.list-group-horizontal-sm</code>, <code>.list-group-horizontal-md</code>, <code>.list-group-horizontal-lg</code>, itd.</p>
+
+        <pre><code class="language-html">
+&lt;ul class="list-group list-group-horizontal-md"&gt;
+  &lt;li class="list-group-item"&gt;Element 1&lt;/li&gt;
+  &lt;li class="list-group-item"&gt;Element 2&lt;/li&gt;
+  &lt;li class="list-group-item"&gt;Element 3&lt;/li&gt;
+&lt;/ul&gt;
+        </code></pre>
+
+        <p>W tym przykładzie lista pozioma działa tylko na średnich i większych ekranach (klasa <code>.list-group-horizontal-md</code>).</p>
+
+        <h2>Kolorowe listy</h2>
+        <p>Każdy element listy można pokolorować za pomocą klas takich jak <code>list-group-item-primary</code>, <code>list-group-item-secondary</code>, itd., podobnie jak w przypadku komunikatów błyskawicznych.</p>
+
+        <pre><code class="language-html">
+&lt;ul class="list-group"&gt;
+  &lt;li class="list-group-item list-group-item-primary"&gt;Element niebieski (primary)&lt;/li&gt;
+  &lt;li class="list-group-item list-group-item-secondary"&gt;Element szary (secondary)&lt;/li&gt;
+  &lt;li class="list-group-item list-group-item-info"&gt;Element niebieski (info)&lt;/li&gt;
+&lt;/ul&gt;
+        </code></pre>
+
+        <p>W tym przykładzie zastosowano różne klasy kolorystyczne, aby zmienić wygląd elementów listy.</p>
+
+        <h2>Elementy formularza w listach (np. checkbox)</h2>
+        <p>Można używać elementów formularza takich jak <code>checkbox</code> lub <code>radio</code> wewnątrz list grupowych, co umożliwia tworzenie interaktywnych list z wyborem.</p>
+
+        <pre><code class="language-html">
+&lt;ul class="list-group"&gt;
+  &lt;li class="list-group-item"&gt;
+    &lt;input class="form-check-input me-1" type="checkbox" value=""&gt; Element 1
+  &lt;/li&gt;
+  &lt;li class="list-group-item"&gt;
+    &lt;input class="form-check-input me-1" type="checkbox" value=""&gt; Element 2
+  &lt;/li&gt;
+  &lt;li class="list-group-item"&gt;
+    &lt;input class="form-check-input me-1" type="checkbox" value=""&gt; Element 3
+  &lt;/li&gt;
+&lt;/ul&gt;
+        </code></pre>
+
+        <p>W tym przykładzie elementy listy zawierają checkboxy, co umożliwia użytkownikowi zaznaczanie wybranych elementów.</p>
+
+        <h2>Podsumowanie</h2>
+        <ul>
+            <li><strong>List Group</strong> to elastyczny komponent Bootstrapu, który może być używany do tworzenia list z różnorodną zawartością.</li>
+            <li>Listy mogą być poziome, kolorowe, responsywne i mogą zawierać elementy formularza, takie jak checkboxy.</li>
+            <li>Komponent List Group wspiera różne style i układy, co czyni go idealnym do tworzenia złożonych interfejsów użytkownika.</li>
+        </ul>
+
+        <a href="./9.1.Listy-projekt.html"><button>Przykłady</button></a>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/prism.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/components/prism-html.min.js"></script>
+</body>
+</html>

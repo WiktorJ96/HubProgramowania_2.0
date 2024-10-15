@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Modal</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/css/bootstrap.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.7/dist/umd/popper.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/js/bootstrap.min.js"></script>
+    <link rel="stylesheet" href="../styles.css">
+
+</head>
+<body>
+    <div class="container">
+        <h1>Modal w Bootstrapie</h1>
+
+        <p>Modale to okna dialogowe, które można otworzyć po kliknięciu przycisku lub linku. Są używane do potwierdzeń, formularzy lub innych interaktywnych elementów. Pojawiają się na środku ekranu i blokują dostęp do pozostałej części strony, dopóki nie zostaną zamknięte.</p>
+
+        <h2>Podstawowy przykład modalu</h2>
+        <p>Przycisk otwierający modal i modal z prostym tekstem oraz przyciskami zamknięcia.</p>
+
+        <pre><code class="language-html">
+&lt;!-- Przycisk do otwierania modalu --&gt;
+&lt;button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal"&gt;
+  Otwórz modal
+&lt;/button&gt;
+
+&lt;!-- Modal --&gt;
+&lt;div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true"&gt;
+  &lt;div class="modal-dialog"&gt;
+    &lt;div class="modal-content"&gt;
+      &lt;div class="modal-header"&gt;
+        &lt;h5 class="modal-title" id="exampleModalLabel"&gt;Tytuł modalu&lt;/h5&gt;
+        &lt;button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Zamknij"&gt;&lt;/button&gt;
+      &lt;/div&gt;
+      &lt;div class="modal-body"&gt;
+        To jest treść w modalu.
+      &lt;/div&gt;
+      &lt;div class="modal-footer"&gt;
+        &lt;button type="button" class="btn btn-secondary" data-bs-dismiss="modal"&gt;Zamknij&lt;/button&gt;
+        &lt;button type="button" class="btn btn-primary"&gt;Zapisz zmiany&lt;/button&gt;
+      &lt;/div&gt;
+    &lt;/div&gt;
+  &lt;/div&gt;
+&lt;/div&gt;
+        </code></pre>
+
+        <h2>Scrollable modal (przewijany modal)</h2>
+        <p>Modal z długą treścią, która powoduje pojawienie się paska przewijania.</p>
+
+        <pre><code class="language-html">
+&lt;!-- Przycisk do otwierania scrollable modalu --&gt;
+&lt;button type="button" class="btn btn-secondary" data-bs-toggle="modal" data-bs-target="#scrollableModal"&gt;
+  Otwórz przewijany modal
+&lt;/button&gt;
+
+&lt;!-- Modal przewijany --&gt;
+&lt;div class="modal fade" id="scrollableModal" tabindex="-1" aria-labelledby="scrollableModalLabel" aria-hidden="true"&gt;
+  &lt;div class="modal-dialog modal-dialog-scrollable"&gt;
+    &lt;div class="modal-content"&gt;
+      &lt;div class="modal-header"&gt;
+        &lt;h5 class="modal-title" id="scrollableModalLabel"&gt;Przewijany modal&lt;/h5&gt;
+        &lt;button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Zamknij"&gt;&lt;/button&gt;
+      &lt;/div&gt;
+      &lt;div class="modal-body"&gt;
+        &lt;p&gt;Długa treść do przewijania...&lt;/p&gt;
+        &lt;p&gt;Więcej treści modalu...&lt;/p&gt;
+        &lt;p&gt;Jeszcze więcej treści modalu...&lt;/p&gt;
+      &lt;/div&gt;
+      &lt;div class="modal-footer"&gt;
+        &lt;button type="button" class="btn btn-secondary" data-bs-dismiss="modal"&gt;Zamknij&lt;/button&gt;
+      &lt;/div&gt;
+    &lt;/div&gt;
+  &lt;/div&gt;
+&lt;/div&gt;
+        </code></pre>
+
+        <h2>Modal w pełnym ekranie</h2>
+        <p>Modal, który zajmuje cały ekran, używa klasy <code>.modal-fullscreen</code>.</p>
+
+        <pre><code class="language-html">
+&lt;!-- Przycisk do otwierania fullscreen modalu --&gt;
+&lt;button type="button" class="btn btn-warning" data-bs-toggle="modal" data-bs-target="#fullscreenModal"&gt;
+  Otwórz modal pełnoekranowy
+&lt;/button&gt;
+
+&lt;!-- Modal pełnoekranowy --&gt;
+&lt;div class="modal fade" id="fullscreenModal" tabindex="-1" aria-labelledby="fullscreenModalLabel" aria-hidden="true"&gt;
+  &lt;div class="modal-dialog modal-fullscreen"&gt;
+    &lt;div class="modal-content"&gt;
+      &lt;div class="modal-header"&gt;
+        &lt;h5 class="modal-title" id="fullscreenModalLabel"&gt;Pełnoekranowy modal&lt;/h5&gt;
+        &lt;button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Zamknij"&gt;&lt;/button&gt;
+      &lt;/div&gt;
+      &lt;div class="modal-body"&gt;
+        To jest pełnoekranowy modal. Można go używać w aplikacjach, gdzie potrzeba dużej przestrzeni na treści.
+      &lt;/div&gt;
+      &lt;div class="modal-footer"&gt;
+        &lt;button type="button" class="btn btn-secondary" data-bs-dismiss="modal"&gt;Zamknij&lt;/button&gt;
+      &lt;/div&gt;
+    &lt;/div&gt;
+  &lt;/div&gt;
+&lt;/div&gt;
+        </code></pre>
+
+        <h2>Podsumowanie</h2>
+        <ul>
+            <li>Modale w Bootstrapie to okna dialogowe wyświetlane na środku ekranu, które blokują resztę strony do czasu zamknięcia.</li>
+            <li>Modale mogą być przewijane, pełnoekranowe oraz mogą zawierać różne treści, takie jak formularze, potwierdzenia czy powiadomienia.</li>
+            <li>Bootstrap obsługuje zamykanie modali poprzez kliknięcie przycisków zamknięcia lub na zewnątrz modalu.</li>
+        </ul>
+
+        <a href="./4.8.Modal-projekt.html"><button>Przykłady</button></a>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/prism.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/components/prism-html.min.js"></script>
+</body>
+</html>
