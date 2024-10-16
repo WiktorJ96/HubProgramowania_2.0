@@ -26,6 +26,7 @@
     </style>
 </head>
 <body>
+    <div id="toastContainer" class="toast-container position-fixed bottom-0 end-0 p-3"></div>
     <div class="container">
         <h1 class="text-center my-4">Przykłady</h1>
 
@@ -124,5 +125,73 @@
             Prism.highlightAll();
         }
     </script>
+        <script>
+    // Tworzenie przycisku
+    const showCodeButton = document.createElement('button');
+    showCodeButton.textContent = 'KOD CSS';
+    showCodeButton.className = 'btn btn-primary';
+    showCodeButton.style.position = 'fixed';
+    showCodeButton.style.top = '10px';
+    showCodeButton.style.left = '10px';
+    showCodeButton.style.zIndex = '1050'; // Wyższy z-index dla widoczności
+    document.body.appendChild(showCodeButton);
+
+    // Tworzenie elementu toasta
+    const toastElement = document.createElement('div');
+    toastElement.className = 'toast';
+    toastElement.setAttribute('role', 'alert');
+    toastElement.setAttribute('aria-live', 'assertive');
+    toastElement.setAttribute('aria-atomic', 'true');
+
+    // Dodanie nagłówka i treści toasta
+    toastElement.innerHTML = `
+        <div class="toast-header">
+            <strong class="me-auto">Kod CSS</strong>
+            <button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Close"></button>
+        </div>
+        <div class="toast-body">
+            <pre id="cssCode">
+        [class *= col] {
+            background-color: #7952b3;
+            color: #ffffff;
+            border: 1px solid rgba(86, 61, 124, 0.8);
+            padding: 20px;
+            text-align: center;
+            margin-bottom: 10px;
+        }
+            </pre>
+            <button id="copyButton" class="btn btn-secondary btn-sm mt-2">Kopiuj</button>
+        </div>
+    `;
+
+    // Dodanie toasta do kontenera w dolnym rogu
+    document.getElementById('toastContainer').appendChild(toastElement);
+
+    // Inicjalizacja Bootstrapowego toasta
+    const cssCodeToast = new bootstrap.Toast(toastElement);
+
+    // Obsługa kliknięcia przycisku, aby pokazać toast
+    showCodeButton.addEventListener('click', () => {
+        cssCodeToast.show();
+    });
+
+    // Obsługa kliknięcia przycisku "Kopiuj", aby skopiować zawartość do schowka i animować przycisk
+    document.getElementById('copyButton').addEventListener('click', () => {
+        const cssCode = document.getElementById('cssCode').innerText;
+        navigator.clipboard.writeText(cssCode).then(() => {
+            const copyButton = document.getElementById('copyButton');
+            // Dodaj klasę animacji
+            copyButton.classList.add('copied');
+            copyButton.textContent = 'Skopiowano!';
+            // Po krótkim czasie przywróć pierwotny stan
+            setTimeout(() => {
+                copyButton.classList.remove('copied');
+                copyButton.textContent = 'Kopiuj';
+            }, 2000);
+        }).catch(err => {
+            console.error('Nie udało się skopiować: ', err);
+        });
+    });
+</script>
 </body>
 </html>
