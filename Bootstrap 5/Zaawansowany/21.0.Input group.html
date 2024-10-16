@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Input group</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/css/bootstrap.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.7/dist/umd/popper.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/js/bootstrap.min.js"></script>
+    <link rel="stylesheet" href="../styles.css">
+</head>
+<body>
+    <div class="container">
+        <h1>Input Group w Bootstrapie</h1>
+
+        <p>Komponent <code>Input Group</code> w Bootstrapie pozwala na połączenie różnych elementów formularza, takich jak pola tekstowe, przyciski, dropdowny i inne, aby stworzyć bardziej funkcjonalne układy. Ułatwia to tworzenie złożonych formularzy z jednolitą estetyką.</p>
+
+        <h2>Podstawowa Input Group</h2>
+        <p>Przykład podstawowej grupy pól, w której dodano przedrostek do pola tekstowego.</p>
+
+        <pre><code class="language-html">
+&lt;!-- Podstawowa Input Group --&gt;
+&lt;div class="input-group mb-3"&gt;
+  &lt;span class="input-group-text" id="basic-addon1"&gt;@&lt;/span&gt;
+  &lt;input type="text" class="form-control" placeholder="Nazwa użytkownika" aria-label="Nazwa użytkownika" aria-describedby="basic-addon1"&gt;
+&lt;/div&gt;
+        </code></pre>
+
+        <h2>Input Group z Przyciskiem</h2>
+        <p>Można łatwo połączyć przycisk z polem tekstowym.</p>
+
+        <pre><code class="language-html">
+&lt;!-- Input Group z przyciskiem --&gt;
+&lt;div class="input-group mb-3"&gt;
+  &lt;input type="text" class="form-control" placeholder="Odbiorca" aria-label="Odbiorca"&gt;
+  &lt;button class="btn btn-outline-secondary" type="button"&gt;Wyślij&lt;/button&gt;
+&lt;/div&gt;
+        </code></pre>
+
+        <h2>Input Group z Dropdown</h2>
+        <p>Input Group może również zawierać rozwijane menu (dropdown).</p>
+
+        <pre><code class="language-html">
+&lt;!-- Input Group z dropdown --&gt;
+&lt;div class="input-group mb-3"&gt;
+  &lt;button class="btn btn-outline-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false"&gt;Opcje&lt;/button&gt;
+  &lt;ul class="dropdown-menu"&gt;
+    &lt;li&gt;&lt;a class="dropdown-item" href="#"&gt;Opcja 1&lt;/a&gt;&lt;/li&gt;
+    &lt;li&gt;&lt;a class="dropdown-item" href="#"&gt;Opcja 2&lt;/a&gt;&lt;/li&gt;
+    &lt;li&gt;&lt;a class="dropdown-item" href="#"&gt;Opcja 3&lt;/a&gt;&lt;/li&gt;
+  &lt;/ul&gt;
+  &lt;input type="text" class="form-control" aria-label="Text input with dropdown button"&gt;
+&lt;/div&gt;
+        </code></pre>
+
+        <h2>Input Group z Przedrostkiem i Przyrostkiem</h2>
+        <p>Można dodać zarówno przedrostek, jak i przyrostek do pola tekstowego, co jest przydatne np. w przypadku walut lub jednostek.</p>
+
+        <pre><code class="language-html">
+&lt;!-- Input Group z przedrostkiem i przyrostkiem --&gt;
+&lt;div class="input-group mb-3"&gt;
+  &lt;span class="input-group-text"&gt;$&lt;/span&gt;
+  &lt;input type="text" class="form-control" aria-label="Kwota (dolar amerykański)"&gt;
+  &lt;span class="input-group-text"&gt;.00&lt;/span&gt;
+&lt;/div&gt;
+        </code></pre>
+
+        <h2>Input Group z Wyborem Pliku</h2>
+        <p>Można łatwo dodać pole wyboru pliku do Input Group, aby umożliwić użytkownikom dodawanie plików.</p>
+
+        <pre><code class="language-html">
+&lt;!-- Input Group z wyborem pliku --&gt;
+&lt;div class="input-group mb-3"&gt;
+  &lt;input type="file" class="form-control" id="inputGroupFile02"&gt;
+  &lt;label class="input-group-text" for="inputGroupFile02"&gt;Prześlij&lt;/label&gt;
+&lt;/div&gt;
+        </code></pre>
+
+        <h2>Wielokrotne Elementy w Input Group</h2>
+        <p>Bootstrap pozwala na dodanie wielu elementów do jednej grupy, co jest przydatne w bardziej złożonych formularzach.</p>
+
+        <pre><code class="language-html">
+&lt;!-- Wielokrotne elementy w Input Group --&gt;
+&lt;div class="input-group"&gt;
+  &lt;span class="input-group-text"&gt;Imię i nazwisko&lt;/span&gt;
+  &lt;input type="text" aria-label="Imię" class="form-control"&gt;
+  &lt;input type="text" aria-label="Nazwisko" class="form-control"&gt;
+&lt;/div&gt;
+        </code></pre>
+
+        <h2>Podsumowanie</h2>
+        <ul>
+            <li><strong>Input Group</strong> w Bootstrapie umożliwia łatwe łączenie różnych elementów formularza w jedną funkcjonalną grupę.</li>
+            <li>Można używać przedrostków, przycisków, dropdownów, przyrostków i pól wyboru plików, aby stworzyć bardziej intuicyjne formularze.</li>
+            <li>Input Group jest elastyczny i pozwala na różne kombinacje elementów, co ułatwia tworzenie bardziej złożonych interfejsów.</li>
+        </ul>
+
+        <a href="./21.1.Input group-projekt.html"><button>Przykłady</button></a>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/prism.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/components/prism-html.min.js"></script>
+</body>
+</html>

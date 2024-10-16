@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Flexbox</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/css/bootstrap.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.7/dist/umd/popper.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/js/bootstrap.min.js"></script>
+    <link rel="stylesheet" href="../styles.css">
+</head>
+<body>
+    <div class="container">
+        <h1>Flexbox w Bootstrapie</h1>
+
+        <p>Flexbox w Bootstrapie pozwala na tworzenie elastycznych i responsywnych układów stron. Dzięki wbudowanym klasom Flexbox, możesz łatwo zarządzać wyrównaniem, rozmieszczeniem, elastycznością i kolejnością elementów w sposób prosty i intuicyjny. Flexbox doskonale nadaje się do tworzenia układów, które automatycznie dostosowują się do różnych rozmiarów ekranów.</p>
+
+        <h2>Podstawowe Wyrównanie z Flexbox</h2>
+        <p>Używaj klas <code>.d-flex</code> wraz z <code>.justify-content-*</code> oraz <code>.align-items-*</code> do zarządzania wyrównaniem elementów poziomo i pionowo.</p>
+
+        <pre><code class="language-html">
+&lt;!-- Podstawowe Wyrównanie --&gt;
+&lt;div class="d-flex justify-content-center align-items-center" style="height: 200px; background-color: #f8f9fa;"&gt;
+  &lt;div&gt;Środkowany Element&lt;/div&gt;
+&lt;/div&gt;
+        </code></pre>
+
+        <h3>Poziome Wyrównanie</h3>
+        <p>Możesz kontrolować wyrównanie poziome elementów za pomocą klas <code>.justify-content-start</code>, <code>.justify-content-center</code>, <code>.justify-content-end</code>, <code>.justify-content-between</code>, <code>.justify-content-around</code> oraz <code>.justify-content-evenly</code>.</p>
+
+        <pre><code class="language-html">
+&lt;!-- Przykład Wyrównania Poziomego --&gt;
+&lt;div class="d-flex justify-content-around"&gt;
+  &lt;div class="p-2 bg-primary text-white"&gt;Element 1&lt;/div&gt;
+  &lt;div class="p-2 bg-secondary text-white"&gt;Element 2&lt;/div&gt;
+  &lt;div class="p-2 bg-success text-white"&gt;Element 3&lt;/div&gt;
+&lt;/div&gt;
+        </code></pre>
+
+        <h3>Pionowe Wyrównanie</h3>
+        <p>Używaj klas <code>.align-items-start</code>, <code>.align-items-center</code> oraz <code>.align-items-end</code> do wyrównania elementów pionowo.</p>
+
+        <pre><code class="language-html">
+&lt;!-- Przykład Wyrównania Pionowego --&gt;
+&lt;div class="d-flex align-items-end" style="height: 150px;"&gt;
+  &lt;div class="p-2 bg-primary text-white"&gt;Dolny Element&lt;/div&gt;
+&lt;/div&gt;
+        </code></pre>
+
+        <h2>Elastyczne Kolumny i Elementy</h2>
+        <p>Flexbox umożliwia łatwe tworzenie elastycznych elementów, które dostosowują się do dostępnej przestrzeni. Używaj klas takich jak <code>.flex-grow-*</code>, <code>.flex-shrink-*</code> oraz <code>.flex-fill</code> do kontrolowania, jak elementy zajmują przestrzeń.</p>
+
+        <pre><code class="language-html">
+&lt;!-- Elastyczne Kolumny --&gt;
+&lt;div class="d-flex"&gt;
+  &lt;div class="flex-fill p-2 bg-primary text-white"&gt;Kolumna 1&lt;/div&gt;
+  &lt;div class="flex-fill p-2 bg-secondary text-white"&gt;Kolumna 2&lt;/div&gt;
+  &lt;div class="flex-fill p-2 bg-success text-white"&gt;Kolumna 3&lt;/div&gt;
+&lt;/div&gt;
+        </code></pre>
+
+        <h3>Elastyczny Wzrost i Skurcz Elementów</h3>
+        <p>Użyj <code>.flex-grow-*</code> oraz <code>.flex-shrink-*</code>, aby kontrolować, jak elementy rosną i kurczą się względem siebie w kontenerze.</p>
+
+        <pre><code class="language-html">
+&lt;!-- Przykład Elastyczności --&gt;
+&lt;div class="d-flex"&gt;
+  &lt;div class="flex-grow-1 p-2 bg-primary text-white"&gt;Rośnie bardziej&lt;/div&gt;
+  &lt;div class="flex-grow-0 p-2 bg-secondary text-white"&gt;Rośnie mniej&lt;/div&gt;
+&lt;/div&gt;
+        </code></pre>
+
+        <h2>Układ w Wierszu i Kolumnie</h2>
+        <p>Flexbox pozwala na zmianę kierunku układu z poziomego na pionowy, co może być przydatne w responsywnych układach. Używaj klas <code>.flex-row</code>, <code>.flex-row-reverse</code>, <code>.flex-column</code>, oraz <code>.flex-column-reverse</code>.</p>
+
+        <pre><code class="language-html">
+&lt;!-- Układ w Wierszu --&gt;
+&lt;div class="d-flex flex-row mb-3"&gt;
+  &lt;div class="p-2 bg-info text-white"&gt;Wiersz 1&lt;/div&gt;
+  &lt;div class="p-2 bg-warning text-white"&gt;Wiersz 2&lt;/div&gt;
+  &lt;div class="p-2 bg-danger text-white"&gt;Wiersz 3&lt;/div&gt;
+&lt;/div&gt;
+
+&lt;!-- Układ w Kolumnie --&gt;
+&lt;div class="d-flex flex-column"&gt;
+  &lt;div class="p-2 bg-info text-white"&gt;Kolumna 1&lt;/div&gt;
+  &lt;div class="p-2 bg-warning text-white"&gt;Kolumna 2&lt;/div&gt;
+  &lt;div class="p-2 bg-danger text-white"&gt;Kolumna 3&lt;/div&gt;
+&lt;/div&gt;
+        </code></pre>
+
+        <h2>Zmiana Kolejności Elementów</h2>
+        <p>Za pomocą klas <code>.order-*</code> możesz zmieniać kolejność elementów, niezależnie od ich położenia w kodzie HTML. Dostępne są klasy <code>.order-0</code> do <code>.order-5</code>, oraz <code>.order-first</code> i <code>.order-last</code>.</p>
+
+        <pre><code class="language-html">
+&lt;!-- Zmiana Kolejności Elementów --&gt;
+&lt;div class="d-flex"&gt;
+  &lt;div class="p-2 bg-light text-dark order-3"&gt;Pierwszy w kolejności (HTML)&lt;/div&gt;
+  &lt;div class="p-2 bg-dark text-white order-1"&gt;Drugi w kolejności (przesunięty)&lt;/div&gt;
+  &lt;div class="p-2 bg-secondary text-white order-2"&gt;Trzeci w kolejności (przesunięty)&lt;/div&gt;
+&lt;/div&gt;
+        </code></pre>
+
+        <h2>Przestrzeń Między Elementami</h2>
+        <p>Użyj klas <code>.gap-*</code> do kontrolowania przestrzeni między elementami. Dostępne są klasy <code>.gap-0</code> do <code>.gap-5</code>, które możesz dostosować dla układów responsywnych, np. <code>.gap-md-4</code>.</p>
+
+        <pre><code class="language-html">
+&lt;!-- Przestrzeń Między Elementami --&gt;
+&lt;div class="d-flex gap-3"&gt;
+  &lt;div class="p-2 bg-primary text-white"&gt;Element 1&lt;/div&gt;
+  &lt;div class="p-2 bg-secondary text-white"&gt;Element 2&lt;/div&gt;
+  &lt;div class="p-2 bg-success text-white"&gt;Element 3&lt;/div&gt;
+&lt;/div&gt;
+        </code></pre>
+
+        <h2>Responsywne Układy Flexbox</h2>
+        <p>Bootstrap pozwala na tworzenie responsywnych układów z użyciem klas Flexbox, które mogą zmieniać kierunek, wyrównanie i inne właściwości w zależności od rozmiaru ekranu. Klasy responsywne to np. <code>.d-md-flex</code>, <code>.flex-sm-row</code>, <code>.justify-content-lg-between</code>.</p>
+
+        <pre><code class="language-html">
+&lt;!-- Responsywne Układy Flexbox --&gt;
+&lt;div class="d-flex flex-column flex-md-row"&gt;
+  &lt;div class="p-2 bg-primary text-white"&gt;Element 1&lt;/div&gt;
+  &lt;div class="p-2 bg-secondary text-white"&gt;Element 2&lt;/div&gt;
+  &lt;div class="p-2 bg-success text-white"&gt;Element 3&lt;/div&gt;
+&lt;/div&gt;
+        </code></pre>
+
+        <h2>Podsumowanie</h2>
+        <ul>
+            <li><strong>Flexbox</strong> w Bootstrapie umożliwia elastyczne tworzenie responsywnych układów stron z różnorodnymi możliwościami zarządzania położeniem i wyrównaniem elementów.</li>
+            <li>Możesz korzystać z klas do zarządzania wyrównaniem poziomym i pionowym, przestrzenią między elementami, kolejnością oraz kierunkiem układu.</li>
+            <li>Responsywne klasy Flexbox pozwalają na tworzenie układów, które automatycznie dostosowują się do różnych rozmiarów ekranów, co ułatwia tworzenie mobilnych interfejsów użytkownika.</li>
+        </ul>
+
+        <a href="./24.1.Flexbox-projekt.html"><button>Przykłady</button></a>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/prism.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/components/prism-html.min.js"></script>
+</body>
+</html>

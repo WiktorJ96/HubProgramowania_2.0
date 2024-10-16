@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Layout formularzy</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/css/bootstrap.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.7/dist/umd/popper.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/js/bootstrap.min.js"></script>
+    <link rel="stylesheet" href="../styles.css">
+</head>
+<body>
+    <div class="container">
+        <h1>Layout formularzy w Bootstrapie</h1>
+
+        <p>Bootstrap oferuje różne sposoby na organizację układu formularzy. Możesz tworzyć formularze pionowe, poziome oraz inline, dostosowując je do różnych potrzeb użytkowników.</p>
+
+        <h2>Pionowy Layout Formularza</h2>
+        <p>Jest to domyślny układ formularza, w którym elementy są ustawione jeden pod drugim. Jest to najbardziej klasyczny i uniwersalny układ.</p>
+
+        <pre><code class="language-html">
+&lt;!-- Pionowy Layout Formularza --&gt;
+&lt;form&gt;
+  &lt;div class="mb-3"&gt;
+    &lt;label for="exampleInputEmail1" class="form-label"&gt;Adres email&lt;/label&gt;
+    &lt;input type="email" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp"&gt;
+    &lt;div id="emailHelp" class="form-text"&gt;Nigdy nie udostępnimy Twojego emaila.&lt;/div&gt;
+  &lt;/div&gt;
+  &lt;div class="mb-3"&gt;
+    &lt;label for="exampleInputPassword1" class="form-label"&gt;Hasło&lt;/label&gt;
+    &lt;input type="password" class="form-control" id="exampleInputPassword1"&gt;
+  &lt;/div&gt;
+  &lt;button type="submit" class="btn btn-primary"&gt;Zaloguj się&lt;/button&gt;
+&lt;/form&gt;
+        </code></pre>
+
+        <h2>Poziomy Layout Formularza</h2>
+        <p>W układzie poziomym etykiety i pola są ustawione obok siebie, co oszczędza miejsce i wygląda bardziej kompaktowo. Aby utworzyć taki układ, używamy klas <code>.row</code> oraz <code>.col-*</code>.</p>
+
+        <pre><code class="language-html">
+&lt;!-- Poziomy Layout Formularza --&gt;
+&lt;form&gt;
+  &lt;div class="row mb-3"&gt;
+    &lt;label for="inputEmail3" class="col-sm-2 col-form-label"&gt;Email&lt;/label&gt;
+    &lt;div class="col-sm-10"&gt;
+      &lt;input type="email" class="form-control" id="inputEmail3"&gt;
+    &lt;/div&gt;
+  &lt;/div&gt;
+  &lt;div class="row mb-3"&gt;
+    &lt;label for="inputPassword3" class="col-sm-2 col-form-label"&gt;Hasło&lt;/label&gt;
+    &lt;div class="col-sm-10"&gt;
+      &lt;input type="password" class="form-control" id="inputPassword3"&gt;
+    &lt;/div&gt;
+  &lt;/div&gt;
+  &lt;fieldset class="row mb-3"&gt;
+    &lt;legend class="col-form-label col-sm-2 pt-0"&gt;Płeć&lt;/legend&gt;
+    &lt;div class="col-sm-10"&gt;
+      &lt;div class="form-check"&gt;
+        &lt;input class="form-check-input" type="radio" name="gridRadios" id="gridRadios1" value="option1" checked&gt;
+        &lt;label class="form-check-label" for="gridRadios1"&gt;
+          Mężczyzna
+        &lt;/label&gt;
+      &lt;/div&gt;
+      &lt;div class="form-check"&gt;
+        &lt;input class="form-check-input" type="radio" name="gridRadios" id="gridRadios2" value="option2"&gt;
+        &lt;label class="form-check-label" for="gridRadios2"&gt;
+          Kobieta
+        &lt;/label&gt;
+      &lt;/div&gt;
+    &lt;/div&gt;
+  &lt;/fieldset&gt;
+  &lt;button type="submit" class="btn btn-primary"&gt;Zatwierdź&lt;/button&gt;
+&lt;/form&gt;
+        </code></pre>
+
+        <h2>Inline Layout Formularza</h2>
+        <p>Formularze inline są stosowane, gdy chcesz, aby elementy formularza były ustawione w jednej linii, np. w paskach wyszukiwania lub szybkich formularzach logowania. Używamy klasy <code>.row g-3</code> oraz <code>.col-auto</code> do tworzenia inline form.</p>
+
+        <pre><code class="language-html">
+&lt;!-- Inline Layout Formularza --&gt;
+&lt;form class="row g-3"&gt;
+  &lt;div class="col-auto"&gt;
+    &lt;label for="staticEmail2" class="visually-hidden"&gt;Email&lt;/label&gt;
+    &lt;input type="text" class="form-control" id="staticEmail2" placeholder="Adres email"&gt;
+  &lt;/div&gt;
+  &lt;div class="col-auto"&gt;
+    &lt;label for="inputPassword2" class="visually-hidden"&gt;Hasło&lt;/label&gt;
+    &lt;input type="password" class="form-control" id="inputPassword2" placeholder="Hasło"&gt;
+  &lt;/div&gt;
+  &lt;div class="col-auto"&gt;
+    &lt;button type="submit" class="btn btn-primary mb-3"&gt;Potwierdź&lt;/button&gt;
+  &lt;/div&gt;
+&lt;/form&gt;
+        </code></pre>
+
+        <h2>Rozciągliwe Elementy Formularza</h2>
+        <p>Możesz użyć klas <code>.w-100</code> oraz <code>.w-auto</code>, aby kontrolować szerokość elementów formularza, co pozwala na lepszą kontrolę nad ich rozmieszczeniem.</p>
+
+        <pre><code class="language-html">
+&lt;!-- Rozciągliwe Elementy Formularza --&gt;
+&lt;form class="d-flex"&gt;
+  &lt;input class="form-control me-2 w-50" type="search" placeholder="Szukaj" aria-label="Szukaj"&gt;
+  &lt;button class="btn btn-outline-success" type="submit"&gt;Szukaj&lt;/button&gt;
+&lt;/form&gt;
+        </code></pre>
+
+        <h2>Podsumowanie</h2>
+        <ul>
+            <li><strong>Layout Formularzy</strong> w Bootstrapie oferuje elastyczne i estetyczne sposoby na organizację elementów formularza.</li>
+            <li>Można łatwo tworzyć układy pionowe, poziome oraz inline, co pozwala dostosować formularze do różnych potrzeb użytkowników.</li>
+            <li>Użycie odpowiednich klas, takich jak <code>.row</code>, <code>.col-*</code>, <code>.d-flex</code> i innych, zapewnia pełną kontrolę nad układem formularzy.</li>
+        </ul>
+
+        <a href="./22.1.Layout formularza-projekt.html"><button>Przykłady</button></a>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/prism.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/components/prism-html.min.js"></script>
+</body>
+</html>

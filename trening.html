@@ -8,75 +8,20 @@
   </head>
   <body data-bs-spy="scroll" data-bs-target="#navbar-example" data-bs-offset="100" tabindex="0">
 
-    <!-- Podstawowy tooltip -->
-<button type="button" class="btn btn-secondary" data-bs-toggle="tooltip" data-bs-placement="top" title="Tooltip na górze">
-  Najedź, aby zobaczyć tooltip
-</button>
+<!-- Układ w Wierszu -->
+<div class="d-flex flex-row mb-3">
+  <div class="p-2 bg-info text-white">Wiersz 1</div>
+  <div class="p-2 bg-warning text-white">Wiersz 2</div>
+  <div class="p-2 bg-danger text-white">Wiersz 3</div>
+</div>
 
-<hr>
-
-
-
-<!-- Tooltipy w różnych miejscach -->
-<button type="button" class="btn btn-secondary" data-bs-toggle="tooltip" data-bs-placement="left" title="Tooltip po lewej">
-  Po lewej
-</button>
-<button type="button" class="btn btn-secondary" data-bs-toggle="tooltip" data-bs-placement="top" title="Tooltip na górze">
-  Na górze
-</button>
-<button type="button" class="btn btn-secondary" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Tooltip na dole">
-  Na dole
-</button>
-<button type="button" class="btn btn-secondary" data-bs-toggle="tooltip" data-bs-placement="right" title="Tooltip po prawej">
-  Po prawej
-</button>
+<!-- Układ w Kolumnie -->
+<div class="d-flex flex-column">
+  <div class="p-2 bg-info text-white">Kolumna 1</div>
+  <div class="p-2 bg-warning text-white">Kolumna 2</div>
+  <div class="p-2 bg-danger text-white">Kolumna 3</div>
+</div>
         
-
-
-<hr>
-
-
-<!-- Tooltip wywoływany kliknięciem -->
-<button type="button" class="btn btn-warning" data-bs-toggle="tooltip" data-bs-trigger="click" title="Kliknij, aby zobaczyć tooltip">
-  Kliknij mnie
-</button>
-        
-
-<hr>
-
-
-
-<!-- Przycisk z tooltipem -->
-<button type="button" class="btn btn-info" id="jsTooltip" title="To jest tooltip inicjalizowany przez JS">
-  Tooltip JS
-</button>
-
-<script>
-  var tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'))
-  var tooltipList = tooltipTriggerList.map(function (tooltipTriggerEl) {
-    return new bootstrap.Tooltip(tooltipTriggerEl)
-  })
-</script>
-
-
-
-<hr>
-
-<!-- Tooltip z niestandardowym kolorem -->
-<button type="button" class="btn btn-primary custom-tooltip" data-bs-toggle="tooltip" title="Kolorowy tooltip">
-  Kolorowy tooltip
-</button>
-
-<style>
-  .custom-tooltip[data-bs-toggle="tooltip"]::after {
-    background-color: #17a2b8; /* Niestandardowy kolor */
-    color: #fff;
-  }
-</style>
-        
-
-        
-
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
   </body>
 </html>
