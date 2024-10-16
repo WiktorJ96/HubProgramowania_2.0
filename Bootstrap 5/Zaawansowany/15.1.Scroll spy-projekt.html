@@ -1,0 +1,231 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Scrollspy w Bootstrapie</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/css/bootstrap.min.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/themes/prism-tomorrow.min.css" rel="stylesheet">
+    <style>
+        body {
+            position: relative;
+        }
+        .scrollspy-example {
+            position: relative;
+            height: 500px;
+            overflow-y: scroll;
+            padding: 20px;
+            border: 1px solid #ddd;
+        }
+        section {
+            padding: 60px 0;
+            border-bottom: 1px solid #eee;
+        }
+        .example {
+            display: none;
+        }
+        .example.active {
+            display: block;
+        }
+        .highlight {
+            background-color: #f8f9fa;
+            padding: 10px;
+            margin-bottom: 20px;
+            border-left: 4px solid #007bff;
+        }
+    </style>
+</head>
+<body data-bs-spy="scroll" data-bs-target="#combined-example"  data-bs-offset="0" tabindex="0">
+    <div class="container">
+        <h1 class="text-center my-4">Przykłady</h1>
+
+        <!-- Menu wyboru przykładów -->
+        <div class="dropdown text-center mb-4">
+            <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton" data-bs-toggle="dropdown" aria-expanded="false">
+                Wybierz przykład Scrollspy
+            </button>
+            <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                <li><a class="dropdown-item" href="#" onclick="showExample('example1')">Scrollspy z navbar</a></li>
+                <li><a class="dropdown-item" href="#" onclick="showExample('example2')">Scrollspy z list group</a></li>
+            </ul>
+        </div>
+
+        <!-- Przykład 1: Scrollspy z navbar -->
+        <div id="example1" class="example active">
+            <h2>Przykład 1: Scrollspy z navbar</h2>
+            <div class="highlight">
+                <nav id="combined-example" class="navbar navbar-light bg-light">
+                    <div class="container-fluid">
+                        <a class="navbar-brand" href="#">Scrollspy</a>
+                        <ul class="nav nav-pills">
+                            <li class="nav-item">
+                                <a class="nav-link active" aria-current="page" href="#section1">Sekcja 1</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" href="#section2">Sekcja 2</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" href="#section3">Sekcja 3</a>
+                            </li>
+                        </ul>
+                    </div>
+                </nav>
+                <div class="scrollspy-example mt-5 pt-5">
+                    <section id="section1">
+                        <h4>Sekcja 1</h4>
+                        <p>Lorem, ipsum dolor sit amet consectetur adipisicing elit. Facilis vel id accusantium dolor dolores dolorem alias est, saepe libero consequuntur aperiam officia aut iure omnis asperiores eveniet doloribus nisi mollitia.
+                        Perferendis quaerat saepe debitis architecto blanditiis quos esse nulla sint modi cum neque ea, distinctio, provident quibusdam voluptates porro quasi error hic ratione, facere perspiciatis illum sit. Soluta, voluptates aliquam!
+                        Libero, recusandae aspernatur. Quod soluta exercitationem enim officiis quo nulla recusandae. Rerum id, distinctio, deserunt dolores, voluptatum facilis voluptate eum atque tenetur quod tempore natus rem. Possimus provident aperiam omnis!
+                        Unde quis architecto, amet culpa tenetur corporis repellat. Ipsa excepturi aliquid iure, voluptate a recusandae odio quibusdam adipisci architecto error, ad voluptas repellendus vel, rerum ea dolor id pariatur deleniti!
+                        Eveniet eaque ipsam ab, officia magnam impedit tenetur perferendis ipsa dolorem qui iusto dicta repellat expedita exercitationem molestiae amet possimus, in ad dolor cum numquam delectus ducimus! Dolores, voluptatum officiis.</p>
+                    </section>
+                    <section id="section2">
+                        <h4>Sekcja 2</h4>
+                        <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Libero ullam placeat commodi culpa accusamus molestias dolor dolore, vitae at pariatur laborum et non veniam, quisquam fuga? Officiis iste corrupti inventore?
+                        Libero hic ullam eius expedita, illum magni ipsum impedit possimus excepturi asperiores sint molestias error iusto, similique ipsam quisquam et neque dolore provident esse? Libero perspiciatis repellat maiores vero quia?
+                        Recusandae nulla eveniet fugit facilis laborum ducimus sapiente quidem. Quibusdam, distinctio qui! Expedita totam, sequi, tempora aut inventore qui animi nihil amet molestias voluptates reiciendis sed assumenda porro eius distinctio!</p>
+                    </section>
+                    <section id="section3">
+                        <h4>Sekcja 3</h4>
+                        <p>Lorem ipsum dolor, sit amet consectetur adipisicing elit. Aperiam deleniti, nulla commodi blanditiis ipsum unde consequuntur tempore fugit esse quis illo iste iure quaerat eum sunt reiciendis nesciunt suscipit vitae.
+                        Aliquid tempora inventore dolorum cum nulla at deserunt, culpa aspernatur error consectetur, esse quam ducimus numquam quisquam saepe, sapiente eligendi quis accusamus exercitationem eius ipsam animi? Laboriosam commodi nostrum nulla!
+                        Numquam obcaecati consequatur reiciendis vel? Non, reiciendis. Ducimus officiis maxime, dolor nostrum commodi est reiciendis id doloremque ipsum sunt laborum, molestias necessitatibus? Ab provident magnam recusandae sequi corporis, corrupti pariatur!
+                        Quod consequatur mollitia rerum commodi natus laboriosam sunt, iure, sit expedita quasi est. Ullam libero molestiae quasi maiores. Ad deserunt quasi est cum obcaecati. Beatae suscipit sequi distinctio a consequuntur!</p>
+                    </section>
+                </div>
+            </div>
+
+            <h3>Kod HTML:</h3>
+            <pre><code class="language-html">
+    &lt;!--Przykłady mogą nie działać prawidłowo, jeśli chcesz je przetestować skopiuj kod HTML do swojego IDE--&gt;
+&lt;body data-bs-spy="scroll" data-bs-target="#combined-example"  data-bs-offset="0" tabindex="0">&lt;/body&gt;    
+&lt;nav id="combined-example" class="navbar navbar-light bg-light fixed-top"&gt;
+    &lt;div class="container-fluid"&gt;
+        &lt;a class="navbar-brand" href="#"&gt;Scrollspy&lt;/a&gt;
+        &lt;ul class="nav nav-pills"&gt;
+            &lt;li class="nav-item"&gt;
+                &lt;a class="nav-link active" aria-current="page" href="#section1"&gt;Sekcja 1&lt;/a&gt;
+            &lt;/li&gt;
+            &lt;li class="nav-item"&gt;
+                &lt;a class="nav-link" href="#section2"&gt;Sekcja 2&lt;/a&gt;
+            &lt;/li&gt;
+            &lt;li class="nav-item"&gt;
+                &lt;a class="nav-link" href="#section3"&gt;Sekcja 3&lt;/a&gt;
+            &lt;/li&gt;
+        &lt;/ul&gt;
+    &lt;/div&gt;
+&lt;/nav&gt;
+&lt;div class="scrollspy-example mt-5 pt-5"&gt;
+    &lt;section id="section1"&gt;
+        &lt;h4&gt;Sekcja 1&lt;/h4&gt;
+        &lt;p&gt;Lorem ipsum dolor sit amet...&lt;/p&gt;
+    &lt;/section&gt;
+    &lt;section id="section2"&gt;
+        &lt;h4&gt;Sekcja 2&lt;/h4&gt;
+        &lt;p&gt;Vestibulum ante ipsum...&lt;/p&gt;
+    &lt;/section&gt;
+    &lt;section id="section3"&gt;
+        &lt;h4&gt;Sekcja 3&lt;/h4&gt;
+        &lt;p&gt;Integer aliquet...&lt;/p&gt;
+    &lt;/section&gt;
+&lt;/div&gt;
+&lt;/body&gt; 
+            </code></pre>
+        </div>
+
+        <!-- Przykład 2: Scrollspy z list group -->
+        <div id="example2" class="example">
+            <h2>Przykład 2: Scrollspy z list group</h2>
+            <div class="highlight">
+                <div class="row">
+                    <div class="col-4">
+                        <div id="combined-example" class="list-group">
+                            <a class="list-group-item list-group-item-action active" href="#section4">Sekcja 1</a>
+                            <a class="list-group-item list-group-item-action" href="#section5">Sekcja 2</a>
+                            <a class="list-group-item list-group-item-action" href="#section6">Sekcja 3</a>
+                        </div>
+                    </div>
+                    <div class="col-8">
+                        <div class="scrollspy-example">
+                            <section id="section4">
+                                <h4>Sekcja 1</h4>
+                                <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Numquam aut possimus cumque repudiandae. Ipsam voluptatum quidem obcaecati dignissimos, assumenda aperiam accusantium iste delectus omnis repudiandae placeat vitae ratione doloribus unde.
+                                Explicabo ea quod at, accusantium corrupti nihil necessitatibus ab iusto minima laboriosam fuga totam recusandae asperiores hic nobis maxime dignissimos omnis nesciunt ad ducimus rerum iure sed obcaecati! Reiciendis, repellendus.
+                                Nam rem, adipisci quis iusto debitis libero? Praesentium voluptatibus id et magni. Fugit maiores, blanditiis tempore neque, quis magnam repudiandae aperiam delectus nihil ratione ex quod similique, praesentium ab veniam.
+                                Recusandae cumque ab sequi eius nobis ut reprehenderit placeat quas, corporis deserunt nulla tempore voluptatem doloribus nostrum iste minus consequatur ducimus quod modi commodi deleniti illum quidem rerum minima! Nisi!
+                                Reprehenderit voluptatem illo, amet maiores harum quam omnis earum consequuntur perferendis a eaque sunt, repellat dolor necessitatibus sequi animi. Ea tempora, est dolores beatae deserunt placeat quo eveniet quidem commodi.</p>
+                            </section>
+                            <section id="section5">
+                                <h4>Sekcja 2</h4>
+                                <p>Lorem ipsum dolor, sit amet consectetur adipisicing elit. Quos inventore eveniet dicta porro, est assumenda harum doloremque ex cum tenetur explicabo natus accusantium quidem corporis hic beatae aspernatur id aut.
+                                Accusantium modi culpa quos cupiditate dicta aliquam sed illo beatae, ducimus aperiam amet voluptate et reiciendis enim veritatis qui eaque consequatur fugiat libero eos labore, omnis ullam aut? Accusamus, ut.
+                                Earum iure cumque harum, suscipit animi aperiam mollitia minus? Culpa mollitia non necessitatibus quae, harum amet? Modi corporis ad dolores fuga eligendi ipsam? In nihil omnis obcaecati, animi eveniet dolores.</p>
+                            </section>
+                            <section id="section6">
+                                <h4>Sekcja 3</h4>
+                                <p>Lorem ipsum, dolor sit amet consectetur adipisicing elit. Distinctio ipsum incidunt repellendus omnis, molestiae placeat nostrum voluptates facilis velit excepturi. Neque incidunt odit dolores ea ipsum cupiditate, doloremque quaerat ab?
+                                Quidem quia inventore blanditiis aliquid illo quam tenetur odit repellat quas at, saepe numquam ullam sapiente, neque minima eveniet eaque dolorum! Alias ab quidem obcaecati itaque, delectus quasi harum iusto!
+                                Vitae a repellendus saepe facere quod deserunt ducimus architecto suscipit cupiditate doloremque, expedita iste aperiam! Aliquam, aut facilis. Repellendus reprehenderit tempora numquam aperiam, quae temporibus nihil voluptas suscipit laudantium. Quos.
+                                Voluptates ab eligendi ullam dolore ex eveniet? Minima consectetur aliquid optio aperiam! Deserunt quae explicabo eligendi harum ab dolorum consequatur modi ipsa nostrum, beatae dolore voluptatum quam eum sapiente voluptas!</p>
+                            </section>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <h3>Kod HTML:</h3>
+            <pre><code class="language-html">
+    &lt;!--Przykłady mogą nie działać prawidłowo, jeśli chcesz je przetestować skopiuj kod HTML do swojego IDE--&gt;
+&lt;body data-bs-spy="scroll" data-bs-target="#combined-example"  data-bs-offset="0" tabindex="0">   
+&lt;div class="row"&gt;
+    &lt;div class="col-4"&gt;
+        &lt;div id="combined-example" class="list-group"&gt;
+            &lt;a class="list-group-item list-group-item-action active" href="#section1"&gt;Sekcja 1&lt;/a&gt;
+            &lt;a class="list-group-item list-group-item-action" href="#section2"&gt;Sekcja 2&lt;/a&gt;
+            &lt;a class="list-group-item list-group-item-action" href="#section3"&gt;Sekcja 3&lt;/a&gt;
+        &lt;/div&gt;
+    &lt;/div&gt;
+    &lt;div class="col-8"&gt;
+        &lt;div class="scrollspy-example"&gt;
+            &lt;section id="section1"&gt;
+                &lt;h4&gt;Sekcja 1&lt;/h4&gt;
+                &lt;p&gt;Lorem ipsum dolor sit amet...&lt;/p&gt;
+            &lt;/section&gt;
+            &lt;section id="section2"&gt;
+                &lt;h4&gt;Sekcja 2&lt;/h4&gt;
+                &lt;p&gt;Vestibulum ante ipsum...&lt;/p&gt;
+            &lt;/section&gt;
+            &lt;section id="section3"&gt;
+                &lt;h4&gt;Sekcja 3&lt;/h4&gt;
+                &lt;p&gt;Integer aliquet...&lt;/p&gt;
+            &lt;/section&gt;
+        &lt;/div&gt;
+    &lt;/div&gt;
+&lt;/div&gt;
+&lt;/body&gt; 
+            </code></pre>
+        </div>
+    </div>
+
+    <!-- Bootstrap i Prism -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/prism.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/components/prism-html.min.js"></script>
+
+    <!-- Skrypt do przełączania przykładów i podświetlania składni -->
+    <script>
+        function showExample(exampleId) {
+            const examples = document.querySelectorAll('.example');
+            examples.forEach(example => {
+                example.classList.remove('active');
+            });
+
+            document.getElementById(exampleId).classList.add('active');
+
+            // Wywołanie ponownego podświetlania po zmianie przykładu
+            Prism.highlightAll();
+        }
+
+    </script>
+</body>
+</html>

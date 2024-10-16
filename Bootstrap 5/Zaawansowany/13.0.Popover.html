@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Popover</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/css/bootstrap.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.7/dist/umd/popper.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/js/bootstrap.min.js"></script>
+    <link rel="stylesheet" href="../styles.css">
+</head>
+<body>
+    <div class="container">
+        <h1>Popover w Bootstrapie</h1>
+
+        <p>Komponent <code>Popover</code> w Bootstrapie umożliwia wyświetlanie dodatkowych informacji w małych okienkach po kliknięciu na element, np. przycisk. Popover przypomina tooltip, ale jest bardziej rozbudowany, może zawierać tytuł oraz treść.</p>
+
+        <h2>Podstawowy przykład popover</h2>
+        <p>W poniższym przykładzie popover jest wywoływany po kliknięciu przycisku.</p>
+
+        <pre><code class="language-html">
+&lt;!-- Przycisk z popover --&gt;
+&lt;button type="button" class="btn btn-secondary" data-bs-toggle="popover" title="Tytuł Popover" data-bs-content="To jest treść popover. Kliknij, aby zobaczyć."&gt;
+  Kliknij, aby zobaczyć popover
+&lt;/button&gt;
+        </code></pre>
+
+        <p>W tym przykładzie popover jest aktywowany po kliknięciu na przycisk. Atrybut <code>data-bs-content</code> zawiera treść, a <code>title</code> określa tytuł.</p>
+
+        <h2>Popover na hover (najechanie myszką)</h2>
+        <p>Możesz wyświetlić popover, gdy użytkownik najedzie myszką na element, ustawiając <code>trigger="hover"</code>.</p>
+
+        <pre><code class="language-html">
+&lt;!-- Przycisk z popover na hover --&gt;
+&lt;button type="button" class="btn btn-primary" data-bs-toggle="popover" data-bs-trigger="hover" title="Tytuł Popover" data-bs-content="To jest popover aktywowany po najechaniu myszką."&gt;
+  Najedź myszką, aby zobaczyć popover
+&lt;/button&gt;
+        </code></pre>
+
+        <p>W tym przykładzie popover zostanie wyświetlony, gdy użytkownik najedzie myszką na przycisk, dzięki użyciu atrybutu <code>data-bs-trigger="hover"</code>.</p>
+
+        <h2>Popover w różnych kierunkach</h2>
+        <p>Możesz zmieniać kierunek wyświetlania popovera za pomocą atrybutu <code>data-bs-placement</code>, ustawiając np. <code>top</code>, <code>bottom</code>, <code>left</code>, lub <code>right</code>.</p>
+
+        <pre><code class="language-html">
+&lt;!-- Przycisk z popover z ustawionym kierunkiem --&gt;
+&lt;button type="button" class="btn btn-warning" data-bs-toggle="popover" data-bs-placement="top" title="Popover na górze" data-bs-content="To jest popover wyświetlany nad przyciskiem."&gt;
+  Popover nad przyciskiem
+&lt;/button&gt;
+
+&lt;button type="button" class="btn btn-info" data-bs-toggle="popover" data-bs-placement="right" title="Popover z prawej" data-bs-content="To jest popover wyświetlany po prawej stronie."&gt;
+  Popover z prawej strony
+&lt;/button&gt;
+        </code></pre>
+
+        <p>W tym przykładzie jeden popover pojawia się nad przyciskiem (placement <code>top</code>), a drugi po jego prawej stronie (placement <code>right</code>).</p>
+
+        <h2>Popover z przyciskiem zamknięcia</h2>
+        <p>Możesz dodać przycisk zamknięcia do popovera, aby użytkownik mógł go samodzielnie zamknąć.</p>
+
+        <pre><code class="language-html">
+&lt;!-- Przycisk z popover z przyciskiem zamknięcia --&gt;
+&lt;button type="button" class="btn btn-danger" data-bs-toggle="popover" title="Popover z zamknięciem" data-bs-content="To jest popover z przyciskiem zamknięcia."&gt;
+  Popover z przyciskiem zamknięcia
+&lt;/button&gt;
+
+&lt;script&gt;
+// Inicjalizacja popovera z przyciskiem zamknięcia
+var popoverTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="popover"]'))
+var popoverList = popoverTriggerList.map(function (popoverTriggerEl) {
+  return new bootstrap.Popover(popoverTriggerEl, {
+    html: true,
+    content: function() {
+      return '&lt;button type="button" class="btn-close" data-bs-dismiss="popover" aria-label="Zamknij"&gt;&lt;/button&gt; Treść z przyciskiem zamknięcia';
+    }
+  })
+})
+&lt;/script&gt;
+        </code></pre>
+
+        <p>W tym przykładzie popover ma przycisk zamknięcia, który jest wyświetlany wraz z treścią, dzięki użyciu opcji <code>html: true</code>.</p>
+
+        <h2>Podsumowanie</h2>
+        <ul>
+            <li><strong>Popover</strong> w Bootstrapie to narzędzie do wyświetlania dodatkowych informacji po kliknięciu lub najechaniu myszką na element.</li>
+            <li>Możesz kontrolować kierunek wyświetlania popovera oraz dodać dodatkowe opcje, takie jak przycisk zamknięcia.</li>
+            <li>Popover obsługuje różne triggery, takie jak <code>click</code> czy <code>hover</code>.</li>
+        </ul>
+
+        <a href="./13.1.Popover-projekt.html"><button>Przykłady</button></a>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/prism.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/components/prism-html.min.js"></script>
+    <script>
+      // Inicjalizacja popoverów
+      var popoverTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="popover"]'))
+      var popoverList = popoverTriggerList.map(function (popoverTriggerEl) {
+        return new bootstrap.Popover(popoverTriggerEl)
+      })
+    </script>
+</body>
+</html>

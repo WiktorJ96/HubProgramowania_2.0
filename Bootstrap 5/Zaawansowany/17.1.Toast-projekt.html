@@ -1,0 +1,278 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Toasty w Bootstrapie</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/css/bootstrap.min.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/themes/prism-tomorrow.min.css" rel="stylesheet">
+    <style>
+        .example {
+            display: none;
+        }
+
+        .example.active {
+            display: block;
+        }
+
+        .highlight {
+            background-color: #f8f9fa;
+            padding: 10px;
+            margin-bottom: 20px;
+            border-left: 4px solid #007bff;
+        }
+
+        .toast-container {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            z-index: 1050;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1 class="text-center my-4">Przykłady</h1>
+
+        <!-- Menu wyboru przykładów -->
+        <div class="dropdown text-center mb-4">
+            <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton" data-bs-toggle="dropdown" aria-expanded="false">
+                Wybierz przykład toasta
+            </button>
+            <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                <li><a class="dropdown-item" href="#" onclick="showExample('example1')">Podstawowy toast</a></li>
+                <li><a class="dropdown-item" href="#" onclick="showExample('example2')">Toast z automatycznym ukrywaniem</a></li>
+                <li><a class="dropdown-item" href="#" onclick="showExample('example3')">Toast z różnymi kolorami</a></li>
+                <li><a class="dropdown-item" href="#" onclick="showExample('example4')">Toast z podpiętym JS</a></li>
+            </ul>
+        </div>
+
+        <!-- Przykład 1: Podstawowy toast -->
+        <div id="example1" class="example active">
+            <h2>Przykład 1: Podstawowy toast</h2>
+            <div class="highlight">
+                <div class="toast-container">
+                    <div id="toast1" class="toast" role="alert" aria-live="assertive" aria-atomic="true">
+                        <div class="toast-header">
+                            <strong class="me-auto">Bootstrap</strong>
+                            <small class="text-muted">Just now</small>
+                            <button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Close"></button>
+                        </div>
+                        <div class="toast-body">
+                            Hello, this is a basic toast!
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <h3>Kod HTML:</h3>
+            <pre><code class="language-html">
+&lt;div class="toast-container"&gt;
+    &lt;div class="toast" role="alert" aria-live="assertive" aria-atomic="true"&gt;
+        &lt;div class="toast-header"&gt;
+            &lt;strong class="me-auto"&gt;Bootstrap&lt;/strong&gt;
+            &lt;small class="text-muted"&gt;Just now&lt;/small&gt;
+            &lt;button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Close"&gt;&lt;/button&gt;
+        &lt;/div&gt;
+        &lt;div class="toast-body"&gt;
+            Hello, this is a basic toast!
+        &lt;/div&gt;
+    &lt;/div&gt;
+&lt;/div&gt;
+            </code></pre>
+
+            <h3>Kod JavaScript</h3>
+            <pre><code class="language-javascript">
+                &lt;script&gt;
+                let toast1 = document.querySelector('#toast1');
+                let t1 = new bootstrap.Toast(toast1);
+                t1.show();
+                &lt;/script&gt;
+            </code></pre>
+        </div>
+
+        <!-- Przykład 2: Toast z automatycznym ukrywaniem -->
+        <div id="example2" class="example">
+            <h2>Przykład 2: Toast z automatycznym ukrywaniem</h2>
+            <div class="highlight">
+                <div class="toast-container">
+                    <div id="toast2" class="toast" role="alert" aria-live="assertive" aria-atomic="true" data-bs-autohide="true" data-bs-delay="5000">
+                        <div class="toast-header">
+                            <strong class="me-auto">Auto-Hide Toast</strong>
+                            <small class="text-muted">5 seconds</small>
+                            <button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Close"></button>
+                        </div>
+                        <div class="toast-body">
+                            This toast will disappear after 5 seconds!
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <h3>Kod HTML:</h3>
+            <pre><code class="language-html">
+&lt;div class="toast" role="alert" aria-live="assertive" aria-atomic="true" data-bs-autohide="true" data-bs-delay="5000"&gt;
+    &lt;div class="toast-header"&gt;
+        &lt;strong class="me-auto"&gt;Auto-Hide Toast&lt;/strong&gt;
+        &lt;small class="text-muted"&gt;5 seconds&lt;/small&gt;
+        &lt;button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Close"&gt;&lt;/button&gt;
+    &lt;/div&gt;
+    &lt;div class="toast-body"&gt;
+        This toast will disappear after 5 seconds!
+    &lt;/div&gt;
+&lt;/div&gt;
+            </code></pre>
+
+            <h3>Kod JavaScript:</h3>
+            <pre><code class="language-javascript">
+                &lt;script&gt;
+                let toast2 = document.querySelector('#toast2');
+                let t2 = new bootstrap.Toast(toast2);
+                t2.show();
+                &lt;/script&gt;
+            </code></pre>
+        </div>
+
+        <!-- Przykład 3: Toast z różnymi kolorami -->
+        <div id="example3" class="example">
+            <h2>Przykład 3: Toast z różnymi kolorami</h2>
+            <div class="highlight">
+                <div id="toast3" class="toast bg-primary text-white" role="alert" aria-live="assertive" aria-atomic="true">
+                    <div class="toast-header text-white bg-primary">
+                        <strong class="me-auto">Info</strong>
+                        <button type="button" class="btn-close btn-close-white" data-bs-dismiss="toast" aria-label="Close"></button>
+                    </div>
+                    <div class="toast-body">
+                        This is an info toast with blue background!
+                    </div>
+                </div>
+            </div>
+
+            <h3>Kod HTML:</h3>
+            <pre><code class="language-html">
+&lt;div class="toast bg-primary text-white" role="alert" aria-live="assertive" aria-atomic="true"&gt;
+    &lt;div class="toast-header text-white bg-primary"&gt;
+        &lt;strong class="me-auto"&gt;Info&lt;/strong&gt;
+        &lt;button type="button" class="btn-close btn-close-white" data-bs-dismiss="toast" aria-label="Close"&gt;&lt;/button&gt;
+    &lt;/div&gt;
+    &lt;div class="toast-body"&gt;
+        This is an info toast with blue background!
+    &lt;/div&gt;
+&lt;/div&gt;
+            </code></pre>
+
+            <h3>Kod JavaScript:</h3>
+            <pre><code class="language-javascript">
+                &lt;script&gt;
+                let toast3 = document.querySelector('#toast3');
+                let t3 = new bootstrap.Toast(toast3);
+                t3.show();
+                &lt;/script&gt;
+            </code></pre>
+        </div>
+
+        <!-- Przykład 4: Toast z podpiętym JS -->
+        <div id="example4" class="example">
+            <h2>Przykład 4: Toast z podpiętym JS</h2>
+            <div class="highlight">
+                <button type="button" class="btn btn-info" id="showToastBtn">Pokaż toasta</button>
+                <div class="toast-container">
+                    <div class="toast" role="alert" aria-live="assertive" aria-atomic="true" id="jsToast">
+                        <div class="toast-header">
+                            <strong class="me-auto">JavaScript Toast</strong>
+                            <button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Close"></button>
+                        </div>
+                        <div class="toast-body">
+                            This toast is triggered via JavaScript!
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <h3>Kod HTML i JavaScript:</h3>
+            <pre><code class="language-html">
+&lt;button type="button" class="btn btn-info" id="showToastBtn"&gt;Pokaż toasta&lt;/button&gt;
+&lt;div class="toast" role="alert" aria-live="assertive" aria-atomic="true" id="jsToast"&gt;
+    &lt;div class="toast-header"&gt;
+        &lt;strong class="me-auto"&gt;JavaScript Toast&lt;/strong&gt;
+        &lt;button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Close"&gt;&lt;/button&gt;
+    &lt;/div&gt;
+    &lt;div class="toast-body"&gt;
+        This toast is triggered via JavaScript!
+    &lt;/div&gt;
+&lt;/div&gt;
+            </code></pre>
+
+            <h3>Kod JavaScript:</h3>
+            <pre><code class="language-javascript">
+&lt;script&gt;
+document.getElementById('showToastBtn').addEventListener('click', function () {
+    const toastEl = document.getElementById('jsToast');
+    const toast = new bootstrap.Toast(toastEl);
+    toast.show();
+});
+&lt;/script&gt;
+            </code></pre>
+        </div>
+    </div>
+
+    <!-- Bootstrap i Prism -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/prism.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/components/prism-html.min.js"></script>
+
+    <!-- Skrypt do przełączania przykładów i podświetlania składni -->
+    <script>
+        function showExample(exampleId) {
+            const examples = document.querySelectorAll('.example');
+            examples.forEach(example => {
+                example.classList.remove('active');
+            });
+
+            document.getElementById(exampleId).classList.add('active');
+
+            // Wywołanie ponownego podświetlania po zmianie przykładu
+            Prism.highlightAll();
+        }
+    </script>
+<script>
+    function showExample(exampleId) {
+        const examples = document.querySelectorAll('.example');
+        examples.forEach(example => {
+            example.classList.remove('active');
+        });
+
+        document.getElementById(exampleId).classList.add('active');
+
+        // Wywołanie ponownego podświetlania po zmianie przykładu
+        Prism.highlightAll();
+
+        // Inicjalizacja i pokazanie odpowiednich toastów
+        if (exampleId === 'example1') {
+            let toast1 = document.querySelector('#toast1');
+            let t1 = new bootstrap.Toast(toast1);
+            t1.show();
+        }
+
+        if (exampleId === 'example2') {
+            let toast2 = document.querySelector('#toast2');
+            let t2 = new bootstrap.Toast(toast2);
+            t2.show();
+        }
+
+        if (exampleId === 'example3') {
+            let toast3 = document.querySelector('#toast3');
+            let t3 = new bootstrap.Toast(toast3);
+            t3.show();
+        }
+
+        if (exampleId === 'example4') {
+            let jsToast = document.querySelector('#jsToast');
+            let t4 = new bootstrap.Toast(jsToast);
+            t4.show();
+        }
+    }
+</script>
+
+</body>
+</html>

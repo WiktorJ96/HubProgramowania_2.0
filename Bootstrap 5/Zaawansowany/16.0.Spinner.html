@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Spinner</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/css/bootstrap.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.7/dist/umd/popper.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/js/bootstrap.min.js"></script>
+    <link rel="stylesheet" href="../styles.css">
+</head>
+<body>
+    <div class="container">
+        <h1>Spinner w Bootstrapie</h1>
+
+        <p>Komponent <code>Spinner</code> w Bootstrapie jest używany do wizualizacji ładowania lub operacji w toku. Może być dostosowywany pod względem rozmiaru, koloru i stylu.</p>
+
+        <h2>Podstawowy Spinner</h2>
+        <p>Poniżej znajduje się przykład podstawowego spinnera, który może być użyty do reprezentowania operacji ładowania.</p>
+
+        <pre><code class="language-html">
+&lt;!-- Podstawowy spinner --&gt;
+&lt;div class="spinner-border" role="status"&gt;
+  &lt;span class="visually-hidden"&gt;Ładowanie...&lt;/span&gt;
+&lt;/div&gt;
+        </code></pre>
+
+        <p>Ten spinner używa klasy <code>spinner-border</code>, aby wyświetlić animację ładowania.</p>
+
+        <h2>Kolorowe Spinnery</h2>
+        <p>Możesz zmieniać kolor spinnera, dodając klasy kolorystyczne, takie jak <code>.text-primary</code>, <code>.text-secondary</code>, <code>.text-success</code>, i inne.</p>
+
+        <pre><code class="language-html">
+&lt;!-- Kolorowe spinnery --&gt;
+&lt;div class="spinner-border text-primary" role="status"&gt;
+  &lt;span class="visually-hidden"&gt;Ładowanie...&lt;/span&gt;
+&lt;/div&gt;
+&lt;div class="spinner-border text-success" role="status"&gt;
+  &lt;span class="visually-hidden"&gt;Ładowanie...&lt;/span&gt;
+&lt;/div&gt;
+&lt;div class="spinner-border text-danger" role="status"&gt;
+  &lt;span class="visually-hidden"&gt;Ładowanie...&lt;/span&gt;
+&lt;/div&gt;
+        </code></pre>
+
+        <p>Każdy spinner ma dodaną klasę kolorystyczną, aby zmienić jego kolor. Możesz łatwo dostosować kolor do stylu swojej strony.</p>
+
+        <h2>Spinner z animacją liniową</h2>
+        <p>Bootstrap oferuje także spinner z animacją liniową zamiast obrotowego. Można go użyć, dodając klasę <code>.spinner-grow</code>.</p>
+
+        <pre><code class="language-html">
+&lt;!-- Spinner z animacją liniową --&gt;
+&lt;div class="spinner-grow text-info" role="status"&gt;
+  &lt;span class="visually-hidden"&gt;Ładowanie...&lt;/span&gt;
+&lt;/div&gt;
+        </code></pre>
+
+        <p>W tym przykładzie używamy klasy <code>spinner-grow</code>, aby uzyskać inny efekt ładowania.</p>
+
+        <h2>Rozmiary Spinnerów</h2>
+        <p>Możesz kontrolować rozmiar spinnera za pomocą klas <code>.spinner-border-sm</code> oraz <code>.spinner-grow-sm</code>, aby uzyskać mniejszy rozmiar spinnera.</p>
+
+        <pre><code class="language-html">
+&lt;!-- Mały spinner --&gt;
+&lt;div class="spinner-border spinner-border-sm" role="status"&gt;
+  &lt;span class="visually-hidden"&gt;Ładowanie...&lt;/span&gt;
+&lt;/div&gt;
+&lt;div class="spinner-grow spinner-grow-sm" role="status"&gt;
+  &lt;span class="visually-hidden"&gt;Ładowanie...&lt;/span&gt;
+&lt;/div&gt;
+        </code></pre>
+
+        <p>Zmniejszenie rozmiaru spinnera jest przydatne, gdy potrzebujesz bardziej kompaktowej wersji animacji ładowania.</p>
+
+        <h2>Spinner w przycisku</h2>
+        <p>Spinnery mogą być umieszczone wewnątrz przycisków, aby wskazać, że operacja jest w toku.</p>
+
+        <pre><code class="language-html">
+&lt;!-- Spinner w przycisku --&gt;
+&lt;button class="btn btn-primary" type="button" disabled&gt;
+  &lt;span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"&gt;&lt;/span&gt;
+  Ładowanie...
+&lt;/button&gt;
+        </code></pre>
+
+        <p>W tym przykładzie spinner został umieszczony w przycisku, co wskazuje, że operacja jest w toku i użytkownik powinien poczekać na jej zakończenie.</p>
+
+        <h2>Podsumowanie</h2>
+        <ul>
+            <li><strong>Spinnery</strong> w Bootstrapie są używane do reprezentowania operacji ładowania lub przetwarzania.</li>
+            <li>Można dostosować spinnery pod względem koloru, rozmiaru oraz stylu, aby dopasować je do wyglądu strony.</li>
+            <li>Bootstrap oferuje dwa rodzaje spinnerów: <code>spinner-border</code> oraz <code>spinner-grow</code>, które można umieszczać nawet wewnątrz przycisków.</li>
+        </ul>
+
+        <a href="./16.1.Spinner-projekt.html"><button>Przykłady</button></a>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/prism.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/components/prism-html.min.js"></script>
+</body>
+</html>
