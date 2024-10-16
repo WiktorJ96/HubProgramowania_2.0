@@ -15,13 +15,6 @@
             display: block;
         }
 
-        .highlight {
-            background-color: #f8f9fa;
-            padding: 10px;
-            margin-bottom: 20px;
-            border-left: 4px solid #007bff;
-        }
-
         .flex-example {
             background-color: #f1f1f1;
             padding: 20px;
@@ -29,9 +22,19 @@
             text-align: center;
             border: 1px solid #ccc;
         }
+
+        .highlight {
+            background-color: #f8f9fa;
+            padding: 10px;
+            margin-bottom: 20px;
+            border-left: 4px solid #007bff;
+        }
+
+        
     </style>
 </head>
 <body>
+    <div id="toastContainer" class="toast-container position-fixed bottom-0 end-0 p-3"></div>
     <div class="container">
         <h1 class="text-center my-4">Przykłady</h1>
 
@@ -49,6 +52,7 @@
                 <li><a class="dropdown-item" href="#" onclick="showExample('example6')">Kolejność elementów</a></li>
                 <li><a class="dropdown-item" href="#" onclick="showExample('example7')">Responsywny Flexbox</a></li>
                 <li><a class="dropdown-item" href="#" onclick="showExample('example8')">Fill, Grow, Shrink</a></li>
+                <li><a class="dropdown-item" href="#" onclick="showExample('example9')">Flex wrap</a></li>
             </ul>
         </div>
 
@@ -221,12 +225,70 @@
 &lt;div class="d-flex" style="border: 1px solid #ccc; padding: 10px; width: 100%;"&gt;
     &lt;div class="flex-example flex-fill"&gt;Element A (flex-fill) Lorem*1&lt;/div&gt;
     &lt;div class="flex-example flex-grow-1"&gt;Element B (flex-grow-1) Lorem*1&lt;/div&gt;
-    &lt;div class="flex-example flex-shrink-0""&gt;Element C (flex-shrink-0)&lt;/div&gt;
+    &lt;div class="flex-example flex-shrink-0"&gt;Element C (flex-shrink-0)&lt;/div&gt;
 &lt;/div&gt;
         </code></pre>
     </div>
-    
-    </div>
+
+        <!-- Przykład: Różne opcje Flex Wrap -->
+        <div id="example9" class="example">
+            <h2>Przykład: Różne opcje Flex Wrap</h2>
+            <div class="highlight">
+                <h4>Bez Flex Wrap (`flex-nowrap`)</h4>
+                <div class="d-flex flex-nowrap mb-4 justify-content-center">
+                    <div class="flex-example col">Element A</div>
+                    <div class="flex-example col">Element B</div>
+                    <div class="flex-example col">Element C</div>
+                    <div class="flex-example col">Element D</div>
+                </div>
+
+                <h4>Z Flex Wrap (`flex-wrap`)</h4>
+                <div class="d-flex flex-wrap mb-4 justify-content-center">
+                    <div class="flex-example col">Element A</div>
+                    <div class="flex-example col">Element B</div>
+                    <div class="flex-example col">Element C</div>
+                    <div class="flex-example col">Element D</div>
+                </div>
+
+                <h4>Z Flex Wrap Reverse (`flex-wrap-reverse`)</h4>
+                <div class="d-flex flex-wrap-reverse justify-content-center">
+                    <div class="flex-example col">Element A</div>
+                    <div class="flex-example col">Element B</div>
+                    <div class="flex-example col">Element C</div>
+                    <div class="flex-example col">Element D</div>
+                </div>
+            </div>
+
+            <h3>Kod HTML:</h3>
+            <pre><code class="language-html">
+            &lt;!-- Bez Flex Wrap --&gt;
+            &lt;div class="d-flex flex-nowrap"&gt;
+                &lt;div class="flex-example col"&gt;Element A&lt;/div&gt;
+                &lt;div class="flex-example col"&gt;Element B&lt;/div&gt;
+                &lt;div class="flex-example col"&gt;Element C&lt;/div&gt;
+                &lt;div class="flex-example col"&gt;Element D&lt;/div&gt;
+            &lt;/div&gt;
+                        
+            &lt;!-- Z Flex Wrap --&gt;
+            &lt;div class="d-flex flex-wrap"&gt;
+                &lt;div class="flex-example col"&gt;Element A&lt;/div&gt;
+                &lt;div class="flex-example col"&gt;Element B&lt;/div&gt;
+                &lt;div class="flex-example col"&gt;Element C&lt;/div&gt;
+                &lt;div class="flex-example col"&gt;Element D&lt;/div&gt;
+            &lt;/div&gt;
+                        
+            &lt;!-- Z Flex Wrap Reverse --&gt;
+            &lt;div class="d-flex flex-wrap-reverse"&gt;
+                &lt;div class="flex-example col"&gt;Element A&lt;/div&gt;
+                &lt;div class="flex-example col"&gt;Element B&lt;/div&gt;
+                &lt;div class="flex-example col"&gt;Element C&lt;/div&gt;
+                &lt;div class="flex-example col"&gt;Element D&lt;/div&gt;
+            &lt;/div&gt;
+                        </code></pre>
+                    </div>
+                
+                
+                </div>
 
     <!-- Bootstrap i Prism -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/js/bootstrap.bundle.min.js"></script>
@@ -247,5 +309,80 @@
             Prism.highlightAll();
         }
     </script>
+        <script>
+    // Tworzenie przycisku
+    const showCodeButton = document.createElement('button');
+    showCodeButton.textContent = 'KOD CSS';
+    showCodeButton.className = 'btn btn-primary';
+    showCodeButton.style.position = 'fixed';
+    showCodeButton.style.top = '10px';
+    showCodeButton.style.left = '10px';
+    showCodeButton.style.zIndex = '1050'; // Wyższy z-index dla widoczności
+    document.body.appendChild(showCodeButton);
+
+    // Tworzenie elementu toasta
+    const toastElement = document.createElement('div');
+    toastElement.className = 'toast';
+    toastElement.setAttribute('role', 'alert');
+    toastElement.setAttribute('aria-live', 'assertive');
+    toastElement.setAttribute('aria-atomic', 'true');
+
+    // Dodanie nagłówka i treści toasta
+    toastElement.innerHTML = `
+        <div class="toast-header">
+            <strong class="me-auto">Kod CSS</strong>
+            <button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Close"></button>
+        </div>
+        <div class="toast-body">
+            <pre id="cssCode">
+        .example {
+            display: none;
+        }
+
+        .example.active {
+            display: block;
+        }
+
+        .flex-example {
+            background-color: #f1f1f1;
+            padding: 20px;
+            margin: 10px;
+            text-align: center;
+            border: 1px solid #ccc;
+        }
+            </pre>
+            <button id="copyButton" class="btn btn-secondary btn-sm mt-2">Kopiuj</button>
+        </div>
+    `;
+
+    // Dodanie toasta do kontenera w dolnym rogu
+    document.getElementById('toastContainer').appendChild(toastElement);
+
+    // Inicjalizacja Bootstrapowego toasta
+    const cssCodeToast = new bootstrap.Toast(toastElement);
+
+    // Obsługa kliknięcia przycisku, aby pokazać toast
+    showCodeButton.addEventListener('click', () => {
+        cssCodeToast.show();
+    });
+
+    // Obsługa kliknięcia przycisku "Kopiuj", aby skopiować zawartość do schowka i animować przycisk
+    document.getElementById('copyButton').addEventListener('click', () => {
+        const cssCode = document.getElementById('cssCode').innerText;
+        navigator.clipboard.writeText(cssCode).then(() => {
+            const copyButton = document.getElementById('copyButton');
+            // Dodaj klasę animacji
+            copyButton.classList.add('copied');
+            copyButton.textContent = 'Skopiowano!';
+            // Po krótkim czasie przywróć pierwotny stan
+            setTimeout(() => {
+                copyButton.classList.remove('copied');
+                copyButton.textContent = 'Kopiuj';
+            }, 2000);
+        }).catch(err => {
+            console.error('Nie udało się skopiować: ', err);
+        });
+    });
+</script>
 </body>
 </html>

@@ -7,6 +7,12 @@
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/css/bootstrap.min.css">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/themes/prism-tomorrow.min.css" rel="stylesheet">
     <style>
+        #highlight {
+            padding: 10px;
+            margin-bottom: 20px;
+            border-left: 4px solid #007bff;
+        }
+
         .example {
             display: none;
         }
@@ -15,74 +21,69 @@
             display: block;
         }
 
-        #highlight {
-            padding: 10px;
-            margin-bottom: 20px;
-            border-left: 4px solid #007bff;
+        /* Ogólne ustawienia paska */
+        .custom-range {
+            -webkit-appearance: none; /* Wyłączenie domyślnego stylu przeglądarki */
+            width: 100%; /* Szerokość paska */
+            height: 8px; /* Wysokość paska */
+            background: #e0e0e0; /* Jasnoszary kolor paska */
+            border-radius: 5px; /* Zaokrąglenie rogów paska */
+            outline: none; /* Usunięcie obramowania */
+            padding: 0;
         }
 
-/* Ogólne ustawienia paska */
-.custom-range {
-    -webkit-appearance: none; /* Wyłączenie domyślnego stylu przeglądarki */
-    width: 100%; /* Szerokość paska */
-    height: 8px; /* Wysokość paska */
-    background: #e0e0e0; /* Jasnoszary kolor paska */
-    border-radius: 5px; /* Zaokrąglenie rogów paska */
-    outline: none; /* Usunięcie obramowania */
-    padding: 0;
-}
+        /* Styl paska dla przeglądarek opartych na WebKit (Chrome, Safari, Edge) */
+        .custom-range::-webkit-slider-runnable-track {
+            background: #e0e0e0; /* Kolor paska */
+            height: 8px;
+            border-radius: 5px;
+        }
 
-/* Styl paska dla przeglądarek opartych na WebKit (Chrome, Safari, Edge) */
-.custom-range::-webkit-slider-runnable-track {
-    background: #e0e0e0; /* Kolor paska */
-    height: 8px;
-    border-radius: 5px;
-}
+        /* Styl uchwytu dla przeglądarek opartych na WebKit */
+        .custom-range::-webkit-slider-thumb {
+            -webkit-appearance: none; /* Wyłączenie domyślnego stylu przeglądarki */
+            width: 20px; /* Szerokość uchwytu */
+            height: 20px; /* Wysokość uchwytu */
+            background: #007bff; /* Niebieski kolor uchwytu */
+            border: 2px solid #ffffff; /* Białe obramowanie uchwytu */
+            border-radius: 50%; /* Zaokrąglenie uchwytu */
+            cursor: pointer; /* Zmiana kursora przy najechaniu */
+            box-shadow: 0px 0px 5px rgba(0, 0, 0, 0.2); /* Delikatny cień, aby uchwyt był lepiej widoczny */
+        }
 
-/* Styl uchwytu dla przeglądarek opartych na WebKit */
-.custom-range::-webkit-slider-thumb {
-    -webkit-appearance: none; /* Wyłączenie domyślnego stylu przeglądarki */
-    width: 20px; /* Szerokość uchwytu */
-    height: 20px; /* Wysokość uchwytu */
-    background: #007bff; /* Niebieski kolor uchwytu */
-    border: 2px solid #ffffff; /* Białe obramowanie uchwytu */
-    border-radius: 50%; /* Zaokrąglenie uchwytu */
-    cursor: pointer; /* Zmiana kursora przy najechaniu */
-    box-shadow: 0px 0px 5px rgba(0, 0, 0, 0.2); /* Delikatny cień, aby uchwyt był lepiej widoczny */
-}
+        /* Styl paska i uchwytu dla przeglądarek Firefox */
+        .custom-range::-moz-range-track {
+            background: #e0e0e0;
+            height: 8px;
+            border-radius: 5px;
+        }
 
-/* Styl paska i uchwytu dla przeglądarek Firefox */
-.custom-range::-moz-range-track {
-    background: #e0e0e0;
-    height: 8px;
-    border-radius: 5px;
-}
+        .custom-range::-moz-range-thumb {
+            width: 20px;
+            height: 20px;
+            background: #007bff;
+            border: 2px solid #ffffff;
+            border-radius: 50%;
+            cursor: pointer;
+            box-shadow: 0px 0px 5px rgba(0, 0, 0, 0.2);
+        }
 
-.custom-range::-moz-range-thumb {
-    width: 20px;
-    height: 20px;
-    background: #007bff;
-    border: 2px solid #ffffff;
-    border-radius: 50%;
-    cursor: pointer;
-    box-shadow: 0px 0px 5px rgba(0, 0, 0, 0.2);
-}
-
-/* Styl uchwytu dla przeglądarek IE */
-.custom-range::-ms-thumb {
-    width: 20px;
-    height: 20px;
-    background: #007bff;
-    border: 2px solid #ffffff;
-    border-radius: 50%;
-    cursor: pointer;
-    box-shadow: 0px 0px 5px rgba(0, 0, 0, 0.2);
-}
+        /* Styl uchwytu dla przeglądarek IE */
+        .custom-range::-ms-thumb {
+            width: 20px;
+            height: 20px;
+            background: #007bff;
+            border: 2px solid #ffffff;
+            border-radius: 50%;
+            cursor: pointer;
+            box-shadow: 0px 0px 5px rgba(0, 0, 0, 0.2);
+        }
 
 
     </style>
 </head>
 <body>
+    <div id="toastContainer" class="toast-container position-fixed bottom-0 end-0 p-3"></div>
     <div class="container">
         <h1 class="text-center my-4">Przykłady</h1>
 
@@ -506,5 +507,140 @@
         }
     });
 </script>
+<script>
+    // Tworzenie przycisku
+    const showCodeButton = document.createElement('button');
+    showCodeButton.textContent = 'KOD CSS';
+    showCodeButton.className = 'btn btn-primary';
+    showCodeButton.style.position = 'fixed';
+    showCodeButton.style.top = '10px';
+    showCodeButton.style.left = '10px';
+    showCodeButton.style.zIndex = '1050'; // Wyższy z-index dla widoczności
+    document.body.appendChild(showCodeButton);
+
+    // Tworzenie elementu toasta
+    const toastElement = document.createElement('div');
+    toastElement.className = 'toast';
+    toastElement.setAttribute('role', 'alert');
+    toastElement.setAttribute('aria-live', 'assertive');
+    toastElement.setAttribute('aria-atomic', 'true');
+
+    // Dodanie nagłówka i treści toasta
+    toastElement.innerHTML = `
+        <div class="toast-header">
+            <strong class="me-auto">Kod CSS</strong>
+            <button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Close"></button>
+        </div>
+        <div class="toast-body">
+            <pre id="cssCode">
+        .example {
+            display: none;
+        }
+
+        .example.active {
+            display: block;
+        }
+
+        /* Ogólne ustawienia paska */
+        .custom-range {
+            -webkit-appearance: none; /* Wyłączenie domyślnego stylu przeglądarki */
+            width: 100%; /* Szerokość paska */
+            height: 8px; /* Wysokość paska */
+            background: #e0e0e0; /* Jasnoszary kolor paska */
+            border-radius: 5px; /* Zaokrąglenie rogów paska */
+            outline: none; /* Usunięcie obramowania */
+            padding: 0;
+        }
+        
+        /* Styl paska dla przeglądarek opartych na WebKit (Chrome, Safari, Edge) */
+        .custom-range::-webkit-slider-runnable-track {
+            background: #e0e0e0; /* Kolor paska */
+            height: 8px;
+            border-radius: 5px;
+        }
+        
+        /* Styl uchwytu dla przeglądarek opartych na WebKit */
+        .custom-range::-webkit-slider-thumb {
+            -webkit-appearance: none; /* Wyłączenie domyślnego stylu przeglądarki */
+            width: 20px; /* Szerokość uchwytu */
+            height: 20px; /* Wysokość uchwytu */
+            background: #007bff; /* Niebieski kolor uchwytu */
+            border: 2px solid #ffffff; /* Białe obramowanie uchwytu */
+            border-radius: 50%; /* Zaokrąglenie uchwytu */
+            cursor: pointer; /* Zmiana kursora przy najechaniu */
+            box-shadow: 0px 0px 5px rgba(0, 0, 0, 0.2); /* Delikatny cień, aby uchwyt był lepiej widoczny */
+        }
+        
+        /* Styl paska i uchwytu dla przeglądarek Firefox */
+        .custom-range::-moz-range-track {
+            background: #e0e0e0;
+            height: 8px;
+            border-radius: 5px;
+        }
+        
+        .custom-range::-moz-range-thumb {
+            width: 20px;
+            height: 20px;
+            background: #007bff;
+            border: 2px solid #ffffff;
+            border-radius: 50%;
+            cursor: pointer;
+            box-shadow: 0px 0px 5px rgba(0, 0, 0, 0.2);
+        }
+        
+        /* Styl uchwytu dla przeglądarek IE */
+        .custom-range::-ms-thumb {
+            width: 20px;
+            height: 20px;
+            background: #007bff;
+            border: 2px solid #ffffff;
+            border-radius: 50%;
+            cursor: pointer;
+            box-shadow: 0px 0px 5px rgba(0, 0, 0, 0.2);
+        }
+            </pre>
+            <button id="copyButton" class="btn btn-secondary btn-sm mt-2">Kopiuj</button>
+        </div>
+    `;
+
+    // Dodanie toasta do kontenera w dolnym rogu
+    document.getElementById('toastContainer').appendChild(toastElement);
+
+    // Inicjalizacja Bootstrapowego toasta
+    const cssCodeToast = new bootstrap.Toast(toastElement);
+
+    // Obsługa kliknięcia przycisku, aby pokazać toast
+    showCodeButton.addEventListener('click', () => {
+        cssCodeToast.show();
+    });
+
+    // Obsługa kliknięcia przycisku "Kopiuj", aby skopiować zawartość do schowka i animować przycisk
+    document.getElementById('copyButton').addEventListener('click', () => {
+        const cssCode = document.getElementById('cssCode').innerText;
+        navigator.clipboard.writeText(cssCode).then(() => {
+            const copyButton = document.getElementById('copyButton');
+            // Dodaj klasę animacji
+            copyButton.classList.add('copied');
+            copyButton.textContent = 'Skopiowano!';
+            // Po krótkim czasie przywróć pierwotny stan
+            setTimeout(() => {
+                copyButton.classList.remove('copied');
+                copyButton.textContent = 'Kopiuj';
+            }, 2000);
+        }).catch(err => {
+            console.error('Nie udało się skopiować: ', err);
+        });
+    });
+</script>
 </body>
 </html>
+
+
+
+
+
+
+
+
+
+

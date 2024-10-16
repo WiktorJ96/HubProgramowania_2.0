@@ -8,19 +8,36 @@
   </head>
   <body data-bs-spy="scroll" data-bs-target="#navbar-example" data-bs-offset="100" tabindex="0">
 
-<!-- Układ w Wierszu -->
-<div class="d-flex flex-row mb-3">
-  <div class="p-2 bg-info text-white">Wiersz 1</div>
-  <div class="p-2 bg-warning text-white">Wiersz 2</div>
-  <div class="p-2 bg-danger text-white">Wiersz 3</div>
-</div>
+<!-- Przykład: Różne opcje Flex Wrap -->
+        <div id="example" class="example active">
+            <h2>Przykład: Różne opcje Flex Wrap</h2>
+            <div class="highlight">
+                <h4>Bez Flex Wrap (`flex-nowrap`)</h4>
+                <div class="d-flex flex-nowrap mb-4">
+                    <div class="flex-example">Element A</div>
+                    <div class="flex-example">Element B</div>
+                    <div class="flex-example">Element C</div>
+                    <div class="flex-example">Element D</div>
+                </div>
 
-<!-- Układ w Kolumnie -->
-<div class="d-flex flex-column">
-  <div class="p-2 bg-info text-white">Kolumna 1</div>
-  <div class="p-2 bg-warning text-white">Kolumna 2</div>
-  <div class="p-2 bg-danger text-white">Kolumna 3</div>
-</div>
+                <h4>Z Flex Wrap (`flex-wrap`)</h4>
+                <div class="d-flex flex-wrap mb-4">
+                    <div class="flex-example">Element A</div>
+                    <div class="flex-example">Element B</div>
+                    <div class="flex-example">Element C</div>
+                    <div class="flex-example">Element D</div>
+                </div>
+
+                <h4>Z Flex Wrap Reverse (`flex-wrap-reverse`)</h4>
+                <div class="d-flex flex-wrap-reverse">
+                    <div class="flex-example">Element A</div>
+                    <div class="flex-example">Element B</div>
+                    <div class="flex-example">Element C</div>
+                    <div class="flex-example">Element D</div>
+                </div>
+            </div>
+
+                       
         
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
   </body>

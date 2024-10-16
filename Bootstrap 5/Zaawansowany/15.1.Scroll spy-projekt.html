@@ -27,6 +27,7 @@
         .example.active {
             display: block;
         }
+
         .highlight {
             background-color: #f8f9fa;
             padding: 10px;
@@ -36,6 +37,7 @@
     </style>
 </head>
 <body data-bs-spy="scroll" data-bs-target="#combined-example"  data-bs-offset="0" tabindex="0">
+    <div id="toastContainer" class="toast-container position-fixed bottom-0 end-0 p-3"></div>
     <div class="container">
         <h1 class="text-center my-4">Przykłady</h1>
 
@@ -227,5 +229,85 @@
         }
 
     </script>
+    <script>
+    // Tworzenie przycisku
+    const showCodeButton = document.createElement('button');
+    showCodeButton.textContent = 'KOD CSS';
+    showCodeButton.className = 'btn btn-primary';
+    showCodeButton.style.position = 'fixed';
+    showCodeButton.style.top = '10px';
+    showCodeButton.style.left = '10px';
+    showCodeButton.style.zIndex = '1050'; // Wyższy z-index dla widoczności
+    document.body.appendChild(showCodeButton);
+
+    // Tworzenie elementu toasta
+    const toastElement = document.createElement('div');
+    toastElement.className = 'toast';
+    toastElement.setAttribute('role', 'alert');
+    toastElement.setAttribute('aria-live', 'assertive');
+    toastElement.setAttribute('aria-atomic', 'true');
+
+    // Dodanie nagłówka i treści toasta
+    toastElement.innerHTML = `
+        <div class="toast-header">
+            <strong class="me-auto">Kod CSS</strong>
+            <button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Close"></button>
+        </div>
+        <div class="toast-body">
+            <pre id="cssCode">
+        body {
+            position: relative;
+        }
+        .scrollspy-example {
+            position: relative;
+            height: 500px;
+            overflow-y: scroll;
+            padding: 20px;
+            border: 1px solid #ddd;
+        }
+        section {
+            padding: 60px 0;
+            border-bottom: 1px solid #eee;
+        }
+        .example {
+            display: none;
+        }
+        .example.active {
+            display: block;
+        }
+            </pre>
+            <button id="copyButton" class="btn btn-secondary btn-sm mt-2">Kopiuj</button>
+        </div>
+    `;
+
+    // Dodanie toasta do kontenera w dolnym rogu
+    document.getElementById('toastContainer').appendChild(toastElement);
+
+    // Inicjalizacja Bootstrapowego toasta
+    const cssCodeToast = new bootstrap.Toast(toastElement);
+
+    // Obsługa kliknięcia przycisku, aby pokazać toast
+    showCodeButton.addEventListener('click', () => {
+        cssCodeToast.show();
+    });
+
+    // Obsługa kliknięcia przycisku "Kopiuj", aby skopiować zawartość do schowka i animować przycisk
+    document.getElementById('copyButton').addEventListener('click', () => {
+        const cssCode = document.getElementById('cssCode').innerText;
+        navigator.clipboard.writeText(cssCode).then(() => {
+            const copyButton = document.getElementById('copyButton');
+            // Dodaj klasę animacji
+            copyButton.classList.add('copied');
+            copyButton.textContent = 'Skopiowano!';
+            // Po krótkim czasie przywróć pierwotny stan
+            setTimeout(() => {
+                copyButton.classList.remove('copied');
+                copyButton.textContent = 'Kopiuj';
+            }, 2000);
+        }).catch(err => {
+            console.error('Nie udało się skopiować: ', err);
+        });
+    });
+</script>
 </body>
 </html>
