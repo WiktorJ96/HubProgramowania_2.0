@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Destrukturyzacja, Rest, Spread</title>
+    <link rel="stylesheet" href="../styles.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/themes/prism-tomorrow.min.css" rel="stylesheet" />
+</head>
+<body>
+    <div class="container">
+        <h1>Destrukturyzacja, Rest, Spread</h1>
+
+        <p>Destrukturyzacja w JavaScript to sposób na łatwe wyciąganie wartości z obiektów i tablic. Operatory rest i spread pozwalają na elastyczne manipulowanie danymi, takie jak zbieranie wielu elementów do jednej zmiennej (rest) lub rozkładanie elementów na poszczególne części (spread).</p>
+
+        <h2>Destrukturyzacja obiektów</h2>
+        <p>Destrukturyzacja obiektów pozwala na wyciąganie wartości z obiektów i przypisywanie ich do zmiennych w prosty sposób.</p>
+        <pre><code class="language-javascript">
+const listaZakupów = {
+    jabłka: 5,
+    banany: 10,
+    pomarańcze: 7
+};
+
+// Destrukturyzacja obiektu - przepisujemy produkty z listy na "karteczki"
+const { jabłka, banany, pomarańcze } = listaZakupów;
+
+// Teraz mamy każdą rzecz z listy zakupów przypisaną do zmiennych (karteczek)
+console.log(`Mam ${jabłka} jabłek.`);
+console.log(`Mam ${banany} bananów.`);
+console.log(`Mam ${pomarańcze} pomarańczy.`);
+        </code></pre>
+        <p>Wyobraź sobie obiekt jako listę zakupów z różnymi produktami. Destrukturyzacja to jak szybkie przepisywanie tych produktów na karteczki — każdy produkt dostaje swoją własną karteczkę (zmienną).</p>
+
+        <h3>Destrukturyzacja z aliasami</h3>
+        <p>Możemy również używać aliasów, jeśli chcemy, aby nasze zmienne miały inne nazwy niż klucze w obiekcie.</p>
+        <pre><code class="language-javascript">
+const { name: firstName, age: years } = person;
+console.log(firstName); // "Anna"
+console.log(years);     // 28
+        </code></pre>
+
+        <h2>Destrukturyzacja tablic</h2>
+        <p>Destrukturyzacja tablic działa podobnie do destrukturyzacji obiektów, ale używa indeksów, aby przypisać wartości do zmiennych.</p>
+        <pre><code class="language-javascript">
+// Mamy pudełko z owocami (tablica)
+const owoce = ["jabłko", "banan", "gruszka"];
+
+// Destrukturyzacja: wyciągamy każdy owoc z pudełka i kładziemy go na osobny talerz (przypisujemy do zmiennych)
+const [talerz1, talerz2, talerz3] = owoce;
+
+// Teraz każdy owoc jest na swoim własnym talerzu (w zmiennych)
+console.log(`Na talerzu 1: ${talerz1}`); // Wyświetla: Na talerzu 1: jabłko
+console.log(`Na talerzu 2: ${talerz2}`); // Wyświetla: Na talerzu 2: banan
+console.log(`Na talerzu 3: ${talerz3}`); // Wyświetla: Na talerzu 3: gruszka
+
+        </code></pre>
+        <p>Wyobraź sobie, że masz pudełko z trzema owocami, a destrukturyzacja to jak przypisanie każdego owocu do swojego własnego talerza. Każdy owoc z pudełka trafia na osobny talerz.</p>
+
+        <h2>Operator Rest</h2>
+        <p>Operator <code>rest</code> wyrażany poprzez (<code>...</code>) pozwala na zbieranie wielu elementów do jednej zmiennej. Można go używać w destrukturyzacji, aby zebrać resztę elementów.</p>
+        <pre><code class="language-javascript">
+const numbers = [1, 2, 3, 4, 5];
+
+// Destrukturyzacja z użyciem operatora rest
+const [first, second, ...rest] = numbers;
+console.log(first);  // 1
+console.log(second); // 2
+console.log(rest);   // [3, 4, 5]
+        </code></pre>
+        <p>Operator <code>rest</code> działa jak worek, do którego wrzucamy wszystkie pozostałe elementy, które nie zostały przypisane do zmiennych.</p>
+
+        <h3>Rest w funkcjach</h3>
+        <p>Można również używać operatora <code>rest</code> w funkcjach, aby zebrać dowolną liczbę argumentów.</p>
+        <pre><code class="language-javascript">
+function sum(...args) {
+    return args.reduce((total, num) => total + num, 0);
+}
+
+console.log(sum(1, 2, 3)); // 6
+console.log(sum(10, 20, 30, 40)); // 100
+        </code></pre>
+        <p>Wyobraź sobie, że <code>rest</code> w funkcji działa jak koszyk, do którego możesz wrzucić dowolną liczbę argumentów. Funkcja <code>sum</code> sumuje wszystkie te argumenty.</p>
+
+        <h2>Operator Spread</h2>
+        <p>Operator <code>spread</code> (<code>...</code>) pozwala na "rozwinięcie" tablicy lub obiektu na poszczególne elementy.</p>
+        <pre><code class="language-javascript">
+const array1 = [1, 2, 3];
+const array2 = [...array1, 4, 5]; // Rozwija array1 i dodaje nowe elementy
+console.log(array2); // [1, 2, 3, 4, 5]
+        </code></pre>
+        <p>Operator <code>spread</code> można porównać do rozpakowania skompresowanych plików za pomocą programu do archiwizacji. Kiedy masz skompresowane pliki (jak np. plik ZIP), wszystkie dane są zebrane razem, ale trudno jest bezpośrednio z nimi pracować. Rozpakowanie takiego pliku powoduje, że wszystkie elementy zostają rozłożone w pełni i są dostępne osobno, gotowe do użycia.</p>
+        <p>Podobnie, operator <code>spread</code> "rozpakowuje" elementy z tablicy lub obiektu, rozkładając je na pojedyncze wartości, które mogą być bezpośrednio używane w nowym kontekście, np. w innej tablicy, obiekcie lub funkcji.</p>
+
+        <h3>Spread w obiektach</h3>
+        <p>Operator <code>spread</code> można również używać z obiektami, aby tworzyć kopie obiektów i dodawać nowe właściwości.</p>
+        <pre><code class="language-javascript">
+const person1 = {
+    name: "Jan",
+    age: 30
+};
+
+const person2 = { ...person1, city: "Kraków" };
+console.log(person2); // { name: "Jan", age: 30, city: "Kraków" }
+        </code></pre>
+        <p>W tym przykładzie operator <code>spread</code> "rozpakowuje" właściwości obiektu <code>person1</code> i tworzy nowy obiekt, do którego dodajemy kolejną właściwość <code>city</code>.</p>
+
+        <h2>Podsumowanie</h2>
+        <ul>
+            <li>Destrukturyzacja pozwala na wyciąganie wartości z obiektów i tablic w łatwy sposób.</li>
+            <li>Operator <code>rest</code> zbiera pozostałe elementy do jednej zmiennej.</li>
+            <li>Operator <code>spread</code> rozwija tablice i obiekty, pozwalając na łatwe łączenie lub kopiowanie elementów.</li>
+        </ul>
+    </div>
+
+    <script>
+        // Przykład destrukturyzacji tablicy z operatorem rest
+        const fruits = ["jabłko", "banan", "gruszka", "pomarańcza"];
+        const [firstFruit, ...otherFruits] = fruits;
+        console.log(firstFruit);  // "jabłko"
+        console.log(otherFruits); // ["banan", "gruszka", "pomarańcza"]
+    </script>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/prism.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/components/prism-javascript.min.js"></script>
+</body>
+</html>

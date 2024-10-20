@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Scope i Hoisting w JavaScript</title>
+    <link rel="stylesheet" href="../styles.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/themes/prism-tomorrow.min.css" rel="stylesheet" />
+</head>
+<body>
+    <div class="container">
+        <h1>Scope i Hoisting w JavaScript</h1>
+
+        <p>W JavaScript zakres (ang. <em>scope</em>) zmiennych określa, gdzie zmienna jest dostępna, a hoisting wpływa na sposób, w jaki zmienne i funkcje są przenoszone na górę swojego zakresu. Poniżej znajdziesz omówienie tych pojęć oraz różnic między <code>var</code>, <code>let</code> i <code>const</code>.</p>
+
+        <h2>Zakres zmiennych (Scope)</h2>
+        <p>Zakres odnosi się do obszaru w kodzie, w którym dana zmienna jest dostępna. W JavaScript mamy dwa główne rodzaje zakresów: globalny i lokalny.</p>
+
+        <h3>Zakres globalny</h3>
+        <p>Zmienne zadeklarowane poza jakąkolwiek funkcją mają zakres globalny, co oznacza, że są dostępne w całym programie.</p>
+        <pre><code class="language-javascript">
+let globalVar = "To jest zmienna globalna";
+
+function showGlobalVar() {
+    console.log(globalVar); // Możemy uzyskać dostęp do zmiennej globalnej wewnątrz funkcji
+}
+
+showGlobalVar(); // Wynik: "To jest zmienna globalna"
+        </code></pre>
+
+        <h3>Zakres lokalny</h3>
+        <p>Zmienne zadeklarowane wewnątrz funkcji mają zakres lokalny i są dostępne tylko wewnątrz tej funkcji.</p>
+        <pre><code class="language-javascript">
+function localScope() {
+    let localVar = "To jest zmienna lokalna";
+    console.log(localVar); // Zmienna lokalna jest dostępna tylko wewnątrz tej funkcji
+}
+
+localScope(); // Wynik: "To jest zmienna lokalna"
+console.log(localVar); // Błąd! localVar nie jest dostępna poza funkcją
+        </code></pre>
+
+        <h3>Zakres blokowy</h3>
+        <p>Zmienne zadeklarowane za pomocą <code>let</code> i <code>const</code> mają zakres blokowy, co oznacza, że są dostępne tylko wewnątrz bloku kodu, np. w klamrach <code>{}</code>.</p>
+        <pre><code class="language-javascript">
+if (true) {
+    let blockVar = "To jest zmienna blokowa";
+    console.log(blockVar); // Zmienna dostępna tylko w bloku if
+}
+
+console.log(blockVar); // Błąd! blockVar nie jest dostępna poza blokiem
+        </code></pre>
+
+        <h2>Hoisting</h2>
+        <p>Hoisting to mechanizm, w którym deklaracje zmiennych i funkcji są przenoszone na górę swojego zakresu przed wykonaniem kodu. Zmienne zadeklarowane za pomocą <code>var</code> są przenoszone na górę, ale ich wartość zostaje przypisana dopiero w miejscu deklaracji. Zmienne <code>let</code> i <code>const</code> również są hoistowane, ale nie można ich używać przed deklaracją.</p>
+
+        <h3>Hoisting zmiennych z <code>var</code></h3>
+        <pre><code class="language-javascript">
+console.log(hoistedVar); // Wynik: undefined (zmienna jest hoistowana, ale wartość przypisana później)
+var hoistedVar = "Jestem hoistowana!";
+        </code></pre>
+
+        <h3>Hoisting zmiennych z <code>let</code> i <code>const</code></h3>
+        <p>Zmiennych zadeklarowanych za pomocą <code>let</code> i <code>const</code> nie można używać przed ich zadeklarowaniem. Poniżej przykład:</p>
+        <pre><code class="language-javascript">
+console.log(hoistedLet); // Błąd! hoistedLet nie może być używana przed deklaracją
+let hoistedLet = "Nie jestem hoistowana!";
+        </code></pre>
+
+        <h2>Różnice między <code>var</code>, <code>let</code> i <code>const</code></h2>
+        <ul>
+            <li><strong><code>var</code></strong>: Ma zakres funkcyjny, jest hoistowana, a jej wartość można nadpisać. Zmienne <code>var</code> są dostępne nawet przed ich deklaracją (dzięki hoistingowi), ale mają wartość <code>undefined</code> przed przypisaniem.</li>
+            <li><strong><code>let</code></strong>: Ma zakres blokowy, nie można jej używać przed deklaracją (hoisting działa inaczej niż w przypadku <code>var</code>), a jej wartość można zmieniać po przypisaniu.</li>
+            <li><strong><code>const</code></strong>: Ma zakres blokowy, nie można jej używać przed deklaracją, a raz przypisana wartość nie może być zmieniona. Jednak w przypadku obiektów zadeklarowanych jako <code>const</code>, możliwe jest modyfikowanie właściwości obiektu, choć sama referencja do obiektu nie może zostać zmieniona.</li>
+        </ul>
+        <pre><code class="language-javascript">
+// var
+var x = 10;
+console.log(x); // Wynik: 10
+x = 20;
+console.log(x); // Wynik: 20
+
+// let
+let y = 15;
+console.log(y); // Wynik: 15
+y = 25;
+console.log(y); // Wynik: 25
+
+// const
+const z = 30;
+console.log(z); // Wynik: 30
+z = 40; // Błąd! Nie można zmienić wartości zmiennej const
+        </code></pre>
+
+        <h3>Modyfikowanie właściwości obiektu zadeklarowanego jako <code>const</code></h3>
+        <p>Obiekty zadeklarowane jako <code>const</code> nie mogą zostać nadpisane nową referencją, ale można modyfikować ich wewnętrzne właściwości.</p>
+        <pre><code class="language-javascript">
+const car = {
+    brand: "Toyota",
+    model: "Corolla"
+};
+
+// Możemy modyfikować właściwości obiektu
+car.model = "Camry";
+console.log(car.model); // Wynik: "Camry"
+
+// Ale nie możemy przypisać nowej wartości do car
+car = { brand: "Honda", model: "Civic" }; // Błąd!
+        </code></pre>
+        <p>W powyższym przykładzie zmienna <code>car</code> jest zadeklarowana jako <code>const</code>, co oznacza, że nie można przypisać jej nowego obiektu. Można jednak modyfikować istniejące właściwości obiektu, takie jak <code>model</code>.</p>
+
+        <pre><code class="language-javascript">
+// Przykład z tablicą zadeklarowaną jako const
+const numbers = [1, 2, 3];
+numbers.push(4); // Możemy dodawać elementy do tablicy
+console.log(numbers); // Wynik: [1, 2, 3, 4]
+
+numbers = [5, 6, 7]; // Błąd! Nie można przypisać nowej tablicy do zmiennej const
+        </code></pre>
+
+    </div>
+    <script>
+        // Przykład hoistingu funkcji
+        greet(); // Możemy wywołać funkcję przed jej deklaracją
+        function greet() {
+            console.log("Cześć!");
+        }
+    </script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/prism.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/components/prism-javascript.min.js"></script>
+</body>
+</html>

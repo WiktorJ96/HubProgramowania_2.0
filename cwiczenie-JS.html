@@ -12,6 +12,7 @@
         width: 100%;
         height: 100vh;
         margin: 0;
+        overflow: hidden;
     }
 
     div {
@@ -29,20 +30,48 @@
   </style>
   <body>
   <canvas id="canvas"></canvas>
+  <button onclick="app.changeColor('white')">Biały</button>
+  <button onclick="app.changeColor('red')">Czerwony</button>
     <script>
         class DrawingApp {
             constructor() {
                 this.canvas = document.getElementById.getElementById("canvas");
+                this.painting = false;
                 this.#init();
+                this.#initEvents();
             }
 
             #init() {
                 this.ctx = this.canvas.getContext("2d");
+                this.ctx.strokeStyle = "white"
                 this.canvas.width = window.innerWidth;
                 this.canvas.height = window.innerHeight;
                 this.clearCanvas();
             }
+
+            #initEvents() {
+
+            }
+
+            #startPosition() {
+                this.painting = true;
+                this.#draw();
+            }
+
+            #endPosition() {
+                this.painting = true;
+            }
+
+            #draw(){
+                
+            }
+
+            changeColor(color) {
+                this.ctx.strokeStyle = color;
+            }
         }
+
+        const app = new DrawingApp();
     </script>
     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.min.js"></script>

@@ -1,0 +1,274 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Klasy i Dziedziczenie</title>
+    <link rel="stylesheet" href="../styles.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/themes/prism-tomorrow.min.css" rel="stylesheet" />
+</head>
+<body>
+    <div class="container">
+        <h1>Klasy i Dziedziczenie</h1>
+
+        <p>Klasy w JavaScript pozwalają na tworzenie obiektów z zaawansowaną logiką. Ułatwiają one organizację kodu i wprowadzają pojęcia takie jak dziedziczenie. Klasy definiują strukturę obiektu (właściwości i metody), a dziedziczenie umożliwia tworzenie nowych klas na podstawie istniejących.</p>
+
+        <h2>Definiowanie klas</h2>
+        <p>Klasy można definiować za pomocą słowa kluczowego <code>class</code>. Każda klasa posiada konstruktor, który jest specjalną metodą do inicjalizacji nowo utworzonych obiektów.</p>
+        <pre><code class="language-javascript">
+class Cake {
+    // Konstruktor to instrukcja, jak przygotować tort.
+    constructor(flavor, layers) {
+        // Właściwości tortu: smak (flavor) i ilość warstw (layers).
+        this.flavor = flavor; // Smak tortu.
+        this.layers = layers; // Liczba warstw tortu.
+    }
+
+    // Metoda "showCake" służy do pokazania tortu – jego smaku i liczby warstw.
+    showCake() {
+        console.log(`Ten tort ma smak ${this.flavor} i składa się z ${this.layers} warstw.`);
+    }
+}
+
+// Tworzymy tort na podstawie klasy Cake.
+const cake1 = new Cake("czekoladowy", 3);
+
+// Prezentujemy tort, wywołując metodę showCake.
+cake1.showCake(); // "Ten tort ma smak czekoladowy i składa się z 3 warstw."
+        </code></pre>
+        <p>Wyobraź sobie klasę jako przepis na tort. Konstruktor to instrukcje, jak przygotować tort (czyli jak stworzyć obiekt), a właściwości takie jak <code>flavor</code> i <code>layers</code> to wytyczne instrukcji. Metoda <code>showCake</code> to sposób prezentacji tortu – można wywołać ją, by pokazać, jak tort wygląda i z ilu warstw się składa.</p>
+
+        <h2>Konstruktory</h2>
+        <p>Konstruktor to specjalna metoda, która jest wywoływana automatycznie przy tworzeniu nowego obiektu na podstawie klasy. Służy do ustawiania początkowych wartości właściwości obiektu.</p>
+        <pre><code class="language-javascript">
+class Car {
+    constructor(brand, model) {
+        this.brand = brand;
+        this.model = model;
+    }
+
+    describe() {
+        console.log(`To jest ${this.brand} ${this.model}.`);
+    }
+}
+
+const car1 = new Car("Toyota", "Corolla");
+car1.describe(); // "To jest Toyota Corolla."
+        </code></pre>
+        <p>Konstruktor jest potrzebny, ponieważ pozwala Ci zdefiniować, jak mają być tworzone obiekty na podstawie klasy. Bez konstruktora nie byłoby możliwości ustawienia początkowych wartości dla właściwości obiektu, takich jak <code>brand</code> i <code>model</code>.</p>
+
+        <p>Bez konstruktora, każdą właściwość trzeba byłoby ustawiać ręcznie po stworzeniu obiektu:</p>
+        <pre><code class="language-javascript">
+const car1 = {}; // Tworzenie pustego obiektu
+car1.brand = "Toyota"; // Ręczne przypisanie marki
+car1.model = "Corolla"; // Ręczne przypisanie modelu
+        </code></pre>
+
+        <h2>Metody klas</h2>
+        <p>Metody w klasach to funkcje, które są przypisane do obiektów danej klasy. Metody mogą wykonywać różne operacje na właściwościach obiektu.</p>
+        <pre><code class="language-javascript">
+class Dog {
+    constructor(name, breed) {
+        this.name = name;
+        this.breed = breed;
+    }
+
+    bark() {
+        console.log(`${this.name} szczeka!`);
+    }
+}
+
+const dog1 = new Dog("Rex", "Owczarek");
+dog1.bark(); // "Rex szczeka!"
+        </code></pre>
+        <p>Metoda <code>bark</code> to jak umiejętność psa – kiedy ją wywołamy, pies wykonuje akcję (w tym przypadku szczeka).</p>
+
+        <h2>Dziedziczenie</h2>
+        <p>Dziedziczenie w JavaScript pozwala na tworzenie nowych klas na podstawie istniejących klas. Używamy słowa kluczowego <code>extends</code>, aby wskazać, że nowa klasa dziedziczy po innej.</p>
+        <pre><code class="language-javascript">
+// Klasa podstawowa "Character" (postać) - każdy bohater w grze ma imię i może atakować.
+class Character {
+    constructor(name) {
+        this.name = name;
+    }
+
+    attack() {
+        console.log(`${this.name} wykonuje atak!`);
+    }
+}
+
+// Klasa "Warrior" (wojownik) rozszerza klasę "Character" - wojownik ma dodatkowe umiejętności, np. obronę.
+class Warrior extends Character {
+    constructor(name, weapon) {
+        super(name); // Wywołuje konstruktor klasy Character, aby ustawić imię postaci.
+        this.weapon = weapon; // Dodatkowa cecha wojownika - rodzaj broni.
+    }
+
+    defend() {
+        console.log(`${this.name} broni się używając ${this.weapon}!`);
+    }
+}
+
+// Tworzymy nową postać wojownika
+const warrior1 = new Warrior("Thorin", "miecz");
+warrior1.attack(); // "Thorin wykonuje atak!" (odziedziczone z klasy Character)
+warrior1.defend(); // "Thorin broni się używając miecz!" (unikalna cecha wojownika)
+        </code></pre>
+        <p>Wyobraź sobie, że klasa <code>Character</code> to podstawowy szablon postaci w grze RPG. Każda postać może wykonywać ataki. Klasa <code>Warrior</code> rozszerza ten szablon, dodając specjalne umiejętności wojownika, takie jak obrona z użyciem broni. Dzięki dziedziczeniu <code>Warrior</code> automatycznie zyskuje umiejętności z klasy <code>Character</code>, ale ma także swoje unikalne metody.</p>
+
+        <h2>Czym jest <code>this</code>?</h2>
+<p><code>this</code> w JavaScript odnosi się do <strong>obiektu</strong>, w którym funkcja jest wywoływana, i pozwala na dostęp do jego właściwości oraz metod. Ważnym aspektem <code>this</code> jest to, że jego kontekst zmienia się w zależności od <strong>sposobu wywołania funkcji</strong>, a nie od miejsca, gdzie ta funkcja jest zdefiniowana. To oznacza, że <code>this</code> może wskazywać na różne obiekty w różnych sytuacjach.</p>
+
+<h3><code>this</code> w metodach obiektu</h3>
+<p>Kiedy używamy <code>this</code> w metodzie obiektu, odnosi się ono do <strong>konkretnego obiektu</strong>, który wywołuje metodę. To naturalne i intuicyjne zachowanie <code>this</code>. Zobaczmy przykład:</p>
+<pre><code class="language-javascript">
+class Person {
+    constructor(name) {
+        this.name = name;
+    }
+
+    greet() {
+        console.log(`Cześć, jestem ${this.name}.`);
+    }
+}
+
+const person1 = new Person("Ania");
+person1.greet(); // "Cześć, jestem Ania."
+</code></pre>
+<p>W powyższym przykładzie, kiedy wywołujemy metodę <code>greet()</code> na obiekcie <code>person1</code>, <code>this</code> odnosi się do tego konkretnego obiektu (<code>person1</code>). Dlatego <code>this.name</code> pobiera wartość <code>name</code> przypisaną do obiektu <code>person1</code> (czyli "Ania").</p>
+
+<h3><code>this</code> w zwykłych funkcjach</h3>
+<p>W przypadku zwykłych funkcji, które są wywoływane globalnie (czyli poza kontekstem jakiegokolwiek obiektu), <code>this</code> odnosi się do <strong>obiektu globalnego</strong>. W przeglądarkach tym obiektem globalnym jest <code>window</code>. Spójrz na ten przykład:</p>
+<pre><code class="language-javascript">
+function showThis() {
+    console.log(this);
+}
+
+showThis(); // Zwraca obiekt "window" w przeglądarce
+</code></pre>
+<p>W powyższym przykładzie funkcja <code>showThis()</code> nie jest związana z żadnym obiektem, dlatego <code>this</code> odnosi się do obiektu globalnego (<code>window</code> w przeglądarce). Jeśli funkcja nie jest wywołana jako metoda obiektu, <code>this</code> domyślnie wskazuje na globalny kontekst.</p>
+
+<h3><code>this</code> w funkcjach strzałkowych</h3>
+<p>Funkcje strzałkowe zachowują się inaczej niż zwykłe funkcje. <strong>Nie mają one własnego kontekstu <code>this</code></strong>, tylko <strong>dziedziczą <code>this</code> z otaczającego kontekstu</strong> (czyli funkcji, w której zostały zdefiniowane). Dzięki temu funkcje strzałkowe są szczególnie przydatne w sytuacjach, gdzie chcemy zachować <code>this</code> z kontekstu obiektu, np. w metodach klas.</p>
+<pre><code class="language-javascript">
+class Timer {
+    constructor() {
+        this.seconds = 0;
+    }
+
+    start() {
+        setInterval(() => {
+            this.seconds++;
+            console.log(this.seconds);
+        }, 1000);
+    }
+}
+
+const timer1 = new Timer();
+timer1.start(); // Wypisuje co sekundę wartość "this.seconds"
+</code></pre>
+<p>W tym przykładzie funkcja strzałkowa wewnątrz <code>setInterval</code> dziedziczy <code>this</code> z otaczającej metody <code>start()</code>. W związku z tym <code>this</code> odnosi się do obiektu <code>timer1</code>, co pozwala na poprawne zwiększanie wartości <code>this.seconds</code>. Gdybyśmy użyli zwykłej funkcji, <code>this</code> odnosiłoby się do obiektu globalnego (<code>window</code>), co wprowadziłoby błąd.</p>
+
+<h3><code>this</code> w funkcjach przekazywanych jako callback</h3>
+<p>Gdy zwykła funkcja jest przekazywana jako callback (np. do <code>setInterval</code> lub <code>setTimeout</code>), jej kontekst <code>this</code> odnosi się do obiektu globalnego. Zobacz przykład:</p>
+<pre><code class="language-javascript">
+class Timer {
+    constructor() {
+        this.seconds = 0;
+    }
+
+    start() {
+        setInterval(function() {
+            this.seconds++;
+            console.log(this.seconds);
+        }, 1000);
+    }
+}
+
+const timer2 = new Timer();
+timer2.start(); // Błąd: this odnosi się do "window", a nie do "timer2"
+</code></pre>
+<p>W tym przykładzie zwykła funkcja w <code>setInterval</code> ma swoje własne <code>this</code>, które w tym przypadku odnosi się do obiektu globalnego (<code>window</code>). To prowadzi do błędu, ponieważ <code>window.seconds</code> nie istnieje. W skrócie funkcja zagnieżdzona w funkcji nie dziedziczy jej <code>this</code>.</p>
+
+<h3><code>this</code> w zdarzeniach DOM</h3>
+<p>Kiedy funkcja jest wywoływana jako handler zdarzenia DOM, <code>this</code> odnosi się do elementu HTML, który wywołał to zdarzenie. Przykład:</p>
+<pre><code class="language-javascript">
+document.querySelector("button").addEventListener("click", function() {
+    console.log(this); // Odnosi się do klikniętego przycisku
+});
+</code></pre>
+<p>W tym przypadku <code>this</code> wskazuje na element HTML (przycisk), który wywołał zdarzenie <code>click</code>. To standardowe zachowanie dla <code>this</code> w kontekście zdarzeń DOM.</p>
+
+<h3>Podsumowanie</h3>
+<ul>
+    <li><code>this</code> odnosi się do obiektu, w którym jest użyte, ale jego znaczenie zależy od <strong>sposobu wywołania funkcji</strong>.</li>
+    <li>W metodach obiektu <code>this</code> odnosi się do tego konkretnego obiektu.</li>
+    <li>W zwykłych funkcjach wywoływanych globalnie <code>this</code> odnosi się do obiektu globalnego (<code>window</code> w przeglądarce).</li>
+    <li>Funkcje strzałkowe nie mają własnego <code>this</code>, tylko dziedziczą je z otaczającego kontekstu.</li>
+    <li>W zdarzeniach DOM <code>this</code> odnosi się do elementu, który wywołał zdarzenie.</li>
+</ul>
+
+
+        <h2><code>super()</code> i superklasy</h2>
+        <p>Funkcja <code>super()</code> służy do wywołania konstruktora klasy nadrzędnej (superklasy). Dzięki niej możemy przekazać dane do klasy nadrzędnej, a następnie dodać swoje specyficzne właściwości w klasie dziedziczącej.</p>
+        <pre><code class="language-javascript">
+class Vehicle {
+    constructor(type) {
+        this.type = type;
+    }
+
+    drive() {
+        console.log(`Prowadzę ${this.type}.`);
+    }
+}
+
+class Car extends Vehicle {
+    constructor(type, brand, model) {
+        super(type); // Wywołanie konstruktora Vehicle
+        this.brand = brand;
+        this.model = model;
+    }
+
+    describe() {
+        console.log(`To jest ${this.brand} ${this.model}, typ: ${this.type}.`);
+    }
+}
+
+const car2 = new Car("Samochód", "Honda", "Civic");
+car2.drive();    // "Prowadzę Samochód."
+car2.describe(); // "To jest Honda Civic, typ: Samochód."
+        </code></pre>
+        <p>Funkcja <code>super()</code> to jak most między klasą bazową a pochodną. Dzięki niemu możemy dziedziczyć właściwości klasy nadrzędnej, a następnie dodać specyficzne właściwości w nowej klasie.</p>
+
+        <h2>Podsumowanie</h2>
+        <ul>
+            <li>Klasy definiują strukturę obiektów, a konstruktor służy do inicjalizacji właściwości.</li>
+            <li>Metody w klasach to funkcje, które mogą wykonywać operacje na właściwościach obiektu.</li>
+            <li>Dziedziczenie pozwala na tworzenie nowych klas na podstawie już istniejących.</li>
+            <li>Funkcja <code>super()</code> wywołuje konstruktor klasy nadrzędnej, umożliwiając dziedziczenie i rozszerzanie funkcjonalności.</li>
+            <li><code>this</code> odnosi się do obiektu, w którym zostało użyte, ale jego kontekst może się zmieniać w zależności od sposobu wywołania.</li>
+        </ul>
+    </div>
+
+    <script>
+        // Przykład klasy z dziedziczeniem
+        class Bird extends Animal {
+            constructor(name, color) {
+                super(name);
+                this.color = color;
+            }
+
+            fly() {
+                console.log(`${this.name}, który ma kolor ${this.color}, leci.`);
+            }
+        }
+
+        const bird1 = new Bird("Papuga", "zielony");
+        bird1.eat(); // "Papuga je."
+        bird1.fly(); // "Papuga, który ma kolor zielony, leci."
+    </script>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/prism.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/components/prism-javascript.min.js"></script>
+</body>
+</html>

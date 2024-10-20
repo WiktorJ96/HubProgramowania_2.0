@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Closures</title>
+    <link rel="stylesheet" href="../styles.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/themes/prism-tomorrow.min.css" rel="stylesheet" />
+</head>
+<body>
+    <div class="container">
+        <h1>Closures</h1>
+
+        <p>Domknięcia (ang. <em>closures</em>) to potężna cecha JavaScript, która pozwala na dostęp do zmiennych lokalnych funkcji nawet po zakończeniu jej wykonania. Zrozumienie tego mechanizmu pozwala na tworzenie bardziej zaawansowanych funkcji, takich jak prywatne zmienne i funkcje.</p>
+
+        <h2>Co to są closures?</h2>
+<p>Domknięcie powstaje, gdy funkcja wewnętrzna (zagnieżdżona) zapamiętuje zakres zmiennych zewnętrznej funkcji, nawet po tym, jak ta zewnętrzna funkcja zakończy swoje działanie. Funkcja wewnętrzna ma dostęp do zmiennych zadeklarowanych w funkcji zewnętrznej dzięki mechanizmowi domknięcia.</p>
+<pre><code class="language-javascript">
+function outerFunction() {
+    let outerVariable = "Jestem z zewnętrznej funkcji";
+
+    function innerFunction() {
+        console.log(outerVariable); // Ma dostęp do zmiennej outerVariable
+    }
+
+    return innerFunction; // Zwracamy funkcję wewnętrzną na zewnątrz
+}
+
+const closure = outerFunction(); // outerFunction się kończy, ale zmienna outerVariable jest "zapamiętana"
+closure(); // Wynik: "Jestem z zewnętrznej funkcji", bo innerFunction ma dostęp do outerVariable dzięki domknięciu
+</code></pre>
+<p>Wyobraź sobie, że funkcja <code>outerFunction</code> to pokój, a zmienna <code>outerVariable</code> to przedmiot w tym pokoju. Funkcja <code>innerFunction</code> to osoba, która znajduje się w tym pokoju i widzi ten przedmiot.</p>
+<p>Kiedy <code>outerFunction</code> (pokój) się kończy, zwykle cały pokój znika, razem z przedmiotem (<code>outerVariable</code>). Ale w przypadku domknięcia, zanim pokój "zniknie", osoba (<code>innerFunction</code>) bierze ten przedmiot (<code>outerVariable</code>) ze sobą i może go dalej używać, nawet po tym, jak pokój przestanie istnieć.</p>
+<p>W kodzie, funkcja <code>innerFunction</code> "zapamiętuje" zmienne, które zostały stworzone w zewnętrznej funkcji (<code>outerFunction</code>), nawet po tym, jak ta zewnętrzna funkcja się zakończyła. Mechanizm domknięcia sprawia, że te zmienne nie znikają, dopóki są potrzebne przez wewnętrzną funkcję.</p>
+
+
+        <h2>Zastosowanie closures w praktyce</h2>
+        <p>Domknięcia mogą być używane w wielu sytuacjach, takich jak tworzenie liczników, obsługa zdarzeń lub zapamiętywanie stanu funkcji.</p>
+
+        <h3>Przykład: Licznik</h3>
+        <p>Domknięcia pozwalają na tworzenie liczników, które pamiętają swoje wartości, nawet po zakończeniu funkcji, która je stworzyła.</p>
+        <pre><code class="language-javascript">
+function createCounter() {
+    let count = 0;
+
+    return function() {
+        count++;
+        console.log("Aktualna wartość licznika: " + count);
+    };
+}
+
+const counter = createCounter();
+counter(); // Wynik: "Aktualna wartość licznika: 1"
+counter(); // Wynik: "Aktualna wartość licznika: 2"
+counter(); // Wynik: "Aktualna wartość licznika: 3"
+        </code></pre>
+        <p>W tym przykładzie zmienna <code>count</code> jest pamiętana między kolejnymi wywołaniami funkcji <code>counter</code> dzięki mechanizmowi domknięcia.</p>
+
+        <h2>Prywatne zmienne i funkcje</h2>
+        <p>Domknięcia umożliwiają tworzenie prywatnych zmiennych i funkcji, które są niedostępne z zewnątrz, ale dostępne wewnątrz funkcji. Jest to podobne do enkapsulacji (ukrywania szczegółów implementacji) w innych językach programowania.</p>
+
+        <h3>Przykład: Prywatne zmienne</h3>
+        <pre><code class="language-javascript">
+function createPerson(name) {
+    let _name = name; // Prywatna zmienna
+
+    return {
+        getName: function() {
+            return _name;
+        },
+        setName: function(newName) {
+            _name = newName;
+        }
+    };
+}
+
+const person = createPerson("Jan");
+console.log(person.getName()); // Wynik: "Jan"
+person.setName("Kasia");
+console.log(person.getName()); // Wynik: "Kasia"
+        </code></pre>
+        <p>W tym przykładzie zmienna <code>_name</code> jest prywatna i nie można jej bezpośrednio zmienić z zewnątrz. Zmiana i odczyt zmiennej są możliwe tylko poprzez metody <code>getName</code> i <code>setName</code>.</p>
+
+        <h2>Podsumowanie</h2>
+        <ul>
+            <li>Domknięcia powstają, gdy funkcja wewnętrzna zapamiętuje zakres zmiennych zewnętrznej funkcji.</li>
+            <li>Umożliwiają tworzenie liczników, obsługę stanu i prywatnych zmiennych.</li>
+            <li>Domknięcia są szeroko wykorzystywane w praktyce do tworzenia bardziej zaawansowanych funkcji w JavaScript.</li>
+        </ul>
+    </div>
+
+    <script>
+        // Przykład closure z licznikiem
+        function licznik() {
+            let count = 0;
+            return function() {
+                count++;
+                console.log("Licznik: " + count);
+            };
+        }
+
+        const myCounter = licznik();
+        myCounter(); // Licznik: 1
+        myCounter(); // Licznik: 2
+    </script>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/prism.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/components/prism-javascript.min.js"></script>
+</body>
+</html>

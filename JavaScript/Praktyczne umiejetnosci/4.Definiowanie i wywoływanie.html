@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Definiowanie i Wywoływanie Funkcji</title>
+    <link rel="stylesheet" href="../styles.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/themes/prism-tomorrow.min.css" rel="stylesheet" />
+</head>
+<body>
+    <div class="container">
+        <h1>Definiowanie i Wywoływanie Funkcji</h1>
+
+        <p>Funkcje w JavaScript są podstawowym sposobem na organizację i ponowne używanie kodu. Funkcje mogą przyjmować parametry, zwracać wartości oraz być deklarowane na różne sposoby. Poniżej znajdziesz omówienie różnych metod definiowania i wywoływania funkcji.</p>
+
+        <h2>Deklaracja funkcji</h2>
+        <p>Najprostszym sposobem zdefiniowania funkcji jest użycie deklaracji <code>function</code>. Deklaracja funkcji składa się z nazwy funkcji, listy parametrów (w nawiasach) oraz bloku kodu (w klamrach), który zostanie wykonany po wywołaniu funkcji.</p>
+        <pre><code class="language-javascript">
+function greet(name) {
+    console.log("Cześć, " + name + "!");
+}
+
+greet("Ala"); // Wywołanie funkcji, wynik: "Cześć, Ala!"
+        </code></pre>
+        <p>W powyższym przykładzie funkcja <code>greet</code> przyjmuje jeden parametr <code>name</code> i wyświetla wiadomość powitalną w konsoli.</p>
+
+        <h2>Wyrażenia funkcyjne</h2>
+        <p>Funkcję można również przypisać do zmiennej, co nazywamy wyrażeniem funkcyjnym. W takim przypadku funkcja jest anonimowa (bez nazwy).</p>
+        <pre><code class="language-javascript">
+const sayHello = function(name) {
+    console.log("Cześć, " + name + "!");
+};
+
+sayHello("Jan"); // Wywołanie funkcji, wynik: "Cześć, Jan!"
+        </code></pre>
+        <p>Funkcje zadeklarowane w ten sposób można wywoływać w podobny sposób jak funkcje nazwane, przypisując je do zmiennej.</p>
+
+        <h2>Funkcje strzałkowe</h2>
+        <p>Funkcje strzałkowe (ang. <em>arrow functions</em>) to krótsza składnia definiowania funkcji. Zamiast słowa kluczowego <code>function</code> używa się symbolu strzałki (<code>=></code>).</p>
+        <pre><code class="language-javascript">
+const add = (a, b) => {
+    return a + b;
+};
+
+console.log(add(5, 3)); // Wynik: 8
+        </code></pre>
+        <p>Jeśli funkcja zawiera tylko jedną instrukcję, można pominąć klamry oraz słowo <code>return</code>:</p>
+        <pre><code class="language-javascript">
+const multiply = (a, b) => a * b;
+
+console.log(multiply(4, 2)); // Wynik: 8
+        </code></pre>
+
+        <h2>Zwracanie wartości</h2>
+        <p>Funkcja może zwracać wynik swojej pracy przy pomocy instrukcji <code>return</code>. Po napotkaniu <code>return</code>, funkcja kończy swoje działanie i zwraca wartość.</p>
+        <pre><code class="language-javascript">
+function sum(a, b) {
+    return a + b; // Funkcja zwraca sumę dwóch argumentów
+}
+
+let result = sum(10, 5);
+console.log(result); // Wynik: 15
+        </code></pre>
+        <p>W powyższym przykładzie funkcja <code>sum</code> zwraca sumę dwóch liczb, a wynik jest przechowywany w zmiennej <code>result</code>.</p>
+
+        <h2>Wartości domyślne parametrów</h2>
+        <p>Można przypisać wartości domyślne do parametrów funkcji. Jeśli podczas wywołania funkcji nie podamy wartości dla danego parametru, zostanie użyta wartość domyślna.</p>
+        <pre><code class="language-javascript">
+function greet(name = "Gość") {
+    console.log("Cześć, " + name + "!");
+}
+
+greet();          // Wynik: "Cześć, Gość!"
+greet("Kasia");   // Wynik: "Cześć, Kasia!"
+        </code></pre>
+        <p>W tym przypadku, jeśli funkcja <code>greet</code> zostanie wywołana bez argumentu, wartość domyślna <code>"Gość"</code> zostanie użyta.</p>
+
+    </div>
+    <script>
+        // Przykład funkcji strzałkowej z domyślnym parametrem
+        const powitanie = (name = "Anonim") => {
+            console.log("Witaj, " + name + "!");
+        };
+
+        powitanie(); // Wyświetla: "Witaj, Anonim!"
+        powitanie("Ewa"); // Wyświetla: "Witaj, Ewa!"
+    </script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/prism.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/components/prism-javascript.min.js"></script>
+</body>
+</html>

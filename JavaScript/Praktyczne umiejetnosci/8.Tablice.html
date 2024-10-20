@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tablice</title>
+    <link rel="stylesheet" href="../styles.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/themes/prism-tomorrow.min.css" rel="stylesheet" />
+</head>
+<body>
+    <div class="container">
+        <h1>Tablice</h1>
+
+        <p>Tablice to struktury danych, które pozwalają przechowywać wiele wartości w jednej zmiennej. Są one szczególnie przydatne, gdy chcemy przechowywać listy elementów. Tablice w JavaScript są dynamiczne i mogą zawierać elementy różnych typów danych.</p>
+
+        <h2>Tworzenie tablic</h2>
+        <p>Tablicę można stworzyć za pomocą nawiasów kwadratowych <code>[]</code>. Elementy tablicy są oddzielane przecinkami.</p>
+        <pre><code class="language-javascript">
+const fruits = ["jabłko", "banan", "gruszka"];
+console.log(fruits); // ["jabłko", "banan", "gruszka"]
+        </code></pre>
+        <p>Tablicę można porównać do półki, na której przechowujemy różne owoce. Każdy owoc to element tablicy, a półka (tablica) może zawierać ich dowolną liczbę.</p>
+
+        <h2>Metody tablicowe</h2>
+<p>JavaScript udostępnia wiele wbudowanych metod do pracy z tablicami. Oto najczęściej używane z nich:</p>
+
+<h3><code>push()</code> i <code>pop()</code></h3>
+<p>Metoda <code>push()</code> dodaje element na końcu tablicy, a <code>pop()</code> usuwa ostatni element.</p>
+<pre><code class="language-javascript">
+const numbers = [1, 2, 3];
+numbers.push(4); // Dodaje 4 na końcu tablicy
+console.log(numbers); // [1, 2, 3, 4]
+
+numbers.pop(); // Usuwa ostatni element (4)
+console.log(numbers); // [1, 2, 3]
+</code></pre>
+<p>Wyobraź sobie tablicę jako pudełko, do którego można dokładać kolejne elementy (<code>push()</code>) lub wyciągać ostatni dodany element (<code>pop()</code>).</p>
+
+<h3><code>map()</code></h3>
+<p>Metoda <code>map()</code> tworzy nową tablicę, stosując funkcję do każdego elementu tablicy.</p>
+<pre><code class="language-javascript">
+const numbers = [1, 2, 3];
+const doubled = numbers.map(number => number * 2); // Funkcja przyjmuje element tablicy (number) i mnoży go przez 2
+console.log(doubled); // [2, 4, 6]
+
+// number - reprezentuje każdy element tablicy 'numbers'
+// number * 2 - działanie, które ma być zastosowane na każdym elemencie (w tym przypadku mnożenie przez 2)
+</code></pre>
+<p>Metodę <code>map()</code> można porównać do malowania każdego elementu w tablicy na inny kolor — każdy element zostaje przekształcony według podanej funkcji.</p>
+
+<h3><code>filter()</code></h3>
+<p>Metoda <code>filter()</code> tworzy nową tablicę z elementami, które spełniają określony warunek.</p>
+<pre><code class="language-javascript">
+const numbers = [1, 2, 3, 4, 5];
+const even = numbers.filter(number => number % 2 === 0); 
+// number % 2 === 0 - warunek, który sprawdza, czy liczba jest parzysta (tylko te elementy zostaną zachowane w nowej tablicy)
+console.log(even); // [2, 4]
+
+// number - reprezentuje każdy element tablicy 'numbers'
+// number % 2 === 0 - warunek filtrowania, który przepuszcza tylko parzyste liczby
+</code></pre>
+<p>Metoda <code>filter()</code> działa jak sitko, które przepuszcza tylko te elementy, które spełniają określone kryteria.</p>
+
+<h3><code>reduce()</code></h3>
+<p>Metoda <code>reduce()</code> przekształca tablicę do jednej wartości, stosując funkcję do każdego elementu i "zbierając" wynik.</p>
+<pre><code class="language-javascript">
+const numbers = [1, 2, 3, 4];
+const sum = numbers.reduce((total, number) => total + number, 0); 
+// total - to suma zgromadzonych wartości podczas iteracji po tablicy
+// number - to aktualny element tablicy w danej iteracji
+// 0 - to wartość początkowa, od której zaczyna się sumowanie
+console.log(sum); // 10
+
+// total - wartość, która przechowuje sumę (na początku jest 0)
+// number - każdy kolejny element tablicy, który jest dodawany do total
+// total + number - operacja, która sumuje wszystkie elementy tablicy
+// 0 - początkowa wartość total, od której zaczyna się liczenie
+</code></pre>
+<p>Metodę <code>reduce()</code> można porównać do skarbonki, do której wrzucamy każdy element tablicy, sumując ich wartości.</p>
+
+
+        <h2>Iteracja po tablicach</h2>
+<p>Istnieje wiele sposobów na iterowanie po tablicach. Oto kilka z nich:</p>
+
+<h3><code>for</code></h3>
+<p>Pętla <code>for</code> pozwala na przechodzenie przez każdy element tablicy.</p>
+<pre><code class="language-javascript">
+const fruits = ["jabłko", "banan", "gruszka"];
+
+for (let i = 0; i < fruits.length; i++) { 
+    // i - zmienna indeksu, zaczyna się od 0, oznacza pozycję w tablicy
+    // i < fruits.length - warunek, który sprawdza, czy indeks jest mniejszy niż długość tablicy
+    // fruits[i] - dostęp do elementu tablicy na danym indeksie
+    console.log(fruits[i]); // Wyświetla każdy owoc z tablicy
+}
+</code></pre>
+
+<h3><code>for...of</code></h3>
+<p>Pętla <code>for...of</code> to wygodny sposób na iterowanie po tablicach, bez potrzeby dostępu do indeksów.</p>
+<pre><code class="language-javascript">
+const fruits = ["jabłko", "banan", "gruszka"];
+
+for (const fruit of fruits) { 
+    // fruit - reprezentuje każdy kolejny element tablicy 'fruits' podczas iteracji
+    console.log(fruit); // Wyświetla każdy owoc z tablicy
+}
+</code></pre>
+
+<h3><code>forEach()</code></h3>
+<p>Metoda <code>forEach()</code> wykonuje podaną funkcję dla każdego elementu tablicy.</p>
+<pre><code class="language-javascript">
+const fruits = ["jabłko", "banan", "gruszka"];
+
+fruits.forEach(fruit => { 
+    // fruit - reprezentuje każdy element tablicy 'fruits'
+    // Funkcja strzałkowa (arrow function) wykonuje operację (console.log) na każdym elemencie tablicy
+    console.log(fruit); // Wyświetla każdy owoc z tablicy
+});
+</code></pre>
+
+
+        <h2>Podsumowanie</h2>
+        <ul>
+            <li>Tablice przechowują wiele wartości w jednej zmiennej i mogą zawierać elementy różnych typów danych.</li>
+            <li>Metody takie jak <code>push()</code>, <code>pop()</code>, <code>map()</code>, <code>filter()</code> i <code>reduce()</code> pozwalają na łatwą manipulację tablicami.</li>
+            <li>Pętle <code>for</code>, <code>for...of</code> oraz metoda <code>forEach()</code> pozwalają na iterowanie po tablicach.</li>
+        </ul>
+    </div>
+
+    <script>
+        // Przykład użycia metody map()
+        const numbers = [1, 2, 3];
+        const doubled = numbers.map(num => num * 2);
+        console.log(doubled); // [2, 4, 6]
+    </script>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/prism.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/components/prism-javascript.min.js"></script>
+</body>
+</html>

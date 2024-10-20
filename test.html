@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <script>
+
+const favoritePlace = "Góry";
+const availablePlace = "Plaża";
+let isAvailable = false; // Domyślnie zakładamy, że miejsce nie jest dostępne
+
+// Sprawdzamy, czy ulubione miejsce jest dostępne
+if (favoritePlace === availablePlace) {
+  isAvailable = true; // Jeśli miejsca się zgadzają, ustawiamy dostępność na true
+}
+
+// Jeśli ulubione miejsce jest dostępne
+if (isAvailable) {
+  console.log("Moje ulubione miejsce wypoczynkowe jest dostępne!");
+} else {
+  console.log("Niestety, moje ulubione miejsce wypoczynkowe jest niedostępne.");
+}
+
+// Sprawdzenie, czy ulubione miejsce zostało podane
+if (favoritePlace === "") {
+  console.log("Błąd: nie podano ulubionego miejsca wypoczynkowego.");
+}
+
+const secretKey = Symbol("klucz dostępu");
+
+// Porównanie ulubionego miejsca ze symbolem nie ma sensu, bo to inny typ danych, ale jeśli chcesz sprawdzić dostęp:
+if (typeof favoritePlace === "symbol") {
+  console.log("Błąd: nie masz dostępu do ulubionego miejsca wypoczynkowego.");
+}
+
+
+    </script>
+</body>
+</html>

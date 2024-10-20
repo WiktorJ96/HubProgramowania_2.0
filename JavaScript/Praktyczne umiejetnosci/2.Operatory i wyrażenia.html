@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Operatory i Wyrażenia</title>
+    <link rel="stylesheet" href="../styles.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/themes/prism-tomorrow.min.css" rel="stylesheet" />
+</head>
+<body>
+    <div class="container">
+        <h1>Operatory i Wyrażenia</h1>
+        
+        <p>Operatory w JavaScript to symbole, które wykonują operacje na wartościach. Wyrażenia są to kombinacje wartości i operatorów, które JavaScript potrafi ocenić (obliczyć).</p>
+
+        <h2>Operatory arytmetyczne</h2>
+        <p>Operatory arytmetyczne wykonują podstawowe operacje matematyczne, takie jak dodawanie, odejmowanie, mnożenie i dzielenie.</p>
+        <ul>
+            <li><strong>Dodawanie:</strong> <code>+</code></li>
+            <li><strong>Odejmowanie:</strong> <code>-</code></li>
+            <li><strong>Mnożenie:</strong> <code>*</code></li>
+            <li><strong>Dzielenie:</strong> <code>/</code></li>
+            <li><strong>Modulo:</strong> <code>%</code> (reszta z dzielenia)</li>
+            <li><strong>Inkrementacja:</strong> <code>++</code> (zwiększa wartość o 1)</li>
+            <li><strong>Dekrementacja:</strong> <code>--</code> (zmniejsza wartość o 1)</li>
+        </ul>
+        <pre><code class="language-javascript">
+let a = 10;
+let b = 3;
+console.log(a + b); // Dodawanie: 13
+console.log(a - b); // Odejmowanie: 7
+console.log(a * b); // Mnożenie: 30
+console.log(a / b); // Dzielenie: 3.33
+console.log(a % b); // Modulo: 1
+        </code></pre>
+
+        <h2>Operatory porównania</h2>
+        <p>Operatory porównania sprawdzają relację pomiędzy wartościami i zwracają wartość logiczną (<code>true</code> lub <code>false</code>).</p>
+        <ul>
+            <li><strong>Równość:</strong> <code>==</code></li>
+            <li><strong>Ścisła równość:</strong> <code>===</code> (sprawdza zarówno wartość, jak i typ danych)</li>
+            <li><strong>Różność:</strong> <code>!=</code></li>
+            <li><strong>Ścisła różność:</strong> <code>!==</code></li>
+            <li><strong>Większe niż:</strong> <code>></code></li>
+            <li><strong>Mniejsze niż:</strong> <code>&lt;</code></li>
+            <li><strong>Większe lub równe:</strong> <code>>=</code></li>
+            <li><strong>Mniejsze lub równe:</strong> <code>&lt;=</code></li>
+        </ul>
+        <pre><code class="language-javascript">
+let x = 5;
+let y = 10;
+console.log(x == y);  // false, bo 5 nie równa się 10
+console.log(x === 5); // true, bo wartość i typ są takie same
+console.log(x !== y); // true, bo 5 nie jest równe 10
+console.log(x < y);   // true, bo 5 jest mniejsze niż 10
+        </code></pre>
+
+        <h2>Operatory przypisania</h2>
+        <p>Operatory przypisania służą do przypisywania wartości do zmiennych.</p>
+        <ul>
+            <li><strong>Przypisanie:</strong> <code>=</code></li>
+            <li><strong>Dodaj i przypisz:</strong> <code>+=</code></li>
+            <li><strong>Odejmij i przypisz:</strong> <code>-=</code></li>
+            <li><strong>Mnożenie i przypisz:</strong> <code>*=</code></li>
+            <li><strong>Dzielenie i przypisz:</strong> <code>/=</code></li>
+            <li><strong>Modulo i przypisz:</strong> <code>%=</code></li>
+        </ul>
+        <pre><code class="language-javascript">
+let num = 10;
+num += 5;  // num = num + 5; wartość num to teraz 15
+num -= 2;  // num = num - 2; wartość num to teraz 13
+num *= 3;  // num = num * 3; wartość num to teraz 39
+        </code></pre>
+
+        <h2>Operatory logiczne</h2>
+        <p>Operatory logiczne służą do łączenia warunków i zwracają wartość logiczną (<code>true</code> lub <code>false</code>).</p>
+        <ul>
+            <li><strong>AND (i):</strong> <code>&&</code></li>
+            <li><strong>OR (lub):</strong> <code>||</code></li>
+            <li><strong>NOT (negacja):</strong> <code>!</code></li>
+        </ul>
+        <pre><code class="language-javascript">
+let isTrue = true;
+let isFalse = false;
+console.log(isTrue && isFalse);  // false, bo jeden z warunków jest false
+console.log(isTrue || isFalse);  // true, bo jeden z warunków jest true
+console.log(!isTrue);            // false, negacja true to false
+        </code></pre>
+
+        <h2>Wyrażenia warunkowe</h2>
+        <p>Wyrażenia warunkowe pozwalają na wykonywanie różnych działań w zależności od spełnienia określonych warunków.</p>
+        <h3>Instrukcja <code>if</code></h3>
+        <pre><code class="language-javascript">
+let age = 20;
+
+if (age >= 18) {
+    console.log("Jesteś pełnoletni");
+} else {
+    console.log("Nie jesteś pełnoletni");
+}
+        </code></pre>
+        <p>W powyższym przykładzie sprawdzamy, czy wartość <code>age</code> jest większa lub równa 18, a jeśli tak, wyświetlamy komunikat o pełnoletności. Jeśli warunek nie jest spełniony, wykonywany jest blok <code>else</code>.</p>
+
+        <h3>Operator warunkowy (<code>?:</code>)</h3>
+        <p>Jest to skrócona wersja instrukcji <code>if</code>, znana jako operator trójargumentowy.</p>
+        <pre><code class="language-javascript">
+let canDrive = (age >= 18) ? "Możesz prowadzić" : "Nie możesz prowadzić";
+console.log(canDrive); // Wyświetla "Możesz prowadzić", jeśli wiek to 18 lub więcej
+        </code></pre>
+
+    </div>
+    <script>
+        // Przykład zastosowania operatorów logicznych
+        let a = true;
+        let b = false;
+        console.log(a && b); // false, bo oba warunki nie są true
+        console.log(a || b); // true, bo jeden z warunków jest true
+        console.log(!a);     // false, bo negacja true to false
+    </script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/prism.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/components/prism-javascript.min.js"></script>
+</body>
+</html>

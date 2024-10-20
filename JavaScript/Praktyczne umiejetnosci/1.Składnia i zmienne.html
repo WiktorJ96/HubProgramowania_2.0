@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Składnia i Zmienne</title>
+    <link rel="stylesheet" href="../styles.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/themes/prism-tomorrow.min.css" rel="stylesheet" />
+</head>
+<body>
+    <div class="container">
+        <h1>Składnia, Zmienne i Typy Danych</h1>
+        
+        <p>JavaScript to język skryptowy, który używany jest głównie do tworzenia interaktywnych stron internetowych. Poniżej omówione zostaną podstawowe elementy JavaScript, takie jak składnia, zmienne, komentarze, typy danych oraz literały.</p>
+
+        <h2>Składnia</h2>
+        <p>Składnia JavaScript odnosi się do reguł, według których piszemy kod. Każda instrukcja kończy się zazwyczaj średnikiem (<code>;</code>), choć nie jest to zawsze wymagane. Poniżej znajduje się prosty przykład składni JavaScript:</p>
+        <pre><code class="language-javascript">
+        let name = "John"; // Deklaracja zmiennej i przypisanie wartości
+        console.log(name);  // Wyświetlenie wartości zmiennej w konsoli
+        </code></pre>
+
+        <h2>Komentarze</h2>
+        <p>Komentarze to sposób na dodanie notatek w kodzie, które nie są wykonywane przez program. Można używać komentarzy jednolinijkowych lub wielolinijkowych:</p>
+        <pre><code class="language-javascript">
+// To jest komentarz jednolinijkowy
+
+/*
+To jest komentarz
+wielolinijkowy
+*/
+        </code></pre>
+
+        <h2>Typy Danych</h2>
+        <p>JavaScript posiada dwa główne typy danych: proste (prymitywne) i referencyjne. Typy proste obejmują liczby, teksty, wartość logiczną i inne, podczas gdy typy referencyjne odnoszą się do bardziej złożonych struktur jak obiekty i tablice.</p>
+
+        <h3>Typy proste</h3>
+        <ul>
+            <li><strong>Number</strong>: Przechowuje liczby (np. <code>let age = 25;</code>).</li>
+            <li><strong>String</strong>: Przechowuje tekst (np. <code>let name = "Alice";</code>).</li>
+            <li><strong>Boolean</strong>: Przechowuje wartość logiczną <code>true</code> lub <code>false</code> (np. <code>let isStudent = true;</code>).</li>
+            <li><strong>Null</strong>: Specjalna wartość oznaczająca brak wartości (np. <code>let empty = null;</code>).</li>
+            <li><strong>Undefined</strong>: Oznacza zmienną, która została zadeklarowana, ale nie przypisano jej wartości (np. <code>let notDefined;</code>).</li>
+        </ul>
+
+        <h3>Typy referencyjne</h3>
+        <ul>
+            <li><strong>Obiekty</strong>: Struktury przechowujące pary klucz-wartość (np. <code>let person = { name: "John", age: 30 };</code>).</li>
+            <li><strong>Tablice</strong>: Lista elementów (np. <code>let colors = ["red", "green", "blue"];</code>).</li>
+        </ul>
+
+        <h2>Zmienne</h2>
+        <p>Zmienna to nazwana przestrzeń, w której przechowywana jest wartość. Możemy zadeklarować zmienne za pomocą <code>var</code>, <code>let</code> oraz <code>const</code>.</p>
+
+        <ul>
+            <li><strong>var</strong>: Zmienne zadeklarowane za pomocą <code>var</code> mają zasięg funkcyjny, co oznacza, że są dostępne w całej funkcji, w której są zadeklarowane.</li>
+            <li><strong>let</strong>: Zmienne zadeklarowane za pomocą <code>let</code> mają zasięg blokowy, co oznacza, że są dostępne tylko w bloku kodu, w którym zostały zadeklarowane.</li>
+            <li><strong>const</strong>: Zmienne zadeklarowane za pomocą <code>const</code> również mają zasięg blokowy, ale ich wartości nie można zmienić po przypisaniu.</li>
+        </ul>
+
+        <h2>Literały</h2>
+        <p>Literały to wartości, które pojawiają się bezpośrednio w kodzie. Oto przykłady literałów:</p>
+        <ul>
+            <li>Literał liczbowy: <code>let x = 10;</code></li>
+            <li>Literał łańcuchowy: <code>let text = "Hello, World!";</code></li>
+            <li>Literał tablicowy: <code>let fruits = ["apple", "banana", "cherry"];</code></li>
+            <li>Literał obiektowy: <code>let car = {model: "Toyota", year: 2020};</code></li>
+        </ul>
+    </div>
+    <script>
+        // Przykład kodu w JavaScript wyświetlający zmienne i ich typy
+        let example = "Przykład";
+        console.log(example);
+    </script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/prism.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/components/prism-javascript.min.js"></script>
+</body>
+</html>

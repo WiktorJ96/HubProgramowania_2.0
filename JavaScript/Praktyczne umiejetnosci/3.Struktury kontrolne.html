@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Struktury Kontrolne</title>
+    <link rel="stylesheet" href="../styles.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/themes/prism-tomorrow.min.css" rel="stylesheet" />
+</head>
+<body>
+    <div class="container">
+        <h1>Struktury Kontrolne</h1>
+        
+        <p>Struktury kontrolne w JavaScript pozwalają na podejmowanie decyzji i wielokrotne wykonywanie kodu w zależności od określonych warunków. Poniżej znajdziesz omówienie instrukcji warunkowych oraz pętli w JavaScript.</p>
+
+        <h2>Instrukcje warunkowe</h2>
+        
+        <h3>Instrukcja <code>if</code></h3>
+        <p>Instrukcja <code>if</code> pozwala na wykonanie pewnej części kodu, jeśli określony warunek jest spełniony (prawdziwy). Jeśli warunek jest fałszywy, można użyć instrukcji <code>else</code> lub <code>else if</code> do wykonania innego bloku kodu.</p>
+        <pre><code class="language-javascript">
+let age = 18;
+
+if (age >= 18) {
+    console.log("Jesteś pełnoletni");
+} else {
+    console.log("Nie jesteś pełnoletni");
+}
+        </code></pre>
+
+        <h3>Instrukcja <code>switch</code></h3>
+        <p>Instrukcja <code>switch</code> jest używana, gdy mamy wiele możliwych wartości do sprawdzenia dla jednej zmiennej. Zamiast wielu instrukcji <code>if</code>, używamy jednej instrukcji <code>switch</code>.</p>
+        <pre><code class="language-javascript">
+let color = "red";
+
+switch (color) {
+    case "red":
+        console.log("Kolor to czerwony");
+        break;
+    case "blue":
+        console.log("Kolor to niebieski");
+        break;
+    default:
+        console.log("Inny kolor");
+}
+        </code></pre>
+        <p>W tym przykładzie, jeśli wartość zmiennej <code>color</code> to "red", zostanie wyświetlona wiadomość "Kolor to czerwony". Instrukcja <code>break</code> kończy wykonywanie bloku <code>switch</code>, zapobiegając sprawdzeniu kolejnych przypadków.</p>
+
+        <h2>Pętle</h2>
+        <p>Pętle pozwalają na wielokrotne wykonywanie określonego bloku kodu, dopóki spełniony jest pewien warunek.</p>
+
+        <h3>Pętla <code>for</code></h3>
+        <p>Pętla <code>for</code> jest najczęściej używaną pętlą w JavaScript. Składa się z trzech części: inicjalizacji zmiennej, warunku, który musi być spełniony, aby kontynuować pętlę, oraz instrukcji, która jest wykonywana po każdej iteracji (np. inkrementacja zmiennej).</p>
+        <pre><code class="language-javascript">
+for (let i = 0; i < 5; i++) {
+    console.log(i);  // Wyświetla liczby od 0 do 4
+}
+        </code></pre>
+
+        <h3>Pętla <code>while</code></h3>
+        <p>Pętla <code>while</code> działa, dopóki warunek w nawiasach jest spełniony. Warunek jest sprawdzany przed każdą iteracją pętli.</p>
+        <pre><code class="language-javascript">
+let i = 0;
+while (i < 5) {
+    console.log(i);
+    i++;
+}
+        </code></pre>
+
+        <h3>Pętla <code>do...while</code></h3>
+        <p>Pętla <code>do...while</code> działa podobnie do <code>while</code>, z tą różnicą, że kod w bloku <code>do</code> jest wykonywany przynajmniej raz, nawet jeśli warunek nie jest spełniony.</p>
+        <pre><code class="language-javascript">
+let i = 0;
+do {
+    console.log(i);
+    i++;
+} while (i < 5);
+        </code></pre>
+
+        <h3>Pętla <code>for...of</code></h3>
+        <p>Pętla <code>for...of</code> iteruje po elementach dowolnej iterowalnej struktury danych, takiej jak tablica.</p>
+        <pre><code class="language-javascript">
+let fruits = ["apple", "banana", "cherry"];
+for (let fruit of fruits) {
+    console.log(fruit); // Wyświetla kolejno "apple", "banana", "cherry"
+}
+        </code></pre>
+
+        <h3>Pętla <code>forEach</code></h3>
+        <p>Metoda <code>forEach</code> jest stosowana do iteracji po elementach tablicy. Wykonuje podaną funkcję dla każdego elementu tablicy.</p>
+        <pre><code class="language-javascript">
+let numbers = [1, 2, 3, 4, 5];
+numbers.forEach(function(number) {
+    console.log(number); // Wyświetla kolejno 1, 2, 3, 4, 5
+});
+        </code></pre>
+
+    </div>
+    <script>
+        // Przykład z pętlą for
+        let names = ["John", "Jane", "Jack"];
+        for (let i = 0; i < names.length; i++) {
+            console.log(names[i]); // Wyświetla "John", "Jane", "Jack"
+        }
+    </script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/prism.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/components/prism-javascript.min.js"></script>
+</body>
+</html>

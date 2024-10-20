@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Obiekty</title>
+    <link rel="stylesheet" href="../styles.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/themes/prism-tomorrow.min.css" rel="stylesheet" />
+</head>
+<body>
+    <div class="container">
+        <h1>Obiekty</h1>
+
+        <p>Obiekty w JavaScript to struktury, które pozwalają przechowywać dane w postaci par <em>klucz-wartość</em>. Dzięki obiektom możemy tworzyć bardziej złożone struktury danych, które zawierają różne właściwości i funkcje (nazywane metodami).</p>
+
+        <h2>Tworzenie obiektów</h2>
+        <p>Obiekt w JavaScript można stworzyć za pomocą literału obiektowego (<code>{}</code>). Wewnątrz obiektu możemy zdefiniować różne właściwości, które są przechowywane w postaci pary <strong>klucz: wartość</strong>.</p>
+        <pre><code class="language-javascript">
+const car = {
+    brand: "Toyota",
+    model: "Corolla",
+    year: 2020
+};
+console.log(car);
+        </code></pre>
+        <p>Wyobraź sobie obiekt jako pudełko z etykietkami (kluczami). Każda etykieta wskazuje, co znajduje się w pudełku. W naszym przypadku mamy klucze <code>brand</code>, <code>model</code> i <code>year</code>, a wartości to odpowiednio "Toyota", "Corolla" i "2020".</p>
+
+        <h2>Manipulacja obiektami</h2>
+        <p>Do właściwości obiektu możemy odwołać się za pomocą kropki lub nawiasów kwadratowych.</p>
+        <pre><code class="language-javascript">
+// Odwołanie się do właściwości obiektu
+console.log(car.brand); // Wynik: "Toyota"
+
+// Modyfikacja właściwości obiektu
+car.year = 2021;
+console.log(car.year); // Wynik: 2021
+
+// Dodanie nowej właściwości
+car.color = "Red";
+console.log(car["color"]); // Wynik: "Red"
+        </code></pre>
+        <p>W analogii pudełka, manipulacja obiektem jest jak zmiana zawartości pudełka: możemy zmieniać istniejące przedmioty (modyfikować właściwości) lub dodać nowe (dodanie właściwości).</p>
+
+        <h2>Metody obiektów</h2>
+        <p>Obiekty mogą również przechowywać funkcje jako swoje właściwości. Te funkcje nazywamy <strong>metodami</strong>.</p>
+        <pre><code class="language-javascript">
+const person = {
+    name: "Jan",
+    age: 30,
+    greet: function() {
+        console.log("Cześć, mam na imię " + this.name);
+    }
+};
+
+person.greet(); // Wynik: "Cześć, mam na imię Jan"
+        </code></pre>
+        <p>Metody w obiekcie działają jak specjalne narzędzia w pudełku. W przypadku osoby (<code>person</code>), narzędziem jest funkcja <code>greet</code>, która wykonuje pewne zadanie (wyświetla wiadomość powitalną).</p>
+
+        <h2>Iteracja po obiektach</h2>
+<p>Istnieje kilka sposobów na iterowanie (przechodzenie) po właściwościach obiektu. Najbardziej powszechną metodą jest użycie pętli <code>for...in</code>.</p>
+<pre><code class="language-javascript">
+const book = {
+    title: "Władca Pierścieni",
+    author: "J.R.R. Tolkien",
+    year: 1954
+};
+
+for (let key in book) {
+    console.log(key + ": " + book[key]);
+}
+</code></pre>
+<p>Pętla <code>for...in</code> przechodzi przez wszystkie właściwości obiektu <code>book</code>.</p>
+<p>Wyobraź sobie, że obiekt <code>book</code> to dom z trzema szufladami. Każda szuflada ma etykietkę (klucz) na zewnątrz, która mówi, co znajduje się w środku, i w każdej szufladzie znajduje się jakiś przedmiot (wartość). Pętla <code>for...in</code> to osoba, która przechodzi przez wszystkie szuflady w domu i otwiera każdą z nich, czytając etykietkę i sprawdzając, co jest w środku.</p>
+<p>W przykładzie powyżej:</p>
+<ul>
+  <li><code>key</code> to etykietka na szufladzie (np. "title", "author", "year").</li>
+  <li><code>book[key]</code> to zawartość tej szuflady (np. "Władca Pierścieni", "J.R.R. Tolkien", 1954).</li>
+</ul>
+<p>Pętla <code>for...in</code> działa tak, że osoba (pętla) otwiera każdą szufladę, odczytuje jej etykietkę i sprawdza, co jest w środku. Na końcu wypisuje informacje o każdej szufladzie: etykietkę (klucz) i jej zawartość (wartość).</p>
+<p>W tym przypadku pętla <code>for...in</code> wypisze:</p>
+<ul>
+  <li>Pierwsza szuflada: etykietka "title" i zawartość "Władca Pierścieni".</li>
+  <li>Druga szuflada: etykietka "author" i zawartość "J.R.R. Tolkien".</li>
+  <li>Trzecia szuflada: etykietka "year" i zawartość 1954.</li>
+</ul>
+
+
+        <h2>Podsumowanie</h2>
+        <ul>
+            <li>Obiekty w JavaScript to struktury przechowujące dane w postaci par <em>klucz-wartość</em>.</li>
+            <li>Możemy odwoływać się do właściwości obiektów za pomocą notacji kropkowej lub nawiasów kwadratowych.</li>
+            <li>Obiekty mogą zawierać funkcje, które nazywamy metodami.</li>
+            <li>Pętla <code>for...in</code> pozwala na iterowanie po wszystkich właściwościach obiektu.</li>
+        </ul>
+    </div>
+
+    <script>
+        // Przykład manipulacji obiektem
+        const phone = {
+            brand: "Apple",
+            model: "iPhone 12"
+        };
+
+        // Modyfikacja właściwości
+        phone.model = "iPhone 13";
+        console.log(phone.model); // Wynik: "iPhone 13"
+    </script>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/prism.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/components/prism-javascript.min.js"></script>
+</body>
+</html>
