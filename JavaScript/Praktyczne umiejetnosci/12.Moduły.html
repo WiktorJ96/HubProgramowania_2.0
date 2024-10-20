@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Moduły ES6</title>
+    <link rel="stylesheet" href="../styles.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/themes/prism-tomorrow.min.css" rel="stylesheet" />
+</head>
+<body>
+    <div class="container">
+        <h1>Moduły ES6</h1>
+
+        <p>Moduły ES6 (ESM – ECMAScript Modules) pozwalają na dzielenie kodu na mniejsze, niezależne części, które można importować i eksportować w miarę potrzeby. Ułatwia to zarządzanie kodem, jego organizację i ponowne użycie.</p>
+
+        <h2>Eksportowanie modułów</h2>
+        <p>W JavaScript możemy eksportować wartości (zmienne, funkcje, klasy) z jednego pliku, aby były one dostępne w innym pliku. Służą do tego słowa kluczowe <code>export</code> i <code>export default</code>.</p>
+
+        <h3>Eksport nazwany</h3>
+        <p>W eksporcie nazwanym możemy eksportować wiele wartości, które następnie importujemy, odwołując się do ich nazw.</p>
+        <pre><code class="language-javascript">
+// math.js
+export const pi = 3.14159;
+
+export function add(a, b) {
+    return a + b;
+}
+
+export function subtract(a, b) {
+    return a - b;
+}
+        </code></pre>
+        <p>W tym przykładzie plik <code>math.js</code> eksportuje zmienną <code>pi</code> oraz funkcje <code>add</code> i <code>subtract</code>.</p>
+
+        <h3>Eksport domyślny</h3>
+        <p>Eksport domyślny (ang. <em>default export</em>) pozwala na eksportowanie jednej głównej wartości z modułu. Każdy moduł może mieć tylko jeden eksport domyślny.</p>
+        <pre><code class="language-javascript">
+// logger.js
+export default function log(message) {
+    console.log(`Log: ${message}`);
+}
+        </code></pre>
+        <p>Plik <code>logger.js</code> eksportuje funkcję <code>log</code> jako eksport domyślny.</p>
+
+        <h2>Importowanie modułów</h2>
+        <p>Importowanie pozwala na używanie wartości eksportowanych z innych plików w naszym kodzie. Importy można wykonywać na różne sposoby w zależności od rodzaju eksportu.</p>
+
+        <h3>Import nazwany</h3>
+        <p>Aby zaimportować wartości nazwane, używamy tej samej nazwy, pod jaką zostały wyeksportowane.</p>
+        <pre><code class="language-javascript">
+// main.js
+import { pi, add, subtract } from './math.js';
+
+console.log(pi); // 3.14159
+console.log(add(2, 3)); // 5
+console.log(subtract(5, 2)); // 3
+        </code></pre>
+        <p>W tym przykładzie importujemy zmienną <code>pi</code> oraz funkcje <code>add</code> i <code>subtract</code> z pliku <code>math.js</code>.</p>
+
+        <h3>Import domyślny</h3>
+        <p>Import domyślny pozwala na importowanie wartości, która została wyeksportowana jako domyślna. Można jej nadać dowolną nazwę podczas importu.</p>
+        <pre><code class="language-javascript">
+// main.js
+import log from './logger.js';
+
+log('Witaj świecie!'); // "Log: Witaj świecie!"
+        </code></pre>
+        <p>W tym przypadku funkcja <code>log</code> została zaimportowana z <code>logger.js</code> i jest używana do logowania wiadomości.</p>
+
+        <h2>Strukturyzacja kodu</h2>
+        <p>Moduły ES6 ułatwiają organizację kodu, szczególnie w większych projektach. Możemy podzielić aplikację na mniejsze części, gdzie każda część zajmuje się jednym aspektem działania programu. Na przykład:</p>
+        <pre><code class="language-javascript">
+// Plik user.js
+export function createUser(name, age) {
+    return { name, age };
+}
+
+export function deleteUser(userId) {
+    console.log(`Usunięto użytkownika: ${userId}`);
+}
+        </code></pre>
+        <pre><code class="language-javascript">
+// Plik auth.js
+export function login(username, password) {
+    console.log(`Zalogowano jako: ${username}`);
+}
+
+export function logout() {
+    console.log("Wylogowano");
+}
+        </code></pre>
+        <pre><code class="language-javascript">
+// Plik main.js
+import { createUser, deleteUser } from './user.js';
+import { login, logout } from './auth.js';
+
+const user = createUser("Anna", 25);
+console.log(user);
+
+login("Anna", "haslo123");
+logout();
+        </code></pre>
+        <p>Każdy moduł (np. <code>user.js</code>, <code>auth.js</code>) zajmuje się jedną odpowiedzialnością, co ułatwia zarządzanie i ponowne użycie kodu.</p>
+
+        <h2>Najlepsze praktyki</h2>
+        <ul>
+            <li><strong>Jedna odpowiedzialność na moduł:</strong> Podziel kod na moduły, gdzie każdy moduł realizuje jedną funkcję (np. zarządzanie użytkownikami, autoryzacja, itp.).</li>
+            <li><strong>Eksport domyślny dla głównej funkcji:</strong> Używaj eksportu domyślnego dla funkcji, która jest głównym zadaniem modułu, a eksport nazwany dla pozostałych funkcji.</li>
+            <li><strong>Unikaj modyfikacji globalnych:</strong> Moduły nie powinny zmieniać globalnych wartości lub wprowadzać zmian w innych modułach w sposób bezpośredni.</li>
+            <li><strong>Używaj relatywnych ścieżek:</strong> Przy importowaniu modułów używaj relatywnych ścieżek (np. <code>./</code>), aby jasno określić, skąd pochodzi import.</li>
+        </ul>
+
+        <h2>Podsumowanie</h2>
+        <ul>
+            <li>Moduły ES6 umożliwiają podział kodu na mniejsze części, które można eksportować i importować między plikami.</li>
+            <li>Możemy eksportować wartości nazwane i domyślne oraz importować je w innych plikach.</li>
+            <li>Dobra strukturyzacja kodu i korzystanie z modułów ułatwia zarządzanie większymi projektami.</li>
+        </ul>
+    </div>
+
+    <script>
+        // Przykład importowania modułów w przeglądarce (wymaga modułów w plikach z rozszerzeniem .mjs)
+        import { pi, add } from './math.js';
+
+        console.log(`Pi wynosi: ${pi}`);
+        console.log(`Suma 2 + 3 = ${add(2, 3)}`);
+    </script>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/prism.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/components/prism-javascript.min.js"></script>
+</body>
+</html>

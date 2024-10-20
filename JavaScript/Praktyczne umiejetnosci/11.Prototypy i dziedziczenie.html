@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Prototypy i Dziedziczenie</title>
+    <link rel="stylesheet" href="../styles.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/themes/prism-tomorrow.min.css" rel="stylesheet" />
+</head>
+<body>
+    <div class="container">
+        <h1>Prototypy i Dziedziczenie</h1>
+
+        <p>Prototypy w JavaScript to mechanizm, który umożliwia dziedziczenie właściwości i metod pomiędzy obiektami. Każdy obiekt ma wbudowany prototyp, który łączy go z innymi obiektami, tworząc tzw. łańcuch prototypów.</p>
+
+        <h2>Pojęcie prototypu</h2>
+        <p>W JavaScript każdy obiekt ma prototyp – inny obiekt, z którego dziedziczy właściwości i metody. Jeśli nie znajdziemy właściwości lub metody w danym obiekcie, JavaScript szuka jej w prototypie. To proces zwany <strong>dziedziczeniem prototypowym</strong>.</p>
+        <pre><code class="language-javascript">
+const person = {
+    name: "Jan",
+    greet() {
+        console.log(`Cześć, jestem ${this.name}`);
+    }
+};
+
+const student = Object.create(person); // student dziedziczy po person
+student.name = "Kasia";
+student.greet(); // "Cześć, jestem Kasia"
+        </code></pre>
+        <p>Wyobraź sobie, że prototyp to plan na stworzenie obiektu. Kiedy tworzymy nowy obiekt, bazuje on na tym planie i może używać jego właściwości i metod. W przykładzie <code>student</code> dziedziczy po obiekcie <code>person</code>, więc mimo że w obiekcie <code>student</code> nie ma metody <code>greet</code>, jest ona dostępna dzięki dziedziczeniu prototypowemu.</p>
+
+        <h2>Łańcuch prototypów</h2>
+        <p>Łańcuch prototypów (ang. <em>prototype chain</em>) to seria połączonych obiektów. Jeśli JavaScript nie znajdzie właściwości lub metody w jednym obiekcie, szuka jej w jego prototypie, a jeśli nie znajdzie tam – szuka dalej w prototypie prototypu, aż do globalnego obiektu <code>Object</code>.</p>
+        <pre><code class="language-javascript">
+console.log(student.hasOwnProperty("name")); // true (jest w obiekcie student)
+console.log(student.hasOwnProperty("greet")); // false (greet jest w prototypie person)
+        </code></pre>
+        <p>Analogicznie, łańcuch prototypów to jak seria pudełek z etykietkami. Jeśli szukamy czegoś w pierwszym pudełku i nie znajdujemy, zaglądamy do drugiego, a potem trzeciego, aż dotrzemy do głównego pudełka, czyli <code>Object</code>.</p>
+
+        <h2>Tworzenie własnych prototypów</h2>
+        <p>Możemy tworzyć własne prototypy, dodając nowe właściwości lub metody do wbudowanych obiektów, takich jak <code>Object</code>, <code>Array</code> itp. Jednak należy być ostrożnym, ponieważ zmiana prototypów może wpływać na wszystkie obiekty tego typu.</p>
+        <pre><code class="language-javascript">
+// Tworzenie własnego prototypu
+function Car(brand, model) {
+    this.brand = brand;
+    this.model = model;
+}
+
+Car.prototype.describe = function() {
+    console.log(`To jest ${this.brand} ${this.model}`);
+};
+
+const car1 = new Car("Honda", "Civic");
+car1.describe(); // "To jest Honda Civic"
+        </code></pre>
+        <p>Tworząc nowy prototyp, przypisujemy nowe funkcje lub właściwości do prototypu konkretnego konstruktora, co sprawia, że wszystkie obiekty utworzone za pomocą tego konstruktora będą miały dostęp do tych funkcji.</p>
+
+        <h2>Dodawanie metod do istniejących obiektów</h2>
+        <p>Możemy dodać nowe metody do wbudowanych obiektów, takich jak <code>Array</code>. W ten sposób wszystkie tablice będą miały dostęp do nowej metody.</p>
+        <pre><code class="language-javascript">
+// Dodanie nowej metody do prototypu Array
+Array.prototype.double = function() {
+    return this.map(item => item * 2);
+};
+
+const numbers = [1, 2, 3];
+console.log(numbers.double()); // [2, 4, 6]
+        </code></pre>
+        <p>Wyobraź sobie, że każda tablica to grupa rozbitków na bezludnej wyspie, każda nowa metoda jest jak narzędzie znalezione na plarzy które jest dostępne dla każdego członka grupy. Object <code>Array</code> to jedna grupa ludzi, a np. object <code>String</code> to druga grupa ze swoimi własnymi narzędziami.</p>
+
+        <h2>Podsumowanie</h2>
+        <ul>
+            <li>Każdy obiekt w JavaScript ma prototyp, który umożliwia dziedziczenie właściwości i metod.</li>
+            <li>Łańcuch prototypów to seria obiektów, które są przeszukiwane w celu znalezienia właściwości lub metod.</li>
+            <li>Możemy tworzyć własne prototypy i dodawać nowe metody do wbudowanych obiektów, takich jak <code>Object</code> czy <code>Array</code>.</li>
+        </ul>
+    </div>
+
+    <script>
+        // Przykład dziedziczenia prototypowego
+        function Animal(name) {
+            this.name = name;
+        }
+
+        Animal.prototype.speak = function() {
+            console.log(`${this.name} wydaje dźwięk.`);
+        };
+
+        const dog = new Animal("Reksio");
+        dog.speak(); // "Reksio wydaje dźwięk."
+
+    </script>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/prism.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/components/prism-javascript.min.js"></script>
+</body>
+</html>

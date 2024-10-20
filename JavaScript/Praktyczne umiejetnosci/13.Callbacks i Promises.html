@@ -1,0 +1,212 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Callbacks i Promises w JavaScript</title>
+    <link rel="stylesheet" href="../styles.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/themes/prism-tomorrow.min.css" rel="stylesheet" />
+</head>
+<body>
+    <div class="container">
+        <h1>Callbacks i Promises</h1>
+
+        <p>JavaScript jest językiem asynchronicznym, co oznacza, że niektóre operacje, takie jak zapytania do serwera, mogą zająć trochę czasu, zanim zostaną ukończone. Aby zarządzać takimi operacjami, możemy używać funkcji zwrotnych (*callbacks*) oraz obiektów <code>Promise</code>. Poniżej wyjaśniamy, jak działają te mechanizmy i jak obsługiwać asynchroniczny kod.</p>
+
+        <h2>Funkcje zwrotne (Callbacks)</h2>
+        <p>Funkcja zwrotna to funkcja przekazana jako argument do innej funkcji, która zostanie wywołana po zakończeniu jakiejś operacji. Jest to podstawowy sposób obsługi asynchronicznego kodu w JavaScript.</p>
+        <pre><code class="language-javascript">
+// Osoba A idzie na zakupy. Funkcja odbiera instrukcję (callback), co ma zrobić po powrocie.
+function osobaIdacaNaZakupy(instrukcjaPoPowrocie) {
+    console.log("Osoba A idzie po zakupy...");  // Osoba A mówi, że idzie na zakupy
+    
+    // Symulacja trwania zakupów (2 sekundy).
+    setTimeout(() => {
+        console.log("Osoba A wraca z zakupami.");  // Osoba A wraca po 2 sekundach
+        
+        // Wykonuje instrukcję (callback), czyli mówi "Zakupy zostały zrobione"
+        instrukcjaPoPowrocie("Zakupy zostały zrobione");
+    }, 2000);
+}
+
+// Osoba B (Ty) mówi do osoby A: "Idź na zakupy, a jak wrócisz, powiedz mi, że zakupy zostały zrobione."
+osobaIdacaNaZakupy((komunikat) => {
+    console.log(komunikat);  // Osoba B odbiera komunikat: "Zakupy zostały zrobione"
+});
+
+// Osoba B robi inne rzeczy, np. sprząta, podczas gdy osoba A jest na zakupach
+console.log("Osoba B zaczyna sprzątać w trakcie, gdy A robi zakupy...");
+for (let i = 0; i < 3; i++) {
+    console.log(`Osoba B sprząta: krok ${i + 1}`);
+}
+        </code></pre>
+        <p><strong>Wyjaśnienie:</strong></p>
+
+<p><strong>Osoba A idzie na zakupy:</strong></p>
+<p>Kiedy wywołujesz funkcję <code>osobaIdacaNaZakupy</code>, osoba A natychmiast mówi, że idzie na zakupy, a <code>setTimeout</code> symuluje czas trwania zakupów (2 sekundy).</p>
+
+<p><strong>Osoba B robi coś innego w tym czasie:</strong></p>
+<p>Po wywołaniu funkcji <code>osobaIdacaNaZakupy</code>, JavaScript nie czeka, aż zakupy się skończą. Zamiast tego wykonuje kolejny kod (w tym przypadku osoba B zaczyna sprzątać). Pokazujemy to za pomocą <code>console.log</code> i pętli <code>for</code>, która symuluje sprzątanie.</p>
+
+<p><strong>Po zakończeniu zakupów (po 2 sekundach):</strong></p>
+<p>Gdy zakupy się kończą (czyli <code>setTimeout</code> dobiega końca), osoba A wraca z zakupami i wywołuje funkcję <code>callback</code>, którą przekazałeś na początku. Callback wyświetla komunikat: "Zakupy zostały zrobione".</p>
+
+<p><strong>Co się dzieje w kodzie:</strong></p>
+<ul>
+  <li><code>Osoba A idzie na zakupy</code> (<code>osobaIdacaNaZakupy</code>) i w tle zaczyna działać <code>setTimeout</code>, który "czeka" 2 sekundy.</li>
+  <li>W międzyczasie <code>Osoba B sprząta</code>, czyli JavaScript wykonuje inne zadania (sprzątanie).</li>
+  <li>Gdy <code>setTimeout</code> się kończy, <code>Osoba A wraca z zakupami</code> i wywołuje funkcję <code>callback</code>, informując, że zakupy są zrobione.</li>
+</ul>
+
+<p><strong>Oczekiwany wynik w konsoli:</strong></p>
+<pre><code>
+Osoba A idzie po zakupy...
+Osoba B zaczyna sprzątać w trakcie, gdy A robi zakupy...
+Osoba B sprząta: krok 1
+Osoba B sprząta: krok 2
+Osoba B sprząta: krok 3
+Osoba A wraca z zakupami.
+Zakupy zostały zrobione
+</code></pre>
+
+<p><strong>Kluczowa idea:</strong></p>
+<ul>
+  <li>JavaScript wykonuje kod <strong>asynchronicznie</strong>, co oznacza, że podczas gdy jedno zadanie "czeka" (zakupy), inne zadania (np. sprzątanie) mogą być wykonywane w tym czasie.</li>
+  <li><code>Callback</code> (instrukcja) jest wywoływany <strong>po zakończeniu zadania</strong>, czyli gdy osoba A wróci z zakupów.</li>
+</ul>
+
+
+        <h3>Problemy z funkcjami zwrotnymi</h3>
+        <p>Kiedy musimy wykonać wiele asynchronicznych operacji jedna po drugiej, funkcje zwrotne mogą prowadzić do zjawiska nazywanego "callback hell", czyli zagnieżdżania wielu funkcji zwrotnych, co utrudnia czytelność kodu.</p>
+        <pre><code class="language-javascript">
+function fetchData(callback) {
+    setTimeout(() => {
+        console.log("Pobieranie danych...");
+        callback("Dane zostały pobrane");
+    }, 2000);
+}
+
+fetchData((data) => {
+    console.log(data);
+    fetchData((newData) => {
+        console.log(newData);
+        fetchData((finalData) => {
+            console.log(finalData);
+        });
+    });
+});
+        </code></pre>
+        <p>Widzimy tutaj, że zagnieżdżanie funkcji zwrotnych może prowadzić do nieczytelnego kodu, co jest trudne do utrzymania. Dlatego pojawiły się inne rozwiązania, takie jak <code>Promise</code>.</p>
+
+        <h2>Pojęcie <code>Promise</code></h2>
+        <p><code>Promise</code> to obiekt, który reprezentuje przyszły wynik operacji asynchronicznej. Może zakończyć się sukcesem (zwracając dane) lub porażką (zwracając błąd). <code>Promise</code> pomaga w bardziej czytelnej obsłudze asynchronicznych operacji.</p>
+
+        <h3>Tworzenie <code>Promise</code></h3>
+        <p>Tworzymy <code>Promise</code>, przekazując funkcję, która przyjmuje dwa argumenty: <code>resolve</code> i <code>reject</code>. <code>resolve</code> jest wywoływane, gdy operacja zakończy się sukcesem, a <code>reject</code>, gdy coś pójdzie nie tak.</p>
+        <pre><code class="language-javascript">
+function osobaIdacaNaZakupy() {
+    // Zwracamy Promise, który symuluje zakupy
+    return new Promise((resolve, reject) => {
+        console.log("Osoba A idzie na zakupy...");
+
+        // Symulujemy czas trwania zakupów (2 sekundy)
+        setTimeout(() => {
+            const sukcesZakupow = true; // Zmienna symulująca, czy zakupy się udały
+            
+            if (sukcesZakupow) {
+                // Zakupy się udały, osoba A wraca z zakupami
+                resolve("Zakupy zostały zrobione i produkty dostarczone");
+            } else {
+                // Zakupy się nie udały, np. sklep był zamknięty
+                reject("Zakupy się nie udały: sklep był zamknięty");
+            }
+        }, 2000); // Zakupy trwają 2 sekundy
+    });
+}
+
+// Oczekujemy na wynik zakupów (Promise)
+osobaIdacaNaZakupy()
+    .then((komunikat) => {
+        // Zakupy się udały - osoba B odbiera produkty
+        console.log(komunikat); // "Zakupy zostały zrobione i produkty dostarczone"
+    })
+    .catch((blad) => {
+        // Zakupy się nie udały - osoba B otrzymuje informację o błędzie
+        console.error(blad); // "Zakupy się nie udały: sklep był zamknięty"
+    });
+        </code></pre>
+        <p><strong>Promise (obietnica zakupów):</strong></p>
+<p>Kiedy wywołujesz funkcję <code>osobaIdacaNaZakupy</code>, osoba A idzie na zakupy, ale nie wiesz jeszcze, czy zakupy się udadzą. To jest jak złożenie obietnicy – wynik przyjdzie później (po 2 sekundach).</p>
+
+<p><strong>resolve (sukces):</strong></p>
+<p>Jeśli zakupy się powiodą (czyli <code>sukcesZakupow</code> jest prawdziwy), wywoływana jest funkcja <code>resolve</code>, która oznacza sukces. Przekazujesz komunikat: "Zakupy zostały zrobione i produkty dostarczone".</p>
+
+<p><strong>reject (błąd):</strong></p>
+<p>Jeśli coś poszło nie tak (np. sklep był zamknięty), wywoływana jest funkcja <code>reject</code>, która przekazuje informację o błędzie: "Zakupy się nie udały: sklep był zamknięty".</p>
+
+<p><strong>Odbierasz wynik:</strong></p>
+<p>Za pomocą <code>then</code> odbierasz produkty, jeśli zakupy się powiodły. Jeśli zakupy się nie udały, za pomocą <code>catch</code> obsługujesz błąd.</p>
+
+<p><strong>Podsumowanie:</strong></p>
+<ul>
+    <li><code>Promise</code> działa jak wysłanie kogoś na zakupy. Wynik przyjdzie po pewnym czasie.</li>
+    <li><code>then</code> to sytuacja, gdy zakupy się udały – odbierasz produkty.</li>
+    <li><code>catch</code> to sytuacja, gdy coś poszło nie tak – obsługujesz błąd.</li>
+</ul>
+
+        <h2>Łańcuchy <code>Promise</code></h2>
+        <p><code>Promise</code> pozwala na tworzenie łańcuchów operacji, co eliminuje potrzebę zagnieżdżania funkcji zwrotnych.</p>
+        <pre><code class="language-javascript">
+
+// Wysyłasz osobę na zakupy, a po powrocie wysyłasz ją ponownie
+osobaIdacaNaZakupy()
+    .then((komunikat) => {
+        console.log(komunikat); // Pierwsze zakupy zakończone sukcesem
+        return osobaIdacaNaZakupy(); // Wysyłasz osobę ponownie
+    })
+    .then((nowyKomunikat) => {
+        console.log(nowyKomunikat); // Drugie zakupy zakończone sukcesem
+        return osobaIdacaNaZakupy(); // Wysyłasz osobę trzeci raz
+    })
+    .then((finalnyKomunikat) => {
+        console.log(finalnyKomunikat); // Trzecie zakupy zakończone sukcesem
+    })
+    .catch((blad) => {
+        console.error(blad); // Obsługa błędu, gdyby coś poszło nie tak
+    });
+        </code></pre>
+        <p>Łańcuchy <code>Promise</code> działają jak seria kroków, które wykonujemy po sobie, każdy czekając na zakończenie poprzedniego kroku, co sprawia, że kod jest czytelniejszy i łatwiejszy w utrzymaniu.</p>
+
+        <h2>Podsumowanie</h2>
+        <ul>
+            <li>Funkcje zwrotne (*callbacks*) to funkcje przekazywane do innych funkcji i wywoływane po zakończeniu operacji asynchronicznej.</li>
+            <li><code>Promise</code> to obiekt reprezentujący przyszły wynik operacji asynchronicznej – zakończony sukcesem lub błędem.</li>
+            <li><code>Promise</code> poprawia czytelność kodu i eliminuje problem "callback hell".</li>
+            <li>Łańcuchy <code>Promise</code> pozwalają na wykonywanie serii operacji asynchronicznych w sposób bardziej uporządkowany.</li>
+        </ul>
+    </div>
+
+    <script>
+        // Przykład Promise
+        function getData() {
+            return new Promise((resolve, reject) => {
+                setTimeout(() => {
+                    const success = true;
+                    if (success) {
+                        resolve("Dane zostały pomyślnie pobrane");
+                    } else {
+                        reject("Wystąpił błąd");
+                    }
+                }, 1000);
+            });
+        }
+
+        getData()
+            .then((data) => console.log(data))
+            .catch((error) => console.error(error));
+    </script>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/prism.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/components/prism-javascript.min.js"></script>
+</body>
+</html>

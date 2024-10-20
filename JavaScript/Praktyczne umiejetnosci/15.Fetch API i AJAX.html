@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Fetch API i AJAX</title>
+    <link rel="stylesheet" href="../styles.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/themes/prism-tomorrow.min.css" rel="stylesheet" />
+</head>
+<body>
+    <div class="container">
+        <h1>Fetch API i AJAX</h1>
+
+        <p>Fetch API i AJAX (Asynchronous JavaScript and XML) umożliwiają wysyłanie żądań HTTP do serwera oraz pobieranie danych, takich jak pliki JSON, bez konieczności przeładowania całej strony. Fetch API jest nowszym, prostszym sposobem na obsługę żądań, natomiast AJAX jest starszą technologią, ale wciąż używaną w wielu projektach.</p>
+
+        <h2>Fetch API</h2>
+        <p>Fetch API to nowoczesny sposób na wysyłanie żądań HTTP. Jest prostszy w użyciu niż AJAX i zwraca obiekt <code>Promise</code>, co pozwala na obsługę asynchronicznych operacji w czytelny sposób.</p>
+        
+        <h3>Wysyłanie żądania GET</h3>
+        <p>Żądanie GET służy do pobierania danych z serwera. Poniżej znajduje się przykład użycia Fetch API do pobrania danych z serwera:</p>
+        <pre><code class="language-javascript">
+fetch('https://api.example.com/data')
+    .then(response => response.json()) // Odczytanie odpowiedzi jako JSON
+    .then(data => console.log(data))   // Przetworzenie danych
+    .catch(error => console.error('Błąd:', error));
+        </code></pre>
+        <p>Wyobraź sobie Fetch API jako listonosza, który wysyła prośbę o paczkę (dane) do serwera. Gdy paczka dotrze (dane zostaną pobrane), rozpakowujesz ją (parsowanie JSON) i sprawdzasz jej zawartość. Jeśli coś pójdzie nie tak, otrzymujesz wiadomość o błędzie.</p>
+
+        <h3>Wysyłanie żądania POST</h3>
+        <p>Żądanie POST służy do wysyłania danych na serwer, np. przy dodawaniu nowych informacji do bazy danych. W Fetch API możemy przesyłać dane w formacie JSON.</p>
+        <pre><code class="language-javascript">
+fetch('https://api.example.com/data', {
+    method: 'POST',           // Określenie metody jako POST
+    headers: {
+        'Content-Type': 'application/json'  // Określenie typu danych
+    },
+    body: JSON.stringify({    // Konwersja danych do formatu JSON
+        name: 'Jan',
+        age: 30
+    })
+})
+.then(response => response.json())  // Odczytanie odpowiedzi jako JSON
+.then(data => console.log(data))    // Przetworzenie odpowiedzi
+.catch(error => console.error('Błąd:', error));
+        </code></pre>
+        <p>Wysyłanie żądania POST za pomocą Fetch API jest jak wysyłanie formularza z danymi do serwera. Serwer odbiera dane, a my możemy otrzymać odpowiedź o sukcesie lub błędzie.</p>
+
+        <h2>Obsługa JSON</h2>
+        <p>JSON (JavaScript Object Notation) to format wymiany danych, który jest łatwy do odczytu zarówno przez ludzi, jak i maszyny. Fetch API automatycznie przekształca dane JSON z serwera w obiekt JavaScript, który można łatwo przetwarzać.</p>
+        <pre><code class="language-javascript">
+fetch('https://api.example.com/data')
+    .then(response => response.json())  // Odczytanie danych JSON
+    .then(data => {
+        console.log(data.name);  // Przykład dostępu do danych
+    })
+    .catch(error => console.error('Błąd:', error));
+        </code></pre>
+        <p>Parsowanie JSON jest jak rozpakowywanie paczki – dostajemy surowe dane, które zamieniamy na strukturę, którą możemy łatwo przetwarzać.</p>
+
+        <h2>AJAX</h2>
+        <p>AJAX (Asynchronous JavaScript and XML) to starsza technologia, która pozwala na wysyłanie żądań HTTP do serwera, a także na przetwarzanie danych bez przeładowywania całej strony. W AJAX używa się obiektu <code>XMLHttpRequest</code>.</p>
+
+        <h3>Wysyłanie żądania GET z AJAX</h3>
+        <pre><code class="language-javascript">
+const xhr = new XMLHttpRequest();
+xhr.open('GET', 'https://api.example.com/data', true);
+
+xhr.onload = function() {
+    if (xhr.status === 200) {
+        const data = JSON.parse(xhr.responseText);  // Parsowanie danych JSON
+        console.log(data);
+    } else {
+        console.error('Błąd:', xhr.statusText);
+    }
+};
+
+xhr.onerror = function() {
+    console.error('Błąd podczas wysyłania żądania');
+};
+
+xhr.send();
+        </code></pre>
+        <p>AJAX działa jak bardziej skomplikowany listonosz – potrzebujemy więcej kroków, aby wysłać prośbę, sprawdzić odpowiedź, a następnie rozpakować dane. Fetch API upraszcza ten proces, ale AJAX jest nadal szeroko stosowany, zwłaszcza w starszych aplikacjach.</p>
+
+        <h3>Wysyłanie żądania POST z AJAX</h3>
+        <pre><code class="language-javascript">
+const xhr = new XMLHttpRequest();
+xhr.open('POST', 'https://api.example.com/data', true);
+xhr.setRequestHeader('Content-Type', 'application/json');
+
+xhr.onload = function() {
+    if (xhr.status === 200) {
+        console.log(JSON.parse(xhr.responseText));
+    } else {
+        console.error('Błąd:', xhr.statusText);
+    }
+};
+
+xhr.onerror = function() {
+    console.error('Błąd podczas wysyłania żądania');
+};
+
+const body = JSON.stringify({ name: 'Jan', age: 30 });
+xhr.send(body);
+        </code></pre>
+        <p>Podobnie jak w Fetch API, żądanie POST w AJAX wymaga wysłania danych w formacie JSON oraz odpowiedniej konfiguracji nagłówków HTTP.</p>
+
+        <h2>Porównanie Fetch API i AJAX</h2>
+        <ul>
+            <li><strong>Fetch API</strong> jest nowszą, prostszą alternatywą dla AJAX, opartą na <code>Promise</code>, co ułatwia pracę z operacjami asynchronicznymi.</li>
+            <li><strong>AJAX</strong> jest starszą technologią, ale wciąż jest używany, zwłaszcza w starszych projektach, które korzystają z <code>XMLHttpRequest</code>.</li>
+            <li>Fetch API lepiej obsługuje dane JSON i ma prostszą składnię do obsługi błędów i żądań.</li>
+        </ul>
+
+        <h2>Podsumowanie</h2>
+        <ul>
+            <li>Fetch API to nowoczesny sposób na wysyłanie żądań HTTP, który opiera się na obiektach <code>Promise</code>.</li>
+            <li>AJAX to starsza technologia, używana do wysyłania żądań HTTP bez przeładowywania strony.</li>
+            <li>JSON jest popularnym formatem danych, który można łatwo przetwarzać w JavaScript, zarówno z Fetch API, jak i z AJAX.</li>
+        </ul>
+    </div>
+
+    <script>
+        // Przykład Fetch API
+        async function getData() {
+            try {
+                const response = await fetch('https://api.example.com/data');
+                const data = await response.json();
+                console.log(data);
+            } catch (error) {
+                console.error('Błąd:', error);
+            }
+        }
+
+        getData();
+    </script>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/prism.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/components/prism-javascript.min.js"></script>
+</body>
+</html>

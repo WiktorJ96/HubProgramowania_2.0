@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Async/Await</title>
+    <link rel="stylesheet" href="../styles.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/themes/prism-tomorrow.min.css" rel="stylesheet" />
+</head>
+<body>
+    <div class="container">
+        <h1>Async/Await</h1>
+
+        <p>Asynchroniczne funkcje w JavaScript ułatwiają obsługę operacji, które mogą zająć trochę czasu, takich jak pobieranie danych z serwera. Instrukcje <code>async</code> i <code>await</code> pozwalają pisać asynchroniczny kod w sposób przypominający kod synchroniczny, co poprawia czytelność i organizację kodu.</p>
+
+        <h2>Asynchroniczne funkcje</h2>
+        <p>Funkcje oznaczone słowem kluczowym <code>async</code> automatycznie zwracają obiekt <code>Promise</code>. To oznacza, że wewnątrz funkcji możemy używać <code>await</code>, aby czekać na zakończenie operacji asynchronicznej.</p>
+        <pre><code class="language-javascript">
+async function zlozZamowienie() {
+    // Funkcja zwraca natychmiast przygotowane zamówienie
+    return "Twoje danie zostało dostarczone";
+}
+
+// Złożenie zamówienia i natychmiastowe jego dostarczenie
+zlozZamowienie().then((danie) => {
+    console.log(danie); // "Twoje danie zostało dostarczone"
+});
+        </code></pre>
+        <p><strong>Wyjaśnienie krok po kroku:</strong></p>
+
+<p><strong>Składasz zamówienie:</strong></p>
+<p>Wywołujesz funkcję <code>zlozZamowienie</code>, co jest jak złożenie zamówienia w restauracji. Ponieważ zamówione danie jest już gotowe, restauracja (funkcja) zwraca je natychmiast.</p>
+
+<p><strong>Natychmiastowa dostawa:</strong></p>
+<p>Kelner (czyli funkcja <code>then</code>) dostarcza danie od razu po jego zamówieniu, ponieważ nie musisz na nie czekać (danie było już przygotowane wcześniej).</p>
+
+<p><strong>Konsumpcja:</strong></p>
+<p>Gdy tylko danie zostaje dostarczone (dane są dostępne), zaczynasz je "jeść" (czyli w naszym przypadku, wyświetlasz dane w konsoli).</p>
+
+<p><strong>Podsumowanie:</strong></p>
+<ul>
+  <li><code>async function</code> reprezentuje składanie zamówienia w restauracji.</li>
+  <li>Ponieważ Twoje danie było gotowe od razu, nie musisz czekać, a kelner (funkcja <code>then</code>) przynosi je natychmiast.</li>
+  <li>Danie to dane, które wyświetlasz w konsoli po dostarczeniu zamówienia.</li>
+</ul>
+
+
+        <h2>Użycie <code>await</code></h2>
+        <p>Słowo kluczowe <code>await</code> można używać tylko wewnątrz funkcji oznaczonej jako <code>async</code>. Pozwala ono "zatrzymać" wykonywanie funkcji, dopóki obietnica (Promise) nie zostanie rozwiązana, co oznacza, że nie musimy używać <code>.then()</code>, aby obsługiwać wynik Promise.</p>
+        <pre><code class="language-javascript">
+async function fetchData() {
+    // Zamawiasz dane (tak jak zamówienie w restauracji)
+    const data = await new Promise((resolve) => {
+        setTimeout(() => {
+            resolve("Dane zostały pobrane");  // Posiłek jest gotowy
+        }, 2000);  // Symulacja czasu oczekiwania na jedzenie (2 sekundy)
+    });
+
+    // Dopiero teraz zaczynasz "jeść" (czyli wyświetlasz dane)
+    console.log(data);  // "Dane zostały pobrane"
+}
+
+fetchData();
+        </code></pre>
+        <p><strong>Wyjaśnienie:</strong></p>
+<p>Kiedy używasz słowa kluczowego <code>await</code> w funkcji <code>async</code>, czekasz, aż <code>Promise</code> (czyli obietnica wykonania zadania) zostanie rozwiązana, zanim funkcja przejdzie do następnej operacji. To sprawia, że kod wygląda, jakby był wykonywany krok po kroku (synchronicznie), mimo że operacja dzieje się w tle (asynchronicznie).</p>
+
+<p>W ten sposób, zamiast używać <code>.then()</code> do obsługi wyniku <code>Promise</code>, możesz po prostu napisać kod w jednej linii, bez podziału na różne fragmenty, co sprawia, że kod staje się bardziej czytelny.</p>
+
+<p><strong>Analogia z życia:</strong></p>
+<p>Użycie <code>await</code> w funkcji to jak czekanie na zamówienie w restauracji:</p>
+<ul>
+  <li>Zamawiasz posiłek (czyli wywołujesz funkcję <code>async</code> z <code>await</code>).</li>
+  <li>Kelner mówi, że przyniesie jedzenie za chwilę, ale Ty w międzyczasie możesz rozmawiać z kimś przy stole, robić inne rzeczy, bez potrzeby przerywania rozmowy.</li>
+  <li>Gdy jedzenie jest gotowe, kelner je przynosi i dopiero wtedy zaczynasz jeść.</li>
+</ul>
+<p>Dzięki <code>await</code> czekasz na gotowy posiłek, ale nie musisz używać dodatkowych kroków, takich jak <code>.then()</code>, żeby sprawdzić, czy jedzenie już dotarło. Po prostu kod zatrzymuje się do momentu, aż danie będzie gotowe, i kontynuuje od razu, jakbyś od razu otrzymał jedzenie.</p>
+
+<p><strong>Podsumowanie:</strong></p>
+<ul>
+  <li><code>async</code> i <code>await</code> sprawiają, że kod wygląda bardziej naturalnie – czekasz na wynik, a potem po prostu go używasz, bez dodatkowych kroków.</li>
+  <li><code>await</code> to jak czekanie na gotowy posiłek – nie musisz sam sprawdzać, czy kucharz skończył gotowanie i czy kelner już niesie jedzenie. Gdy danie jest gotowe, dostajesz je automatycznie, bez potrzeby dodatkowych kroków. Gdy danie dociera do Ciebie, zaczynasz je jeść (czyli przetwarzać dane).</li>
+</ul>
+
+        <h2>Obsługa błędów w asynchronicznych funkcjach</h2>
+        <p>Aby obsługiwać błędy w asynchronicznych funkcjach, możemy użyć bloku <code>try...catch</code>. Umożliwia to łapanie błędów w asynchronicznym kodzie, bez konieczności używania <code>.catch()</code> na każdym etapie.</p>
+        <pre><code class="language-javascript">
+async function fetchData() {
+    try {
+        // Kierownik czuwa nad procesem zamówienia (blok try)
+        const data = await new Promise((resolve, reject) => {
+            setTimeout(() => {
+                // Coś poszło nie tak (danie się przypaliło)
+                reject("Błąd podczas pobierania danych");
+            }, 2000);
+        });
+
+        console.log(data);  // Jeśli wszystko poszło dobrze, danie jest gotowe
+    } catch (error) {
+        // Kierownik zajmuje się problemem (blok catch)
+        console.error(error);  // Informuje Cię, że coś poszło nie tak
+    }
+}
+
+fetchData();
+        </code></pre>
+        <p><strong>Blok try...catch można porównać do kierownika restauracji:</strong></p>
+<p>Kierownik czuwa nad całym procesem: jeśli wszystko idzie zgodnie z planem, jedzenie jest serwowane bez problemów.</p>
+<p><strong>Ale:</strong> gdy coś pójdzie nie tak (np. kucharz popełni błąd, jedzenie się przypali), kierownik natychmiast podejmuje działania, aby naprawić sytuację – przeprasza Cię i oferuje rekompensatę (czyli blok <code>catch</code> obsługuje błąd).</p>
+
+<p><strong>Podsumowanie:</strong></p>
+<ul>
+    <li><strong>Blok try:</strong> To jak zamówienie jedzenia w restauracji – kuchnia próbuje przyrządzić Twoje danie.</li>
+    <li><strong>Blok catch:</strong> Jeśli coś pójdzie nie tak (np. jedzenie się przypali), kierownik (blok <code>catch</code>) przejmuje kontrolę, zajmując się problemem i informując Cię o sytuacji, zamiast zostawiać Cię w niewiedzy.</li>
+</ul>
+
+
+        <h2>Przykład pełnej asynchronicznej funkcji</h2>
+        <p>W poniższym przykładzie pobieramy dane, czekamy na zakończenie operacji, a w razie błędu obsługujemy go w bloku <code>catch</code>.</p>
+        <pre><code class="language-javascript">
+async function getData() {
+    try {
+        const data = await fetch("https://api.example.com/data");
+        const json = await data.json();
+        console.log(json);
+    } catch (error) {
+        console.error("Wystąpił błąd:", error);
+    }
+}
+
+getData();
+        </code></pre>
+
+        <h2>Podsumowanie</h2>
+
+<p><strong>Jaki sens ma używanie async/await i Promise ?</strong></p>
+
+<p><strong>Ujednolicenie obsługi asynchronicznych operacji:</strong></p>
+<p>W prawdziwych zastosowaniach często operacje, takie jak pobieranie danych z serwera, trwają jakiś czas (np. kilka sekund). Funkcje <code>async</code> i <code>Promise</code> są stworzone specjalnie do obsługi takich asynchronicznych zadań, gdzie wynik przychodzi po pewnym czasie. Nawet jeśli w danym momencie dane są zwracane natychmiast (jak w naszym przykładzie), używanie <code>async/await</code> pozwala na jednolitą strukturę kodu, którą można później łatwo rozszerzać o prawdziwe asynchroniczne operacje.</p>
+
+<p><strong>Przyszłe operacje mogą być asynchroniczne:</strong></p>
+<p>Nawet jeśli teraz dane są zwracane natychmiast, możesz w przyszłości dodać operacje, które będą wymagały czekania (np. pobieranie z bazy danych, operacje na plikach itp.). Dzięki używaniu <code>Promise</code> i <code>async/await</code> nie musisz zmieniać struktury kodu – będzie on gotowy na obsługę operacji asynchronicznych. To jak budowanie domu z solidnymi fundamentami, nawet jeśli na początku potrzebujesz tylko prostego pomieszczenia.</p>
+
+<p><strong>Kwestia wydajności i przepływu danych:</strong></p>
+<p>Gdy dane są pobierane z zewnętrznych źródeł (np. API, bazy danych), <code>Promise</code> i funkcje asynchroniczne pozwalają na przerwanie oczekiwania na dane, a w międzyczasie program może wykonywać inne zadania. Dzięki temu kod nie zatrzymuje działania aplikacji w oczekiwaniu na wynik (czyli tzw. blokowanie kodu).</p>
+
+<p><strong>Dlaczego nie użyć zwykłej funkcji?</strong></p>
+<p>W przypadku asynchronicznych operacji, gdzie dane są pobierane z serwera, plików czy innych źródeł, używanie zwykłej funkcji zablokowałoby program i wymagałoby czekania na zakończenie operacji, zanim można by było zrobić coś innego. Zwykła funkcja zwraca wynik natychmiast, co oznacza, że nie jest w stanie efektywnie obsłużyć operacji, które trwają dłużej.</p>
+
+<ul>
+    <li><strong>Zwykła funkcja:</strong> Zwraca wynik natychmiast, blokując kod, aż operacja zostanie zakończona.</li>
+    <li><strong>Promise lub async/await:</strong> Pozwala programowi pracować dalej, a wynik zostanie obsłużony, gdy operacja się zakończy (asynchronicznie).</li>
+</ul>
+
+<p><strong>Przykład z restauracji:</strong></p>
+<ul>
+    <li><strong>Zwykła funkcja:</strong> To jakbyś zamówił danie w restauracji i kelner kazał Ci siedzieć w miejscu, bez możliwości robienia czegokolwiek innego, aż jedzenie będzie gotowe. Cały czas musisz czekać i nie możesz zrobić nic innego, zanim nie dostaniesz dania.</li>
+    <li><strong>Promise lub async/await:</strong> To jak zamówienie jedzenia, a w międzyczasie możesz robić inne rzeczy – np. rozmawiać z kimś, przeglądać telefon – i dopiero jak jedzenie będzie gotowe, dostaniesz informację, że możesz zacząć jeść. Restauracja nie "zatrzymuje" Cię w oczekiwaniu.</li>
+</ul>
+
+<p><strong>Różnica między Promise a zwykłą funkcją:</strong></p>
+<ul>
+    <li><strong>Zwykła funkcja:</strong> Zwraca wynik natychmiast. Jeśli operacja trwa dłużej, musisz czekać na wynik, a program nie może kontynuować innych operacji.</li>
+    <li><strong>Promise i async/await:</strong> Pozwalają programowi działać asynchronicznie, co oznacza, że nie trzeba czekać na wynik – program może kontynuować inne operacje, a wynik zostanie dostarczony, gdy operacja się zakończy.</li>
+</ul>
+
+<p><strong>Podsumowanie:</strong></p>
+<ul>
+    <li>Używamy <code>Promise</code> i <code>async/await</code> do obsługi asynchronicznych operacji, które trwają jakiś czas (np. pobieranie danych z serwera).</li>
+    <li>Funkcje asynchroniczne, oznaczone słowem kluczowym <code>async</code>, automatycznie zwracają <code>Promise</code>, co ułatwia obsługę operacji asynchronicznych.</li>
+    <li>Słowo <code>await</code> pozwala zatrzymać wykonywanie funkcji, dopóki <code>Promise</code> nie zostanie rozwiązany, co sprawia, że kod wygląda bardziej jak kod synchroniczny.</li>
+    <li>Obsługa błędów w funkcjach asynchronicznych jest realizowana za pomocą bloku <code>try...catch</code>, co pozwala na przejęcie kontroli, gdy coś pójdzie nie tak.</li>
+    <li>Stosowanie <code>async</code> i <code>await</code> ujednolica strukturę kodu, co przygotowuje go na przyszłe operacje asynchroniczne, nawet jeśli obecnie dane są dostępne od razu.</li>
+    <li>Zwykłe funkcje mogą blokować wykonywanie programu podczas oczekiwania na dłuższe operacje, dlatego <code>Promise</code> oraz <code>async/await</code> są bardziej efektywne w takich sytuacjach.</li>
+</ul>
+
+
+    <script>
+        // Przykład użycia async/await
+        async function getAsyncData() {
+            try {
+                const result = await new Promise((resolve) => {
+                    setTimeout(() => resolve("Dane zostały pomyślnie pobrane"), 1000);
+                });
+                console.log(result); // Wyświetla wynik, gdy Promise zostanie rozwiązany
+            } catch (error) {
+                console.error("Wystąpił błąd:", error);
+            }
+        }
+
+        getAsyncData();
+    </script>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/prism.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/components/prism-javascript.min.js"></script>
+</body>
+</html>
