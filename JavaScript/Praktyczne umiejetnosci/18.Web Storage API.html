@@ -1,0 +1,443 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Web Storage API i IndexedDB</title>
+    <link rel="stylesheet" href="../styles.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/themes/prism-tomorrow.min.css" rel="stylesheet" />
+</head>
+<style>
+        /* Stylowanie kontenera modala */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.75); /* Ciemne przezroczyste tło */
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+        }
+
+        /* Stylowanie treści modala */
+        .modal-content {
+            background-color: #1e1e1e; /* Dopasowanie do tła kontenera */
+            padding: 30px;
+            border-radius: 15px;
+            max-width: 80%;
+            width: 800px;
+            max-height: 80vh; /* Maksymalna wysokość modala */
+            overflow-y: auto; /* Dodanie przewijania */
+            color: #e0e0e0;
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.6); /* Cień jak w kontenerach */
+            transition: transform 0.2s ease-in-out;
+        }
+
+        /* Stylowanie przycisku zamykającego */
+        .close-btn {
+            background-color: #ffcc80;
+            color: #1e1e1e;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 8px;
+            cursor: pointer;
+            float: right;
+            font-weight: bold;
+            transition: background-color 0.3s ease-in-out, transform 0.2s ease-in-out;
+        }
+
+        .close-btn:hover {
+            background-color: #ffe0b2;
+            transform: scale(1.05);
+        }
+
+        .close-btn:active {
+            background-color: #ffab40;
+            transform: scale(0.98);
+        }
+
+        /* Stylowanie przycisków otwierających modal */
+        .open-modal-btn {
+            background-color: #ffcc80;
+            color: #1e1e1e;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 1rem;
+            font-weight: bold;
+            margin-right: 10px;
+            transition: background-color 0.3s ease-in-out, transform 0.2s ease-in-out;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.4);
+        }
+
+        .open-modal-btn:hover {
+            background-color: #ffe0b2;
+            transform: scale(1.05);
+        }
+
+        .open-modal-btn:active {
+            background-color: #ffab40;
+            transform: scale(0.98);
+        }
+
+        /* Responsywność */
+        @media (min-width: 768px) {
+            .modal-content {
+                max-width: 60%;
+            }
+        }
+    </style>
+<body>
+    <div class="container">
+        <h1>Web Storage API i IndexedDB</h1>
+
+        <p>Web Storage API i IndexedDB to dwa mechanizmy do przechowywania danych po stronie klienta w przeglądarce. O ile Web Storage (localStorage i sessionStorage) jest prostsze, IndexedDB pozwala na bardziej złożoną strukturę danych i większe możliwości przechowywania.</p>
+
+        <h2>Web Storage API: localStorage i sessionStorage</h2>
+        <p><strong>localStorage</strong> i <strong>sessionStorage</strong> umożliwiają przechowywanie danych w formie par <code>klucz-wartość</code>. localStorage pozwala przechowywać dane na stałe, a sessionStorage przechowuje dane tylko na czas trwania sesji przeglądarki.</p>
+
+        <h3>Przykład: localStorage</h3>
+        <pre><code class="language-javascript">
+// Zapisywanie danych w localStorage
+localStorage.setItem('username', 'Jan Kowalski');
+
+// Pobieranie danych z localStorage
+const username = localStorage.getItem('username');
+console.log(username); // Wyświetli 'Jan Kowalski'
+
+// Usuwanie danych z localStorage
+localStorage.removeItem('username');
+
+// Wyczyszczenie całego localStorage
+localStorage.clear();
+        </code></pre>
+
+        <h3>Przykład: sessionStorage</h3>
+        <pre><code class="language-javascript">
+// Zapisywanie danych w sessionStorage
+sessionStorage.setItem('sessionData', 'Sesja aktywna');
+
+// Pobieranie danych z sessionStorage
+const sessionData = sessionStorage.getItem('sessionData');
+console.log(sessionData); // Wyświetli 'Sesja aktywna'
+
+// Usuwanie danych z sessionStorage
+sessionStorage.removeItem('sessionData');
+
+// Wyczyszczenie całego sessionStorage
+sessionStorage.clear();
+        </code></pre>
+
+        <h2>IndexedDB: Baza danych po stronie klienta</h2>
+        <p><strong>IndexedDB</strong> to lokalna baza danych przeznaczona do przechowywania dużych ilości danych w bardziej złożonych strukturach niż Web Storage. W przeciwieństwie do localStorage, który przechowuje tylko stringi, IndexedDB obsługuje złożone obiekty i relacje.</p>
+
+        <h3>Tworzenie i otwieranie bazy danych</h3>
+        <p>W IndexedDB bazy danych są asynchroniczne i oparte na zdarzeniach. Aby otworzyć lub utworzyć bazę danych, używamy metody <code>indexedDB.open()</code>. Każda baza danych może zawierać wiele obiektów (tabel).</p>
+
+        <pre><code class="language-javascript">
+const request = indexedDB.open('myDatabase', 1); // Nazwa bazy danych i jej wersja
+
+request.onupgradeneeded = function(event) {
+    const db = event.target.result;
+    // Tworzymy nowy obiekt (tabela)
+    const objectStore = db.createObjectStore('users', { keyPath: 'id', autoIncrement: true });
+    objectStore.createIndex('name', 'name', { unique: false });
+};
+
+request.onsuccess = function(event) {
+    const db = event.target.result;
+    console.log('Baza danych otwarta');
+};
+
+request.onerror = function(event) {
+    console.error('Błąd podczas otwierania bazy danych', event.target.error);
+};
+        </code></pre>
+        <button class="open-modal-btn" data-content="
+        <p><strong>Otwieranie lub tworzenie bazy danych:</strong></p>
+<ul>
+  <li><code>indexedDB.open('myDatabase', 1)</code>: Otwiera bazę danych o nazwie <strong>myDatabase</strong>. Jeśli baza jeszcze nie istnieje, zostanie utworzona.</li>
+  <li><strong>1</strong>: To numer wersji bazy danych. Gdy zmienisz strukturę bazy danych, możesz podnieść ten numer.</li>
+</ul>
+
+<p><strong>Tworzenie tabeli (Object Store):</strong></p>
+<ul>
+  <li><code>onupgradeneeded</code>: To wydarzenie uruchamia się, gdy baza danych jest tworzona po raz pierwszy lub gdy zmieniasz jej wersję.</li>
+  <li><code>db.createObjectStore('users', { keyPath: 'id', autoIncrement: true })</code>: Tworzy tabelę (nazywaną Object Store) o nazwie <strong>users</strong>, w której każdy wpis będzie miał automatycznie rosnący numer <strong>id</strong>.</li>
+  <li><code>objectStore.createIndex('name', 'name', { unique: false })</code>: Tworzy indeks (rodzaj skrótu), który ułatwia wyszukiwanie wpisów na podstawie pola <strong>name</strong>.</li>
+</ul>
+
+<p><strong>Sukces otwarcia bazy danych:</strong></p>
+<ul>
+  <li><code>onsuccess</code>: Wydarzenie uruchamiane, gdy baza danych została pomyślnie otwarta lub utworzona.</li>
+  <li><code>console.log('Baza danych otwarta')</code>: Wyświetla komunikat w konsoli, że baza danych została otwarta.</li>
+</ul>
+
+<p><strong>Obsługa błędów:</strong></p>
+<ul>
+  <li><code>onerror</code>: Wydarzenie, które uruchamia się, gdy wystąpi problem z otwarciem bazy danych.</li>
+  <li><code>console.error('Błąd podczas otwierania bazy danych')</code>: Wyświetla komunikat o błędzie w konsoli, jeśli coś pójdzie nie tak.</li>
+</ul>
+">Wyjaśnienie</button></p>
+
+        <h3>Dodawanie danych do IndexedDB</h3>
+        <pre><code class="language-javascript">
+function addUser(db, userData) {
+    const transaction = db.transaction(['users'], 'readwrite');
+    const objectStore = transaction.objectStore('users');
+    const request = objectStore.add(userData);
+
+    request.onsuccess = function() {
+        console.log('Dane zostały dodane');
+    };
+
+    request.onerror = function(event) {
+        console.error('Błąd przy dodawaniu danych', event.target.error);
+    };
+}
+
+// Użycie funkcji addUser
+const user = { name: 'Jan', age: 30 };
+request.onsuccess = function(event) {
+    const db = event.target.result;
+    addUser(db, user);
+};
+        </code></pre>
+        <button class="open-modal-btn" data-content="
+
+<p><strong>Funkcja addUser:</strong></p>
+<ul>
+    <li><code>db.transaction(['users'], 'readwrite')</code>: Tworzy transakcję w trybie odczytu i zapisu, aby móc dodać nowe dane do tabeli <code>users</code>.</li>
+    <li><code>transaction.objectStore('users')</code>: Uzyskujemy dostęp do Object Store (tabeli) o nazwie <strong>users</strong>, w której będą przechowywane dane użytkowników.</li>
+    <li><code>objectStore.add(userData)</code>: Dodaje dane użytkownika do tabeli <strong>users</strong>. <code>userData</code> to obiekt, który zawiera dane użytkownika, np. <code>{ name: 'Jan', age: 30 }</code>.</li>
+    <li><code>request.onsuccess</code>: Ta funkcja uruchamia się, gdy dane użytkownika zostaną pomyślnie dodane do bazy. Wyświetla komunikat: <strong>'Dane zostały dodane'</strong>.</li>
+    <li><code>request.onerror</code>: Ta funkcja uruchamia się, gdy wystąpi błąd podczas dodawania danych. Wyświetla komunikat o błędzie w konsoli.</li>
+</ul>
+
+<p><strong>Użycie funkcji addUser:</strong></p>
+<ul>
+    <li><code>const user = { name: 'Jan', age: 30 }</code>: Tworzymy obiekt <strong>user</strong>, który zawiera dane użytkownika, które chcemy dodać (imię i wiek).</li>
+    <li><code>request.onsuccess</code>: Wydarzenie uruchamiane po pomyślnym otwarciu bazy danych. Uzyskujemy dostęp do otwartej bazy danych przez <code>event.target.result</code> i przekazujemy ją do funkcji <strong>addUser</strong>, aby dodać dane użytkownika.</li>
+    <li><code>addUser(db, user)</code>: Wywołujemy funkcję <strong>addUser</strong>, przekazując do niej otwartą bazę danych <strong>db</strong> oraz dane użytkownika <strong>user</strong>.</li>
+</ul>
+
+<p><strong>Podsumowanie:</strong></p>
+<ul>
+    <li>Funkcja <strong>addUser</strong> dodaje nowego użytkownika do Object Store w IndexedDB, tworząc transakcję z prawem do zapisu.</li>
+    <li>Po pomyślnym dodaniu danych, w konsoli wyświetlany jest komunikat o sukcesie.</li>
+    <li>W przypadku błędu, wyświetlany jest odpowiedni komunikat w konsoli.</li>
+</ul>
+">Wyjaśnienie</button>
+
+        <h3>Odczytywanie danych z IndexedDB</h3>
+        <pre><code class="language-javascript">
+function getUser(db, id) {
+    const transaction = db.transaction(['users']);
+    const objectStore = transaction.objectStore('users');
+    const request = objectStore.get(id);
+
+    request.onsuccess = function(event) {
+        console.log('Pobrane dane:', event.target.result);
+    };
+
+    request.onerror = function(event) {
+        console.error('Błąd przy odczytywaniu danych', event.target.error);
+    };
+}
+
+// Użycie funkcji getUser
+request.onsuccess = function(event) {
+    const db = event.target.result;
+    getUser(db, 1); // Odczytaj użytkownika o id 1
+};
+        </code></pre>
+        <button class="open-modal-btn" data-content="
+
+<p><strong>Funkcja getUser:</strong></p>
+<ul>
+    <li><code>db.transaction(['users'])</code>: Tworzy transakcję w trybie domyślnym (tylko do odczytu) dla tabeli <strong>users</strong>, ponieważ będziemy tylko odczytywać dane, a nie modyfikować je.</li>
+    <li><code>transaction.objectStore('users')</code>: Uzyskujemy dostęp do Object Store (tabeli) <strong>users</strong>, z której chcemy pobrać dane.</li>
+    <li><code>objectStore.get(id)</code>: Wysyłamy żądanie, aby pobrać dane użytkownika z tabeli <strong>users</strong> na podstawie jego <strong>id</strong>. <code>id</code> to numer, który identyfikuje użytkownika, np. <code>1</code> w przykładzie.</li>
+    <li><code>request.onsuccess</code>: Ta funkcja uruchamia się, gdy dane użytkownika zostaną pomyślnie pobrane. <code>event.target.result</code> to dane użytkownika, które są wyświetlane w konsoli.</li>
+    <li><code>request.onerror</code>: Jeśli wystąpi błąd podczas próby odczytu danych, uruchamiana jest ta funkcja, która wyświetla komunikat o błędzie w konsoli.</li>
+</ul>
+
+<p><strong>Użycie funkcji getUser:</strong></p>
+<ul>
+    <li><code>request.onsuccess</code>: Po pomyślnym otwarciu bazy danych (w innym fragmencie kodu), wydarzenie <code>onsuccess</code> uzyskuje dostęp do otwartej bazy danych przez <code>event.target.result</code> i przekazuje ją do funkcji <strong>getUser</strong>.</li>
+    <li><code>getUser(db, 1)</code>: Wywołujemy funkcję <strong>getUser</strong>, aby pobrać dane użytkownika z bazy danych o <strong>id = 1</strong>.</li>
+</ul>
+
+<p><strong>Podsumowanie:</strong></p>
+<ul>
+    <li>Funkcja <strong>getUser</strong> odczytuje dane użytkownika z Object Store na podstawie jego <strong>id</strong>.</li>
+    <li>Po pomyślnym odczytaniu danych, dane są wyświetlane w konsoli.</li>
+    <li>W przypadku błędu, wyświetlany jest komunikat o błędzie w konsoli.</li>
+</ul>
+">Wyjaśnienie</button>
+
+        <h3>Aktualizowanie danych w IndexedDB</h3>
+        <pre><code class="language-javascript">
+function updateUser(db, userData) {
+    const transaction = db.transaction(['users'], 'readwrite');
+    const objectStore = transaction.objectStore('users');
+    const request = objectStore.put(userData);
+
+    request.onsuccess = function() {
+        console.log('Dane zostały zaktualizowane');
+    };
+
+    request.onerror = function(event) {
+        console.error('Błąd przy aktualizacji danych', event.target.error);
+    };
+}
+
+// Użycie funkcji updateUser
+const updatedUser = { id: 1, name: 'Jan Nowak', age: 31 };
+request.onsuccess = function(event) {
+    const db = event.target.result;
+    updateUser(db, updatedUser);
+};
+        </code></pre>
+        <button class="open-modal-btn" data-content="
+
+<p><strong>Funkcja updateUser:</strong></p>
+<ul>
+    <li><code>db.transaction(['users'], 'readwrite')</code>: Tworzymy transakcję w trybie <strong>readwrite</strong> (czyli z możliwością odczytu i zapisu) dla tabeli <strong>users</strong>, aby móc zaktualizować dane użytkownika.</li>
+    <li><code>transaction.objectStore('users')</code>: Uzyskujemy dostęp do Object Store (tabeli) o nazwie <strong>users</strong>, w której przechowywane są dane użytkowników.</li>
+    <li><code>objectStore.put(userData)</code>: Używamy metody <strong>put</strong>, aby zaktualizować dane użytkownika. Obiekt <code>userData</code> musi zawierać <strong>id</strong> użytkownika, którego chcemy zaktualizować, oraz nowe dane (np. imię, wiek).</li>
+    <li><code>request.onsuccess</code>: Ta funkcja uruchamia się, gdy dane użytkownika zostaną pomyślnie zaktualizowane. Wyświetla komunikat: <strong>'Dane zostały zaktualizowane'</strong>.</li>
+    <li><code>request.onerror</code>: Ta funkcja uruchamia się, gdy wystąpi problem podczas aktualizacji danych. Wyświetla komunikat o błędzie w konsoli.</li>
+</ul>
+
+<p><strong>Użycie funkcji updateUser:</strong></p>
+<ul>
+    <li><code>const updatedUser = { id: 1, name: 'Jan Nowak', age: 31 }</code>: Tworzymy obiekt <strong>updatedUser</strong>, który zawiera zaktualizowane dane użytkownika. Musi zawierać pole <strong>id</strong>, aby móc zidentyfikować użytkownika do aktualizacji.</li>
+    <li><code>request.onsuccess</code>: Po pomyślnym otwarciu bazy danych (w innym fragmencie kodu), funkcja <code>onsuccess</code> uzyskuje dostęp do otwartej bazy danych przez <code>event.target.result</code> i przekazuje ją do funkcji <strong>updateUser</strong>.</li>
+    <li><code>updateUser(db, updatedUser)</code>: Wywołujemy funkcję <strong>updateUser</strong>, aby zaktualizować dane użytkownika w bazie danych.</li>
+</ul>
+
+<p><strong>Podsumowanie:</strong></p>
+<ul>
+    <li>Funkcja <strong>updateUser</strong> aktualizuje dane użytkownika w Object Store (tabeli) na podstawie jego <strong>id</strong>.</li>
+    <li>Po pomyślnym zaktualizowaniu danych, w konsoli wyświetlany jest komunikat o sukcesie.</li>
+    <li>W przypadku błędu, wyświetlany jest komunikat o problemie w konsoli.</li>
+</ul>
+">Wyjaśnienie</button>
+
+        <h3>Usuwanie danych z IndexedDB</h3>
+        <pre><code class="language-javascript">
+function deleteUser(db, id) {
+    const transaction = db.transaction(['users'], 'readwrite');
+    const objectStore = transaction.objectStore('users');
+    const request = objectStore.delete(id);
+
+    request.onsuccess = function() {
+        console.log('Dane zostały usunięte');
+    };
+
+    request.onerror = function(event) {
+        console.error('Błąd przy usuwaniu danych', event.target.error);
+    };
+}
+
+// Użycie funkcji deleteUser
+request.onsuccess = function(event) {
+    const db = event.target.result;
+    deleteUser(db, 1); // Usuń użytkownika o id 1
+};
+        </code></pre>
+        <button class="open-modal-btn" data-content="
+
+<p><strong>Funkcja deleteUser:</strong></p>
+<ul>
+    <li><code>db.transaction(['users'], 'readwrite')</code>: Tworzymy transakcję w trybie <strong>readwrite</strong> (czyli z możliwością odczytu i zapisu) dla tabeli <strong>users</strong>, aby móc usunąć dane użytkownika.</li>
+    <li><code>transaction.objectStore('users')</code>: Uzyskujemy dostęp do Object Store (tabeli) o nazwie <strong>users</strong>, w której przechowywane są dane użytkowników.</li>
+    <li><code>objectStore.delete(id)</code>: Używamy metody <strong>delete</strong>, aby usunąć dane użytkownika na podstawie jego <strong>id</strong>. W przykładzie używamy <code>id = 1</code>, co oznacza, że usuniemy użytkownika o <strong>id 1</strong>.</li>
+    <li><code>request.onsuccess</code>: Ta funkcja uruchamia się, gdy użytkownik zostanie pomyślnie usunięty. Wyświetla komunikat: <strong>'Dane zostały usunięte'</strong>.</li>
+    <li><code>request.onerror</code>: Jeśli wystąpi problem podczas usuwania danych, ta funkcja zostanie wywołana i wyświetli komunikat o błędzie w konsoli.</li>
+</ul>
+
+<p><strong>Użycie funkcji deleteUser:</strong></p>
+<ul>
+    <li><code>request.onsuccess</code>: Po pomyślnym otwarciu bazy danych (w innym fragmencie kodu), funkcja <code>onsuccess</code> uzyskuje dostęp do otwartej bazy danych przez <code>event.target.result</code> i przekazuje ją do funkcji <strong>deleteUser</strong>.</li>
+    <li><code>deleteUser(db, 1)</code>: Wywołujemy funkcję <strong>deleteUser</strong>, aby usunąć użytkownika z bazy danych na podstawie <strong>id = 1</strong>.</li>
+</ul>
+
+<p><strong>Podsumowanie:</strong></p>
+<ul>
+    <li>Funkcja <strong>deleteUser</strong> usuwa użytkownika z Object Store (tabeli) na podstawie jego <strong>id</strong>.</li>
+    <li>Po pomyślnym usunięciu danych, w konsoli wyświetlany jest komunikat o sukcesie.</li>
+    <li>W przypadku błędu, wyświetlany jest komunikat o problemie w konsoli.</li>
+</ul>
+">Wyjaśnienie</button>
+<h2>Podsumowanie – Web Storage vs IndexedDB</h2>
+<ul>
+    <li><strong>Web Storage (localStorage, sessionStorage)</strong> to prosty sposób na przechowywanie małych ilości danych w formacie <code>string</code>, w formie par <code>klucz-wartość</code>. Jest szybkie i łatwe w użyciu, jednak ogranicza się do tego formatu.</li>
+    <li><strong>IndexedDB</strong> to zaawansowana baza danych po stronie klienta, która pozwala przechowywać złożone obiekty, relacje, indeksy i duże ilości danych. Jest bardziej złożona, ale daje większą elastyczność w operacjach na danych (dodawanie, odczytywanie, aktualizowanie i usuwanie).</li>
+    <li><strong>localStorage</strong> przechowuje dane na stałe, nawet po zamknięciu przeglądarki, podczas gdy <strong>sessionStorage</strong> przechowuje dane tylko na czas trwania sesji.</li>
+</ul>
+
+
+    <div id="customModal" class="modal">
+        <div class="modal-content">
+            <button class="close-btn">Zamknij</button>
+            <h2>Wyjaśnienie</h2>
+            <p id="modalBody">Domyślna treść modala.</p>
+        </div>
+    </div>
+<script>
+        // Pobierz elementy
+        const modal = document.getElementById("customModal");
+        const modalBody = document.getElementById("modalBody");
+        const openModalBtns = document.querySelectorAll(".open-modal-btn");
+        const closeModalBtn = document.querySelector(".close-btn");
+
+        // Funkcja otwierająca modal z dynamiczną zawartością HTML
+        openModalBtns.forEach(btn => {
+            btn.addEventListener("click", function() {
+                const content = this.getAttribute("data-content"); // Pobierz treść HTML z atrybutu data-content
+                modalBody.innerHTML = content; // Ustaw dynamiczny HTML w modalBody
+                modal.style.display = "flex"; // Pokaż modal
+
+                // Dezaktywuj przewijanie strony
+                document.body.style.overflow = "hidden";
+            });
+        });
+
+        // Zamknij modal po kliknięciu przycisku zamykającego
+        closeModalBtn.addEventListener("click", function() {
+            modal.style.display = "none"; // Ukryj modal
+
+            // Przywróć przewijanie strony
+            document.body.style.overflow = "auto";
+        });
+
+        // Zamknij modal, gdy użytkownik kliknie poza modalem
+        window.addEventListener("click", function(event) {
+            if (event.target === modal) {
+                modal.style.display = "none"; // Ukryj modal
+
+                // Przywróć przewijanie strony
+                document.body.style.overflow = "auto";
+            }
+        });
+    </script>
+    <script>
+        // Przykład zapisu i odczytu danych w localStorage
+        localStorage.setItem('favoriteColor', 'Niebieski');
+        const favoriteColor = localStorage.getItem('favoriteColor');
+        console.log(`Ulubiony kolor: ${favoriteColor}`);
+
+        // Przykład usunięcia danych z localStorage
+        localStorage.removeItem('favoriteColor');
+    </script>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/prism.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/components/prism-javascript.min.js"></script>
+</body>
+</html>

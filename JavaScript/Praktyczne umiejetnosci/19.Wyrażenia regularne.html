@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Wyrażenia Regularne</title>
+    <link rel="stylesheet" href="../styles.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/themes/prism-tomorrow.min.css" rel="stylesheet" />
+</head>
+<body>
+    <div class="container">
+        <h1>Wyrażenia Regularne</h1>
+
+        <p>Wyrażenia regularne (ang. <strong>regular expressions</strong>, w skrócie <code>regex</code>) to wzorce, które pozwalają na wyszukiwanie, dopasowywanie i manipulowanie ciągami znaków. W JavaScript wyrażenia regularne mogą być tworzone za pomocą literałów lub obiektów klasy <code>RegExp</code>.</p>
+
+        <h2>Tworzenie wyrażeń regularnych</h2>
+        <p>Wyrażenia regularne można tworzyć na dwa sposoby:</p>
+        <ul>
+            <li>Za pomocą literałów regex: <code>/wzorzec/</code></li>
+            <li>Za pomocą konstruktora <code>RegExp</code>: <code>new RegExp('wzorzec')</code></li>
+        </ul>
+
+        <h3>Przykład: Tworzenie wyrażenia regularnego</h3>
+        <pre><code class="language-javascript">
+// Literał wyrażenia regularnego
+const regex1 = /abc/;
+
+// Konstruktor RegExp
+const regex2 = new RegExp('abc');
+        </code></pre>
+
+        <h2>Metody testowania wyrażeń regularnych</h2>
+        <p>JavaScript udostępnia kilka metod do pracy z wyrażeniami regularnymi, takich jak <code>test()</code> i <code>match()</code>. Poniżej wyjaśniono ich działanie.</p>
+
+        <h3>Metoda <code>test()</code></h3>
+        <p>Metoda <code>test()</code> sprawdza, czy wyrażenie regularne pasuje do podanego ciągu. Zwraca <code>true</code> lub <code>false</code>.</p>
+
+        <h4>Przykład: Użycie <code>test()</code></h4>
+        <pre><code class="language-javascript">
+const regex = /kot/;
+const text = "Mam kota w domu";
+
+// Sprawdzamy, czy w tekście znajduje się słowo "kot"
+const result = regex.test(text);
+console.log(result); // true
+        </code></pre>
+
+        <h3>Metoda <code>match()</code></h3>
+        <p>Metoda <code>match()</code> zwraca tablicę wszystkich dopasowań do wzorca w ciągu. Jeśli nie znajdzie dopasowań, zwraca <code>null</code>.</p>
+
+        <h4>Przykład: Użycie <code>match()</code></h4>
+        <pre><code class="language-javascript">
+const text = "123-456-7890 to mój numer telefonu";
+const regex = /\d{3}-\d{3}-\d{4}/;
+
+const matchResult = text.match(regex);
+console.log(matchResult); // ["123-456-7890"]
+        </code></pre>
+        <p>W tym przykładzie wyrażenie regularne <code>/\d{3}-\d{3}-\d{4}/</code> szuka numeru telefonu w formacie XXX-XXX-XXXX. Metoda <code>match()</code> zwraca dopasowanie jako tablicę.</p>
+
+        <h3>Metoda <code>replace()</code></h3>
+        <p>Metoda <code>replace()</code> pozwala zamieniać dopasowane ciągi na inny tekst. Jest to przydatne do modyfikowania tekstu na podstawie wzorca.</p>
+
+        <h4>Przykład: Użycie <code>replace()</code></h4>
+        <pre><code class="language-javascript">
+const text = "Numer telefonu: 123-456-7890";
+const regex = /\d{3}-\d{3}-\d{4}/;
+
+// Zamieniamy numer telefonu na "XXX-XXX-XXXX"
+const newText = text.replace(regex, 'XXX-XXX-XXXX');
+console.log(newText); // "Numer telefonu: XXX-XXX-XXXX"
+        </code></pre>
+
+        <h2>Flagi wyrażeń regularnych</h2>
+        <p>Flagi modyfikują sposób działania wyrażeń regularnych. Możemy ich używać z literałami regex, dodając je po ostatnim ukośniku. Oto najczęściej używane flagi:</p>
+        <ul>
+            <li><code>g</code> – Globalne wyszukiwanie, czyli dopasowywanie wszystkich wystąpień w ciągu.</li>
+            <li><code>i</code> – Ignorowanie wielkości liter.</li>
+            <li><code>m</code> – Wieloliniowe dopasowanie (uwzględnia znaki nowej linii).</li>
+        </ul>
+
+        <h3>Przykład: Użycie flag</h3>
+        <pre><code class="language-javascript">
+const text = "Ala ma Kota. ala ma psa.";
+const regex = /ala/gi; // 'g' - globalne wyszukiwanie, 'i' - ignorowanie wielkości liter
+
+const matches = text.match(regex);
+console.log(matches); // ["Ala", "ala"]
+        </code></pre>
+
+        <h2>Przydatne wzorce w wyrażeniach regularnych</h2>
+        <ul>
+            <li><code>\d</code> – Dowolna cyfra.</li>
+            <li><code>\w</code> – Dowolna litera, cyfra lub podkreślnik.</li>
+            <li><code>\s</code> – Dowolna spacja.</li>
+            <li><code>^</code> – Początek ciągu.</li>
+            <li><code>$</code> – Koniec ciągu.</li>
+            <li><code>[abc]</code> – Dowolny znak z grupy <code>a</code>, <code>b</code>, <code>c</code>.</li>
+            <li><code>(abc)</code> – Grupowanie znaków.</li>
+            <li><code>{n}</code> – Dokładnie <code>n</code> wystąpień poprzedzającego elementu.</li>
+            <li><code>{n,m}</code> – Od <code>n</code> do <code>m</code> wystąpień poprzedzającego elementu.</li>
+        </ul>
+
+        <h3>Przykład: Sprawdzenie formatu e-maila</h3>
+        <pre><code class="language-javascript">
+const email = "jan.kowalski@example.com";
+const emailRegex = /^[\w.-]+@[a-zA-Z\d.-]+\.[a-zA-Z]{2,}$/;
+
+const isValidEmail = emailRegex.test(email);
+console.log(isValidEmail); // true
+        </code></pre>
+        <p>Wyrażenie regularne <code>/^[\w.-]+@[a-zA-Z\d.-]+\.[a-zA-Z]{2,}$/</code> sprawdza, czy ciąg jest w formacie e-maila.</p>
+
+        <h2>Podsumowanie</h2>
+        <ul>
+            <li>Wyrażenia regularne służą do wyszukiwania, dopasowywania i manipulacji ciągami znaków.</li>
+            <li>Możemy tworzyć wyrażenia za pomocą literałów regex lub obiektu <code>RegExp</code>.</li>
+            <li>Metody <code>test()</code>, <code>match()</code> i <code>replace()</code> pozwalają na pracę z wyrażeniami regularnymi w JavaScript.</li>
+            <li>Flagi, takie jak <code>g</code> i <code>i</code>, modyfikują działanie wyrażeń regularnych.</li>
+        </ul>
+    </div>
+
+    <script>
+        // Przykład testowania wyrażenia regularnego
+        const regex = /kot/;
+        const text = "Mam kota";
+        const result = regex.test(text);
+        console.log(result); // true
+    </script>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/prism.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/components/prism-javascript.min.js"></script>
+</body>
+</html>

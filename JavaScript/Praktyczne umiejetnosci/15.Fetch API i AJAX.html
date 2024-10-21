@@ -19,31 +19,82 @@
         <h3>Wysyłanie żądania GET</h3>
         <p>Żądanie GET służy do pobierania danych z serwera. Poniżej znajduje się przykład użycia Fetch API do pobrania danych z serwera:</p>
         <pre><code class="language-javascript">
-fetch('https://api.example.com/data')
-    .then(response => response.json()) // Odczytanie odpowiedzi jako JSON
-    .then(data => console.log(data))   // Przetworzenie danych
-    .catch(error => console.error('Błąd:', error));
+fetch('https://api.example.com/movie')
+    .then(response => {
+        // Film zaczyna się ładować (odpowiedź dociera, ale jeszcze trzeba ją przetworzyć)
+        return response.json();  // Odczytanie odpowiedzi jako JSON
+    })
+    .then(data => {
+        // Film jest gotowy, możesz go oglądać (przetworzenie danych)
+        console.log(data);  // Wyświetlenie danych (np. informacji o filmie)
+    })
+    .catch(error => {
+        // Coś poszło nie tak (film nie jest dostępny) – obsługa błędu
+        console.error('Błąd:', error);  // Informacja o błędzie
+    });
         </code></pre>
-        <p>Wyobraź sobie Fetch API jako listonosza, który wysyła prośbę o paczkę (dane) do serwera. Gdy paczka dotrze (dane zostaną pobrane), rozpakowujesz ją (parsowanie JSON) i sprawdzasz jej zawartość. Jeśli coś pójdzie nie tak, otrzymujesz wiadomość o błędzie.</p>
+        <p><strong>Wyobraź sobie, że Fetch API działa jak proces, w którym wybierasz film do obejrzenia na platformie streamingowej, np. Netflix.</strong></p>
+
+<ul>
+    <li><strong>Wybierasz film (wysyłasz prośbę o dane):</strong><br>
+    Wywołanie funkcji <code>fetch</code> to jak kliknięcie filmu, który chcesz obejrzeć. Składasz prośbę do serwera o dostęp do filmu.</li>
+
+    <li><strong>Oczekiwanie na załadowanie filmu (odpowiedź):</strong><br>
+    Pierwszy <code>.then()</code> to moment, w którym film zaczyna się buforować (ładować), ale zanim zacznie odtwarzać, musi zostać poprawnie załadowany (parsowanie odpowiedzi jako JSON).</li>
+
+    <li><strong>Oglądanie filmu (przetwarzanie danych):</strong><br>
+    Drugi <code>.then()</code> to moment, w którym film jest już gotowy i zaczynasz go oglądać – przetwarzasz dane i wyświetlasz je na ekranie.</li>
+
+    <li><strong>Obsługa błędów (catch):</strong><br>
+    Jeśli coś pójdzie nie tak, np. serwer z filmem jest niedostępny, <code>.catch()</code> informuje Cię, że wystąpił problem (np. „błąd połączenia” albo „film niedostępny”).</li>
+</ul>
+
 
         <h3>Wysyłanie żądania POST</h3>
         <p>Żądanie POST służy do wysyłania danych na serwer, np. przy dodawaniu nowych informacji do bazy danych. W Fetch API możemy przesyłać dane w formacie JSON.</p>
         <pre><code class="language-javascript">
 fetch('https://api.example.com/data', {
-    method: 'POST',           // Określenie metody jako POST
+    method: 'POST',           // Wysyłasz formularz (POST)
     headers: {
-        'Content-Type': 'application/json'  // Określenie typu danych
+        'Content-Type': 'application/json'  // Typ danych to JSON
     },
-    body: JSON.stringify({    // Konwersja danych do formatu JSON
+    body: JSON.stringify({    // Wypełniasz formularz (dane: imię, wiek)
         name: 'Jan',
         age: 30
     })
 })
-.then(response => response.json())  // Odczytanie odpowiedzi jako JSON
-.then(data => console.log(data))    // Przetworzenie odpowiedzi
-.catch(error => console.error('Błąd:', error));
+.then(response => {
+    // Serwer przyjął dane, teraz przetwarzamy odpowiedź (np. potwierdzenie rejestracji)
+    return response.json();
+})
+.then(data => {
+    // Konto zostało utworzone, wyświetlamy informacje
+    console.log(data);  // "Konto zostało utworzone"
+})
+.catch(error => {
+    // Coś poszło nie tak (np. błąd w formularzu), wyświetlamy komunikat o błędzie
+    console.error('Błąd:', error);  // Informacja o błędzie
+});
         </code></pre>
-        <p>Wysyłanie żądania POST za pomocą Fetch API jest jak wysyłanie formularza z danymi do serwera. Serwer odbiera dane, a my możemy otrzymać odpowiedź o sukcesie lub błędzie.</p>
+        <p><strong>Wyobraź sobie, że chcesz założyć konto na platformie streamingowej, aby móc oglądać filmy. Żądanie POST w Fetch API działa jak proces wypełnienia i wysłania formularza rejestracyjnego, który zawiera Twoje dane (np. imię, wiek). Te dane są wysyłane do serwera, który na ich podstawie zakłada Twoje konto.</strong></p>
+
+<ul>
+    <li><strong>Wypełniasz formularz rejestracyjny (wysyłasz dane na serwer):</strong><br>
+    Kiedy używasz metody <code>POST</code> w Fetch API, to jakbyś wypełniał formularz rejestracyjny na platformie streamingowej. W tym formularzu wpisujesz swoje dane (np. imię, wiek), które później są wysyłane do serwera.</li>
+
+    <li><strong>Wysłanie formularza do serwera:</strong><br>
+    Kiedy dane są gotowe, serwer odbiera formularz (w Fetch API są to dane przekazane w <code>body</code>) i przetwarza je, aby utworzyć Twoje konto na platformie.</li>
+
+    <li><strong>Otrzymanie odpowiedzi od serwera:</strong><br>
+    Pierwszy <code>.then()</code> to moment, w którym serwer potwierdza, że dane zostały odebrane i przetworzone. Odpowiedź serwera jest konwertowana na czytelny format (np. JSON) i gotowa do dalszego przetwarzania.</li>
+
+    <li><strong>Sprawdzenie, czy rejestracja się powiodła:</strong><br>
+    Drugi <code>.then()</code> to moment, w którym możesz zobaczyć, czy rejestracja się udała, np. serwer odpowiada „Konto zostało utworzone” lub zwraca inne informacje o nowo utworzonym koncie.</li>
+
+    <li><strong>Obsługa błędów (<code>catch</code>):</strong><br>
+    Jeśli coś poszło nie tak, np. serwer odrzucił Twoje dane (np. z powodu błędu w formularzu), blok <code>.catch()</code> informuje Cię o problemie, tak jakby platforma streamingowa wyświetliła komunikat o błędzie (np. „Nie udało się utworzyć konta”).</li>
+</ul>
+
 
         <h2>Obsługa JSON</h2>
         <p>JSON (JavaScript Object Notation) to format wymiany danych, który jest łatwy do odczytu zarówno przez ludzi, jak i maszyny. Fetch API automatycznie przekształca dane JSON z serwera w obiekt JavaScript, który można łatwo przetwarzać.</p>
@@ -55,7 +106,19 @@ fetch('https://api.example.com/data')
     })
     .catch(error => console.error('Błąd:', error));
         </code></pre>
-        <p>Parsowanie JSON jest jak rozpakowywanie paczki – dostajemy surowe dane, które zamieniamy na strukturę, którą możemy łatwo przetwarzać.</p>
+        <p><strong>Parsowanie JSON to jak czytanie wiadomości w obcym języku przy użyciu tłumacza.</strong></p>
+
+<ul>
+    <li><strong>Dostajesz wiadomość w obcym języku (dane JSON):</strong><br>
+    Surowe dane są jak tekst, który nie jest od razu zrozumiały.</li>
+
+    <li><strong>Używasz tłumacza (parsowanie JSON):</strong><br>
+    Tłumaczysz te dane na język, który rozumiesz, czyli konwertujesz surowy JSON na strukturę, którą możesz łatwo przetwarzać (np. obiekt JavaScript).</li>
+
+    <li><strong>Teraz możesz zrozumieć wiadomość i coś z nią zrobić:</strong><br>
+    Po przetłumaczeniu wiadomości masz dane w formacie, który możesz przetwarzać i na którym możesz działać w swoim programie.</li>
+</ul>
+
 
         <h2>AJAX</h2>
         <p>AJAX (Asynchronous JavaScript and XML) to starsza technologia, która pozwala na wysyłanie żądań HTTP do serwera, a także na przetwarzanie danych bez przeładowywania całej strony. W AJAX używa się obiektu <code>XMLHttpRequest</code>.</p>
@@ -105,19 +168,15 @@ xhr.send(body);
         </code></pre>
         <p>Podobnie jak w Fetch API, żądanie POST w AJAX wymaga wysłania danych w formacie JSON oraz odpowiedniej konfiguracji nagłówków HTTP.</p>
 
-        <h2>Porównanie Fetch API i AJAX</h2>
-        <ul>
-            <li><strong>Fetch API</strong> jest nowszą, prostszą alternatywą dla AJAX, opartą na <code>Promise</code>, co ułatwia pracę z operacjami asynchronicznymi.</li>
-            <li><strong>AJAX</strong> jest starszą technologią, ale wciąż jest używany, zwłaszcza w starszych projektach, które korzystają z <code>XMLHttpRequest</code>.</li>
-            <li>Fetch API lepiej obsługuje dane JSON i ma prostszą składnię do obsługi błędów i żądań.</li>
-        </ul>
+        <h2>Podsumowanie – Fetch API i AJAX</h2>
+<ul>
+    <li><strong>Fetch API</strong> to nowoczesny sposób na wysyłanie żądań HTTP, oparty na <code>Promise</code>, co ułatwia pracę z operacjami asynchronicznymi.</li>
+    <li><strong>AJAX</strong> to starsza technologia, która używa <code>XMLHttpRequest</code>, jednak wciąż jest stosowana w starszych projektach.</li>
+    <li>Fetch API ma prostszą składnię i lepsze wsparcie dla obsługi błędów oraz przetwarzania danych w formacie JSON w porównaniu do AJAX.</li>
+    <li>Zarówno Fetch API, jak i AJAX pozwalają na wysyłanie żądań HTTP bez przeładowywania strony.</li>
+    <li><strong>JSON</strong> jest popularnym formatem danych, który można łatwo przetwarzać w JavaScript, niezależnie od używanej technologii (Fetch API lub AJAX).</li>
+</ul>
 
-        <h2>Podsumowanie</h2>
-        <ul>
-            <li>Fetch API to nowoczesny sposób na wysyłanie żądań HTTP, który opiera się na obiektach <code>Promise</code>.</li>
-            <li>AJAX to starsza technologia, używana do wysyłania żądań HTTP bez przeładowywania strony.</li>
-            <li>JSON jest popularnym formatem danych, który można łatwo przetwarzać w JavaScript, zarówno z Fetch API, jak i z AJAX.</li>
-        </ul>
     </div>
 
     <script>

@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Canvas</title>
+    <link rel="stylesheet" href="../styles.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/themes/prism-tomorrow.min.css" rel="stylesheet" />
+</head>
+<body>
+    <div class="container">
+        <h1>Canvas</h1>
+
+        <p>Element <code>&lt;canvas&gt;</code> w HTML pozwala na rysowanie grafiki, wykresów, animacji, a nawet gier za pomocą JavaScript. Canvas zapewnia przestrzeń do renderowania grafiki w formie rastrowej, a wszystkie rysunki są wykonywane za pomocą metod JavaScriptowych na tzw. kontekście 2D.</p>
+
+        <h2>Podstawy użycia elementu Canvas</h2>
+        <p>Aby użyć <code>canvas</code>, najpierw musimy umieścić element w naszym HTML, a następnie uzyskać jego kontekst 2D, który pozwala na rysowanie. Poniżej znajdziesz podstawowy przykład, jak zacząć pracę z Canvas.</p>
+
+        <h3>Przykład: Tworzenie prostokąta na canvas</h3>
+        <pre><code class="language-html">
+&lt;canvas id="myCanvas" width="400" height="300" style="border:1px solid #f90505;">&lt;/canvas&gt;
+        </code></pre>
+        <pre><code class="language-javascript">
+// Uzyskanie dostępu do elementu canvas
+const canvas = document.getElementById('myCanvas');
+const ctx = canvas.getContext('2d'); // Kontekst 2D
+
+// Rysowanie prostokąta
+ctx.fillStyle = 'blue'; // Kolor wypełnienia
+ctx.fillRect(50, 50, 150, 100); // Rysowanie prostokąta
+        </code></pre>
+        <p>W tym przykładzie rysujemy niebieski prostokąt na canvas o szerokości 150 pikseli i wysokości 100 pikseli, zaczynając od punktu (50, 50).</p>
+
+        <h2>Rysowanie kształtów na Canvas</h2>
+        <p>Canvas oferuje metody do rysowania prostokątów, linii, okręgów oraz ścieżek. Oto kilka przykładów.</p>
+
+        <h3>Rysowanie prostokątów</h3>
+        <p>Na canvas możemy rysować prostokąty za pomocą trzech metod:</p>
+        <ul>
+            <li><code>fillRect(x, y, width, height)</code> – Rysuje wypełniony prostokąt.</li>
+            <li><code>strokeRect(x, y, width, height)</code> – Rysuje obrys prostokąta.</li>
+            <li><code>clearRect(x, y, width, height)</code> – Czyści prostokąt, usuwając zawartość.</li>
+        </ul>
+
+        <pre><code class="language-javascript">
+// Rysowanie obrysowanego prostokąta
+ctx.strokeStyle = 'red'; // Kolor obrysu
+ctx.strokeRect(200, 50, 150, 100); // Obrys prostokąta
+
+// Czyszczenie obszaru w canvas
+ctx.clearRect(75, 75, 50, 50); // Czyści prostokąt w środku
+        </code></pre>
+
+        <h3>Rysowanie linii</h3>
+        <p>Do rysowania linii używamy metody <code>moveTo(x, y)</code> (ustawienie początku linii) i <code>lineTo(x, y)</code> (ustawienie końca linii). Na koniec używamy <code>stroke()</code>, aby narysować linię.</p>
+
+        <pre><code class="language-javascript">
+// Rysowanie linii
+ctx.beginPath();
+ctx.moveTo(50, 200); // Punkt początkowy
+ctx.lineTo(200, 250); // Punkt końcowy
+ctx.strokeStyle = 'green'; // Kolor linii
+ctx.stroke(); // Rysowanie linii
+        </code></pre>
+
+        <h3>Rysowanie okręgów i łuków</h3>
+        <p>Aby narysować okrąg lub łuk, używamy metody <code>arc(x, y, radius, startAngle, endAngle)</code>, gdzie kąty są podane w radianach (1 radian = 180° / π).</p>
+
+        <pre><code class="language-javascript">
+// Rysowanie okręgu
+ctx.beginPath();
+ctx.arc(300, 200, 50, 0, Math.PI * 2); // Pełny okrąg
+ctx.fillStyle = 'purple';
+ctx.fill(); // Wypełniony okrąg
+        </code></pre>
+
+        <h2>Kolory i gradienty</h2>
+        <p>Możemy ustawiać kolory i tworzyć gradienty na canvas, aby uzyskać bardziej złożone efekty.</p>
+
+        <h3>Ustawianie kolorów</h3>
+        <p>Kolory można ustawiać za pomocą właściwości <code>fillStyle</code> (dla wypełnień) i <code>strokeStyle</code> (dla obrysów).</p>
+
+        <pre><code class="language-javascript">
+// Rysowanie prostokąta z czerwonym obrysem i niebieskim wypełnieniem
+ctx.fillStyle = 'blue';
+ctx.fillRect(100, 100, 100, 100);
+
+ctx.strokeStyle = 'red';
+ctx.strokeRect(100, 100, 100, 100);
+        </code></pre>
+
+        <h3>Tworzenie gradientów</h3>
+        <p>Canvas pozwala na tworzenie gradientów liniowych i radialnych.</p>
+
+        <h4>Przykład: Gradient liniowy</h4>
+        <pre><code class="language-javascript">
+// Tworzenie gradientu liniowego
+const gradient = ctx.createLinearGradient(0, 0, 200, 0);
+gradient.addColorStop(0, 'red');
+gradient.addColorStop(1, 'yellow');
+
+// Ustawienie gradientu jako wypełnienia
+ctx.fillStyle = gradient;
+ctx.fillRect(50, 250, 200, 100);
+        </code></pre>
+
+        <h2>Dodawanie obrazków do Canvas</h2>
+        <p>Canvas pozwala na wyświetlanie obrazków za pomocą metody <code>drawImage()</code>. Możemy załadować obrazek z zewnętrznego źródła i narysować go na canvas.</p>
+
+        <h3>Przykład: Rysowanie obrazka</h3>
+        <pre><code class="language-javascript">
+const img = new Image(); // Tworzymy nowy obiekt Image
+img.src = 'image.jpg'; // Ścieżka do obrazka
+
+img.onload = function() {
+    ctx.drawImage(img, 10, 10, 200, 150); // Rysowanie obrazka, gdy zostanie załadowany
+};
+        </code></pre>
+
+        <h2>Animacje na Canvas</h2>
+        <p>Canvas jest idealny do tworzenia animacji, ponieważ umożliwia rysowanie i aktualizowanie grafiki w czasie rzeczywistym. Najczęściej używa się metody <code>requestAnimationFrame()</code>, która pozwala płynnie animować elementy.</p>
+
+        <h3>Przykład: Prosta animacja</h3>
+        <pre><code class="language-javascript">
+let x = 0;
+
+function animate() {
+    ctx.clearRect(0, 0, canvas.width, canvas.height); // Czyścimy canvas
+    ctx.fillStyle = 'blue';
+    ctx.fillRect(x, 100, 50, 50); // Rysujemy poruszający się prostokąt
+    x += 2; // Zwiększamy pozycję x
+
+    if (x < canvas.width) {
+        requestAnimationFrame(animate); // Kontynuujemy animację
+    }
+}
+
+animate(); // Rozpoczynamy animację
+        </code></pre>
+        <p>W tym przykładzie animujemy prostokąt, który porusza się wzdłuż osi X.</p>
+
+        <h2>Podsumowanie</h2>
+        <ul>
+            <li>Element <code>&lt;canvas&gt;</code> umożliwia rysowanie grafiki w przeglądarce za pomocą JavaScript.</li>
+            <li>Canvas używa kontekstu 2D do rysowania kształtów, linii, okręgów, obrazków oraz animacji.</li>
+            <li>Możemy używać kolorów, gradientów i obrazków do tworzenia bogatych wizualnie interfejsów.</li>
+            <li>Metoda <code>requestAnimationFrame()</code> pozwala na płynne animacje.</li>
+        </ul>
+    </div>
+
+
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/prism.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/components/prism-javascript.min.js"></script>
+</body>
+</html>

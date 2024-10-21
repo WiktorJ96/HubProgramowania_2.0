@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Obsługa Błędów i Debugowanie</title>
+    <link rel="stylesheet" href="../styles.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/themes/prism-tomorrow.min.css" rel="stylesheet" />
+</head>
+<body>
+    <div class="container">
+        <h1>Obsługa Błędów i Debugowanie</h1>
+
+        <p>Obsługa błędów to ważny element pisania niezawodnych aplikacji. W JavaScript możemy korzystać z mechanizmu <code>try...catch</code>, aby wyłapywać błędy i odpowiednio nimi zarządzać. Oprócz tego możemy ręcznie rzucać wyjątki i korzystać z narzędzi deweloperskich w przeglądarce, aby debugować nasz kod.</p>
+
+        <h2>Try...catch: Obsługa wyjątków</h2>
+        <p>Konstrukcja <code>try...catch</code> pozwala na obsługę błędów, które mogą wystąpić w danym bloku kodu. Jeśli błąd zostanie wykryty w bloku <code>try</code>, kod w bloku <code>catch</code> zostanie wykonany, co zapobiega przerwaniu działania programu.</p>
+
+        <h3>Składnia <code>try...catch</code></h3>
+        <pre><code class="language-javascript">
+try {
+    // Kod, który może powodować błąd
+    let result = riskyOperation();
+    console.log(result);
+} catch (error) {
+    // Obsługa błędu
+    console.error('Wystąpił błąd:', error.message);
+} finally {
+    // Kod, który wykona się niezależnie od tego, czy błąd wystąpił
+    console.log('Operacja zakończona');
+}
+        </code></pre>
+        <p>W powyższym przykładzie, jeśli funkcja <code>riskyOperation()</code> spowoduje błąd, zostanie on przechwycony i obsłużony w bloku <code>catch</code>. Blok <code>finally</code> jest opcjonalny i zostanie wykonany niezależnie od tego, czy błąd wystąpił.</p>
+
+        <h2>Rzucanie wyjątków</h2>
+        <p>Możemy ręcznie "rzucić" wyjątek za pomocą instrukcji <code>throw</code>. Jest to przydatne, gdy chcemy zgłosić błąd w kontrolowany sposób, np. gdy warunki wejściowe funkcji nie są spełnione.</p>
+
+        <h3>Przykład: Rzucanie wyjątków</h3>
+        <pre><code class="language-javascript">
+function divide(a, b) {
+    if (b === 0) {
+        throw new Error('Dzielenie przez zero jest niedozwolone');
+    }
+    return a / b;
+}
+
+try {
+    let result = divide(10, 0);
+    console.log(result);
+} catch (error) {
+    console.error('Błąd:', error.message);
+}
+        </code></pre>
+        <p>W powyższym przykładzie, jeśli próbujemy podzielić przez zero, ręcznie rzucamy wyjątek, który zostanie przechwycony i obsłużony przez <code>try...catch</code>.</p>
+
+        <h2>Blok <code>finally</code></h2>
+        <p>Blok <code>finally</code> zostanie wykonany niezależnie od tego, czy błąd wystąpił, czy nie. Jest to przydatne w sytuacjach, gdy chcemy upewnić się, że pewne operacje (np. zamknięcie zasobów) zostaną wykonane bez względu na wynik działania kodu.</p>
+
+        <h3>Przykład: Użycie bloku <code>finally</code></h3>
+        <pre><code class="language-javascript">
+try {
+    let data = fetchDataFromServer();
+} catch (error) {
+    console.error('Błąd podczas pobierania danych:', error.message);
+} finally {
+    console.log('Operacja pobierania danych zakończona');
+}
+        </code></pre>
+
+        <h2>Debugowanie w narzędziach deweloperskich</h2>
+        <p>Narzędzia deweloperskie w przeglądarkach, takie jak Chrome DevTools czy Firefox Developer Tools, pozwalają na debugowanie kodu JavaScript w czasie rzeczywistym. Możemy ustawiać punkty przerwania (ang. <strong>breakpoints</strong>), aby zatrzymać wykonywanie kodu i sprawdzić wartości zmiennych oraz logikę programu.</p>
+
+        <h3>Ustawianie punktów przerwania</h3>
+        <p>Aby ustawić punkt przerwania, otwórz narzędzia deweloperskie (zazwyczaj F12 lub PPM -> Zbadaj) i przejdź do zakładki "Sources" (w Chrome). Znajdź plik JS, kliknij na numerze linii, aby ustawić punkt przerwania. Po ustawieniu punktu przerwania, kod zatrzyma się w tym miejscu, umożliwiając debugowanie.</p>
+
+        <h3>Konsola i <code>console.log()</code></h3>
+        <p>Najprostszym narzędziem do debugowania jest funkcja <code>console.log()</code>, która pozwala na wyświetlanie informacji w konsoli przeglądarki.</p>
+
+        <h4>Przykład użycia <code>console.log()</code></h4>
+        <pre><code class="language-javascript">
+let x = 10;
+let y = 20;
+console.log('Wartości zmiennych:', { x, y });
+        </code></pre>
+        <p>Używanie <code>console.log()</code> jest szybkim sposobem na sprawdzenie wartości zmiennych podczas działania skryptu.</p>
+
+        <h2>Obsługa błędów asynchronicznych</h2>
+        <p>W przypadku pracy z funkcjami asynchronicznymi, takimi jak <code>fetch()</code> lub operacjami z użyciem <code>Promise</code>, możemy używać <code>try...catch</code> w połączeniu z <code>async/await</code>, aby obsłużyć błędy.</p>
+
+        <h3>Przykład: Obsługa błędów w asynchronicznym kodzie</h3>
+        <pre><code class="language-javascript">
+async function fetchData() {
+    try {
+        let response = await fetch('https://api.example.com/data');
+        let data = await response.json();
+        console.log(data);
+    } catch (error) {
+        console.error('Błąd podczas pobierania danych:', error.message);
+    }
+}
+
+fetchData();
+        </code></pre>
+        <p>W tym przykładzie używamy <code>try...catch</code> do obsługi błędów, które mogą wystąpić podczas pobierania danych z serwera za pomocą <code>fetch()</code>.</p>
+
+        <h2>Podsumowanie</h2>
+        <ul>
+            <li><code>try...catch</code> pozwala obsługiwać błędy w kodzie i zapobiegać awariom programu.</li>
+            <li>Możemy ręcznie rzucać wyjątki za pomocą <code>throw</code>, co pozwala kontrolować przepływ błędów.</li>
+            <li>Blok <code>finally</code> wykonuje się niezależnie od tego, czy wystąpił błąd, i jest przydatny w sytuacjach, gdzie pewne operacje muszą zostać wykonane na końcu.</li>
+            <li>Narzędzia deweloperskie, takie jak Chrome DevTools, pozwalają na szczegółowe debugowanie kodu JavaScript poprzez punkty przerwania i analizę zmiennych.</li>
+            <li>W przypadku kodu asynchronicznego, <code>try...catch</code> można używać z <code>async/await</code> do obsługi błędów.</li>
+        </ul>
+    </div>
+
+    <script>
+        // Przykład rzucania wyjątku i obsługi błędu
+        function divide(a, b) {
+            if (b === 0) {
+                throw new Error('Dzielenie przez zero jest niedozwolone');
+            }
+            return a / b;
+        }
+
+        try {
+            let result = divide(10, 0);
+            console.log(result);
+        } catch (error) {
+            console.error('Błąd:', error.message);
+        }
+    </script>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/prism.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/components/prism-javascript.min.js"></script>
+</body>
+</html>

@@ -1,0 +1,228 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Obsługa Zdarzeń</title>
+    <link rel="stylesheet" href="../styles.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/themes/prism-tomorrow.min.css" rel="stylesheet" />
+</head>
+<body>
+    <div class="container">
+        <h1>Obsługa Zdarzeń</h1>
+
+        <p>W JavaScript możemy obsługiwać różne zdarzenia, takie jak kliknięcia, zmiany formularza, przewijanie strony i wiele innych. Zdarzenia te mogą być monitorowane za pomocą nasłuchiwaczy zdarzeń, które są funkcjami wywoływanymi, gdy zdarzenie ma miejsce. Poniżej znajdziesz opis, jak dodawać i usuwać nasłuchiwacze, oraz jak działają różne rodzaje zdarzeń, takie jak propagacja i delegacja.</p>
+
+        <h2>Dodawanie nasłuchiwaczy zdarzeń</h2>
+        <p>Nasłuchiwacz zdarzeń możemy dodać za pomocą metody <code>addEventListener()</code>, która przyjmuje nazwę zdarzenia oraz funkcję, która zostanie wywołana, gdy zdarzenie zajdzie.</p>
+
+        <h3>Przykład: Kliknięcie przycisku</h3>
+        <pre><code class="language-javascript">
+// Pobieramy przycisk i dodajemy nasłuchiwacz zdarzenia 'click'
+const button = document.querySelector('button');
+button.addEventListener('click', () => {
+    console.log('Przycisk został kliknięty');
+});
+        </code></pre>
+
+        <h2>Usuwanie nasłuchiwaczy zdarzeń</h2>
+        <p>Aby usunąć nasłuchiwacz zdarzeń, możemy skorzystać z metody <code>removeEventListener()</code>, ale musimy przekazać tę samą funkcję, którą wcześniej dodaliśmy.</p>
+
+        <h3>Przykład: Usuwanie nasłuchiwacza zdarzenia</h3>
+        <pre><code class="language-javascript">
+function handleClick() {
+    console.log('Przycisk został kliknięty');
+}
+
+// Dodajemy nasłuchiwacz zdarzenia
+button.addEventListener('click', handleClick);
+
+// Usuwamy nasłuchiwacz zdarzenia
+button.removeEventListener('click', handleClick);
+        </code></pre>
+
+        <h2>Propagacja zdarzeń</h2>
+        <p>Zdarzenia w DOM propagują się w górę lub w dół drzewa DOM. Propagacja składa się z dwóch faz: fazy przechwytywania (ang. capturing), w której zdarzenie przemieszcza się od korzenia drzewa do docelowego elementu, oraz fazy bąbelkowania (ang. bubbling), w której zdarzenie przemieszcza się z powrotem od elementu docelowego do korzenia.</p>
+
+        <h3>Przykład: Propagacja bąbelkowa</h3>
+        <pre><code class="language-javascript">
+document.querySelector('div').addEventListener('click', () => {
+    console.log('Kliknięto na div');
+});
+
+document.querySelector('button').addEventListener('click', (event) => {
+    console.log('Kliknięto na przycisk');
+    event.stopPropagation(); // Zatrzymanie propagacji zdarzenia
+});
+        </code></pre>
+
+        <h3>Propagacja fazowa</h3>
+        <p>Możemy również nasłuchiwać zdarzeń w fazie przechwytywania (gdy zdarzenie idzie w dół drzewa DOM) poprzez dodanie trzeciego argumentu <code>true</code> w <code>addEventListener</code>.</p>
+
+        <pre><code class="language-javascript">
+document.querySelector('div').addEventListener('click', () => {
+    console.log('Kliknięto na div w fazie przechwytywania');
+}, true);
+        </code></pre>
+
+        <h2>Delegacja zdarzeń</h2>
+        <p>Delegacja zdarzeń pozwala na efektywne zarządzanie zdarzeniami na wielu elementach potomnych, poprzez dodanie nasłuchiwacza zdarzeń do elementu nadrzędnego. Dzięki temu nie musimy dodawać osobnych nasłuchiwaczy do każdego elementu.</p>
+
+        <h3>Przykład: Delegacja zdarzeń</h3>
+        <pre><code class="language-javascript">
+// Nasłuchujemy kliknięć na liście <ul>
+document.querySelector('ul').addEventListener('click', (event) => {
+    if (event.target.tagName === 'LI') {
+        console.log(`Kliknięto na element listy: ${event.target.textContent}`);
+    }
+});
+        </code></pre>
+
+        <h2>Rodzaje zdarzeń</h2>
+
+        <h3>Zdarzenia myszy</h3>
+        <p>Zdarzenia myszy to te, które są wywoływane w odpowiedzi na interakcje użytkownika z myszką, takie jak kliknięcia, najechanie kursorem lub jego opuszczenie.</p>
+
+        <h3><code>click</code> – Kliknięcie</h3>
+        <p>Zdarzenie <code>click</code> wywoływane jest, gdy użytkownik kliknie element.</p>
+        <pre><code class="language-javascript">
+const button = document.querySelector('button');
+button.addEventListener('click', () => {
+    console.log('Przycisk został kliknięty');
+});
+        </code></pre>
+
+        <h3><code>dblclick</code> – Podwójne kliknięcie</h3>
+        <p>Zdarzenie <code>dblclick</code> wywoływane jest, gdy użytkownik dwukrotnie kliknie element w krótkim odstępie czasu.</p>
+        <pre><code class="language-javascript">
+button.addEventListener('dblclick', () => {
+    console.log('Przycisk został podwójnie kliknięty');
+});
+        </code></pre>
+
+        <h3><code>mouseover</code> – Najechanie kursorem</h3>
+        <p>Zdarzenie <code>mouseover</code> wywoływane jest, gdy użytkownik najedzie kursorem na element.</p>
+        <pre><code class="language-javascript">
+const image = document.querySelector('img');
+image.addEventListener('mouseover', () => {
+    console.log('Najechano kursorem na obrazek');
+});
+        </code></pre>
+
+        <h3><code>mouseout</code> – Opuszczenie kursora</h3>
+        <p>Zdarzenie <code>mouseout</code> wywoływane jest, gdy użytkownik opuści kursorem dany element.</p>
+        <pre><code class="language-javascript">
+image.addEventListener('mouseout', () => {
+    console.log('Kursor opuścił obrazek');
+});
+        </code></pre>
+        <br>
+        <hr>
+
+        <h3>Zdarzenia klawiatury</h3>
+        <p>Zdarzenia klawiatury pozwalają reagować na akcje użytkownika związane z wciskaniem klawiszy na klawiaturze.</p>
+
+        <h3><code>keydown</code> – Wciśnięcie klawisza</h3>
+        <p>Zdarzenie <code>keydown</code> wywoływane jest, gdy użytkownik wciśnie dowolny klawisz.</p>
+        <pre><code class="language-javascript">
+document.addEventListener('keydown', (event) => {
+    console.log(`Wciśnięto klawisz: ${event.key}`);
+});
+        </code></pre>
+
+        <h3><code>keyup</code> – Zwolnienie klawisza</h3>
+        <p>Zdarzenie <code>keyup</code> wywoływane jest, gdy użytkownik zwolni wciśnięty klawisz.</p>
+        <pre><code class="language-javascript">
+document.addEventListener('keyup', (event) => {
+    console.log(`Zwolniono klawisz: ${event.key}`);
+});
+        </code></pre>
+
+        <h3><code>keypress</code> – Wciśnięcie klawisza (przestarzałe)</h3>
+        <p>Zdarzenie <code>keypress</code> wywoływane było, gdy użytkownik wcisnął znakowy klawisz (litery, cyfry). Jednak jest to zdarzenie przestarzałe i nie jest zalecane do użytku w nowych aplikacjach – zamiast tego używaj <code>keydown</code> lub <code>keyup</code>.</p>
+        <br>
+        <hr>
+        <h3>Zdarzenia formularzy</h3>
+        <p>Zdarzenia formularzy są wywoływane podczas interakcji z formularzami HTML, np. przy zmianie wartości pola tekstowego lub przesyłaniu formularza.</p>
+
+        <h3><code>submit</code> – Wysłanie formularza</h3>
+        <p>Zdarzenie <code>submit</code> wywoływane jest, gdy formularz zostanie przesłany. Możemy użyć tego zdarzenia, aby przechwycić wysyłanie formularza i obsłużyć je w JavaScript.</p>
+        <pre><code class="language-javascript">
+const form = document.querySelector('form');
+form.addEventListener('submit', (event) => {
+    event.preventDefault();  // Zapobiega domyślnemu wysyłaniu formularza
+    console.log('Formularz został wysłany');
+});
+        </code></pre>
+
+        <h3><code>change</code> – Zmiana wartości w polu formularza</h3>
+        <p>Zdarzenie <code>change</code> wywoływane jest, gdy użytkownik zmieni wartość w polu formularza (np. tekstowym lub checkbox).</p>
+        <pre><code class="language-javascript">
+const input = document.querySelector('input');
+input.addEventListener('change', (event) => {
+    console.log(`Wartość została zmieniona na: ${event.target.value}`);
+});
+        </code></pre>
+
+        <h3><code>input</code> – Zmiana wartości w czasie rzeczywistym</h3>
+        <p>Zdarzenie <code>input</code> wywoływane jest w czasie rzeczywistym, gdy użytkownik wpisuje dane w polu tekstowym.</p>
+        <pre><code class="language-javascript">
+input.addEventListener('input', (event) => {
+    console.log(`Aktualna wartość: ${event.target.value}`);
+});
+        </code></pre>
+        <br>
+        <hr>
+        <h3>Zdarzenia okna</h3>
+        <p>Zdarzenia okna są związane z interakcjami z całym oknem przeglądarki, takimi jak zmiana rozmiaru, przewijanie lub zamknięcie strony.</p>
+
+        <h3><code>resize</code> – Zmiana rozmiaru okna</h3>
+        <p>Zdarzenie <code>resize</code> wywoływane jest, gdy użytkownik zmieni rozmiar okna przeglądarki.</p>
+        <pre><code class="language-javascript">
+window.addEventListener('resize', () => {
+    console.log('Rozmiar okna został zmieniony');
+});
+        </code></pre>
+
+        <h3><code>scroll</code> – Przewijanie strony</h3>
+        <p>Zdarzenie <code>scroll</code> wywoływane jest, gdy użytkownik przewija stronę.</p>
+        <pre><code class="language-javascript">
+window.addEventListener('scroll', () => {
+    console.log(`Pozycja przewijania: ${window.scrollY}`);
+});
+        </code></pre>
+
+        <h2>Podsumowanie</h2>
+        <ul>
+            <li>Nasłuchiwacze zdarzeń pozwalają na wykonywanie akcji, gdy użytkownik wchodzi w interakcję z elementami na stronie.</li>
+            <li>Propagacja zdarzeń opisuje, jak zdarzenia przemieszczają się w górę lub w dół drzewa DOM.</li>
+            <li>Delegacja zdarzeń pozwala na efektywne zarządzanie zdarzeniami na elementach potomnych poprzez nasłuchiwacz na elemencie nadrzędnym.</li>
+            <li>JavaScript obsługuje różne rodzaje zdarzeń, takie jak myszy, klawiatury, formularzy i okna przeglądarki.</li>
+        </ul>
+    </div>
+
+    <script>
+        // Przykład nasłuchiwacza zdarzenia dla przycisku
+        const button = document.querySelector('button');
+        button.addEventListener('click', () => {
+            alert('Kliknięto przycisk!');
+        });
+
+        // Przykład delegacji zdarzeń dla listy
+        const ul = document.querySelector('ul');
+        ul.addEventListener('click', (event) => {
+            if (event.target.tagName === 'LI') {
+                alert(`Kliknięto na element: ${event.target.textContent}`);
+            }
+        });
+
+        // Przykład zdarzenia przewijania okna
+        window.addEventListener('scroll', () => {
+            console.log(`Pozycja przewijania: ${window.scrollY}`);
+        });
+    </script>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/prism.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/components/prism-javascript.min.js"></script>
+</body>
+</html>

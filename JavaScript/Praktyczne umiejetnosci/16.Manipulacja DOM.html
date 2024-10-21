@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Manipulacja DOM</title>
+    <link rel="stylesheet" href="../styles.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/themes/prism-tomorrow.min.css" rel="stylesheet" />
+</head>
+<body>
+    <div class="container">
+        <h1>Manipulacja DOM</h1>
+
+        <p>DOM (Document Object Model) to struktura dokumentu HTML reprezentowana w formie drzewa, gdzie każdy element HTML jest węzłem. Manipulacja DOM polega na modyfikowaniu struktury, zawartości i atrybutów elementów za pomocą JavaScript.</p>
+
+        <h2>Pobieranie elementów</h2>
+        <p>Aby manipulować elementami DOM, musimy najpierw je pobrać. Możemy to zrobić na kilka sposobów:</p>
+
+        <h3><code>getElementById()</code></h3>
+        <p>Metoda <code>getElementById()</code> zwraca element na podstawie jego unikalnego identyfikatora (ID).</p>
+        <pre><code class="language-javascript">
+const header = document.getElementById('main-header');
+console.log(header);
+        </code></pre>
+
+        <h3><code>querySelector()</code></h3>
+        <p>Metoda <code>querySelector()</code> zwraca pierwszy element, który pasuje do podanego selektora CSS.</p>
+        <pre><code class="language-javascript">
+const firstParagraph = document.querySelector('p');
+console.log(firstParagraph);
+        </code></pre>
+
+        <h3><code>querySelectorAll()</code> z indeksem</h3>
+<p>Metoda <code>querySelectorAll()</code> zwraca wszystkie elementy, które pasują do podanego selektora CSS, jako listę <code>NodeList</code>. Możemy uzyskać dostęp do konkretnego elementu na podstawie jego indeksu w tej liście.</p>
+
+<pre><code class="language-javascript">
+// Pobranie drugiego elementu <p> (indeks 1, bo indeksowanie zaczyna się od zera)
+const secondParagraph = document.querySelectorAll('p')[1];
+console.log(secondParagraph); // Wyświetli drugi element <p>
+
+// Zmieniamy tekst w drugim elemencie <p>
+secondParagraph.textContent = "To jest drugi akapit";
+</code></pre>
+
+<p>W przykładzie używamy <code>querySelectorAll()</code>, aby pobrać listę wszystkich elementów <code>p</code>, a następnie bezpośrednio odwołujemy się do drugiego elementu poprzez indeks, zmieniając jego treść.</p>
+<hr>
+        <p>Wyobraź sobie pobieranie elementów DOM jako przeszukiwanie drzewa. <code>getElementById()</code> to jak szukanie konkretnej gałęzi po jej etykiecie, a <code>querySelector()</code> to szukanie pierwszej gałęzi, która spełnia dany warunek (np. wszystkie gałęzie oznaczone jako 'p').</p>
+
+        <h2>Modyfikacja treści i atrybutów</h2>
+        <p>Po pobraniu elementu możemy zmieniać jego zawartość, style i atrybuty.</p>
+
+        <h3>Modyfikacja tekstu</h3>
+        <p>Możemy zmienić tekst wewnątrz elementu, używając właściwości <code>textContent</code> lub <code>innerHTML</code>.</p>
+        <pre><code class="language-javascript">
+// Zmiana tekstu nagłówka
+const header = document.getElementById('main-header');
+header.textContent = 'Nowy nagłówek';
+        </code></pre>
+
+        <h3>Modyfikacja atrybutów</h3>
+        <p>Możemy zmienić atrybuty elementu, takie jak <code>src</code>, <code>href</code>, czy <code>alt</code>, za pomocą metody <code>setAttribute()</code> lub bezpośredniej modyfikacji właściwości.</p>
+        <pre><code class="language-javascript">
+// Zmiana atrybutu obrazu
+const image = document.querySelector('img');
+image.setAttribute('src', 'nowy-obrazek.jpg');
+
+// Lub bezpośrednio
+image.src = 'nowy-obrazek.jpg';
+        </code></pre>
+
+        <h3>Modyfikacja stylów</h3>
+        <p>Style elementu można zmienić, używając właściwości <code>style</code>.</p>
+        <pre><code class="language-javascript">
+const header = document.getElementById('main-header');
+header.style.color = 'blue';
+header.style.fontSize = '24px';
+        </code></pre>
+        <p>Zmiana treści i atrybutów jest jak modyfikowanie opisu w katalogu – zmieniamy to, co użytkownik widzi, lub jak dany element zachowuje się na stronie.</p>
+
+        <h2>Tworzenie i usuwanie elementów</h2>
+        <p>Możemy dynamicznie tworzyć nowe elementy, dodawać je do strony oraz usuwać istniejące elementy.</p>
+
+        <h3>Tworzenie nowych elementów</h3>
+        <p>Aby utworzyć nowy element, używamy metody <code>document.createElement()</code>, a następnie dodajemy go do DOM za pomocą <code>appendChild()</code>.</p>
+        <pre><code class="language-javascript">
+// Tworzenie nowego akapitu
+const newParagraph = document.createElement('p');
+newParagraph.textContent = 'To jest nowy akapit';
+
+// Dodanie akapitu do elementu body
+document.body.appendChild(newParagraph);
+        </code></pre>
+
+        <h3>Usuwanie elementów</h3>
+        <p>Aby usunąć element, używamy metody <code>remove()</code> lub <code>removeChild()</code>.</p>
+        <pre><code class="language-javascript">
+// Usunięcie elementu
+const paragraphToRemove = document.querySelector('p');
+paragraphToRemove.remove();
+        </code></pre>
+        <p>Tworzenie nowych elementów to jak dodawanie nowych gałęzi do drzewa, a ich usuwanie to jak obcinanie gałęzi.</p>
+
+        <h2>Podsumowanie</h2>
+        <ul>
+            <li>Możemy pobierać elementy DOM za pomocą metod takich jak <code>getElementById()</code> i <code>querySelector()</code>.</li>
+            <li>Możemy zmieniać treść, atrybuty i style elementów za pomocą JavaScript.</li>
+            <li>Możemy tworzyć nowe elementy za pomocą <code>createElement()</code> i usuwać istniejące elementy za pomocą <code>remove()</code>.</li>
+        </ul>
+    </div>
+
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/prism.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/components/prism-javascript.min.js"></script>
+</body>
+</html>
