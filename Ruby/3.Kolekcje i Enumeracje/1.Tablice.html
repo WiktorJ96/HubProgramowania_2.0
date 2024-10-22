@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tablice</title>
+    <link rel="stylesheet" href="../styles.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/themes/prism-tomorrow.min.css" rel="stylesheet" />
+</head>
+<body>
+    <div class="container">
+        <h1>Tablice</h1>
+        
+        <p>Tablice (Arrays) w Ruby są strukturami danych, które przechowują kolekcje elementów. Elementy te mogą być różnego typu, na przykład liczby, łańcuchy znaków czy inne obiekty. Tablice są dynamiczne, co oznacza, że mogą zmieniać swój rozmiar w trakcie działania programu.</p>
+
+        <h2>Tworzenie tablicy</h2>
+        <p>Tablicę w Ruby można stworzyć za pomocą nawiasów kwadratowych <code>[]</code>, lub używając metody <code>Array.new</code>. Elementy tablicy są indeksowane, co oznacza, że możemy uzyskać dostęp do elementu tablicy na podstawie jego indeksu.</p>
+        <pre><code class="language-ruby">
+        # Tworzenie tablicy za pomocą nawiasów kwadratowych
+        fruits = ["jabłko", "banan", "truskawka"]
+
+        # Tworzenie tablicy za pomocą metody Array.new
+        numbers = Array.new(3)  # Tablica o 3 elementach, wypełniona nilami
+
+        puts fruits[0]  # Wyświetla: "jabłko"
+        puts numbers[1]  # Wyświetla: nil
+        </code></pre>
+
+        <h2>Dodawanie i usuwanie elementów</h2>
+        <p>Ruby oferuje różne metody do manipulacji elementami tablicy. Można dodawać elementy na końcu tablicy za pomocą metody <code>push</code> lub operatora <code>&lt;&lt;</code>, a usuwać za pomocą metody <code>pop</code> lub <code>delete</code>.</p>
+        <pre><code class="language-ruby">
+        fruits = ["jabłko", "banan", "truskawka"]
+
+        # Dodawanie elementu na końcu tablicy
+        fruits.push("gruszka")
+        fruits << "winogrono"
+
+        # Usuwanie elementu z końca tablicy
+        fruits.pop  # Usuwa "winogrono"
+
+        puts fruits.inspect  # Wyświetla: ["jabłko", "banan", "truskawka", "gruszka"]
+
+        # Usuwanie konkretnego elementu
+        fruits.delete("banan")
+        puts fruits.inspect  # Wyświetla: ["jabłko", "truskawka", "gruszka"]
+        </code></pre>
+
+        <h2>Iteracja po tablicach</h2>
+        <p>Tablice w Ruby można łatwo przeglądać za pomocą różnych metod iteracyjnych, takich jak <code>each</code> czy <code>map</code>.</p>
+        <pre><code class="language-ruby">
+        fruits = ["jabłko", "truskawka", "gruszka"]
+
+        # Użycie each do iteracji po elementach
+        fruits.each do |fruit|
+          puts "Owoc: #{fruit}"
+        end
+
+        # Użycie map do przekształcenia elementów tablicy
+        uppercase_fruits = fruits.map { |fruit| fruit.upcase }
+        puts uppercase_fruits.inspect  # Wyświetla: ["JABŁKO", "TRUSKAWKA", "GRUSZKA"]
+        </code></pre>
+
+        <h2>Dostęp do elementów tablicy</h2>
+        <p>Do elementów tablicy możemy uzyskać dostęp poprzez indeks. Indeksowanie w Ruby zaczyna się od zera. Istnieje również możliwość dostępu do elementów od końca tablicy za pomocą indeksów ujemnych.</p>
+        <pre><code class="language-ruby">
+        fruits = ["jabłko", "truskawka", "gruszka"]
+
+        # Dostęp do elementów za pomocą indeksu
+        puts fruits[0]  # Wyświetla: "jabłko"
+        puts fruits[-1]  # Wyświetla: "gruszka" (ostatni element)
+
+        # Można również wycinać podtablice
+        puts fruits[0, 2].inspect  # Wyświetla: ["jabłko", "truskawka"]
+        </code></pre>
+
+        <h2>Metody przydatne dla tablic</h2>
+        <p>Ruby oferuje wiele przydatnych metod do pracy z tablicami, takich jak <code>sort</code>, <code>reverse</code>, <code>include?</code>, <code>join</code> i wiele innych.</p>
+        <pre><code class="language-ruby">
+        fruits = ["gruszka", "jabłko", "truskawka"]
+
+        # Sortowanie tablicy
+        sorted_fruits = fruits.sort
+        puts sorted_fruits.inspect  # Wyświetla: ["gruszka", "jabłko", "truskawka"]
+
+        # Odwracanie kolejności elementów w tablicy
+        reversed_fruits = fruits.reverse
+        puts reversed_fruits.inspect  # Wyświetla: ["truskawka", "jabłko", "gruszka"]
+
+        # Sprawdzanie, czy tablica zawiera dany element
+        puts fruits.include?("jabłko")  # Wyświetla: true
+
+        # Łączenie elementów tablicy w łańcuch znaków
+        puts fruits.join(", ")  # Wyświetla: "gruszka, jabłko, truskawka"
+        </code></pre>
+
+        <h2>Podsumowanie</h2>
+        <p>Tablice są jedną z podstawowych struktur danych w Ruby. Dzięki ich dynamicznemu charakterowi oraz dużej liczbie wbudowanych metod, praca z nimi jest bardzo elastyczna i wydajna. Tablice pozwalają przechowywać, modyfikować i przetwarzać zbiory danych w prosty sposób.</p>
+    </div>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/prism.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/components/prism-ruby.min.js"></script>
+</body>
+</html>

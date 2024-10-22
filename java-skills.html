@@ -1,0 +1,333 @@
+<!DOCTYPE html>
+<html lang="pl">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Umiejętności Java</title>
+    <link rel="icon" type="image/png" href="assets/java-icon.png" sizes="16x16">
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- FontAwesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="skills.css">
+    <style>
+        .java-hr {
+            border: none;
+            height: 3px;
+            background: linear-gradient(to right, #f89820, rgba(248, 152, 32, 0), #5382a1);
+            margin: 40px 0;
+            position: relative;
+            overflow: visible;
+        }
+
+        .java-hr::before {
+            content: 'Java';
+            display: block;
+            position: absolute;
+            top: -14px;
+            left: 50%;
+            transform: translateX(-50%);
+            font-size: 24px;
+            color: #f89820;
+            font-weight: bold;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        .iconJava {
+            font-size: 100px;
+            color: #5382a1;
+            display: block;
+            text-align: center;
+        }
+    </style>
+</head>
+
+<body data-page="java">
+    <div class="container py-5">
+
+        <i class="fab fa-java iconJava mb-4"></i>
+
+        <hr class="java-hr">
+
+        <!-- Zawartość kart umiejętności -->
+        <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4">
+
+            <!-- Podstawy Javy -->
+            <div class="col" data-difficulty="Dobry" data-category="podstawy-javy">
+                <div class="card skill-card h-100">
+                    <div class="card-body text-center">
+                        <i class="fas fa-code skill-icon mb-3"></i>
+                        <h5 class="card-title">Podstawy Javy</h5>
+                        <p class="card-text">Składnia, typy danych, zmienne, operatory, instrukcje warunkowe, pętle.</p>
+                    </div>
+                    <div class="card-footer">
+                        <span class="badge bg-success">
+                            <i class="fas fa-smile" data-bs-toggle="tooltip" title="Dobry"></i>
+                        </span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Programowanie Obiektowe -->
+            <div class="col" data-difficulty="Dobry" data-category="programowanie-obiektowe">
+                <div class="card skill-card h-100">
+                    <div class="card-body text-center">
+                        <i class="fas fa-object-group skill-icon mb-3"></i>
+                        <h5 class="card-title">Programowanie Obiektowe</h5>
+                        <p class="card-text">Klasy, obiekty, dziedziczenie, polimorfizm, enkapsulacja, interfejsy.</p>
+                    </div>
+                    <div class="card-footer">
+                        <span class="badge bg-success">
+                            <i class="fas fa-smile" data-bs-toggle="tooltip" title="Dobry"></i>
+                        </span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Kolekcje -->
+            <div class="col" data-difficulty="Średni" data-category="kolekcje">
+                <div class="card skill-card h-100">
+                    <div class="card-body text-center">
+                        <i class="fas fa-th-list skill-icon mb-3"></i>
+                        <h5 class="card-title">Kolekcje</h5>
+                        <p class="card-text">Tablice, listy, zbiory, mapy, operacje na kolekcjach, typy generyczne.</p>
+                    </div>
+                    <div class="card-footer">
+                        <span class="badge bg-warning">
+                            <i class="fas fa-meh" data-bs-toggle="tooltip" title="Średni"></i>
+                        </span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Obsługa Wyjątków -->
+            <div class="col" data-difficulty="Dobry" data-category="wyjatki">
+                <div class="card skill-card h-100">
+                    <div class="card-body text-center">
+                        <i class="fas fa-exclamation-triangle skill-icon mb-3"></i>
+                        <h5 class="card-title">Obsługa Wyjątków</h5>
+                        <p class="card-text">Try-catch, własne wyjątki, obsługa błędów.</p>
+                    </div>
+                    <div class="card-footer">
+                        <span class="badge bg-success">
+                            <i class="fas fa-smile" data-bs-toggle="tooltip" title="Dobry"></i>
+                        </span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Operacje I/O -->
+            <div class="col" data-difficulty="Średni" data-category="operacje-io">
+                <div class="card skill-card h-100">
+                    <div class="card-body text-center">
+                        <i class="fas fa-file-alt skill-icon mb-3"></i>
+                        <h5 class="card-title">Operacje I/O</h5>
+                        <p class="card-text">Praca z plikami, strumienie, serializacja obiektów.</p>
+                    </div>
+                    <div class="card-footer">
+                        <span class="badge bg-warning">
+                            <i class="fas fa-meh" data-bs-toggle="tooltip" title="Średni"></i>
+                        </span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Interfejsy Graficzne -->
+            <div class="col" data-difficulty="Słaby" data-category="interfejsy-graficzne">
+                <div class="card skill-card h-100">
+                    <div class="card-body text-center">
+                        <i class="fas fa-desktop skill-icon mb-3"></i>
+                        <h5 class="card-title">Interfejsy Graficzne</h5>
+                        <p class="card-text">Podstawy Swing, JavaFX, tworzenie aplikacji z GUI.</p>
+                    </div>
+                    <div class="card-footer">
+                        <span class="badge bg-danger">
+                            <i class="fas fa-frown" data-bs-toggle="tooltip" title="Słaby"></i>
+                        </span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Bazy Danych -->
+            <div class="col" data-difficulty="Średni" data-category="bazy-danych">
+                <div class="card skill-card h-100">
+                    <div class="card-body text-center">
+                        <i class="fas fa-database skill-icon mb-3"></i>
+                        <h5 class="card-title">Bazy Danych</h5>
+                        <p class="card-text">JDBC, ORM (Hibernate, JPA), operacje na bazach danych.</p>
+                    </div>
+                    <div class="card-footer">
+                        <span class="badge bg-warning">
+                            <i class="fas fa-meh" data-bs-toggle="tooltip" title="Średni"></i>
+                        </span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Wielowątkowość -->
+            <div class="col" data-difficulty="Średni" data-category="wielowatkowosc">
+                <div class="card skill-card h-100">
+                    <div class="card-body text-center">
+                        <i class="fas fa-project-diagram skill-icon mb-3"></i>
+                        <h5 class="card-title">Wielowątkowość</h5>
+                        <p class="card-text">Tworzenie i zarządzanie wątkami, synchronizacja, pakiet <code>java.util.concurrent</code>.</p>
+                    </div>
+                    <div class="card-footer">
+                        <span class="badge bg-warning">
+                            <i class="fas fa-meh" data-bs-toggle="tooltip" title="Średni"></i>
+                        </span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Narzędzia -->
+            <div class="col" data-difficulty="Dobry" data-category="narzedzia">
+                <div class="card skill-card h-100">
+                    <div class="card-body text-center">
+                        <i class="fas fa-tools skill-icon mb-3"></i>
+                        <h5 class="card-title">Narzędzia</h5>
+                        <p class="card-text">Maven, Gradle, zarządzanie zależnościami, automatyzacja budowania.</p>
+                    </div>
+                    <div class="card-footer">
+                        <span class="badge bg-success">
+                            <i class="fas fa-smile" data-bs-toggle="tooltip" title="Dobry"></i>
+                        </span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Lambda Expressions i Stream API -->
+            <div class="col" data-difficulty="Średni" data-category="lambda-streams">
+                <div class="card skill-card h-100">
+                    <div class="card-body text-center">
+                        <i class="fas fa-stream skill-icon mb-3"></i>
+                        <h5 class="card-title">Lambda Expressions i Stream API</h5>
+                        <p class="card-text">Programowanie funkcyjne, przetwarzanie danych w strumieniach.</p>
+                    </div>
+                    <div class="card-footer">
+                        <span class="badge bg-warning">
+                            <i class="fas fa-meh" data-bs-toggle="tooltip" title="Średni"></i>
+                        </span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Testowanie Jednostkowe -->
+            <div class="col" data-difficulty="Średni" data-category="testowanie">
+                <div class="card skill-card h-100">
+                    <div class="card-body text-center">
+                        <i class="fas fa-vial skill-icon mb-3"></i>
+                        <h5 class="card-title">Testowanie Jednostkowe</h5>
+                        <p class="card-text">JUnit, Mockito, tworzenie i uruchamianie testów, TDD.</p>
+                    </div>
+                    <div class="card-footer">
+                        <span class="badge bg-warning">
+                            <i class="fas fa-meh" data-bs-toggle="tooltip" title="Średni"></i>
+                        </span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Wzorce Projektowe -->
+            <div class="col" data-difficulty="Słaby" data-category="wzorce-projektowe">
+                <div class="card skill-card h-100">
+                    <div class="card-body text-center">
+                        <i class="fas fa-sitemap skill-icon mb-3"></i>
+                        <h5 class="card-title">Wzorce Projektowe</h5>
+                        <p class="card-text">Wzorce kreacyjne, strukturalne i behawioralne.</p>
+                    </div>
+                    <div class="card-footer">
+                        <span class="badge bg-danger">
+                            <i class="fas fa-frown" data-bs-toggle="tooltip" title="Słaby"></i>
+                        </span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Web Development -->
+            <div class="col" data-difficulty="Słaby" data-category="web-development">
+                <div class="card skill-card h-100">
+                    <div class="card-body text-center">
+                        <i class="fas fa-globe skill-icon mb-3"></i>
+                        <h5 class="card-title">Web Development</h5>
+                        <p class="card-text">Servlet, JSP, Spring Framework, RESTful Web Services.</p>
+                    </div>
+                    <div class="card-footer">
+                        <span class="badge bg-danger">
+                            <i class="fas fa-frown" data-bs-toggle="tooltip" title="Słaby"></i>
+                        </span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Microservices i Spring Boot -->
+            <div class="col" data-difficulty="Słaby" data-category="microservices">
+                <div class="card skill-card h-100">
+                    <div class="card-body text-center">
+                        <i class="fas fa-network-wired skill-icon mb-3"></i>
+                        <h5 class="card-title">Microservices i Spring Boot</h5>
+                        <p class="card-text">Tworzenie mikroserwisów, konfiguracja i uruchamianie aplikacji Spring Boot.</p>
+                    </div>
+                    <div class="card-footer">
+                        <span class="badge bg-danger">
+                            <i class="fas fa-frown" data-bs-toggle="tooltip" title="Słaby"></i>
+                        </span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Programowanie Sieciowe -->
+            <div class="col" data-difficulty="Średni" data-category="programowanie-sieciowe">
+                <div class="card skill-card h-100">
+                    <div class="card-body text-center">
+                        <i class="fas fa-cloud skill-icon mb-3"></i>
+                        <h5 class="card-title">Programowanie Sieciowe</h5>
+                        <p class="card-text">Sockets, ServerSocket, połączenia HTTP, parsowanie JSON i XML.</p>
+                    </div>
+                    <div class="card-footer">
+                        <span class="badge bg-warning">
+                            <i class="fas fa-meh" data-bs-toggle="tooltip" title="Średni"></i>
+                        </span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Bezpieczeństwo -->
+            <div class="col" data-difficulty="Słaby" data-category="bezpieczenstwo">
+                <div class="card skill-card h-100">
+                    <div class="card-body text-center">
+                        <i class="fas fa-shield-alt skill-icon mb-3"></i>
+                        <h5 class="card-title">Bezpieczeństwo</h5>
+                        <p class="card-text">Szyfrowanie, uwierzytelnianie, zabezpieczanie aplikacji.</p>
+                    </div>
+                    <div class="card-footer">
+                        <span class="badge bg-danger">
+                            <i class="fas fa-frown" data-bs-toggle="tooltip" title="Słaby"></i>
+                        </span>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+    <!-- Bootstrap JS (Popper.js and Bootstrap JS) -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <!-- FontAwesome JS -->
+    <script src="https://kit.fontawesome.com/a076d05399.js" crossorigin="anonymous"></script>
+    <!-- Custom JS -->
+    <script src="skills.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            // Inicjalizacja tooltipów
+            var tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'))
+            var tooltipList = tooltipTriggerList.map(function (tooltipTriggerElement) {
+                return new bootstrap.Tooltip(tooltipTriggerElement)
+            })
+        });
+    </script>
+</body>
+
+</html>

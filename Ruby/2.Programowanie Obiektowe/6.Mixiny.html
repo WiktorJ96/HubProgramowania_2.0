@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mixiny</title>
+    <link rel="stylesheet" href="../styles.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/themes/prism-tomorrow.min.css" rel="stylesheet" />
+</head>
+<body>
+    <div class="container">
+        <h1>Mixiny</h1>
+        
+        <p>Mixiny w Ruby to moduły, które pozwalają na dzielenie się funkcjonalnością między klasami bez potrzeby dziedziczenia. Ruby nie obsługuje wielokrotnego dziedziczenia, ale mixiny umożliwiają włączenie metod modułów do klasy, co pozwala rozszerzyć jej funkcjonalność.</p>
+
+        <h2>Moduły w Ruby</h2>
+        <p>Moduły w Ruby są zbiorem metod i stałych, które można załączać do klas za pomocą słów kluczowych <code>include</code> lub <code>extend</code>. Użycie <code>include</code> dodaje metody modułu jako metody instancyjne, a <code>extend</code> jako metody klasowe.</p>
+
+        <h3>Tworzenie modułu</h3>
+        <p>Moduł definiujemy za pomocą słowa kluczowego <code>module</code>. Oto przykład prostego modułu z metodą:</p>
+        <pre><code class="language-ruby">
+        module Walkable
+          def walk
+            puts "Idę!"
+          end
+        end
+        </code></pre>
+
+        <h2>Używanie modułu w klasie (mixin)</h2>
+        <p>Aby włączyć moduł do klasy jako mixin, używamy słowa kluczowego <code>include</code>. Metody modułu stają się wtedy metodami instancyjnymi danej klasy.</p>
+        <pre><code class="language-ruby">
+        module Walkable
+          def walk
+            puts "Idę!"
+          end
+        end
+
+        class Person
+          include Walkable  # Włączenie modułu jako mixin
+
+          def initialize(name)
+            @name = name
+          end
+        end
+
+        person = Person.new("Alice")
+        person.walk  # Wywołanie metody z modułu Walkable
+        </code></pre>
+
+        <h2>Moduł jako metody klasowe</h2>
+        <p>Jeśli chcemy, aby metody modułu były dostępne jako metody klasowe (nie instancyjne), możemy użyć <code>extend</code>. Metody te będą dostępne bez konieczności tworzenia instancji klasy.</p>
+        <pre><code class="language-ruby">
+        module Describable
+          def describe
+            puts "Jestem klasą #{self.name}"
+          end
+        end
+
+        class Product
+          extend Describable  # Włączenie modułu jako metody klasowe
+        end
+
+        Product.describe  # Wywołanie metody klasowej z modułu Describable
+        </code></pre>
+
+        <h2>Mixiny i dziedziczenie</h2>
+        <p>Mixiny mogą być łączone z dziedziczeniem, co pozwala na tworzenie klas, które dziedziczą po innych klasach i jednocześnie korzystają z modułów. W ten sposób można osiągnąć bardziej elastyczne zarządzanie funkcjonalnością.</p>
+        <pre><code class="language-ruby">
+        module Flyable
+          def fly
+            puts "Lecę!"
+          end
+        end
+
+        class Animal
+          def speak
+            puts "Zwierzę wydaje dźwięk"
+          end
+        end
+
+        class Bird < Animal
+          include Flyable  # Ptak może latać dzięki mixinowi
+        end
+
+        bird = Bird.new
+        bird.speak  # Dziedziczy metodę speak z Animal
+        bird.fly    # Korzysta z metody fly z modułu Flyable
+        </code></pre>
+
+        <h2>Mixiny jako alternatywa dla wielokrotnego dziedziczenia</h2>
+        <p>Ruby nie wspiera wielokrotnego dziedziczenia, ale dzięki mixinom można tworzyć klasy, które "dziedziczą" funkcjonalność z wielu modułów. Jest to elastyczna alternatywa dla dziedziczenia z wielu klas.</p>
+        <pre><code class="language-ruby">
+        module Flyable
+          def fly
+            puts "Lecę!"
+          end
+        end
+
+        module Swimable
+          def swim
+            puts "Pływam!"
+          end
+        end
+
+        class Duck
+          include Flyable
+          include Swimable  # Kaczka może zarówno latać, jak i pływać
+        end
+
+        duck = Duck.new
+        duck.fly   # Wywołanie metody z modułu Flyable
+        duck.swim  # Wywołanie metody z modułu Swimable
+        </code></pre>
+
+        <h2>Mixiny z metodami prywatnymi</h2>
+        <p>Moduły mogą również zawierać prywatne metody, które są dostępne tylko w klasach, które włączają te moduły. Użycie mixinów z metodami prywatnymi pozwala na ukrywanie szczegółów implementacyjnych.</p>
+        <pre><code class="language-ruby">
+        module Helper
+        private
+          def assist
+            puts "Pomoc prywatna"
+          end
+        end
+
+        class Mechanic
+          include Helper
+
+          def fix
+            puts "Naprawiam samochód"
+            assist  # Wywołanie prywatnej metody z modułu Helper
+          end
+        end
+
+        mechanic = Mechanic.new
+        mechanic.fix  # Naprawia samochód i wywołuje prywatną metodę assist
+        mechanic.assist  # Błąd, ponieważ assist jest prywatną metodą
+        </code></pre>
+
+        <h2>Korzyści z używania mixinów</h2>
+        <ul>
+            <li><strong>Wielokrotne użycie kodu</strong>: Mixiny pozwalają na ponowne użycie tego samego kodu w różnych klasach bez potrzeby duplikacji.</li>
+            <li><strong>Modularność</strong>: Funkcjonalność można podzielić na mniejsze moduły, które są łatwe do zarządzania i mogą być włączane w dowolnych klasach.</li>
+            <li><strong>Brak potrzeby wielokrotnego dziedziczenia</strong>: Ruby nie obsługuje wielokrotnego dziedziczenia, ale mixiny oferują podobną funkcjonalność, umożliwiając klasom "dziedziczenie" z wielu źródeł.</li>
+        </ul>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/prism.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/components/prism-ruby.min.js"></script>
+</body>
+</html>

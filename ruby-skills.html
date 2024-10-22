@@ -1,0 +1,314 @@
+<!DOCTYPE html>
+<html lang="pl">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Umiejętności Ruby</title>
+    <link rel="icon" type="image/png" href="assets/ruby-icon.png" sizes="16x16">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <link rel="stylesheet" href="skills.css">
+    <style>
+        .ruby-hr {
+            border: none;
+            height: 3px;
+            background: linear-gradient(to right, #e0115f, rgba(224, 17, 95, 0), #cc0000);
+            margin: 40px 0;
+            position: relative;
+            overflow: visible;
+        }
+
+        .ruby-hr::before {
+            content: 'Ruby';
+            display: block;
+            position: absolute;
+            top: -14px;
+            left: 50%;
+            transform: translateX(-50%);
+            font-size: 24px;
+            color: #e0115f;
+            font-weight: bold;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        .iconRuby {
+            font-size: 100px;
+            color: #e0115f;
+            display: block;
+            text-align: center;
+        }
+    </style>
+</head>
+
+<body data-page="ruby">
+    <div class="container py-5">
+
+        <i class="fas fa-gem iconRuby mb-4"></i>
+
+        <hr class="ruby-hr">
+
+        <!-- Zawartość kart umiejętności -->
+        <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4">
+
+            <!-- Podstawy Ruby (Podstawowe) -->
+            <div class="col" data-difficulty="Dobry" data-category="podstawy-ruby">
+                <div class="card skill-card h-100">
+                    <div class="card-body text-center">
+                        <i class="fas fa-code skill-icon mb-3"></i>
+                        <h5 class="card-title">Podstawy Ruby</h5>
+                        <p class="card-text">Składnia, typy danych, zmienne, operatory, instrukcje warunkowe, pętle.</p>
+                    </div>
+                    <div class="card-footer">
+                        <span class="badge bg-success">
+                            <i class="fas fa-smile" data-bs-toggle="tooltip" title="Dobry"></i>
+                        </span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Programowanie Obiektowe (Podstawowe/Średniozaawansowane) -->
+            <div class="col" data-difficulty="Dobry" data-category="programowanie-obiektowe">
+                <div class="card skill-card h-100">
+                    <div class="card-body text-center">
+                        <i class="fas fa-object-group skill-icon mb-3"></i>
+                        <h5 class="card-title">Programowanie Obiektowe</h5>
+                        <p class="card-text">Klasy, obiekty, dziedziczenie, polimorfizm, enkapsulacja, moduły, mixiny.</p>
+                    </div>
+                    <div class="card-footer">
+                        <span class="badge bg-success">
+                            <i class="fas fa-smile" data-bs-toggle="tooltip" title="Dobry"></i>
+                        </span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Kolekcje i Enumeracje (Średniozaawansowane) -->
+            <div class="col" data-difficulty="Dobry" data-category="kolekcje">
+                <div class="card skill-card h-100">
+                    <div class="card-body text-center">
+                        <i class="fas fa-th-list skill-icon mb-3"></i>
+                        <h5 class="card-title">Kolekcje i Enumeracje</h5>
+                        <p class="card-text">Tablice, hashe, zakresy, iteratory, metody Enumerable.</p>
+                    </div>
+                    <div class="card-footer">
+                        <span class="badge bg-success">
+                            <i class="fas fa-smile" data-bs-toggle="tooltip" title="Dobry"></i>
+                        </span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Gemy i Zarządzanie Pakietami (Średniozaawansowane) -->
+            <div class="col" data-difficulty="Dobry" data-category="gemy">
+                <div class="card skill-card h-100">
+                    <div class="card-body text-center">
+                        <i class="fas fa-box-open skill-icon mb-3"></i>
+                        <h5 class="card-title">Gemy i Zarządzanie Pakietami</h5>
+                        <p class="card-text">Instalacja gemów, tworzenie własnych gemów, Bundler.</p>
+                    </div>
+                    <div class="card-footer">
+                        <span class="badge bg-success">
+                            <i class="fas fa-smile" data-bs-toggle="tooltip" title="Dobry"></i>
+                        </span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Bloki, Proc i Lambdy (Średniozaawansowane) -->
+            <div class="col" data-difficulty="Średni" data-category="bloki-proki-lambdy">
+                <div class="card skill-card h-100">
+                    <div class="card-body text-center">
+                        <i class="fas fa-link skill-icon mb-3"></i>
+                        <h5 class="card-title">Bloki, Proc i Lambdy</h5>
+                        <p class="card-text">Użycie bloków kodu, obiektów Proc, lambd, różnice między nimi.</p>
+                    </div>
+                    <div class="card-footer">
+                        <span class="badge bg-warning">
+                            <i class="fas fa-meh" data-bs-toggle="tooltip" title="Średni"></i>
+                        </span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Wielowątkowość (Średniozaawansowane) -->
+            <div class="col" data-difficulty="Średni" data-category="wielowatkowosc">
+                <div class="card skill-card h-100">
+                    <div class="card-body text-center">
+                        <i class="fas fa-project-diagram skill-icon mb-3"></i>
+                        <h5 class="card-title">Wielowątkowość</h5>
+                        <p class="card-text">Tworzenie i zarządzanie wątkami, synchronizacja.</p>
+                    </div>
+                    <div class="card-footer">
+                        <span class="badge bg-warning">
+                            <i class="fas fa-meh" data-bs-toggle="tooltip" title="Średni"></i>
+                        </span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Obsługa Wyjątków (Średniozaawansowane) -->
+            <div class="col" data-difficulty="Dobry" data-category="wyjatki">
+                <div class="card skill-card h-100">
+                    <div class="card-body text-center">
+                        <i class="fas fa-exclamation-triangle skill-icon mb-3"></i>
+                        <h5 class="card-title">Obsługa Wyjątków</h5>
+                        <p class="card-text">Begin-rescue-end, tworzenie własnych wyjątków, obsługa błędów.</p>
+                    </div>
+                    <div class="card-footer">
+                        <span class="badge bg-success">
+                            <i class="fas fa-smile" data-bs-toggle="tooltip" title="Dobry"></i>
+                        </span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Testowanie Jednostkowe (Średniozaawansowane) -->
+            <div class="col" data-difficulty="Średni" data-category="testowanie">
+                <div class="card skill-card h-100">
+                    <div class="card-body text-center">
+                        <i class="fas fa-vial skill-icon mb-3"></i>
+                        <h5 class="card-title">Testowanie Jednostkowe</h5>
+                        <p class="card-text">RSpec, Minitest, tworzenie i uruchamianie testów.</p>
+                    </div>
+                    <div class="card-footer">
+                        <span class="badge bg-warning">
+                            <i class="fas fa-meh" data-bs-toggle="tooltip" title="Średni"></i>
+                        </span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Operacje I/O (Średniozaawansowane) -->
+            <div class="col" data-difficulty="Średni" data-category="operacje-io">
+                <div class="card skill-card h-100">
+                    <div class="card-body text-center">
+                        <i class="fas fa-file-alt skill-icon mb-3"></i>
+                        <h5 class="card-title">Operacje I/O</h5>
+                        <p class="card-text">Praca z plikami, strumienie, serializacja obiektów.</p>
+                    </div>
+                    <div class="card-footer">
+                        <span class="badge bg-warning">
+                            <i class="fas fa-meh" data-bs-toggle="tooltip" title="Średni"></i>
+                        </span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Programowanie Funkcyjne (Średniozaawansowane) -->
+            <div class="col" data-difficulty="Średni" data-category="programowanie-funkcyjne">
+                <div class="card skill-card h-100">
+                    <div class="card-body text-center">
+                        <i class="fas fa-calculator skill-icon mb-3"></i>
+                        <h5 class="card-title">Programowanie Funkcyjne</h5>
+                        <p class="card-text">Funkcje wyższego rzędu, curryfikacja, funkcje anonimowe.</p>
+                    </div>
+                    <div class="card-footer">
+                        <span class="badge bg-warning">
+                            <i class="fas fa-meh" data-bs-toggle="tooltip" title="Średni"></i>
+                        </span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Obsługa Baz Danych (Średniozaawansowane) -->
+            <div class="col" data-difficulty="Średni" data-category="bazy-danych">
+                <div class="card skill-card h-100">
+                    <div class="card-body text-center">
+                        <i class="fas fa-database skill-icon mb-3"></i>
+                        <h5 class="card-title">Obsługa Baz Danych</h5>
+                        <p class="card-text">ActiveRecord, ORM, podstawowe operacje na bazach danych.</p>
+                    </div>
+                    <div class="card-footer">
+                        <span class="badge bg-warning">
+                            <i class="fas fa-meh" data-bs-toggle="tooltip" title="Średni"></i>
+                        </span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Metaprogramowanie (Zaawansowane) -->
+            <div class="col" data-difficulty="Słaby" data-category="metaprogramowanie">
+                <div class="card skill-card h-100">
+                    <div class="card-body text-center">
+                        <i class="fas fa-magic skill-icon mb-3"></i>
+                        <h5 class="card-title">Metaprogramowanie</h5>
+                        <p class="card-text">Dynamiczne definiowanie metod, refleksja, metody metod.</p>
+                    </div>
+                    <div class="card-footer">
+                        <span class="badge bg-danger">
+                            <i class="fas fa-frown" data-bs-toggle="tooltip" title="Słaby"></i>
+                        </span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Ruby on Rails (Zaawansowane) -->
+            <div class="col" data-difficulty="Słaby" data-category="ruby-on-rails">
+                <div class="card skill-card h-100">
+                    <div class="card-body text-center">
+                        <i class="fas fa-gem skill-icon mb-3"></i>
+                        <h5 class="card-title">Ruby on Rails</h5>
+                        <p class="card-text">Podstawy frameworka Rails, MVC, routing, kontrolery, widoki.</p>
+                    </div>
+                    <div class="card-footer">
+                        <span class="badge bg-danger">
+                            <i class="fas fa-frown" data-bs-toggle="tooltip" title="Słaby"></i>
+                        </span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Programowanie Sieciowe (Zaawansowane) -->
+            <div class="col" data-difficulty="Słaby" data-category="programowanie-sieciowe">
+                <div class="card skill-card h-100">
+                    <div class="card-body text-center">
+                        <i class="fas fa-cloud skill-icon mb-3"></i>
+                        <h5 class="card-title">Programowanie Sieciowe</h5>
+                        <p class="card-text">Sockets, HTTP, tworzenie serwerów i klientów sieciowych.</p>
+                    </div>
+                    <div class="card-footer">
+                        <span class="badge bg-danger">
+                            <i class="fas fa-frown" data-bs-toggle="tooltip" title="Słaby"></i>
+                        </span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Bezpieczeństwo (Zaawansowane) -->
+            <div class="col" data-difficulty="Słaby" data-category="bezpieczenstwo">
+                <div class="card skill-card h-100">
+                    <div class="card-body text-center">
+                        <i class="fas fa-shield-alt skill-icon mb-3"></i>
+                        <h5 class="card-title">Bezpieczeństwo</h5>
+                        <p class="card-text">Szyfrowanie, uwierzytelnianie, zabezpieczanie aplikacji.</p>
+                    </div>
+                    <div class="card-footer">
+                        <span class="badge bg-danger">
+                            <i class="fas fa-frown" data-bs-toggle="tooltip" title="Słaby"></i>
+                        </span>
+                    </div>
+                </div>      
+            </div>
+
+        </div>
+
+
+    <!-- Bootstrap JS (Popper.js and Bootstrap JS) -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <!-- FontAwesome JS -->
+    <script src="https://kit.fontawesome.com/a076d05399.js" crossorigin="anonymous"></script>
+    <!-- Custom JS -->
+    <script src="skills.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            // Inicjalizacja tooltipów
+            var tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'))
+            var tooltipList = tooltipTriggerList.map(function (tooltipTriggerElement) {
+                return new bootstrap.Tooltip(tooltipTriggerElement)
+            })
+        });
+    </script>
+</body>
+
+</html>

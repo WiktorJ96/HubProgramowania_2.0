@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Polimorfizm</title>
+    <link rel="stylesheet" href="../styles.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/themes/prism-tomorrow.min.css" rel="stylesheet" />
+</head>
+<body>
+    <div class="container">
+        <h1>Polimorfizm</h1>
+        
+        <p>Polimorfizm to zdolność różnych obiektów do reagowania na te same wywołania metod, ale w sposób specyficzny dla danej klasy. W Ruby, polimorfizm osiąga się głównie przez dziedziczenie i nadpisywanie metod. Pozwala to na bardziej elastyczne projektowanie kodu.</p>
+
+        <h2>Przykład polimorfizmu</h2>
+        <p>Załóżmy, że mamy klasy <code>Animal</code> oraz różne klasy dziedziczące po niej, takie jak <code>Dog</code> i <code>Cat</code>. Każda z tych klas może implementować własną wersję metody <code>speak</code>.</p>
+        <pre><code class="language-ruby">
+        class Animal
+          def speak
+            puts "Zwierzę wydaje dźwięk"
+          end
+        end
+
+        class Dog < Animal
+          def speak
+            puts "Pies szczeka"
+          end
+        end
+
+        class Cat < Animal
+          def speak
+            puts "Kot miauczy"
+          end
+        end
+
+        animals = [Dog.new, Cat.new]
+
+        animals.each do |animal|
+          animal.speak  # Wywołuje odpowiednią wersję metody 'speak' w zależności od obiektu
+        end
+        </code></pre>
+
+        <h2>Dlaczego polimorfizm jest przydatny?</h2>
+        <p>Polimorfizm ułatwia zarządzanie kodem i dodawanie nowych funkcji bez konieczności zmieniania istniejących metod. Dzięki temu możemy pisać kod, który działa na ogólnych obiektach, a każdy z tych obiektów wykonuje swoje własne operacje. Na przykład, w powyższym kodzie pętla <code>each</code> wywołuje metodę <code>speak</code> bez wiedzy o tym, czy obiektem jest <code>Dog</code> czy <code>Cat</code>. Każda z klas implementuje swoją wersję tej metody.</p>
+
+        <h2>Przykład bardziej złożony</h2>
+        <p>Przyjrzyjmy się bardziej złożonemu przykładowi z klasami <code>Shape</code>, <code>Circle</code> oraz <code>Rectangle</code>. Każda z tych klas będzie implementować własną wersję metody <code>area</code>, która oblicza powierzchnię.</p>
+        <pre><code class="language-ruby">
+        class Shape
+          def area
+            raise "Metoda 'area' musi być zaimplementowana w podklasie"
+          end
+        end
+
+        class Circle < Shape
+          def initialize(radius)
+            @radius = radius
+          end
+
+          def area
+            Math::PI * @radius**2
+          end
+        end
+
+        class Rectangle < Shape
+          def initialize(width, height)
+            @width = width
+            @height = height
+          end
+
+          def area
+            @width * @height
+          end
+        end
+
+        shapes = [Circle.new(5), Rectangle.new(10, 20)]
+
+        shapes.each do |shape|
+          puts "Powierzchnia: #{shape.area}"
+        end
+        </code></pre>
+
+        <h2>Podsumowanie</h2>
+        <p>Polimorfizm pozwala na używanie jednej metody na różnych typach obiektów, co czyni kod bardziej elastycznym i łatwiejszym w utrzymaniu. Dzięki niemu możemy rozszerzać aplikacje poprzez dodawanie nowych klas i metod bez modyfikacji istniejącego kodu.</p>
+    </div>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/prism.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/components/prism-ruby.min.js"></script>
+</body>
+</html>

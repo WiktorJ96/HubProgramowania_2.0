@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Zakresy</title>
+    <link rel="stylesheet" href="../styles.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/themes/prism-tomorrow.min.css" rel="stylesheet" />
+</head>
+<body>
+    <div class="container">
+        <h1>Zakresy</h1>
+        
+        <p>Zakresy (ang. ranges) w Ruby to struktury danych, które reprezentują przedziały wartości, takie jak liczby, litery czy inne elementy z określonego zbioru. Zakresy są używane do iteracji, sprawdzania przynależności oraz generowania sekwencji.</p>
+
+        <h2>Tworzenie zakresów</h2>
+        <p>Zakresy można tworzyć przy użyciu dwóch różnych operatorów:</p>
+        <ul>
+            <li><code>..</code> — zakres zawiera wartości od początku do końca, włącznie z końcem (tzw. zakres zamknięty).</li>
+            <li><code>...</code> — zakres zawiera wartości od początku do końca, ale nie obejmuje końcowej wartości (tzw. zakres otwarty).</li>
+        </ul>
+
+        <pre><code class="language-ruby">
+        # Zakres zamknięty
+        range1 = 1..5
+        puts range1.to_a  # Wyświetla: [1, 2, 3, 4, 5]
+
+        # Zakres otwarty
+        range2 = 1...5
+        puts range2.to_a  # Wyświetla: [1, 2, 3, 4]
+        </code></pre>
+
+        <h2>Zakresy numeryczne</h2>
+        <p>Zakresy numeryczne są jednym z najczęściej używanych typów zakresów. Mogą być wykorzystywane do generowania sekwencji liczb lub iteracji.</p>
+        <pre><code class="language-ruby">
+        range = 10..15
+        puts range.to_a  # Wyświetla: [10, 11, 12, 13, 14, 15]
+
+        # Iteracja po zakresie
+        (1..5).each do |number|
+          puts "Numer: #{number}"
+        end
+        # Wyświetli:
+        # Numer: 1
+        # Numer: 2
+        # Numer: 3
+        # Numer: 4
+        # Numer: 5
+        </code></pre>
+
+        <h2>Zakresy znakowe</h2>
+        <p>Ruby pozwala tworzyć zakresy znakowe, które obejmują litery alfabetu. Można je używać podobnie jak zakresy numeryczne.</p>
+        <pre><code class="language-ruby">
+        # Zakres liter od a do e
+        letter_range = 'a'..'e'
+        puts letter_range.to_a  # Wyświetla: ["a", "b", "c", "d", "e"]
+
+        # Zakres dużych liter
+        uppercase_range = 'A'..'D'
+        puts uppercase_range.to_a  # Wyświetla: ["A", "B", "C", "D"]
+        </code></pre>
+
+        <h2>Metody operujące na zakresach</h2>
+        <p>Ruby dostarcza wiele metod do pracy z zakresami. Oto niektóre z nich:</p>
+        <ul>
+            <li><code>to_a</code> — Konwertuje zakres na tablicę.</li>
+            <li><code>include?</code> — Sprawdza, czy zakres zawiera daną wartość.</li>
+            <li><code>first</code> — Zwraca pierwszą wartość zakresu.</li>
+            <li><code>last</code> — Zwraca ostatnią wartość zakresu.</li>
+            <li><code>step</code> — Pozwala iterować po zakresie z określonym krokiem.</li>
+        </ul>
+
+        <pre><code class="language-ruby">
+        range = 1..10
+
+        # Konwersja na tablicę
+        puts range.to_a  # Wyświetla: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
+
+        # Sprawdzenie, czy zakres zawiera wartość
+        puts range.include?(5)  # Wyświetla: true
+        puts range.include?(15) # Wyświetla: false
+
+        # Pierwsza i ostatnia wartość
+        puts range.first  # Wyświetla: 1
+        puts range.last   # Wyświetla: 10
+
+        # Iteracja z krokiem 2
+        range.step(2) { |i| puts i }
+        # Wyświetli:
+        # 1
+        # 3
+        # 5
+        # 7
+        # 9
+        </code></pre>
+
+        <h2>Zakresy w warunkach</h2>
+        <p>Zakresy mogą być używane w warunkach logicznych do sprawdzania, czy wartość należy do danego przedziału.</p>
+        <pre><code class="language-ruby">
+        age = 25
+
+        case age
+        when 0..17
+          puts "Niepełnoletni"
+        when 18..64
+          puts "Dorosły"
+        else
+          puts "Senior"
+        end
+        # Wyświetli: Dorosły
+        </code></pre>
+
+        <h2>Operowanie na zmiennych z zakresem</h2>
+        <p>Ruby umożliwia operacje na zmiennych za pomocą zakresów, np. sprawdzenie, czy zmienna zawiera się w określonym przedziale wartości.</p>
+        <pre><code class="language-ruby">
+        score = 75
+
+        if (50..100).include?(score)
+          puts "Wynik jest w przedziale 50-100"
+        else
+          puts "Wynik poza zakresem"
+        end
+        # Wyświetli: Wynik jest w przedziale 50-100
+        </code></pre>
+
+        <h2>Nieskończone zakresy</h2>
+        <p>Ruby obsługuje również nieskończone zakresy, które są tworzone za pomocą <code>Float::INFINITY</code>. Nieskończone zakresy są używane, gdy początek jest określony, ale koniec jest otwarty.</p>
+        <pre><code class="language-ruby">
+        range = (1..Float::INFINITY)
+
+        # Sprawdzenie, czy liczba należy do nieskończonego zakresu
+        puts range.include?(1000)  # Wyświetla: true
+
+        # Użycie w pętli
+        range.each do |num|
+          break if num > 10  # Przerywamy po 10 iteracjach
+          puts num
+        end
+        # Wyświetli liczby od 1 do 10
+        </code></pre>
+
+        <h2>Zakresy a iteratory</h2>
+        <p>Zakresy często są używane jako iteratory, szczególnie w pętlach, do wykonywania operacji na liczbach lub innych zbiorach.</p>
+        <pre><code class="language-ruby">
+        # Pętla iterująca po zakresie
+        (1..5).each do |i|
+          puts "Liczba: #{i}"
+        end
+        # Wyświetli:
+        # Liczba: 1
+        # Liczba: 2
+        # Liczba: 3
+        # Liczba: 4
+        # Liczba: 5
+        </code></pre>
+
+        <h2>Zastosowania zakresów</h2>
+        <ul>
+            <li><strong>Iteracja</strong>: Zakresy są często używane do iteracji po liczbach lub literach.</li>
+            <li><strong>Warunki</strong>: Zakresy mogą być używane w warunkach <code>if</code> lub <code>case</code>, aby sprawdzić, czy wartość mieści się w danym przedziale.</li>
+            <li><strong>Generowanie sekwencji</strong>: Zakresy są używane do generowania sekwencji liczb lub liter.</li>
+        </ul>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/prism.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/components/prism-ruby.min.js"></script>
+</body>
+</html>

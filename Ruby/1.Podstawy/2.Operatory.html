@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Operatory</title>
+    <link rel="stylesheet" href="../styles.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/themes/prism-tomorrow.min.css" rel="stylesheet" />
+</head>
+<body>
+    <div class="container">
+        <h1>Operatory</h1>
+        
+        <p>Ruby obsługuje szeroki wachlarz operatorów, które umożliwiają wykonywanie operacji na zmiennych i wartościach. Poniżej omówione zostaną najczęściej używane operatory w Ruby.</p>
+
+        <h2>Operatory arytmetyczne</h2>
+        <p>Te operatory służą do wykonywania operacji matematycznych na liczbach.</p>
+        <ul>
+            <li><strong>Dodawanie (<code>+</code>)</strong>: <code>5 + 3</code> zwraca <code>8</code>.</li>
+            <li><strong>Odejmowanie (<code>-</code>)</strong>: <code>5 - 3</code> zwraca <code>2</code>.</li>
+            <li><strong>Mnożenie (<code>*</code>)</strong>: <code>5 * 3</code> zwraca <code>15</code>.</li>
+            <li><strong>Dzielenie (<code>/</code>)</strong>: <code>6 / 3</code> zwraca <code>2</code>.</li>
+            <li><strong>Modulo (<code>%</code>)</strong>: Zwraca resztę z dzielenia (np. <code>5 % 2</code> zwraca <code>1</code>).</li>
+            <li><strong>Potęgowanie (<code>**</code>)</strong>: Podnosi liczbę do potęgi (np. <code>2 ** 3</code> zwraca <code>8</code>).</li>
+        </ul>
+
+        <h2>Operatory przypisania</h2>
+        <p>Operatory przypisania służą do przypisywania wartości do zmiennych.</p>
+        <ul>
+            <li><strong>=</strong>  : Przypisuje wartość (np. <code>x = 5</code>).</li>
+            <li><strong>+=</strong> : Dodaje wartość do zmiennej i przypisuje (np. <code>x += 3</code> jest równoważne <code>x = x + 3</code>).</li>
+            <li><strong>-=</strong> : Odejmowanie z przypisaniem (np. <code>x -= 3</code>).</li>
+            <li><strong>*=</strong> : Mnożenie z przypisaniem (np. <code>x *= 3</code>).</li>
+            <li><strong>/=</strong> : Dzielenie z przypisaniem (np. <code>x /= 3</code>).</li>
+            <li><strong>%=</strong> : Modulo z przypisaniem (np. <code>x %= 3</code>).</li>
+        </ul>
+
+        <h2>Operatory porównania</h2>
+        <p>Operatory te służą do porównywania wartości. Wynikiem porównania jest wartość logiczna <code>true</code> lub <code>false</code>.</p>
+        <ul>
+            <li><strong>==</strong> : Sprawdza, czy wartości są równe (np. <code>5 == 5</code> zwraca <code>true</code>).</li>
+            <li><strong>!=</strong> : Sprawdza, czy wartości są różne (np. <code>5 != 3</code> zwraca <code>true</code>).</li>
+            <li><strong>></strong> : Sprawdza, czy wartość po lewej stronie jest większa (np. <code>5 > 3</code>).</li>
+            <li><strong><</strong> : Sprawdza, czy wartość po lewej stronie jest mniejsza (np. <code>3 < 5</code>).</li>
+            <li><strong>>=</strong> : Sprawdza, czy wartość po lewej stronie jest większa lub równa (np. <code>5 >= 3</code>).</li>
+            <li><strong><=</strong> : Sprawdza, czy wartość po lewej stronie jest mniejsza lub równa (np. <code>3 <= 5</code>).</li>
+        </ul>
+
+        <h2>Operatory logiczne</h2>
+        <p>Operatory logiczne służą do wykonywania operacji logicznych na wartościach <code>true</code> i <code>false</code>.</p>
+        <ul>
+            <li><strong>and</strong> : Zwraca <code>true</code> tylko wtedy, gdy obie wartości są <code>true</code> (np. <code>true and false</code> zwraca <code>false</code>).</li>
+            <li><strong>or</strong> : Zwraca <code>true</code>, jeśli przynajmniej jedna wartość jest <code>true</code> (np. <code>true or false</code> zwraca <code>true</code>).</li>
+            <li><strong>not</strong> : Odwraca wartość logiczną (np. <code>not true</code> zwraca <code>false</code>).</li>
+            <li><strong>&&</strong> : Alternatywa dla <code>and</code> (np. <code>true && false</code>).</li>
+            <li><strong>||</strong> : Alternatywa dla <code>or</code> (np. <code>true || false</code>).</li>
+        </ul>
+
+        <h2>Operatory specjalne</h2>
+        <p>Ruby oferuje także kilka innych operatorów, które mają bardziej specyficzne zastosowania:</p>
+        <ul>
+            <li><strong>Operator zakresu (<code>..</code> i <code>...</code>)</strong>: Służy do tworzenia zakresów wartości. <code>1..5</code> obejmuje liczby od 1 do 5, a <code>1...5</code> obejmuje liczby od 1 do 4.</li>
+            <li><strong>Operator złączenia (<code>+</code>)</strong>: Służy do łączenia ciągów znaków (np. <code>"Hello " + "World"</code> zwraca <code>"Hello World"</code>).</li>
+            <li><strong>Operator porównania (<code><=></code>)</strong>: Zwraca <code>-1</code>, <code>0</code>, lub <code>1</code>, w zależności od porównania dwóch wartości (np. <code>5 <=> 3</code> zwraca <code>1</code>).</li>
+            <p>Zwraca -1 – jeśli lewa strona jest mniejsza niż prawa strona.
+                <br>
+               Zwraca 0 – jeśli lewa strona jest równa prawej stronie.
+               <br>
+               Zwraca 1 – jeśli lewa strona jest większa niż prawa strona.</p>
+        </ul>
+    </div>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/prism.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/components/prism-ruby.min.js"></script>
+</body>
+</html>

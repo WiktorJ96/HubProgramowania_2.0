@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Moduły</title>
+    <link rel="stylesheet" href="../styles.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/themes/prism-tomorrow.min.css" rel="stylesheet" />
+</head>
+<body>
+    <div class="container">
+        <h1>Moduły</h1>
+        
+        <p>Moduły w Ruby są używane do grupowania metod, klas i stałych. Są one podobne do klas, ale nie mogą być instancjonowane, co oznacza, że nie można tworzyć ich obiektów. Zamiast tego, moduły są wykorzystywane do dodawania funkcjonalności do klas i mogą być wykorzystywane jako przestrzenie nazw lub mixiny.</p>
+
+        <h2>Przestrzenie nazw</h2>
+        <p>Przestrzenie nazw pozwalają na organizację kodu, szczególnie w przypadku, gdy różne klasy lub metody mogą mieć takie same nazwy. Używając modułów jako przestrzeni nazw, możemy unikać konfliktów nazw.</p>
+        <pre><code class="language-ruby">
+        module Geometry
+          class Circle
+            def initialize(radius)
+              @radius = radius
+            end
+
+            def area
+              Math::PI * @radius**2
+            end
+          end
+
+          class Rectangle
+            def initialize(width, height)
+              @width = width
+              @height = height
+            end
+
+            def area
+              @width * @height
+            end
+          end
+        end
+
+        # Aby odwołać się do klas wewnątrz modułu, używamy składni dwukropka ::
+        circle = Geometry::Circle.new(5)
+        rectangle = Geometry::Rectangle.new(10, 20)
+
+        puts circle.area  # Wyświetla powierzchnię koła
+        puts rectangle.area  # Wyświetla powierzchnię prostokąta
+        </code></pre>
+
+        <h2>Mixiny</h2>
+        <p>Mixiny to kolejny sposób użycia modułów. Pozwalają one na "wstrzykiwanie" metod do klas. W Ruby, mixiny implementuje się za pomocą słów kluczowych <code>include</code> oraz <code>extend</code>. Moduł może być włączony do klasy, aby dodawać do niej nowe metody.</p>
+
+        <h3>Przykład mixinu</h3>
+        <pre><code class="language-ruby">
+        module Describable
+          def describe
+            puts "To jest obiekt klasy #{self.class}"
+          end
+        end
+
+        class Car
+          include Describable
+        end
+
+        class Person
+          include Describable
+        end
+
+        car = Car.new
+        person = Person.new
+
+        car.describe  # Wyświetla: "To jest obiekt klasy Car"
+        person.describe  # Wyświetla: "To jest obiekt klasy Person"
+        </code></pre>
+
+        <h3>Różnica między <code>include</code> a <code>extend</code></h3>
+        <p>Słowo kluczowe <code>include</code> dodaje metody modułu do instancji klasy, co oznacza, że będą one dostępne dla obiektów tej klasy. Natomiast <code>extend</code> dodaje metody do samej klasy, co oznacza, że będą one dostępne jako metody klasowe.</p>
+        <pre><code class="language-ruby">
+        module Greetable
+          def greet
+            puts "Cześć!"
+          end
+        end
+
+        class User
+          include Greetable  # Metoda będzie dostępna dla obiektów
+        end
+
+        class Admin
+          extend Greetable  # Metoda będzie dostępna jako metoda klasowa
+        end
+
+        user = User.new
+        user.greet  # Wyświetla: "Cześć!"
+
+        Admin.greet  # Wyświetla: "Cześć!"
+        # Admin.new.greet  - spowodowałoby błąd, ponieważ 'greet' jest metodą klasową, a nie instancyjną
+        </code></pre>
+
+        <h2>Podsumowanie</h2>
+        <p>Moduły w Ruby są potężnym narzędziem do organizacji kodu i wielokrotnego użycia funkcjonalności w różnych klasach. Można je używać jako przestrzenie nazw, aby uniknąć konfliktów nazw, a także jako mixiny, aby dodawać metody do klas. Dzięki słowom kluczowym <code>include</code> oraz <code>extend</code>, możemy kontrolować, czy metody modułu mają być dostępne na poziomie instancji czy klasy.</p>
+    </div>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/prism.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/components/prism-ruby.min.js"></script>
+</body>
+</html>

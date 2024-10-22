@@ -1,0 +1,31 @@
+; JUNIOR W RUBY POWINIEN ZNAC
+    Podstawy języka Ruby
+1.Składnia Ruby – zrozumienie, jak pisze się kod w Ruby: definicja zmiennych, operatory, instrukcje warunkowe (if, else, unless), pętle (while, for, times).
+2.Typy danych – liczby, łańcuchy znaków (strings), tablice (arrays), zbiory (hashes), symbole (symbols).
+3.Zmienne – lokalne, globalne, instancji, klasy.
+4.Operacje na ciągach – praca z tekstem, metody jak split, chomp, gsub, konkatenacja ciągów.
+5.Operatory – podstawowe operatory arytmetyczne i logiczne, operator porównania <=>.
+
+    Programowanie obiektowe (OOP)
+1.Klasy i obiekty – umiejętność tworzenia i używania klas oraz instancji obiektów.
+2.Metody – tworzenie metod, przekazywanie argumentów, zwracanie wartości.
+3.Dziedziczenie – jak jedna klasa może dziedziczyć właściwości i metody innej klasy.
+4.Polimorfizm – zrozumienie, jak różne obiekty mogą reagować na te same metody.
+5.Enkapsulacja – ukrywanie szczegółów implementacji (np. używanie private i protected).
+
+    Kolekcje danych
+1.Tablice (Arrays) – dodawanie, usuwanie, manipulacja elementami.
+2.Zbiory (Hashes) – klucz-wartość, dostęp do wartości, dodawanie i modyfikowanie elementów.
+3.Iteratory – each, map, select, reduce – zrozumienie jak iterować po danych i je przekształcać.
+
+    Bloki, Proc i Lambdy
+1.Bloki kodu – co to są bloki w Ruby i jak ich używać w metodach (do...end lub {...}).
+2.Proc i lambda – różnice między nimi i kiedy używać jednego lub drugiego.
+
+    Obsługa wyjątków
+1.Begin-rescue – jak obsługiwać błędy w kodzie i zapobiegać jego przerwaniu.
+2.Tworzenie własnych wyjątków – jak definiować i rzucać własne wyjątki.
+
+    Operacje I/O
+1.Pliki – otwieranie, czytanie i zapisywanie plików (File.open, read, write).
+2.Strumienie wejścia/wyjścia – jak czytać dane od użytkownika i zapisywać dane do plików.

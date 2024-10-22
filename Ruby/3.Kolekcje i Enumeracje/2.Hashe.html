@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hashe</title>
+    <link rel="stylesheet" href="../styles.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/themes/prism-tomorrow.min.css" rel="stylesheet" />
+</head>
+<body>
+    <div class="container">
+        <h1>Hashe</h1>
+        
+        <p>Hash w Ruby to struktura danych, która przechowuje pary klucz-wartość. Każdy klucz w hash'u jest unikalny, a przypisana do niego wartość może być dowolnego typu. Hash działa podobnie jak tablica asocjacyjna lub słownik w innych językach programowania.</p>
+
+        <h2>Tworzenie hasha</h2>
+        <p>Hashe w Ruby można tworzyć za pomocą nawiasów klamrowych <code>{}</code> lub używając metody <code>Hash.new</code>. Oto kilka przykładów:</p>
+        <pre><code class="language-ruby">
+        # Tworzenie hasha z kluczami jako symbole
+        my_hash = { name: "Alice", age: 30, city: "Warszawa" }
+
+        # Tworzenie hasha z kluczami jako ciągi znaków
+        my_hash = { "name" => "Alice", "age" => 30, "city" => "Warszawa" }
+
+        # Tworzenie pustego hasha
+        empty_hash = Hash.new
+        </code></pre>
+
+        <h2>Dostęp do wartości w hash'u</h2>
+        <p>Aby uzyskać dostęp do wartości w hash'u, należy użyć odpowiedniego klucza. Jeśli klucz nie istnieje, domyślnie zwracana jest wartość <code>nil</code>, chyba że zdefiniowano wartość domyślną dla hasha.</p>
+        <pre><code class="language-ruby">
+        my_hash = { name: "Alice", age: 30, city: "Warszawa" }
+
+        # Dostęp do wartości za pomocą klucza
+        puts my_hash[:name]  # Wyświetla: Alice
+        puts my_hash[:age]   # Wyświetla: 30
+
+        # Klucz nie istnieje, zwraca nil
+        puts my_hash[:country]  # Wyświetla: nil
+
+        # Ustawienie domyślnej wartości dla hasha
+        my_hash = Hash.new("nieznany")
+        puts my_hash[:country]  # Wyświetla: nieznany
+        </code></pre>
+
+        <h2>Dodawanie i modyfikowanie wartości</h2>
+        <p>Możesz łatwo dodać nowe klucze do hasha lub zmodyfikować istniejące wartości, przypisując nowe wartości do kluczy.</p>
+        <pre><code class="language-ruby">
+        my_hash = { name: "Alice", age: 30 }
+
+        # Dodawanie nowej pary klucz-wartość
+        my_hash[:city] = "Warszawa"
+        puts my_hash  # Wyświetla: {:name=>"Alice", :age=>30, :city=>"Warszawa"}
+
+        # Modyfikacja istniejącej wartości
+        my_hash[:age] = 31
+        puts my_hash  # Wyświetla: {:name=>"Alice", :age=>31, :city=>"Warszawa"}
+        </code></pre>
+
+        <h2>Iteracja po hash'u</h2>
+        <p>Ruby umożliwia łatwą iterację po hash'u za pomocą metody <code>each</code>, która iteruje po każdej parze klucz-wartość.</p>
+        <pre><code class="language-ruby">
+        my_hash = { name: "Alice", age: 30, city: "Warszawa" }
+
+        # Iteracja po kluczach i wartościach
+        my_hash.each do |key, value|
+          puts "#{key}: #{value}"
+        end
+        # Wyświetli:
+        # name: Alice
+        # age: 30
+        # city: Warszawa
+        </code></pre>
+
+        <h2>Metody operujące na hash'ach</h2>
+        <p>Hashe w Ruby mają wiele wbudowanych metod, które ułatwiają pracę z nimi. Oto kilka przydatnych metod:</p>
+        <ul>
+            <li><code>keys</code>: Zwraca tablicę wszystkich kluczy w hash'u.</li>
+            <li><code>values</code>: Zwraca tablicę wszystkich wartości w hash'u.</li>
+            <li><code>has_key?(key)</code>: Sprawdza, czy hash zawiera określony klucz.</li>
+            <li><code>has_value?(value)</code>: Sprawdza, czy hash zawiera określoną wartość.</li>
+            <li><code>delete(key)</code>: Usuwa klucz wraz z wartością.</li>
+            <li><code>merge(other_hash)</code>: Łączy dwa hashe w jeden.</li>
+        </ul>
+        <pre><code class="language-ruby">
+        my_hash = { name: "Alice", age: 30, city: "Warszawa" }
+
+        # Pobranie wszystkich kluczy
+        puts my_hash.keys  # Wyświetla: [:name, :age, :city]
+
+        # Pobranie wszystkich wartości
+        puts my_hash.values  # Wyświetla: ["Alice", 30, "Warszawa"]
+
+        # Sprawdzenie, czy hash zawiera klucz
+        puts my_hash.has_key?(:name)  # Wyświetla: true
+
+        # Usunięcie klucza
+        my_hash.delete(:city)
+        puts my_hash  # Wyświetla: {:name=>"Alice", :age=>30}
+
+        # Łączenie dwóch hashy
+        other_hash = { country: "Polska" }
+        merged_hash = my_hash.merge(other_hash)
+        puts merged_hash  # Wyświetla: {:name=>"Alice", :age=>30, :country=>"Polska"}
+        </code></pre>
+
+        <h2>Zagnieżdżone hashe</h2>
+        <p>Hash może również zawierać inne hashe jako wartości, co pozwala na tworzenie złożonych struktur danych.</p>
+        <pre><code class="language-ruby">
+        person = {
+          name: "Alice",
+          age: 30,
+          address: {
+            city: "Warszawa",
+            street: "Krakowska 1"
+          }
+        }
+
+        # Dostęp do zagnieżdżonych hashy
+        puts person[:address][:city]  # Wyświetla: Warszawa
+        </code></pre>
+
+        <h2>Hash z wartością domyślną</h2>
+        <p>Możesz ustawić wartość domyślną dla hashy, aby w przypadku braku klucza zwracana była określona wartość zamiast <code>nil</code>.</p>
+        <pre><code class="language-ruby">
+        # Hash z domyślną wartością
+        my_hash = Hash.new("nieznany")
+        puts my_hash[:name]  # Wyświetla: nieznany
+
+        # Hash bez domyślnej wartości
+        other_hash = {}
+        puts other_hash[:name]  # Wyświetla: nil
+        </code></pre>
+
+        <h2>Symboliczne klucze</h2>
+        <p>W Ruby często używa się symboli jako kluczy w hashach, ponieważ są bardziej wydajne niż ciągi znaków (stringi), ponieważ symbol jest zawsze tą samą wartością w pamięci.</p>
+        <pre><code class="language-ruby">
+        # Hash z symbolami jako kluczami
+        my_hash = { name: "Alice", age: 30 }
+        puts my_hash[:name]  # Wyświetla: Alice
+        </code></pre>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/prism.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/components/prism-ruby.min.js"></script>
+</body>
+</html>

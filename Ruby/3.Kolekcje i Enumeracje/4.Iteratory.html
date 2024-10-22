@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Iteratory</title>
+    <link rel="stylesheet" href="../styles.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/themes/prism-tomorrow.min.css" rel="stylesheet" />
+</head>
+<body>
+    <div class="container">
+        <h1>Iteratory</h1>
+        
+        <p>Iteratory to specjalne metody w Ruby, które umożliwiają przeglądanie elementów kolekcji, takich jak tablice czy hashe. Najbardziej popularnym iteratorem w Ruby jest <code>each</code>, ale istnieje wiele innych, które pozwalają na bardziej zaawansowane operacje.</p>
+
+        <h2>Podstawowy iterator <code>each</code></h2>
+        <p>Metoda <code>each</code> jest najczęściej używanym iteratorem w Ruby. Przegląda ona wszystkie elementy kolekcji i wykonuje blok kodu dla każdego elementu.</p>
+        <pre><code class="language-ruby">
+        fruits = ["jabłko", "banan", "truskawka"]
+
+        # Użycie each do iteracji po tablicy
+        fruits.each do |fruit|
+          puts "Owoc: #{fruit}"
+        end
+        # Wyświetla: 
+        # Owoc: jabłko
+        # Owoc: banan
+        # Owoc: truskawka
+        </code></pre>
+
+        <h2>Iterator <code>map</code></h2>
+        <p>Metoda <code>map</code> (czasem znana jako <code>collect</code>) przekształca każdy element kolekcji i zwraca nową kolekcję z przekształconymi elementami. Często jest używana, gdy chcemy dokonać zmiany na wszystkich elementach kolekcji.</p>
+        <pre><code class="language-ruby">
+        numbers = [1, 2, 3, 4]
+
+        # Użycie map do przekształcenia elementów tablicy
+        squares = numbers.map { |num| num * num }
+        puts squares.inspect  # Wyświetla: [1, 4, 9, 16]
+        </code></pre>
+
+        <h2>Iterator <code>select</code></h2>
+        <p>Metoda <code>select</code> filtruje elementy kolekcji, zwracając nową kolekcję z elementami, które spełniają warunki zdefiniowane w bloku kodu.</p>
+        <pre><code class="language-ruby">
+        numbers = [1, 2, 3, 4, 5, 6]
+
+        # Użycie select do wybierania liczb parzystych
+        even_numbers = numbers.select { |num| num.even? }
+        puts even_numbers.inspect  # Wyświetla: [2, 4, 6]
+        </code></pre>
+
+        <h2>Iterator <code>reduce</code> (znany też jako <code>inject</code>)</h2>
+        <p>Metoda <code>reduce</code> jest używana do zredukowania wszystkich elementów kolekcji do jednej wartości, np. sumy wszystkich elementów.</p>
+        <pre><code class="language-ruby">
+        numbers = [1, 2, 3, 4, 5]
+
+        # Użycie reduce do obliczenia sumy elementów
+        sum = numbers.reduce(0) { |total, num| total + num }
+        puts sum  # Wyświetla: 15
+        </code></pre>
+
+        <h2>Inne przydatne iteratory</h2>
+        <p>Ruby oferuje również inne iteratory, które mogą być przydatne w zależności od potrzeb:</p>
+        <ul>
+            <li><code>find</code> – Zwraca pierwszy element, który spełnia warunek.</li>
+            <li><code>all?</code> – Sprawdza, czy wszystkie elementy kolekcji spełniają warunek.</li>
+            <li><code>any?</code> – Sprawdza, czy jakikolwiek element spełnia warunek.</li>
+            <li><code>none?</code> – Sprawdza, czy żaden element nie spełnia warunku.</li>
+            <li><code>count</code> – Zwraca liczbę elementów, które spełniają warunek.</li>
+        </ul>
+
+        <h3>Przykład metody <code>find</code></h3>
+        <pre><code class="language-ruby">
+        numbers = [1, 2, 3, 4, 5]
+
+        # Znalezienie pierwszej liczby większej niż 3
+        first_large_number = numbers.find { |num| num > 3 }
+        puts first_large_number  # Wyświetla: 4
+        </code></pre>
+
+        <h2>Iteracja z indeksem</h2>
+        <p>Jeśli potrzebujesz zarówno elementów, jak i ich indeksów, możesz użyć metody <code>each_with_index</code>.</p>
+        <pre><code class="language-ruby">
+        fruits = ["jabłko", "banan", "truskawka"]
+
+        # Użycie each_with_index do iteracji z dostępem do indeksu
+        fruits.each_with_index do |fruit, index|
+          puts "Owoc nr #{index}: #{fruit}"
+        end
+        # Wyświetla:
+        # Owoc nr 0: jabłko
+        # Owoc nr 1: banan
+        # Owoc nr 2: truskawka
+        </code></pre>
+
+        <h2>Podsumowanie</h2>
+        <p>Iteratory w Ruby to potężne narzędzia pozwalające na efektywną pracę z kolekcjami danych. Pozwalają one na elastyczne przetwarzanie danych, od prostego przeglądania po skomplikowane przekształcenia. Dzięki wielu metodom, takim jak <code>each</code>, <code>map</code> czy <code>reduce</code>, można w prosty sposób manipulować danymi w Ruby.</p>
+    </div>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/prism.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/components/prism-ruby.min.js"></script>
+</body>
+</html>

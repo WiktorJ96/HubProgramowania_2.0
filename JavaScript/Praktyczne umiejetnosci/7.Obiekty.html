@@ -7,6 +7,90 @@
     <link rel="stylesheet" href="../styles.css">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/themes/prism-tomorrow.min.css" rel="stylesheet" />
 </head>
+<style>
+        /* Stylowanie kontenera modala */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.75); /* Ciemne przezroczyste tło */
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+        }
+
+        /* Stylowanie treści modala */
+        .modal-content {
+            background-color: #1e1e1e; /* Dopasowanie do tła kontenera */
+            padding: 30px;
+            border-radius: 15px;
+            max-width: 80%;
+            width: 800px;
+            max-height: 80vh; /* Maksymalna wysokość modala */
+            overflow-y: auto; /* Dodanie przewijania */
+            color: #e0e0e0;
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.6); /* Cień jak w kontenerach */
+            transition: transform 0.2s ease-in-out;
+        }
+
+        /* Stylowanie przycisku zamykającego */
+        .close-btn {
+            background-color: #ffcc80;
+            color: #1e1e1e;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 8px;
+            cursor: pointer;
+            float: right;
+            font-weight: bold;
+            transition: background-color 0.3s ease-in-out, transform 0.2s ease-in-out;
+        }
+
+        .close-btn:hover {
+            background-color: #ffe0b2;
+            transform: scale(1.05);
+        }
+
+        .close-btn:active {
+            background-color: #ffab40;
+            transform: scale(0.98);
+        }
+
+        /* Stylowanie przycisków otwierających modal */
+        .open-modal-btn {
+            background-color: #ffcc80;
+            color: #1e1e1e;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 1rem;
+            font-weight: bold;
+            margin-right: 10px;
+            transition: background-color 0.3s ease-in-out, transform 0.2s ease-in-out;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.4);
+        }
+
+        .open-modal-btn:hover {
+            background-color: #ffe0b2;
+            transform: scale(1.05);
+        }
+
+        .open-modal-btn:active {
+            background-color: #ffab40;
+            transform: scale(0.98);
+        }
+
+        /* Responsywność */
+        @media (min-width: 768px) {
+            .modal-content {
+                max-width: 60%;
+            }
+        }
+    </style>
 <body>
     <div class="container">
         <h1>Obiekty</h1>
@@ -26,8 +110,8 @@ console.log(car);
         <p>Wyobraź sobie obiekt jako pudełko z etykietkami (kluczami). Każda etykieta wskazuje, co znajduje się w pudełku. W naszym przypadku mamy klucze <code>brand</code>, <code>model</code> i <code>year</code>, a wartości to odpowiednio "Toyota", "Corolla" i "2020".</p>
 
         <h2>Manipulacja obiektami</h2>
-        <p>Do właściwości obiektu możemy odwołać się za pomocą kropki lub nawiasów kwadratowych.</p>
-        <pre><code class="language-javascript">
+<p>Do właściwości obiektu możemy odwołać się za pomocą kropki lub nawiasów kwadratowych.</p>
+<pre><code class="language-javascript">
 // Odwołanie się do właściwości obiektu
 console.log(car.brand); // Wynik: "Toyota"
 
@@ -38,7 +122,11 @@ console.log(car.year); // Wynik: 2021
 // Dodanie nowej właściwości
 car.color = "Red";
 console.log(car["color"]); // Wynik: "Red"
-        </code></pre>
+
+// Usunięcie właściwości obiektu
+delete car.color;
+console.log(car.color); // Wynik: undefined
+</code></pre>
         <p>W analogii pudełka, manipulacja obiektem jest jak zmiana zawartości pudełka: możemy zmieniać istniejące przedmioty (modyfikować właściwości) lub dodać nowe (dodanie właściwości).</p>
 
         <h2>Metody obiektów</h2>
@@ -55,6 +143,84 @@ const person = {
 person.greet(); // Wynik: "Cześć, mam na imię Jan"
         </code></pre>
         <p>Metody w obiekcie działają jak specjalne narzędzia w pudełku. W przypadku osoby (<code>person</code>), narzędziem jest funkcja <code>greet</code>, która wykonuje pewne zadanie (wyświetla wiadomość powitalną).</p>
+        <button class="open-modal-btn" data-content="
+
+<h2>1. <code>Object.keys(obj)</code></h2>
+<p><strong>Opis:</strong> Zwraca tablicę wszystkich kluczy (właściwości) obiektu <code>obj</code>.</p>
+<p><strong>Przykład:</strong> <code>Object.keys(student); // ['name', 'age', 'grade', 'email', 'iteration']</code></p>
+
+<h2>2. <code>Object.values(obj)</code></h2>
+<p><strong>Opis:</strong> Zwraca tablicę wszystkich wartości właściwości obiektu.</p>
+<p><strong>Przykład:</strong> <code>Object.values(student); // ['Student', 18, 'A', 'student@example.com', function]</code></p>
+
+<h2>3. <code>Object.entries(obj)</code></h2>
+<p><strong>Opis:</strong> Zwraca tablicę par klucz-wartość dla każdej właściwości obiektu <code>obj</code>.</p>
+<p><strong>Przykład:</strong> <code>Object.entries(student); // [['name', 'Student'], ['age', 18], ['grade', 'A'], ['email', 'student@example.com'], ['iteration', function]]</code></p>
+
+<h2>4. <code>Object.assign(target, ...sources)</code></h2>
+<p><strong>Opis:</strong> Kopiuje wszystkie właściwości z obiektów źródłowych do obiektu docelowego.</p>
+<p><strong>Przykład:</strong> <code>Object.assign(student, {age: 20}); // student.age === 20</code></p>
+
+<h2>5. <code>Object.freeze(obj)</code></h2>
+<p><strong>Opis:</strong> 'Zamraża' obiekt <code>obj</code>, uniemożliwiając modyfikację istniejących właściwości.</p>
+<p><strong>Przykład:</strong> <code>Object.freeze(student); // Nie można zmieniać ani dodawać nowych właściwości</code></p>
+
+<h2>6. <code>Object.seal(obj)</code></h2>
+<p><strong>Opis:</strong> Uszczelnia obiekt <code>obj</code>, uniemożliwiając dodawanie lub usuwanie właściwości, ale pozwalając na modyfikację istniejących.</p>
+<p><strong>Przykład:</strong> <code>Object.seal(student); // Można zmieniać, ale nie można dodawać nowych właściwości</code></p>
+
+<h2>7. <code>Object.getPrototypeOf(obj)</code></h2>
+<p><strong>Opis:</strong> Zwraca prototyp obiektu <code>obj</code>.</p>
+<p><strong>Przykład:</strong> <code>Object.getPrototypeOf(student);</code></p>
+
+<h2>8. <code>Object.setPrototypeOf(obj, prototype)</code></h2>
+<p><strong>Opis:</strong> Ustawia prototyp dla obiektu <code>obj</code>.</p>
+<p><strong>Przykład:</strong> <code>Object.setPrototypeOf(student, newProto);</code></p>
+
+<h2>9. <code>Object.hasOwnProperty(key)</code></h2>
+<p><strong>Opis:</strong> Sprawdza, czy obiekt posiada właściwość o nazwie <code>key</code>.</p>
+<p><strong>Przykład:</strong> <code>student.hasOwnProperty('name'); // true</code></p>
+
+<h2>10. <code>Object.defineProperty(obj, key, descriptor)</code></h2>
+<p><strong>Opis:</strong> Definiuje nową właściwość w obiekcie <code>obj</code> z określonymi atrybutami.</p>
+<p><strong>Przykład:</strong> 
+    <code>
+        Object.defineProperty(student, 'fullName', { value: 'John Doe', writable: true });
+    </code>
+</p>
+
+<h2>11. <code>Object.defineProperties(obj, descriptors)</code></h2>
+<p><strong>Opis:</strong> Definiuje wiele nowych właściwości z określonymi atrybutami.</p>
+<p><strong>Przykład:</strong> 
+    <code>
+        Object.defineProperties(student, { firstName: { value: 'John', writable: true }, lastName: { value: 'Doe', writable: true } });
+    </code>
+</p>
+
+<h2>12. <code>Object.is(obj1, obj2)</code></h2>
+<p><strong>Opis:</strong> Sprawdza, czy dwa obiekty są równe (w bardziej rygorystyczny sposób niż <code>===</code>).</p>
+<p><strong>Przykład:</strong> <code>Object.is(student, anotherStudent);</code></p>
+
+<h2>13. <code>Object.getOwnPropertyNames(obj)</code></h2>
+<p><strong>Opis:</strong> Zwraca tablicę wszystkich nazw właściwości (enumerable i non-enumerable) obiektu <code>obj</code>.</p>
+<p><strong>Przykład:</strong> <code>Object.getOwnPropertyNames(student);</code></p>
+
+<h2>14. <code>Object.getOwnPropertyDescriptor(obj, key)</code></h2>
+<p><strong>Opis:</strong> Zwraca deskryptor właściwości <code>key</code> w obiekcie <code>obj</code>.</p>
+<p><strong>Przykład:</strong> <code>Object.getOwnPropertyDescriptor(student, 'name');</code></p>
+
+<h2>15. <code>Object.create(proto, [propertiesObject])</code></h2>
+<p><strong>Opis:</strong> Tworzy nowy obiekt z prototypem <code>proto</code> i opcjonalnie dodaje właściwości.</p>
+<p><strong>Przykład:</strong> <code>let newStudent = Object.create(student);</code></p>
+
+<h2>16. <code>Object.preventExtensions(obj)</code></h2>
+<p><strong>Opis:</strong> Uniemożliwia dodawanie nowych właściwości do obiektu <code>obj</code>.</p>
+<p><strong>Przykład:</strong> <code>Object.preventExtensions(student); // Nie można dodawać nowych właściwości</code></p>
+
+<h2>17. <code>Object.isExtensible(obj)</code></h2>
+<p><strong>Opis:</strong> Sprawdza, czy można dodać nowe właściwości do obiektu <code>obj</code>.</p>
+<p><strong>Przykład:</strong> <code>Object.isExtensible(student); // true</code></p>
+">Wszystkie metody</button>
 
         <h2>Iteracja po obiektach</h2>
 <p>Istnieje kilka sposobów na iterowanie (przechodzenie) po właściwościach obiektu. Najbardziej powszechną metodą jest użycie pętli <code>for...in</code>.</p>
@@ -94,6 +260,53 @@ for (let key in book) {
         </ul>
     </div>
 
+
+
+
+
+    <div id="customModal" class="modal">
+        <div class="modal-content">
+            <button class="close-btn">Zamknij</button>
+            <p id="modalBody">Domyślna treść modala.</p>
+        </div>
+    </div>
+    <script>
+        // Pobierz elementy
+        const modal = document.getElementById("customModal");
+        const modalBody = document.getElementById("modalBody");
+        const openModalBtns = document.querySelectorAll(".open-modal-btn");
+        const closeModalBtn = document.querySelector(".close-btn");
+
+        // Funkcja otwierająca modal z dynamiczną zawartością HTML
+        openModalBtns.forEach(btn => {
+            btn.addEventListener("click", function() {
+                const content = this.getAttribute("data-content"); // Pobierz treść HTML z atrybutu data-content
+                modalBody.innerHTML = content; // Ustaw dynamiczny HTML w modalBody
+                modal.style.display = "flex"; // Pokaż modal
+
+                // Dezaktywuj przewijanie strony
+                document.body.style.overflow = "hidden";
+            });
+        });
+
+        // Zamknij modal po kliknięciu przycisku zamykającego
+        closeModalBtn.addEventListener("click", function() {
+            modal.style.display = "none"; // Ukryj modal
+
+            // Przywróć przewijanie strony
+            document.body.style.overflow = "auto";
+        });
+
+        // Zamknij modal, gdy użytkownik kliknie poza modalem
+        window.addEventListener("click", function(event) {
+            if (event.target === modal) {
+                modal.style.display = "none"; // Ukryj modal
+
+                // Przywróć przewijanie strony
+                document.body.style.overflow = "auto";
+            }
+        });
+    </script>
     <script>
         // Przykład manipulacji obiektem
         const phone = {

@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dziedziczenie</title>
+    <link rel="stylesheet" href="../styles.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/themes/prism-tomorrow.min.css" rel="stylesheet" />
+</head>
+<body>
+    <div class="container">
+        <h1>Dziedziczenie</h1>
+        
+        <p>Dziedziczenie w Ruby pozwala na tworzenie klas, które przejmują funkcjonalność innych klas. Jest to podstawowa zasada programowania obiektowego, dzięki której można tworzyć klasy bazowe (rodzic) i klasy pochodne (dziecko), które rozszerzają lub zmieniają zachowanie klasy bazowej.</p>
+
+        <h2>Podstawy dziedziczenia</h2>
+        <p>W Ruby, dziedziczenie jest realizowane poprzez użycie znaku mniejszości <code>&lt;</code>. Klasa pochodna (subklasa) dziedziczy wszystkie metody i atrybuty z klasy bazowej (superklasy).</p>
+        <pre><code class="language-ruby">
+        class Animal
+          def speak
+            puts "Zwierzę wydaje dźwięk"
+          end
+        end
+
+        # Klasa Dog dziedziczy po klasie Animal
+        class Dog < Animal
+          def bark
+            puts "Pies szczeka"
+          end
+        end
+
+        dog = Dog.new
+        dog.speak  # Dziedziczy metodę speak z klasy Animal
+        dog.bark   # Metoda bark zdefiniowana w klasie Dog
+        </code></pre>
+
+        <h2>Metoda <code>super</code></h2>
+        <p>Metoda <code>super</code> w Ruby służy do wywoływania metod z klasy bazowej w klasie pochodnej. Pozwala to na rozszerzanie funkcjonalności metod klasy bazowej, zamiast ich nadpisywania.</p>
+        <pre><code class="language-ruby">
+        class Animal
+          def speak
+            puts "Zwierzę wydaje dźwięk"
+          end
+        end
+
+        class Dog < Animal
+          def speak
+            super  # Wywołuje metodę speak z klasy Animal
+            puts "Pies szczeka"
+          end
+        end
+
+        dog = Dog.new
+        dog.speak  # Najpierw wywołuje metodę z Animal, a potem z Dog
+        </code></pre>
+
+        <h2>Konstruktor i dziedziczenie</h2>
+        <p>Jeśli klasa bazowa posiada konstruktor (metodę <code>initialize</code>), możemy użyć metody <code>super</code> w klasie pochodnej, aby wywołać ten konstruktor i rozszerzyć go o dodatkowe funkcje w klasie pochodnej.</p>
+        <pre><code class="language-ruby">
+        class Animal
+          def initialize(name)
+            @name = name
+          end
+
+          def speak
+            puts "#{@name} wydaje dźwięk"
+          end
+        end
+
+        class Dog < Animal
+          def initialize(name, breed)
+            super(name)  # Wywołanie konstruktora z klasy Animal
+            @breed = breed
+          end
+
+          def speak
+            super  # Wywołanie metody speak z Animal
+            puts "#{@name} to #{@breed}, który szczeka"
+          end
+        end
+
+        dog = Dog.new("Max", "Labrador")
+        dog.speak  # Wyświetla dźwięk z klasy Animal i dodatkowy tekst z Dog
+        </code></pre>
+
+        <h2>Nadpisywanie metod</h2>
+        <p>Klasy pochodne mogą nadpisywać metody z klasy bazowej. Jeśli jednak chcemy zachować część funkcjonalności klasy bazowej, możemy użyć metody <code>super</code> w nadpisanej metodzie.</p>
+        <pre><code class="language-ruby">
+        class Animal
+          def info
+            puts "To jest zwierzę"
+          end
+        end
+
+        class Cat < Animal
+          def info
+            puts "To jest kot"
+          end
+        end
+
+        cat = Cat.new
+        cat.info  # Wywołuje nadpisaną metodę z klasy Cat
+        </code></pre>
+
+        <h2>Sprawdzanie dziedziczenia</h2>
+        <p>Ruby umożliwia sprawdzenie, czy dana klasa dziedziczy po innej klasie, za pomocą metody <code>is_a?</code> lub <code>ancestors</code>.</p>
+        <pre><code class="language-ruby">
+        class Animal; end
+        class Dog < Animal; end
+
+        dog = Dog.new
+
+        puts dog.is_a?(Animal)  # Zwraca true, ponieważ Dog dziedziczy po Animal
+        puts Dog.ancestors      # Zwraca listę przodków: [Dog, Animal, Object, Kernel, BasicObject]
+        </code></pre>
+
+        <h2>Przykład pełnego dziedziczenia</h2>
+        <p>Poniżej znajduje się przykład dziedziczenia w pełnej klasie, gdzie klasa pochodna dziedziczy metody oraz nadpisuje niektóre z nich.</p>
+        <pre><code class="language-ruby">
+        class Vehicle
+          def initialize(make, model)
+            @make = make
+            @model = model
+          end
+
+          def info
+            puts "Pojazd: #{@make} #{@model}"
+          end
+        end
+
+        class Car < Vehicle
+          def initialize(make, model, year)
+            super(make, model)  # Dziedziczenie inicjalizacji
+            @year = year
+          end
+
+          def info
+            super  # Wywołanie metody info z Vehicle
+            puts "Rok produkcji: #{@year}"
+          end
+        end
+
+        car = Car.new("Toyota", "Corolla", 2020)
+        car.info  # Wywołuje metodę info z klasy Vehicle i Car
+        </code></pre>
+    </div>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/prism.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/components/prism-ruby.min.js"></script>
+</body>
+</html>

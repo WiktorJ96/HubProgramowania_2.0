@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Składnia, Zmienne i Typy Danych</title>
+    <link rel="stylesheet" href="../styles.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/themes/prism-tomorrow.min.css" rel="stylesheet" />
+</head>
+<body>
+    <div class="container">
+        <h1>Składnia, Zmienne i Typy Danych</h1>
+        
+        <p>Ruby to język programowania o dynamicznie typowanej składni, zaprojektowany z myślą o prostocie i czytelności kodu. Poniżej omówione zostaną podstawowe elementy Ruby, takie jak składnia, zmienne, komentarze, typy danych oraz literały.</p>
+
+        <h2>Składnia</h2>
+        <p>Składnia Ruby jest dość elastyczna i pozwala na pominięcie niektórych znaków, które są wymagane w innych językach (np. średniki). Przykład prostego programu w Ruby:</p>
+        <pre><code class="language-ruby">
+        name = "John"  # Deklaracja zmiennej i przypisanie wartości
+        puts name      # Wyświetlenie wartości zmiennej w konsoli
+        </code></pre>
+
+        <h2>Komentarze</h2>
+        <p>Komentarze w Ruby to notatki w kodzie, które nie są wykonywane przez program. Można używać komentarzy jednolinijkowych lub wielolinijkowych:</p>
+        <pre><code class="language-ruby">
+# To jest komentarz jednolinijkowy
+
+=begin
+To jest komentarz
+wielolinijkowy
+=end
+        </code></pre>
+
+        <h2>Typy Danych</h2>
+        <p>Ruby posiada różne typy danych, w tym liczby, teksty, wartości logiczne i inne struktury. Główne typy danych w Ruby to:</p>
+
+        <h3>Typy proste</h3>
+        <ul>
+            <li><strong>Number</strong>: Przechowuje liczby całkowite i zmiennoprzecinkowe (np. <code>age = 25</code>).</li>
+            <li><strong>String</strong>: Przechowuje tekst (np. <code>name = "Alice"</code>).</li>
+            <li><strong>Boolean</strong>: Przechowuje wartość logiczną <code>true</code> lub <code>false</code> (np. <code>is_student = true</code>).</li>
+            <li><strong>Nil</strong>: Oznacza brak wartości (np. <code>empty = nil</code>).</li>
+        </ul>
+
+        <h3>Typy referencyjne</h3>
+        <ul>
+            <li><strong>Hash</strong>: Kolekcja par klucz-wartość (np. <code>person = {name: "John", age: 30}</code>).</li>
+            <li><strong>Array</strong>: Lista elementów (np. <code>colors = ["red", "green", "blue"]</code>).</li>
+        </ul>
+
+        <h2>Zmienne</h2>
+        <p>Zmienna w Ruby to obiekt, do którego można przypisać wartość. Ruby rozróżnia różne typy zmiennych:</p>
+
+        <ul>
+            <li><strong>Zwykłe zmienne</strong>: Zmienna zaczyna się od małej litery lub znaku <code>_</code> (np. <code>name = "Alice"</code>).</li>
+            <li><strong>Zmienna globalna</strong>: Zmienna zaczyna się od znaku <code>$</code> (np. <code>$global_variable</code>).</li>
+            <li><strong>Zmienna instancji</strong>: Zmienna zaczyna się od znaku <code>@</code> (np. <code>@instance_variable</code>).</li>
+            <li><strong>Zmienna klasowa</strong>: Zmienna zaczyna się od <code>@@</code> (np. <code>@@class_variable</code>).</li>
+            <li><strong>Stałe</strong>: Zmienna, której wartość nie powinna być zmieniana, zaczyna się od wielkiej litery (np. <code>PI = 3.14</code>).</li>
+        </ul>
+
+        <h2>Literały</h2>
+        <p>Literały to wartości wpisane bezpośrednio w kodzie. Oto kilka przykładów literałów w Ruby:</p>
+        <ul>
+            <li>Literał liczbowy: <code>x = 10</code></li>
+            <li>Literał łańcuchowy: <code>text = "Hello, World!"</code></li>
+            <li>Literał tablicowy: <code>fruits = ["apple", "banana", "cherry"]</code></li>
+            <li>Literał obiektowy: <code>car = {model: "Toyota", year: 2020}</code></li>
+        </ul>
+    </div>
+    
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/prism.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/components/prism-ruby.min.js"></script>
+</body>
+</html>

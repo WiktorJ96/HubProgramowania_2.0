@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/themes/prism-tomorrow.min.css" rel="stylesheet" />
+    <link rel="stylesheet" href="../styles.css">
+    <title>Jak stworzyć Kalkulator Zniżek w Ruby</title>
+</head>
+<body>
+    <div class="container">
+        <h1>Jak stworzyć Kalkulator Zniżek w Ruby</h1>
+        <p>Ten projekt demonstracyjny pokazuje, jak stworzyć aplikację w Ruby przy użyciu frameworka Sinatra, która oblicza zniżki na podstawie strategii.</p>
+
+        <h2>Krok 1: Instalacja Ruby i Sinatry</h2>
+        <p>Aby rozpocząć, upewnij się, że masz zainstalowane Ruby. Aby zainstalować Sinatrę, uruchom następującą komendę:</p>
+        <pre><code class="language-bash">gem install sinatra</code></pre>
+
+        <h2>Krok 2: Utwórz plik app.rb</h2>
+        <p>Stwórz plik <code>app.rb</code> z poniższym kodem:</p>
+        <pre><code class="language-ruby">
+require 'sinatra'
+require 'json'
+
+# Definicja klasy strategii zniżek
+class DiscountStrategy
+  def apply_discount(price)
+    price  # Domyślnie brak zniżki
+  end
+end
+
+# Strategia procentowa
+class PercentageDiscount < DiscountStrategy
+  def initialize(percentage)
+    @percentage = percentage
+  end
+
+  def apply_discount(price)
+    price - (price * (@percentage / 100.0))  # Oblicza zniżkę procentową
+  end
+end
+
+# Strategia kwotowa
+class FixedDiscount < DiscountStrategy
+  def initialize(amount)
+    @amount = amount
+  end
+
+  def apply_discount(price)
+    price - @amount  # Oblicza zniżkę kwotową
+  end
+end
+
+# Strategia lojalnościowa
+class LoyaltyDiscount < DiscountStrategy
+  def apply_discount(price)
+    price * 0.8  # 20% zniżki dla lojalnych klientów
+  end
+end
+
+# Klasa kontekstowa do obliczeń zniżek
+class DiscountCalculator
+  def initialize(strategy)
+    @strategy = strategy
+  end
+
+  def calculate(price)
+    @strategy.apply_discount(price)
+  end
+end
+
+# Endpoint HTTP dla kalkulacji zniżki
+get '/calculate_discount' do
+  price = params['price'].to_f
+  discount_type = params['discountType']
+
+  strategy = case discount_type
+             when 'percentage'
+               PercentageDiscount.new(10)  # 10% zniżki
+             when 'fixed'
+               FixedDiscount.new(20)  # Zniżka o 20 PLN
+             when 'loyalty'
+               LoyaltyDiscount.new  # 20% zniżki lojalnościowej
+             else
+               DiscountStrategy.new  # Brak zniżki
+             end
+
+  calculator = DiscountCalculator.new(strategy)
+  discounted_price = calculator.calculate(price)
+
+  content_type :json
+  { discounted_price: discounted_price.round(2) }.to_json
+end
+        </code></pre>
+
+<h2>Krok 3: Utwórz plik HTML</h2>
+<p>Stwórz plik <code>index.html</code> w folderze <code>public</code>, aby wyświetlić interfejs użytkownika:</p>
+
+<pre><code class="language-html">
+&lt;!DOCTYPE html&gt;
+&lt;html lang="pl"&gt;
+&lt;head&gt;
+    &lt;meta charset="UTF-8"&gt;
+    &lt;meta name="viewport" content="width=device-width, initial-scale=1.0"&gt;
+    &lt;title&gt;Kalkulator Zniżek w Ruby&lt;/title&gt;
+&lt;/head&gt;
+&lt;body&gt;
+    &lt;div class="container"&gt;
+        &lt;h1&gt;Kalkulator Zniżek - Ruby&lt;/h1&gt;
+        &lt;div&gt;
+            &lt;label for="price"&gt;Cena produktu (PLN):&lt;/label&gt;
+            &lt;input type="number" id="price" value="100"&gt;
+            &lt;label for="discountType"&gt;Rodzaj zniżki:&lt;/label&gt;
+            &lt;select id="discountType"&gt;
+                &lt;option value="percentage"&gt;Zniżka procentowa&lt;/option&gt;
+                &lt;option value="fixed"&gt;Zniżka kwotowa&lt;/option&gt;
+                &lt;option value="loyalty"&gt;Zniżka dla lojalnych klientów&lt;/option&gt;
+            &lt;/select&gt;
+            &lt;button id="calculateDiscountBtn"&gt;Oblicz zniżkę&lt;/button&gt;
+        &lt;/div&gt;
+        &lt;p id="discountedPrice"&gt;&lt;/p&gt;
+    &lt;/div&gt;
+    &lt;script src="main.js"&gt;&lt;/script&gt;
+    &lt;/body&gt;
+    &lt;/html&gt;
+</code></pre>
+
+<h2>Dodaj logikę JavaScript</h2>
+
+<pre><code class="language-javascript">
+document.getElementById('calculateDiscountBtn').addEventListener('click', () =&gt; {
+    const price = parseFloat(document.getElementById('price').value);
+    const discountType = document.getElementById('discountType').value;
+
+    fetch(`/calculate_discount?price=${price}&discountType=${discountType}`)
+        .then(response =&gt; response.json())
+        .then(data =&gt; {
+            document.getElementById('discountedPrice').textContent = `Cena po zniżce: ${data.discounted_price} PLN`;
+        });
+});
+</code></pre>
+
+
+        <h2>Krok 4: Uruchomienie aplikacji</h2>
+        <p>Aby uruchomić aplikację, wpisz poniższą komendę w terminalu:</p>
+        <pre><code class="language-bash">ruby app.rb</code></pre>
+        <p>Przejdź do <code>http://localhost:4567/index.html</code> w przeglądarce, aby zobaczyć działającą aplikację.</p>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/prism.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/components/prism-ruby.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/components/prism-bash.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/components/prism-html.min.js"></script>
+</body>
+</html>

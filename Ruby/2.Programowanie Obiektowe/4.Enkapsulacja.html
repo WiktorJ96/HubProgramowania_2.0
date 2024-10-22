@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Enkapsulacja</title>
+    <link rel="stylesheet" href="../styles.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/themes/prism-tomorrow.min.css" rel="stylesheet" />
+</head>
+<body>
+    <div class="container">
+        <h1>Enkapsulacja</h1>
+        
+        <p>Enkapsulacja (kapsułkowanie) to jedna z podstawowych zasad programowania obiektowego, która polega na ukrywaniu szczegółów implementacji obiektu i zapewnianiu bezpiecznego dostępu do jego danych tylko poprzez zdefiniowane metody. W Ruby możemy kontrolować dostęp do zmiennych instancji za pomocą modyfikatorów dostępu oraz metod getterów i setterów.</p>
+
+        <h2>Modyfikatory dostępu</h2>
+        <p>Ruby oferuje trzy główne modyfikatory dostępu, które określają poziom widoczności metod i zmiennych w klasach:</p>
+        <ul>
+            <li><strong>public</strong>: Metody dostępne dla wszystkich. Domyślny poziom dostępu w Ruby.</li>
+            <li><strong>protected</strong>: Metody dostępne wewnątrz klasy oraz jej podklas, ale nie mogą być wywoływane bezpośrednio na obiekcie.</li>
+            <li><strong>private</strong>: Metody dostępne tylko wewnątrz klasy, w której są zdefiniowane. Nie mogą być wywoływane na obiekcie.</li>
+        </ul>
+
+        <h3>Przykład modyfikatorów dostępu</h3>
+        <pre><code class="language-ruby">
+        class Person
+          def initialize(name, age)
+            @name = name
+            @age = age
+          end
+
+          # Publiczna metoda, dostępna na zewnątrz
+          def display_info
+            puts "Imię: #{@name}, Wiek: #{@age}"
+          end
+
+        protected
+          # Metoda protected, dostępna wewnątrz klasy i podklas
+          def protected_info
+            puts "Dane chronione osoby"
+          end
+
+        private
+          # Prywatna metoda, niedostępna na zewnątrz
+          def private_info
+            puts "Dane prywatne osoby"
+          end
+        end
+
+        person = Person.new("Alice", 30)
+        person.display_info  # Wywołuje publiczną metodę
+        person.private_info  # Wywoła błąd, ponieważ metoda jest prywatna
+        </code></pre>
+
+        <h2>Gettery i settery</h2>
+        <p>W Ruby, aby kontrolować dostęp do atrybutów, możemy używać getterów i setterów. Gettery służą do odczytu wartości zmiennych instancji, a settery do ich modyfikacji. Możemy ręcznie tworzyć takie metody lub skorzystać z wbudowanych w Ruby metod <code>attr_reader</code>, <code>attr_writer</code> oraz <code>attr_accessor</code>.</p>
+
+        <h3>Ręczne definiowanie getterów i setterów</h3>
+        <pre><code class="language-ruby">
+        class Person
+          def initialize(name, age)
+            @name = name
+            @age = age
+          end
+
+          # Getter dla name
+          def name
+            @name
+          end
+
+          # Setter dla name
+          def name=(new_name)
+            @name = new_name
+          end
+        end
+
+        person = Person.new("Alice", 30)
+        puts person.name  # Wywołuje getter, wyświetla: Alice
+        person.name = "Bob"  # Wywołuje setter, zmienia imię na Bob
+        puts person.name  # Wyświetla: Bob
+        </code></pre>
+
+        <h3>Automatyczne tworzenie getterów i setterów</h3>
+        <p>Ruby oferuje wygodne metody do automatycznego tworzenia getterów i setterów:</p>
+        <ul>
+            <li><code>attr_reader</code>: Tworzy getter (metodę do odczytu atrybutu).</li>
+            <li><code>attr_writer</code>: Tworzy setter (metodę do zmiany wartości atrybutu).</li>
+            <li><code>attr_accessor</code>: Tworzy zarówno getter, jak i setter dla atrybutu.</li>
+        </ul>
+        <pre><code class="language-ruby">
+        class Person
+          attr_accessor :name  # Tworzy getter i setter dla name
+          attr_reader :age     # Tylko getter dla age
+
+          def initialize(name, age)
+            @name = name
+            @age = age
+          end
+        end
+
+        person = Person.new("Alice", 30)
+        puts person.name   # Wyświetla: Alice (getter)
+        person.name = "Bob"  # Zmienia imię na Bob (setter)
+        puts person.name   # Wyświetla: Bob
+        puts person.age    # Wyświetla: 30 (getter)
+        person.age = 31    # Zwróci błąd, ponieważ brak settera dla age
+        </code></pre>
+
+        <h2>Ukrywanie implementacji</h2>
+        <p>Jednym z celów enkapsulacji jest ukrywanie szczegółów implementacji przed użytkownikiem klasy. Prywatne metody i atrybuty są niedostępne bezpośrednio na zewnątrz klasy, co zapobiega niepożądanej manipulacji danymi.</p>
+        <pre><code class="language-ruby">
+        class BankAccount
+          def initialize(balance)
+            @balance = balance
+          end
+
+          def display_balance
+            puts "Saldo: #{@balance} PLN"
+          end
+
+        private
+          def update_balance(amount)
+            @balance += amount
+          end
+        end
+
+        account = BankAccount.new(1000)
+        account.display_balance  # Wyświetla saldo
+        account.update_balance(500)  # Błąd, metoda jest prywatna
+        </code></pre>
+
+        <h2>Korzyści z enkapsulacji</h2>
+        <p>Enkapsulacja przynosi wiele korzyści:</p>
+        <ul>
+            <li><strong>Bezpieczeństwo danych</strong>: Prywatne dane są chronione przed bezpośrednią manipulacją.</li>
+            <li><strong>Łatwość utrzymania</strong>: Zmiany w implementacji klasy nie wpływają na kod korzystający z klasy, dopóki interfejs (publiczne metody) pozostaje taki sam.</li>
+            <li><strong>Modularność</strong>: Klasy mogą być projektowane jako oddzielne moduły, z jasno zdefiniowanym interfejsem dla innych klas.</li>
+        </ul>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/prism.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/components/prism-ruby.min.js"></script>
+</body>
+</html>

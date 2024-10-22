@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Metody Enumerable</title>
+    <link rel="stylesheet" href="../styles.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/themes/prism-tomorrow.min.css" rel="stylesheet" />
+</head>
+<body>
+    <div class="container">
+        <h1>Metody Enumerable</h1>
+        
+        <p>Moduł <code>Enumerable</code> w Ruby zawiera wiele metod służących do pracy z kolekcjami danych, takimi jak tablice, zakresy, hashe oraz inne obiekty, które implementują metodę <code>each</code>. Metody te ułatwiają iterację, filtrowanie, transformację i analizę danych.</p>
+
+        <h2>Podstawowe metody Enumerable</h2>
+        <p>Poniżej przedstawione są najczęściej używane metody modułu <code>Enumerable</code>:</p>
+
+        <h3><code>each</code></h3>
+        <p>Podstawowa metoda do iteracji, wywołuje blok kodu dla każdego elementu w kolekcji.</p>
+        <pre><code class="language-ruby">
+        array = [1, 2, 3, 4]
+
+        array.each do |number|
+          puts number
+        end
+        # Wyświetli:
+        # 1
+        # 2
+        # 3
+        # 4
+        </code></pre>
+
+        <h3><code>map</code></h3>
+        <p>Tworzy nową kolekcję, stosując podany blok do każdego elementu i zwracając wyniki.</p>
+        <pre><code class="language-ruby">
+        array = [1, 2, 3, 4]
+
+        squared = array.map { |number| number * number }
+        puts squared  # Wyświetli: [1, 4, 9, 16]
+        </code></pre>
+
+        <h3><code>select</code></h3>
+        <p>Zwraca nową kolekcję, zawierającą elementy, dla których blok zwrócił <code>true</code>.</p>
+        <pre><code class="language-ruby">
+        array = [1, 2, 3, 4, 5]
+
+        even_numbers = array.select { |number| number.even? }
+        puts even_numbers  # Wyświetli: [2, 4]
+        </code></pre>
+
+        <h3><code>reject</code></h3>
+        <p>Tworzy nową kolekcję, odrzucając elementy, dla których blok zwrócił <code>true</code>.</p>
+        <pre><code class="language-ruby">
+        array = [1, 2, 3, 4, 5]
+
+        odd_numbers = array.reject { |number| number.even? }
+        puts odd_numbers  # Wyświetli: [1, 3, 5]
+        </code></pre>
+
+        <h3><code>find</code></h3>
+        <p>Zwraca pierwszy element, dla którego blok zwrócił <code>true</code>.</p>
+        <pre><code class="language-ruby">
+        array = [1, 2, 3, 4, 5]
+
+        first_even = array.find { |number| number.even? }
+        puts first_even  # Wyświetli: 2
+        </code></pre>
+
+        <h3><code>find_all</code></h3>
+        <p>Zwraca wszystkie elementy, dla których blok zwrócił <code>true</code> (alias dla <code>select</code>).</p>
+        <pre><code class="language-ruby">
+        array = [1, 2, 3, 4, 5]
+
+        evens = array.find_all { |number| number.even? }
+        puts evens  # Wyświetli: [2, 4]
+        </code></pre>
+
+        <h3><code>count</code></h3>
+        <p>Zwraca liczbę elementów w kolekcji. Jeśli przekazany jest blok, liczy tylko te elementy, dla których blok zwraca <code>true</code>.</p>
+        <pre><code class="language-ruby">
+        array = [1, 2, 3, 4, 5]
+
+        puts array.count  # Wyświetli: 5
+        puts array.count { |number| number.even? }  # Wyświetli: 2
+        </code></pre>
+
+        <h3><code>any?</code></h3>
+        <p>Sprawdza, czy przynajmniej jeden element w kolekcji spełnia warunek z bloku.</p>
+        <pre><code class="language-ruby">
+        array = [1, 2, 3, 4, 5]
+
+        puts array.any? { |number| number.even? }  # Wyświetli: true
+        </code></pre>
+
+        <h3><code>all?</code></h3>
+        <p>Sprawdza, czy wszystkie elementy w kolekcji spełniają warunek z bloku.</p>
+        <pre><code class="language-ruby">
+        array = [1, 2, 3, 4, 5]
+
+        puts array.all? { |number| number > 0 }  # Wyświetli: true
+        puts array.all? { |number| number.even? }  # Wyświetli: false
+        </code></pre>
+
+        <h3><code>none?</code></h3>
+        <p>Sprawdza, czy żaden z elementów w kolekcji nie spełnia warunku z bloku.</p>
+        <pre><code class="language-ruby">
+        array = [1, 2, 3, 4, 5]
+
+        puts array.none? { |number| number > 5 }  # Wyświetli: true
+        </code></pre>
+
+        <h3><code>reduce</code> (alias <code>inject</code>)</h3>
+        <p>Zredukuje kolekcję do jednej wartości, stosując operację na każdym elemencie i akumulując wynik.</p>
+        <pre><code class="language-ruby">
+        array = [1, 2, 3, 4, 5]
+
+        sum = array.reduce(0) { |accumulator, number| accumulator + number }
+        puts sum  # Wyświetli: 15
+
+        product = array.reduce(1) { |accumulator, number| accumulator * number }
+        puts product  # Wyświetli: 120
+        </code></pre>
+
+        <h3><code>group_by</code></h3>
+        <p>Grupuje elementy na podstawie wartości zwracanych przez blok i zwraca hash.</p>
+        <pre><code class="language-ruby">
+        array = [1, 2, 3, 4, 5, 6]
+
+        grouped = array.group_by { |number| number.even? }
+        puts grouped
+        # Wyświetli: {false=>[1, 3, 5], true=>[2, 4, 6]}
+        </code></pre>
+
+        <h2>Zaawansowane metody Enumerable</h2>
+        <h3><code>partition</code></h3>
+        <p>Zwraca dwie tablice: jedną zawierającą elementy, dla których blok zwrócił <code>true</code>, a drugą z pozostałymi elementami.</p>
+        <pre><code class="language-ruby">
+        array = [1, 2, 3, 4, 5, 6]
+
+        evens, odds = array.partition { |number| number.even? }
+        puts evens  # Wyświetli: [2, 4, 6]
+        puts odds   # Wyświetli: [1, 3, 5]
+        </code></pre>
+
+        <h3><code>take</code> i <code>drop</code></h3>
+        <p><code>take(n)</code> zwraca pierwsze <code>n</code> elementów kolekcji, a <code>drop(n)</code> zwraca pozostałe elementy po pominięciu pierwszych <code>n</code>.</p>
+        <pre><code class="language-ruby">
+        array = [1, 2, 3, 4, 5]
+
+        puts array.take(3)  # Wyświetli: [1, 2, 3]
+        puts array.drop(3)  # Wyświetli: [4, 5]
+        </code></pre>
+
+        <h3><code>uniq</code></h3>
+        <p>Zwraca nową kolekcję z unikalnymi elementami.</p>
+        <pre><code class="language-ruby">
+        array = [1, 2, 2, 3, 4, 4, 5]
+
+        unique_array = array.uniq
+        puts unique_array  # Wyświetli: [1, 2, 3, 4, 5]
+        </code></pre>
+
+        <h2>Przykład zastosowania Enumerable</h2>
+        <p>Moduł <code>Enumerable</code> może być używany na różnych kolekcjach, takich jak zakresy, tablice, hashe. Oto przykład zastosowania go na zakresie:</p>
+        <pre><code class="language-ruby">
+        range = (1..10)
+
+        # Zastosowanie metody select na zakresie
+        evens = range.select { |number| number.even? }
+        puts evens  # Wyświetli: [2, 4, 6, 8, 10]
+        </code></pre>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/prism.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/components/prism-ruby.min.js"></script>
+</body>
+</html>

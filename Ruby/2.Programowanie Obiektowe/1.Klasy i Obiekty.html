@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Klasy i Obiekty</title>
+    <link rel="stylesheet" href="../styles.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/themes/prism-tomorrow.min.css" rel="stylesheet" />
+</head>
+<body>
+    <div class="container">
+        <h1>Klasy i Obiekty</h1>
+        
+        <p>Ruby jest językiem obiektowym, co oznacza, że wszystko w Ruby jest obiektem. Klasa jest jak szablon, na podstawie którego tworzone są obiekty. Klasy mogą mieć atrybuty i metody, które definiują ich zachowanie i właściwości.</p>
+
+        <h2>Tworzenie klasy</h2>
+        <p>Aby zdefiniować klasę w Ruby, używamy słowa kluczowego <code>class</code>. Klasa może zawierać metody, które określają jej zachowanie.</p>
+        <pre><code class="language-ruby">
+        class Car
+          # Definicja metody inicjalizującej
+          def initialize(make, model, year)
+            @make = make  # Atrybuty obiektu
+            @model = model
+            @year = year
+          end
+
+          # Definicja metody wyświetlającej szczegóły samochodu
+          def display_details
+            puts "Samochód: #{@make}, Model: #{@model}, Rok: #{@year}"
+          end
+        end
+        </code></pre>
+
+        <h2>Tworzenie obiektu</h2>
+        <p>Obiekt to instancja klasy. Obiekty są tworzone za pomocą metody <code>new</code>, która wywołuje metodę <code>initialize</code> odpowiedzialną za przypisanie początkowych wartości atrybutów.</p>
+        <pre><code class="language-ruby">
+        # Tworzenie nowego obiektu klasy Car
+        my_car = Car.new("Toyota", "Corolla", 2020)
+        my_car.display_details  # Wywołanie metody obiektu
+        </code></pre>
+
+        <h2>Atrybuty i metody</h2>
+        <p>W Ruby możemy zdefiniować metody dostępu do atrybutów (getter i setter), aby kontrolować dostęp do zmiennych instancji.</p>
+
+        <h3>Definiowanie metod dostępu (getter i setter)</h3>
+        <pre><code class="language-ruby">
+        class Person
+          def initialize(name, age)
+            @name = name
+            @age = age
+          end
+
+          # Getter dla atrybutu name
+          def name
+            @name
+          end
+
+          # Setter dla atrybutu name
+          def name=(new_name)
+            @name = new_name
+          end
+
+          # Getter dla atrybutu age
+          def age
+            @age
+          end
+
+          # Setter dla atrybutu age
+          def age=(new_age)
+            @age = new_age
+          end
+        end
+
+        person = Person.new("Alice", 25)
+        puts person.name    # Wyświetla: Alice
+        person.name = "Bob" # Zmiana imienia na Bob
+        puts person.name    # Wyświetla: Bob
+        </code></pre>
+
+        <h2>Dziedziczenie</h2>
+        <p>Dziedziczenie pozwala tworzyć klasy, które dziedziczą funkcjonalność innych klas. Używamy do tego znaku <code>&lt;</code> po nazwie klasy bazowej.</p>
+        <pre><code class="language-ruby">
+        class Animal
+          def speak
+            puts "Zwierzę wydaje dźwięk"
+          end
+        end
+
+        # Klasa Dog dziedziczy po klasie Animal
+        class Dog < Animal
+          def bark
+            puts "Pies szczeka"
+          end
+        end
+
+        dog = Dog.new
+        dog.speak  # Wywołanie metody odziedziczonej z klasy Animal
+        dog.bark   # Wywołanie metody zdefiniowanej w klasie Dog
+        </code></pre>
+
+        <h2>Metody klasowe i instancyjne</h2>
+        <p>Ruby rozróżnia metody instancyjne, które działają na konkretnych obiektach, oraz metody klasowe, które można wywołać bez tworzenia obiektu klasy.</p>
+
+        <h3>Metoda klasowa</h3>
+        <p>Metody klasowe są definiowane za pomocą <code>self</code>.</p>
+        <pre><code class="language-ruby">
+        class MathHelper
+          # Metoda klasowa
+          def self.add(a, b)
+            a + b
+          end
+        end
+
+        result = MathHelper.add(5, 3)
+        puts result  # Wyświetla: 8
+        </code></pre>
+
+        <h3>Metoda instancyjna</h3>
+        <p>Metody instancyjne działają na instancjach (obiektach) danej klasy.</p>
+        <pre><code class="language-ruby">
+        class Calculator
+          def initialize(number)
+            @number = number
+          end
+
+          # Metoda instancyjna
+          def square
+            @number * @number
+          end
+        end
+
+        calc = Calculator.new(4)
+        puts calc.square  # Wyświetla: 16
+        </code></pre>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/prism.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/components/prism-ruby.min.js"></script>
+</body>
+</html>
