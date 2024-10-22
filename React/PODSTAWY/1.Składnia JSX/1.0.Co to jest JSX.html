@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Co to jest JSX?</title>
+    <link rel="stylesheet" href="/React/styles.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/themes/prism-tomorrow.min.css" rel="stylesheet" />
+</head>
+<body>
+    <div class="container">
+        <h1>Co to jest JSX?</h1>
+
+        <p><strong>JSX</strong> (JavaScript XML) to rozszerzenie składni JavaScriptu, które wygląda podobnie do HTML-a i jest używane w React do opisywania, jak interfejs użytkownika powinien wyglądać. JSX ułatwia tworzenie komponentów React, umożliwiając mieszanie logiki i struktury w jednym miejscu.</p>
+
+        <h2>Dlaczego JSX?</h2>
+        <p>JSX pozwala na pisanie składni podobnej do HTML-a bezpośrednio w kodzie JavaScript, co sprawia, że komponenty React są bardziej czytelne i zrozumiałe. JSX ostatecznie jest przetwarzany przez przeglądarkę jako czysty JavaScript.</p>
+
+        <h3>Prosty przykład JSX</h3>
+        <p>Poniżej znajduje się prosty przykład JSX, który wyświetla wiadomość powitalną. JSX przypomina HTML, ale działa w środku JavaScriptu.</p>
+        <pre><code class="language-javascript">
+// Komponent funkcyjny z JSX
+function Welcome(props) {
+  return &lt;h1&gt;Witaj, {props.name}!&lt;/h1&gt;;
+}
+
+// Użycie komponentu
+ReactDOM.render(&lt;Welcome name="Kamil" /&gt;, document.getElementById('root'));
+        </code></pre>
+
+        <h3>JSX a czysty JavaScript</h3>
+        <p>Pod maską JSX jest przekształcany w wywołania funkcji JavaScriptu, na przykład <code>React.createElement</code>. Oto jak wygląda przykład JSX w czystym JavaScripcie:</p>
+        <pre><code class="language-javascript">
+// JSX
+const element = &lt;h1&gt;Witaj, świecie!&lt;/h1&gt;;
+
+// Czysty JavaScript (bez JSX)
+const element = React.createElement('h1', null, 'Witaj, świecie!');
+        </code></pre>
+
+        <h2>Właściwości JSX</h2>
+        <ul>
+            <li><strong>Zagnieżdżanie:</strong> W JSX możesz zagnieżdżać elementy w ten sam sposób, jak w HTML.</li>
+            <li><strong>Interpolacja:</strong> W JSX możesz umieszczać wyrażenia JavaScriptu wewnątrz nawiasów klamrowych <code>{}</code>. Jest to przydatne do dynamicznego wstawiania wartości w elementach.</li>
+            <li><strong>JSX a HTML:</strong> JSX wygląda jak HTML, ale niektóre atrybuty są inne (np. <code>className</code> zamiast <code>class</code>).</li>
+        </ul>
+
+        <h3>Zagnieżdżanie elementów</h3>
+        <p>JSX pozwala na zagnieżdżanie elementów tak jak w HTML. Oto przykład:</p>
+        <pre><code class="language-javascript">
+function App() {
+  return (
+    &lt;div&gt;
+      &lt;h1&gt;Moje nagłówki&lt;/h1&gt;
+      &lt;p&gt;To jest akapit zagnieżdżony w divie.&lt;/p&gt;
+    &lt;/div&gt;
+  );
+}
+
+ReactDOM.render(&lt;App /&gt;, document.getElementById('root'));
+        </code></pre>
+
+        <h3>Interpolacja w JSX</h3>
+        <p>JSX pozwala na dynamiczne wstawianie wartości JavaScriptu do elementów HTML za pomocą nawiasów klamrowych <code>{}</code>. Przykład:</p>
+        <pre><code class="language-javascript">
+function Welcome(props) {
+  return &lt;h1&gt;Witaj, {props.name}!&lt;/h1&gt;;
+}
+
+ReactDOM.render(&lt;Welcome name="Anna" /&gt;, document.getElementById('root'));
+        </code></pre>
+
+        <h2>Różnice między JSX a HTML</h2>
+        <p>Mimo że JSX wygląda bardzo podobnie do HTML, istnieją pewne różnice:</p>
+        <ul>
+            <li><strong>className zamiast class:</strong> W JSX używamy <code>className</code>, ponieważ <code>class</code> jest zarezerwowanym słowem kluczowym w JavaScript.</li>
+            <li><strong>onClick zamiast onclick:</strong> Eventy w JSX są pisane camelCasem (np. <code>onClick</code>, <code>onChange</code>), a nie w stylu HTML (np. <code>onclick</code>).</li>
+            <li><strong>Fragmenty:</strong> W JSX, gdy chcemy zwrócić wiele elementów bez zagnieżdżania ich w kontenerze <code>div</code>, możemy użyć <code>React.Fragment</code> lub skróconej formy <code>&lt;&gt;&lt;/&gt;</code>.</li>
+        </ul>
+
+        <h3>Przykład fragmentu JSX</h3>
+        <p>Fragmenty pozwalają na zwracanie wielu elementów bez dodawania dodatkowych znaczników do DOM. Przykład:</p>
+        <pre><code class="language-javascript">
+function FragmentExample() {
+  return (
+    &lt;&gt;
+      &lt;h1&gt;To jest nagłówek&lt;/h1&gt;
+      &lt;p&gt;To jest akapit.&lt;/p&gt;
+    &lt;/&gt;
+  );
+}
+
+ReactDOM.render(&lt;FragmentExample /&gt;, document.getElementById('root'));
+        </code></pre>
+
+        <h2>Kiedy używać JSX?</h2>
+        <p>JSX jest domyślną składnią używaną w React i jest zalecany do tworzenia komponentów interfejsu użytkownika. Jest bardziej zwięzły i czytelny niż czysty JavaScript, a także ułatwia pracę z elementami interfejsu.</p>
+    </div>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/prism.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/components/prism-javascript.min.js"></script>
+    <script src="https://unpkg.com/react@17/umd/react.development.js"></script>
+    <script src="https://unpkg.com/react-dom@17/umd/react-dom.development.js"></script>
+</body>
+</html>

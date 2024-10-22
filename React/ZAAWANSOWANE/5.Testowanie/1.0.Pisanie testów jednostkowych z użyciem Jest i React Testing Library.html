@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pisanie testów jednostkowych z użyciem Jest i React Testing Library</title>
+    <link rel="stylesheet" href="/React/styles.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/themes/prism-tomorrow.min.css" rel="stylesheet" />
+</head>
+<body>
+    <div class="container">
+        <h1>Pisanie testów jednostkowych z użyciem Jest i React Testing Library</h1>
+
+        <p>Testowanie jednostkowe w aplikacjach React pozwala na upewnienie się, że poszczególne komponenty działają poprawnie. <strong>Jest</strong> to popularna biblioteka do testowania JavaScript, a <strong>React Testing Library</strong> to narzędzie, które ułatwia testowanie komponentów React w sposób zbliżony do interakcji użytkownika.</p>
+
+        <h2>Instalacja Jest i React Testing Library</h2>
+        <p>Jest i React Testing Library są zazwyczaj instalowane w aplikacjach React za pomocą menedżera pakietów npm lub yarn. Możesz je zainstalować w następujący sposób:</p>
+
+        <pre><code class="language-bash">
+# Instalacja za pomocą npm
+npm install --save-dev jest @testing-library/react @testing-library/jest-dom
+
+# Instalacja za pomocą yarn
+yarn add --dev jest @testing-library/react @testing-library/jest-dom
+        </code></pre>
+
+        <h2>Pisanie prostego testu z React Testing Library</h2>
+        <p>React Testing Library koncentruje się na testowaniu komponentów z perspektywy użytkownika. Możesz tworzyć testy, które sprawdzają, czy komponenty renderują się poprawnie i reagują na interakcje użytkownika. Zobaczmy przykład testowania prostego komponentu:</p>
+
+        <pre><code class="language-javascript">
+// Komponent Button.js
+import React from 'react';
+
+function Button(&#123; onClick, label &#125;) &#123;
+  return &lt;button onClick=&#123;onClick&#125;&gt;&#123;label&#125;&lt;/button&gt;;
+&#125;
+
+export default Button;
+        </code></pre>
+
+        <p>Teraz napiszmy test, który sprawdzi, czy komponent <code>Button</code> renderuje poprawnie i reaguje na kliknięcie:</p>
+
+        <pre><code class="language-javascript">
+// Test Button.test.js
+import React from 'react';
+import &#123; render, screen, fireEvent &#125; from '@testing-library/react';
+import Button from './Button';
+
+test('renderuje przycisk z etykietą', () => &#123;
+  render(&lt;Button label="Kliknij mnie" /&gt;);
+  const buttonElement = screen.getByText(/Kliknij mnie/i);
+  expect(buttonElement).toBeInTheDocument();  // Sprawdza, czy element istnieje w dokumencie
+&#125;);
+
+test('reaguje na kliknięcie', () => &#123;
+  const handleClick = jest.fn();  // Tworzy funkcję mockującą
+  render(&lt;Button label="Kliknij mnie" onClick=&#123;handleClick&#125; /&gt;);
+  const buttonElement = screen.getByText(/Kliknij mnie/i);
+  fireEvent.click(buttonElement);  // Symuluje kliknięcie
+  expect(handleClick).toHaveBeenCalledTimes(1);  // Sprawdza, czy funkcja została wywołana
+&#125;);
+        </code></pre>
+
+        <p>W tym przykładzie wykonujemy dwa testy:</p>
+        <ul>
+            <li><strong>Test renderowania:</strong> Sprawdza, czy komponent <code>Button</code> renderuje poprawnie i wyświetla tekst "Kliknij mnie".</li>
+            <li><strong>Test interakcji:</strong> Sprawdza, czy funkcja <code>onClick</code> została wywołana po kliknięciu przycisku.</li>
+        </ul>
+
+        <h2>Używanie <code>jest-dom</code> do rozszerzenia matcherów</h2>
+        <p><code>@testing-library/jest-dom</code> to dodatek do Jest, który rozszerza zestaw matcherów, umożliwiając bardziej intuicyjne testy DOM. Możesz używać matcherów, takich jak <code>toBeInTheDocument</code>, <code>toHaveTextContent</code> i wiele innych, aby łatwo testować komponenty React.</p>
+
+        <pre><code class="language-javascript">
+// Test Button.test.js z użyciem jest-dom
+import React from 'react';
+import &#123; render, screen &#125; from '@testing-library/react';
+import '@testing-library/jest-dom/extend-expect';  // Dodaje dodatkowe matchery
+import Button from './Button';
+
+test('przycisk ma poprawny tekst', () => &#123;
+  render(&lt;Button label="Kliknij mnie" /&gt;);
+  const buttonElement = screen.getByText(/Kliknij mnie/i);
+  expect(buttonElement).toHaveTextContent('Kliknij mnie');  // Sprawdza zawartość tekstową
+&#125;);
+        </code></pre>
+
+        <p>Matcher <code>toHaveTextContent</code> sprawdza, czy dany element zawiera oczekiwany tekst. Dzięki <code>jest-dom</code> testy są bardziej czytelne i łatwiejsze w interpretacji.</p>
+
+        <h2>Testowanie komponentów z elementami asynchronicznymi</h2>
+        <p>Jeśli twój komponent renderuje elementy asynchronicznie, np. po pobraniu danych z API, możesz użyć funkcji asynchronicznych, takich jak <code>findBy</code> lub <code>waitFor</code>, aby poczekać na pojawienie się elementów na stronie.</p>
+
+        <pre><code class="language-javascript">
+// Komponent FetchData.js
+import React, &#123; useState, useEffect &#125; from 'react';
+
+function FetchData() &#123;
+  const [data, setData] = useState(null);
+
+  useEffect(() => &#123;
+    fetch('https://jsonplaceholder.typicode.com/todos/1')
+      .then(response => response.json())
+      .then(data => setData(data));
+  &#125;, []);
+
+  if (!data) &#123;
+    return &lt;p&gt;Ładowanie...&lt;/p&gt;;
+  &#125;
+
+  return &lt;p&gt;Tytuł: &#123;data.title&#125;&lt;/p&gt;;
+&#125;
+
+export default FetchData;
+        </code></pre>
+
+        <p>A teraz napiszmy test dla tego komponentu:</p>
+
+        <pre><code class="language-javascript">
+// Test FetchData.test.js
+import React from 'react';
+import &#123; render, screen, waitFor &#125; from '@testing-library/react';
+import FetchData from './FetchData';
+
+test('pobiera dane i wyświetla tytuł', async () => &#123;
+  render(&lt;FetchData /&gt;);
+  const loadingElement = screen.getByText(/Ładowanie.../i);
+  expect(loadingElement).toBeInTheDocument();  // Sprawdza, czy element "Ładowanie..." jest widoczny
+
+  const titleElement = await screen.findByText(/delectus aut autem/i);
+  expect(titleElement).toBeInTheDocument();  // Czeka, aż element z tytułem pojawi się w DOM
+&#125;);
+        </code></pre>
+
+        <p>W tym teście sprawdzamy, czy komponent wyświetla najpierw "Ładowanie...", a następnie tytuł pobrany z API. Używamy asynchronicznej funkcji <code>findByText</code>, która czeka na pojawienie się elementu w DOM.</p>
+
+        <h2>Mockowanie funkcji za pomocą <code>jest.fn()</code></h2>
+        <p>W testach możemy używać <code>jest.fn()</code> do tworzenia funkcji mockujących, które pozwalają śledzić, ile razy dana funkcja została wywołana lub jakie argumenty otrzymała. Jest to szczególnie przydatne, gdy testujemy funkcje przekazywane do komponentów jako propsy, np. <code>onClick</code>.</p>
+
+        <pre><code class="language-javascript">
+// Test z funkcją mockującą
+import React from 'react';
+import &#123; render, screen, fireEvent &#125; from '@testing-library/react';
+import Button from './Button';
+
+test('funkcja onClick jest wywoływana', () => &#123;
+  const handleClick = jest.fn();  // Funkcja mockująca
+  render(&lt;Button label="Kliknij mnie" onClick=&#123;handleClick&#125; /&gt;);
+
+  const buttonElement = screen.getByText(/Kliknij mnie/i);
+  fireEvent.click(buttonElement);  // Symulacja kliknięcia
+
+  expect(handleClick).toHaveBeenCalledTimes(1);  // Sprawdza, czy funkcja została wywołana raz
+&#125;);
+        </code></pre>
+
+        <h2>Podsumowanie</h2>
+        <p>Jest i React Testing Library umożliwiają łatwe i skuteczne testowanie komponentów React. Dzięki tym narzędziom możemy upewnić się, że nasze komponenty renderują się poprawnie, reagują na interakcje użytkownika i obsługują asynchroniczne operacje w sposób zgodny z oczekiwaniami.</p>
+
+        <ul>
+            <li><strong>Jest:</strong> Biblioteka testów do JavaScriptu, umożliwiająca tworzenie funkcji mockujących i łatwe testowanie logiki aplikacji.</li>
+            <li><strong>React Testing Library:</strong> Narzędzie do testowania komponentów React, które symuluje interakcje użytkownika.</li>
+            <li><strong>jest-dom:</strong> Zestaw dodatkowych matcherów do testowania DOM w React Testing Library.</li>
+            <li><strong>Mockowanie funkcji:</strong> <code>jest.fn()</code> umożliwia tworzenie funkcji mockujących, co ułatwia testowanie zachowań komponentów.</li>
+            <li><strong>Testowanie asynchroniczne:</strong> Funkcje takie jak <code>waitFor</code> i <code>findBy</code> umożliwiają testowanie komponentów asynchronicznych.</li>
+        </ul>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/prism.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/components/prism-javascript.min.js"></script>
+</body>
+</html>

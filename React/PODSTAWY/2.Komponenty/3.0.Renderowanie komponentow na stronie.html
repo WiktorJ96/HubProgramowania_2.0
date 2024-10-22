@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Renderowanie komponentów w React</title>
+    <link rel="stylesheet" href="/React/styles.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/themes/prism-tomorrow.min.css" rel="stylesheet" />
+</head>
+<body>
+    <div class="container">
+        <h1>Renderowanie komponentów w React</h1>
+
+        <p>Renderowanie komponentów to proces, w którym komponenty React są zamieniane na elementy DOM, które są następnie wyświetlane w przeglądarce. React zapewnia metodę <code>ReactDOM.render</code>, która umożliwia renderowanie komponentów do drzewa DOM.</p>
+
+        <h2>Podstawowe renderowanie komponentu</h2>
+        <p>Najprostszym sposobem renderowania komponentu jest użycie metody <code>ReactDOM.render</code>. Poniżej znajduje się przykład renderowania prostego komponentu <code>Welcome</code> do elementu <code>div</code> o id <code>root</code>:</p>
+        <pre><code class="language-javascript">
+// Prosty komponent funkcyjny
+function Welcome(props) {
+  return &lt;h1&gt;Witaj, &#123;props.name&#125;!&lt;/h1&gt;;
+}
+
+// Renderowanie komponentu
+ReactDOM.render(&lt;Welcome name="Kamil" /&gt;, document.getElementById('root'));
+        </code></pre>
+
+        <h2>Renderowanie wielu komponentów</h2>
+        <p>React pozwala na renderowanie wielu komponentów jednocześnie. Komponenty te mogą być zagnieżdżane w innych komponentach lub renderowane osobno. Oto przykład renderowania kilku komponentów obok siebie:</p>
+        <pre><code class="language-javascript">
+// Dwa proste komponenty funkcyjne
+function Welcome(props) {
+  return &lt;h1&gt;Witaj, &#123;props.name&#125;!&lt;/h1&gt;;
+}
+
+function Goodbye(props) {
+  return &lt;p&gt;Do zobaczenia, &#123;props.name&#125;!&lt;/p&gt;;
+}
+
+// Renderowanie wielu komponentów
+ReactDOM.render(
+  &lt;div&gt;
+    &lt;Welcome name="Kamil" /&gt;
+    &lt;Goodbye name="Kamil" /&gt;
+  &lt;/div&gt;,
+  document.getElementById('root')
+);
+        </code></pre>
+
+        <h2>Zagnieżdżanie komponentów</h2>
+        <p>Komponenty React mogą być zagnieżdżane w innych komponentach, co pozwala na tworzenie bardziej złożonych struktur. Oto przykład zagnieżdżenia komponentu <code>Greeting</code> w komponencie <code>App</code>:</p>
+        <pre><code class="language-javascript">
+// Komponent Greeting
+function Greeting(props) {
+  return &lt;h1&gt;Witaj, &#123;props.name&#125;!&lt;/h1&gt;;
+}
+
+// Komponent App, który zagnieżdża Greeting
+function App() {
+  return (
+    &lt;div&gt;
+      &lt;Greeting name="Anna" /&gt;
+    &lt;/div&gt;
+  );
+}
+
+// Renderowanie komponentu App
+ReactDOM.render(&lt;App /&gt;, document.getElementById('root'));
+        </code></pre>
+
+        <h2>Renderowanie warunkowe</h2>
+        <p>React pozwala na renderowanie komponentów warunkowo w zależności od wartości zmiennych lub stanu komponentu. Możemy to osiągnąć za pomocą operatora warunkowego <code>if</code> lub wyrażenia <code>ternary</code> (operator trójargumentowy). Oto przykład:</p>
+        <pre><code class="language-javascript">
+// Komponent wyświetlający powitanie lub pożegnanie na podstawie warunku
+function Greeting(props) {
+  const isLoggedIn = props.isLoggedIn;
+  if (isLoggedIn) {
+    return &lt;h1&gt;Witaj, użytkowniku!&lt;/h1&gt;;
+  } else {
+    return &lt;h1&gt;Proszę się zalogować.&lt;/h1&gt;;
+  }
+}
+
+// Renderowanie warunkowego komponentu
+ReactDOM.render(&lt;Greeting isLoggedIn=&#123;true&#125; /&gt;, document.getElementById('root'));
+        </code></pre>
+
+        <h2>Renderowanie listy komponentów</h2>
+        <p>React pozwala na renderowanie list komponentów dynamicznie, na przykład na podstawie tablicy danych. Ważne jest, aby każdy renderowany element listy miał unikalny atrybut <code>key</code>. Oto przykład renderowania listy imion:</p>
+        <pre><code class="language-javascript">
+// Komponent wyświetlający listę imion
+function NameList(props) {
+  const names = props.names;
+  return (
+    &lt;ul&gt;
+      &#123;names.map((name, index) => (
+        &lt;li key=&#123;index&#125;&gt;&#123;name&#125;&lt;/li&gt;
+      ))&#125;
+    &lt;/ul&gt;
+  );
+}
+
+// Lista imion do renderowania
+const names = ['Anna', 'Kamil', 'Magda'];
+
+// Renderowanie listy komponentów
+ReactDOM.render(&lt;NameList names=&#123;names&#125; /&gt;, document.getElementById('root'));
+        </code></pre>
+
+        <h2>Kiedy używać renderowania komponentów?</h2>
+        <p>Renderowanie komponentów jest kluczową funkcjonalnością React. Należy go używać zawsze, gdy chcemy wyświetlić elementy interfejsu użytkownika na stronie. Możemy renderować pojedyncze komponenty, wiele komponentów, listy, a nawet renderować komponenty warunkowo w zależności od logiki aplikacji.</p>
+
+        <h2>Podsumowanie</h2>
+        <p>Renderowanie komponentów w React jest centralnym elementem tworzenia interaktywnych interfejsów użytkownika. Dzięki metodzie <code>ReactDOM.render</code> możemy dynamicznie tworzyć i wyświetlać komponenty w drzewie DOM. Zagnieżdżanie, warunkowe renderowanie oraz renderowanie list to ważne techniki, które umożliwiają budowanie złożonych aplikacji.</p>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/prism.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/components/prism-javascript.min.js"></script>
+    <script src="https://unpkg.com/react@17/umd/react.development.js"></script>
+    <script src="https://unpkg.com/react-dom@17/umd/react-dom.development.js"></script>
+</body>
+</html>

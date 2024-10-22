@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Zarządzanie stanem aplikacji za pomocą Redux Store</title>
+    <link rel="stylesheet" href="/React/styles.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/themes/prism-tomorrow.min.css" rel="stylesheet" />
+</head>
+<body>
+    <div class="container">
+        <h1>Zarządzanie stanem aplikacji za pomocą Redux Store</h1>
+
+        <p>Redux to biblioteka do zarządzania stanem w aplikacjach JavaScript. Pozwala na przechowywanie globalnego stanu aplikacji w jednym miejscu, tzw. <strong>Redux Store</strong>. Redux działa według zasady jednego źródła prawdy, co oznacza, że wszystkie dane w aplikacji są przechowywane w jednym globalnym stanie. Dzięki temu możemy lepiej kontrolować, jak i kiedy zmienia się stan naszej aplikacji.</p>
+
+        <h2>Podstawowe pojęcia w Redux</h2>
+        <ul>
+            <li><strong>Store:</strong> Globalny stan aplikacji przechowywany w jednym miejscu.</li>
+            <li><strong>Action:</strong> Obiekt, który opisuje, co ma się zmienić w stanie. Zawiera typ akcji i opcjonalnie dane.</li>
+            <li><strong>Reducer:</strong> Funkcja, która opisuje, jak akcje zmieniają stan. Przyjmuje aktualny stan i akcję, a następnie zwraca nowy stan.</li>
+            <li><strong>Dispatch:</strong> Mechanizm wysyłania akcji, który informuje reducer o tym, że stan ma zostać zaktualizowany.</li>
+        </ul>
+
+        <h2>Tworzenie Redux Store</h2>
+        <p>Aby zacząć zarządzać stanem aplikacji za pomocą Redux, musimy utworzyć <strong>store</strong>, który przechowuje cały globalny stan aplikacji. Store jest tworzony przy pomocy funkcji <code>createStore</code> z Reduxa. Zobaczmy przykład tworzenia stanu licznika:</p>
+
+        <pre><code class="language-javascript">
+// Reducer licznika
+function counterReducer(state = 0, action) &#123;
+  switch (action.type) &#123;
+    case 'INCREMENT':
+      return state + 1;
+    case 'DECREMENT':
+      return state - 1;
+    default:
+      return state;
+  &#125;
+&#125;
+
+// Tworzenie store
+import &#123; createStore &#125; from 'redux';
+const store = createStore(counterReducer);
+
+export default store;
+        </code></pre>
+
+        <p>W tym przykładzie definiujemy reducer <code>counterReducer</code>, który obsługuje dwie akcje: <code>INCREMENT</code> i <code>DECREMENT</code>. Następnie tworzymy <code>store</code>, który przechowuje stan licznika.</p>
+
+        <h2>Podłączenie Redux Store do aplikacji React</h2>
+        <p>Aby nasz stan był dostępny w aplikacji React, musimy połączyć Redux Store z Reactem za pomocą biblioteki <code>react-redux</code>. Używamy komponentu <code>Provider</code>, aby udostępnić store całej aplikacji:</p>
+
+        <pre><code class="language-javascript">
+import React from 'react';
+import ReactDOM from 'react-dom';
+import &#123; Provider &#125; from 'react-redux';
+import store from './store';
+import App from './App';
+
+ReactDOM.render(
+  &lt;Provider store=&#123;store&#125;&gt;
+    &lt;App /&gt;
+  &lt;/Provider&gt;,
+  document.getElementById('root')
+);
+        </code></pre>
+
+        <p>Dzięki komponentowi <code>Provider</code>, store jest dostępny we wszystkich komponentach aplikacji React. Teraz możemy odczytywać stan oraz wysyłać akcje, aby go zmieniać.</p>
+
+        <h2>Odczytywanie stanu za pomocą <code>useSelector</code></h2>
+        <p>Aby odczytać dane ze store w komponentach React, używamy hooka <code>useSelector</code>. Umożliwia on dostęp do fragmentów globalnego stanu w dowolnym komponencie:</p>
+
+        <pre><code class="language-javascript">
+import React from 'react';
+import &#123; useSelector &#125; from 'react-redux';
+
+function CounterDisplay() &#123;
+  const count = useSelector((state) => state);  // Odczytywanie stanu licznika
+  return &lt;p&gt;Licznik: &#123;count&#125;&lt;/p&gt;;
+&#125;
+
+export default CounterDisplay;
+        </code></pre>
+
+        <p>W tym przykładzie hook <code>useSelector</code> pozwala nam pobrać bieżący stan licznika z globalnego store i wyświetlić go w komponencie <code>CounterDisplay</code>.</p>
+
+        <h2>Aktualizacja stanu za pomocą <code>useDispatch</code></h2>
+        <p>Aby zaktualizować stan, wysyłamy akcje do store za pomocą hooka <code>useDispatch</code>. Zobaczmy, jak wysłać akcje <code>INCREMENT</code> i <code>DECREMENT</code> z poziomu komponentu:</p>
+
+        <pre><code class="language-javascript">
+import React from 'react';
+import &#123; useDispatch &#125; from 'react-redux';
+
+function CounterControls() &#123;
+  const dispatch = useDispatch();  // Użycie dispatch do wysyłania akcji
+
+  return (
+    &lt;div&gt;
+      &lt;button onClick=&#123;() => dispatch(&#123; type: 'INCREMENT' &#125;)&#125;&gt;Zwiększ&lt;/button&gt;
+      &lt;button onClick=&#123;() => dispatch(&#123; type: 'DECREMENT' &#125;)&#125;&gt;Zmniejsz&lt;/button&gt;
+    &lt;/div&gt;
+  );
+&#125;
+
+export default CounterControls;
+        </code></pre>
+
+        <p>W tym przykładzie używamy hooka <code>useDispatch</code> do wysyłania akcji <code>INCREMENT</code> i <code>DECREMENT</code>, co powoduje aktualizację stanu licznika w store.</p>
+
+        <h2>Złożone stany i wielokrotne reducery</h2>
+        <p>W większych aplikacjach możemy mieć wiele różnych stanów i reducerów. Redux pozwala na łączenie różnych reducerów za pomocą funkcji <code>combineReducers</code>, co umożliwia zarządzanie złożonymi stanami.</p>
+
+        <pre><code class="language-javascript">
+import &#123; combineReducers, createStore &#125; from 'redux';
+
+// Reducer licznika
+function counterReducer(state = 0, action) &#123;
+  switch (action.type) &#123;
+    case 'INCREMENT':
+      return state + 1;
+    case 'DECREMENT':
+      return state - 1;
+    default:
+      return state;
+  &#125;
+&#125;
+
+// Reducer dla logowania
+function authReducer(state = false, action) &#123;
+  switch (action.type) &#123;
+    case 'LOG_IN':
+      return true;
+    case 'LOG_OUT':
+      return false;
+    default:
+      return state;
+  &#125;
+&#125;
+
+// Łączenie reducerów
+const rootReducer = combineReducers(&#123;
+  counter: counterReducer,
+  auth: authReducer,
+&#125;);
+
+// Tworzenie store z połączonymi reducerami
+const store = createStore(rootReducer);
+
+export default store;
+        </code></pre>
+
+        <p>W tym przykładzie łączymy dwa reducery: <code>counterReducer</code> oraz <code>authReducer</code>. <code>combineReducers</code> umożliwia zarządzanie różnymi częściami stanu w jednym store.</p>
+
+        <h2>Kiedy używać Reduxa?</h2>
+        <p>Redux jest szczególnie przydatny w dużych aplikacjach, gdzie wiele komponentów musi mieć dostęp do tego samego stanu lub stan musi być zarządzany w skomplikowany sposób. Jednakże, dla małych aplikacji, Redux może być nadmiarowy – w takich przypadkach wystarczające może być użycie <code>useState</code> i <code>useContext</code>.</p>
+
+        <h2>Podsumowanie</h2>
+        <p>Zarządzanie stanem aplikacji za pomocą Redux Store pozwala na efektywne przechowywanie i aktualizowanie globalnych danych. Dzięki Redux możemy jasno określić, w jaki sposób stan się zmienia za pomocą akcji i reducerów. Jest to szczególnie przydatne w dużych, złożonych aplikacjach, gdzie utrzymanie spójności stanu jest kluczowe.</p>
+
+        <ul>
+            <li><strong>Store:</strong> Przechowuje globalny stan aplikacji.</li>
+            <li><strong>Action:</strong> Obiekt opisujący, co ma się zmienić w stanie.</li>
+            <li><strong>Reducer:</strong> Funkcja, która aktualizuje stan na podstawie akcji.</li>
+            <li><strong>useSelector:</strong> Hook do pobierania stanu w komponentach.</li>
+            <li><strong>useDispatch:</strong> Hook do wysyłania akcji do store.</li>
+            <li><strong>combineReducers:</strong> Funkcja umożliwiająca zarządzanie złożonym stanem poprzez łączenie wielu reducerów.</li>
+        </ul>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/prism.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/components/prism-javascript.min.js"></script>
+    <script src="https://unpkg.com/react@17/umd/react.development.js"></script>
+    <script src="https://unpkg.com/react-dom@17/umd/react-dom.development.js"></script>
+</body>
+</html>

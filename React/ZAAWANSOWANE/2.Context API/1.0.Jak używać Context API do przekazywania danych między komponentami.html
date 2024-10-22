@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Jak używać Context API w React?</title>
+    <link rel="stylesheet" href="/React/styles.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/themes/prism-tomorrow.min.css" rel="stylesheet" />
+</head>
+<body>
+    <div class="container">
+        <h1>Jak używać Context API w React do przekazywania danych?</h1>
+
+        <p>W React, **prop drilling** odnosi się do sytuacji, gdy musimy przekazywać dane przez wiele poziomów komponentów, nawet jeśli nie wszystkie z nich potrzebują tych danych. Context API pozwala nam przekazywać dane bezpośrednio do komponentów potomnych bez potrzeby przekazywania propsów na każdym poziomie drzewa komponentów. Dzięki temu możemy zredukować złożoność kodu i uprościć zarządzanie danymi.</p>
+
+        <h2>Czym jest Context API?</h2>
+        <p>**Context API** umożliwia tworzenie globalnych zmiennych dostępnych dla dowolnych komponentów w aplikacji. Jest to idealne rozwiązanie, gdy musimy udostępniać dane takie jak stan logowania użytkownika, język aplikacji czy motyw (ciemny/jasny) dla wielu komponentów na różnych poziomach drzewa.</p>
+
+        <h2>Podstawowe elementy Context API</h2>
+        <p>Context API składa się z kilku głównych elementów:</p>
+        <ul>
+          <li><code>React.createContext()</code> – tworzy kontekst, który będzie przechowywać dane.</li>
+          <li><code>Provider</code> – komponent, który "udostępnia" dane kontekstu komponentom potomnym.</li>
+          <li><code>Consumer</code> lub <code>useContext</code> – komponenty lub hooki, które umożliwiają dostęp do danych kontekstu w komponentach potomnych.</li>
+        </ul>
+
+        <h2>Przykład użycia Context API</h2>
+        <p>Załóżmy, że mamy aplikację, w której chcemy udostępnić użytkownikowi możliwość zmiany motywu (ciemny/jasny) i chcemy, aby ten wybór był dostępny w różnych komponentach, bez konieczności przekazywania tej informacji przez wszystkie komponenty pośrednie. Możemy to zrobić za pomocą Context API.</p>
+
+        <pre><code class="language-javascript">
+        import React, &#123; useState, createContext, useContext &#125; from 'react';
+
+        // Tworzymy kontekst dla motywu
+        const ThemeContext = createContext();
+
+        // Komponent nadrzędny, który będzie udostępniał motyw
+        function ThemeProvider(&#123; children &#125;) &#123;
+          const [theme, setTheme] = useState('light');  // Motyw: 'light' lub 'dark'
+
+          const toggleTheme = () => &#123;
+            setTheme((prevTheme) => (prevTheme === 'light' ? 'dark' : 'light'));
+          &#125;;
+
+          return (
+            &lt;ThemeContext.Provider value=&#123;&#123; theme, toggleTheme &#125;&#125;&gt;
+              &#123;children&#125;
+            &lt;/ThemeContext.Provider&gt;
+          );
+        &#125;
+
+        // Komponent, który korzysta z kontekstu
+        function ThemeButton() &#123;
+          const &#123; theme, toggleTheme &#125; = useContext(ThemeContext);  // Pobieramy motyw z kontekstu
+
+          return (
+            &lt;button onClick=&#123;toggleTheme&#125;&gt;
+              Przełącz na &#123;theme === 'light' ? 'ciemny' : 'jasny'&#125; motyw
+            &lt;/button&gt;
+          );
+        &#125;
+
+        // Główny komponent aplikacji
+        function App() &#123;
+          return (
+            &lt;ThemeProvider&gt;
+              &lt;div&gt;
+                &lt;h1&gt;Aplikacja z motywem: &lt;span&gt;&#123;theme&#125;&lt;/span&gt;&lt;/h1&gt;
+                &lt;ThemeButton /&gt;  {/* Komponent potomny, który zmienia motyw */}
+              &lt;/div&gt;
+            &lt;/ThemeProvider&gt;
+          );
+        &#125;
+
+        export default App;
+        </code></pre>
+
+        <p>W tym przykładzie używamy Context API, aby przekazywać stan motywu (jasny/ciemny) oraz funkcję <code>toggleTheme</code> do komponentu <code>ThemeButton</code>. Zamiast przekazywać ten stan przez wszystkie komponenty pośrednie, bezpośrednio udostępniamy go dzięki <code>ThemeContext.Provider</code>.</p>
+
+        <h2>Dlaczego warto używać Context API?</h2>
+        <p>Context API jest idealne, gdy mamy dane globalne, które muszą być dostępne w wielu miejscach aplikacji. Bez niego musielibyśmy przekazywać propsy na każdym poziomie drzewa komponentów (prop drilling), co może prowadzić do nieczytelnego i trudnego w utrzymaniu kodu.</p>
+
+        <h2>Hook <code>useContext</code> vs. <code>Consumer</code></h2>
+        <p>W starszych wersjach Reacta, aby uzyskać dostęp do danych kontekstu, trzeba było używać komponentu <code>Consumer</code>, co wymagało korzystania z funkcji renderujących (render props). W nowoczesnych aplikacjach React używamy hooka <code>useContext</code>, który upraszcza dostęp do kontekstu w komponentach funkcyjnych.</p>
+
+        <pre><code class="language-javascript">
+// Starszy sposób używania Context API z Consumer
+&lt;ThemeContext.Consumer&gt;
+  &#123;(value) => (
+    &lt;div&gt;Aktualny motyw: &#123;value.theme&#125;&lt;/div&gt;
+  )&#125;
+&lt;/ThemeContext.Consumer&gt;
+
+// Nowy sposób z użyciem useContext hooka
+const &#123; theme &#125; = useContext(ThemeContext);
+&lt;div&gt;Aktualny motyw: &#123;theme&#125;&lt;/div&gt;
+        </code></pre>
+
+        <p>Hook <code>useContext</code> jest prostszy i bardziej czytelny, dlatego jest obecnie preferowanym rozwiązaniem.</p>
+
+        <h2>Zaawansowane użycie Context API</h2>
+        <p>Context API można również używać do bardziej zaawansowanych zastosowań, takich jak:</p>
+        <ul>
+          <li>Przekazywanie wielu kontekstów – na przykład kontekst dla motywu oraz dla użytkownika.</li>
+          <li>Łączenie Context API z Reducerem (<code>useReducer</code>) – aby zarządzać bardziej złożonym stanem globalnym.</li>
+        </ul>
+
+        <h3>Przykład z wieloma kontekstami:</h3>
+
+        <pre><code class="language-javascript">
+        import React, &#123; useState, createContext, useContext &#125; from 'react';
+
+        const ThemeContext = createContext();
+        const UserContext = createContext();
+
+        function App() &#123;
+          const [theme, setTheme] = useState('light');
+          const [user, setUser] = useState(&#123; name: 'Anna', loggedIn: true &#125;);
+
+          return (
+            &lt;ThemeContext.Provider value=&#123;&#123; theme, setTheme &#125;&#125;&gt;
+              &lt;UserContext.Provider value=&#123;&#123; user, setUser &#125;&#125;&gt;
+                &lt;div&gt;
+                  &lt;Header /&gt;  {/* Komponent korzystający z obu kontekstów */}
+                &lt;/div&gt;
+              &lt;/UserContext.Provider&gt;
+            &lt;/ThemeContext.Provider&gt;
+          );
+        &#125;
+
+        function Header() &#123;
+          const &#123; theme &#125; = useContext(ThemeContext);
+          const &#123; user &#125; = useContext(UserContext);
+
+          return (
+            &lt;header style=&#123;&#123; backgroundColor: theme === 'light' ? '#fff' : '#333', color: theme === 'light' ? '#000' : '#fff' &#125;&#125;&gt;
+              &lt;h1&gt;Witaj, &#123;user.name&#125;!&lt;/h1&gt;
+            &lt;/header&gt;
+          );
+        &#125;
+
+        export default App;
+        </code></pre>
+
+        <p>W tym przykładzie używamy dwóch kontekstów: jednego dla motywu i drugiego dla informacji o użytkowniku. Dzięki Context API możemy łatwo zarządzać wieloma kontekstami bez potrzeby stosowania prop drillingu.</p>
+
+        <h2>Podsumowanie</h2>
+        <p>Context API w React to potężne narzędzie, które pozwala uniknąć nadmiernego przekazywania propsów między komponentami (prop drilling). Używając <code>Provider</code>, <code>useContext</code> i <code>Consumer</code>, możemy efektywnie zarządzać globalnym stanem aplikacji. Jest to idealne rozwiązanie, gdy musimy udostępniać dane, takie jak motywy, ustawienia użytkownika, lub inne globalne zmienne w różnych częściach aplikacji.</p>
+    </div>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/prism.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/components/prism-javascript.min.js"></script>
+</body>
+</html>

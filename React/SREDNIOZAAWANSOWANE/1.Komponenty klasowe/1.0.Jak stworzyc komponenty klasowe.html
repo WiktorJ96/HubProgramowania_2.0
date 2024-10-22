@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Jak stworzyć komponenty klasowe w React?</title>
+    <link rel="stylesheet" href="/React/styles.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/themes/prism-tomorrow.min.css" rel="stylesheet" />
+</head>
+<body>
+    <div class="container">
+        <h1>Jak stworzyć komponenty klasowe w React?</h1>
+
+        <p>W React możemy tworzyć komponenty na dwa sposoby: jako **komponenty funkcyjne** lub **komponenty klasowe**. Komponenty klasowe są używane, gdy potrzebujemy dostępu do bardziej zaawansowanych funkcji Reacta, takich jak cykl życia komponentu czy zarządzanie stanem przed wprowadzeniem hooków. Dzisiaj komponenty funkcyjne z hookami są zalecane, ale komponenty klasowe nadal są w użyciu, szczególnie w starszych projektach.</p>
+
+        <h2>Tworzenie komponentu klasowego</h2>
+        <p>Komponent klasowy to klasa, która rozszerza klasę <code>React.Component</code>. Każdy komponent klasowy musi mieć metodę <code>render()</code>, która zwraca element JSX. Oto podstawowy przykład:</p>
+
+        <pre><code class="language-javascript">
+        import React from 'react';
+
+        class Welcome extends React.Component &#123;
+          render() &#123;
+            return &lt;h1&gt;Witaj, &#123;this.props.name&#125;!&lt;/h1&gt;;
+          &#125;
+        &#125;
+
+        export default Welcome;
+        </code></pre>
+        <p>W tym przykładzie stworzyliśmy komponent klasowy <code>Welcome</code>, który przyjmuje <code>props</code> i wyświetla wiadomość powitalną. Warto zauważyć, że w komponentach klasowych dostęp do propsów odbywa się przez <code>this.props</code>.</p>
+
+        <h2>Dodawanie stanu do komponentu klasowego</h2>
+        <p>Komponenty klasowe mogą zarządzać stanem za pomocą właściwości <code>state</code>. Stan możemy ustawić w konstruktorze komponentu, a później go aktualizować za pomocą metody <code>setState</code>.</p>
+
+        <pre><code class="language-javascript">
+        import React from 'react';
+
+        class Counter extends React.Component &#123;
+          constructor(props) &#123;
+            super(props);
+            this.state = &#123; count: 0 &#125;;  // Inicjalizacja stanu
+          &#125;
+
+          increment = () => &#123;
+            this.setState((prevState) => (&#123; count: prevState.count + 1 &#125;));
+          &#125;;
+
+          render() &#123;
+            return (
+              &lt;div&gt;
+                &lt;p&gt;Licznik: &#123;this.state.count&#125;&lt;/p&gt;
+                &lt;button onClick=&#123;this.increment&#125;&gt;Zwiększ&lt;/button&gt;
+              &lt;/div&gt;
+            );
+          &#125;
+        &#125;
+
+        export default Counter;
+        </code></pre>
+
+        <p>W tym przykładzie komponent <code>Counter</code> zarządza stanem przy użyciu właściwości <code>state</code>. Zmieniamy stan, wywołując metodę <code>this.setState</code>, która powoduje ponowne renderowanie komponentu z nową wartością stanu.</p>
+
+        <h2>Cykl życia komponentu</h2>
+        <p>Komponenty klasowe mają dostęp do metod cyklu życia, które są wywoływane w określonych momentach istnienia komponentu, takich jak jego montowanie, aktualizowanie i odmontowywanie. Oto kilka z najczęściej używanych metod cyklu życia:</p>
+
+        <ul>
+          <li><code>componentDidMount()</code> – wywoływana po zamontowaniu komponentu (po pierwszym renderowaniu).</li>
+          <li><code>componentDidUpdate()</code> – wywoływana po każdej aktualizacji komponentu.</li>
+          <li><code>componentWillUnmount()</code> – wywoływana przed usunięciem komponentu z DOM.</li>
+        </ul>
+
+        <pre><code class="language-javascript">
+        import React from 'react';
+
+        class Timer extends React.Component &#123;
+          constructor(props) &#123;
+            super(props);
+            this.state = &#123; seconds: 0 &#125;;
+          &#125;
+
+          componentDidMount() &#123;
+            this.interval = setInterval(() => &#123;
+              this.setState((prevState) => (&#123; seconds: prevState.seconds + 1 &#125;));
+            &#125;, 1000);
+          &#125;
+
+          componentDidUpdate() &#123;
+            console.log(`Komponent został zaktualizowany. Czas: &#123;this.state.seconds&#125; sekund.`);
+          &#125;
+
+          componentWillUnmount() &#123;
+            clearInterval(this.interval);
+          &#125;
+
+          render() &#123;
+            return &lt;h1&gt;Sekundy: &#123;this.state.seconds&#125;&lt;/h1&gt;;
+          &#125;
+        &#125;
+
+        export default Timer;
+        </code></pre>
+        <p>W tym przykładzie komponent <code>Timer</code> uruchamia licznik, który zwiększa wartość o 1 co sekundę, korzystając z <code>setInterval</code>. Metoda <code>componentDidMount</code> uruchamia licznik po pierwszym renderowaniu, <code>componentDidUpdate</code> zapisuje zmiany, a <code>componentWillUnmount</code> zatrzymuje licznik, gdy komponent zostanie usunięty z DOM.</p>
+
+        <h2>Przekazywanie propsów do komponentu klasowego</h2>
+        <p>Tak jak w przypadku komponentów funkcyjnych, możemy przekazywać propsy do komponentów klasowych. Oto przykład:</p>
+
+        <pre><code class="language-javascript">
+        import React from 'react';
+
+        class Greeting extends React.Component &#123;
+          render() &#123;
+            return &lt;h1&gt;Cześć, &#123;this.props.name&#125;!&lt;/h1&gt;;
+          &#125;
+        &#125;
+
+        function App() &#123;
+          return &lt;Greeting name="Kamil" /&gt;;
+        &#125;
+
+        export default App;
+        </code></pre>
+        <p>W tym przykładzie komponent <code>Greeting</code> przyjmuje props <code>name</code> i wyświetla go. W React, komponenty klasowe uzyskują dostęp do propsów poprzez <code>this.props</code>.</p>
+
+        <h2>Podsumowanie</h2>
+        <p>Komponenty klasowe w React oferują pełną kontrolę nad stanem oraz dostęp do metod cyklu życia, co pozwala na bardziej zaawansowane zarządzanie logiką komponentu. Mimo że hooki są teraz preferowane do zarządzania stanem i cyklem życia w komponentach funkcyjnych, komponenty klasowe są nadal używane w starszych projektach.</p>
+    </div>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/prism.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/components/prism-javascript.min.js"></script>
+</body>
+</html>

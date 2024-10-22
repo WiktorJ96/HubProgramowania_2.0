@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Wstawianie Wyrażeń JavaScript w JSX</title>
+    <link rel="stylesheet" href="/React/styles.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/themes/prism-tomorrow.min.css" rel="stylesheet" />
+</head>
+<body>
+    <div class="container">
+        <h1>Wstawianie Wyrażeń JavaScript w JSX</h1>
+        
+        <p>JSX to rozszerzona składnia JavaScript używana w React, która umożliwia pisanie struktury komponentów w sposób przypominający HTML. Jedną z najważniejszych cech JSX jest możliwość wstawiania wyrażeń JavaScript wewnątrz klamr <code>{}</code>.</p>
+
+        <h2>Proste wstawienie wyrażenia JavaScript w JSX</h2>
+        <p>Aby wstawić wyrażenie JavaScript w JSX, wystarczy użyć klamr <code>{}</code>. Można w ten sposób wyświetlać wartości zmiennych, wywoływać funkcje czy wykonywać operacje matematyczne.</p>
+        <pre><code class="language-jsx">
+        function MyComponent() {
+          const name = "Jan";
+          const age = 30;
+          return (
+            &lt;div&gt;
+              &lt;p&gt;Cześć, {name}! Masz {age} lat.&lt;/p&gt;
+            &lt;/div&gt;
+          );
+        }
+        </code></pre>
+        <p>W tym przykładzie wyrażenia <code>{name}</code> oraz <code>{age}</code> są wstawiane do JSX, a React renderuje ich wartości w interfejsie użytkownika.</p>
+
+        <h2>Wywoływanie funkcji w JSX</h2>
+        <p>Możesz również wywoływać funkcje w JSX. Poniższy przykład pokazuje, jak wywołać funkcję zwracającą wynik w JSX.</p>
+        <pre><code class="language-jsx">
+        function greetUser(name) {
+          return `Cześć, ${name}!`;
+        }
+
+        function MyComponent() {
+          const user = "Anna";
+          return (
+            &lt;div&gt;
+              &lt;p&gt;{greetUser(user)}&lt;/p&gt;
+            &lt;/div&gt;
+          );
+        }
+        </code></pre>
+        <p>Funkcja <code>greetUser</code> jest wywoływana w klamrach, a jej wynik jest wyświetlany w JSX.</p>
+
+        <h2>Operacje matematyczne i logiczne w JSX</h2>
+        <p>JSX pozwala również na wykonywanie operacji matematycznych oraz logicznych. Przykład:</p>
+        <pre><code class="language-jsx">
+        function MyComponent() {
+          const a = 10;
+          const b = 20;
+          return (
+            &lt;div&gt;
+              &lt;p&gt;Wynik dodawania: {a + b}&lt;/p&gt;
+              &lt;p&gt;Czy a jest większe od b? {a > b ? 'Tak' : 'Nie'}&lt;/p&gt;
+            &lt;/div&gt;
+          );
+        }
+        </code></pre>
+        <p>W powyższym przykładzie JSX wykonuje operacje matematyczne oraz sprawdza warunki logiczne, a wynik jest dynamicznie wyświetlany w interfejsie użytkownika.</p>
+
+        <h2>Wstawianie złożonych struktur danych w JSX</h2>
+        <p>Możesz także wstawiać złożone struktury danych, takie jak tablice czy obiekty. Na przykład, możesz mapować elementy tablicy na komponenty JSX.</p>
+        <pre><code class="language-jsx">
+        function MyComponent() {
+          const items = ['jabłko', 'banan', 'gruszka'];
+          return (
+            &lt;ul&gt;
+              {items.map(item => &lt;li key={item}&gt;{item}&lt;/li&gt;)}
+            &lt;/ul&gt;
+          );
+        }
+        </code></pre>
+        <p>W tym przykładzie każdy element tablicy <code>items</code> jest renderowany jako osobny element <code>&lt;li&gt;</code> w JSX.</p>
+
+        <h2>Podsumowanie</h2>
+        <p>JSX pozwala na wstawianie wyrażeń JavaScript w klamrach <code>{}</code>, co umożliwia dynamiczne renderowanie treści, wywoływanie funkcji, wykonywanie operacji logicznych i matematycznych, a także manipulację tablicami i obiektami. Dzięki temu aplikacje React mogą być bardziej interaktywne i elastyczne.</p>
+    </div>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/prism.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/components/prism-jsx.min.js"></script>
+</body>
+</html>

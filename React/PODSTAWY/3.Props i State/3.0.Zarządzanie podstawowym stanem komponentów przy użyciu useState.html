@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Zarządzanie podstawowym stanem komponentów przy użyciu useState w React</title>
+    <link rel="stylesheet" href="/React/styles.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/themes/prism-tomorrow.min.css" rel="stylesheet" />
+</head>
+<body>
+    <div class="container">
+        <h1>Zarządzanie podstawowym stanem komponentów przy użyciu <code>useState</code> w React</h1>
+        
+        <p>W React komponenty funkcyjne mogą zarządzać stanem za pomocą hooka <code>useState</code>. Stan komponentu to dynamiczna wartość, która może się zmieniać podczas działania aplikacji. Gdy stan się zmienia, React automatycznie renderuje ponownie komponent, aby odzwierciedlić te zmiany w interfejsie użytkownika.</p>
+
+        <h2>Podstawy <code>useState</code></h2>
+        <p>Hook <code>useState</code> pozwala na dodanie stanu do komponentu funkcyjnego. Zwraca on parę wartości: aktualną wartość stanu oraz funkcję do jej aktualizacji.</p>
+        <pre><code class="language-javascript">
+        import React, &#123; useState &#125; from 'react';
+
+        function Counter() {
+          // Deklaracja zmiennej stanu "count" z początkową wartością 0
+          const [count, setCount] = useState(0);
+
+          return (
+            &lt;div&gt;
+              &lt;p&gt;Wartość licznika: &#123;count&#125;&lt;/p&gt;
+              &#123;/* Zwiększenie stanu o 1 po kliknięciu */&#125;
+              &lt;button onClick=&#123;() => setCount(count + 1)&#125;&gt;
+                Zwiększ licznik
+              &lt;/button&gt;
+            &lt;/div&gt;
+          );
+        }
+
+        export default Counter;
+        </code></pre>
+        <p>W tym przykładzie używamy <code>useState</code>, aby zdefiniować zmienną stanu <code>count</code> i funkcję <code>setCount</code>, która aktualizuje ten stan. Po kliknięciu przycisku funkcja <code>setCount</code> zwiększa wartość stanu o 1, a komponent jest ponownie renderowany z nową wartością.</p>
+
+        <h2>Inicjalizacja stanu</h2>
+        <p>Stan można zainicjować dowolną wartością — liczbą, tekstem, tablicą lub obiektem. Początkowa wartość stanu jest przekazywana jako argument do <code>useState</code>.</p>
+        <pre><code class="language-javascript">
+        import React, &#123; useState &#125; from 'react';
+
+        function User() {
+          // Stan z początkową wartością jako obiekt
+          const [user, setUser] = useState(&#123;
+            name: 'Anna',
+            age: 28
+          &#125;);
+
+          return (
+            &lt;div&gt;
+              &lt;p&gt;Imię: &#123;user.name&#125;&lt;/p&gt;
+              &lt;p&gt;Wiek: &#123;user.age&#125;&lt;/p&gt;
+              &#123;/* Zwiększenie wieku o 1 po kliknięciu */&#125;
+              &lt;button onClick=&#123;() => setUser(&#123; ...user, age: user.age + 1 &#125;)&#125;&gt;
+                Zwiększ wiek
+              &lt;/button&gt;
+            &lt;/div&gt;
+          );
+        }
+
+        export default User;
+        </code></pre>
+        <p>W tym przykładzie stan <code>user</code> jest obiektem, który przechowuje dane o użytkowniku. Zwiększamy wiek użytkownika, aktualizując tylko właściwość <code>age</code> przy użyciu operatora rozproszenia <code>...</code>, aby zachować resztę danych.</p>
+
+        <h2>Aktualizacja stanu</h2>
+        <p>Za każdym razem, gdy funkcja <code>setState</code> (w przypadku <code>useState</code> jest to <code>setCount</code>, <code>setUser</code>, itp.) jest wywoływana, React ponownie renderuje komponent, aby wyświetlić nowe dane. Zmiana stanu musi odbywać się za pomocą tej funkcji, aby React prawidłowo odświeżał interfejs.</p>
+        <pre><code class="language-javascript">
+        import React, &#123; useState &#125; from 'react';
+
+        function Toggle() {
+          const [isToggled, setIsToggled] = useState(false);
+
+          return (
+            &lt;div&gt;
+              &lt;p&gt;&#123;isToggled ? "Włączone" : "Wyłączone"&#125;&lt;/p&gt;
+              &#123;/* Przełączanie stanu */&#125;
+              &lt;button onClick=&#123;() => setIsToggled(!isToggled)&#125;&gt;
+                Przełącz
+              &lt;/button&gt;
+            &lt;/div&gt;
+          );
+        }
+
+        export default Toggle;
+        </code></pre>
+        <p>W tym przykładzie stan <code>isToggled</code> jest zmieniany przy każdym kliknięciu przycisku. W zależności od aktualnej wartości stanu, wyświetlana jest odpowiednia wiadomość ("Włączone" lub "Wyłączone").</p>
+
+        <h2>Obsługa wielu stanów</h2>
+        <p>Możemy mieć wiele niezależnych stanów w jednym komponencie, używając kilku wywołań <code>useState</code>. Każdy stan zarządzany jest niezależnie.</p>
+        <pre><code class="language-javascript">
+        import React, &#123; useState &#125; from 'react';
+
+        function Form() {
+          // Dwa niezależne stany
+          const [name, setName] = useState('');
+          const [email, setEmail] = useState('');
+
+          return (
+            &lt;form&gt;
+              &lt;div&gt;
+                &lt;label&gt;Imię:&lt;/label&gt;
+                &lt;input 
+                  type="text" 
+                  value=&#123;name&#125; 
+                  onChange=&#123;(e) => setName(e.target.value)&#125; 
+                /&gt;
+              &lt;/div&gt;
+              &lt;div&gt;
+                &lt;label&gt;Email:&lt;/label&gt;
+                &lt;input 
+                  type="email" 
+                  value=&#123;email&#125; 
+                  onChange=&#123;(e) => setEmail(e.target.value)&#125; 
+                /&gt;
+              &lt;/div&gt;
+              &lt;p&gt;Imię: &#123;name&#125;&lt;/p&gt;
+              &lt;p&gt;Email: &#123;email&#125;&lt;/p&gt;
+            &lt;/form&gt;
+          );
+        }
+
+        export default Form;
+        </code></pre>
+        <p>W tym przykładzie używamy dwóch stanów do zarządzania wartościami pól formularza (<code>name</code> i <code>email</code>). Każdy stan jest aktualizowany za pomocą osobnej funkcji <code>setName</code> i <code>setEmail</code>, co pozwala na niezależne przetwarzanie tych danych.</p>
+
+        <h2>Przykład złożonego zarządzania stanem</h2>
+        <p>W bardziej złożonych przypadkach możemy zarządzać stanem tablic lub obiektów, co wymaga szczególnej uwagi, aby nie nadpisać istniejących danych. Oto przykład listy zakupów:</p>
+        <pre><code class="language-javascript">
+        import React, &#123; useState &#125; from 'react';
+
+        function ShoppingCart() {
+          const [items, setItems] = useState([]);  // Początkowo pusta tablica
+          const [newItem, setNewItem] = useState('');
+
+          const addItem = () => &#123;
+            if (newItem !== '') &#123;
+              setItems([...items, newItem]);  // Dodanie nowego elementu do listy
+              setNewItem('');  // Zresetowanie pola tekstowego
+            &#125;
+          &#125;;
+
+          return (
+            &lt;div&gt;
+              &lt;input 
+                type="text" 
+                value=&#123;newItem&#125; 
+                onChange=&#123;(e) => setNewItem(e.target.value)&#125; 
+                placeholder="Dodaj nowy produkt"
+              /&gt;
+              &lt;button onClick=&#123;addItem&#125;&gt;Dodaj do koszyka&lt;/button&gt;
+              &lt;ul&gt;
+                &#123;items.map((item, index) => (
+                  &lt;li key=&#123;index&#125;&gt;&#123;item&#125;&lt;/li&gt;
+                ))&#125;
+              &lt;/ul&gt;
+            &lt;/div&gt;
+          );
+        }
+
+        export default ShoppingCart;
+        </code></pre>
+        <p>W tym przykładzie komponent <code>ShoppingCart</code> zarządza listą produktów w koszyku. Użytkownik może dodać nowy produkt, a stan <code>items</code> jest aktualizowany za każdym razem, gdy użytkownik doda nowy przedmiot do listy.</p>
+
+        <h2>Podsumowanie</h2>
+        <p>Hook <code>useState</code> to podstawowe narzędzie do zarządzania stanem w komponentach funkcyjnych React. Pozwala na przechowywanie dynamicznych wartości oraz ich aktualizację, co prowadzi do automatycznego ponownego renderowania komponentów. Zarządzanie stanem w React pozwala na tworzenie dynamicznych i interaktywnych interfejsów użytkownika.</p>
+    </div>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/prism.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/components/prism-javascript.min.js"></script>
+</body>
+</html>

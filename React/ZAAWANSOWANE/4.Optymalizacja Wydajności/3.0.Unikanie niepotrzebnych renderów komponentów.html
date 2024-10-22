@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Unikanie niepotrzebnych renderów komponentów w React</title>
+    <link rel="stylesheet" href="/React/styles.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/themes/prism-tomorrow.min.css" rel="stylesheet" />
+</head>
+<body>
+    <div class="container">
+        <h1>Unikanie niepotrzebnych renderów komponentów w React</h1>
+
+        <p>W aplikacjach React niepotrzebne renderowanie komponentów może powodować obniżenie wydajności, szczególnie w przypadku dużych aplikacji. Na szczęście istnieje kilka technik, które pomagają kontrolować renderowanie komponentów i uniknąć sytuacji, w których komponenty są renderowane bez potrzeby.</p>
+
+        <h2>Dlaczego komponenty są renderowane?</h2>
+        <p>Komponenty w React są ponownie renderowane, gdy:</p>
+        <ul>
+            <li>Stan (<code>state</code>) komponentu ulega zmianie.</li>
+            <li>Zmieniają się <code>props</code> przekazywane do komponentu.</li>
+            <li>Rodzic komponentu renderuje się ponownie, nawet jeśli propsy komponentu dziecka się nie zmieniają.</li>
+        </ul>
+        <p>Aby poprawić wydajność, możemy kontrolować, kiedy komponenty powinny być renderowane, i unikać niepotrzebnych renderów.</p>
+
+        <h2>1. Używanie React.memo</h2>
+        <p>Jednym z najprostszych sposobów na unikanie niepotrzebnych renderów komponentów funkcyjnych jest użycie <code>React.memo</code>. Opakowuje komponent i zapobiega jego renderowaniu, jeśli propsy się nie zmieniły. Oto przykład:</p>
+
+        <pre><code class="language-javascript">
+import React from 'react';
+
+// Komponent Child opakowany w React.memo
+const Child = React.memo(function ChildComponent(&#123; name &#125;) &#123;
+  console.log('Renderowanie komponentu Child');
+  return &lt;p&gt;Witaj, &#123;name&#125;&lt;/p&gt;;
+&#125;);
+
+function Parent() &#123;
+  const [count, setCount] = React.useState(0);
+  const [name, setName] = React.useState('Anna');
+
+  return (
+    &lt;div&gt;
+      &lt;button onClick=&#123;() => setCount(count + 1)&#125;&gt;Zwiększ licznik&lt;/button&gt;
+      &lt;button onClick=&#123;() => setName('Kamil')&#125;&gt;Zmień imię&lt;/button&gt;
+      &lt;p&gt;Licznik: &#123;count&#125;&lt;/p&gt;
+      &lt;Child name=&#123;name&#125; /&gt;
+    &lt;/div&gt;
+  );
+&#125;
+
+export default Parent;
+        </code></pre>
+
+        <p>W tym przykładzie komponent <code>Child</code> jest opakowany w <code>React.memo</code>, co zapobiega jego ponownemu renderowaniu, jeśli props <code>name</code> się nie zmieni.</p>
+
+        <h2>2. Używanie hooka <code>useCallback</code></h2>
+        <p>Innym częstym problemem, który prowadzi do niepotrzebnych renderów, jest przekazywanie nowych referencji do funkcji jako propsów. Funkcja tworzona w każdej renderacji ma nową referencję, nawet jeśli jej definicja się nie zmienia. Możemy temu zapobiec, używając hooka <code>useCallback</code>, który "zapamiętuje" referencję funkcji między renderowaniami:</p>
+
+        <pre><code class="language-javascript">
+import React from 'react';
+
+function Parent() &#123;
+  const [count, setCount] = React.useState(0);
+  
+  const handleClick = React.useCallback(() => &#123;
+    setCount((prevCount) => prevCount + 1);
+  &#125;, []);
+
+  return (
+    &lt;div&gt;
+      &lt;button onClick=&#123;handleClick&#125;&gt;Zwiększ licznik&lt;/button&gt;
+      &lt;p&gt;Licznik: &#123;count&#125;&lt;/p&gt;
+    &lt;/div&gt;
+  );
+&#125;
+
+export default Parent;
+        </code></pre>
+
+        <p>Dzięki <code>useCallback</code> funkcja <code>handleClick</code> nie jest tworzona na nowo przy każdym renderowaniu, co zapobiega niepotrzebnemu renderowaniu komponentów, które mogłyby otrzymać tę funkcję jako props.</p>
+
+        <h2>3. Używanie hooka <code>useMemo</code></h2>
+        <p>Podobnie jak <code>useCallback</code>, hook <code>useMemo</code> pozwala zapamiętać wynik kosztownych operacji, takich jak obliczenia, i wykonać je ponownie tylko wtedy, gdy zmienią się odpowiednie zależności:</p>
+
+        <pre><code class="language-javascript">
+import React from 'react';
+
+function ExpensiveComponent() &#123;
+  const [count, setCount] = React.useState(0);
+
+  const expensiveCalculation = React.useMemo(() => &#123;
+    console.log('Wykonanie kosztownej operacji');
+    return count * 2;
+  &#125;, [count]);
+
+  return (
+    &lt;div&gt;
+      &lt;p&gt;Wynik kosztownej operacji: &#123;expensiveCalculation&#125;&lt;/p&gt;
+      &lt;button onClick=&#123;() => setCount(count + 1)&#125;&gt;Zwiększ licznik&lt;/button&gt;
+    &lt;/div&gt;
+  );
+&#125;
+
+export default ExpensiveComponent;
+        </code></pre>
+
+        <p>W tym przykładzie funkcja <code>expensiveCalculation</code> jest zapamiętywana dzięki <code>useMemo</code> i jest obliczana tylko wtedy, gdy zmienia się <code>count</code>.</p>
+
+        <h2>4. Optymalizacja renderów list za pomocą <code>key</code></h2>
+        <p>Gdy renderujesz listy elementów w React, kluczową rolę odgrywa atrybut <code>key</code>. Klucze pomagają Reactowi zidentyfikować, które elementy listy uległy zmianie, co pozwala uniknąć niepotrzebnych renderów:</p>
+
+        <pre><code class="language-javascript">
+function ListComponent(&#123; items &#125;) &#123;
+  return (
+    &lt;ul&gt;
+      &#123;items.map((item) => (
+        &lt;li key=&#123;item.id&#125;&gt;&#123;item.name&#125;&lt;/li&gt;
+      ))&#125;
+    &lt;/ul&gt;
+  );
+&#125;
+        </code></pre>
+
+        <p>Zawsze należy upewnić się, że klucz <code>key</code> jest unikalny dla każdego elementu listy, aby React mógł śledzić, które elementy są nowe, a które trzeba usunąć lub zmodyfikować.</p>
+
+        <h2>5. Unikanie renderowania zbyt wielu komponentów</h2>
+        <p>Jednym ze sposobów na poprawę wydajności jest unikanie renderowania zbyt wielu komponentów jednocześnie. Możesz na przykład używać technik takich jak "lazy loading" lub "code splitting", aby ładować komponenty dopiero wtedy, gdy są potrzebne.</p>
+
+        <pre><code class="language-javascript">
+import React, &#123; Suspense, lazy &#125; from 'react';
+
+// Dynamiczne ładowanie komponentu
+const LazyComponent = lazy(() => import('./LazyComponent'));
+
+function App() &#123;
+  return (
+    &lt;div&gt;
+      &lt;Suspense fallback=&#123;&lt;p&gt;Ładowanie...&lt;/p&gt;&#125;&gt;
+        &lt;LazyComponent /&gt;
+      &lt;/Suspense&gt;
+    &lt;/div&gt;
+  );
+&#125;
+
+export default App;
+        </code></pre>
+
+        <p>W tym przykładzie komponent <code>LazyComponent</code> jest ładowany dynamicznie, co pozwala na oszczędzanie zasobów, dopóki komponent nie jest faktycznie potrzebny.</p>
+
+        <h2>Podsumowanie</h2>
+        <p>Unikanie niepotrzebnych renderów komponentów w React to kluczowa technika optymalizacji wydajności, szczególnie w dużych aplikacjach. Dzięki technikom takim jak używanie <code>React.memo</code>, <code>useCallback</code>, <code>useMemo</code>, optymalizowanie list i dynamiczne ładowanie komponentów, możemy znacznie zmniejszyć liczbę renderów i poprawić szybkość aplikacji.</p>
+
+        <ul>
+            <li><strong>React.memo:</strong> Zapobiega renderowaniu komponentów funkcyjnych, jeśli propsy się nie zmieniają.</li>
+            <li><strong>useCallback:</strong> Zapamiętuje referencję do funkcji, aby zapobiec ich niepotrzebnemu tworzeniu.</li>
+            <li><strong>useMemo:</strong> Zapamiętuje wynik kosztownych operacji obliczeniowych.</li>
+            <li><strong>key w listach:</strong> Użycie kluczy w listach pomaga Reactowi unikać niepotrzebnych renderów.</li>
+            <li><strong>Lazy loading:</strong> Dynamiczne ładowanie komponentów, aby oszczędzać zasoby.</li>
+        </ul>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/prism.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/components/prism-javascript.min.js"></script>
+    <script src="https://unpkg.com/react@17/umd/react.development.js"></script>
+    <script src="https://unpkg.com/react-dom@17/umd/react-dom.development.js"></script>
+</body>
+</html>

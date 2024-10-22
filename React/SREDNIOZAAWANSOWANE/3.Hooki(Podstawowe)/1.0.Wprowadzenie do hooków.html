@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Wprowadzenie do hooków w React</title>
+    <link rel="stylesheet" href="/React/styles.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/themes/prism-tomorrow.min.css" rel="stylesheet" />
+</head>
+<body>
+    <div class="container">
+        <h1>Wprowadzenie do hooków w React</h1>
+
+        <p>**Hooki** zostały wprowadzone w React w wersji 16.8 i zrewolucjonizowały sposób, w jaki zarządzamy stanem oraz efektami ubocznymi w komponentach funkcyjnych. Przed hookami zarządzanie stanem było możliwe jedynie w komponentach klasowych, a cykl życia komponentu był obsługiwany przez metody takie jak <code>componentDidMount</code> czy <code>componentDidUpdate</code>. Dzięki hookom możemy używać tych funkcji w prostszy sposób, bez potrzeby używania klas.</p>
+
+        <h2>Czym są hooki?</h2>
+        <p>Hooki to funkcje, które pozwalają "zahaczyć" się w wewnętrzne mechanizmy Reacta, takie jak stan czy cykl życia komponentu, bez potrzeby tworzenia klas. Najczęściej używane hooki to <code>useState</code> i <code>useEffect</code>, ale React oferuje również wiele innych hooków, które umożliwiają bardziej zaawansowane operacje.</p>
+
+        <h2>useState – zarządzanie stanem</h2>
+        <p>Hook <code>useState</code> pozwala dodać stan do komponentu funkcyjnego. Zwraca on parę wartości: aktualną wartość stanu oraz funkcję do jego aktualizacji. Oto przykład:</p>
+        <pre><code class="language-javascript">
+        import React, &#123; useState &#125; from 'react';
+
+        function Counter() &#123;
+          const [count, setCount] = useState(0);  // Inicjalizacja stanu z początkową wartością 0
+
+          return (
+            &lt;div&gt;
+              &lt;p&gt;Wartość licznika: &#123;count&#125;&lt;/p&gt;
+              &lt;button onClick=&#123;() => setCount(count + 1)&#125;&gt;Zwiększ licznik&lt;/button&gt;
+            &lt;/div&gt;
+          );
+        &#125;
+
+        export default Counter;
+        </code></pre>
+        <p>W powyższym przykładzie <code>useState</code> definiuje stan <code>count</code> z początkową wartością 0. Za każdym razem, gdy użytkownik kliknie przycisk, funkcja <code>setCount</code> zwiększa wartość stanu o 1.</p>
+
+        <h2>useEffect – obsługa efektów ubocznych</h2>
+        <p>Hook <code>useEffect</code> umożliwia wykonywanie efektów ubocznych w komponentach funkcyjnych, takich jak pobieranie danych z API, subskrypcje czy aktualizowanie tytułu dokumentu. Działa podobnie do metod cyklu życia komponentu w komponentach klasowych.</p>
+        <pre><code class="language-javascript">
+        import React, &#123; useState, useEffect &#125; from 'react';
+
+        function Timer() &#123;
+          const [seconds, setSeconds] = useState(0);
+
+          useEffect(() => &#123;
+            const interval = setInterval(() => &#123;
+              setSeconds(seconds => seconds + 1);
+            &#125;, 1000);
+
+            return () => clearInterval(interval);  // Czyszczenie timera po odmontowaniu komponentu
+          &#125;, []);  // Pusty array oznacza, że efekt zostanie uruchomiony tylko raz, po zamontowaniu komponentu
+
+          return &lt;p&gt;Sekundy: &#123;seconds&#125;&lt;/p&gt;;
+        &#125;
+
+        export default Timer;
+        </code></pre>
+        <p>W tym przykładzie używamy <code>useEffect</code>, aby uruchomić licznik po zamontowaniu komponentu i zatrzymać go, gdy komponent zostanie usunięty z DOM. Drugi argument (pusty array) powoduje, że efekt zostanie wykonany tylko raz.</p>
+
+        <h2>useContext – dostęp do kontekstu</h2>
+        <p>Hook <code>useContext</code> umożliwia komponentom dostęp do kontekstu React bez potrzeby owijania ich w <code>Context.Consumer</code>. Kontekst pozwala przekazywać dane globalnie w aplikacji, bez potrzeby ręcznego przekazywania ich przez propsy na każdym poziomie drzewa komponentów.</p>
+
+        <pre><code class="language-javascript">
+        import React, &#123; useContext &#125; from 'react';
+
+        const UserContext = React.createContext();
+
+        function UserInfo() &#123;
+          const user = useContext(UserContext);
+          return &lt;p&gt;Cześć, &#123;user.name&#125;!&lt;/p&gt;;
+        &#125;
+
+        function App() &#123;
+          const user = &#123; name: 'Kamil' &#125;;
+
+          return (
+            &lt;UserContext.Provider value=&#123;user&#125;&gt;
+              &lt;UserInfo /&gt;
+            &lt;/UserContext.Provider&gt;
+          );
+        &#125;
+
+        export default App;
+        </code></pre>
+        <p>W tym przykładzie hook <code>useContext</code> pobiera dane z kontekstu <code>UserContext</code>, a komponent <code>UserInfo</code> wyświetla imię użytkownika.</p>
+
+        <h2>Inne hooki</h2>
+        <p>Oprócz <code>useState</code>, <code>useEffect</code> i <code>useContext</code>, React oferuje inne hooki, które mogą być używane w bardziej zaawansowanych przypadkach:</p>
+        <ul>
+          <li><code>useReducer</code> – podobny do <code>useState</code>, ale bardziej odpowiedni do zarządzania złożonym stanem.</li>
+          <li><code>useRef</code> – umożliwia tworzenie referencji do elementów DOM lub przechowywanie wartości, które nie powodują ponownego renderowania komponentu.</li>
+          <li><code>useMemo</code> – optymalizuje wydajność, pamiętając wartość złożonych obliczeń i ponownie wykonując je tylko wtedy, gdy zmienią się zależności.</li>
+          <li><code>useCallback</code> – podobny do <code>useMemo</code>, ale przechowuje funkcje, aby nie tworzyć ich ponownie przy każdym renderowaniu.</li>
+        </ul>
+
+        <h2>Zasady używania hooków</h2>
+        <p>Istnieje kilka zasad, których należy przestrzegać podczas używania hooków:</p>
+        <ul>
+          <li><strong>Hooki można używać tylko wewnątrz komponentów funkcyjnych lub własnych hooków.</strong> Hooków nie można używać wewnątrz funkcji warunkowych, pętli czy innych bloków kodu.</li>
+          <li><strong>Hooki muszą być wywoływane w tej samej kolejności przy każdym renderowaniu komponentu.</strong> To pozwala Reactowi odpowiednio kojarzyć stan z każdym wywołaniem hooka.</li>
+        </ul>
+
+        <h2>Podsumowanie</h2>
+        <p>Hooki umożliwiły uproszczenie zarządzania stanem i efektami ubocznymi w komponentach funkcyjnych w React. Dzięki hookom komponenty funkcyjne mogą teraz obsługiwać stan, cykl życia oraz inne zaawansowane funkcje, które wcześniej były dostępne tylko w komponentach klasowych. <code>useState</code> i <code>useEffect</code> to najczęściej używane hooki, ale React oferuje także inne hooki, które pomagają rozwiązywać bardziej złożone problemy.</p>
+    </div>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/prism.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/components/prism-javascript.min.js"></script>
+</body>
+</html>

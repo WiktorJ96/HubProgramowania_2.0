@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Testowanie komponentów i interakcji użytkownika w React</title>
+    <link rel="stylesheet" href="/React/styles.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/themes/prism-tomorrow.min.css" rel="stylesheet" />
+</head>
+<body>
+    <div class="container">
+        <h1>Testowanie komponentów i interakcji użytkownika w React</h1>
+
+        <p>Testowanie komponentów React jest kluczowe w zapewnianiu niezawodności aplikacji. Pozwala upewnić się, że komponenty renderują poprawnie oraz że reagują właściwie na interakcje użytkownika. W React najczęściej używa się **Jest** i **React Testing Library** do pisania testów komponentów i symulacji interakcji użytkownika.</p>
+
+        <h2>Dlaczego warto testować komponenty?</h2>
+        <p>Testowanie komponentów w React pozwala na:</p>
+        <ul>
+          <li>Wczesne wykrycie błędów w kodzie.</li>
+          <li>Upewnienie się, że komponenty działają zgodnie z oczekiwaniami.</li>
+          <li>Ochronę przed regresją – zmiany w kodzie nie powodują nieoczekiwanych błędów w innych częściach aplikacji.</li>
+        </ul>
+
+        <h2>Podstawowe testy renderowania</h2>
+        <p>Najprostszym testem jest sprawdzenie, czy komponent renderuje się poprawnie. Możemy to osiągnąć za pomocą React Testing Library, która zapewnia intuicyjne narzędzia do testowania komponentów React.</p>
+
+        <pre><code class="language-javascript">
+        import React from 'react';
+        import &#123; render, screen &#125; from '@testing-library/react';
+        import '@testing-library/jest-dom/extend-expect';  // Dodatkowe matchery dla Jest
+        import MyComponent from './MyComponent';
+
+        test('czy komponent renderuje się poprawnie', () => &#123;
+          render(&#60;MyComponent /&#62;);
+          const element = screen.getByText(/Witaj w React!/i);
+          expect(element).toBeInTheDocument();
+        &#125;);
+        </code></pre>
+
+        <p>W tym przykładzie test sprawdza, czy tekst "Witaj w React!" jest obecny w komponencie <code>MyComponent</code>. <code>render</code> renderuje komponent, a <code>screen</code> pozwala na odszukanie elementów w zrenderowanym drzewie DOM.</p>
+
+        <h2>Testowanie interakcji użytkownika</h2>
+        <p>Poza testowaniem renderowania możemy także testować interakcje użytkownika, takie jak klikanie przycisków czy wprowadzanie danych w formularzach. Do symulacji takich akcji używamy <code>fireEvent</code> z React Testing Library.</p>
+
+        <h3>Przykład: Testowanie kliknięcia przycisku</h3>
+        <pre><code class="language-javascript">
+        import React from 'react';
+        import &#123; render, screen, fireEvent &#125; from '@testing-library/react';
+        import '@testing-library/jest-dom/extend-expect';
+        import Counter from './Counter';
+
+        test('czy licznik zwiększa się po kliknięciu', () => &#123;
+          render(&#60;Counter /&#62;);
+          const button = screen.getByText(/Zwiększ/i);
+          const countDisplay = screen.getByText(/Licznik: 0/i);
+
+          // Symulacja kliknięcia przycisku
+          fireEvent.click(button);
+          expect(countDisplay).toHaveTextContent('Licznik: 1');
+        &#125;);
+        </code></pre>
+
+        <p>W tym przykładzie testujemy komponent <code>Counter</code>, który ma przycisk do zwiększania licznika. <code>fireEvent.click(button)</code> symuluje kliknięcie, a <code>expect</code> sprawdza, czy po kliknięciu wartość licznika została poprawnie zaktualizowana.</p>
+
+        <h2>Testowanie formularzy i pól tekstowych</h2>
+        <p>React Testing Library pozwala także na testowanie interakcji z formularzami i polami tekstowymi, w tym wprowadzania danych i ich walidacji.</p>
+
+        <h3>Przykład: Testowanie wprowadzania danych</h3>
+        <pre><code class="language-javascript">
+        import React from 'react';
+        import &#123; render, screen, fireEvent &#125; from '@testing-library/react';
+        import '@testing-library/jest-dom/extend-expect';
+        import Form from './Form';
+
+        test('czy formularz obsługuje wprowadzanie danych', () => &#123;
+          render(&#60;Form /&#62;);
+          const input = screen.getByLabelText(/Imię/i);
+          const submitButton = screen.getByText(/Wyślij/i);
+
+          // Symulacja wprowadzania tekstu
+          fireEvent.change(input, &#123; target: &#123; value: 'Anna' &#125; &#125;);
+          expect(input.value).toBe('Anna');
+
+          // Symulacja kliknięcia przycisku Wyślij
+          fireEvent.click(submitButton);
+          const successMessage = screen.getByText(/Dziękujemy, Anna!/i);
+          expect(successMessage).toBeInTheDocument();
+        &#125;);
+        </code></pre>
+
+        <p>W tym przykładzie testujemy komponent formularza. Najpierw symulujemy wprowadzenie tekstu "Anna" do pola tekstowego, a następnie kliknięcie przycisku "Wyślij". Na końcu sprawdzamy, czy formularz zwrócił poprawną wiadomość powitalną.</p>
+
+        <h2>Testowanie efektów ubocznych z <code>useEffect</code></h2>
+        <p>Jeśli komponent korzysta z hooka <code>useEffect</code> do pobierania danych lub innych efektów ubocznych, możemy przetestować, czy te efekty działają poprawnie, np. sprawdzając, czy dane są prawidłowo renderowane po ich pobraniu.</p>
+
+        <h3>Przykład: Testowanie pobierania danych</h3>
+        <pre><code class="language-javascript">
+        import React from 'react';
+        import &#123; render, screen, waitFor &#125; from '@testing-library/react';
+        import '@testing-library/jest-dom/extend-expect';
+        import FetchComponent from './FetchComponent';
+
+        // Mockowanie funkcji fetch
+        global.fetch = jest.fn(() =>
+          Promise.resolve(&#123;
+            json: () => Promise.resolve(&#123; data: 'Dane testowe' &#125;)
+          &#125;)
+        );
+
+        test('czy dane są poprawnie pobrane i wyświetlone', async () => &#123;
+          render(&#60;FetchComponent /&#62;);
+
+          // Oczekiwanie na załadowanie danych
+          const dataDisplay = await waitFor(() => screen.getByText(/Dane testowe/i));
+          expect(dataDisplay).toBeInTheDocument();
+        &#125;);
+        </code></pre>
+
+        <p>W tym przykładzie testujemy komponent, który pobiera dane z zewnętrznego źródła. Używamy <code>jest.fn()</code> do mockowania funkcji <code>fetch</code>, a <code>waitFor</code> pozwala nam czekać na asynchroniczne renderowanie danych.</p>
+
+        <h2>Mockowanie funkcji i zależności</h2>
+        <p>Możemy również używać funkcji <code>jest.mock()</code> do mockowania modułów i zależności, które są zewnętrzne wobec testowanego komponentu, co pozwala na bardziej izolowane testy.</p>
+
+        <h3>Przykład: Mockowanie modułu z funkcjami</h3>
+        <pre><code class="language-javascript">
+        import React from 'react';
+        import &#123; render, screen &#125; from '@testing-library/react';
+        import '@testing-library/jest-dom/extend-expect';
+        import * as api from './api';
+        import DataComponent from './DataComponent';
+
+        jest.mock('./api');
+
+        test('czy dane z mockowanego API są wyświetlane', async () => &#123;
+          api.fetchData.mockResolvedValue(&#123; data: 'Dane z mocka' &#125;);
+          render(&#60;DataComponent /&#62;);
+
+          const dataDisplay = await screen.findByText(/Dane z mocka/i);
+          expect(dataDisplay).toBeInTheDocument();
+        &#125;);
+        </code></pre>
+
+        <p>W tym przykładzie używamy <code>jest.mock()</code> do mockowania modułu API, aby zamiast rzeczywistych danych testować komponent na podstawie mockowanych danych. Jest to przydatne przy testach zależnych od zewnętrznych usług.</p>
+
+        <h2>Podsumowanie</h2>
+        <p>Testowanie komponentów React jest kluczowym elementem budowania niezawodnych aplikacji. Używając narzędzi takich jak **Jest** i **React Testing Library**, możemy testować zarówno renderowanie komponentów, jak i interakcje użytkownika. Testy takie pozwalają upewnić się, że aplikacja działa zgodnie z oczekiwaniami, nawet w miarę wprowadzania nowych funkcji.</p>
+    </div>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/prism.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/components/prism-javascript.min.js"></script>
+</body>
+</html>

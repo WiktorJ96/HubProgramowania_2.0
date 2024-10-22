@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Przekazywanie props między komponentami w React</title>
+    <link rel="stylesheet" href="/React/styles.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/themes/prism-tomorrow.min.css" rel="stylesheet" />
+</head>
+<body>
+    <div class="container">
+        <h1>Przekazywanie props między komponentami w React</h1>
+
+        <p>W React, <strong>props</strong> (skrót od "properties") są sposobem na przekazywanie danych między komponentami. Props umożliwiają przesyłanie danych z komponentu nadrzędnego (rodzica) do komponentu podrzędnego (dziecka), dzięki czemu można tworzyć bardziej modularne i dynamiczne aplikacje.</p>
+
+        <h2>Przekazywanie props z komponentu rodzica do komponentu dziecka</h2>
+        <p>W React dane są przekazywane "z góry na dół", co oznacza, że komponent nadrzędny może przesłać dane do komponentu podrzędnego poprzez propsy. Oto przykład:</p>
+        
+        <pre><code class="language-javascript">
+// Komponent rodzica
+function ParentComponent() {
+  const userName = "Kamil";
+
+  return (
+    &lt;div&gt;
+      &lt;h1&gt;Komponent Rodzica&lt;/h1&gt;
+      &#123;/* Przekazywanie props do komponentu dziecka */&#125;
+      &lt;ChildComponent name=&#123;userName&#125; /&gt;
+    &lt;/div&gt;
+  );
+}
+
+// Komponent dziecka
+function ChildComponent(props) {
+  return &lt;h2&gt;Witaj, &#123;props.name&#125;!&lt;/h2&gt;;
+}
+
+// Renderowanie komponentu rodzica
+ReactDOM.render(&lt;ParentComponent /&gt;, document.getElementById('root'));
+        </code></pre>
+
+        <p>W powyższym przykładzie komponent <code>ParentComponent</code> przekazuje <code>userName</code> jako props do komponentu <code>ChildComponent</code>. Dziecko otrzymuje dane przez <code>props</code> i wyświetla je w elemencie <code>h2</code>.</p>
+
+        <h2>Przekazywanie wielu props</h2>
+        <p>Możesz przekazywać wiele różnych propsów z komponentu rodzica do dziecka. Oto przykład:</p>
+
+        <pre><code class="language-javascript">
+// Komponent rodzica
+function ParentComponent() {
+  const userName = "Kamil";
+  const userAge = 25;
+
+  return (
+    &lt;div&gt;
+      &lt;h1&gt;Komponent Rodzica&lt;/h1&gt;
+      &#123;/* Przekazywanie wielu props do komponentu dziecka */&#125;
+      &lt;ChildComponent name=&#123;userName&#125; age=&#123;userAge&#125; /&gt;
+    &lt;/div&gt;
+  );
+}
+
+// Komponent dziecka
+function ChildComponent(props) {
+  return (
+    &lt;div&gt;
+      &lt;h2&gt;Witaj, &#123;props.name&#125;!&lt;/h2&gt;
+      &lt;p&gt;Masz &#123;props.age&#125; lat.&lt;/p&gt;
+    &lt;/div&gt;
+  );
+}
+
+// Renderowanie komponentu rodzica
+ReactDOM.render(&lt;ParentComponent /&gt;, document.getElementById('root'));
+        </code></pre>
+
+        <p>W tym przykładzie komponent <code>ParentComponent</code> przekazuje dwa propsy: <code>name</code> i <code>age</code>. Komponent <code>ChildComponent</code> wyświetla oba te wartości w elemencie <code>h2</code> i <code>p</code>.</p>
+
+        <h2>Przekazywanie funkcji jako props</h2>
+        <p>Możliwe jest także przekazywanie funkcji jako props. Dzięki temu komponent dziecka może wywołać funkcję zdefiniowaną w komponencie rodzica. Przykład:</p>
+
+        <pre><code class="language-javascript">
+// Komponent rodzica
+function ParentComponent() {
+  const handleButtonClick = () => &#123;
+    alert("Przycisk został kliknięty w komponencie dziecka!");
+  &#125;;
+
+  return (
+    &lt;div&gt;
+      &lt;h1&gt;Komponent Rodzica&lt;/h1&gt;
+      &#123;/* Przekazywanie funkcji jako props */&#125;
+      &lt;ChildComponent onButtonClick=&#123;handleButtonClick&#125; /&gt;
+    &lt;/div&gt;
+  );
+}
+
+// Komponent dziecka
+function ChildComponent(props) {
+  return (
+    &lt;div&gt;
+      &lt;h2&gt;Komponent Dziecka&lt;/h2&gt;
+      &lt;button onClick=&#123;props.onButtonClick&#125;&gt;Kliknij mnie&lt;/button&gt;
+    &lt;/div&gt;
+  );
+}
+
+// Renderowanie komponentu rodzica
+ReactDOM.render(&lt;ParentComponent /&gt;, document.getElementById('root'));
+        </code></pre>
+
+        <p>W tym przypadku komponent <code>ParentComponent</code> przekazuje funkcję <code>handleButtonClick</code> jako props. Komponent <code>ChildComponent</code> może ją wywołać, gdy przycisk zostanie kliknięty, co spowoduje wyświetlenie alertu w przeglądarce.</p>
+
+        <h2>Przekazywanie obiektów jako props</h2>
+        <p>Możesz także przekazywać obiekty jako props, aby przekazać bardziej złożone dane. Oto przykład:</p>
+
+        <pre><code class="language-javascript">
+// Komponent rodzica
+function ParentComponent() {
+  const user = &#123;
+    name: "Kamil",
+    age: 25,
+    location: "Warszawa"
+  &#125;;
+
+  return (
+    &lt;div&gt;
+      &lt;h1&gt;Komponent Rodzica&lt;/h1&gt;
+      &#123;/* Przekazywanie obiektu jako props */&#125;
+      &lt;ChildComponent userInfo=&#123;user&#125; /&gt;
+    &lt;/div&gt;
+  );
+}
+
+// Komponent dziecka
+function ChildComponent(props) {
+  return (
+    &lt;div&gt;
+      &lt;h2&gt;Witaj, &#123;props.userInfo.name&#125;!&lt;/h2&gt;
+      &lt;p&gt;Masz &#123;props.userInfo.age&#125; lat i mieszkasz w &#123;props.userInfo.location&#125;.&lt;/p&gt;
+    &lt;/div&gt;
+  );
+}
+
+// Renderowanie komponentu rodzica
+ReactDOM.render(&lt;ParentComponent /&gt;, document.getElementById('root'));
+        </code></pre>
+
+        <p>W tym przykładzie obiekt <code>user</code> zawierający dane takie jak imię, wiek i lokalizacja jest przekazywany jako pojedynczy props <code>userInfo</code>. Komponent dziecka korzysta z tych danych, aby dynamicznie wyświetlić informacje.</p>
+
+        <h2>Kiedy używać props?</h2>
+        <p>Props są idealnym rozwiązaniem, gdy chcesz przekazywać dane z komponentu nadrzędnego do podrzędnego. Używaj propsów, gdy komponent dziecka musi wiedzieć coś, co zostało zdefiniowane w jego rodzicu, ale nie musi sam zarządzać tymi danymi.</p>
+
+        <h2>Podsumowanie</h2>
+        <p>Props to kluczowy mechanizm w React do przekazywania danych między komponentami. Mogą być używane do przekazywania zarówno prostych wartości, jak i bardziej złożonych obiektów czy funkcji. Zrozumienie, jak skutecznie przekazywać props między komponentami, pozwala na budowanie modularnych i elastycznych aplikacji React.</p>
+    </div>
+
+    <script>
+        // Przykład komponentu rodzica i dziecka z props
+        function ParentComponent() {
+          const userName = "Kamil";
+
+          return (
+            &lt;div&gt;
+              &lt;h1&gt;Komponent Rodzica&lt;/h1&gt;
+              &lt;ChildComponent name=&#123;userName&#125; /&gt;
+            &lt;/div&gt;
+          );
+        }
+
+        function ChildComponent(props) {
+          return &lt;h2&gt;Witaj, &#123;props.name&#125;!&lt;/h2&gt;;
+        }
+
+        ReactDOM.render(&lt;ParentComponent /&gt;, document.getElementById('root'));
+    </script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/prism.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/components/prism-javascript.min.js"></script>
+    <script src="https://unpkg.com/react@17/umd/react.development.js"></script>
+    <script src="https://unpkg.com/react-dom@17/umd/react-dom.development.js"></script>
+</body>
+</html>

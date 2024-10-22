@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Wprowadzenie do useEffect – efektów ubocznych w React</title>
+    <link rel="stylesheet" href="/React/styles.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/themes/prism-tomorrow.min.css" rel="stylesheet" />
+</head>
+<body>
+    <div class="container">
+        <h1>Wprowadzenie do <code>useEffect</code> – efektów ubocznych w komponentach</h1>
+
+        <p>W React, hook <code>useEffect</code> pozwala na zarządzanie efektami ubocznymi w komponentach funkcyjnych. Efekty uboczne to działania, które mają miejsce poza głównym procesem renderowania komponentu, takie jak pobieranie danych, manipulowanie DOM, subskrypcje czy uruchamianie timerów. <code>useEffect</code> pozwala na ich kontrolę i uruchamianie w odpowiednich momentach cyklu życia komponentu.</p>
+
+        <h2>Podstawowe użycie <code>useEffect</code></h2>
+        <p>Podstawowym sposobem użycia <code>useEffect</code> jest uruchomienie efektu po każdym renderowaniu komponentu. Hook ten przyjmuje funkcję, która zostanie wykonana po renderowaniu:</p>
+
+        <pre><code class="language-javascript">
+import React, &#123; useState, useEffect &#125; from 'react';
+
+function Counter() &#123;
+  const [count, setCount] = useState(0);
+
+  // Użycie useEffect
+  useEffect(() => &#123;
+    document.title = `Kliknięto &#123;count&#125; razy`;
+  &#125;);
+
+  return (
+    &lt;div&gt;
+      &lt;p&gt;Kliknięto &#123;count&#125; razy&lt;/p&gt;
+      &lt;button onClick=&#123;() => setCount(count + 1)&#125;&gt;Kliknij mnie&lt;/button&gt;
+    &lt;/div&gt;
+  );
+&#125;
+
+ReactDOM.render(&lt;Counter /&gt;, document.getElementById('root'));
+        </code></pre>
+
+        <p>W tym przykładzie <code>useEffect</code> zmienia tytuł strony przy każdym renderowaniu komponentu w zależności od wartości <code>count</code>. Efekt jest wywoływany po każdym kliknięciu przycisku, które powoduje zmianę stanu i ponowne renderowanie komponentu.</p>
+
+        <h2>Efekty uruchamiane tylko raz</h2>
+        <p>Jeśli chcemy, aby efekt był uruchamiany tylko raz, podczas montowania komponentu (odpowiednik <code>componentDidMount</code> w komponentach klasowych), możemy przekazać pustą tablicę jako drugi argument do <code>useEffect</code>:</p>
+
+        <pre><code class="language-javascript">
+import React, &#123; useEffect &#125; from 'react';
+
+function WelcomeMessage() &#123;
+  // Efekt uruchamiany tylko raz
+  useEffect(() => &#123;
+    console.log('Komponent został zamontowany.');
+  &#125;, []); // Pusta tablica oznacza, że efekt uruchamia się tylko raz
+
+  return (
+    &lt;div&gt;
+      &lt;p&gt;Witamy na naszej stronie!&lt;/p&gt;
+    &lt;/div&gt;
+  );
+&#125;
+
+ReactDOM.render(&lt;WelcomeMessage /&gt;, document.getElementById('root'));
+        </code></pre>
+
+        <p>W tym przypadku <code>useEffect</code> zostanie uruchomiony tylko raz, podczas pierwszego montowania komponentu, ponieważ podano pustą tablicę zależności.</p>
+
+        <h2>Efekty zależne od wartości</h2>
+        <p>Jeśli chcemy, aby efekt był wywoływany tylko wtedy, gdy zmieni się konkretna wartość (np. stan lub props), możemy przekazać tę wartość jako zależność w tablicy. Oto przykład:</p>
+
+        <pre><code class="language-javascript">
+import React, &#123; useState, useEffect &#125; from 'react';
+
+function DataFetcher() &#123;
+  const [userId, setUserId] = useState(1);
+  const [data, setData] = useState(null);
+
+  // Efekt zależny od wartości userId
+  useEffect(() => &#123;
+    // Symulowane pobieranie danych
+    fetch(`https://jsonplaceholder.typicode.com/users/&#123;userId&#125;`)
+      .then(response => response.json())
+      .then(data => setData(data));
+  &#125;, [userId]); // Efekt uruchamia się tylko wtedy, gdy userId się zmieni
+
+  return (
+    &lt;div&gt;
+      &lt;h1&gt;Dane użytkownika: &#123;data ? data.name : 'Ładowanie...'&#125;&lt;/h1&gt;
+      &lt;button onClick=&#123;() => setUserId(userId + 1)&#125;&gt;Załaduj następnego użytkownika&lt;/button&gt;
+    &lt;/div&gt;
+  );
+&#125;
+
+ReactDOM.render(&lt;DataFetcher /&gt;, document.getElementById('root'));
+        </code></pre>
+
+        <p>W tym przykładzie <code>useEffect</code> zostanie wywołany za każdym razem, gdy zmieni się wartość <code>userId</code>. Efekt ten odpowiada za pobranie danych dla konkretnego użytkownika. Każde kliknięcie przycisku zmienia <code>userId</code>, co powoduje ponowne pobranie danych.</p>
+
+        <h2>Czyszczenie efektów – <code>useEffect</code> z cleanup</h2>
+        <p>Niektóre efekty wymagają czyszczenia, aby zapobiec wyciekom zasobów, na przykład zatrzymywanie timerów, anulowanie subskrypcji czy usuwanie nasłuchiwaczy zdarzeń. Aby to zrobić, możemy zwrócić funkcję czyszczącą z hooka <code>useEffect</code>:</p>
+
+        <pre><code class="language-javascript">
+import React, &#123; useState, useEffect &#125; from 'react';
+
+function Timer() &#123;
+  const [time, setTime] = useState(0);
+
+  useEffect(() => &#123;
+    const interval = setInterval(() => &#123;
+      setTime((prevTime) => prevTime + 1);
+    &#125;, 1000);
+
+    // Zwrócenie funkcji czyszczącej
+    return () => &#123;
+      clearInterval(interval); // Czyszczenie timera po odmontowaniu
+    &#125;;
+  &#125;, []); // Uruchamianie efektu tylko raz
+
+  return (
+    &lt;div&gt;
+      &lt;p&gt;Czas: &#123;time&#125; sekund&lt;/p&gt;
+    &lt;/div&gt;
+  );
+&#125;
+
+ReactDOM.render(&lt;Timer /&gt;, document.getElementById('root'));
+        </code></pre>
+
+        <p>W tym przykładzie efekt uruchamia timer, a funkcja czyszcząca zatrzymuje go, gdy komponent zostanie odmontowany. Dzięki temu zapobiegamy wyciekom zasobów.</p>
+
+        <h2>Kiedy używać <code>useEffect</code>?</h2>
+        <ul>
+            <li>Gdy komponent wymaga efektów ubocznych, takich jak pobieranie danych, ustawianie tytułu dokumentu czy manipulacja DOM.</li>
+            <li>Do subskrypcji, ustawiania timerów lub innych zadań, które wymagają sprzątania po zakończeniu działania komponentu.</li>
+            <li>Gdy efekt powinien być uruchamiany tylko w określonych momentach, np. po zmianie konkretnych zależności.</li>
+        </ul>
+
+        <h2>Podsumowanie</h2>
+        <p>Hook <code>useEffect</code> jest narzędziem do zarządzania efektami ubocznymi w komponentach funkcyjnych. Pozwala na uruchamianie kodu po każdym renderowaniu, przy pierwszym montowaniu lub po zmianach określonych wartości. Dodatkowo, umożliwia definiowanie funkcji czyszczących, aby zapobiegać wyciekom zasobów. Jest kluczowym narzędziem w zarządzaniu efektami ubocznymi w nowoczesnych aplikacjach React.</p>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/prism.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/components/prism-javascript.min.js"></script>
+    <script src="https://unpkg.com/react@17/umd/react.development.js"></script>
+    <script src="https://unpkg.com/react-dom@17/umd/react-dom.development.js"></script>
+</body>
+</html>

@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Używanie useState do zarządzania stanem w React</title>
+    <link rel="stylesheet" href="/React/styles.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/themes/prism-tomorrow.min.css" rel="stylesheet" />
+</head>
+<body>
+    <div class="container">
+        <h1>Używanie <code>useState</code> do zarządzania stanem w React</h1>
+
+        <p>W nowoczesnych aplikacjach React, funkcjonalne komponenty stały się standardem. Do zarządzania stanem w tych komponentach używamy hooka <code>useState</code>. <code>useState</code> pozwala na dodawanie lokalnego stanu do komponentów funkcyjnych. Z jego pomocą można dynamicznie zarządzać danymi i reagować na interakcje użytkownika.</p>
+
+        <h2>Podstawowe użycie <code>useState</code></h2>
+        <p>Hook <code>useState</code> zwraca dwuelementową tablicę: pierwszym elementem jest aktualna wartość stanu, a drugim funkcja do jej aktualizacji. Oto jak wygląda podstawowa implementacja:</p>
+
+        <pre><code class="language-javascript">
+import React, &#123; useState &#125; from 'react';
+
+function Counter() &#123;
+  // Inicjalizacja stanu z początkową wartością 0
+  const [count, setCount] = useState(0);
+
+  return (
+    &lt;div&gt;
+      &lt;p&gt;Kliknięto &#123;count&#125; razy&lt;/p&gt;
+      &lt;button onClick=&#123;() => setCount(count + 1)&#125;&gt;Kliknij mnie&lt;/button&gt;
+    &lt;/div&gt;
+  );
+&#125;
+
+ReactDOM.render(&lt;Counter /&gt;, document.getElementById('root'));
+        </code></pre>
+
+        <p>W tym przykładzie stan <code>count</code> jest zainicjalizowany wartością <code>0</code> za pomocą <code>useState(0)</code>. Funkcja <code>setCount</code> aktualizuje stan, a komponent renderuje się ponownie, gdy stan zostanie zmieniony.</p>
+
+        <h2>Przykład z wieloma wartościami stanu</h2>
+        <p>W komponentach React możesz używać wielu hooków <code>useState</code>, aby zarządzać różnymi wartościami stanu. Oto przykład z kilkoma wartościami stanu:</p>
+
+        <pre><code class="language-javascript">
+import React, &#123; useState &#125; from 'react';
+
+function UserInfo() &#123;
+  const [name, setName] = useState('');
+  const [age, setAge] = useState(0);
+
+  return (
+    &lt;div&gt;
+      &lt;div&gt;
+        &lt;label&gt;
+          Imię: &lt;input type="text" value=&#123;name&#125; onChange=&#123;(e) => setName(e.target.value)&#125; /&gt;
+        &lt;/label&gt;
+      &lt;/div&gt;
+      &lt;div&gt;
+        &lt;label&gt;
+          Wiek: &lt;input type="number" value=&#123;age&#125; onChange=&#123;(e) => setAge(e.target.value)&#125; /&gt;
+        &lt;/label&gt;
+      &lt;/div&gt;
+      &lt;p&gt;Witaj, &#123;name&#125;. Masz &#123;age&#125; lat.&lt;/p&gt;
+    &lt;/div&gt;
+  );
+&#125;
+
+ReactDOM.render(&lt;UserInfo /&gt;, document.getElementById('root'));
+        </code></pre>
+
+        <p>W tym przykładzie używamy dwóch wartości stanu: <code>name</code> i <code>age</code>. Każdy z nich jest zarządzany oddzielnie przy użyciu osobnych hooków <code>useState</code>.</p>
+
+        <h2>Aktualizacja stanu w oparciu o poprzedni stan</h2>
+        <p>Jeśli potrzebujemy zaktualizować stan w oparciu o jego poprzednią wartość, możemy przekazać funkcję jako argument do <code>setState</code>. Oto jak to zrobić:</p>
+
+        <pre><code class="language-javascript">
+import React, &#123; useState &#125; from 'react';
+
+function Counter() &#123;
+  const [count, setCount] = useState(0);
+
+  const increment = () => &#123;
+    setCount((prevCount) => prevCount + 1);
+  &#125;;
+
+  return (
+    &lt;div&gt;
+      &lt;p&gt;Kliknięto &#123;count&#125; razy&lt;/p&gt;
+      &lt;button onClick=&#123;increment&#125;&gt;Kliknij mnie&lt;/button&gt;
+    &lt;/div&gt;
+  );
+&#125;
+
+ReactDOM.render(&lt;Counter /&gt;, document.getElementById('root'));
+        </code></pre>
+
+        <p>Przekazanie funkcji do <code>setCount</code> zapewnia, że najnowsza wartość stanu będzie brana pod uwagę podczas aktualizacji. To przydatne, gdy aktualizacja stanu zależy od jego poprzedniej wartości.</p>
+
+        <h2>Domyślne wartości stanu</h2>
+        <p>Możemy także ustawić domyślną wartość stanu, która może pochodzić z bardziej skomplikowanych obliczeń. W takim przypadku możemy przekazać funkcję jako argument do <code>useState</code>. Ta funkcja zostanie wykonana tylko raz, przy pierwszym renderowaniu:</p>
+
+        <pre><code class="language-javascript">
+import React, &#123; useState &#125; from 'react';
+
+function calculateInitialCount() &#123;
+  return 10; // Na przykład, wynik obliczeń
+&#125;
+
+function Counter() &#123;
+  const [count, setCount] = useState(calculateInitialCount);
+
+  return (
+    &lt;div&gt;
+      &lt;p&gt;Licznik: &#123;count&#125;&lt;/p&gt;
+      &lt;button onClick=&#123;() => setCount(count + 1)&#125;&gt;Zwiększ licznik&lt;/button&gt;
+    &lt;/div&gt;
+  );
+&#125;
+
+ReactDOM.render(&lt;Counter /&gt;, document.getElementById('root'));
+        </code></pre>
+
+        <p>Funkcja <code>calculateInitialCount</code> zostanie wywołana tylko raz, podczas inicjalizacji stanu. To dobre podejście, jeśli musimy przeprowadzić kosztowne obliczenia tylko przy pierwszym renderowaniu komponentu.</p>
+
+        <h2>Podsumowanie</h2>
+        <p>Hook <code>useState</code> umożliwia zarządzanie lokalnym stanem w komponentach funkcyjnych w React. Jego użycie jest proste i pozwala na dynamiczne aktualizowanie danych w komponentach. Możemy zarządzać wieloma wartościami stanu, aktualizować stan w oparciu o poprzednie wartości oraz ustawiać domyślne wartości stanu za pomocą funkcji. <code>useState</code> jest jednym z najważniejszych hooków w React, umożliwiając budowanie interaktywnych i dynamicznych interfejsów użytkownika.</p>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/prism.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/components/prism-javascript.min.js"></script>
+    <script src="https://unpkg.com/react@17/umd/react.development.js"></script>
+    <script src="https://unpkg.com/react-dom@17/umd/react-dom.development.js"></script>
+</body>
+</html>

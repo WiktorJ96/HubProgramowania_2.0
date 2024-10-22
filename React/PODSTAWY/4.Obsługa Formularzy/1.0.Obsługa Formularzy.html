@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tworzenie prostego formularza w React</title>
+    <link rel="stylesheet" href="/React/styles.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/themes/prism-tomorrow.min.css" rel="stylesheet" />
+</head>
+<body>
+    <div class="container">
+        <h1>Tworzenie prostego formularza w React</h1>
+
+        <p>Tworzenie formularzy w React jest łatwe dzięki możliwości zarządzania stanem i reagowania na zmiany w polach formularza. Formularze są kluczowym elementem w każdej aplikacji, która wymaga interakcji z użytkownikiem.</p>
+
+        <h2>Podstawowy formularz</h2>
+        <p>Poniżej znajduje się przykład prostego formularza React, który pozwala użytkownikowi na wpisanie imienia. Komponent zarządza stanem, aby zapisać wartość wprowadzoną w polu tekstowym.</p>
+
+        <pre><code class="language-javascript">
+// Importowanie hooka useState
+import React, { useState } from 'react';
+
+function SimpleForm() {
+  // Inicjalizacja stanu
+  const [name, setName] = useState('');
+
+  // Funkcja obsługująca zmiany w polu tekstowym
+  const handleChange = (event) => {
+    setName(event.target.value);
+  };
+
+  // Funkcja obsługująca przesłanie formularza
+  const handleSubmit = (event) => {
+    event.preventDefault();
+    alert(`Witaj, ${name}!`);
+  };
+
+  return (
+    &lt;form onSubmit={handleSubmit}&gt;
+      &lt;label&gt;
+        Imię:
+        &lt;input type="text" value={name} onChange={handleChange} /&gt;
+      &lt;/label&gt;
+      &lt;button type="submit"&gt;Wyślij&lt;/button&gt;
+    &lt;/form&gt;
+  );
+}
+
+// Renderowanie formularza
+ReactDOM.render(&lt;SimpleForm /&gt;, document.getElementById('root'));
+        </code></pre>
+
+        <h2>Objaśnienie działania</h2>
+        <p>W powyższym przykładzie:</p>
+        <ul>
+            <li>Stworzono stan <code>name</code>, który przechowuje aktualną wartość wpisaną przez użytkownika w polu tekstowym.</li>
+            <li>Funkcja <code>handleChange</code> jest wywoływana za każdym razem, gdy użytkownik wpisuje coś w pole. Aktualizuje ona stan <code>name</code>.</li>
+            <li>Funkcja <code>handleSubmit</code> obsługuje przesłanie formularza. Zamiast odświeżać stronę, wyświetla alert z wpisanym imieniem.</li>
+        </ul>
+
+        <h2>Dodawanie dodatkowych pól do formularza</h2>
+        <p>Formularze mogą zawierać więcej niż jedno pole. Możemy rozszerzyć powyższy przykład, dodając pole na wiek. Każde pole będzie miało swoje własne zarządzanie stanem:</p>
+
+        <pre><code class="language-javascript">
+// Importowanie hooka useState
+import React, { useState } from 'react';
+
+function ExtendedForm() {
+  // Inicjalizacja stanu dla imienia i wieku
+  const [name, setName] = useState('');
+  const [age, setAge] = useState('');
+
+  // Funkcje obsługujące zmiany w polach
+  const handleNameChange = (event) => {
+    setName(event.target.value);
+  };
+
+  const handleAgeChange = (event) => {
+    setAge(event.target.value);
+  };
+
+  // Funkcja obsługująca przesłanie formularza
+  const handleSubmit = (event) => {
+    event.preventDefault();
+    alert(`Witaj, ${name}! Masz ${age} lat.`);
+  };
+
+  return (
+<pre><code class="language-html">
+&lt;form onSubmit={handleSubmit}&gt;
+  &lt;label&gt;
+    Imię:
+    &lt;input type="text" value={name} onChange={handleNameChange} /&gt;
+  &lt;/label&gt;
+  &lt;br /&gt;
+  &lt;label&gt;
+    Wiek:
+    &lt;input type="number" value={age} onChange={handleAgeChange} /&gt;
+  &lt;/label&gt;
+  &lt;br /&gt;
+  &lt;button type="submit"&gt;Wyślij&lt;/button&gt;
+&lt;/form&gt;
+</code></pre>
+
+  );
+}
+
+// Renderowanie formularza
+ReactDOM.render(<ExtendedForm />, document.getElementById('root'));
+        </code></pre>
+
+        <h2>Objaśnienie dodatkowych pól</h2>
+        <p>W tym przykładzie dodano nowe pole <code>Wiek</code>. Każde pole ma własną funkcję zarządzającą zmianą stanu, która aktualizuje odpowiednią wartość w momencie wprowadzania danych.</p>
+
+        <h2>Obsługa wielu pól za pomocą jednego stanu</h2>
+        <p>Zamiast używać oddzielnego stanu dla każdego pola, można zarządzać wieloma polami za pomocą jednego obiektu w stanie. Oto przykład:</p>
+
+        <pre><code class="language-javascript">
+// Importowanie hooka useState
+import React, { useState } from 'react';
+
+function UnifiedForm() {
+  // Jeden stan dla wszystkich pól
+  const [formData, setFormData] = useState({ name: '', age: '' });
+
+  // Funkcja obsługująca zmiany w polach
+  const handleChange = (event) => {
+    const { name, value } = event.target;
+    setFormData((prevData) => ({
+      ...prevData,
+      [name]: value,
+    }));
+  };
+
+  // Funkcja obsługująca przesłanie formularza
+  const handleSubmit = (event) => {
+    event.preventDefault();
+    alert(`Witaj, ${formData.name}! Masz ${formData.age} lat.`);
+  };
+
+  return (
+    <pre><code class="language-html">
+&lt;form onSubmit={handleSubmit}&gt;
+  &lt;label&gt;
+    Imię:
+    &lt;input
+      type="text"
+      name="name"
+      value={formData.name}
+      onChange={handleChange}
+    /&gt;
+  &lt;/label&gt;
+  &lt;br /&gt;
+  &lt;label&gt;
+    Wiek:
+    &lt;input
+      type="number"
+      name="age"
+      value={formData.age}
+      onChange={handleChange}
+    /&gt;
+  &lt;/label&gt;
+  &lt;br /&gt;
+  &lt;button type="submit"&gt;Wyślij&lt;/button&gt;
+&lt;/form&gt;
+</code></pre>
+
+  );
+}
+
+// Renderowanie formularza
+ReactDOM.render(<UnifiedForm />, document.getElementById('root'));
+        </code></pre>
+
+        <p>W tym przykładzie zarządzamy danymi wszystkich pól za pomocą jednego stanu <code>formData</code>, który jest obiektem. Funkcja <code>handleChange</code> dynamicznie aktualizuje odpowiednie pole, korzystając z nazwy pola jako klucza obiektu.</p>
+
+        <h2>Kiedy używać formularzy w React?</h2>
+        <p>Formularze są niezbędne w aplikacjach, które wymagają interakcji z użytkownikiem, np. rejestracja, logowanie, ankiety, itp. React pozwala na łatwe zarządzanie danymi w formularzach dzięki wykorzystaniu stanu i dynamicznej aktualizacji zawartości pól.</p>
+
+        <h2>Podsumowanie</h2>
+        <p>Tworzenie formularzy w React jest proste i elastyczne dzięki zarządzaniu stanem komponentu. Możemy w łatwy sposób dodać pola, zarządzać ich wartościami oraz reagować na interakcje użytkownika. Przykłady pokazują różne sposoby zarządzania formularzami w zależności od potrzeb aplikacji.</p>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/prism.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/components/prism-javascript.min.js"></script>
+    <script src="https://unpkg.com/react@17/umd/react.development.js"></script>
+    <script src="https://unpkg.com/react-dom@17/umd/react-dom.development.js"></script>
+</body>
+</html>

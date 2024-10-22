@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Wprowadzenie do Redux w React</title>
+    <link rel="stylesheet" href="/React/styles.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/themes/prism-tomorrow.min.css" rel="stylesheet" />
+</head>
+<body>
+    <div class="container">
+        <h1>Wprowadzenie do Redux w React</h1>
+
+        <p>Redux to biblioteka do zarządzania stanem aplikacji. Pomaga w przechowywaniu i zarządzaniu globalnym stanem, który może być dostępny w całej aplikacji React. Redux działa na podstawie trzech głównych zasad: jednego źródła prawdy (jednego globalnego stanu), stan jest tylko do odczytu, a zmiany stanu są wprowadzane za pomocą funkcji zwanych <strong>reducerami</strong>.</p>
+
+        <h2>Podstawowe pojęcia w Redux</h2>
+        <ul>
+            <li><strong>Store:</strong> Globalne miejsce, w którym przechowywany jest stan całej aplikacji.</li>
+            <li><strong>Action:</strong> Obiekt opisujący zmianę, która powinna zostać wprowadzona do stanu (zazwyczaj ma pole <code>type</code> oraz opcjonalne dane).</li>
+            <li><strong>Reducer:</strong> Funkcja, która przyjmuje aktualny stan i akcję, a następnie zwraca nowy stan.</li>
+            <li><strong>Dispatch:</strong> Funkcja, która wysyła akcję do reduktora, aby zaktualizować stan.</li>
+        </ul>
+
+        <h2>Instalacja Reduxa</h2>
+        <p>Aby używać Reduxa z React, należy zainstalować dwie paczki: <code>redux</code> oraz <code>react-redux</code>. Można to zrobić za pomocą npm lub yarn:</p>
+
+        <pre><code class="language-bash">
+# Instalacja za pomocą npm
+npm install redux react-redux
+
+# Instalacja za pomocą yarn
+yarn add redux react-redux
+        </code></pre>
+
+        <h2>Tworzenie stanu w Redux</h2>
+        <p>Pierwszym krokiem w pracy z Redux jest utworzenie <strong>reducerów</strong>, które określają, jak stan powinien się zmieniać w odpowiedzi na akcje. Poniżej znajduje się prosty przykład:</p>
+
+        <pre><code class="language-javascript">
+// Reducer licznika
+function counterReducer(state = 0, action) &#123;
+  switch (action.type) &#123;
+    case 'INCREMENT':
+      return state + 1;
+    case 'DECREMENT':
+      return state - 1;
+    default:
+      return state;
+  &#125;
+&#125;
+
+export default counterReducer;
+        </code></pre>
+
+        <p>W tym przykładzie <code>counterReducer</code> jest funkcją, która zarządza stanem licznika. Stan początkowy to 0, a reduktor obsługuje dwie akcje: <code>INCREMENT</code> oraz <code>DECREMENT</code>, które odpowiednio zwiększają lub zmniejszają stan.</p>
+
+        <h2>Tworzenie store w Redux</h2>
+        <p>Następnie tworzymy <code>store</code>, który będzie przechowywał globalny stan aplikacji i pozwalał na jego aktualizację. Store można stworzyć za pomocą funkcji <code>createStore</code> z Reduxa:</p>
+
+        <pre><code class="language-javascript">
+import &#123; createStore &#125; from 'redux';
+import counterReducer from './counterReducer';
+
+// Tworzenie store
+const store = createStore(counterReducer);
+
+export default store;
+        </code></pre>
+
+        <p>Teraz mamy utworzony <code>store</code>, który przechowuje stan licznika i umożliwia jego modyfikację za pomocą reducerów.</p>
+
+        <h2>Podłączenie Reduxa do React za pomocą <code>react-redux</code></h2>
+        <p>Biblioteka <code>react-redux</code> pozwala na łatwe podłączenie Reduxa do komponentów React. Najpierw musimy owinąć główny komponent aplikacji w komponent <code>Provider</code>, aby udostępnić <code>store</code> całej aplikacji:</p>
+
+        <pre><code class="language-javascript">
+import React from 'react';
+import ReactDOM from 'react-dom';
+import &#123; Provider &#125; from 'react-redux';
+import store from './store';  // Importujemy stworzony store
+import App from './App';  // Główny komponent aplikacji
+
+ReactDOM.render(
+  &lt;Provider store=&#123;store&#125;&gt;
+    &lt;App /&gt;
+  &lt;/Provider&gt;,
+  document.getElementById('root')
+);
+        </code></pre>
+
+        <p>Używając <code>Provider</code>, możemy teraz udostępnić globalny stan aplikacji wszystkim komponentom.</p>
+
+        <h2>Odczytywanie i aktualizacja stanu w komponentach</h2>
+        <p>Aby uzyskać dostęp do stanu i aktualizować go w komponentach React, używamy hooków <code>useSelector</code> oraz <code>useDispatch</code> z biblioteki <code>react-redux</code>.</p>
+
+        <h3>Odczytywanie stanu za pomocą <code>useSelector</code></h3>
+        <p>Hook <code>useSelector</code> pozwala na pobieranie danych ze stanu. Zobaczmy, jak odczytać stan licznika:</p>
+
+        <pre><code class="language-javascript">
+import React from 'react';
+import &#123; useSelector &#125; from 'react-redux';
+
+function CounterDisplay() &#123;
+  const count = useSelector((state) => state);  // Pobranie stanu
+
+  return &lt;p&gt;Licznik: &#123;count&#125;&lt;/p&gt;;
+&#125;
+
+export default CounterDisplay;
+        </code></pre>
+
+        <p>W tym przykładzie <code>useSelector</code> pobiera wartość licznika ze stanu i wyświetla ją w komponencie.</p>
+
+        <h3>Wysyłanie akcji za pomocą <code>useDispatch</code></h3>
+        <p>Hook <code>useDispatch</code> umożliwia wysyłanie akcji do store, aby zaktualizować stan. Oto jak można to zrobić:</p>
+
+        <pre><code class="language-javascript">
+import React from 'react';
+import &#123; useDispatch &#125; from 'react-redux';
+
+function CounterControls() &#123;
+  const dispatch = useDispatch();  // Inicjalizacja dispatch
+
+  return (
+    &lt;div&gt;
+      &lt;button onClick=&#123;() => dispatch(&#123; type: 'INCREMENT' &#125;)&#125;&gt;Zwiększ&lt;/button&gt;
+      &lt;button onClick=&#123;() => dispatch(&#123; type: 'DECREMENT' &#125;)&#125;&gt;Zmniejsz&lt;/button&gt;
+    &lt;/div&gt;
+  );
+&#125;
+
+export default CounterControls;
+        </code></pre>
+
+        <p>W tym przykładzie używamy <code>useDispatch</code> do wysyłania akcji <code>INCREMENT</code> oraz <code>DECREMENT</code>, aby zaktualizować stan licznika.</p>
+
+        <h2>Podsumowanie</h2>
+        <p>Redux to potężne narzędzie do zarządzania stanem w dużych aplikacjach. Zapewnia jedno źródło prawdy (globalny store) i jasno określony sposób na wprowadzanie zmian w stanie za pomocą akcji i reduktorów. Redux jest szczególnie przydatny w przypadku złożonych aplikacji, gdzie wiele komponentów wymaga dostępu do tego samego stanu.</p>
+
+        <ul>
+            <li><strong>Store:</strong> Przechowuje globalny stan aplikacji.</li>
+            <li><strong>Action:</strong> Obiekt opisujący zmianę w stanie.</li>
+            <li><strong>Reducer:</strong> Funkcja, która aktualizuje stan na podstawie akcji.</li>
+            <li><strong>useSelector:</strong> Hook do pobierania stanu w komponentach.</li>
+            <li><strong>useDispatch:</strong> Hook do wysyłania akcji, które aktualizują stan.</li>
+        </ul>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/prism.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/components/prism-javascript.min.js"></script>
+    <script src="https://unpkg.com/react@17/umd/react.development.js"></script>
+    <script src="https://unpkg.com/react-dom@17/umd/react-dom.development.js"></script>
+</body>
+</html>

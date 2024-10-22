@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cykl życia komponentów w React</title>
+    <link rel="stylesheet" href="/React/styles.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/themes/prism-tomorrow.min.css" rel="stylesheet" />
+</head>
+<body>
+    <div class="container">
+        <h1>Cykl życia komponentów w React</h1>
+
+        <p>Każdy komponent w React przechodzi przez serię faz podczas swojego istnienia. Te fazy nazywane są **cyklem życia komponentu**. React zapewnia metody cyklu życia, które umożliwiają wykonanie kodu w określonych momentach, takich jak montowanie, aktualizacja i odmontowanie komponentu. Zrozumienie cyklu życia komponentów jest kluczowe dla tworzenia wydajnych i dobrze zarządzanych aplikacji.</p>
+
+        <h2>Fazy cyklu życia komponentu</h2>
+        <p>Cykl życia komponentu w React można podzielić na trzy główne fazy:</p>
+        <ul>
+          <li><strong>Montowanie</strong> – komponent jest tworzony i wstawiany do drzewa DOM.</li>
+          <li><strong>Aktualizacja</strong> – komponent jest aktualizowany, gdy zmieniają się jego propsy lub stan.</li>
+          <li><strong>Odmontowanie</strong> – komponent jest usuwany z drzewa DOM.</li>
+        </ul>
+
+        <h2>Metody cyklu życia</h2>
+        <p>React oferuje różne metody cyklu życia, które są wywoływane podczas różnych faz istnienia komponentu. W przypadku komponentów klasowych mamy dostęp do kilku ważnych metod:</p>
+
+        <h3>1. <code>componentDidMount()</code></h3>
+        <p>Metoda <code>componentDidMount()</code> jest wywoływana po pierwszym renderowaniu komponentu, czyli po jego zamontowaniu w drzewie DOM. Możemy tu inicjalizować dane, np. pobierać dane z API lub ustawiać subskrypcje.</p>
+
+        <pre><code class="language-javascript">
+        import React from 'react';
+
+        class Timer extends React.Component &#123;
+          componentDidMount() &#123;
+            this.timerID = setInterval(() => this.tick(), 1000);
+          &#125;
+
+          componentWillUnmount() &#123;
+            clearInterval(this.timerID);
+          &#125;
+
+          tick() &#123;
+            console.log('Sekundy mijają...');
+          &#125;
+
+          render() &#123;
+            return &lt;h1&gt;Zegar działa!&lt;/h1&gt;;
+          &#125;
+        &#125;
+
+        export default Timer;
+        </code></pre>
+        <p>W powyższym przykładzie komponent <code>Timer</code> zaczyna odliczać sekundy po zamontowaniu komponentu, a zegar jest zatrzymywany, gdy komponent jest usuwany z DOM.</p>
+
+        <h3>2. <code>componentDidUpdate()</code></h3>
+        <p>Metoda <code>componentDidUpdate()</code> jest wywoływana po każdej aktualizacji komponentu, czyli wtedy, gdy zmienia się jego stan lub propsy. Możemy tu reagować na zmiany i wykonywać dodatkowe operacje, np. synchronizować dane.</p>
+
+        <pre><code class="language-javascript">
+        import React from 'react';
+
+        class Counter extends React.Component &#123;
+          constructor(props) &#123;
+            super(props);
+            this.state = &#123; count: 0 &#125;;
+          &#125;
+
+          componentDidUpdate(prevProps, prevState) &#123;
+            if (prevState.count !== this.state.count) &#123;
+              console.log('Licznik został zaktualizowany:', this.state.count);
+            &#125;
+          &#125;
+
+          increment = () => &#123;
+            this.setState((prevState) => (&#123; count: prevState.count + 1 &#125;));
+          &#125;
+
+          render() &#123;
+            return (
+              &lt;div&gt;
+                &lt;p&gt;Licznik: &#123;this.state.count&#125;&lt;/p&gt;
+                &lt;button onClick=&#123;this.increment&#125;&gt;Zwiększ&lt;/button&gt;
+              &lt;/div&gt;
+            );
+          &#125;
+        &#125;
+
+        export default Counter;
+        </code></pre>
+        <p>W tym przykładzie metoda <code>componentDidUpdate()</code> wywołuje log w konsoli po każdej aktualizacji wartości licznika.</p>
+
+        <h3>3. <code>componentWillUnmount()</code></h3>
+        <p>Metoda <code>componentWillUnmount()</code> jest wywoływana tuż przed usunięciem komponentu z drzewa DOM. Możemy tutaj wyczyścić zasoby, takie jak subskrypcje, timery lub połączenia sieciowe.</p>
+
+        <pre><code class="language-javascript">
+        import React from 'react';
+
+        class Clock extends React.Component &#123;
+          constructor(props) &#123;
+            super(props);
+            this.state = &#123; time: new Date() &#125;;
+          &#125;
+
+          componentDidMount() &#123;
+            this.timerID = setInterval(() => this.tick(), 1000);
+          &#125;
+
+          componentWillUnmount() &#123;
+            clearInterval(this.timerID);  // Wyczyść timer
+          &#125;
+
+          tick() &#123;
+            this.setState(&#123; time: new Date() &#125;);
+          &#125;
+
+          render() &#123;
+            return &lt;h2&gt;Aktualny czas: &#123;this.state.time.toLocaleTimeString()&#125;&lt;/h2&gt;;
+          &#125;
+        &#125;
+
+        export default Clock;
+        </code></pre>
+        <p>W tym przykładzie komponent <code>Clock</code> uruchamia zegar po zamontowaniu, a przed usunięciem komponentu z DOM zegar zostaje zatrzymany przy użyciu <code>clearInterval</code>.</p>
+
+        <h2>Inne metody cyklu życia</h2>
+        <p>Oprócz powyższych metod, React oferuje inne metody cyklu życia, takie jak:</p>
+        <ul>
+          <li><code>shouldComponentUpdate()</code> – pozwala na kontrolę, czy komponent powinien się ponownie renderować po zmianach stanu lub propsów.</li>
+          <li><code>getDerivedStateFromProps()</code> – pozwala na aktualizację stanu komponentu na podstawie zmian propsów przed renderowaniem.</li>
+          <li><code>getSnapshotBeforeUpdate()</code> – pozwala na przechwycenie informacji z DOM przed aktualizacją komponentu.</li>
+        </ul>
+
+        <h2>Cykl życia w komponentach funkcyjnych</h2>
+        <p>W komponentach funkcyjnych zarządzanie cyklem życia komponentu jest możliwe dzięki hookowi <code>useEffect</code>. Hook ten działa podobnie do metod cyklu życia, pozwalając na wykonywanie efektów ubocznych po montowaniu, aktualizacji lub odmontowaniu komponentu.</p>
+
+        <pre><code class="language-javascript">
+        import React, &#123; useState, useEffect &#125; from 'react';
+
+        function Timer() &#123;
+          const [count, setCount] = useState(0);
+
+          useEffect(() => &#123;
+            const timer = setInterval(() => &#123;
+              setCount((prevCount) => prevCount + 1);
+            &#125;, 1000);
+
+            return () => clearInterval(timer);  // Wyczyść timer po odmontowaniu
+          &#125;, []);
+
+          return &lt;h1&gt;Licznik: &#123;count&#125;&lt;/h1&gt;;
+        &#125;
+
+        export default Timer;
+        </code></pre>
+        <p>W powyższym przykładzie hook <code>useEffect</code> działa podobnie do metod <code>componentDidMount</code> i <code>componentWillUnmount</code>, inicjalizując licznik po montażu komponentu i czyszcząc go po jego usunięciu.</p>
+
+        <h2>Podsumowanie</h2>
+        <p>Cykl życia komponentów w React pozwala na dokładne kontrolowanie tego, co dzieje się podczas istnienia komponentu w aplikacji. Dzięki metodom cyklu życia możemy reagować na zmiany, aktualizować dane i zarządzać zasobami w sposób efektywny. W nowoczesnych komponentach funkcyjnych hook <code>useEffect</code> pełni podobną rolę, ułatwiając zarządzanie efektami ubocznymi.</p>
+    </div>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/prism.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/components/prism-javascript.min.js"></script>
+</body>
+</html>

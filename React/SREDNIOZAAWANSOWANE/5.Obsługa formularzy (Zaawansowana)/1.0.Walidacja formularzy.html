@@ -1,0 +1,212 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Walidacja formularzy w React</title>
+    <link rel="stylesheet" href="/React/styles.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/themes/prism-tomorrow.min.css" rel="stylesheet" />
+</head>
+<body>
+    <div class="container">
+        <h1>Walidacja formularzy w React</h1>
+
+        <p>Walidacja formularzy to kluczowy element każdej aplikacji, która zbiera dane od użytkowników. W React możemy dodać walidację do formularzy zarówno na poziomie frontendowym, jak i backendowym. Poniżej znajdziesz sposoby na implementację walidacji formularzy przy użyciu <code>useState</code> oraz obsługę zdarzeń.</p>
+
+        <h2>Prosty formularz z walidacją</h2>
+        <p>Poniżej znajdziesz przykład formularza, który zawiera pola dla imienia, adresu email oraz hasła. Każde pole jest walidowane na podstawie podstawowych zasad, takich jak wymóg wypełnienia czy poprawny format adresu email.</p>
+
+        <pre><code class="language-javascript">
+import React, &#123; useState &#125; from 'react';
+
+function SimpleForm() &#123;
+  // Stany dla wartości pól formularza
+  const [name, setName] = useState('');
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+  
+  // Stany dla błędów walidacji
+  const [errors, setErrors] = useState(&#123; name: '', email: '', password: '' &#125;);
+
+  // Funkcja walidująca formularz
+  const validateForm = () => &#123;
+    let valid = true;
+    const newErrors = &#123; name: '', email: '', password: '' &#125;;
+
+    // Sprawdzanie pola imię
+    if (!name.trim()) &#123;
+      newErrors.name = 'Imię jest wymagane';
+      valid = false;
+    &#125;
+
+    // Sprawdzanie pola email
+    if (!email.includes('@')) &#123;
+      newErrors.email = 'Niepoprawny adres email';
+      valid = false;
+    &#125;
+
+    // Sprawdzanie pola hasło
+    if (password.length < 6) &#123;
+      newErrors.password = 'Hasło musi mieć co najmniej 6 znaków';
+      valid = false;
+    &#125;
+
+    setErrors(newErrors);
+    return valid;
+  &#125;;
+
+  // Funkcja obsługująca przesłanie formularza
+  const handleSubmit = (event) => &#123;
+    event.preventDefault();
+    if (validateForm()) &#123;
+      alert('Formularz przesłany pomyślnie');
+    &#125;
+  &#125;;
+
+  return (
+    &lt;form onSubmit=&#123;handleSubmit&#125;&gt;
+      &lt;div&gt;
+        &lt;label&gt;Imię:&lt;/label&gt;
+        &lt;input
+          type="text"
+          value=&#123;name&#125;
+          onChange=&#123;(e) => setName(e.target.value)&#125;
+        /&gt;
+        &lt;span style=&#123;&#123; color: 'red' &#125;&#125;&gt;&#123;errors.name&#125;&lt;/span&gt;
+      &lt;/div&gt;
+
+      &lt;div&gt;
+        &lt;label&gt;Email:&lt;/label&gt;
+        &lt;input
+          type="email"
+          value=&#123;email&#125;
+          onChange=&#123;(e) => setEmail(e.target.value)&#125;
+        /&gt;
+        &lt;span style=&#123;&#123; color: 'red' &#125;&#125;&gt;&#123;errors.email&#125;&lt;/span&gt;
+      &lt;/div&gt;
+
+      &lt;div&gt;
+        &lt;label&gt;Hasło:&lt;/label&gt;
+        &lt;input
+          type="password"
+          value=&#123;password&#125;
+          onChange=&#123;(e) => setPassword(e.target.value)&#125;
+        /&gt;
+        &lt;span style=&#123;&#123; color: 'red' &#125;&#125;&gt;&#123;errors.password&#125;&lt;/span&gt;
+      &lt;/div&gt;
+
+      &lt;button type="submit"&gt;Wyślij&lt;/button&gt;
+    &lt;/form&gt;
+  );
+&#125;
+
+ReactDOM.render(&lt;SimpleForm /&gt;, document.getElementById('root'));
+        </code></pre>
+
+        <p>W tym przykładzie mamy prostą walidację na poziomie pól formularza, która sprawdza, czy pola są wypełnione, czy email zawiera znak <code>@</code> oraz czy hasło ma co najmniej 6 znaków. Komunikaty błędów są wyświetlane obok pól formularza, a formularz nie zostanie przesłany, dopóki wszystkie walidacje nie przejdą.</p>
+
+        <h2>Zaawansowana walidacja – dynamiczna walidacja podczas wpisywania</h2>
+        <p>Możemy również walidować pola formularza dynamicznie podczas ich wypełniania. Poniżej znajduje się przykład, który waliduje każde pole w momencie wpisywania danych:</p>
+
+        <pre><code class="language-javascript">
+import React, &#123; useState &#125; from 'react';
+
+function DynamicForm() &#123;
+  const [name, setName] = useState('');
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+  const [errors, setErrors] = useState(&#123; name: '', email: '', password: '' &#125;);
+
+  // Funkcja walidująca pojedyncze pole
+  const validateField = (field, value) => &#123;
+    let error = '';
+    switch (field) &#123;
+      case 'name':
+        if (!value.trim()) &#123;
+          error = 'Imię jest wymagane';
+        &#125;
+        break;
+      case 'email':
+        if (!value.includes('@')) &#123;
+          error = 'Niepoprawny adres email';
+        &#125;
+        break;
+      case 'password':
+        if (value.length < 6) &#123;
+          error = 'Hasło musi mieć co najmniej 6 znaków';
+        &#125;
+        break;
+      default:
+        break;
+    &#125;
+    return error;
+  &#125;;
+
+  // Funkcje obsługujące zmiany w polach formularza z walidacją
+  const handleNameChange = (e) => &#123;
+    setName(e.target.value);
+    setErrors((prevErrors) => (&#123; ...prevErrors, name: validateField('name', e.target.value) &#125;));
+  &#125;;
+
+  const handleEmailChange = (e) => &#123;
+    setEmail(e.target.value);
+    setErrors((prevErrors) => (&#123; ...prevErrors, email: validateField('email', e.target.value) &#125;));
+  &#125;;
+
+  const handlePasswordChange = (e) => &#123;
+    setPassword(e.target.value);
+    setErrors((prevErrors) => (&#123; ...prevErrors, password: validateField('password', e.target.value) &#125;));
+  &#125;;
+
+  return (
+    &lt;form&gt;
+      &lt;div&gt;
+        &lt;label&gt;Imię:&lt;/label&gt;
+        &lt;input
+          type="text"
+          value=&#123;name&#125;
+          onChange=&#123;handleNameChange&#125;
+        /&gt;
+        &lt;span style=&#123;&#123; color: 'red' &#125;&#125;&gt;&#123;errors.name&#125;&lt;/span&gt;
+      &lt;/div&gt;
+
+      &lt;div&gt;
+        &lt;label&gt;Email:&lt;/label&gt;
+        &lt;input
+          type="email"
+          value=&#123;email&#125;
+          onChange=&#123;handleEmailChange&#125;
+        /&gt;
+        &lt;span style=&#123;&#123; color: 'red' &#125;&#125;&gt;&#123;errors.email&#125;&lt;/span&gt;
+      &lt;/div&gt;
+
+      &lt;div&gt;
+        &lt;label&gt;Hasło:&lt;/label&gt;
+        &lt;input
+          type="password"
+          value=&#123;password&#125;
+          onChange=&#123;handlePasswordChange&#125;
+        /&gt;
+        &lt;span style=&#123;&#123; color: 'red' &#125;&#125;&gt;&#123;errors.password&#125;&lt;/span&gt;
+      &lt;/div&gt;
+
+      &lt;button type="submit"&gt;Wyślij&lt;/button&gt;
+    &lt;/form&gt;
+  );
+&#125;
+
+ReactDOM.render(&lt;DynamicForm /&gt;, document.getElementById('root'));
+        </code></pre>
+
+        <p>W tym przykładzie dynamicznie walidujemy każde pole w momencie, gdy użytkownik wprowadza dane. Każde pole ma swoją funkcję walidującą, która ustawia błędy na bieżąco.</p>
+
+        <h2>Podsumowanie</h2>
+        <p>Walidacja formularzy w React jest kluczowa, aby upewnić się, że dane wprowadzane przez użytkownika są poprawne. Możemy ją zaimplementować na różne sposoby: walidując formularz przy jego przesłaniu lub dynamicznie podczas wypełniania pól. React pozwala na łatwe zarządzanie stanem pól i błędami walidacji, co umożliwia tworzenie bardziej interaktywnych i responsywnych formularzy.</p>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/prism.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/components/prism-javascript.min.js"></script>
+    <script src="https://unpkg.com/react@17/umd/react.development.js"></script>
+    <script src="https://unpkg.com/react-dom@17/umd/react-dom.development.js"></script>
+</body>
+</html>

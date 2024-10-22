@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tworzenie wielostronicowych aplikacji za pomocą React Router</title>
+    <link rel="stylesheet" href="/React/styles.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/themes/prism-tomorrow.min.css" rel="stylesheet" />
+</head>
+<body>
+    <div class="container">
+        <h1>Tworzenie wielostronicowych aplikacji za pomocą React Router</h1>
+
+        <p>W React, możemy tworzyć **wielostronicowe aplikacje** dzięki bibliotece **React Router**. React Router umożliwia nawigację między różnymi widokami (stronami) bez potrzeby przeładowywania całej aplikacji. Dzięki temu użytkownicy mogą nawigować po stronie w bardziej płynny sposób.</p>
+
+        <h2>Instalacja React Router</h2>
+        <p>Aby używać React Router w swojej aplikacji, musisz najpierw zainstalować pakiet <code>react-router-dom</code>. Możesz to zrobić, wpisując następującą komendę w terminalu:</p>
+        <pre><code class="language-bash">
+        npm install react-router-dom
+        </code></pre>
+
+        <h2>Podstawowa struktura React Router</h2>
+        <p>Podstawowym elementem React Router jest komponent <code>Router</code>, który zarządza trasami (ścieżkami) w aplikacji. Dwa najczęściej używane komponenty to <code>BrowserRouter</code> i <code>Route</code>.</p>
+
+        <ul>
+          <li><code>BrowserRouter</code> – używany do zarządzania trasami w oparciu o adresy URL (najczęściej używany rodzaj routera).</li>
+          <li><code>Route</code> – definiuje ścieżki, które renderują określone komponenty, w zależności od adresu URL.</li>
+        </ul>
+
+        <h2>Tworzenie podstawowej aplikacji z React Router</h2>
+        <p>Poniżej znajduje się przykład prostej aplikacji wielostronicowej z trzema stronami: Home, About i Contact.</p>
+
+        <pre><code class="language-javascript">
+        import React from 'react';
+        import &#123; BrowserRouter as Router, Route, Switch &#125; from 'react-router-dom';
+
+        function Home() &#123;
+          return &lt;h2&gt;Strona Główna&lt;/h2&gt;;
+        &#125;
+
+        function About() &#123;
+          return &lt;h2&gt;O nas&lt;/h2&gt;;
+        &#125;
+
+        function Contact() &#123;
+          return &lt;h2&gt;Kontakt&lt;/h2&gt;;
+        &#125;
+
+        function App() &#123;
+          return (
+            &lt;Router&gt;
+              &lt;div&gt;
+                &lt;nav&gt;
+                  &lt;ul&gt;
+                    &lt;li&gt;
+                      &lt;a href="/"&gt;Strona Główna&lt;/a&gt;
+                    &lt;/li&gt;
+                    &lt;li&gt;
+                      &lt;a href="/about"&gt;O nas&lt;/a&gt;
+                    &lt;/li&gt;
+                    &lt;li&gt;
+                      &lt;a href="/contact"&gt;Kontakt&lt;/a&gt;
+                    &lt;/li&gt;
+                  &lt;/ul&gt;
+                &lt;/nav&gt;
+
+                &lt;Switch&gt;
+                  &lt;Route path="/about"&gt;
+                    &lt;About /&gt;
+                  &lt;/Route&gt;
+                  &lt;Route path="/contact"&gt;
+                    &lt;Contact /&gt;
+                  &lt;/Route&gt;
+                  &lt;Route path="/" exact&gt;
+                    &lt;Home /&gt;
+                  &lt;/Route&gt;
+                &lt;/Switch&gt;
+              &lt;/div&gt;
+            &lt;/Router&gt;
+          );
+        &#125;
+
+        export default App;
+        </code></pre>
+
+        <p>W tym przykładzie używamy komponentu <code>Router</code> do zarządzania trasami. Każda trasa jest definiowana przez komponent <code>Route</code>, a <code>Switch</code> zapewnia, że tylko jedna trasa jest renderowana jednocześnie. Każda trasa renderuje inny komponent: <code>Home</code>, <code>About</code> lub <code>Contact</code>.</p>
+
+        <h2>Linki nawigacyjne</h2>
+        <p>Zamiast używać standardowych linków HTML (<code>&lt;a&gt;</code>), React Router oferuje komponent <code>Link</code>, który pozwala na nawigację między stronami bez przeładowywania strony. Oto jak możemy zamienić linki na <code>Link</code>:</p>
+
+        <pre><code class="language-javascript">
+        import &#123; Link &#125; from 'react-router-dom';
+
+        function App() &#123;
+          return (
+            &lt;Router&gt;
+              &lt;div&gt;
+                &lt;nav&gt;
+                  &lt;ul&gt;
+                    &lt;li&gt;
+                      &lt;Link to="/"&gt;Strona Główna&lt;/Link&gt;
+                    &lt;/li&gt;
+                    &lt;li&gt;
+                      &lt;Link to="/about"&gt;O nas&lt;/Link&gt;
+                    &lt;/li&gt;
+                    &lt;li&gt;
+                      &lt;Link to="/contact"&gt;Kontakt&lt;/Link&gt;
+                    &lt;/li&gt;
+                  &lt;/ul&gt;
+                &lt;/nav&gt;
+
+                &lt;Switch&gt;
+                  &lt;Route path="/about"&gt;
+                    &lt;About /&gt;
+                  &lt;/Route&gt;
+                  &lt;Route path="/contact"&gt;
+                    &lt;Contact /&gt;
+                  &lt;/Route&gt;
+                  &lt;Route path="/" exact&gt;
+                    &lt;Home /&gt;
+                  &lt;/Route&gt;
+                &lt;/Switch&gt;
+              &lt;/div&gt;
+            &lt;/Router&gt;
+          );
+        &#125;
+        </code></pre>
+
+        <p>Komponent <code>Link</code> zapewnia lepszą nawigację, ponieważ nie przeładowuje całej strony, a jedynie zmienia adres URL i renderuje odpowiednią trasę.</p>
+
+        <h2>Nawigacja dynamiczna</h2>
+        <p>React Router obsługuje również dynamiczne ścieżki, które mogą się zmieniać w zależności od parametrów URL. Oto przykład, w którym dynamicznie renderujemy stronę profilu użytkownika na podstawie ID w URL.</p>
+
+        <pre><code class="language-javascript">
+        import React from 'react';
+        import &#123; BrowserRouter as Router, Route, Switch, useParams &#125; from 'react-router-dom';
+
+        function UserProfile() &#123;
+          const &#123; id &#125; = useParams();
+          return &lt;h2&gt;Profil użytkownika: &#123;id&#125;&lt;/h2&gt;;
+        &#125;
+
+        function App() &#123;
+          return (
+            &lt;Router&gt;
+              &lt;div&gt;
+                &lt;Switch&gt;
+                  &lt;Route path="/user/:id"&gt;
+                    &lt;UserProfile /&gt;
+                  &lt;/Route&gt;
+                &lt;/Switch&gt;
+              &lt;/div&gt;
+            &lt;/Router&gt;
+          );
+        &#125;
+
+        export default App;
+        </code></pre>
+
+        <p>W tym przykładzie komponent <code>UserProfile</code> korzysta z hooka <code>useParams</code>, aby uzyskać ID użytkownika z dynamicznej ścieżki. Jeśli użytkownik wejdzie na stronę <code>/user/123</code>, zostanie wyświetlony komunikat "Profil użytkownika: 123".</p>
+
+        <h2>Przekierowania</h2>
+        <p>React Router pozwala również na przekierowywanie użytkowników z jednej trasy na inną. Możemy to osiągnąć za pomocą komponentu <code>Redirect</code>.</p>
+
+        <pre><code class="language-javascript">
+        import &#123; Redirect &#125; from 'react-router-dom';
+
+        function App() &#123;
+          return (
+            &lt;Router&gt;
+              &lt;Switch&gt;
+                &lt;Route path="/home"&gt;
+                  &lt;Redirect to="/" /&gt;
+                &lt;/Route&gt;
+                &lt;Route path="/" exact&gt;
+                  &lt;Home /&gt;
+                &lt;/Route&gt;
+              &lt;/Switch&gt;
+            &lt;/Router&gt;
+          );
+        &#125;
+
+        export default App;
+        </code></pre>
+
+        <p>W tym przykładzie użytkownik, który wejdzie na ścieżkę <code>/home</code>, zostanie automatycznie przekierowany na stronę główną <code>/</code>.</p>
+
+        <h2>Podsumowanie</h2>
+        <p>React Router to potężne narzędzie, które umożliwia tworzenie wielostronicowych aplikacji w React. Dzięki takim funkcjom jak dynamiczne trasy, przekierowania czy łatwe zarządzanie linkami nawigacyjnymi, React Router pozwala na efektywne budowanie aplikacji SPA (Single Page Application), które są bardziej intuicyjne i płynne dla użytkowników.</p>
+    </div>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/prism.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/components/prism-javascript.min.js"></script>
+</body>
+</html>
