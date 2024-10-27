@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>React - Error Boundaries</title>
+    <link rel="stylesheet" href="../styles.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/themes/prism-tomorrow.min.css" rel="stylesheet" />
+</head>
+<body>
+    <div class="container">
+        <h1>React - Error Boundaries</h1>
+        
+        <p>Error Boundaries to mechanizm wprowadzony w React 16, który pozwala przechwytywać błędy w komponentach podrzędnych. Dzięki nim możemy zapobiec awarii całej aplikacji, wyświetlając zamiast tego komunikat o błędzie lub zastępczy interfejs.</p>
+
+        <h2>Tworzenie Error Boundary</h2>
+        <p>Error Boundary to komponent klasowy, który implementuje dwie specjalne metody: <code>componentDidCatch</code> do przechwytywania błędów i <code>getDerivedStateFromError</code> do aktualizacji stanu w przypadku błędu.</p>
+
+        <pre><code class="language-javascript">
+import React, { Component } from 'react';
+
+class ErrorBoundary extends Component {
+    constructor(props) {
+        super(props);
+        this.state = { hasError: false };
+    }
+
+    static getDerivedStateFromError(error) {
+        // Ustawia stan na true w przypadku błędu
+        return { hasError: true };
+    }
+
+    componentDidCatch(error, info) {
+        // Możemy tutaj zalogować błąd do systemu monitorowania błędów
+        console.error("Błąd:", error, info);
+    }
+
+    render() {
+        if (this.state.hasError) {
+            return &lt;h2&gt;Coś poszło nie tak.&lt;/h2&gt;;
+        }
+        return this.props.children;
+    }
+}
+
+export default ErrorBoundary;
+        </code></pre>
+
+        <p>W tym przykładzie, jeśli dowolny komponent wewnątrz <code>ErrorBoundary</code> wyrzuci błąd, zostanie on przechwycony, a komponent wyświetli komunikat <code>"Coś poszło nie tak."</code> zamiast zawartości.</p>
+
+        <h2>Użycie Error Boundary</h2>
+        <p>Error Boundary należy opakować wokół komponentów, które mogą potencjalnie wywołać błąd, tak aby zminimalizować wpływ błędów na inne części aplikacji.</p>
+
+        <pre><code class="language-javascript">
+import React from 'react';
+import ErrorBoundary from './ErrorBoundary';
+import FaultyComponent from './FaultyComponent';
+
+function App() {
+    return (
+        &lt;div&gt;
+            &lt;h1&gt;Aplikacja React z Error Boundary&lt;/h1&gt;
+            &lt;ErrorBoundary&gt;
+                &lt;FaultyComponent /&gt;
+            &lt;/ErrorBoundary&gt;
+        &lt;/div&gt;
+    );
+}
+
+export default App;
+        </code></pre>
+
+        <p>W powyższym przykładzie, jeśli <code>FaultyComponent</code> wyrzuci błąd, zostanie on przechwycony przez <code>ErrorBoundary</code>, który wyświetli komunikat o błędzie zamiast przerwać działanie aplikacji.</p>
+
+        <h2>Ograniczenia Error Boundaries</h2>
+        <p>Error Boundaries działają tylko dla błędów, które występują w czasie renderowania, w metodach cyklu życia, i w konstruktorze komponentu. Nie przechwytują błędów występujących w zdarzeniach asynchronicznych, takich jak wywołania <code>setTimeout</code> czy <code>Promise</code>. W takich przypadkach należy stosować odpowiednie obsługi błędów asynchronicznych.</p>
+
+        <h2>Przykład komponentu z błędem</h2>
+        <p>Aby zobaczyć Error Boundary w akcji, poniżej znajduje się przykład komponentu, który celowo wyrzuca błąd:</p>
+
+        <pre><code class="language-javascript">
+// FaultyComponent.js
+import React from 'react';
+
+function FaultyComponent() {
+    throw new Error("Ups! Wystąpił błąd.");
+}
+
+export default FaultyComponent;
+        </code></pre>
+
+        <p>Gdy <code>FaultyComponent</code> zostanie załadowany w <code>ErrorBoundary</code>, komunikat błędu zostanie wyświetlony bez przerywania działania reszty aplikacji.</p>
+
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/prism.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/components/prism-javascript.min.js"></script>
+</body>
+</html>

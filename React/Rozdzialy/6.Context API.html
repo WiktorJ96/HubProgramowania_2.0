@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>React - Context API</title>
+    <link rel="stylesheet" href="../styles.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/themes/prism-tomorrow.min.css" rel="stylesheet" />
+</head>
+<body>
+    <div class="container">
+        <h1>React - Context API</h1>
+        
+        <p>Context API to mechanizm Reacta, który pozwala przekazywać dane w drzewie komponentów bez potrzeby przekazywania ich ręcznie za pomocą <code>props</code> (ang. prop drilling). Jest przydatny, gdy mamy wiele komponentów zależnych od wspólnego kontekstu, takich jak ustawienia użytkownika, temat aplikacji itp.</p>
+
+        <h2>Tworzenie Kontekstu</h2>
+        <p>Aby użyć Context API, najpierw tworzymy kontekst przy użyciu funkcji <code>React.createContext</code>. Możemy zdefiniować wartość domyślną dla kontekstu, która będzie dostępna, jeśli nie zostanie ustawiona żadna inna wartość.</p>
+
+        <pre><code class="language-javascript">
+import React, { createContext } from 'react';
+
+// Tworzenie kontekstu z wartością domyślną "jasny" dla tematu
+const ThemeContext = createContext('jasny');
+
+export default ThemeContext;
+        </code></pre>
+
+        <h2>Provider - Dostarczanie Danych</h2>
+        <p>Komponent <code>Provider</code> udostępnia wartość kontekstu wszystkim komponentom podrzędnym. Wartość kontekstu można ustawić za pomocą atrybutu <code>value</code> na <code>Provider</code>.</p>
+
+        <pre><code class="language-javascript">
+import React from 'react';
+import ThemeContext from './ThemeContext';
+
+function App() {
+    return (
+        &lt;ThemeContext.Provider value="ciemny"&gt;
+            &lt;Toolbar /&gt;
+        &lt;/ThemeContext.Provider&gt;
+    );
+}
+        </code></pre>
+
+        <p>W powyższym przykładzie <code>ThemeContext.Provider</code> dostarcza wartość <code>"ciemny"</code> do wszystkich komponentów wewnątrz, dzięki czemu mogą one uzyskać dostęp do aktualnego motywu bez konieczności przekazywania go przez <code>props</code>.</p>
+
+        <h2>Consumer - Pobieranie Danych</h2>
+        <p>Wewnętrzne komponenty mogą uzyskać dostęp do kontekstu za pomocą komponentu <code>Consumer</code> lub hooka <code>useContext</code>. <code>Consumer</code> wykorzystuje funkcję renderującą, aby uzyskać dostęp do wartości kontekstu.</p>
+
+        <pre><code class="language-javascript">
+import React from 'react';
+import ThemeContext from './ThemeContext';
+
+function Toolbar() {
+    return (
+        &lt;ThemeContext.Consumer&gt;
+            {theme => &lt;button className={theme}&gt;Motyw: {theme}&lt;/button&gt;}
+        &lt;/ThemeContext.Consumer&gt;
+    );
+}
+        </code></pre>
+
+        <p>Funkcja renderująca w <code>Consumer</code> pozwala na dostęp do wartości <code>theme</code>, a przycisk zmienia swój motyw na podstawie tej wartości.</p>
+
+        <h2>useContext Hook</h2>
+        <p>Alternatywnie można użyć hooka <code>useContext</code> do pobrania wartości kontekstu bez używania <code>Consumer</code>. Jest to wygodniejsze, zwłaszcza w komponentach funkcyjnych.</p>
+
+        <pre><code class="language-javascript">
+import React, { useContext } from 'react';
+import ThemeContext from './ThemeContext';
+
+function Toolbar() {
+    const theme = useContext(ThemeContext);
+    
+    return &lt;button className={theme}&gt;Motyw: {theme}&lt;/button&gt;;
+}
+        </code></pre>
+
+        <p>Hook <code>useContext</code> pobiera wartość kontekstu bezpośrednio i przypisuje ją do zmiennej <code>theme</code>, co upraszcza kod i eliminuje konieczność używania komponentu <code>Consumer</code>.</p>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/prism.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/components/prism-javascript.min.js"></script>
+</body>
+</html>

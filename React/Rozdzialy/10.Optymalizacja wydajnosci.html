@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>React - Optymalizacja Wydajności</title>
+    <link rel="stylesheet" href="../styles.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/themes/prism-tomorrow.min.css" rel="stylesheet" />
+</head>
+<body>
+    <div class="container">
+        <h1>React - Optymalizacja Wydajności</h1>
+        
+        <p>Optymalizacja wydajności w React polega na minimalizowaniu niepotrzebnych renderów i ładowaniu kodu tylko wtedy, gdy jest potrzebny. Można to osiągnąć, stosując <code>React.memo</code>, lazy loading, code splitting oraz techniki zapobiegające niepotrzebnym renderom.</p>
+
+        <h2>React.memo</h2>
+        <p><code>React.memo</code> to wyższy komponent (ang. higher-order component), który zapobiega ponownemu renderowaniu komponentu, jeśli jego <code>props</code> się nie zmieniły. Jest przydatny dla komponentów, które mają ten sam wynik renderowania przy takich samych <code>props</code>.</p>
+
+        <pre><code class="language-javascript">
+import React from 'react';
+
+const MyComponent = React.memo(function MyComponent({ value }) {
+    console.log('Renderowanie MyComponent');
+    return &lt;p&gt;Wartość: {value}&lt;/p&gt;;
+});
+
+export default MyComponent;
+        </code></pre>
+
+        <p>W tym przykładzie <code>MyComponent</code> nie będzie renderowany ponownie, jeśli wartość <code>value</code> nie zmieni się, co poprawia wydajność.</p>
+
+        <h2>Lazy Loading (ładowanie na żądanie)</h2>
+        <p>Lazy loading pozwala na ładowanie komponentów tylko wtedy, gdy są one potrzebne. Jest to szczególnie przydatne dla dużych aplikacji, gdzie nie wszystkie komponenty muszą być ładowane na starcie.</p>
+
+        <pre><code class="language-javascript">
+import React, { Suspense } from 'react';
+
+const LazyComponent = React.lazy(() => import('./LazyComponent'));
+
+function App() {
+    return (
+        &lt;div&gt;
+            &lt;Suspense fallback=&lt;p&gt;Ładowanie...&lt;/p&gt;&gt;
+                &lt;LazyComponent /&gt;
+            &lt;/Suspense&gt;
+        &lt;/div&gt;
+    );
+}
+
+export default App;
+        </code></pre>
+
+        <p>W powyższym przykładzie <code>LazyComponent</code> jest ładowany tylko wtedy, gdy jest potrzebny, a w trakcie ładowania wyświetlana jest zawartość <code>fallback</code>.</p>
+
+        <h2>Code Splitting</h2>
+        <p>Code splitting dzieli kod na mniejsze części (chunks), co pozwala na ładowanie tylko tych fragmentów, które są potrzebne. React automatycznie wykonuje code splitting przy użyciu <code>React.lazy</code> i dynamicznych importów.</p>
+
+        <pre><code class="language-javascript">
+import React, { Suspense } from 'react';
+
+const LargeComponent = React.lazy(() => import('./LargeComponent'));
+
+function App() {
+    return (
+        &lt;div&gt;
+            &lt;Suspense fallback=&lt;p&gt;Ładowanie komponentu...&lt;/p&gt;&gt;
+                &lt;LargeComponent /&gt;
+            &lt;/Suspense&gt;
+        &lt;/div&gt;
+    );
+}
+
+export default App;
+        </code></pre>
+
+        <p>W tym przykładzie <code>LargeComponent</code> jest ładowany oddzielnie od reszty aplikacji, co zmniejsza początkowy czas ładowania.</p>
+
+        <h2>Unikanie Niepotrzebnych Renderów</h2>
+        <p>Niepotrzebne renderowanie komponentów może spowolnić aplikację. Można je ograniczyć, stosując <code>React.memo</code>, a także optymalizując zależności w <code>useEffect</code> i innych hookach.</p>
+
+        <pre><code class="language-javascript">
+import React, { useState, useEffect } from 'react';
+
+function ExampleComponent({ propValue }) {
+    const [value, setValue] = useState(0);
+
+    useEffect(() => {
+        console.log('Uruchomienie efektu');
+        // Efekt uruchomi się tylko wtedy, gdy propValue się zmieni
+    }, [propValue]);
+
+    return (
+        &lt;div&gt;
+            &lt;p&gt;Wartość: {value}&lt;/p&gt;
+            &lt;button onClick={() =&gt; setValue(value + 1)}&gt;Zwiększ&lt;/button&gt;
+        &lt;/div&gt;
+    );
+}
+
+export default React.memo(ExampleComponent);
+        </code></pre>
+
+        <p>W powyższym przykładzie <code>useEffect</code> uruchomi się tylko wtedy, gdy <code>propValue</code> się zmieni, a komponent <code>ExampleComponent</code> nie zostanie ponownie renderowany, jeśli jego <code>props</code> pozostaną bez zmian dzięki <code>React.memo</code>.</p>
+
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/prism.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/components/prism-javascript.min.js"></script>
+</body>
+</html>

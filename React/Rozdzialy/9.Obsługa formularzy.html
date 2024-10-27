@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>React - Obsługa Formularzy</title>
+    <link rel="stylesheet" href="../styles.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/themes/prism-tomorrow.min.css" rel="stylesheet" />
+</head>
+<body>
+    <div class="container">
+        <h1>React - Obsługa Formularzy</h1>
+        
+        <p>Formularze w React są obsługiwane poprzez stan komponentu i obsługę zdarzeń. Dzięki kontrolowaniu stanu formularza można łatwo zarządzać danymi wejściowymi i dodawać walidację.</p>
+
+        <h2>Tworzenie Formularza i Obsługa Zdarzeń</h2>
+        <p>Przy tworzeniu formularzy, aby uzyskać dostęp do wartości pól, można użyć zdarzeń takich jak <code>onChange</code> i przechowywać te wartości w stanie komponentu.</p>
+
+        <pre><code class="language-javascript">
+import React, { useState } from 'react';
+
+function SimpleForm() {
+    const [name, setName] = useState('');
+
+    const handleChange = (event) => {
+        setName(event.target.value); // Ustawia wartość name na bieżący input
+    };
+
+    const handleSubmit = (event) => {
+        event.preventDefault(); // Zapobiega przeładowaniu strony
+        alert(`Witaj, ${name}!`);
+    };
+
+    return (
+        &lt;form onSubmit={handleSubmit}&gt;
+            &lt;label&gt;
+                Imię:
+                &lt;input type="text" value={name} onChange={handleChange} /&gt;
+            &lt;/label&gt;
+            &lt;button type="submit"&gt;Wyślij&lt;/button&gt;
+        &lt;/form&gt;
+    );
+}
+
+export default SimpleForm;
+        </code></pre>
+
+        <p>W tym przykładzie <code>handleChange</code> aktualizuje stan <code>name</code> po każdej zmianie w polu tekstowym, a <code>handleSubmit</code> wyświetla alert z wpisanym imieniem, zapobiegając jednocześnie przeładowaniu strony.</p>
+
+        <h2>Walidacja Formularza</h2>
+        <p>Walidacja formularza pozwala sprawdzić poprawność danych przed ich wysłaniem. Można przeprowadzać walidację, sprawdzając warunki w funkcji <code>handleSubmit</code> lub podczas zmiany pola.</p>
+
+        <pre><code class="language-javascript">
+function ValidatedForm() {
+    const [email, setEmail] = useState('');
+    const [error, setError] = useState('');
+
+    const handleEmailChange = (event) => {
+        setEmail(event.target.value);
+        if (!event.target.value.includes('@')) {
+            setError('Email musi zawierać znak "@"');
+        } else {
+            setError('');
+        }
+    };
+
+    const handleSubmit = (event) => {
+        event.preventDefault();
+        if (error === '') {
+            alert(`Email został wysłany: ${email}`);
+        } else {
+            alert('Popraw błędy w formularzu przed wysłaniem');
+        }
+    };
+
+    return (
+        &lt;form onSubmit={handleSubmit}&gt;
+            &lt;label&gt;
+                Email:
+                &lt;input type="email" value={email} onChange={handleEmailChange} /&gt;
+            &lt;/label&gt;
+            &lt;p style={{ color: 'red' }}&gt;{error}&lt;/p&gt;
+            &lt;button type="submit"&gt;Wyślij&lt;/button&gt;
+        &lt;/form&gt;
+    );
+}
+
+export default ValidatedForm;
+        </code></pre>
+
+        <p>W powyższym przykładzie walidacja sprawdza, czy w polu <code>email</code> znajduje się znak <code>@</code>. Jeśli go brakuje, wyświetla komunikat o błędzie, a przy próbie wysłania formularza użytkownik otrzyma ostrzeżenie.</p>
+
+        <h2>Obsługa Wielu Pól Formularza</h2>
+        <p>Do obsługi wielu pól formularza można przechowywać wartości każdego pola w jednym obiekcie stanu i aktualizować je na podstawie <code>name</code> pola wejściowego.</p>
+
+        <pre><code class="language-javascript">
+function MultiFieldForm() {
+    const [formData, setFormData] = useState({ username: '', age: '' });
+
+    const handleChange = (event) => {
+        const { name, value } = event.target;
+        setFormData({ ...formData, [name]: value });
+    };
+
+    const handleSubmit = (event) => {
+        event.preventDefault();
+        alert(`Użytkownik: ${formData.username}, Wiek: ${formData.age}`);
+    };
+
+    return (
+        &lt;form onSubmit={handleSubmit}&gt;
+            &lt;label&gt;
+                Nazwa użytkownika:
+                &lt;input type="text" name="username" value={formData.username} onChange={handleChange} /&gt;
+            &lt;/label&gt;
+            &lt;label&gt;
+                Wiek:
+                &lt;input type="number" name="age" value={formData.age} onChange={handleChange} /&gt;
+            &lt;/label&gt;
+            &lt;button type="submit"&gt;Wyślij&lt;/button&gt;
+        &lt;/form&gt;
+    );
+}
+
+export default MultiFieldForm;
+        </code></pre>
+
+        <p>W tym przykładzie <code>handleChange</code> aktualizuje stan <code>formData</code> na podstawie <code>name</code> pola, co pozwala obsługiwać wiele pól w jednym obiekcie stanu.</p>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/prism.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/components/prism-javascript.min.js"></script>
+</body>
+</html>

@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Komponenty w React - Funkcyjne i Klasowe</title>
+    <link rel="stylesheet" href="../styles.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/themes/prism-tomorrow.min.css" rel="stylesheet" />
+</head>
+<body>
+    <div class="container">
+        <h1>Komponenty w React - Funkcyjne i Klasowe</h1>
+        
+        <p>Komponenty są podstawowymi blokami budującymi aplikacje w React. W React możemy tworzyć komponenty funkcyjne lub klasowe.</p>
+
+        <h2>Komponenty Funkcyjne</h2>
+        <p>Komponenty funkcyjne to proste funkcje JavaScript, które przyjmują <code>props</code> jako argument i zwracają JSX. Są preferowane w nowoczesnych aplikacjach React.</p>
+
+        <pre><code class="language-javascript">
+// Przykład komponentu funkcyjnego
+function Welcome(props) {
+    return &lt;h1&gt;Witaj, {props.name}!&lt;/h1&gt;;
+}
+
+// Użycie komponentu
+const element = &lt;Welcome name="Jan" /&gt;;
+        </code></pre>
+
+        <h2>Komponenty Klasowe</h2>
+        <p>Komponenty klasowe to starszy sposób tworzenia komponentów w React. Muszą dziedziczyć po <code>React.Component</code> i zawierać metodę <code>render()</code>, która zwraca JSX.</p>
+
+        <pre><code class="language-javascript">
+// Przykład komponentu klasowego
+import React, { Component } from 'react';
+
+class Welcome extends Component {
+    render() {
+        return &lt;h1&gt;Witaj, {this.props.name}!&lt;/h1&gt;;
+    }
+}
+
+// Użycie komponentu
+const element = &lt;Welcome name="Jan" /&gt;;
+        </code></pre>
+
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/prism.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/components/prism-javascript.min.js"></script>
+</body>
+</html>

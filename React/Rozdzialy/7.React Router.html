@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>React - React Router</title>
+    <link rel="stylesheet" href="../styles.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/themes/prism-tomorrow.min.css" rel="stylesheet" />
+</head>
+<body>
+    <div class="container">
+        <h1>React - React Router</h1>
+        
+        <p>React Router to biblioteka, która umożliwia dodanie routingu (nawigacji) w aplikacji React. Dzięki niej możemy tworzyć wielostronicowe aplikacje, gdzie różne adresy URL wyświetlają różne komponenty bez przeładowania strony.</p>
+
+        <h2>Instalacja React Router</h2>
+        <p>Aby używać React Router, należy najpierw zainstalować pakiet <code>react-router-dom</code>:</p>
+
+        <pre><code class="language-bash">
+npm install react-router-dom
+        </code></pre>
+
+        <h2>Podstawowa Konfiguracja</h2>
+        <p>Podstawowe elementy React Router to <code>BrowserRouter</code>, <code>Routes</code>, i <code>Route</code>. <code>BrowserRouter</code> jest kontenerem dla całej aplikacji, a <code>Routes</code> zawiera poszczególne <code>Route</code>, które określają, jakie komponenty mają być renderowane dla określonych ścieżek.</p>
+
+        <pre><code class="language-javascript">
+import React from 'react';
+import { BrowserRouter, Routes, Route } from 'react-router-dom';
+import Home from './Home';
+import About from './About';
+import Contact from './Contact';
+
+function App() {
+    return (
+        &lt;BrowserRouter&gt;
+            &lt;Routes&gt;
+                &lt;Route path="/" element=&lt;Home /&gt; /&gt;
+                &lt;Route path="/about" element=&lt;About /&gt; /&gt;
+                &lt;Route path="/contact" element=&lt;Contact /&gt; /&gt;
+            &lt;/Routes&gt;
+        &lt;/BrowserRouter&gt;
+    );
+}
+
+export default App;
+        </code></pre>
+
+        <p>W powyższym przykładzie każda ścieżka (<code>path</code>) renderuje inny komponent. <code>"/"</code> wyświetla komponent <code>Home</code>, <code>"/about"</code> wyświetla <code>About</code>, a <code>"/contact"</code> wyświetla <code>Contact</code>.</p>
+
+        <h2>Nawigacja</h2>
+        <p>Aby poruszać się między różnymi ścieżkami w aplikacji, używamy komponentu <code>Link</code> zamiast tradycyjnego HTML-owego linku <code>&lt;a&gt;</code>. Pozwala to na zmianę ścieżek bez przeładowania strony.</p>
+
+        <pre><code class="language-javascript">
+import React from 'react';
+import { Link } from 'react-router-dom';
+
+function Navbar() {
+    return (
+        &lt;nav&gt;
+            &lt;ul&gt;
+                &lt;li&gt;&lt;Link to="/"&gt;Strona główna&lt;/Link&gt;&lt;/li&gt;
+                &lt;li&gt;&lt;Link to="/about"&gt;O nas&lt;/Link&gt;&lt;/li&gt;
+                &lt;li&gt;&lt;Link to="/contact"&gt;Kontakt&lt;/Link&gt;&lt;/li&gt;
+            &lt;/ul&gt;
+        &lt;/nav&gt;
+    );
+}
+
+export default Navbar;
+        </code></pre>
+
+        <p>Komponent <code>Link</code> zmienia adres URL i renderuje odpowiedni komponent, bez odświeżania całej strony.</p>
+
+        <h2>Komponent <code>Navigate</code></h2>
+        <p>React Router umożliwia również przekierowywanie użytkowników na inną stronę za pomocą komponentu <code>Navigate</code>. Przykładem może być przekierowanie na stronę główną po wykonaniu akcji:</p>
+
+        <pre><code class="language-javascript">
+import React from 'react';
+import { Navigate } from 'react-router-dom';
+
+function RedirectToHome() {
+    return &lt;Navigate to="/" /&gt;;
+}
+        </code></pre>
+
+        <p>W tym przykładzie komponent <code>RedirectToHome</code> automatycznie przekieruje użytkownika na stronę główną (<code>"/"</code>).</p>
+        
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/prism.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/components/prism-javascript.min.js"></script>
+</body>
+</html>

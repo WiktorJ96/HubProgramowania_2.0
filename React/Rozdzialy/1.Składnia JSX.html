@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Składnia JSX</title>
+    <link rel="stylesheet" href="../styles.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/themes/prism-tomorrow.min.css" rel="stylesheet" />
+</head>
+<body>
+    <div class="container">
+        <h1>Składnia JSX</h1>
+        
+        <p>JSX to rozszerzenie składni JavaScript, które umożliwia pisanie elementów podobnych do HTML bezpośrednio w kodzie JavaScript. JSX jest często wykorzystywany w React do tworzenia komponentów interfejsu użytkownika.</p>
+
+        <h2>Wprowadzenie do JSX</h2>
+        <p>JSX pozwala na wstawianie kodu HTML bezpośrednio w JavaScript i dodawanie wyrażeń JavaScript w HTML przy użyciu składni <code>{}</code>. JSX musi być przetworzony przez Babel, aby działał w przeglądarkach.</p>
+
+        <pre><code class="language-javascript">
+// JSX pozwala na pisanie kodu przypominającego HTML w JavaScript
+const element = &lt;h1&gt;Witaj, świecie!&lt;/h1&gt;;
+
+// JSX wspiera wyrażenia JavaScript wewnątrz nawiasów {}
+const user = "Jan";
+const greeting = &lt;h2&gt;Witaj, {user}!&lt;/h2&gt;;
+console.log(greeting);
+        </code></pre>
+
+        <h2>Pisanie komponentów w JSX</h2>
+        <p>Komponenty w React można tworzyć jako funkcje lub klasy. Funkcja komponentu jest prostą funkcją JavaScript, która zwraca JSX. Oto przykład:</p>
+        
+        <pre><code class="language-javascript">
+// Przykład prostego komponentu w JSX
+function Welcome(props) {
+    return &lt;h1&gt;Witaj, {props.name}!&lt;/h1&gt;;
+}
+
+// Użycie komponentu
+const element = &lt;Welcome name="Jan" /&gt;;
+console.log(element);
+        </code></pre>
+
+        <h2>Wstawianie wyrażeń JavaScript w JSX</h2>
+        <p>W JSX można wstawiać wyrażenia JavaScript w nawiasach klamrowych <code>{}</code>. Jest to przydatne, gdy chcemy dynamicznie generować zawartość.</p>
+
+        <pre><code class="language-javascript">
+// Przykład wstawiania wyrażeń w JSX
+const user = { firstName: 'Anna', lastName: 'Kowalska' };
+
+function formatName(user) {
+    return user.firstName + ' ' + user.lastName;
+}
+
+const element = &lt;h1&gt;Witaj, {formatName(user)}!&lt;/h1&gt;;
+console.log(element);
+        </code></pre>
+
+        <h2>Atrybuty w JSX</h2>
+        <p>Podobnie jak w HTML, w JSX można używać atrybutów, ale niektóre z nich mają inne nazwy, jak na przykład <code>className</code> zamiast <code>class</code>.</p>
+        
+        <pre><code class="language-javascript">
+// Dodawanie atrybutów w JSX
+const element = &lt;img src="zdjecie.jpg" alt="Przykładowe zdjęcie" className="obrazek" /&gt;;
+        </code></pre>
+
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/prism.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/components/prism-javascript.min.js"></script>
+</body>
+</html>

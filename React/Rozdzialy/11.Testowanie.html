@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>React - Testowanie z Jest i React Testing Library</title>
+    <link rel="stylesheet" href="../styles.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/themes/prism-tomorrow.min.css" rel="stylesheet" />
+</head>
+<body>
+    <div class="container">
+        <h1>React - Testowanie z Jest i React Testing Library</h1>
+        
+        <p>Testowanie jednostkowe to technika, która pozwala na sprawdzanie poprawności poszczególnych funkcji i komponentów w izolacji. W React najczęściej używa się do tego narzędzi takich jak <code>Jest</code> (biblioteka testowa) i <code>React Testing Library</code> (do testowania komponentów React).</p>
+
+        <h2>Instalacja Jest i React Testing Library</h2>
+        <p>Aby rozpocząć testowanie, należy zainstalować <code>jest</code> oraz <code>@testing-library/react</code>:</p>
+
+        <pre><code class="language-bash">
+npm install --save-dev jest @testing-library/react @testing-library/jest-dom
+        </code></pre>
+
+        <h2>Pisanie Prostych Testów za pomocą Jest</h2>
+        <p>Jest jest biblioteką do testowania, która pozwala na definiowanie testów przy użyciu funkcji takich jak <code>test</code>, <code>expect</code>, <code>describe</code>, itp. Poniższy przykład pokazuje test funkcji sumującej liczby.</p>
+
+        <pre><code class="language-javascript">
+// sum.js
+export function sum(a, b) {
+    return a + b;
+}
+
+// sum.test.js
+import { sum } from './sum';
+
+test('Dodaje 1 + 2, aby uzyskać 3', () => {
+    expect(sum(1, 2)).toBe(3);
+});
+        </code></pre>
+
+        <p>W powyższym przykładzie <code>test</code> sprawdza, czy funkcja <code>sum</code> zwraca poprawny wynik dla podanych wartości.</p>
+
+        <h2>Testowanie Komponentów za pomocą React Testing Library</h2>
+        <p>React Testing Library pozwala na renderowanie komponentów w wirtualnym środowisku do testów. Pozwala na interakcję z elementami tak, jakby były renderowane w przeglądarce.</p>
+
+        <pre><code class="language-javascript">
+// Greeting.js
+import React from 'react';
+
+function Greeting({ name }) {
+    return &lt;h1&gt;Hello, {name}!&lt;/h1&gt;;
+}
+
+export default Greeting;
+
+// Greeting.test.js
+import React from 'react';
+import { render, screen } from '@testing-library/react';
+import '@testing-library/jest-dom';
+import Greeting from './Greeting';
+
+test('Wyświetla powitanie z imieniem', () => {
+    render(&lt;Greeting name="Jan" /&gt;);
+    const greetingElement = screen.getByText(/Hello, Jan!/i);
+    expect(greetingElement).toBeInTheDocument();
+});
+        </code></pre>
+
+        <p>Test <code>Greeting</code> sprawdza, czy komponent renderuje się poprawnie z przekazanym <code>name</code>. Funkcja <code>getByText</code> szuka tekstu "Hello, Jan!" w komponencie.</p>
+
+        <h2>Symulowanie Zdarzeń</h2>
+        <p>React Testing Library umożliwia symulowanie zdarzeń, takich jak kliknięcia, dzięki funkcji <code>fireEvent</code>. Jest to przydatne do testowania interakcji użytkownika.</p>
+
+        <pre><code class="language-javascript">
+// Button.js
+import React, { useState } from 'react';
+
+function Button() {
+    const [count, setCount] = useState(0);
+    return (
+        &lt;div&gt;
+            &lt;p&gt;Kliknięcia: {count}&lt;/p&gt;
+            &lt;button onClick={() =&gt; setCount(count + 1)}&gt;Kliknij mnie&lt;/button&gt;
+        &lt;/div&gt;
+    );
+}
+
+export default Button;
+
+// Button.test.js
+import React from 'react';
+import { render, screen, fireEvent } from '@testing-library/react';
+import '@testing-library/jest-dom';
+import Button from './Button';
+
+test('Zwiększa licznik po kliknięciu', () => {
+    render(&lt;Button /&gt;);
+    const buttonElement = screen.getByText(/Kliknij mnie/i);
+    fireEvent.click(buttonElement);
+    const countElement = screen.getByText(/Kliknięcia: 1/i);
+    expect(countElement).toBeInTheDocument();
+});
+        </code></pre>
+
+        <p>W powyższym przykładzie test sprawdza, czy kliknięcie przycisku powoduje zwiększenie licznika. <code>fireEvent.click</code> symuluje kliknięcie na przycisk.</p>
+
+        <h2>Testowanie Asynchroniczne</h2>
+        <p>React Testing Library umożliwia również testowanie kodu asynchronicznego przy użyciu funkcji <code>findBy</code> lub <code>waitFor</code> do czekania na rezultaty asynchroniczne.</p>
+
+        <pre><code class="language-javascript">
+// AsyncComponent.js
+import React, { useState, useEffect } from 'react';
+
+function AsyncComponent() {
+    const [data, setData] = useState(null);
+
+    useEffect(() => {
+        setTimeout(() => {
+            setData("Załadowano dane!");
+        }, 1000);
+    }, []);
+
+    return &lt;p&gt;{data ? data : "Ładowanie..." }&lt;/p&gt;;
+}
+
+export default AsyncComponent;
+
+// AsyncComponent.test.js
+import React from 'react';
+import { render, screen, waitFor } from '@testing-library/react';
+import AsyncComponent from './AsyncComponent';
+
+test('Załadowano dane po upływie czasu', async () => {
+    render(&lt;AsyncComponent /&gt;);
+    const dataElement = await waitFor(() => screen.getByText(/Załadowano dane!/i));
+    expect(dataElement).toBeInTheDocument();
+});
+        </code></pre>
+
+        <p>W tym przykładzie <code>waitFor</code> czeka, aż komponent <code>AsyncComponent</code> załaduje dane, a następnie sprawdza, czy tekst "Załadowano dane!" jest wyświetlony.</p>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/prism.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/components/prism-javascript.min.js"></script>
+</body>
+</html>

@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>React - Metody Cyklu Życia</title>
+    <link rel="stylesheet" href="../styles.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/themes/prism-tomorrow.min.css" rel="stylesheet" />
+</head>
+<body>
+    <div class="container">
+        <h1>React - Metody Cyklu Życia</h1>
+        
+        <p>Komponenty klasowe w React posiadają zestaw metod cyklu życia, które pozwalają kontrolować zachowanie komponentu w określonych momentach jego istnienia. Metody te są szczególnie przydatne do wykonywania akcji w momencie montowania, aktualizowania oraz odmontowywania komponentu.</p>
+
+        <h2>Podstawowe Metody Cyklu Życia</h2>
+
+        <h3><code>componentDidMount</code></h3>
+        <p>Metoda <code>componentDidMount</code> jest wywoływana po zamontowaniu komponentu w drzewie DOM. Jest używana do inicjowania akcji, takich jak pobieranie danych z API, ustawianie timerów itp.</p>
+        
+        <pre><code class="language-javascript">
+import React, { Component } from 'react';
+
+class ExampleComponent extends Component {
+    componentDidMount() {
+        console.log("Komponent został zamontowany!");
+        // Można tu wywołać np. fetch() aby pobrać dane
+    }
+
+    render() {
+        return &lt;h1&gt;Witaj, świecie!&lt;/h1&gt;;
+    }
+}
+        </code></pre>
+
+        <h3><code>componentDidUpdate</code></h3>
+        <p>Metoda <code>componentDidUpdate</code> jest wywoływana po każdej aktualizacji komponentu, gdy zmienią się jego <code>props</code> lub <code>state</code>. Można jej używać do reagowania na te zmiany, na przykład aktualizując dane lub zmieniając DOM.</p>
+
+        <pre><code class="language-javascript">
+class ExampleComponent extends Component {
+    componentDidUpdate(prevProps, prevState) {
+        console.log("Komponent został zaktualizowany!");
+
+        if (this.props.someValue !== prevProps.someValue) {
+            // Wykonaj akcję, gdy someValue się zmieni
+        }
+    }
+
+    render() {
+        return &lt;h1&gt;Witaj, świecie!&lt;/h1&gt;;
+    }
+}
+        </code></pre>
+
+        <h3><code>componentWillUnmount</code></h3>
+        <p>Metoda <code>componentWillUnmount</code> jest wywoływana tuż przed odmontowaniem komponentu z DOM. Używana jest do czyszczenia zasobów, takich jak anulowanie timerów lub zakończenie nasłuchów zdarzeń.</p>
+
+        <pre><code class="language-javascript">
+class ExampleComponent extends Component {
+    componentWillUnmount() {
+        console.log("Komponent zostanie odmontowany!");
+        // Można tu np. usunąć timer lub nasłuch zdarzeń
+    }
+
+    render() {
+        return &lt;h1&gt;Witaj, świecie!&lt;/h1&gt;;
+    }
+}
+        </code></pre>
+
+        <h2>Przykład: Timer z Metodami Cyklu Życia</h2>
+        <p>Poniższy przykład demonstruje użycie metod <code>componentDidMount</code> i <code>componentWillUnmount</code> do ustawienia i czyszczenia timera w komponencie klasowym.</p>
+
+        <pre><code class="language-javascript">
+class Timer extends Component {
+    // Konstruktor klasy, w którym ustawiany jest początkowy stan komponentu
+    constructor(props) {
+        super(props); // Wywołanie konstruktora klasy nadrzędnej (Component)
+        this.state = { time: new Date() }; // Ustawienie początkowego stanu z aktualną datą i czasem
+    }
+
+    // Funkcja wykonywana automatycznie po zamontowaniu komponentu
+    componentDidMount() {
+        // Ustawienie interwału, który co 1000 ms (1 sekunda) wywołuje metodę tick()
+        this.timerID = setInterval(() => this.tick(), 1000);
+    }
+
+    // Funkcja wykonywana automatycznie przed usunięciem komponentu
+    componentWillUnmount() {
+        // Wyczyszczenie interwału, aby zatrzymać wywoływanie tick() po usunięciu komponentu
+        clearInterval(this.timerID);
+    }
+
+    // Metoda tick aktualizuje stan z aktualną datą i czasem
+    tick() {
+        this.setState({ time: new Date() }); // Ustawienie nowego czasu w stanie komponentu
+    }
+
+    // Metoda renderująca JSX do wyświetlenia na stronie
+    render() {
+        // Zwraca element <h2> z tekstem i aktualnym czasem pobranym ze stanu
+        return <h2>Aktualna godzina: {this.state.time.toLocaleTimeString()}</h2>;
+    }
+}
+        </code></pre>
+        
+        <p>W tym przykładzie <code>componentDidMount</code> ustawia timer, który aktualizuje czas co sekundę, a <code>componentWillUnmount</code> usuwa ten timer, gdy komponent jest odmontowywany.</p>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/prism.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/components/prism-javascript.min.js"></script>
+</body>
+</html>

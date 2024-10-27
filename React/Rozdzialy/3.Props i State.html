@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>React - Props i State</title>
+    <link rel="stylesheet" href="../styles.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/themes/prism-tomorrow.min.css" rel="stylesheet" />
+</head>
+<body>
+    <div class="container">
+        <h1>React - Props i State</h1>
+        
+        <p>W React możemy przekazywać dane między komponentami przy pomocy <code>props</code> oraz zarządzać stanem komponentów przy użyciu <code>state</code>. Oto podstawy, które pozwolą zrozumieć, jak te mechanizmy działają.</p>
+
+        <h2>Props</h2>
+        <p><code>Props</code> to właściwości przekazywane od komponentu nadrzędnego (rodzica) do komponentu podrzędnego (dziecka). Używamy ich, aby przekazać dane lub funkcje do komponentów dzieci, które nie mogą samodzielnie zmienić wartości przekazanych <code>props</code>.</p>
+
+        <pre><code class="language-javascript">
+// Komponent rodzica
+function ParentComponent() {
+    return &lt;ChildComponent message="Witaj, świecie!" /&gt;;
+}
+
+// Komponent dziecka
+function ChildComponent(props) {
+    return &lt;h1&gt;{props.message}&lt;/h1&gt;;
+}
+        </code></pre>
+
+        <p>W powyższym przykładzie komponent rodzica <code>ParentComponent</code> przekazuje wartość <code>"Witaj, świecie!"</code> do komponentu dziecka <code>ChildComponent</code> za pomocą mechanizmu <code>props</code>. W React <code>props</code> pozwala na przesyłanie danych między komponentami, umożliwiając komponentowi nadrzędnemu (rodzicowi) przekazanie informacji do komponentu podrzędnego (dziecka).</p>
+        <p>W <code>ParentComponent</code> wartość <code>"Witaj, świecie!"</code> jest przypisana do atrybutu JSX o nazwie <code>message</code>. W momencie renderowania React automatycznie tworzy obiekt <code>props</code> dla <code>ChildComponent</code>, zawierający wszystkie przekazane atrybuty. W tym przypadku <code>props</code> zawiera właściwość <code>message</code> z wartością <code>"Witaj, świecie!"</code>.</p>
+        <p>W <code>ChildComponent</code> dostęp do <code>props</code> uzyskujemy poprzez argument funkcji. Komponent dziecka może odczytać wartość przekazaną z rodzica, wywołując <code>props.message</code>. Ta wartość jest następnie wyświetlana wewnątrz elementu <code>&lt;h1&gt;</code>, co powoduje renderowanie tekstu <code>"Witaj, świecie!"</code> na stronie.</p>
+
+
+        <h2>State</h2>
+        <p><code>State</code> jest wewnętrznym stanem komponentu, który może być zmieniany w trakcie jego cyklu życia. Zmiana stanu powoduje ponowne renderowanie komponentu, aby zaktualizować jego wygląd lub dane wyświetlane w interfejsie.</p>
+
+        <pre><code class="language-javascript">
+import React, { useState } from 'react';
+
+function Counter() {
+    const [count, setCount] = useState(0); // Inicjalizacja stanu z wartością początkową 0
+
+    return (
+        &lt;div&gt;
+            &lt;p&gt;Licznik: {count}&lt;/p&gt;
+            &lt;button onClick={() =&gt; setCount(count + 1)}&gt;Zwiększ&lt;/button&gt;
+        &lt;/div&gt;
+    );
+}
+        </code></pre>
+
+        <p>W powyższym przykładzie użyto funkcji <code>useState</code>, aby utworzyć stan o nazwie <code>count</code> i przypisać mu wartość początkową 0. <code>useState</code> to funkcja React, która pozwala komponentowi na przechowywanie i zarządzanie danymi, które mogą się zmieniać w trakcie działania aplikacji. Funkcja ta zwraca tablicę dwóch elementów: aktualną wartość stanu (<code>count</code>) i funkcję do aktualizacji tego stanu.</p>
+    <p>Kiedy użytkownik kliknie przycisk, wywoływana jest funkcja, która zwiększa wartość <code>count</code> o 1, używając funkcji aktualizującej stan (zwróconej przez <code>useState</code>). Dzięki temu komponent zostaje ponownie wyrenderowany z nową, zwiększoną wartością <code>count</code>.</p>
+    <p>Podsumowując: <code>useState</code> umożliwia komponentowi przechowywanie dynamicznych danych, a każda zmiana tych danych powoduje ponowne wyrenderowanie komponentu, aby wyświetlić aktualną wartość.</p>
+
+
+        <h2>Props i State razem</h2>
+        <p>Możemy także łączyć <code>props</code> i <code>state</code>, przekazując stan komponentu rodzica jako <code>props</code> do komponentu dziecka. To pozwala na kontrolowanie stanu przez komponent nadrzędny i aktualizację widoku komponentu podrzędnego.</p>
+
+        <pre><code class="language-javascript">
+// Komponent rodzica
+function ParentComponent() {
+    const [message, setMessage] = useState("Początkowa wiadomość");
+
+    return (
+        &lt;div&gt;
+            &lt;ChildComponent message={message} /&gt;
+            &lt;button onClick={() =&gt; setMessage("Zaktualizowana wiadomość")} &gt;Zmień wiadomość&lt;/button&gt;
+        &lt;/div&gt;
+    );
+}
+
+// Komponent dziecka
+function ChildComponent(props) {
+    return &lt;h1&gt;{props.message}&lt;/h1&gt;;
+}
+        </code></pre>
+
+        <p>W tym przykładzie <code>ParentComponent</code> działa jak nauczyciel, który zarządza tablicą (stanem <code>message</code>) i przekazuje jej zawartość do <code>ChildComponent</code>, czyli ucznia, który odczytuje tę wiadomość. Kliknięcie przycisku sprawia, że nauczyciel zmienia wiadomość na tablicy, co automatycznie powoduje, że uczeń widzi nową treść. Dzięki temu <code>ChildComponent</code> zawsze pokazuje aktualną wiadomość przekazaną z <code>ParentComponent</code>.</p>
+
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/prism.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/components/prism-javascript.min.js"></script>
+</body>
+</html>

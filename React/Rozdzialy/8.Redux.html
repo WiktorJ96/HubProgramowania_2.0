@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>React - Redux</title>
+    <link rel="stylesheet" href="../styles.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/themes/prism-tomorrow.min.css" rel="stylesheet" />
+</head>
+<body>
+    <div class="container">
+        <h1>React - Redux</h1>
+        
+        <p>Redux to biblioteka do zarządzania stanem aplikacji. Używa centralnego magazynu (store), w którym przechowuje stan aplikacji, pozwalając na spójne zarządzanie danymi oraz ich łatwą aktualizację za pomocą akcji i reducerów.</p>
+
+        <h2>Instalacja Redux</h2>
+        <p>Aby użyć Redux w aplikacji React, należy zainstalować pakiety <code>redux</code> oraz <code>react-redux</code>:</p>
+
+        <pre><code class="language-bash">
+npm install redux react-redux
+        </code></pre>
+
+        <h2>Tworzenie Store</h2>
+        <p><code>Store</code> to centralny magazyn, w którym przechowywany jest stan aplikacji. Jest tworzony za pomocą funkcji <code>createStore</code> i przyjmuje reducer jako argument.</p>
+
+        <pre><code class="language-javascript">
+import { createStore } from 'redux';
+import counterReducer from './reducers/counterReducer';
+
+const store = createStore(counterReducer);
+
+export default store;
+        </code></pre>
+
+        <p>W tym przykładzie store jest tworzony z użyciem <code>counterReducer</code>, który zarządza stanem licznika.</p>
+
+        <h2>Akcje</h2>
+        <p>Akcje to obiekty opisujące, co ma się wydarzyć w aplikacji. Zawierają typ (opis akcji) i opcjonalnie dane, które mają być przekazane do reducera.</p>
+
+        <pre><code class="language-javascript">
+// Definicja akcji zwiększającej licznik
+export const increment = () => ({
+    type: 'INCREMENT'
+});
+
+// Definicja akcji zmniejszającej licznik
+export const decrement = () => ({
+    type: 'DECREMENT'
+});
+        </code></pre>
+
+        <p>W powyższym przykładzie mamy dwie akcje: <code>increment</code> i <code>decrement</code>, które służą do zmiany stanu licznika.</p>
+
+        <h2>Reducery</h2>
+        <p>Reducer to funkcja, która przyjmuje obecny stan i akcję, a następnie zwraca nowy stan w zależności od typu akcji. Reducer jest odpowiedzialny za przetwarzanie akcji i aktualizację stanu.</p>
+
+        <pre><code class="language-javascript">
+const initialState = { count: 0 };
+
+function counterReducer(state = initialState, action) {
+    switch (action.type) {
+        case 'INCREMENT':
+            return { ...state, count: state.count + 1 };
+        case 'DECREMENT':
+            return { ...state, count: state.count - 1 };
+        default:
+            return state;
+    }
+}
+
+export default counterReducer;
+        </code></pre>
+
+        <p>W powyższym przykładzie <code>counterReducer</code> zwiększa lub zmniejsza wartość <code>count</code> w zależności od typu akcji.</p>
+
+        <h2>Łączenie Redux z React</h2>
+        <p>Aby korzystać z Redux w komponentach React, musimy opakować aplikację w <code>Provider</code> oraz użyć hooków <code>useSelector</code> i <code>useDispatch</code> do uzyskiwania dostępu do stanu i wywoływania akcji.</p>
+
+        <pre><code class="language-javascript">
+import React from 'react';
+import { Provider } from 'react-redux';
+import store from './store';
+import Counter from './Counter';
+
+function App() {
+    return (
+        &lt;Provider store={store}&gt;
+            &lt;Counter /&gt;
+        &lt;/Provider&gt;
+    );
+}
+
+export default App;
+        </code></pre>
+
+        <p>Komponent <code>Provider</code> dostarcza store do wszystkich komponentów wewnątrz aplikacji.</p>
+
+        <h2>Użycie useSelector i useDispatch</h2>
+        <p>Hook <code>useSelector</code> pozwala na pobieranie stanu z magazynu, a <code>useDispatch</code> umożliwia wysyłanie akcji.</p>
+
+        <pre><code class="language-javascript">
+import React from 'react';
+import { useSelector, useDispatch } from 'react-redux';
+import { increment, decrement } from './actions';
+
+function Counter() {
+    const count = useSelector((state) => state.count);
+    const dispatch = useDispatch();
+
+    return (
+        &lt;div&gt;
+            &lt;p&gt;Licznik: {count}&lt;/p&gt;
+            &lt;button onClick={() =&gt; dispatch(increment())}&gt;Zwiększ&lt;/button&gt;
+            &lt;button onClick={() =&gt; dispatch(decrement())}&gt;Zmniejsz&lt;/button&gt;
+        &lt;/div&gt;
+    );
+}
+
+export default Counter;
+        </code></pre>
+
+        <p>W przykładzie powyżej <code>useSelector</code> pobiera wartość licznika, a <code>useDispatch</code> umożliwia wysłanie akcji <code>increment</code> lub <code>decrement</code>.</p>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/prism.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/components/prism-javascript.min.js"></script>
+</body>
+</html>

@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>React - Hooki</title>
+    <link rel="stylesheet" href="../styles.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/themes/prism-tomorrow.min.css" rel="stylesheet" />
+</head>
+<body>
+    <div class="container">
+        <h1>React - Hooki</h1>
+        
+        <p>Hooki to funkcje, które pozwalają "zaczepiać" (ang. hook) funkcjonalności Reacta, takie jak stan i cykl życia komponentu, w komponentach funkcyjnych. Poniżej przedstawiono wbudowane hooki <code>useState</code> i <code>useEffect</code> oraz sposób tworzenia własnych hooków.</p>
+
+        <h2>useState</h2>
+        <p><code>useState</code> jest hookiem, który pozwala na zarządzanie stanem w komponentach funkcyjnych. Zwraca parę wartości: bieżący stan i funkcję do jego aktualizacji.</p>
+
+        <pre><code class="language-javascript">
+import React, { useState } from 'react';
+
+function Counter() {
+    const [count, setCount] = useState(0); // Inicjalizacja stanu z wartością początkową 0
+
+    return (
+        &lt;div&gt;
+            &lt;p&gt;Licznik: {count}&lt;/p&gt;
+            &lt;button onClick={() =&gt; setCount(count + 1)}&gt;Zwiększ&lt;/button&gt;
+        &lt;/div&gt;
+    );
+}
+        </code></pre>
+
+        <p>W powyższym przykładzie użyto <code>useState</code>, aby utworzyć stan <code>count</code> z wartością początkową 0, który zwiększa się o 1 przy każdym kliknięciu przycisku.</p>
+
+        <h2>useEffect</h2>
+        <p><code>useEffect</code> to hook, który pozwala wykonywać efekty uboczne (ang. side effects) w komponentach, takie jak pobieranie danych, ustawianie timera czy aktualizacja DOM. Można go skonfigurować tak, aby uruchamiał się po każdej aktualizacji lub tylko po określonych zmianach.</p>
+
+        <pre><code class="language-javascript">
+import React, { useState, useEffect } from 'react';
+
+function Timer() {
+    const [time, setTime] = useState(new Date());
+
+    useEffect(() => {
+        const timerID = setInterval(() => setTime(new Date()), 1000);
+        
+        return () => clearInterval(timerID); // Czyszczenie timera przy odmontowywaniu
+    }, []); // Pusta tablica jako drugi argument sprawia, że efekt uruchamia się tylko raz, po zamontowaniu komponentu
+
+    return &lt;h2&gt;Aktualna godzina: {time.toLocaleTimeString()}&lt;/h2&gt;;
+}
+        </code></pre>
+
+        <p>W przykładzie powyżej <code>useEffect</code> ustawia timer, który co sekundę aktualizuje stan <code>time</code>. Funkcja zwracana z <code>useEffect</code> usuwa timer, gdy komponent jest odmontowywany.</p>
+
+        <h2>Tworzenie Własnych Hooków</h2>
+        <p>Możemy także tworzyć własne hooki, aby ponownie wykorzystywać logikę w różnych komponentach. Własny hook to po prostu funkcja, która może używać innych hooków i zawsze rozpoczyna się od prefiksu <code>use</code>.</p>
+
+        <pre><code class="language-javascript">
+// Importujemy niezbędne funkcje z React
+import { useState, useEffect } from 'react';
+
+// Definiujemy własny hook o nazwie useWindowWidth, który śledzi szerokość okna przeglądarki
+function useWindowWidth() {
+    // Ustawiamy początkowy stan szerokości na bieżącą szerokość okna przeglądarki
+    const [width, setWidth] = useState(window.innerWidth);
+
+    // Używamy useEffect, aby dodać i usunąć zdarzenie "resize" tylko raz, podczas montowania i odmontowywania hooka
+    useEffect(() => {
+        // Funkcja handleResize aktualizuje stan width na bieżącą szerokość okna
+        const handleResize = () => setWidth(window.innerWidth);
+        
+        // Dodajemy nasłuchiwanie zdarzenia "resize", aby wykrywać zmiany szerokości okna
+        window.addEventListener('resize', handleResize);
+        
+        // Funkcja cleanup (sprzątająca) usuwająca nasłuchiwanie zdarzenia "resize", gdy komponent jest odmontowany
+        return () => window.removeEventListener('resize', handleResize);
+    }, []); // [] jako drugi argument oznacza, że efekt zostanie wykonany tylko raz po zamontowaniu komponentu
+
+    // Hook zwraca bieżącą szerokość okna przeglądarki
+    return width;
+}
+
+// Komponent, który korzysta z własnego hooka useWindowWidth
+function WindowWidthDisplay() {
+    // Wywołujemy useWindowWidth, aby uzyskać aktualną szerokość okna
+    const width = useWindowWidth();
+    
+    // Renderujemy element <p> z bieżącą szerokością okna przeglądarki
+    return <p>Szerokość okna: {width}px</p>;
+}
+
+        </code></pre>
+
+        <p>W tym przykładzie własny hook <code>useWindowWidth</code> śledzi szerokość okna przeglądarki i zwraca ją, umożliwiając jej łatwe użycie w dowolnym komponencie.</p>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/prism.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/components/prism-javascript.min.js"></script>
+</body>
+</html>
