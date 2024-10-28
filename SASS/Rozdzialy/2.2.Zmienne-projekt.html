@@ -1,0 +1,125 @@
+
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="../styles-p.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/themes/prism-tomorrow.min.css" rel="stylesheet" />
+    <title>Podgląd Projektu - SASS Zmienne</title>
+</head>
+<style>
+    /* Zdefiniowanie zmiennych */
+:root {
+    --primary-color: #3498db;
+    --secondary-color: #2ecc71;
+    --font-size-large: 18px;
+    --font-size-medium: 16px;
+    --padding: 10px;
+}
+
+/* Styl przycisków */
+.button {
+    padding: var(--padding);
+    font-size: var(--font-size-medium);
+    color: #fff;
+    border: none;
+    cursor: pointer;
+    width: 200px;
+}
+
+.button-primary {
+    background-color: var(--primary-color);
+}
+
+.button-secondary {
+    background-color: var(--secondary-color);
+}
+
+/* Styl tekstu */
+.text-large {
+    font-size: var(--font-size-large);
+    margin-bottom: var(--padding);
+}
+
+.text-medium {
+    font-size: var(--font-size-medium);
+    margin-bottom: calc(var(--padding) / 2);
+}
+
+/* Styl podglądu */
+.preview {
+    display: flex;
+    flex-direction: column;
+    gap: var(--padding);
+    margin: var(--padding) 0;
+}
+
+</style>
+<body>
+    <div class="container">
+        <!-- Podgląd Projektu -->
+        <div class="preview">
+            <button class="button button-primary">Primary Button</button>
+            <button class="button button-secondary">Secondary Button</button>
+            <div class="text-large">Tekst dużej wielkości</div>
+            <div class="text-medium">Tekst średniej wielkości</div>
+        </div>
+        
+        <h2>Podgląd Kodów SASS i HTML</h2>
+        <p>Poniżej znajdują się fragmenty kodów SASS i HTML, z których składa się projekt:</p>
+
+        <h3>Kod SASS</h3>
+        <pre><code class="language-scss">
+// Zdefiniowanie zmiennych
+$primary-color: #3498db;
+$secondary-color: #2ecc71;
+$font-size-large: 18px;
+$font-size-medium: 16px;
+$padding: 10px;
+
+// Styl przycisków
+.button {
+    padding: $padding;
+    font-size: $font-size-medium;
+    color: #fff;
+    width:200px
+    
+    &.button-primary {
+        background-color: $primary-color;
+    }
+
+    &.button-secondary {
+        background-color: $secondary-color;
+    }
+}
+
+// Styl tekstu
+.text-large {
+    font-size: $font-size-large;
+    margin-bottom: $padding;
+}
+
+.text-medium {
+    font-size: $font-size-medium;
+    margin-bottom: $padding / 2;
+}
+        </code></pre>
+
+        <h3>Kod HTML</h3>
+        <pre><code class="language-html">
+&lt;!-- Podgląd Projektu --&gt;
+&lt;div class="preview"&gt;
+    &lt;button class="button button-primary"&gt;Primary Button&lt;/button&gt;
+    &lt;button class="button button-secondary"&gt;Secondary Button&lt;/button&gt;
+    &lt;div class="text-large"&gt;Tekst dużej wielkości&lt;/div&gt;
+    &lt;div class="text-medium"&gt;Tekst średniej wielkości&lt;/div&gt;
+&lt;/div&gt;
+        </code></pre>
+
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/prism.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/components/prism-scss.min.js"></script>
+</body>
+</html>

@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="../styles-p.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/themes/prism-tomorrow.min.css" rel="stylesheet" />
+    <title>Podgląd Projektu - SASS Importowanie</title>
+</head>
+<style>
+    /* Zdefiniowanie zmiennych */
+:root {
+    --primary-color: #3498db;
+    --secondary-color: #2ecc71;
+    --default-font: Arial, sans-serif;
+}
+
+/* Styl Nagłówka */
+.header {
+    background-color: var(--primary-color);
+    color: #fff;
+    padding: 20px;
+    text-align: center;
+    font-family: var(--default-font);
+}
+
+/* Styl Przycisku */
+.button {
+    background-color: var(--secondary-color);
+    color: #fff;
+    padding: 10px 20px;
+    border-radius: 10px;
+    cursor: pointer;
+    border: none;
+}
+</style>
+<body>
+    <div class="container">
+        <!-- Podgląd Projektu -->
+        <div class="preview">
+            <header class="header">Nagłówek Modułowy</header>
+            <button class="button">Przycisk Modułowy</button>
+        </div>
+
+        <h2>Podgląd Kodów SASS i HTML</h2>
+        <p>Poniżej znajdują się fragmenty kodów SASS i HTML, z których składa się projekt:</p>
+
+        <h3>Kod SASS</h3>
+        <pre><code class="language-scss">
+// _variables.scss - plik zmiennych
+$default-font: 'Arial, sans-serif';
+$primary-color: #3498db;
+$secondary-color: #2ecc71;
+
+// _header.scss - plik stylu nagłówka
+@use 'variables';
+
+.header {
+    background-color: variables.$primary-color;
+    color: #fff;
+    padding: 20px;
+    text-align: center;
+    font-family: variables.$default-font;
+}
+
+// _button.scss - plik stylu przycisku
+@use 'variables';
+@use 'mixins';
+
+.button {
+    @include mixins.rounded(10px);
+    background-color: variables.$secondary-color;
+    color: #fff;
+    padding: 10px 20px;
+    cursor: pointer;
+    border: none;
+}
+
+// _mixins.scss - plik z mixinami
+@mixin rounded($radius) {
+    border-radius: $radius;
+}
+
+// main.scss - główny plik stylów
+@use 'variables';
+@use 'header';
+@use 'button';
+@use 'mixins';
+        </code></pre>
+
+        <h3>Kod HTML</h3>
+        <pre><code class="language-html">
+&lt;!-- Podgląd Projektu --&gt;
+&lt;header class="header"&gt;Nagłówek Modułowy&lt;/header&gt;
+&lt;button class="button"&gt;Przycisk Modułowy&lt;/button&gt;
+        </code></pre>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/prism.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/components/prism-scss.min.js"></script>
+</body>
+</html>

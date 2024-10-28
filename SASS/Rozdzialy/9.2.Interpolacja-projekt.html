@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="../styles-p.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/themes/prism-tomorrow.min.css" rel="stylesheet" />
+    <title>Podgląd Projektu - SASS Interpolacja</title>
+</head>
+<style>
+    /* Zdefiniowanie zmiennych */
+:root {
+    --main-color: #ff6f61;
+}
+
+/* Styl przycisku z interpolacją */
+.button-primary {
+    background-color: #3498db;
+    color: #fff;
+    padding: 10px;
+}
+
+.button-secondary {
+    background-color: #2ecc71;
+    color: #fff;
+    padding: 10px;
+}
+
+.button-danger {
+    background-color: #e74c3c;
+    color: #fff;
+    padding: 10px;
+}
+
+/* Styl kontenera z interpolacją w niestandardowych właściwościach */
+:root {
+    --main-color: #ff6f61;
+}
+
+.button-custom {
+    background-color: var(--main-color);
+    color: #fff;
+    padding: 10px 20px;
+    border-radius: 5px;
+}
+
+/* Styl kolumn z interpolacją */
+.column-1 {
+    width: 10%;
+    border: 2px solid blue;
+}
+
+.column-2 {
+    width: 20%;
+    border: 2px solid blue;
+}
+
+.column-3 {
+    width: 30%;
+    border: 2px solid blue;
+}
+
+
+/* Styl kontenera dla punktów przerwania */
+.container-small { max-width: 576px; }
+.container-medium { max-width: 768px; }
+.container-large { max-width: 992px; }
+</style>
+<body>
+    <div class="container">
+        <!-- Podgląd Projektu -->
+        <div class="preview">
+            <button class="button-primary">Primary Button</button>
+            <button class="button-secondary">Secondary Button</button>
+            <button class="button-danger">Danger Button</button>
+            <button class="button-custom">Custom Button</button>
+
+            <div class="column-1">Kolumna 1 - 10%</div>
+            <div class="column-2">Kolumna 2 - 20%</div>
+            <div class="column-3">Kolumna 3 - 30%</div>
+
+            <div class="container-small">Container Small - max-width: 576px</div>
+            <div class="container-medium">Container Medium - max-width: 768px</div>
+            <div class="container-large">Container Large - max-width: 992px</div>
+        </div>
+
+        <h2>Podgląd Kodów SASS i HTML</h2>
+        <p>Poniżej znajdują się fragmenty kodów SASS i HTML, z których składa się projekt:</p>
+
+        <h3>Kod SASS</h3>
+        <pre><code class="language-scss">
+// Użycie interpolacji do generowania klas przycisków
+$colors: (primary: #3498db, secondary: #2ecc71, danger: #e74c3c);
+
+@each $name, $color in $colors {
+    .button-#{$name} {
+        background-color: $color;
+        color: #fff;
+        padding: 10px;
+    }
+}
+
+// Interpolacja dla niestandardowych właściwości CSS
+$theme-color: #ff6f61;
+
+:root {
+    --main-color: #{$theme-color};
+}
+
+.button-custom {
+    background-color: var(--main-color);
+    color: #fff;
+    padding: 10px 20px;
+    border-radius: 5px;
+}
+
+// Generowanie kolumn z niebieskim obramowaniem
+@for $i from 1 through 3 {
+    .column-#{$i} {
+        width: #{$i * 10}%;
+        border: 2px solid blue;
+    }
+}
+
+// Responsywne kontenery
+$breakpoints: (small: 576px, medium: 768px, large: 992px);
+
+@each $size, $px in $breakpoints {
+    @media (min-width: $px) {
+        .container-#{$size} {
+            max-width: $px;
+        }
+    }
+}
+        </code></pre>
+
+        <h3>Kod HTML</h3>
+        <pre><code class="language-html">
+&lt;!-- Podgląd Projektu --&gt;
+&lt;button class="button-primary"&gt;Primary Button&lt;/button&gt;
+&lt;button class="button-secondary"&gt;Secondary Button&lt;/button&gt;
+&lt;button class="button-danger"&gt;Danger Button&lt;/button&gt;
+&lt;button class="button-custom"&gt;Custom Button&lt;/button&gt;
+
+&lt;div class="column-1"&gt;Kolumna 1 - 10%&lt;/div&gt;
+&lt;div class="column-2"&gt;Kolumna 2 - 20%&lt;/div&gt;
+&lt;div class="column-3"&gt;Kolumna 3 - 30%&lt;/div&gt;
+
+&lt;div class="container-small"&gt;Container Small - max-width: 576px&lt;/div&gt;
+&lt;div class="container-medium"&gt;Container Medium - max-width: 768px&lt;/div&gt;
+&lt;div class="container-large"&gt;Container Large - max-width: 992px&lt;/div&gt;
+        </code></pre>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/prism.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/components/prism-scss.min.js"></script>
+</body>
+</html>

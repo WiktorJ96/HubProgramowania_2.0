@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="../styles-p.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/themes/prism-tomorrow.min.css" rel="stylesheet" />
+    <title>Podgląd Projektu - SASS Kontrola Dyrektyw</title>
+</head>
+<style>
+    /* Zdefiniowanie zmiennych */
+:root {
+    --dark-bg: #333;
+    --dark-color: #fff;
+    --light-bg: #fff;
+    --light-color: #333;
+    --gutter: 20px;
+}
+
+/* Styl Przycisku */
+.button {
+    padding: 10px 20px;
+    font-size: 16px;
+    border-radius: 5px;
+    border: none;
+    cursor: pointer;
+}
+
+.button-dark {
+    background-color: var(--dark-bg);
+    color: var(--dark-color);
+}
+
+.button-light {
+    background-color: var(--light-bg);
+    color: var(--light-color);
+}
+
+/* Styl Klas Dla Marginesów */
+.margin-1 { margin: 10px; }
+.margin-2 { margin: 20px; }
+.margin-3 { margin: 30px; }
+.margin-4 { margin: 40px; }
+.margin-5 { margin: 50px; }
+
+/* Styl Klas Dla Kolorów */
+.button-primary {
+    background-color: #3498db;
+    color: #fff;
+}
+
+.button-success {
+    background-color: #2ecc71;
+    color: #fff;
+}
+
+.button-danger {
+    background-color: #e74c3c;
+    color: #fff;
+}
+
+/* Styl Klas Dla Obramowań */
+.border-1 { border-width: 1px; }
+.border-2 { border-width: 2px; }
+.border-3 { border-width: 3px; }
+.border-4 { border-width: 4px; }
+.border-5 { border-width: 5px; }
+
+/* Styl Siatki Kolumn */
+.main-container {
+    display: flex;
+    flex-wrap: wrap;
+}
+
+.col-1 { width: calc((100% / 4) * 1 - var(--gutter)); margin-right: var(--gutter); }
+.col-2 { width: calc((100% / 4) * 2 - var(--gutter)); margin-right: var(--gutter); }
+.col-3 { width: calc((100% / 4) * 3 - var(--gutter)); margin-right: var(--gutter); }
+.col-4 { width: calc((100% / 4) * 4 - var(--gutter)); margin-right: var(--gutter); }
+</style>
+<body>
+    <div class="container">
+        <!-- Podgląd Projektu -->
+        <div class="preview">
+            <button class="button button-dark">Button Dark</button>
+            <button class="button button-light">Button Light</button>
+
+            <div class="button button-primary margin-1">Primary</div>
+            <div class="button button-success margin-2">Success</div>
+            <div class="button button-danger margin-3">Danger</div>
+
+            <div class="container">
+                <div class="col-1 border-1">Column 1</div>
+                <div class="col-2 border-2">Column 2</div>
+                <div class="col-3 border-3">Column 3</div>
+                <div class="col-4 border-4">Column 4</div>
+            </div>
+        </div>
+
+        <h2>Podgląd Kodów SASS i HTML</h2>
+        <p>Poniżej znajdują się fragmenty kodów SASS i HTML, z których składa się projekt:</p>
+
+        <h3>Kod SASS</h3>
+        <pre><code class="language-scss">
+// Definicja kolorów i motywu
+$theme: dark;
+
+.button {
+    @if $theme == dark {
+        background-color: #333;
+        color: #fff;
+    } @else {
+        background-color: #fff;
+        color: #333;
+    }
+}
+
+// Generowanie klas dla marginesów
+@for $i from 1 through 5 {
+    .margin-#{$i} {
+        margin: #{$i * 10}px;
+    }
+}
+
+// Definicja listy kolorów
+$colors: (primary: #3498db, success: #2ecc71, danger: #e74c3c);
+
+@each $name, $color in $colors {
+    .button-#{$name} {
+        background-color: $color;
+        color: #fff;
+    }
+}
+
+// Generowanie klas dla obramowań
+$i: 1;
+
+@while $i <= 5 {
+    .border-#{$i} {
+        border-width: #{$i}px;
+    }
+    $i: $i + 1;
+}
+
+// Generowanie kolumn siatki
+$columns: 4;
+$gutter: 20px;
+
+.main-container {
+    display: flex;
+    flex-wrap: wrap;
+
+    @for $i from 1 through $columns {
+        .col-#{$i} {
+            width: (100% / $columns) * $i - $gutter;
+            margin-right: $gutter;
+        }
+    }
+}
+        </code></pre>
+
+        <h3>Kod HTML</h3>
+        <pre><code class="language-html">
+&lt;!-- Podgląd Projektu --&gt;
+&lt;div class="preview"&gt;
+    &lt;button class="button button-dark"&gt;Button Dark&lt;/button&gt;
+    &lt;button class="button button-light"&gt;Button Light&lt;/button&gt;
+
+    &lt;div class="button button-primary margin-1"&gt;Primary&lt;/div&gt;
+    &lt;div class="button button-success margin-2"&gt;Success&lt;/div&gt;
+    &lt;div class="button button-danger margin-3"&gt;Danger&lt;/div&gt;
+
+    &lt;div class="container"&gt;
+        &lt;div class="col-1 border-1"&gt;Column 1&lt;/div&gt;
+        &lt;div class="col-2 border-2"&gt;Column 2&lt;/div&gt;
+        &lt;div class="col-3 border-3"&gt;Column 3&lt;/div&gt;
+        &lt;div class="col-4 border-4"&gt;Column 4&lt;/div&gt;
+    &lt;/div&gt;
+&lt;/div&gt;
+        </code></pre>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/prism.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/components/prism-scss.min.js"></script>
+</body>
+</html>

@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="../styles-p.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/themes/prism-tomorrow.min.css" rel="stylesheet" />
+    <title>Podgląd Projektu - SASS Dziedziczenie Stylów</title>
+</head>
+<style>
+    /* Zdefiniowanie zmiennych */
+:root {
+    --primary-color: #3498db;
+    --secondary-color: #2ecc71;
+    --text-color-dark: #fff;
+    --button-radius: 5px;
+    --padding-default: 10px;
+}
+
+/* Styl Przycisków */
+.button {
+    padding: var(--padding-default) 20px;
+    font-size: 16px;
+    color: #fff;
+    background-color: var(--primary-color);
+    border: none;
+    border-radius: var(--button-radius);
+    cursor: pointer;
+}
+
+.button-secondary {
+    background-color: var(--secondary-color);
+    color: #fff;
+}
+
+/* Styl Karty */
+.card {
+    border: 1px solid #333;
+    border-radius: 8px;
+    padding: 15px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    background-color: #333;
+}
+
+.card-highlighted {
+    background-color: #333;
+    border-color: var(--primary-color);
+}
+
+/* Styl Tekstu */
+.header {
+    font-family: Arial, sans-serif;
+    font-size: 24px;
+    color: var(--text-color-dark);
+    line-height: 1.5;
+}
+
+.paragraph {
+    font-family: Arial, sans-serif;
+    font-size: 16px;
+    color: var(--text-color-dark);
+    line-height: 1.5;
+    margin-bottom: 10px;
+}
+</style>
+<body>
+    <div class="container">
+        <!-- Podgląd Projektu -->
+        <div class="preview">
+            <h2 class="header">Nagłówek z dziedziczonym stylem bazowym</h2>
+            <p class="paragraph">To jest paragraf, który dziedziczy styl bazowy tekstu z użyciem `@extend`.</p>
+
+            <div class="card">
+                <h3>Podstawowa Karta</h3>
+                <p>Przykład karty z dziedziczonym stylem bazowym `card-base`.</p>
+            </div>
+
+            <div class="card card-highlighted">
+                <h3>Wyróżniona Karta</h3>
+                <p>Przykład wyróżnionej karty z dziedziczonym stylem bazowym `card-base`.</p>
+            </div>
+
+            <button class="button">Primary Button</button>
+            <button class="button button-secondary">Secondary Button</button>
+        </div>
+
+        <h2>Podgląd Kodów SASS i HTML</h2>
+        <p>Poniżej znajdują się fragmenty kodów SASS i HTML, z których składa się projekt:</p>
+
+        <h3>Kod SASS</h3>
+        <pre><code class="language-scss">
+// Definicja placeholdera dla karty
+%card-base {
+    border: 1px solid #333;
+    border-radius: 8px;
+    padding: 15px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+// Dziedziczenie stylu placeholdera
+.card {
+    @extend %card-base;
+    background-color: #333;
+}
+
+.card-highlighted {
+    @extend %card-base;
+    background-color: #333;
+    border-color: #3498db;
+}
+
+// Styl podstawowy dla tekstu
+%base-text {
+    font-family: Arial, sans-serif;
+    color: #333;
+    line-height: 1.5;
+}
+
+// Dziedziczenie stylu tekstu bazowego
+.header {
+    @extend %base-text;
+    font-size: 24px;
+}
+
+.paragraph {
+    @extend %base-text;
+    font-size: 16px;
+    margin-bottom: 10px;
+}
+
+// Styl przycisków z użyciem @extend
+.button {
+    padding: 10px 20px;
+    font-size: 16px;
+    color: #fff;
+    background-color: #3498db;
+    border: none;
+    border-radius: 5px;
+}
+
+.button-secondary {
+    @extend .button;
+    background-color: #2ecc71;
+}
+        </code></pre>
+
+        <h3>Kod HTML</h3>
+        <pre><code class="language-html">
+&lt;!-- Podgląd Projektu --&gt;
+&lt;div class="preview"&gt;
+    &lt;h2 class="header"&gt;Nagłówek z dziedziczonym stylem bazowym&lt;/h2&gt;
+    &lt;p class="paragraph"&gt;To jest paragraf, który dziedziczy styl bazowy tekstu z użyciem `@extend`.&lt;/p&gt;
+
+    &lt;div class="card"&gt;
+        &lt;h3&gt;Podstawowa Karta&lt;/h3&gt;
+        &lt;p&gt;Przykład karty z dziedziczonym stylem bazowym `card-base`.&lt;/p&gt;
+    &lt;/div&gt;
+
+    &lt;div class="card card-highlighted"&gt;
+        &lt;h3&gt;Wyróżniona Karta&lt;/h3&gt;
+        &lt;p&gt;Przykład wyróżnionej karty z dziedziczonym stylem bazowym `card-base`.&lt;/p&gt;
+    &lt;/div&gt;
+
+    &lt;button class="button"&gt;Primary Button&lt;/button&gt;
+    &lt;button class="button button-secondary"&gt;Secondary Button&lt;/button&gt;
+&lt;/div&gt;
+        </code></pre>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/prism.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/components/prism-scss.min.js"></script>
+</body>
+</html>

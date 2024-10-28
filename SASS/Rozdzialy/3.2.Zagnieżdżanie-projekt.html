@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="../styles-p.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/themes/prism-tomorrow.min.css" rel="stylesheet" />
+    <title>Podgląd Projektu - SASS Zagnieżdżanie</title>
+</head>
+<style>
+    /* Zdefiniowanie zmiennych */
+:root {
+    --primary-color: #3498db;
+    --secondary-color: #2ecc71;
+    --font-size-large: 18px;
+    --padding: 10px;
+}
+
+/* Styl Navbar */
+.navbar {
+    background-color: #333;
+    padding: var(--padding);
+    display: flex;
+    gap: var(--padding);
+}
+
+.nav-item {
+    color: #fff;
+    margin-right: var(--padding);
+    cursor: pointer;
+}
+
+.nav-item:hover {
+    color: #ddd;
+}
+
+.nav-item--active {
+    font-weight: bold;
+    color: #ff6f61;
+}
+
+.icon {
+    margin-right: 5px;
+}
+
+/* Styl Przycisków */
+.button {
+    padding: var(--padding);
+    font-size: var(--font-size-large);
+    background-color: var(--primary-color);
+    color: #fff;
+    border: none;
+    cursor: pointer;
+}
+
+.button:hover {
+    background-color: #2980b9;
+}
+
+.button::after {
+    content: ' »';
+}
+</style>
+<body>
+    <div class="container">
+        <!-- Podgląd Projektu -->
+        <div class="preview">
+            <nav class="navbar">
+                <div class="nav-item nav-item--active"><span class="icon">🏠</span>Home</div>
+                <div class="nav-item"><span class="icon">📄</span>About</div>
+                <div class="nav-item"><span class="icon">📞</span>Contact</div>
+            </nav>
+            <button class="button">Primary Button</button>
+        </div>
+
+        <h2>Podgląd Kodów SASS i HTML</h2>
+        <p>Poniżej znajdują się fragmenty kodów SASS i HTML, z których składa się projekt:</p>
+
+        <h3>Kod SASS</h3>
+        <pre><code class="language-scss">
+// Zagnieżdżanie stylów w .navbar
+.navbar {
+    background-color: #333;
+    padding: 10px;
+
+    .nav-item {
+        color: #fff;
+        margin-right: 10px;
+
+        &:hover {
+            color: #ddd;
+        }
+
+        .icon {
+            margin-right: 5px;
+        }
+    }
+
+    .nav-item--active {
+        font-weight: bold;
+        color: #ff6f61;
+    }
+}
+
+// Styl dla przycisku z użyciem pseudo-klas
+.button {
+    background-color: #3498db;
+    color: #fff;
+    padding: 10px;
+
+    &:hover {
+        background-color: #2980b9;
+    }
+
+    &::after {
+        content: ' »';
+    }
+}
+        </code></pre>
+
+        <h3>Kod HTML</h3>
+        <pre><code class="language-html">
+&lt;!-- Podgląd Projektu --&gt;
+&lt;nav class="navbar"&gt;
+    &lt;div class="nav-item nav-item--active"&gt;&lt;span class="icon"&gt;🏠&lt;/span&gt;Home&lt;/div&gt;
+    &lt;div class="nav-item"&gt;&lt;span class="icon"&gt;📄&lt;/span&gt;About&lt;/div&gt;
+    &lt;div class="nav-item"&gt;&lt;span class="icon"&gt;📞&lt;/span&gt;Contact&lt;/div&gt;
+&lt;/nav&gt;
+
+&lt;button class="button"&gt;Primary Button&lt;/button&gt;
+        </code></pre>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/prism.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/components/prism-scss.min.js"></script>
+</body>
+</html>

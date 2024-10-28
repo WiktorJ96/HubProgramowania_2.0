@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="../styles-p.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/themes/prism-tomorrow.min.css" rel="stylesheet" />
+    <title>Podgląd Projektu - SASS Funkcje Niestandardowe</title>
+</head>
+<style>
+    /* Konwersja px na rem */
+    .container {
+        font-size: 1.125rem; /* 18px na rem */
+    }
+
+    /* Styl przycisku przyciemnionego o 20% */
+    .button-dark {
+        background-color: #2874a6; /* Ciemniejszy o 20% od #3498db */
+        color: #fff;
+        padding: 10px 20px;
+    }
+
+    /* Styl okna alertu z kolorem z mapy */
+    .alert {
+        background-color: #e74c3c; /* Kolor 'danger' */
+        color: #fff;
+        padding: 10px;
+        border-radius: 5px;
+    }
+
+    /* Styl odstępów */
+    .spacing-small { margin-bottom: 8px; }
+    .spacing-medium { margin-bottom: 16px; }
+    .spacing-large { margin-bottom: 24px; }
+</style>
+<body>
+    <div class="container">
+        <!-- Podgląd Projektu -->
+        <div class="preview">
+            <div class="container">Font-size: 18px przeliczone na rem</div>
+            <button class="button-dark">Przycisk Przyciemniony</button>
+            <div class="alert">Alert z kolorem danger</div>
+            <div class="spacing-small">Odstęp small - 8px</div>
+            <div class="spacing-medium">Odstęp medium - 16px</div>
+            <div class="spacing-large">Odstęp large - 24px</div>
+        </div>
+
+        <h2>Podgląd Kodów SASS i HTML</h2>
+        <p>Poniżej znajdują się fragmenty kodów SASS i HTML, z których składa się projekt:</p>
+
+        <h3>Kod SASS</h3>
+        <pre><code class="language-scss">
+// Funkcja do konwersji pikseli na rem
+@function px-to-rem($px, $base-font-size: 16px) {
+    @return $px / $base-font-size * 1rem;
+}
+
+// Funkcja do przyciemniania koloru
+@function darken-color($color, $percentage) {
+    @return darken($color, $percentage);
+}
+
+// Funkcja zwracająca mapę kolorów
+@function color-palette() {
+    @return (
+        primary: #3498db,
+        secondary: #2ecc71,
+        danger: #e74c3c
+    );
+}
+
+// Funkcja do obliczania odstępów
+@function spacing($size) {
+    @if $size == small {
+        @return 8px;
+    } @else if $size == medium {
+        @return 16px;
+    } @else if $size == large {
+        @return 24px;
+    } @else {
+        @error "Niewłaściwa wartość dla $size: musi być small, medium lub large";
+    }
+}
+
+// Użycie funkcji w stylach
+.container {
+    font-size: px-to-rem(18px);
+}
+
+.button-dark {
+    background-color: darken-color(#3498db, 20%);
+    color: #fff;
+    padding: 10px 20px;
+}
+
+.alert {
+    background-color: map-get(color-palette(), danger);
+    color: #fff;
+    padding: 10px;
+    border-radius: 5px;
+}
+
+.spacing-small { margin-bottom: spacing(small); }
+.spacing-medium { margin-bottom: spacing(medium); }
+.spacing-large { margin-bottom: spacing(large); }
+        </code></pre>
+
+        <h3>Kod HTML</h3>
+        <pre><code class="language-html">
+&lt;!-- Podgląd Projektu --&gt;
+&lt;div class="container"&gt;Font-size: 18px przeliczone na rem&lt;/div&gt;
+&lt;button class="button-dark"&gt;Przycisk Przyciemniony&lt;/button&gt;
+&lt;div class="alert"&gt;Alert z kolorem danger&lt;/div&gt;
+&lt;div class="spacing-small"&gt;Odstęp small - 8px&lt;/div&gt;
+&lt;div class="spacing-medium"&gt;Odstęp medium - 16px&lt;/div&gt;
+&lt;div class="spacing-large"&gt;Odstęp large - 24px&lt;/div&gt;
+        </code></pre>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/prism.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/components/prism-scss.min.js"></script>
+</body>
+</html>

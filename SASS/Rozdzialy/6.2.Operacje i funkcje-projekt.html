@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="../styles-p.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/themes/prism-tomorrow.min.css" rel="stylesheet" />
+    <title>Podgląd Projektu - SASS Operacje i Funkcje</title>
+</head>
+<style>
+    /* Zdefiniowanie zmiennych */
+:root {
+    --primary-color: #3498db;
+    --secondary-color: #5dade2;
+    --button-radius: 5px;
+    --padding: 10px;
+    --text-color: #fff;
+}
+
+/* Styl Przycisków */
+.button {
+    background-color: var(--primary-color);
+    padding: var(--padding);
+    border-radius: var(--button-radius);
+    color: var(--text-color);
+    border: none;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.button:hover {
+    background-color: #2c7bbf;
+}
+
+/* Styl Karty */
+.card {
+    background-color: var(--secondary-color);
+    border-radius: var(--button-radius);
+    padding: calc(var(--padding) * 2);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    color: #333;
+}
+
+/* Styl kontenera */
+.main-container {
+    width: calc(100% - 2 * var(--padding));
+    margin: var(--padding) auto;
+    padding: var(--padding) / 2;
+}
+</style>
+<body>
+    <div class="container">
+        <!-- Podgląd Projektu -->
+        <div class="preview">
+            <button class="button">Primary Button</button>
+
+            <div class="card">
+                <h3>Karta z Dynamicznymi Stylami</h3>
+                <p>Przykład karty wykorzystującej funkcje i operacje matematyczne SASS.</p>
+            </div>
+        </div>
+
+        <h2>Podgląd Kodów SASS i HTML</h2>
+        <p>Poniżej znajdują się fragmenty kodów SASS i HTML, z których składa się projekt:</p>
+
+        <h3>Kod SASS</h3>
+        <pre><code class="language-scss">
+// Ustawienia bazowe
+$primary-color: #3498db;
+$secondary-color: lighten($primary-color, 20%);
+$border-radius: 5px;
+$padding: 10px;
+
+// Styl dla przycisku
+.button {
+    background-color: $primary-color;
+    padding: $padding;
+    border-radius: $border-radius;
+    color: #fff;
+    border: none;
+    cursor: pointer;
+
+    &:hover {
+        background-color: darken($primary-color, 10%);
+    }
+}
+
+// Styl dla karty
+.card {
+    background-color: $secondary-color;
+    border-radius: $border-radius;
+    padding: $padding * 2;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    color: #333;
+}
+
+// Styl kontenera
+.main-container {
+    width: 100% - 2 * $padding;
+    margin: $padding auto;
+    padding: $padding / 2;
+}
+        </code></pre>
+
+        <h3>Kod HTML</h3>
+        <pre><code class="language-html">
+&lt;!-- Podgląd Projektu --&gt;
+&lt;div class="preview"&gt;
+    &lt;button class="button"&gt;Primary Button&lt;/button&gt;
+
+    &lt;div class="card"&gt;
+        &lt;h3&gt;Karta z Dynamicznymi Stylami&lt;/h3&gt;
+        &lt;p&gt;Przykład karty wykorzystującej funkcje i operacje matematyczne SASS.&lt;/p&gt;
+    &lt;/div&gt;
+&lt;/div&gt;
+        </code></pre>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/prism.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/components/prism-scss.min.js"></script>
+</body>
+</html>

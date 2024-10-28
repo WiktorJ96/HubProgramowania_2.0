@@ -1,0 +1,65 @@
+$primary: rgb(31, 31, 33);
+$secondary: rgb(41, 151, 224);
+$border: #222;
+$font-size: 16px;
+$padding: 10px;
+$bgcolor: whitesmoke;
+
+@mixin rounded-corners { 
+    border-radius: 5px;
+}
+
+@mixin font($color, $font-size) {
+    color:$color;
+    font-size: $font-size;
+}
+
+header{
+    background-color: $primary;
+    color: white;
+    padding: $padding;
+    text-align: center;
+    font-size: $font-size;
+
+    .nav-color{
+        background-color: $primary;
+    }
+}
+
+main{
+    margin-top: 10px;
+    background-color: $bgcolor;
+
+    section{
+        border: 2px solid $border;
+        @include rounded-corners;
+    }
+
+    .container {
+        margin: 0 auto;
+        max-width: 1000px;
+        padding: $padding;
+    }
+}
+
+footer {
+    @include font(#0aeebc, 16px);
+
+    &:hover{
+        border: 2px dotted $border;
+    }
+}
+
+%btn { 
+    padding: 10px 20px;
+    font-size: 16px;
+    color: #fff;
+    background-color: #3498db;
+    border: none;
+    border-radius: 5px;
+}
+
+.btn2, .btn1{
+    @extend %btn;
+}
+

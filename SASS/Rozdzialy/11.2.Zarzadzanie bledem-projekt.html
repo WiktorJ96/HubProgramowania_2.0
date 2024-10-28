@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="../styles-p.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/themes/prism-tomorrow.min.css" rel="stylesheet" />
+    <title>Podgląd Projektu - SASS Zarządzanie Błędem</title>
+</head>
+<style>
+    /* Styl okna informującego o przyciemnieniu */
+    .button-dark {
+        background-color: #2874a6; /* Przyciemniony kolor o 25% */
+        color: #fff;
+        padding: 10px 20px;
+    }
+
+    /* Styl kontenera z walidacją */
+    .main-container {
+        width: 120px; /* Wyświetli ostrzeżenie przy przekroczeniu 100px */
+    }
+
+    /* Styl tekstu do debugowania */
+    .text {
+        font-size: 16px;
+        line-height: 1.5;
+    }
+</style>
+<body>
+    <div class="container">
+        <!-- Podgląd Projektu -->
+        <div class="preview">
+            <button class="button-dark">Przycisk z Ostrzeżeniem</button>
+            <div class="container">Szerokość: 120px (przykładowy warning)</div>
+            <div class="text">Tekst z Debuggingiem (font-size: 16px, line-height: 1.5)</div>
+        </div>
+
+        <h2>Podgląd Kodów SASS i HTML</h2>
+        <p>Poniżej znajdują się fragmenty kodów SASS i HTML, z których składa się projekt:</p>
+
+        <h3>Kod SASS</h3>
+        <pre><code class="language-scss">
+// Funkcja przyciemnienia koloru z ostrzeżeniem
+@function safe-darken($color, $amount) {
+    @if $amount > 20% {
+        @warn "Uwaga: Przyciemnianie o więcej niż 20% może zmienić wygląd elementu";
+    }
+    @return darken($color, $amount);
+}
+
+// Funkcja ustawiająca szerokość z walidacją
+@function set-width($width) {
+    @if type-of($width) != 'number' {
+        @error "Błąd: $width nie jest liczbą. Użyj wartości liczbowej.";
+    } @else if $width > 100px {
+        @warn "Ostrzeżenie: Szerokość większa niż 100px może wpłynąć na layout.";
+    }
+    @return $width;
+}
+
+// Debugowanie wartości
+$font-size: 16px;
+$line-height: 1.5;
+
+@debug $font-size;
+@debug $font-size * $line-height;
+
+// Stylizacja elementów z użyciem funkcji i debugowaniem
+.button-dark {
+    background-color: safe-darken(#3498db, 25%);
+    color: #fff;
+    padding: 10px 20px;
+}
+
+.main-container {
+    width: set-width(120px);
+}
+
+.text {
+    font-size: $font-size;
+    line-height: $line-height;
+}
+        </code></pre>
+
+        <h3>Kod HTML</h3>
+        <pre><code class="language-html">
+&lt;!-- Podgląd Projektu --&gt;
+&lt;button class="button-dark"&gt;Przycisk z Ostrzeżeniem&lt;/button&gt;
+&lt;div class="container"&gt;Szerokość: 120px (przykładowy warning)&lt;/div&gt;
+&lt;div class="text"&gt;Tekst z Debuggingiem (font-size: 16px, line-height: 1.5)&lt;/div&gt;
+        </code></pre>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/prism.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/components/prism-scss.min.js"></script>
+</body>
+</html>
