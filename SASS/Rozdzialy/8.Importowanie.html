@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SASS - Importowanie</title>
+    <link rel="stylesheet" href="../styles.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/themes/prism-tomorrow.min.css" rel="stylesheet" />
+</head>
+<body>
+    <div class="container">
+        <h1>SASS - Importowanie</h1>
+        
+        <p>Modularizacja kodu w SASS umożliwia podzielenie stylów na mniejsze, łatwiejsze do zarządzania pliki, które można importować do głównego pliku za pomocą dyrektywy <code>@use</code> (lub starszej <code>@import</code>, która jest obecnie mniej zalecana). Dzięki modularizacji kod jest bardziej przejrzysty i łatwiejszy w utrzymaniu.</p>
+
+        <h2>Podstawowe Użycie Dyrektywy @use</h2>
+        <p>Dyrektywa <code>@use</code> pozwala na załadowanie zawartości innego pliku SASS. Plik można zaimportować przez nazwę ścieżki bez rozszerzenia, a SASS automatycznie znajdzie odpowiedni plik <code>.scss</code>.</p>
+
+        <pre><code class="language-scss">
+// main.scss - główny plik stylów
+@use 'variables';
+@use 'mixins';
+@use 'buttons';
+
+body {
+    font-family: $default-font; // Zmienne i mixiny są dostępne po prefiksie (np. variables.$default-font)
+    background-color: #f3f3f3;
+}
+        </code></pre>
+
+        <p>W powyższym przykładzie <code>@use</code> importuje pliki <code>variables.scss</code>, <code>mixins.scss</code>, i <code>buttons.scss</code>. Dzięki temu możemy modularnie dodawać do głównego pliku zawartość z każdego z zaimportowanych plików.</p>
+
+        <h2>Zmienne, Mixiny i Funkcje w Modularizacji</h2>
+        <p>Typowe pliki SASS, które można modularnie importować, obejmują zmienne, mixiny, funkcje i specyficzne komponenty. Na przykład:</p>
+
+        <pre><code class="language-scss">
+// variables.scss - plik zmiennych
+$default-font: 'Arial, sans-serif';
+$primary-color: #3498db;
+$secondary-color: #2ecc71;
+
+// mixins.scss - plik z mixinami
+@mixin rounded($radius: 5px) {
+    border-radius: $radius;
+}
+        </code></pre>
+
+        <p>Modularizacja pozwala na łatwe zarządzanie i zmianę wartości zmiennych czy mixinów w jednym miejscu, co od razu wpływa na wszystkie zaimportowane elementy w projekcie.</p>
+
+        <h2>Użycie Prefiksów przy @use</h2>
+        <p>Domyślnie zmienne, mixiny i funkcje zaimportowane za pomocą <code>@use</code> są dostępne tylko z prefiksem nazwy pliku. Można to zmienić, używając aliasu.</p>
+
+        <pre><code class="language-scss">
+// Główne plik stylów z aliasem
+@use 'variables' as vars;
+
+.button {
+    color: vars.$primary-color; // Użycie aliasu vars
+    font-family: vars.$default-font;
+}
+        </code></pre>
+
+        <p>Alias <code>vars</code> pozwala na bardziej zwięzłe odwoływanie się do zmiennych z pliku <code>variables.scss</code>.</p>
+
+        <h2>Importowanie Częściowe za Pomocą Nazw Plików z Podkreśleniem</h2>
+        <p>Pliki przeznaczone do importowania, ale nie do kompilacji samodzielnie, mogą mieć przedrostek podkreślenia, np. <code>_variables.scss</code>. Dzięki temu SASS wie, że są to pliki częściowe i nie generuje osobnych plików CSS.</p>
+
+        <pre><code class="language-scss">
+// Struktura plików:
+// _variables.scss
+// _mixins.scss
+// main.scss
+
+// main.scss
+@use 'variables';
+@use 'mixins';
+        </code></pre>
+
+        <p>Pliki <code>_variables.scss</code> i <code>_mixins.scss</code> będą załadowane do <code>main.scss</code>, ale SASS nie wygeneruje z nich osobnych plików CSS.</p>
+
+        <h2>Przykład: Modularizacja Stylów dla Komponentów</h2>
+        <p>Można też tworzyć pliki dla specyficznych komponentów, takich jak nagłówki, przyciski czy karty, a następnie importować je do głównego pliku.</p>
+
+        <pre><code class="language-scss">
+// _header.scss
+.header {
+    background-color: $primary-color;
+    padding: 20px;
+    text-align: center;
+}
+
+// _button.scss
+.button {
+    @include rounded(10px);
+    background-color: $secondary-color;
+    color: #fff;
+    padding: 10px 20px;
+}
+
+// main.scss
+@use 'variables';
+@use 'mixins';
+@use 'header';
+@use 'button';
+        </code></pre>
+
+        <p>Główny plik <code>main.scss</code> importuje style dla poszczególnych komponentów, co czyni kod bardziej modularnym i zorganizowanym.</p>
+
+        <h2>Różnice między @use a @import</h2>
+        <p>Wcześniej w SASS używano <code>@import</code> do modularizacji, jednak <code>@use</code> jest teraz preferowane, ponieważ rozwiązuje problemy z wydajnością i pozwala na bardziej kontrolowane importowanie stylów. Warto pamiętać:</p>
+        <ul>
+            <li><code>@use</code> pozwala kontrolować widoczność zmiennych i funkcji przez prefiksy.</li>
+            <li><code>@use</code> ładuje każdy plik tylko raz, co zapobiega problemom z wielokrotnym importem.</li>
+            <li><code>@import</code> jest kompatybilne z przestarzałymi wersjami, ale nie jest zalecane w nowych projektach.</li>
+        </ul>
+
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/prism.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/components/prism-scss.min.js"></script>
+</body>
+</html>

@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Podstawy SASS</title>
+    <link rel="stylesheet" href="../styles.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/themes/prism-tomorrow.min.css" rel="stylesheet" />
+</head>
+<body>
+    <div class="container">
+        <h1>Podstawy SASS</h1>
+        
+        <p>SASS (Syntactically Awesome Style Sheets) to rozszerzenie CSS, które pozwala na łatwiejsze zarządzanie kodem stylów poprzez wprowadzenie zmiennych, zagnieżdżania, mixinów i innych funkcji. SASS oferuje dwie składnie: <strong>SCSS</strong> (najczęściej używana) oraz <strong>SASS</strong>.</p>
+
+        <h2>Składnia SCSS</h2>
+        <p>SCSS to składnia, która jest w pełni zgodna z CSS, ale pozwala na użycie dodatkowych funkcji SASS. Składnia SCSS używa nawiasów klamrowych <code>{}</code> i średników <code>;</code>, podobnie jak CSS.</p>
+
+        <pre><code class="language-scss">
+// Przykład składni SCSS
+$primary-color: #3498db;
+
+.container {
+    color: $primary-color;
+    padding: 10px;
+    
+    .header {
+        font-size: 24px;
+        margin-bottom: 15px;
+    }
+}
+        </code></pre>
+
+        <h2>Składnia SASS</h2>
+        <p>Składnia SASS jest bardziej uproszczona i nie wymaga użycia nawiasów klamrowych ani średników. Zamiast tego, stosuje wcięcia do struktury kodu, podobnie jak Python.</p>
+
+        <pre><code class="language-sass">
+// Przykład składni SASS
+$primary-color: #3498db
+
+.container
+    color: $primary-color
+    padding: 10px
+    
+    .header
+        font-size: 24px
+        margin-bottom: 15px
+        </code></pre>
+
+        <h2>Kompilacja Plików SASS do CSS</h2>
+        <p>Pliki SASS (z rozszerzeniami <code>.scss</code> lub <code>.sass</code>) muszą być skompilowane do CSS, aby mogły być użyte w przeglądarkach. Do kompilacji można użyć narzędzia <code>sass</code> z linii komend lub wbudowanych narzędzi w edytorach kodu.</p>
+
+        <pre><code class="language-bash">
+# Kompilacja pojedynczego pliku SCSS do CSS
+sass styles.scss styles.css
+
+# Kompilacja w trybie watch (automatyczne wykrywanie zmian)
+sass --watch styles.scss:styles.css
+        </code></pre>
+
+        <p>Po wykonaniu tej komendy plik <code>styles.scss</code> zostanie skompilowany do <code>styles.css</code>, gotowego do użycia w projekcie.</p>
+
+        <h2>Integracja SASS z Projektem</h2>
+        <p>Aby używać plików SASS w projekcie, trzeba dodać skompilowany plik CSS do HTML lub, w przypadku projektów takich jak React, dodać bezpośrednią obsługę plików SCSS.</p>
+
+        <h3>Integracja z HTML</h3>
+        <p>Po skompilowaniu można podłączyć plik CSS w kodzie HTML za pomocą standardowego linku:</p>
+
+        <pre><code class="language-html">
+&lt;link rel="stylesheet" href="styles.css"&gt;
+        </code></pre>
+
+        <h3>Integracja z React</h3>
+        <p>Aby dodać SASS do projektu React, należy najpierw zainstalować pakiet <code>node-sass</code> (w przypadku projektów opartych o webpack, takich jak create-react-app, jest on domyślnie obsługiwany):</p>
+
+        <pre><code class="language-bash">
+npm install node-sass
+        </code></pre>
+
+        <p>Następnie można importować pliki <code>.scss</code> bezpośrednio w komponentach React:</p>
+
+        <pre><code class="language-javascript">
+import './styles.scss';
+
+function App() {
+    return (
+        &lt;div className="container"&gt;
+            &lt;h1&gt;Witaj w aplikacji!&lt;/h1&gt;
+        &lt;/div&gt;
+    );
+}
+
+export default App;
+        </code></pre>
+
+        <h2>Podstawowe Funkcje SASS</h2>
+        <p>SASS oferuje szereg funkcji, które ułatwiają zarządzanie stylami:</p>
+        <ul>
+            <li><strong>Zagnieżdżanie</strong>: umożliwia zagnieżdżanie selektorów.</li>
+            <li><strong>Zmiennie</strong>: pozwalają na przechowywanie wartości, takich jak kolory i rozmiary.</li>
+            <li><strong>Mixiny</strong>: pozwalają na wielokrotne użycie bloków kodu.</li>
+            <li><strong>Dziedziczenie</strong>: umożliwia użycie stylów z innego selektora.</li>
+        </ul>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/prism.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/components/prism-scss.min.js"></script>
+</body>
+</html>

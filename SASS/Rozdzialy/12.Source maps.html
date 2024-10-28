@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SASS - Source Maps</title>
+    <link rel="stylesheet" href="../styles.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/themes/prism-tomorrow.min.css" rel="stylesheet" />
+</head>
+<body>
+    <div class="container">
+        <h1>SASS - Source Maps</h1>
+        
+        <p>Source maps (mapy źródłowe) to narzędzie, które pozwala przeglądarkom połączyć skompilowany kod CSS z oryginalnymi plikami SASS. Dzięki temu podczas debugowania w narzędziach deweloperskich możemy zobaczyć, z której linijki kodu SASS pochodzi dany styl CSS, co znacznie ułatwia pracę nad projektem.</p>
+
+        <h2>Co to są Source Maps?</h2>
+        <p>Source maps to specjalne pliki, które mapują linie kodu w skompilowanym CSS z odpowiadającymi im liniami w plikach źródłowych SASS. Dzięki temu podczas debugowania w narzędziach deweloperskich przeglądarki, takich jak Chrome DevTools, widzimy bezpośrednie odniesienia do oryginalnego kodu SASS, zamiast analizować skompilowany CSS.</p>
+
+        <h2>Konfiguracja Source Maps w SASS</h2>
+        <p>Aby wygenerować mapy źródłowe, wystarczy użyć flagi <code>--source-map</code> podczas kompilacji SASS za pomocą narzędzia wiersza poleceń <code>sass</code>. Flaga ta instruuje SASS, aby tworzył dodatkowy plik z mapą źródłową dla każdego pliku CSS.</p>
+
+        <pre><code class="language-bash">
+# Kompilacja z włączonymi mapami źródłowymi
+sass --watch styles.scss styles.css --source-map
+        </code></pre>
+
+        <p>W powyższym przykładzie, jeśli używasz komendy <code>sass --watch</code>, SASS będzie generować plik <code>styles.css.map</code> przy każdej kompilacji, który zawiera mapę źródłową.</p>
+
+        <h2>Użycie Source Maps w Narzędziach Deweloperskich</h2>
+        <p>Po wygenerowaniu mapy źródłowej możemy jej użyć w narzędziach deweloperskich przeglądarki, aby zobaczyć oryginalne pliki SASS. Aby to zrobić:</p>
+        <ol>
+            <li>Otwórz narzędzia deweloperskie w przeglądarce (np. w Chrome użyj skrótu <code>Ctrl+Shift+I</code> na Windows lub <code>Cmd+Opt+I</code> na Mac).</li>
+            <li>Przejdź do zakładki <strong>Elements</strong> i wybierz element na stronie.</li>
+            <li>W sekcji <strong>Styles</strong> zobaczysz odniesienia do oryginalnych plików SASS, które wskazują dokładne linie kodu.</li>
+        </ol>
+
+        <p>Dzięki temu możesz szybko zlokalizować problematyczny kod w swoich plikach SASS, co znacznie ułatwia debugowanie.</p>
+
+        <h2>Konfiguracja Source Maps w Narzędziach Automatyzacji</h2>
+        <p>Jeśli używasz narzędzi takich jak Gulp, Webpack, czy Grunt do automatyzacji kompilacji, możesz także skonfigurować source maps w tych narzędziach. Poniżej znajdują się przykłady dla Gulp i Webpack.</p>
+
+        <h3>Przykład Konfiguracji w Gulp</h3>
+        <p>W Gulp można użyć wtyczki <code>gulp-sourcemaps</code>, aby zintegrować mapy źródłowe podczas kompilacji SASS.</p>
+
+        <pre><code class="language-javascript">
+// Instalacja wtyczki gulp-sourcemaps
+// npm install gulp-sass gulp-sourcemaps --save-dev
+
+const gulp = require('gulp');
+const sass = require('gulp-sass')(require('sass'));
+const sourcemaps = require('gulp-sourcemaps');
+
+gulp.task('sass', function() {
+    return gulp.src('src/styles.scss')
+        .pipe(sourcemaps.init()) // Inicjalizacja source maps
+        .pipe(sass().on('error', sass.logError))
+        .pipe(sourcemaps.write('./')) // Zapisuje mapy źródłowe w tym samym katalogu co plik CSS
+        .pipe(gulp.dest('dist'));
+});
+        </code></pre>
+
+        <p>W powyższym przykładzie <code>gulp-sourcemaps</code> inicjalizuje mapy źródłowe, a następnie zapisuje je w katalogu docelowym. Dzięki temu możesz używać map źródłowych w plikach wygenerowanych przez Gulp.</p>
+
+        <h3>Przykład Konfiguracji w Webpack</h3>
+        <p>W Webpack wystarczy dodać opcję <code>devtool</code> w pliku konfiguracji, aby włączyć generowanie source maps.</p>
+
+        <pre><code class="language-javascript">
+// webpack.config.js
+module.exports = {
+    mode: 'development',
+    devtool: 'source-map', // Włącza mapy źródłowe
+    module: {
+        rules: [
+            {
+                test: /\.scss$/,
+                use: [
+                    'style-loader',
+                    'css-loader',
+                    {
+                        loader: 'sass-loader',
+                        options: {
+                            sourceMap: true, // Włącza mapy źródłowe dla SASS
+                        }
+                    }
+                ]
+            }
+        ]
+    }
+};
+        </code></pre>
+
+        <p>W tym przykładzie opcja <code>devtool: 'source-map'</code> włącza mapy źródłowe w Webpack, a <code>sass-loader</code> generuje mapy źródłowe dla SASS, które można używać w narzędziach deweloperskich.</p>
+
+        <h2>Korzyści z Użycia Source Maps</h2>
+        <ul>
+            <li><strong>Szybsze debugowanie</strong>: Łatwiejsze śledzenie kodu źródłowego i identyfikacja problemów.</li>
+            <li><strong>Lepsza organizacja kodu</strong>: Możliwość pracy bezpośrednio w plikach SASS, bez potrzeby analizowania skompilowanego CSS.</li>
+            <li><strong>Optymalizacja czasu pracy</strong>: Mniej czasu spędzonego na lokalizowaniu problemów, dzięki bezpośrednim odniesieniom do kodu źródłowego.</li>
+        </ul>
+
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/prism.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/components/prism-javascript.min.js"></script>
+</body>
+</html>

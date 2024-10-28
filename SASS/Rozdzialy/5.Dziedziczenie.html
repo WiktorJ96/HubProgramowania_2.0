@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SASS - Dziedziczenie Stylów</title>
+    <link rel="stylesheet" href="../styles.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/themes/prism-tomorrow.min.css" rel="stylesheet" />
+</head>
+<body>
+    <div class="container">
+        <h1>SASS - Dziedziczenie Stylów</h1>
+        
+        <p>W SASS można dziedziczyć style między selektorami, co umożliwia użycie istniejących reguł w innych miejscach kodu bez ich powtarzania. Dzięki `@extend` stylizacje są bardziej spójne i łatwiejsze w zarządzaniu.</p>
+
+        <h2>Podstawowe Użycie `@extend`</h2>
+        <p>Aby użyć `@extend`, dodaj go w nowym selektorze, aby przejąć style z istniejącego selektora. Poniżej znajduje się przykład podstawowego dziedziczenia stylów:</p>
+
+        <pre><code class="language-scss">
+// Definicja bazowego selektora
+.button {
+    padding: 10px 20px;
+    font-size: 16px;
+    color: #fff;
+    background-color: #3498db;
+    border: none;
+    border-radius: 5px;
+}
+
+// Dziedziczenie stylów za pomocą @extend
+.button-primary {
+    @extend .button;
+}
+
+.button-secondary {
+    @extend .button;
+    background-color: #2ecc71;
+}
+        </code></pre>
+
+        <p>W tym przykładzie klasa <code>.button-primary</code> dziedziczy wszystkie style z <code>.button</code>, a klasa <code>.button-secondary</code> dziedziczy styl z <code>.button</code> i dodatkowo nadpisuje kolor tła.</p>
+
+        <h2>Dziedziczenie Stylów z Elementów Bazowych</h2>
+        <p>Przy użyciu `@extend` można tworzyć elementy bazowe, które są następnie dziedziczone przez inne selektory, co pozwala tworzyć spójne struktury stylów dla całego projektu.</p>
+
+        <pre><code class="language-scss">
+// Styl podstawowy dla tekstu
+%base-text {
+    font-family: Arial, sans-serif;
+    color: #333;
+    line-height: 1.5;
+}
+
+// Dziedziczenie stylu tekstu bazowego
+.header {
+    @extend %base-text;
+    font-size: 24px;
+}
+
+.paragraph {
+    @extend %base-text;
+    font-size: 16px;
+    margin-bottom: 10px;
+}
+        </code></pre>
+
+        <p>W tym przykładzie styl <code>%base-text</code> jest elementem bazowym (placeholder) i nie jest sam w sobie renderowany w CSS, ale jego reguły są dziedziczone przez <code>.header</code> i <code>.paragraph</code>.</p>
+
+        <h2>Unikanie Powielania Kodów z Placeholderami</h2>
+        <p>Użycie placeholderów (elementów bazowych z symbolem <code>%</code>) pomaga uniknąć powielania kodów. Są renderowane tylko wtedy, gdy są dziedziczone przez inny selektor, co poprawia wydajność kodu.</p>
+
+        <pre><code class="language-scss">
+// Definicja placeholdera dla przycisków
+%button-style {
+    padding: 10px 20px;
+    font-size: 16px;
+    border-radius: 5px;
+    text-transform: uppercase;
+}
+
+// Dziedziczenie placeholdera
+.button {
+    @extend %button-style;
+    background-color: #3498db;
+    color: #fff;
+}
+
+.button-outline {
+    @extend %button-style;
+    background-color: transparent;
+    color: #3498db;
+    border: 2px solid #3498db;
+}
+        </code></pre>
+
+        <p>W tym przykładzie placeholder <code>%button-style</code> jest używany przez <code>.button</code> i <code>.button-outline</code>, co pozwala na wielokrotne wykorzystanie stylów bez ich powtarzania.</p>
+
+        <h2>Przykład Dziedziczenia w Złożonym Projekcie</h2>
+        <p>Dziedziczenie stylów jest szczególnie przydatne w złożonych projektach, gdzie wiele elementów potrzebuje podobnych stylów. Poniższy przykład ilustruje zastosowanie dziedziczenia stylów dla różnych rodzajów kart:</p>
+
+        <pre><code class="language-scss">
+// Styl podstawowy dla karty
+%card-base {
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    padding: 15px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+// Dziedziczenie stylu podstawowego
+.card {
+    @extend %card-base;
+    background-color: #fff;
+}
+
+.card-highlighted {
+    @extend %card-base;
+    background-color: #f9f9f9;
+    border-color: #3498db;
+}
+        </code></pre>
+
+        <p>W tym przykładzie <code>.card</code> i <code>.card-highlighted</code> dziedziczą styl <code>%card-base</code>, co zapewnia spójność i wygodę w zarządzaniu wyglądem kart.</p>
+
+        <h2>Zalety i Ograniczenia `@extend`</h2>
+        <p>**Zalety:** `@extend` pozwala na efektywne zarządzanie wspólnymi stylami i zmniejsza powtarzalność kodu. Jednak jego stosowanie wymaga ostrożności, ponieważ może generować złożone selektory, gdy używamy go wielokrotnie lub na dużą skalę.</p>
+
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/prism.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/components/prism-scss.min.js"></script>
+</body>
+</html>

@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SASS - Mixiny</title>
+    <link rel="stylesheet" href="../styles.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/themes/prism-tomorrow.min.css" rel="stylesheet" />
+</head>
+<body>
+    <div class="container">
+        <h1>SASS - Mixiny</h1>
+        
+        <p>Mixiny w SASS to funkcje pozwalające definiować bloki stylów, które można wielokrotnie używać w różnych miejscach projektu. Dzięki mixinom można łatwo uniknąć powtarzania kodu i sprawnie zarządzać złożonymi stylami.</p>
+
+        <h2>Definiowanie Mixina</h2>
+        <p>Aby zdefiniować mixin, użyj słowa kluczowego <code>@mixin</code>, a następnie nadaj nazwę mixinowi i określ bloki stylów, które chcesz wielokrotnie używać.</p>
+
+        <pre><code class="language-scss">
+// Definiowanie prostego mixina
+@mixin rounded-corners {
+    border-radius: 10px;
+    overflow: hidden;
+}
+
+// Użycie mixina
+.card {
+    @include rounded-corners;
+    background-color: #f3f3f3;
+    padding: 20px;
+}
+        </code></pre>
+
+        <p>W powyższym przykładzie mixin <code>rounded-corners</code> zawiera styl <code>border-radius</code>, a jego użycie w klasie <code>.card</code> dodaje zaokrąglone rogi do tego elementu.</p>
+
+        <h2>Mixiny z Parametrami</h2>
+        <p>Mixiny mogą przyjmować parametry, co pozwala na dostosowywanie stylów przy każdym użyciu. Możesz na przykład przekazać wartość rozmiaru zaokrąglenia jako parametr.</p>
+
+        <pre><code class="language-scss">
+// Definiowanie mixina z parametrem
+@mixin rounded-corners($radius) {
+    border-radius: $radius;
+    overflow: hidden;
+}
+
+// Użycie mixina z różnymi wartościami
+.box-small {
+    @include rounded-corners(5px);
+}
+
+.box-large {
+    @include rounded-corners(15px);
+}
+        </code></pre>
+
+        <p>W tym przykładzie mixin <code>rounded-corners</code> przyjmuje parametr <code>$radius</code>, co pozwala na kontrolowanie promienia zaokrąglenia dla różnych elementów.</p>
+
+        <h2>Domyślne Wartości Parametrów</h2>
+        <p>Parametry w mixinach mogą mieć wartości domyślne, które zostaną użyte, jeśli nie przekażemy innej wartości podczas użycia mixina. Dzięki temu kod jest bardziej elastyczny.</p>
+
+        <pre><code class="language-scss">
+// Definiowanie mixina z domyślną wartością
+@mixin box-shadow($color: rgba(0, 0, 0, 0.5), $blur: 10px) {
+    box-shadow: 0 0 $blur $color;
+}
+
+// Użycie mixina
+.panel {
+    @include box-shadow;
+}
+
+.panel-strong {
+    @include box-shadow(rgba(0, 0, 0, 0.8), 15px);
+}
+        </code></pre>
+
+        <p>W powyższym przykładzie mixin <code>box-shadow</code> ma domyślne wartości dla parametrów <code>$color</code> i <code>$blur</code>. Umożliwia to jego użycie bez dodatkowych parametrów, jak i z nimi.</p>
+
+        <h2>Mixiny do Responsywnych Stylów</h2>
+        <p>Mixiny są przydatne do definiowania stylów responsywnych. Możemy zdefiniować mixin do obsługi zapytań <code>@media</code> i używać go w dowolnym miejscu projektu.</p>
+
+        <pre><code class="language-scss">
+// Mixin dla stylów responsywnych
+@mixin respond-to($breakpoint) {
+    @if $breakpoint == small {
+        @media (max-width: 600px) { @content; }
+    } @else if $breakpoint == medium {
+        @media (max-width: 900px) { @content; }
+    } @else if $breakpoint == large {
+        @media (max-width: 1200px) { @content; }
+    }
+}
+
+// Użycie mixina
+.container {
+    width: 100%;
+
+    @include respond-to(small) {
+        width: 90%;
+    }
+
+    @include respond-to(medium) {
+        width: 80%;
+    }
+}
+        </code></pre>
+
+        <p>W przykładzie powyżej mixin <code>respond-to</code> dostosowuje szerokość kontenera dla różnych punktów przerwania (<code>small</code>, <code>medium</code>, <code>large</code>), co pozwala na łatwe zarządzanie responsywnością.</p>
+
+        <h2>Przykład: Zaawansowany Mixin</h2>
+        <p>Mixiny mogą zawierać złożone bloki stylów, które są często używane w różnych miejscach projektu. Oto przykład mixina do stylizowania przycisków z parametrami.</p>
+
+        <pre><code class="language-scss">
+// Mixin do stylizacji przycisków
+@mixin button-style($bg-color, $text-color: #fff, $padding: 10px) {
+    background-color: $bg-color;
+    color: $text-color;
+    padding: $padding;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    text-transform: uppercase;
+
+    &:hover {
+        background-color: darken($bg-color, 10%);
+    }
+}
+
+// Użycie mixina
+.button-primary {
+    @include button-style(#3498db);
+}
+
+.button-secondary {
+    @include button-style(#2ecc71, #333, 15px);
+}
+        </code></pre>
+
+        <p>W tym przykładzie mixin <code>button-style</code> pozwala tworzyć spójnie stylizowane przyciski z różnymi kolorami tła, kolorem tekstu i odstępami, dzięki czemu stylizacja przycisków jest łatwiejsza do zarządzania.</p>
+
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/prism.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/components/prism-scss.min.js"></script>
+</body>
+</html>

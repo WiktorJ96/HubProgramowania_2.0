@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SASS - Zarządzanie Błędem</title>
+    <link rel="stylesheet" href="../styles.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/themes/prism-tomorrow.min.css" rel="stylesheet" />
+</head>
+<body>
+    <div class="container">
+        <h1>SASS - Zarządzanie Błędem</h1>
+        
+        <p>SASS udostępnia trzy dyrektywy, które pomagają w zarządzaniu błędami i ostrzeżeniami: <code>&#64;error</code>, <code>&#64;warn</code>, i <code>&#64;debug</code>. Dzięki nim można wykrywać i obsługiwać błędy w kodzie oraz monitorować wartości zmiennych podczas kompilacji, co ułatwia debugowanie i kontrolowanie jakości kodu.</p>
+
+        <h2>Dyrektywa &#64;error</h2>
+        <p>Dyrektywa <code>&#64;error</code> generuje krytyczny błąd, który przerywa kompilację SASS i wyświetla określony komunikat. Jest przydatna do walidacji argumentów lub upewniania się, że wartości są zgodne z oczekiwaniami.</p>
+
+        <pre><code class="language-scss">
+// Funkcja sprawdzająca, czy argument jest liczbą
+&#64;function square($number) {
+    &#64;if type-of($number) != 'number' {
+        &#64;error "Argument musi być liczbą"; // Zatrzymuje kompilację z komunikatem błędu
+    }
+    &#64;return $number * $number;
+}
+
+// Użycie funkcji
+.box {
+    width: square(5px); // Poprawne użycie
+    height: square("abc"); // Spowoduje błąd i przerwie kompilację
+}
+        </code></pre>
+
+        <p>W powyższym przykładzie, jeśli argument nie jest liczbą, dyrektywa <code>&#64;error</code> wygeneruje błąd i zatrzyma kompilację, wyświetlając komunikat <code>"Argument musi być liczbą"</code>.</p>
+
+        <h2>Dyrektywa &#64;warn</h2>
+        <p>Dyrektywa <code>&#64;warn</code> wyświetla ostrzeżenie, ale nie przerywa kompilacji. Jest przydatna do informowania o potencjalnych problemach lub zmianach, które nie są krytyczne.</p>
+
+        <pre><code class="language-scss">
+// Funkcja przyciemniająca kolor z ostrzeżeniem
+&#64;function safe-darken($color, $amount) {
+    &#64;if $amount > 20% {
+        &#64;warn "Uwaga: Przyciemnianie o więcej niż 20% może zmienić wygląd elementu";
+    }
+    &#64;return darken($color, $amount);
+}
+
+// Użycie funkcji
+.button {
+    background-color: safe-darken(#3498db, 25%); // Wyświetli ostrzeżenie, ale nie zatrzyma kompilacji
+}
+        </code></pre>
+
+        <p>W tym przykładzie funkcja <code>safe-darken</code> wyświetli ostrzeżenie, jeśli wartość przyciemnienia przekracza 20%, ale kompilacja będzie kontynuowana.</p>
+
+        <h2>Dyrektywa &#64;debug</h2>
+        <p>Dyrektywa <code>&#64;debug</code> pozwala na wyświetlanie wartości zmiennych lub wyników obliczeń podczas kompilacji. Jest przydatna do monitorowania i śledzenia wartości w trakcie pracy nad kodem.</p>
+
+        <pre><code class="language-scss">
+$font-size: 16px;
+$line-height: 1.5;
+
+// Debugowanie wartości
+&#64;debug $font-size;
+&#64;debug $font-size * $line-height;
+
+// Styl z debugowaniem
+.text {
+    font-size: $font-size;
+    line-height: $line-height;
+}
+        </code></pre>
+
+        <p>W tym przykładzie dyrektywa <code>&#64;debug</code> wyświetli wartości <code>$font-size</code> i obliczonego <code>$font-size * $line-height</code> w konsoli podczas kompilacji, co ułatwia śledzenie wartości.</p>
+
+        <h2>Przykład: Funkcja Walidująca i Informująca o Błędach</h2>
+        <p>Poniżej znajduje się bardziej zaawansowany przykład funkcji, która sprawdza argumenty, ostrzega przed zbyt dużymi wartościami i przerywa kompilację, jeśli argumenty są nieprawidłowe.</p>
+
+        <pre><code class="language-scss">
+// Funkcja ustawiająca szerokość z walidacją
+&#64;function set-width($width) {
+    &#64;if type-of($width) != 'number' {
+        &#64;error "Błąd: $width nie jest liczbą. Użyj wartości liczbowej.";
+    } &#64;else if $width > 100px {
+        &#64;warn "Ostrzeżenie: Szerokość większa niż 100px może wpłynąć na layout.";
+    }
+    &#64;return $width;
+}
+
+// Użycie funkcji
+.container {
+    width: set-width(120px); // Wyświetli ostrzeżenie, ale nie przerwie kompilacji
+    height: set-width("abc"); // Przerwie kompilację z błędem
+}
+        </code></pre>
+
+        <p>Funkcja <code>set-width</code> sprawdza, czy argument jest liczbą. Jeśli nie, generuje krytyczny błąd przy użyciu <code>&#64;error</code>. Jeśli wartość przekracza 100px, wyświetla ostrzeżenie przy użyciu <code>&#64;warn</code>.</p>
+
+        <h2>Podsumowanie</h2>
+        <ul>
+            <li><strong>&#64;error</strong>: Zatrzymuje kompilację i wyświetla komunikat błędu – przydatne do krytycznych walidacji.</li>
+            <li><strong>&#64;warn</strong>: Wyświetla ostrzeżenie bez przerywania kompilacji – używane do niekrytycznych uwag.</li>
+            <li><strong>&#64;debug</strong>: Wyświetla wartości zmiennych lub obliczeń w konsoli podczas kompilacji – przydatne do monitorowania wartości.</li>
+        </ul>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/prism.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/components/prism-scss.min.js"></script>
+</body>
+</html>

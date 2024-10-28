@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SASS - Zmienne</title>
+    <link rel="stylesheet" href="../styles.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/themes/prism-tomorrow.min.css" rel="stylesheet" />
+</head>
+<body>
+    <div class="container">
+        <h1>SASS - Zmienne</h1>
+        
+        <p>Zmiennie w SASS umożliwiają przechowywanie wartości takich jak kolory, rozmiary, odstępy i inne właściwości, co ułatwia zarządzanie i modyfikowanie stylów w całym projekcie. Zmienne są tworzone przy użyciu symbolu <code>$</code>.</p>
+
+        <h2>Definiowanie Zmiennych</h2>
+        <p>Aby zdefiniować zmienną w SASS, należy użyć symbolu <code>$</code> przed nazwą zmiennej, a następnie przypisać jej wartość. Zmienna może przechowywać dowolną wartość CSS, jak kolor, rozmiar czy font.</p>
+
+        <pre><code class="language-scss">
+// Definicje zmiennych
+$primary-color: #3498db;
+$secondary-color: #2ecc71;
+$font-size-large: 18px;
+$padding: 10px;
+        </code></pre>
+
+        <h2>Używanie Zmiennych</h2>
+        <p>Po zdefiniowaniu zmiennych można ich używać w dowolnym miejscu w kodzie SASS, zamiast wpisywania wartości bezpośrednio. Jest to wygodne, gdy chcesz zmienić kolor lub rozmiar w całym projekcie - wystarczy edytować wartość zmiennej.</p>
+
+        <pre><code class="language-scss">
+.button {
+    background-color: $primary-color;
+    font-size: $font-size-large;
+    padding: $padding;
+    color: #fff;
+}
+
+.header {
+    background-color: $secondary-color;
+    padding: $padding * 2; // Zmienna może być modyfikowana matematycznie
+}
+        </code></pre>
+
+        <h2>Przechowywanie Wartości Kolorów</h2>
+        <p>Zmiennych można używać do przechowywania wartości kolorów, co ułatwia ich modyfikację w całym projekcie. Możesz zdefiniować paletę kolorów dla swojej aplikacji, np. dla kolorów głównych i pomocniczych.</p>
+
+        <pre><code class="language-scss">
+// Paleta kolorów
+$color-primary: #3498db;
+$color-secondary: #2ecc71;
+$color-background: #f3f3f3;
+$color-text: #333;
+
+body {
+    background-color: $color-background;
+    color: $color-text;
+}
+
+.button-primary {
+    background-color: $color-primary;
+}
+
+.button-secondary {
+    background-color: $color-secondary;
+}
+        </code></pre>
+
+        <h2>Przechowywanie Rozmiarów i Odstępów</h2>
+        <p>Zmienne mogą być używane do przechowywania rozmiarów czcionek, odstępów i szerokości. Dzięki temu, jeżeli trzeba zmienić te wartości, wystarczy zaktualizować zmienną, a zmiany zostaną automatycznie zastosowane we wszystkich miejscach.</p>
+
+        <pre><code class="language-scss">
+// Rozmiary czcionek i odstępy
+$font-size-small: 12px;
+$font-size-medium: 16px;
+$font-size-large: 20px;
+
+$margin-small: 5px;
+$margin-medium: 10px;
+$margin-large: 20px;
+
+.text-large {
+    font-size: $font-size-large;
+    margin-bottom: $margin-large;
+}
+
+.text-medium {
+    font-size: $font-size-medium;
+    margin-bottom: $margin-medium;
+}
+        </code></pre>
+
+        <h2>Przykład: Zmienne w Projekcie</h2>
+        <p>Użycie zmiennych jest szczególnie przydatne w dużych projektach, gdzie zmiana koloru lub rozmiaru wymagałaby modyfikacji wielu plików. Oto przykład zastosowania zmiennych w projekcie:</p>
+
+        <pre><code class="language-scss">
+// Definicje zmiennych
+$primary-color: #ff6f61;
+$secondary-color: #6c5b7b;
+$font-family: 'Arial', sans-serif;
+$padding-base: 15px;
+
+// Użycie zmiennych
+body {
+    font-family: $font-family;
+    background-color: $primary-color;
+    color: $secondary-color;
+}
+
+.container {
+    padding: $padding-base;
+}
+
+.button {
+    padding: $padding-base / 2;
+    background-color: $secondary-color;
+    color: $primary-color;
+}
+        </code></pre>
+
+        <p>W tym przykładzie kolory, czcionka i odstępy są zdefiniowane jako zmienne, co pozwala łatwo dostosować wygląd całej strony poprzez edytowanie wartości w jednym miejscu.</p>
+
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/prism.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/components/prism-scss.min.js"></script>
+</body>
+</html>

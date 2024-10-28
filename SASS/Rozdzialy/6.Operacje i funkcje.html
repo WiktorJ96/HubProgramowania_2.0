@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SASS - Operacje i Funkcje</title>
+    <link rel="stylesheet" href="../styles.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/themes/prism-tomorrow.min.css" rel="stylesheet" />
+</head>
+<body>
+    <div class="container">
+        <h1>SASS - Operacje i Funkcje</h1>
+        
+        <p>SASS wspiera wykonywanie operacji matematycznych i używanie wbudowanych funkcji, co pozwala na tworzenie bardziej dynamicznych i elastycznych stylów. Możemy np. obliczać wartości pikseli lub procentów oraz używać funkcji do pracy z kolorami i innymi właściwościami CSS.</p>
+
+        <h2>Operacje Matematyczne</h2>
+        <p>SASS umożliwia wykonywanie operacji arytmetycznych, takich jak dodawanie, odejmowanie, mnożenie i dzielenie. Dzięki temu można tworzyć skalowalne wartości bez konieczności ręcznego obliczania rozmiarów.</p>
+
+        <pre><code class="language-scss">
+// Przykład operacji matematycznych
+$base-margin: 10px;
+
+.container {
+    margin: $base-margin * 2;  // 20px
+    padding: $base-margin / 2; // 5px
+    width: 100% - 2 * $base-margin;
+}
+        </code></pre>
+
+        <p>W tym przykładzie SASS automatycznie oblicza wartości, co ułatwia zarządzanie odstępami i wymiarami elementów.</p>
+
+        <h2>Operacje na Wartościach Procentowych</h2>
+        <p>Można także używać operacji z wartościami procentowymi, aby tworzyć responsywne układy.</p>
+
+        <pre><code class="language-scss">
+$base-width: 1000px;
+
+.sidebar {
+    width: $base-width * 0.25; // 25% szerokości
+}
+
+.content {
+    width: $base-width * 0.75; // 75% szerokości
+}
+        </code></pre>
+
+        <p>Dzięki zastosowaniu operacji procentowych układ jest łatwy do skalowania i bardziej elastyczny.</p>
+
+        <h2>Wbudowane Funkcje Kolorów</h2>
+        <p>SASS oferuje wiele funkcji do pracy z kolorami, takich jak `darken`, `lighten`, `mix`, `adjust-hue`, `saturate` i `desaturate`. Te funkcje pozwalają na manipulowanie kolorami, co ułatwia tworzenie spójnych palet barw.</p>
+
+        <pre><code class="language-scss">
+$primary-color: #3498db;
+
+.button {
+    background-color: $primary-color;
+    border-color: darken($primary-color, 10%); // Przyciemnia kolor o 10%
+    color: lighten($primary-color, 20%);       // Rozjaśnia kolor o 20%
+}
+
+.alert {
+    background-color: mix(#e74c3c, #3498db, 50%); // Miesza dwa kolory w równych proporcjach
+}
+        </code></pre>
+
+        <p>W powyższym przykładzie funkcje kolorów, takie jak `darken` i `lighten`, pozwalają na uzyskanie różnych odcieni i zapewnienie spójności kolorystycznej.</p>
+
+        <h2>Funkcje Manipulujące Jednostkami</h2>
+        <p>SASS umożliwia również konwersję jednostek, co pozwala np. na przeliczenie wartości pikseli na procenty czy innych jednostek miary.</p>
+
+        <pre><code class="language-scss">
+// Przeliczanie jednostek
+$base-padding: 16px;
+
+.container {
+    padding: $base-padding * 2;     // 32px
+    padding: ($base-padding / 16) * 1rem; // Konwersja na rem
+}
+        </code></pre>
+
+        <p>W powyższym przykładzie jednostki są przeliczane, co umożliwia lepsze dostosowanie rozmiarów w różnych układach.</p>
+
+        <h2>Wbudowane Funkcje dla Tekstu</h2>
+        <p>SASS oferuje funkcje, które pomagają manipulować tekstem, takie jak `to-upper-case`, `to-lower-case` oraz `str-replace`.</p>
+
+        <pre><code class="language-scss">
+$font-family: "Helvetica Neue", sans-serif;
+
+.text {
+    font-family: $font-family;
+    text-transform: to-upper-case($font-family); // Konwersja na wielkie litery
+}
+        </code></pre>
+
+        <p>W tym przykładzie funkcja `to-upper-case` zmienia tekst na wielkie litery, co może być przydatne w specyficznych zastosowaniach.</p>
+
+        <h2>Przykład: Używanie Operacji i Funkcji w Projekcie</h2>
+        <p>Poniżej znajduje się bardziej zaawansowany przykład wykorzystania operacji matematycznych oraz funkcji kolorów w SASS, aby stworzyć dynamiczne i spójne style.</p>
+
+        <pre><code class="language-scss">
+// Ustawienia bazowe
+$primary-color: #3498db;
+$secondary-color: lighten($primary-color, 20%);
+$border-radius: 5px;
+$padding: 10px;
+
+// Styl dla przycisku
+.button {
+    background-color: $primary-color;
+    padding: $padding;
+    border-radius: $border-radius;
+    color: #fff;
+
+    &:hover {
+        background-color: darken($primary-color, 10%);
+    }
+}
+
+// Styl dla karty
+.card {
+    background-color: $secondary-color;
+    border-radius: $border-radius;
+    padding: $padding * 2;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+        </code></pre>
+
+        <p>W powyższym przykładzie SASS używa operacji matematycznych i funkcji kolorów, aby stworzyć spójne style dla przycisku i karty.</p>
+
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/prism.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/components/prism-scss.min.js"></script>
+</body>
+</html>

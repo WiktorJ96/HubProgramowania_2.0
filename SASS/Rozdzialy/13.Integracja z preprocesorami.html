@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SASS - Integracja z Preprocesorami</title>
+    <link rel="stylesheet" href="../styles.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/themes/prism-tomorrow.min.css" rel="stylesheet" />
+</head>
+<body>
+    <div class="container">
+        <h1>SASS - Integracja z Preprocesorami</h1>
+        
+        <p>Preprocesory, takie jak Gulp, Grunt i Webpack, pozwalają na automatyzację zadań związanych z przetwarzaniem plików SASS, co przyspiesza rozwój projektu i ułatwia zarządzanie kodem. W tej sekcji omówimy, jak zintegrować SASS z tymi narzędziami, aby kompilować pliki .scss do CSS, dodawać mapy źródłowe oraz optymalizować kod.</p>
+
+        <h2>Integracja SASS z Gulp</h2>
+        <p>Gulp jest popularnym narzędziem do automatyzacji, które pozwala na kompilację SASS przy użyciu odpowiednich wtyczek. Aby skonfigurować Gulp do kompilacji SASS, najpierw zainstaluj Gulp i potrzebne wtyczki.</p>
+
+        <h3>Kroki konfiguracji</h3>
+        <ol>
+            <li>Zainstaluj <code>gulp</code>, <code>gulp-sass</code> i <code>gulp-sourcemaps</code> w swoim projekcie:</li>
+            <pre><code class="language-bash">
+npm install gulp gulp-sass gulp-sourcemaps --save-dev
+            </code></pre>
+            <li>Utwórz plik <code>gulpfile.js</code> w katalogu głównym projektu i skonfiguruj zadanie SASS.</li>
+        </ol>
+
+        <h3>Przykładowy kod w gulpfile.js</h3>
+
+        <pre><code class="language-javascript">
+const gulp = require('gulp');
+const sass = require('gulp-sass')(require('sass'));
+const sourcemaps = require('gulp-sourcemaps');
+
+gulp.task('sass', function() {
+    return gulp.src('src/styles.scss') // Ścieżka do plików źródłowych SASS
+        .pipe(sourcemaps.init()) // Inicjalizacja map źródłowych
+        .pipe(sass().on('error', sass.logError)) // Kompilacja SASS z obsługą błędów
+        .pipe(sourcemaps.write('./')) // Zapis map źródłowych w tym samym katalogu
+        .pipe(gulp.dest('dist')); // Katalog wyjściowy dla plików CSS
+});
+
+// Zadanie domyślne, które uruchamia kompilację przy każdej zmianie
+gulp.task('watch', function() {
+    gulp.watch('src/**/*.scss', gulp.series('sass'));
+});
+        </code></pre>
+
+        <p>W powyższym przykładzie zadanie <code>sass</code> kompiluje pliki SASS, tworzy mapy źródłowe i zapisuje wynikowy CSS w katalogu <code>dist</code>. Zadanie <code>watch</code> monitoruje zmiany w plikach .scss i automatycznie uruchamia kompilację.</p>
+
+        <h2>Integracja SASS z Grunt</h2>
+        <p>Grunt to inne narzędzie do automatyzacji, które pozwala kompilować SASS za pomocą odpowiednich wtyczek. Poniżej znajduje się konfiguracja Grunt do obsługi SASS.</p>
+
+        <h3>Kroki konfiguracji</h3>
+        <ol>
+            <li>Zainstaluj <code>grunt</code> oraz wtyczki <code>grunt-sass</code> i <code>grunt-contrib-watch</code>:</li>
+            <pre><code class="language-bash">
+npm install grunt grunt-sass grunt-contrib-watch --save-dev
+            </code></pre>
+            <li>Utwórz plik <code>Gruntfile.js</code> i skonfiguruj zadanie SASS.</li>
+        </ol>
+
+        <h3>Przykładowy kod w Gruntfile.js</h3>
+
+        <pre><code class="language-javascript">
+module.exports = function(grunt) {
+    // Konfiguracja zadań
+    grunt.initConfig({
+        sass: {
+            options: {
+                sourceMap: true // Włączenie map źródłowych
+            },
+            dist: {
+                files: {
+                    'dist/styles.css': 'src/styles.scss' // Katalog wyjściowy dla CSS
+                }
+            }
+        },
+        watch: {
+            sass: {
+                files: 'src/**/*.scss',
+                tasks: ['sass'] // Uruchomienie kompilacji przy zmianach
+            }
+        }
+    });
+
+    // Ładowanie wtyczek
+    grunt.loadNpmTasks('grunt-sass');
+    grunt.loadNpmTasks('grunt-contrib-watch');
+
+    // Rejestracja zadań
+    grunt.registerTask('default', ['sass', 'watch']);
+};
+        </code></pre>
+
+        <p>W tym przykładzie zadanie <code>sass</code> w Grunt kompiluje pliki SASS, generuje mapy źródłowe i zapisuje wynikowy CSS w katalogu <code>dist</code>. Zadanie <code>watch</code> monitoruje zmiany w plikach SASS i uruchamia kompilację automatycznie.</p>
+
+        <h2>Integracja SASS z Webpack</h2>
+        <p>Webpack to narzędzie do pakowania modułów, które umożliwia przetwarzanie SASS za pomocą odpowiednich loaderów. Poniżej znajduje się konfiguracja Webpack do kompilacji SASS.</p>
+
+        <h3>Kroki konfiguracji</h3>
+        <ol>
+            <li>Zainstaluj <code>sass-loader</code>, <code>css-loader</code>, <code>style-loader</code>, i <code>sass</code>:</li>
+            <pre><code class="language-bash">
+npm install sass-loader css-loader style-loader sass --save-dev
+            </code></pre>
+            <li>Utwórz plik <code>webpack.config.js</code> i skonfiguruj moduły dla SASS.</li>
+        </ol>
+
+        <h3>Przykładowy kod w webpack.config.js</h3>
+
+        <pre><code class="language-javascript">
+module.exports = {
+    mode: 'development',
+    entry: './src/index.js',
+    output: {
+        filename: 'bundle.js',
+        path: __dirname + '/dist',
+    },
+    module: {
+        rules: [
+            {
+                test: /\.scss$/, // Dotyczy plików .scss
+                use: [
+                    'style-loader', // Wstrzykuje CSS do DOM
+                    'css-loader',   // Przetwarza CSS
+                    {
+                        loader: 'sass-loader',
+                        options: {
+                            sourceMap: true // Włączenie map źródłowych
+                        }
+                    }
+                ]
+            }
+        ]
+    },
+    devtool: 'source-map' // Generowanie map źródłowych dla debugowania
+};
+        </code></pre>
+
+        <p>W powyższym przykładzie Webpack konfiguruje loader <code>sass-loader</code>, który kompiluje pliki SASS do CSS, oraz <code>css-loader</code> i <code>style-loader</code>, które umożliwiają wstrzykiwanie CSS do DOM. Opcja <code>devtool: 'source-map'</code> włącza generowanie map źródłowych.</p>
+
+        <h2>Porównanie Narzędzi</h2>
+        <ul>
+            <li><strong>Gulp</strong>: Idealny do prostych projektów, gdzie potrzeba szybka kompilacja SASS i monitorowanie plików.</li>
+            <li><strong>Grunt</strong>: Stabilne rozwiązanie do kompilacji SASS i obsługi automatyzacji, choć mniej popularne niż Gulp.</li>
+            <li><strong>Webpack</strong>: Potężne narzędzie do bardziej zaawansowanych projektów z pakowaniem modułów i wstrzykiwaniem stylów do DOM.</li>
+        </ul>
+
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/prism.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/components/prism-javascript.min.js"></script>
+</body>
+</html>

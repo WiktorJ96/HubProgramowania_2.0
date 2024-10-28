@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SASS - Zagnieżdżanie</title>
+    <link rel="stylesheet" href="../styles.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/themes/prism-tomorrow.min.css" rel="stylesheet" />
+</head>
+<body>
+    <div class="container">
+        <h1>SASS - Zagnieżdżanie</h1>
+        
+        <p>Zagnieżdżanie w SASS pozwala na bardziej przejrzyste i zorganizowane pisanie kodu, umożliwiając strukturalne tworzenie selektorów wewnątrz innych selektorów. Dzięki temu kod CSS jest łatwiejszy w zarządzaniu, zwłaszcza w złożonych projektach.</p>
+
+        <h2>Podstawy Zagnieżdżania</h2>
+        <p>W SASS selektory można zagnieżdżać, co oznacza, że możemy pisać reguły CSS wewnątrz innych selektorów w sposób, który odzwierciedla strukturę HTML. Poniższy przykład pokazuje zagnieżdżanie elementów w klasie <code>.container</code>:</p>
+
+        <pre><code class="language-scss">
+.container {
+    padding: 20px;
+    background-color: #f3f3f3;
+
+    .header {
+        font-size: 24px;
+        color: #333;
+    }
+
+    .content {
+        font-size: 16px;
+        color: #666;
+
+        a {
+            color: #3498db;
+            text-decoration: none;
+        }
+    }
+}
+        </code></pre>
+
+        <p>W powyższym przykładzie reguły dla <code>.header</code> i <code>.content</code> są zagnieżdżone wewnątrz <code>.container</code>, a styl dla linku <code>&lt;a&gt;</code> wewnątrz <code>.content</code> jest zagnieżdżony dodatkowo, co ułatwia organizację kodu.</p>
+
+        <h2>Wykorzystanie Zagnieżdżania w Pseudo-klasach i Pseudo-elementach</h2>
+        <p>Zagnieżdżanie można stosować również w pseudo-klasach i pseudo-elementach, co pozwala na stosowanie stylów dla stanów elementów, takich jak <code>:hover</code> i <code>::after</code>.</p>
+
+        <pre><code class="language-scss">
+.button {
+    background-color: #3498db;
+    color: #fff;
+    padding: 10px;
+
+    &:hover {
+        background-color: #2980b9;
+    }
+
+    &::after {
+        content: ' »';
+    }
+}
+        </code></pre>
+
+        <p>W przykładzie powyżej styl <code>:hover</code> oraz <code>::after</code> jest zagnieżdżony w <code>.button</code>, co poprawia czytelność i organizację kodu.</p>
+
+        <h2>Operator & (referencja do rodzica)</h2>
+        <p>Symbol <code>&</code> odnosi się do bieżącego selektora, co jest przydatne przy tworzeniu bardziej złożonych struktur CSS. Na przykład, można go użyć do tworzenia modyfikatorów klasy.</p>
+
+        <pre><code class="language-scss">
+.button {
+    background-color: #3498db;
+    color: #fff;
+
+    &.is-active {
+        background-color: #2ecc71;
+    }
+
+    &--large {
+        padding: 20px;
+        font-size: 18px;
+    }
+}
+        </code></pre>
+
+        <p>W przykładzie <code>&</code> jest użyty do tworzenia modyfikatorów <code>.button.is-active</code> i <code>.button--large</code>, co umożliwia łatwe zarządzanie wariantami klasy <code>.button</code>.</p>
+
+        <h2>Zagnieżdżanie Media Queries</h2>
+        <p>W SASS można również zagnieżdżać <code>@media</code> wewnątrz selektorów, co pozwala na łatwe definiowanie responsywnych stylów dla poszczególnych elementów.</p>
+
+        <pre><code class="language-scss">
+.card {
+    padding: 20px;
+    background-color: #fff;
+    border: 1px solid #ddd;
+
+    @media (min-width: 768px) {
+        padding: 40px;
+    }
+
+    .title {
+        font-size: 24px;
+
+        @media (min-width: 768px) {
+            font-size: 32px;
+        }
+    }
+}
+        </code></pre>
+
+        <p>W powyższym przykładzie <code>@media</code> zostało zagnieżdżone wewnątrz <code>.card</code> oraz <code>.title</code>, co ułatwia organizację responsywnych stylów bez konieczności powtarzania pełnych selektorów.</p>
+
+        <h2>Przykład Zagnieżdżania w Projekcie</h2>
+        <p>Zagnieżdżanie jest szczególnie przydatne, gdy projekt wymaga wielu zagnieżdżonych selektorów. Oto przykład kodu, który przedstawia, jak zagnieżdżanie może pomóc w organizacji stylów dla złożonego komponentu.</p>
+
+        <pre><code class="language-scss">
+.navbar {
+    background-color: #333;
+    padding: 15px;
+
+    .nav-item {
+        color: #fff;
+        margin-right: 10px;
+
+        &:hover {
+            color: #ddd;
+        }
+
+        .icon {
+            margin-right: 5px;
+        }
+    }
+
+    .nav-item--active {
+        font-weight: bold;
+        color: #ff6f61;
+    }
+}
+        </code></pre>
+
+        <p>W tym przykładzie struktura <code>.navbar</code> zawiera zagnieżdżone style dla elementów nawigacji, takich jak <code>.nav-item</code>, <code>.nav-item:hover</code> oraz <code>.nav-item--active</code>. Dzięki temu kod jest bardziej zorganizowany i łatwiejszy w zarządzaniu.</p>
+
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/prism.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/components/prism-scss.min.js"></script>
+</body>
+</html>

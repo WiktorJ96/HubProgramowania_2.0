@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SASS - Interpolacja</title>
+    <link rel="stylesheet" href="../styles.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/themes/prism-tomorrow.min.css" rel="stylesheet" />
+</head>
+<body>
+    <div class="container">
+        <h1>SASS - Interpolacja</h1>
+        
+        <p>Interpolacja w SASS umożliwia dynamiczne generowanie nazw selektorów, właściwości i wartości. Jest to szczególnie przydatne, gdy chcemy tworzyć elementy CSS bazujące na zmiennych lub iteracjach. Interpolacja jest wykonywana za pomocą składni <code>#{}</code>, która pozwala na wstawienie wartości zmiennej bezpośrednio w nazwie lub właściwości.</p>
+
+        <h2>Podstawowe Użycie Interpolacji w Nazwach Selektorów</h2>
+        <p>Interpolacja może być użyta do dynamicznego tworzenia nazw klas i identyfikatorów, co jest przydatne, gdy chcemy generować klasy w oparciu o wartości zmiennych.</p>
+
+        <pre><code class="language-scss">
+// Definicja podstawowego koloru
+$color-name: "primary";
+$primary-color: #3498db;
+
+.button-#{$color-name} {
+    background-color: $primary-color;
+    color: #fff;
+    padding: 10px;
+}
+        </code></pre>
+
+        <p>W powyższym przykładzie interpolacja <code>#{}</code> tworzy klasę <code>.button-primary</code>, która używa wartości zmiennej <code>$color-name</code> jako części nazwy klasy.</p>
+
+        <h2>Interpolacja w Nazwach Właściwości CSS</h2>
+        <p>Interpolacja może być również użyta do tworzenia dynamicznych nazw właściwości. Jest to przydatne, gdy chcemy generować niestandardowe właściwości lub style CSS oparte na zmiennych.</p>
+
+        <pre><code class="language-scss">
+$side: "left";
+$margin-size: 20px;
+
+.content {
+    margin-#{$side}: $margin-size; // Tworzy margin-left
+}
+        </code></pre>
+
+        <p>W tym przykładzie interpolacja generuje właściwość <code>margin-left</code> z wartością <code>$margin-size</code> na podstawie zmiennej <code>$side</code>.</p>
+
+        <h2>Interpolacja w Generowaniu Wielu Klas i Właściwości</h2>
+        <p>Interpolacja może być użyta w połączeniu z pętlami <code>&#64;for</code> i <code>&#64;each</code>, co pozwala na dynamiczne tworzenie wielu klas lub właściwości.</p>
+
+        <pre><code class="language-scss">
+&#64;for $i from 1 through 3 {
+    .column-#{$i} {
+        width: #{$i * 10}% // Tworzy width: 10%, width: 20%, itd.
+    }
+}
+        </code></pre>
+
+        <p>W powyższym przykładzie pętla <code>&#64;for</code> generuje klasy <code>.column-1</code> do <code>.column-3</code>, z szerokościami od 10% do 30%.</p>
+
+        <h2>Interpolacja w Niestandardowych Właściwościach CSS</h2>
+        <p>Interpolacja jest także przydatna do tworzenia niestandardowych właściwości CSS (CSS Custom Properties), co jest szczególnie użyteczne w bardziej zaawansowanych projektach.</p>
+
+        <pre><code class="language-scss">
+$theme-color: #ff6f61;
+
+:root {
+    --main-color: #{$theme-color}; // Tworzy: --main-color: #ff6f61
+}
+
+.button {
+    background-color: var(--main-color);
+}
+        </code></pre>
+
+        <p>W powyższym przykładzie interpolacja generuje niestandardową właściwość <code>--main-color</code> z wartością zmiennej <code>$theme-color</code>.</p>
+
+        <h2>Interpolacja w Mapach i Listach</h2>
+        <p>Interpolacja może również pomóc w iterowaniu po mapach i listach, co jest przydatne przy tworzeniu dynamicznych stylów bazujących na zestawach danych.</p>
+
+        <pre><code class="language-scss">
+$colors: (primary: #3498db, secondary: #2ecc71, danger: #e74c3c);
+
+&#64;each $name, $color in $colors {
+    .text-#{$name} {
+        color: $color;
+    }
+}
+        </code></pre>
+
+        <p>W tym przykładzie interpolacja generuje klasy <code>.text-primary</code>, <code>.text-secondary</code>, i <code>.text-danger</code> z kolorami pobranymi z mapy <code>$colors</code>.</p>
+
+        <h2>Przykład: Tworzenie Responsywnych Klas z Interpolacją</h2>
+        <p>Interpolacja jest także przydatna przy generowaniu responsywnych klas. Poniższy przykład pokazuje, jak dynamicznie tworzyć klasy zależne od punktów przerwania.</p>
+
+        <pre><code class="language-scss">
+$breakpoints: (small: 576px, medium: 768px, large: 992px);
+
+&#64;each $size, $px in $breakpoints {
+    &#64;media (min-width: $px) {
+        .container-#{$size} {
+            max-width: $px;
+        }
+    }
+}
+        </code></pre>
+
+        <p>W tym przykładzie interpolacja generuje klasy <code>.container-small</code>, <code>.container-medium</code>, i <code>.container-large</code> z odpowiednimi maksymalnymi szerokościami, co pozwala na szybkie tworzenie responsywnych stylów.</p>
+
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/prism.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/components/prism-scss.min.js"></script>
+</body>
+</html>

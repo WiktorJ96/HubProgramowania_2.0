@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SASS - Kontrola Dyrektyw</title>
+    <link rel="stylesheet" href="../styles.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/themes/prism-tomorrow.min.css" rel="stylesheet" />
+</head>
+<body>
+    <div class="container">
+        <h1>SASS - Kontrola Dyrektyw</h1>
+        
+        <p>SASS umożliwia kontrolowanie generacji kodu CSS przy użyciu dyrektyw kontrolnych, takich jak <code>&#64;if</code>, <code>&#64;else</code>, <code>&#64;for</code>, i <code>&#64;each</code>. Dzięki nim można tworzyć dynamiczne reguły CSS w zależności od warunków, iteracji i wartości zmiennych.</p>
+
+        <h2>Dyrektywa &#64;if i &#64;else</h2>
+        <p>Dyrektywy <code>&#64;if</code> i <code>&#64;else</code> umożliwiają tworzenie warunkowych stylów. Dzięki nim można definiować różne style w zależności od określonych warunków.</p>
+
+        <pre><code class="language-scss">
+// Definicja koloru w zależności od zmiennej
+$theme: dark;
+
+.button {
+    &#64;if $theme == dark {
+        background-color: #333;
+        color: #fff;
+    } &#64;else {
+        background-color: #fff;
+        color: #333;
+    }
+}
+        </code></pre>
+
+        <p>W tym przykładzie styl <code>.button</code> zmienia się w zależności od wartości zmiennej <code>$theme</code>. Jeśli motyw jest ciemny, przycisk będzie miał ciemne tło i jasny tekst.</p>
+
+        <h2>Dyrektywa &#64;for</h2>
+        <p>Dyrektywa <code>&#64;for</code> umożliwia iterację w określonym zakresie liczb, co pozwala generować powtarzające się style dynamicznie. Jest to przydatne np. przy tworzeniu siatek lub wariantów stylów.</p>
+
+        <pre><code class="language-scss">
+// Generowanie klas dla marginesów
+&#64;for $i from 1 through 5 {
+    .margin-#{$i} {
+        margin: #{$i * 10}px;
+    }
+}
+        </code></pre>
+
+        <p>W powyższym przykładzie dyrektywa <code>&#64;for</code> generuje klasy <code>.margin-1</code> do <code>.margin-5</code> z wartościami marginesów od 10px do 50px.</p>
+
+        <h2>Dyrektywa &#64;each</h2>
+        <p>Dyrektywa <code>&#64;each</code> umożliwia iterację po elementach listy lub mapy, co pozwala na generowanie stylów dla każdego elementu na liście. Jest szczególnie przydatna do pracy z listami kolorów, czcionek lub rozmiarów.</p>
+
+        <pre><code class="language-scss">
+// Definicja listy kolorów
+$colors: (primary: #3498db, success: #2ecc71, danger: #e74c3c);
+
+&#64;each $name, $color in $colors {
+    .button-#{$name} {
+        background-color: $color;
+        color: #fff;
+    }
+}
+        </code></pre>
+
+        <p>W przykładzie powyżej dyrektywa <code>&#64;each</code> generuje klasy <code>.button-primary</code>, <code>.button-success</code>, i <code>.button-danger</code> na podstawie listy <code>$colors</code> i przypisanych kolorów.</p>
+
+        <h2>Dyrektywa &#64;while</h2>
+        <p>Dyrektywa <code>&#64;while</code> pozwala na wykonywanie powtarzających się stylów, dopóki warunek jest spełniony. Jest przydatna do bardziej złożonych iteracji i warunków.</p>
+
+        <pre><code class="language-scss">
+$i: 1;
+
+&#64;while $i <= 5 {
+    .border-#{$i} {
+        border-width: #{$i}px;
+    }
+    $i: $i + 1;
+}
+        </code></pre>
+
+        <p>W tym przykładzie dyrektywa <code>&#64;while</code> generuje klasy <code>.border-1</code> do <code>.border-5</code>, zmieniając szerokość obramowania od 1px do 5px.</p>
+
+        <h2>Przykład: Tworzenie Siatki za pomocą Dyrektyw Kontrolnych</h2>
+        <p>Poniżej znajduje się bardziej zaawansowany przykład zastosowania dyrektyw kontrolnych do generowania siatki układu.</p>
+
+        <pre><code class="language-scss">
+$columns: 4;
+$gutter: 20px;
+
+.container {
+    display: flex;
+    flex-wrap: wrap;
+
+    &#64;for $i from 1 through $columns {
+        .col-#{$i} {
+            width: (100% / $columns) * $i - $gutter;
+            margin-right: $gutter;
+        }
+    }
+}
+        </code></pre>
+
+        <p>W powyższym przykładzie dyrektywa <code>&#64;for</code> generuje klasy <code>.col-1</code> do <code>.col-4</code> z odpowiednimi szerokościami, tworząc dynamicznie kolumny siatki. Stylizacja uwzględnia także margines między kolumnami (gutter).</p>
+
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/prism.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/components/prism-scss.min.js"></script>
+</body>
+</html>

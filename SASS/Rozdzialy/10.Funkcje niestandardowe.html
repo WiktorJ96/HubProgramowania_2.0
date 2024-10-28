@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SASS - Funkcje Niestandardowe</title>
+    <link rel="stylesheet" href="../styles.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/themes/prism-tomorrow.min.css" rel="stylesheet" />
+</head>
+<body>
+    <div class="container">
+        <h1>SASS - Funkcje Niestandardowe</h1>
+        
+        <p>W SASS można definiować własne funkcje, które przyjmują argumenty i zwracają wynik. Dzięki funkcjom niestandardowym możliwe jest wykonywanie obliczeń lub tworzenie złożonych reguł CSS w sposób bardziej dynamiczny. Funkcje niestandardowe są definiowane za pomocą dyrektywy <code>&#64;function</code>.</p>
+
+        <h2>Definiowanie Prostej Funkcji Niestandardowej</h2>
+        <p>Aby zdefiniować funkcję, należy użyć <code>&#64;function</code>, nadać jej nazwę, a następnie zwrócić wartość za pomocą <code>&#64;return</code>. Funkcję można wywoływać tak samo, jak wbudowane funkcje SASS.</p>
+
+        <pre><code class="language-scss">
+// Definiowanie funkcji do konwersji pikseli na remy
+&#64;function px-to-rem($px, $base-font-size: 16px) {
+    &#64;return $px / $base-font-size * 1rem;
+}
+
+// Użycie funkcji
+.container {
+    font-size: px-to-rem(18px); // Konwertuje 18px na rem
+}
+        </code></pre>
+
+        <p>W powyższym przykładzie funkcja <code>px-to-rem</code> przelicza wartość pikseli na remy na podstawie rozmiaru czcionki bazowej. Wartość jest obliczana i zwracana przy użyciu <code>&#64;return</code>.</p>
+
+        <h2>Funkcje z Wiele Parametrów</h2>
+        <p>Funkcje mogą przyjmować wiele parametrów, co pozwala na bardziej elastyczne operacje. Poniżej znajduje się przykład funkcji obliczającej odcień koloru na podstawie parametrów koloru i stopnia przyciemnienia.</p>
+
+        <pre><code class="language-scss">
+// Funkcja do przyciemniania koloru
+&#64;function darken-color($color, $percentage) {
+    &#64;return darken($color, $percentage);
+}
+
+// Użycie funkcji
+.button {
+    background-color: darken-color(#3498db, 20%); // Tworzy ciemniejszy kolor
+}
+        </code></pre>
+
+        <p>W tym przykładzie funkcja <code>darken-color</code> przyjmuje kolor i procent przyciemnienia, a następnie zwraca nowy odcień koloru.</p>
+
+        <h2>Walidacja Argumentów w Funkcjach</h2>
+        <p>W funkcjach niestandardowych można stosować warunki <code>&#64;if</code> do walidacji argumentów. Na przykład możemy sprawdzić, czy argument jest poprawnego typu, zanim wykonamy na nim operacje.</p>
+
+        <pre><code class="language-scss">
+// Funkcja z walidacją argumentów
+&#64;function square($number) {
+    &#64;if type-of($number) != 'number' {
+        &#64;error "Argument musi być liczbą";
+    }
+    &#64;return $number * $number;
+}
+
+// Użycie funkcji
+.box {
+    width: square(5px); // Ustawia szerokość na 25px
+}
+        </code></pre>
+
+        <p>Funkcja <code>square</code> sprawdza, czy argument jest liczbą. Jeśli nie, wyrzuca błąd przy użyciu <code>&#64;error</code>.</p>
+
+        <h2>Funkcje Zwracające Listy lub Mapy</h2>
+        <p>Funkcje niestandardowe mogą zwracać złożone struktury danych, takie jak listy i mapy. Na przykład funkcja może zwrócić mapę kolorów na podstawie zdefiniowanej palety.</p>
+
+        <pre><code class="language-scss">
+// Funkcja zwracająca mapę kolorów
+&#64;function color-palette() {
+    &#64;return (
+        primary: #3498db,
+        secondary: #2ecc71,
+        danger: #e74c3c
+    );
+}
+
+// Użycie funkcji do pobrania koloru z mapy
+.alert {
+    background-color: map-get(color-palette(), danger); // Ustawia tło na kolor danger
+}
+        </code></pre>
+
+        <p>Funkcja <code>color-palette</code> zwraca mapę kolorów, co pozwala na szybki dostęp do poszczególnych kolorów w stylach.</p>
+
+        <h2>Przykład: Funkcja do Obliczania Odstępów</h2>
+        <p>Poniżej znajduje się przykład funkcji, która oblicza odstępy między elementami na podstawie przekazanego stopnia wielkości (np. <code>small</code>, <code>medium</code>, <code>large</code>).</p>
+
+        <pre><code class="language-scss">
+// Funkcja do obliczania odstępów
+&#64;function spacing($size) {
+    &#64;if $size == small {
+        &#64;return 8px;
+    } &#64;else if $size == medium {
+        &#64;return 16px;
+    } &#64;else if $size == large {
+        &#64;return 24px;
+    } &#64;else {
+        &#64;error "Niewłaściwa wartość dla $size: musi być small, medium lub large";
+    }
+}
+
+// Użycie funkcji
+.container {
+    margin-bottom: spacing(medium); // Ustawia odstęp na 16px
+}
+        </code></pre>
+
+        <p>Funkcja <code>spacing</code> zwraca odpowiednią wartość odstępu w zależności od argumentu <code>$size</code>, co pozwala na stosowanie spójnych odstępów w całym projekcie.</p>
+
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/prism.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/components/prism-scss.min.js"></script>
+</body>
+</html>
