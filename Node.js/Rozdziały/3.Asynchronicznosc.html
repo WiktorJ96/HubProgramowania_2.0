@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Asynchroniczność w Node.js</title>
+    <link rel="stylesheet" href="../styles.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/themes/prism-tomorrow.min.css" rel="stylesheet" />
+</head>
+<body>
+    <div class="container">
+        <h1>Asynchroniczność w Node.js</h1>
+
+        <p>Node.js jest jednowątkowym środowiskiem, co oznacza, że wszystkie operacje wykonują się w jednym wątku. Aby jednak uniknąć blokowania podczas wykonywania zadań takich jak operacje na plikach czy zapytania do bazy danych, Node.js wykorzystuje asynchroniczność. W tej sekcji omówimy podstawowe narzędzia do obsługi operacji asynchronicznych: <strong>callbacks</strong>, <strong>Promises</strong> oraz <strong>async/await</strong>.</p>
+
+        <h2>Callbacks (funkcje zwrotne)</h2>
+        <p>Callback to funkcja przekazywana jako argument do innej funkcji, która jest wywoływana po zakończeniu operacji. W Node.js callbacks były stosowane powszechnie przed wprowadzeniem Promises i async/await.</p>
+        <pre><code class="language-javascript">
+const fs = require('fs'); 
+// Importujemy moduł 'fs' (filesystem) dostępny w Node.js, 
+// który pozwala na operacje na plikach, takie jak ich odczyt, zapis i usuwanie.
+
+fs.readFile('plik.txt', 'utf8', (err, data) => { 
+    // Wywołujemy metodę 'readFile' z modułu 'fs', aby odczytać zawartość pliku o nazwie 'plik.txt'.
+    // Pierwszy argument, 'plik.txt', to nazwa pliku, który chcemy odczytać.
+    // Drugi argument, 'utf8', to kodowanie, które sprawia, że plik zostanie odczytany jako tekst, a nie dane binarne.
+    // Trzeci argument to funkcja zwrotna (callback), która wykona się po zakończeniu odczytu pliku.
+    // Funkcja ta przyjmuje dwa parametry:
+    // 'err' – reprezentuje błąd, jeśli wystąpił podczas odczytu,
+    // 'data' – zawiera zawartość pliku, jeśli odczyt się udał.
+
+    if (err) {
+        console.error("Błąd podczas odczytu pliku:", err);
+        // Sprawdzamy, czy wystąpił błąd podczas odczytu. 
+        // Jeśli tak, 'console.error' wyświetli komunikat z błędem w konsoli.
+        // Następnie 'return' kończy wykonanie funkcji, aby nie przejść do dalszego kodu.
+        return;
+    }
+
+    console.log("Dane z pliku:", data);
+    // Jeśli nie było błędu, funkcja wyświetli w konsoli zawartość pliku.
+    // 'data' zawiera dane z pliku 'plik.txt', które zostały odczytane przez 'fs.readFile'.
+});
+        </code></pre>
+        <p>W powyższym przykładzie <code>readFile</code> odczytuje plik asynchronicznie i wywołuje funkcję zwrotną, gdy zakończy operację. Jeśli wystąpi błąd, jest on obsługiwany przez sprawdzenie wartości <code>err</code>.</p>
+
+        <h2>Promises (obietnice)</h2>
+        <p>Promise to obiekt, który reprezentuje wynik asynchronicznej operacji, która może zakończyć się sukcesem lub błędem. Zamiast zagnieżdżać callbacks, możemy użyć metody <code>.then()</code> do obsługi sukcesu i <code>.catch()</code> do obsługi błędów.</p>
+        <pre><code class="language-javascript">
+const fs = require('fs').promises;
+// Importujemy moduł 'fs' (filesystem) z Node.js, korzystając z wersji obsługującej obietnice (promises).
+// Dzięki temu możemy używać 'then' i 'catch' do obsługi odczytu plików, co upraszcza zarządzanie kodem asynchronicznym.
+
+fs.readFile('plik.txt', 'utf8')
+    // Wywołujemy metodę 'readFile' z modułu 'fs', aby odczytać zawartość pliku o nazwie 'plik.txt'.
+    // Pierwszy argument 'plik.txt' to nazwa pliku, który chcemy odczytać.
+    // Drugi argument 'utf8' to kodowanie, dzięki któremu odczytany plik będzie traktowany jako tekst.
+    // 'fs.readFile' zwraca obiekt typu Promise, który może zakończyć się sukcesem lub błędem.
+    
+    .then(data => {
+        // 'then' uruchamia się, gdy Promise (czyli operacja odczytu pliku) zakończy się sukcesem.
+        // Wynik, czyli zawartość pliku, trafia do zmiennej 'data'.
+        
+        console.log("Dane z pliku:", data);
+        // Wyświetlamy zawartość pliku w konsoli. 'data' zawiera tekst z pliku 'plik.txt'.
+    })
+    
+    .catch(err => {
+        // 'catch' przechwytuje błędy, jeśli Promise zostanie odrzucony (np. plik nie istnieje).
+        
+        console.error("Błąd podczas odczytu pliku:", err);
+        // Wyświetlamy komunikat o błędzie w konsoli. 'err' zawiera szczegóły dotyczące tego błędu.
+    });
+        </code></pre>
+        <p>Dzięki zastosowaniu <code>Promise</code> można bardziej przejrzyście obsługiwać asynchroniczne operacje bez zagnieżdżania funkcji.</p>
+
+        <h2>async/await</h2>
+        <p><code>async</code> i <code>await</code> to rozszerzenie Promise, które pozwala pisać asynchroniczny kod w stylu synchronicznym. Funkcja oznaczona jako <code>async</code> zwraca Promise, a słowo kluczowe <code>await</code> pozwala na "czekanie" na wynik Promise.</p>
+        <pre><code class="language-javascript">
+async function readData() {
+    // Tworzymy funkcję asynchroniczną 'readData'. 
+    // Użycie słowa kluczowego 'async' przed definicją funkcji oznacza, 
+    // że może ona używać 'await' do obsługi operacji asynchronicznych.
+    
+    try {
+        const data = await fs.readFile('plik.txt', 'utf8');
+        // Używamy 'await' przed 'fs.readFile', aby poczekać na wynik operacji odczytu pliku.
+        // 'fs.readFile' to metoda asynchroniczna, która zwraca obiekt typu Promise.
+        // 'await' sprawia, że funkcja zatrzyma się tutaj i poczeka, aż Promise zostanie rozwiązany.
+        // Gdy odczyt pliku zakończy się sukcesem, zwraca jego zawartość (tekst z pliku) do zmiennej 'data'.
+
+        console.log("Dane z pliku:", data);
+        // Jeśli odczyt zakończył się sukcesem, zawartość pliku jest przypisana do zmiennej 'data'.
+        // Następnie wyświetlamy tę zawartość w konsoli.
+
+    } catch (err) {
+        console.error("Błąd podczas odczytu pliku:", err);
+        // Jeśli wystąpi błąd (np. plik nie istnieje lub jest problem z dostępem), 
+        // błąd zostanie przechwycony przez blok 'catch'.
+        // 'console.error' wyświetla komunikat błędu w konsoli, a 'err' zawiera szczegóły błędu.
+    }
+}
+
+readData();
+// Wywołujemy funkcję 'readData', aby rozpocząć proces odczytu pliku 'plik.txt'.
+// Kod wewnątrz 'readData' wykona się asynchronicznie, ale dzięki 'await' działa sekwencyjnie,
+// co ułatwia pisanie i czytanie kodu.
+        </code></pre>
+        <p>Powyższy przykład pokazuje, jak dzięki <code>async/await</code> możemy napisać kod, który wygląda jak synchroniczny, ale działa asynchronicznie.</p>
+
+        <h2>Podsumowanie</h2>
+        <p>W Node.js istnieje wiele sposobów na obsługę operacji asynchronicznych: callbacks, Promises i async/await. Wybór zależy od potrzeb projektu, ale async/await pozwala na prostszy i bardziej przejrzysty kod, eliminując tzw. "callback hell" (chaos zagnieżdżonych funkcji zwrotnych).</p>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/prism.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/components/prism-javascript.min.js"></script>
+</body>
+</html>

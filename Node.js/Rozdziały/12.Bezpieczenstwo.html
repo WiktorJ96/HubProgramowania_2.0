@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bezpieczeństwo w Node.js</title>
+    <link rel="stylesheet" href="../styles.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/themes/prism-tomorrow.min.css" rel="stylesheet" />
+</head>
+<body>
+    <div class="container">
+        <h1>Bezpieczeństwo w Node.js</h1>
+
+        <p>Zabezpieczenie aplikacji Node.js jest kluczowe, aby chronić dane użytkowników oraz unikać ataków. W tej sekcji omówimy praktyki bezpiecznego kodowania, techniki bezpiecznej obsługi danych oraz sposoby unikania podatności.</p>
+
+        <h2>Praktyki bezpiecznego kodowania</h2>
+        
+        <h3>1. Walidacja i Sanityzacja Danych</h3>
+        <p>Walidacja danych wejściowych jest pierwszą linią obrony przed wstrzyknięciami złośliwego kodu, takiego jak SQL Injection czy XSS. Używaj bibliotek takich jak <code>validator</code> lub <code>Joi</code>, aby sprawdzić poprawność danych.</p>
+        <pre><code class="language-javascript">
+// Przykład walidacji za pomocą Joi
+const Joi = require('joi');
+
+const schema = Joi.object({
+    username: Joi.string().alphanum().min(3).max(30).required(),
+    password: Joi.string().min(8).required()
+});
+
+const { error } = schema.validate({ username: 'testuser', password: 'safePassword123' });
+if (error) {
+    console.error("Niepoprawne dane:", error.details);
+}
+        </code></pre>
+
+        <h3>2. Unikanie wrażliwych danych w kodzie</h3>
+        <p>Wrażliwe dane, takie jak hasła, klucze API czy dane dostępu do bazy danych, powinny być przechowywane w plikach środowiskowych (<code>.env</code>) i nigdy nie powinny być zapisane bezpośrednio w kodzie.</p>
+        <pre><code class="language-javascript">
+// Użycie dotenv do ładowania zmiennych środowiskowych
+require('dotenv').config();
+
+const dbPassword = process.env.DB_PASSWORD;
+        </code></pre>
+
+        <h2>Bezpieczna obsługa danych</h2>
+        
+        <h3>1. Szyfrowanie haseł</h3>
+        <p>Hasła użytkowników powinny być zawsze szyfrowane przed zapisaniem w bazie danych. Najczęściej stosuje się <code>bcrypt</code> do bezpiecznego hashowania haseł.</p>
+        <pre><code class="language-javascript">
+const bcrypt = require('bcrypt');
+
+async function hashPassword(password) {
+    const salt = await bcrypt.genSalt(10);
+    const hashedPassword = await bcrypt.hash(password, salt);
+    return hashedPassword;
+}
+
+// Weryfikacja hasła podczas logowania
+async function verifyPassword(inputPassword, storedHash) {
+    return await bcrypt.compare(inputPassword, storedHash);
+}
+        </code></pre>
+
+        <h3>2. Ochrona przed atakami XSS (Cross-Site Scripting)</h3>
+        <p>XSS występuje, gdy dane wejściowe nie są odpowiednio oczyszczone i wprowadzają złośliwy kod JavaScript na stronę. Używaj bibliotek takich jak <code>helmet</code>, aby włączyć nagłówki bezpieczeństwa, które chronią przed XSS.</p>
+        <pre><code class="language-shell">
+npm install helmet
+        </code></pre>
+        <pre><code class="language-javascript">
+const express = require('express');
+const helmet = require('helmet');
+
+const app = express();
+app.use(helmet()); // Dodaje nagłówki bezpieczeństwa do każdej odpowiedzi
+        </code></pre>
+
+        <h2>Unikanie podatności</h2>
+
+        <h3>1. Aktualizowanie pakietów</h3>
+        <p>Regularne aktualizowanie pakietów za pomocą <code>npm update</code> lub <code>yarn upgrade</code> pomaga uniknąć znanych podatności. Dodatkowo można użyć <code>npm audit</code> do automatycznego sprawdzania zagrożeń.</p>
+        <pre><code class="language-shell">
+npm audit
+        </code></pre>
+
+        <h3>2. Ograniczenie dostępu do API</h3>
+        <p>Użycie tokenów uwierzytelniających, takich jak JWT (JSON Web Token), pozwala na ograniczenie dostępu do API tylko dla uwierzytelnionych użytkowników. W ten sposób zabezpieczysz swoje zasoby przed nieautoryzowanym dostępem.</p>
+        <pre><code class="language-javascript">
+const jwt = require('jsonwebtoken');
+
+function generateToken(user) {
+    return jwt.sign({ id: user.id }, process.env.JWT_SECRET, { expiresIn: '1h' });
+}
+
+function authenticateToken(req, res, next) {
+    const token = req.headers['authorization'];
+    if (!token) return res.sendStatus(403);
+
+    jwt.verify(token, process.env.JWT_SECRET, (err, user) => {
+        if (err) return res.sendStatus(403);
+        req.user = user;
+        next();
+    });
+}
+        </code></pre>
+
+        <h2>Podsumowanie</h2>
+        <p>Bezpieczeństwo w Node.js wymaga stosowania dobrych praktyk, takich jak walidacja danych, szyfrowanie haseł oraz odpowiednia obsługa tokenów uwierzytelniających. Dzięki tym technikom możesz zwiększyć bezpieczeństwo aplikacji i chronić ją przed potencjalnymi zagrożeniami.</p>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/prism.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/components/prism-javascript.min.js"></script>
+</body>
+</html>

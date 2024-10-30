@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Zarządzanie Pakietami w Node.js</title>
+    <link rel="stylesheet" href="../styles.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/themes/prism-tomorrow.min.css" rel="stylesheet" />
+</head>
+<body>
+    <div class="container">
+        <h1>Zarządzanie Pakietami w Node.js</h1>
+
+        <p>Node.js używa menedżerów pakietów, takich jak <code>npm</code> oraz <code>yarn</code>, które ułatwiają instalowanie bibliotek, zarządzanie zależnościami oraz konfigurowanie projektów za pomocą pliku <code>package.json</code>. W tej sekcji omówimy podstawowe operacje na pakietach, użycie <code>npm</code> i <code>yarn</code>, oraz tworzenie i zarządzanie plikiem <code>package.json</code>.</p>
+
+        <h2>Tworzenie <code>package.json</code></h2>
+        <p>Plik <code>package.json</code> przechowuje informacje o projekcie oraz jego zależnościach. Aby stworzyć ten plik, można skorzystać z komendy <code>npm init</code> lub <code>yarn init</code>:</p>
+        <pre><code class="language-shell">
+# Z użyciem npm
+npm init
+
+# Z użyciem yarn
+yarn init
+        </code></pre>
+        <p>Komenda <code>init</code> poprowadzi przez konfigurację pliku <code>package.json</code>, pytając o takie informacje jak nazwa projektu, wersja, opis, punkt wejściowy (np. <code>index.js</code>), oraz lista autorów.</p>
+
+        <h2>Instalowanie pakietów</h2>
+        <p>Zarówno <code>npm</code>, jak i <code>yarn</code> umożliwiają instalowanie pakietów, które mogą być zależnościami projektowymi (zapisanymi w <code>dependencies</code>) lub zależnościami deweloperskimi (zapisanymi w <code>devDependencies</code>).</p>
+        
+        <h3>Instalowanie zależności</h3>
+        <pre><code class="language-shell">
+# Instalowanie zależności z npm
+npm install [nazwa_pakietu]
+
+# Instalowanie zależności z yarn
+yarn add [nazwa_pakietu]
+        </code></pre>
+
+        <h3>Instalowanie zależności deweloperskich</h3>
+        <p>Zależności deweloperskie są używane tylko podczas procesu tworzenia aplikacji, np. narzędzia do testowania lub transpilacji kodu.</p>
+        <pre><code class="language-shell">
+# Instalowanie zależności deweloperskich z npm
+npm install [nazwa_pakietu] --save-dev
+
+# Instalowanie zależności deweloperskich z yarn
+yarn add [nazwa_pakietu] --dev
+        </code></pre>
+
+        <h2>Zarządzanie zależnościami</h2>
+        <p>Plik <code>package.json</code> przechowuje wszystkie zależności projektu, co ułatwia ich kontrolę i aktualizację.</p>
+        
+        <h3>Aktualizowanie pakietów</h3>
+        <p>Aktualizacje pakietów pozwalają korzystać z najnowszych funkcji i poprawek bezpieczeństwa. Można je wykonać za pomocą komend:</p>
+        <pre><code class="language-shell">
+# Aktualizowanie wszystkich pakietów z npm
+npm update
+
+# Aktualizowanie wszystkich pakietów z yarn
+yarn upgrade
+        </code></pre>
+
+        <h3>Usuwanie pakietów</h3>
+        <p>Aby usunąć pakiet z projektu, można użyć odpowiednich komend:</p>
+        <pre><code class="language-shell">
+# Usuwanie pakietu z npm
+npm uninstall [nazwa_pakietu]
+
+# Usuwanie pakietu z yarn
+yarn remove [nazwa_pakietu]
+        </code></pre>
+
+        <h2>Instalacja zależności z pliku <code>package.json</code></h2>
+        <p>Jeśli projekt już zawiera plik <code>package.json</code>, można szybko zainstalować wszystkie wymienione zależności:</p>
+        <pre><code class="language-shell">
+# Instalacja zależności z npm
+npm install
+
+# Instalacja zależności z yarn
+yarn install
+        </code></pre>
+        <p>Po wykonaniu powyższych komend wszystkie zależności zostaną zainstalowane na podstawie informacji zawartych w <code>package.json</code>.</p>
+
+        <h2>Przykład pliku <code>package.json</code></h2>
+        <p>Poniżej znajduje się przykład pliku <code>package.json</code> zawierającego podstawowe zależności oraz zależności deweloperskie:</p>
+        <pre><code class="language-json">
+{
+    "name": "moj-projekt",
+    "version": "1.0.0",
+    "description": "Przykładowy projekt Node.js",
+    "main": "index.js",
+    "scripts": {
+        "start": "node index.js",
+        "test": "echo \"Error: no test specified\" && exit 1"
+    },
+    "dependencies": {
+        "express": "^4.17.1"
+    },
+    "devDependencies": {
+        "nodemon": "^2.0.7"
+    }
+}
+        </code></pre>
+        <p>W tym przykładzie <code>express</code> jest zależnością produkcyjną, a <code>nodemon</code> - zależnością deweloperską, przydatną do automatycznego restartowania serwera podczas prac rozwojowych.</p>
+
+        <h2>Podsumowanie</h2>
+        <p>npm i yarn są podstawowymi narzędziami do zarządzania pakietami w Node.js. Dzięki nim można łatwo dodawać, aktualizować oraz usuwać zależności, a plik <code>package.json</code> pomaga w organizacji i automatyzacji procesu instalacji w projekcie.</p>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/prism.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/components/prism-javascript.min.js"></script>
+</body>
+</html>

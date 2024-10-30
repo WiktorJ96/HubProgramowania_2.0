@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Event Loop w Node.js</title>
+    <link rel="stylesheet" href="../styles.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/themes/prism-tomorrow.min.css" rel="stylesheet" />
+</head>
+<body>
+    <div class="container">
+        <h1>Event Loop w Node.js</h1>
+
+        <p>Mechanizm <strong>Event Loop</strong> w Node.js jest kluczowy do zrozumienia asynchroniczności oraz obsługi zdarzeń. Dzięki Event Loop, Node.js może wykonywać operacje asynchroniczne, takie jak zapytania do bazy danych, obsługa plików czy zapytania HTTP, bez blokowania głównego wątku. Poniżej omówimy działanie Event Loop, jego cykle oraz podstawy asynchroniczności.</p>
+
+        <h2>Co to jest Event Loop?</h2>
+        <p>Event Loop to mechanizm, który pozwala Node.js obsługiwać operacje asynchroniczne w jednowątkowym środowisku. Działa on w pętli, przetwarzając zadania (funkcje zwrotne) z różnych kolejek zdarzeń.</p>
+        <p>Event Loop wykonuje zadania w głównym wątku w kolejności, co sprawia, że kod w Node.js jest nieblokujący i wydajny nawet podczas obsługi wielu operacji.</p>
+
+        <h2>Etapy Event Loop</h2>
+        <p>Event Loop działa w cyklach, zwanych "tickami". Każdy tick przetwarza różne kolejki zadań, takie jak:</p>
+        <ul>
+            <li><strong>Timers:</strong> Obsługa funkcji ustawionych za pomocą <code>setTimeout</code> oraz <code>setInterval</code>.</li>
+            <li><strong>Pending Callbacks:</strong> Obsługa operacji asynchronicznych, które zakończyły się błędem.</li>
+            <li><strong>Idle, Prepare:</strong> Wewnętrzne operacje używane przez Node.js.</li>
+            <li><strong>Poll:</strong> Przetwarzanie nowych zdarzeń oraz oczekiwanie na nowe.</li>
+            <li><strong>Check:</strong> Obsługa funkcji zwrotnych z <code>setImmediate</code>.</li>
+            <li><strong>Close Callbacks:</strong> Obsługa zdarzeń zamknięcia, takich jak <code>socket.on('close')</code>.</li>
+        </ul>
+
+        <h2>Przykład działania Event Loop</h2>
+        <p>Aby lepiej zrozumieć działanie Event Loop, rozważmy poniższy przykład:</p>
+        <pre><code class="language-javascript">
+console.log('Początek');
+
+setTimeout(() => {
+    console.log('Zdarzenie z setTimeout');
+}, 0);
+
+setImmediate(() => {
+    console.log('Zdarzenie z setImmediate');
+});
+
+console.log('Koniec');
+        </code></pre>
+        <p>W powyższym przykładzie Event Loop najpierw wypisuje <code>Początek</code>, potem <code>Koniec</code>, a dopiero na końcu obsługuje zdarzenia asynchroniczne, takie jak <code>setTimeout</code> i <code>setImmediate</code>.</p>
+
+        <h2>Asynchroniczność w Node.js</h2>
+        <p>Asynchroniczność pozwala Node.js wykonywać operacje w tle, co pozwala na nieblokującą obsługę wielu żądań jednocześnie. Najpopularniejsze metody tworzenia asynchroniczności to:</p>
+
+        <h3>1. Callbacks</h3>
+        <pre><code class="language-javascript">
+const fs = require('fs');
+
+fs.readFile('plik.txt', 'utf8', (err, data) => {
+    if (err) throw err;
+    console.log('Dane z pliku:', data);
+});
+
+console.log('Ta linia wyświetli się przed odczytem pliku');
+        </code></pre>
+        <p>W tym przykładzie <code>fs.readFile</code> jest asynchroniczne i używa funkcji zwrotnej (callback) do obsługi wyniku operacji.</p>
+
+        <h3>2. Promises</h3>
+        <pre><code class="language-javascript">
+const fs = require('fs').promises;
+
+fs.readFile('plik.txt', 'utf8')
+    .then(data => console.log('Dane z pliku:', data))
+    .catch(err => console.error('Błąd:', err));
+
+console.log('Ta linia wyświetli się przed odczytem pliku');
+        </code></pre>
+
+        <h3>3. Async/Await</h3>
+        <p><code>async/await</code> pozwala pisać asynchroniczny kod w stylu synchronicznym, co zwiększa czytelność.</p>
+        <pre><code class="language-javascript">
+const fs = require('fs').promises;
+
+async function odczytajPlik() {
+    try {
+        const data

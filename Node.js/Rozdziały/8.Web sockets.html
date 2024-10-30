@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>WebSockets w Node.js</title>
+    <link rel="stylesheet" href="../styles.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/themes/prism-tomorrow.min.css" rel="stylesheet" />
+</head>
+<body>
+    <div class="container">
+        <h1>Realizacja komunikacji w czasie rzeczywistym za pomocą WebSockets w Node.js</h1>
+
+        <p>WebSocket to protokół umożliwiający dwukierunkową komunikację w czasie rzeczywistym między serwerem a klientem. W Node.js można wykorzystać bibliotekę <code>ws</code> do obsługi połączeń WebSocket, umożliwiając komunikację w czasie rzeczywistym, np. do czatów, gier online i powiadomień.</p>
+
+        <h2>Instalacja i konfiguracja WebSocket</h2>
+        <p>Aby rozpocząć pracę z WebSocket, najpierw zainstaluj bibliotekę <code>ws</code> za pomocą npm:</p>
+        <pre><code class="language-shell">
+npm install ws
+        </code></pre>
+
+        <h2>Tworzenie serwera WebSocket</h2>
+        <p>W poniższym przykładzie utworzymy prosty serwer WebSocket, który będzie nasłuchiwał na określonym porcie i obsługiwał połączenia w czasie rzeczywistym:</p>
+        <pre><code class="language-javascript">
+const WebSocket = require('ws');
+const server = new WebSocket.Server({ port: 8080 });
+
+server.on('connection', socket => {
+    console.log('Nowe połączenie WebSocket');
+
+    socket.on('message', message => {
+        console.log('Otrzymano wiadomość:', message);
+        socket.send(`Odpowiedź serwera: ${message}`);
+    });
+
+    socket.on('close', () => {
+        console.log('Połączenie WebSocket zamknięte');
+    });
+});
+
+console.log('Serwer WebSocket działa na porcie 8080');
+        </code></pre>
+        <p>Serwer WebSocket nasłuchuje na porcie <code>8080</code> i obsługuje dwa główne zdarzenia: <code>connection</code> oraz <code>message</code>. Przy każdej otrzymanej wiadomości serwer wysyła odpowiedź z powrotem do klienta.</p>
+
+        <h2>Klient WebSocket w przeglądarce</h2>
+        <p>Poniżej przedstawiono, jak stworzyć klienta WebSocket w przeglądarce, który połączy się z serwerem i wyświetli wiadomości w konsoli:</p>
+        <pre><code class="language-javascript">
+const socket = new WebSocket('ws://localhost:8080');
+
+socket.onopen = () => {
+    console.log('Połączono z serwerem WebSocket');
+    socket.send('Witaj serwerze!');
+};
+
+socket.onmessage = event => {
+    console.log('Odpowiedź od serwera:', event.data);
+};
+
+socket.onclose = () => {
+    console.log('Połączenie z serwerem WebSocket zostało zamknięte');
+};
+        </code></pre>
+        <p>Klient WebSocket łączy się z serwerem, wysyła wiadomość <code>Witaj serwerze!</code> i odbiera odpowiedzi, które są wyświetlane w konsoli przeglądarki.</p>
+
+        <h2>Przykład prostego czatu</h2>
+        <p>Poniżej znajduje się przykład implementacji prostego czatu przy użyciu WebSocket. Serwer przesyła wiadomości do wszystkich podłączonych klientów:</p>
+        <pre><code class="language-javascript">
+server.on('connection', socket => {
+    socket.on('message', message => {
+        server.clients.forEach(client => {
+            if (client.readyState === WebSocket.OPEN) {
+                client.send(message); // Wysyłanie wiadomości do każdego klienta
+            }
+        });
+    });
+});
+        </code></pre>
+        <p>W tym przykładzie każda otrzymana wiadomość jest przekazywana do wszystkich klientów podłączonych do serwera, tworząc prostą funkcjonalność czatu.</p>
+
+        <h2>Obsługa błędów w WebSocket</h2>
+        <p>Podczas pracy z WebSocket ważne jest odpowiednie zarządzanie błędami. Możemy dodać obsługę błędów, aby poprawnie zamknąć połączenia w razie problemów:</p>
+        <pre><code class="language-javascript">
+socket.on('error', error => {
+    console.error('Błąd WebSocket:', error);
+    socket.close();
+});
+        </code></pre>
+        <p>Dzięki powyższej obsłudze każde wystąpienie błędu jest rejestrowane, a połączenie zamykane, aby uniknąć problemów z komunikacją.</p>
+
+        <h2>Podsumowanie</h2>
+        <p>WebSocket to efektywny sposób na implementację komunikacji w czasie rzeczywistym w aplikacjach Node.js. Dzięki bibliotece <code>ws</code> możemy tworzyć serwery i klientów WebSocket, obsługiwać wiadomości oraz zarządzać połączeniami w czasie rzeczywistym.</p>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/prism.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/components/prism-javascript.min.js"></script>
+</body>
+</html>

@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Praca z Bazami Danych w Node.js</title>
+    <link rel="stylesheet" href="../styles.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/themes/prism-tomorrow.min.css" rel="stylesheet" />
+</head>
+<body>
+    <div class="container">
+        <h1>Praca z Bazami Danych w Node.js</h1>
+
+        <p>Node.js umożliwia pracę z różnymi bazami danych, takimi jak MongoDB, MySQL i PostgreSQL. W tej sekcji omówimy, jak łączyć się z tymi bazami danych, używać Mongoose do pracy z MongoDB oraz implementować podstawowe operacje CRUD (Create, Read, Update, Delete).</p>
+
+        <h2>Praca z MongoDB przy użyciu Mongoose</h2>
+        <p>Mongoose to popularna biblioteka dla MongoDB, która pozwala na łatwe definiowanie schematów danych i wykonywanie operacji CRUD. Najpierw należy zainstalować Mongoose:</p>
+        <pre><code class="language-shell">
+npm install mongoose
+        </code></pre>
+
+        <h3>Połączenie z MongoDB</h3>
+        <pre><code class="language-javascript">
+const mongoose = require('mongoose');
+
+mongoose.connect('mongodb://localhost:27017/mojabaza', { useNewUrlParser: true, useUnifiedTopology: true })
+    .then(() => console.log('Połączono z MongoDB'))
+    .catch(err => console.error('Błąd połączenia:', err));
+        </code></pre>
+
+        <h3>Tworzenie schematu i modelu</h3>
+        <pre><code class="language-javascript">
+const Schema = mongoose.Schema;
+
+const UserSchema = new Schema({
+    name: String,
+    age: Number,
+    email: String
+});
+
+const User = mongoose.model('User', UserSchema);
+        </code></pre>
+
+        <h3>Operacje CRUD</h3>
+        <p>Oto przykłady operacji CRUD przy użyciu Mongoose:</p>
+
+        <pre><code class="language-javascript">
+async function createUser() {
+    const user = new User({ name: 'Jan', age: 30, email: 'jan@example.com' });
+    await user.save();
+    console.log('Użytkownik zapisany:', user);
+}
+
+async function getUsers() {
+    const users = await User.find();
+    console.log('Użytkownicy:', users);
+}
+
+async function updateUser(id) {
+    const user = await User.findByIdAndUpdate(id, { age: 35 }, { new: true });
+    console.log('Zaktualizowany użytkownik:', user);
+}
+
+async function deleteUser(id) {
+    await User.findByIdAndDelete(id);
+    console.log('Użytkownik usunięty');
+}
+        </code></pre>
+
+        <h2>Praca z MySQL</h2>
+        <p>Aby połączyć się z MySQL w Node.js, można użyć pakietu <code>mysql2</code>. Najpierw zainstaluj go:</p>
+        <pre><code class="language-shell">
+npm install mysql2
+        </code></pre>
+
+        <h3>Połączenie z MySQL</h3>
+        <pre><code class="language-javascript">
+const mysql = require('mysql2');
+
+const connection = mysql.createConnection({
+    host: 'localhost',
+    user: 'root',
+    password: 'password',
+    database: 'mojabaza'
+});
+
+connection.connect(err => {
+    if (err) {
+        console.error('Błąd połączenia z MySQL:', err);
+        return;
+    }
+    console.log('Połączono z MySQL');
+});
+        </code></pre>
+
+        <h3>Operacje CRUD</h3>
+        <p>Przykłady operacji CRUD w MySQL:</p>
+        <pre><code class="language-javascript">
+connection.query('INSERT INTO users (name, age, email) VALUES (?, ?, ?)', ['Jan', 30, 'jan@example.com'], (err, results) => {
+    if (err) throw err;
+    console.log('Użytkownik dodany:', results);
+});
+
+connection.query('SELECT * FROM users', (err, results) => {
+    if (err) throw err;
+    console.log('Użytkownicy:', results);
+});
+
+connection.query('UPDATE users SET age = ? WHERE name = ?', [35, 'Jan'], (err, results) => {
+    if (err) throw err;
+    console.log('Zaktualizowany użytkownik:', results);
+});
+
+connection.query('DELETE FROM users WHERE name = ?', ['Jan'], (err, results) => {
+    if (err) throw err;
+    console.log('Użytkownik usunięty:', results);
+});
+        </code></pre>
+
+        <h2>Praca z PostgreSQL</h2>
+        <p>Aby połączyć się z PostgreSQL, można użyć pakietu <code>pg</code>. Najpierw zainstaluj go:</p>
+        <pre><code class="language-shell">
+npm install pg
+        </code></pre>
+
+        <h3>Połączenie z PostgreSQL</h3>
+        <pre><code class="language-javascript">
+const { Client } = require('pg');
+
+const client = new Client({
+    host: 'localhost',
+    user: 'postgres',
+    password: 'password',
+    database: 'mojabaza'
+});
+
+client.connect(err => {
+    if (err) {
+        console.error('Błąd połączenia z PostgreSQL:', err);
+        return;
+    }
+    console.log('Połączono z PostgreSQL');
+});
+        </code></pre>
+
+        <h3>Operacje CRUD</h3>
+        <p>Przykłady operacji CRUD w PostgreSQL:</p>
+        <pre><code class="language-javascript">
+client.query('INSERT INTO users (name, age, email) VALUES ($1, $2, $3)', ['Jan', 30, 'jan@example.com'], (err, res) => {
+    if (err) throw err;
+    console.log('Użytkownik dodany:', res);
+});
+
+client.query('SELECT * FROM users', (err, res) => {
+    if (err) throw err;
+    console.log('Użytkownicy:', res.rows);
+});
+
+client.query('UPDATE users SET age = $1 WHERE name = $2', [35, 'Jan'], (err, res) => {
+    if (err) throw err;
+    console.log('Zaktualizowany użytkownik:', res);
+});
+
+client.query('DELETE FROM users WHERE name = $1', ['Jan'], (err, res) => {
+    if (err) throw err;
+    console.log('Użytkownik usunięty:', res);
+});
+        </code></pre>
+
+        <h2>Podsumowanie</h2>
+        <p>Node.js oferuje wsparcie dla wielu baz danych, w tym MongoDB, MySQL i PostgreSQL. Dzięki odpowiednim bibliotekom, takim jak Mongoose, mysql2 oraz pg, możemy łatwo realizować operacje CRUD i integrować bazę danych z aplikacją Node.js.</p>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/prism.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/components/prism-javascript.min.js"></script>
+</body>
+</html>

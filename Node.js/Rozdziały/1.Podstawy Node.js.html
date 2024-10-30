@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Podstawy Node.js</title>
+    <link rel="stylesheet" href="../styles.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/themes/prism-tomorrow.min.css" rel="stylesheet" />
+</head>
+<body>
+    <div class="container">
+        <h1>Podstawy Node.js</h1>
+
+        <p>Node.js to środowisko uruchomieniowe JavaScript umożliwiające tworzenie aplikacji po stronie serwera. Pozwala na pisanie kodu w JavaScript na serwerze, co otwiera nowe możliwości dla deweloperów. Poniżej znajdziesz instrukcje instalacji, omówienie podstawowych komend oraz REPL.</p>
+
+        <h2>Instalacja Node.js</h2>
+        <p>Aby zacząć pracę z Node.js, należy najpierw zainstalować środowisko. Można to zrobić poprzez stronę <a href="https://nodejs.org" target="_blank">nodejs.org</a>. Zaleca się pobranie wersji LTS (Long Term Support) dla stabilności.</p>
+        <pre><code class="language-shell">
+# Sprawdzenie wersji Node.js po instalacji
+node -v
+        </code></pre>
+        <p>Po instalacji, komenda <code>node -v</code> pozwoli sprawdzić, czy Node.js został poprawnie zainstalowany.</p>
+
+        <h2>Podstawowe komendy</h2>
+        <p>Node.js oferuje kilka podstawowych komend do zarządzania i testowania kodu. Oto niektóre z nich:</p>
+        <ul>
+            <li><code>node [nazwa_pliku]</code>: Uruchamia dany plik JavaScript za pomocą Node.js.</li>
+            <li><code>npm init</code>: Inicjuje nowy projekt Node.js, tworząc plik <code>package.json</code>.</li>
+            <li><code>npm install [nazwa_pakietu]</code>: Instaluje pakiet npm (Node Package Manager) lokalnie do projektu.</li>
+        </ul>
+        <pre><code class="language-shell">
+# Przykład uruchomienia pliku
+node app.js
+
+# Inicjacja nowego projektu
+npm init
+
+# Instalacja pakietu np. Express
+npm install express
+        </code></pre>
+
+        <h2>REPL (Read-Eval-Print Loop)</h2>
+        <p>REPL to interaktywna powłoka, która umożliwia wprowadzanie kodu JavaScript, natychmiastowe wykonywanie go i zwracanie wyników. Jest to przydatne narzędzie do testowania małych fragmentów kodu.</p>
+        <pre><code class="language-javascript">
+# Uruchamianie REPL
+node
+
+# Przykład kodu w REPL
+> let x = 10;
+> x + 5
+// Wynik: 15
+        </code></pre>
+        <p>Aby uruchomić REPL, wystarczy wpisać <code>node</code> w terminalu. Można w nim pisać proste wyrażenia JavaScript i natychmiast otrzymywać wynik.</p>
+
+        <h2>Zarządzanie wersjami Node.js</h2>
+        <p>Do zarządzania różnymi wersjami Node.js można użyć narzędzia NVM (Node Version Manager). Dzięki niemu możemy łatwo instalować i przełączać się między wersjami Node.js.</p>
+        <pre><code class="language-shell">
+# Instalacja NVM
+curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.35.3/install.sh | bash
+
+# Sprawdzenie dostępnych wersji Node.js
+nvm ls-remote
+
+# Instalacja konkretnej wersji Node.js
+nvm install 14.17.0
+
+# Przełączanie się na inną wersję
+nvm use 14.17.0
+        </code></pre>
+        <p>Przykład pokazuje, jak zainstalować NVM i zarządzać wersjami Node.js, co jest przydatne, gdy pracujemy nad różnymi projektami wymagającymi różnych wersji.</p>
+    </div>
+    
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/prism.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/components/prism-javascript.min.js"></script>
+</body>
+</html>

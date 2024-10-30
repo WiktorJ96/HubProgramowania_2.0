@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Clustering i Skalowanie w Node.js</title>
+    <link rel="stylesheet" href="../styles.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/themes/prism-tomorrow.min.css" rel="stylesheet" />
+</head>
+<body>
+    <div class="container">
+        <h1>Clustering i Skalowanie w Node.js</h1>
+
+        <p>Aplikacje Node.js uruchamiane są domyślnie w jednym wątku, co oznacza, że mogą wykorzystać tylko jeden rdzeń procesora. Dzięki modułowi <code>cluster</code> można jednak tworzyć klastery procesów, które pozwalają na uruchomienie aplikacji na wielu rdzeniach i obsługę większej liczby żądań. W tej sekcji omówimy, jak użyć modułu <code>cluster</code> oraz jak skalować aplikację Node.js.</p>
+
+        <h2>Moduł <code>cluster</code></h2>
+        <p>Moduł <code>cluster</code> w Node.js umożliwia tworzenie procesów potomnych (workerów), które wykonują tę samą aplikację, równoważąc obciążenie na dostępnych rdzeniach procesora.</p>
+
+        <h3>Podstawowy przykład użycia modułu <code>cluster</code></h3>
+        <p>Poniższy przykład ilustruje podstawowe użycie modułu <code>cluster</code> do uruchomienia aplikacji na wielu rdzeniach:</p>
+        <pre><code class="language-javascript">
+const cluster = require('cluster');
+const http = require('http');
+const os = require('os');
+
+if (cluster.isMaster) {
+    // Tworzenie procesu dla każdego rdzenia
+    const numCPUs = os.cpus().length;
+    console.log(`Liczba rdzeni: ${numCPUs}`);
+    console.log('Master proces uruchomiony z PID:', process.pid);
+
+    for (let i = 0; i < numCPUs; i++) {
+        cluster.fork(); // Tworzenie workerów
+    }
+
+    // Obserwacja zakończenia pracy workerów
+    cluster.on('exit', (worker, code, signal) => {
+        console.log(`Worker ${worker.process.pid} zakończył pracę`);
+        cluster.fork(); // Tworzenie nowego workera w miejsce zakończonego
+    });
+} else {
+    // Worker - uruchamianie serwera HTTP
+    http.createServer((req, res) => {
+        res.writeHead(200);
+        res.end(`Witaj z workera o PID: ${process.pid}\n`);
+    }).listen(8000);
+
+    console.log(`Worker uruchomiony z PID: ${process.pid}`);
+}
+        </code></pre>
+        <p>W powyższym przykładzie proces główny (master) tworzy tylu workerów, ile jest dostępnych rdzeni. Każdy worker uruchamia serwer HTTP, który obsługuje żądania na porcie <code>8000</code>.</p>
+
+        <h2>Skalowanie aplikacji Node.js</h2>
+        
+        <h3>1. Korzystanie z Load Balancer</h3>
+        <p>Klastery Node.js można dodatkowo skalować, używając load balancera (równoważnika obciążenia), który kieruje żądania do dostępnych instancji aplikacji. Popularnym rozwiązaniem jest NGINX, który obsługuje ruch i równoważy obciążenie.</p>
+
+        <h3>2. Automatyczne restartowanie workerów</h3>
+        <p>Gdy worker zakończy pracę, można skonfigurować proces główny tak, aby tworzył nowego workera automatycznie, co zwiększa stabilność aplikacji.</p>
+        
+        <pre><code class="language-javascript">
+cluster.on('exit', (worker, code, signal) => {
+    console.log(`Worker ${worker.process.pid} zakończył pracę`);
+    cluster.fork(); // Tworzy nowego workera, zastępując zakończony proces
+});
+        </code></pre>
+
+        <h2>PM2 - Narzędzie do zarządzania klastrami</h2>
+        <p>PM2 to popularne narzędzie do zarządzania aplikacjami Node.js. Obsługuje automatyczne restartowanie, monitorowanie procesów oraz skalowanie na wiele rdzeni, co upraszcza zarządzanie produkcyjnymi aplikacjami.</p>
+        
+        <h3>Instalacja PM2</h3>
+        <pre><code class="language-shell">
+npm install pm2 -g
+        </code></pre>
+
+        <h3>Skalowanie aplikacji za pomocą PM2</h3>
+        <p>Aby uruchomić aplikację Node.js na wszystkich rdzeniach przy użyciu PM2, można użyć opcji <code>-i max</code>:</p>
+        <pre><code class="language-shell">
+pm2 start app.js -i max
+        </code></pre>
+        <p>PM2 automatycznie uruchomi aplikację w tylu instancjach, ile rdzeni jest dostępnych na serwerze.</p>
+
+        <h3>Monitorowanie aplikacji z PM2</h3>
+        <p>PM2 oferuje również narzędzia do monitorowania aplikacji i logów:</p>
+        <pre><code class="language-shell">
+pm2 monit  # Monitorowanie aplikacji
+pm2 logs   # Wyświetlanie logów aplikacji
+        </code></pre>
+
+        <h2>Podsumowanie</h2>
+        <p>Moduł <code>cluster</code> umożliwia skalowanie aplikacji Node.js na wiele rdzeni, co zwiększa jej wydajność i zdolność do obsługi większej liczby żądań. Narzędzie PM2 jest przydatne do automatycznego zarządzania klastrami i monitorowania aplikacji w środowisku produkcyjnym.</p>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/prism.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/components/prism-javascript.min.js"></script>
+</body>
+</html>

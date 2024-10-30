@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Debugging w Node.js</title>
+    <link rel="stylesheet" href="../styles.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/themes/prism-tomorrow.min.css" rel="stylesheet" />
+</head>
+<body>
+    <div class="container">
+        <h1>Debugging w Node.js</h1>
+
+        <p>Debugging, czyli proces wykrywania i naprawiania błędów w kodzie, jest kluczowy w pracy nad aplikacjami. W Node.js można używać narzędzi takich jak <code>console.log</code>, <code>debugger</code> oraz zaawansowanych narzędzi debugujących dostępnych w IDE. W tej sekcji omówimy te techniki, aby efektywnie debugować aplikacje Node.js.</p>
+
+        <h2>Użycie <code>console.log</code></h2>
+        <p>Najprostszą metodą debugowania jest wypisywanie wartości do konsoli za pomocą <code>console.log</code>. Pomaga to śledzić wartości zmiennych oraz punkty, w których kod się wykonuje.</p>
+        <pre><code class="language-javascript">
+function sum(a, b) {
+    console.log("Wartość a:", a);
+    console.log("Wartość b:", b);
+    return a + b;
+}
+
+console.log("Suma:", sum(5, 3)); // Wartości będą wypisane w konsoli
+        </code></pre>
+        <p>W powyższym przykładzie <code>console.log</code> umożliwia monitorowanie wartości <code>a</code> i <code>b</code> w funkcji <code>sum</code>, co jest przydatne do wykrycia potencjalnych problemów z danymi.</p>
+
+        <h2>Użycie <code>debugger</code></h2>
+        <p>Słowo kluczowe <code>debugger</code> zatrzymuje wykonywanie kodu w określonym punkcie, umożliwiając jego szczegółowe przeanalizowanie. To polecenie jest szczególnie przydatne, gdy korzystamy z narzędzi debugujących dostępnych w IDE.</p>
+        <pre><code class="language-javascript">
+function multiply(a, b) {
+    debugger; // W tym miejscu wykonanie kodu zostanie wstrzymane
+    return a * b;
+}
+
+multiply(4, 5);
+        </code></pre>
+        <p>Dodanie <code>debugger</code> w powyższym przykładzie zatrzyma wykonanie kodu w tym miejscu, pozwalając przeanalizować wartości zmiennych i krok po kroku śledzić działanie funkcji.</p>
+
+        <h2>Debugging w IDE (np. Visual Studio Code)</h2>
+        <p>Nowoczesne IDE, takie jak Visual Studio Code (VS Code), oferują zaawansowane narzędzia do debugowania, które pozwalają na dodawanie punktów przerwań (breakpoints), śledzenie zmiennych oraz kontrolowanie wykonywania kodu krok po kroku.</p>
+
+        <h3>Konfiguracja debuggera w VS Code</h3>
+        <p>Aby rozpocząć debugowanie w VS Code, wykonaj następujące kroki:</p>
+        <ol>
+            <li>Otwórz panel debugowania w VS Code, klikając ikonę Debug (lub naciskając <code>Ctrl+Shift+D</code>).</li>
+            <li>Kliknij "Add Configuration" i wybierz konfigurację "Node.js".</li>
+            <li>VS Code stworzy plik <code>launch.json</code> z domyślnymi ustawieniami debugowania dla Node.js.</li>
+        </ol>
+        <p>Po skonfigurowaniu możesz ustawiać punkty przerwań (breakpoints) klikając na lewą stronę linii kodu i uruchamiać debugowanie za pomocą przycisku "Start Debugging" (lub klawisza <code>F5</code>).</p>
+
+        <h3>Przykład debugowania krok po kroku</h3>
+        <p>W poniższym przykładzie, po ustawieniu breakpointów w VS Code, możemy śledzić wykonanie każdej linii kodu:</p>
+        <pre><code class="language-javascript">
+function greet(name) {
+    let message = "Hello, " + name;
+    return message;
+}
+
+console.log(greet("Anna"));
+        </code></pre>
+        <p>Ustawiając breakpointy, można sprawdzić wartość zmiennych i zobaczyć, jak funkcja <code>greet</code> buduje wiadomość krok po kroku.</p>
+
+        <h2>Debugowanie z Node Inspector</h2>
+        <p>Node.js oferuje możliwość debugowania w przeglądarce za pomocą narzędzia Node Inspector. Aby z niego skorzystać, należy uruchomić kod z flagą <code>inspect</code>:</p>
+        <pre><code class="language-shell">
+node --inspect index.js
+        </code></pre>
+        <p>Po uruchomieniu powyższej komendy pojawi się link w konsoli, umożliwiający debugowanie w DevTools w przeglądarce. Node Inspector pozwala na używanie breakpointów, śledzenie wywołań funkcji i analizowanie wartości zmiennych w czasie rzeczywistym.</p>
+
+        <h2>Podsumowanie</h2>
+        <p>Node.js oferuje różne techniki debugowania, od prostych <code>console.log</code> po zaawansowane debugowanie w IDE i przeglądarce. Wybór narzędzia zależy od skomplikowania problemu oraz osobistych preferencji programisty.</p>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/prism.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/components/prism-javascript.min.js"></script>
+</body>
+</html>

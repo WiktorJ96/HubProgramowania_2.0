@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Testowanie w Node.js</title>
+    <link rel="stylesheet" href="../styles.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/themes/prism-tomorrow.min.css" rel="stylesheet" />
+</head>
+<body>
+    <div class="container">
+        <h1>Testowanie w Node.js</h1>
+
+        <p>Testowanie jest kluczowym elementem procesu tworzenia oprogramowania, który zapewnia, że kod działa zgodnie z oczekiwaniami. W Node.js można korzystać z popularnych narzędzi do testowania, takich jak <code>Mocha</code>, <code>Chai</code> oraz <code>Jest</code>, aby pisać testy jednostkowe i osiągać wysokie pokrycie kodu testami.</p>
+
+        <h2>Mocha i Chai</h2>
+        <p><code>Mocha</code> to popularne narzędzie do testowania jednostkowego w JavaScript, natomiast <code>Chai</code> jest biblioteką asercji (porównań), która wspiera różne style asercji, takie jak <code>should</code>, <code>expect</code> oraz <code>assert</code>. Aby zainstalować Mocha i Chai, można użyć poniższych komend:</p>
+        <pre><code class="language-shell">
+npm install mocha chai --save-dev
+        </code></pre>
+
+        <h3>Przykład testu jednostkowego z Mocha i Chai</h3>
+        <p>Poniżej znajduje się przykład testu, który sprawdza funkcję sumującą dwie liczby:</p>
+        <pre><code class="language-javascript">
+// Plik: math.js
+function sum(a, b) {
+    return a + b;
+}
+
+module.exports = sum;
+        </code></pre>
+
+        <pre><code class="language-javascript">
+// Plik: test/math.test.js
+const chai = require('chai');
+const expect = chai.expect;
+const sum = require('../math');
+
+describe('Funkcja sum', () => {
+    it('powinna poprawnie sumować dwie liczby', () => {
+        const result = sum(5, 3);
+        expect(result).to.equal(8);
+    });
+});
+        </code></pre>
+
+        <p>W tym przykładzie plik <code>math.test.js</code> zawiera test, który sprawdza, czy funkcja <code>sum</code> poprawnie sumuje dwie liczby. Test uruchamiamy za pomocą komendy:</p>
+        <pre><code class="language-shell">
+npx mocha test/math.test.js
+        </code></pre>
+
+        <h2>Jest</h2>
+        <p><code>Jest</code> to framework do testowania opracowany przez Facebooka, który zawiera wbudowane funkcje do asercji i sprawdzania pokrycia kodu. Jest prosty w konfiguracji i doskonale sprawdza się w testach jednostkowych i integracyjnych. Można go zainstalować za pomocą:</p>
+        <pre><code class="language-shell">
+npm install jest --save-dev
+        </code></pre>
+
+        <h3>Przykład testu jednostkowego z Jest</h3>
+        <p>Poniżej znajduje się podobny przykład testu, tym razem napisanego przy użyciu Jest:</p>
+        <pre><code class="language-javascript">
+// Plik: math.js
+function sum(a, b) {
+    return a + b;
+}
+
+module.exports = sum;
+        </code></pre>
+
+        <pre><code class="language-javascript">
+// Plik: math.test.js
+const sum = require('./math');
+
+test('powinna poprawnie sumować dwie liczby', () => {
+    expect(sum(5, 3)).toBe(8);
+});
+        </code></pre>
+
+        <p>Uruchomienie testu za pomocą Jest odbywa się przez komendę:</p>
+        <pre><code class="language-shell">
+npx jest
+        </code></pre>
+
+        <h2>Pokrycie kodu testami</h2>
+        <p>Pokrycie kodu testami jest metryką, która mierzy, jaka część kodu jest testowana przez testy jednostkowe. W Jest, można łatwo sprawdzić pokrycie kodu dodając flagę <code>--coverage</code>:</p>
+        <pre><code class="language-shell">
+npx jest --coverage
+        </code></pre>
+
+        <p>Po wykonaniu komendy zostanie wygenerowany raport pokrycia kodu, który pokazuje, jaka część kodu jest objęta testami.</p>
+
+        <h2>Podsumowanie</h2>
+        <p>Node.js wspiera różne narzędzia do testowania jednostkowego, takie jak Mocha, Chai oraz Jest. Dzięki tym narzędziom można łatwo pisać testy, zwiększać pokrycie kodu oraz dbać o jakość aplikacji.</p>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/prism.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/components/prism-javascript.min.js"></script>
+</body>
+</html>

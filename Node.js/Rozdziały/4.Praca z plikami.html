@@ -1,0 +1,373 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Praca z Plikami w Node.js</title>
+    <link rel="stylesheet" href="../styles.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/themes/prism-tomorrow.min.css" rel="stylesheet" />
+</head>
+    <style>
+        /* Stylizacja dla tła modala */
+        #myModal {
+            display: none;
+            position: fixed;
+            z-index: 1;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.8); /* ciemniejsze tło */
+        }
+
+        /* Stylizacja dla zawartości modala */
+        .modal-content {
+            background-color: #fefefe;
+            color: #333;
+            margin: 5% auto;
+            padding: 20px;
+            border-radius: 8px;
+            width: 90%;
+            max-width: 800px;
+            max-height: 80vh; /* Maksymalna wysokość modal z przewijaniem */
+            overflow-y: auto; /* Dodaje przewijanie dla zawartości modala */
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.5);
+        }
+
+        /* Przycisk zamykający */
+        .close-btn {
+            color: #888;
+            float: right;
+            font-size: 24px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+
+        .close-btn:hover,
+        .close-btn:focus {
+            color: #000;
+            text-decoration: none;
+            cursor: pointer;
+        }
+
+        /* Stylowanie tabeli wewnątrz modala */
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+
+        th, td {
+            padding: 12px;
+            text-align: left;
+            border-bottom: 1px solid #ddd;
+        }
+
+        th {
+            background-color: #4CAF50;
+            color: white;
+        }
+
+        td {
+            background-color: #f9f9f9;
+        }
+    </style>
+<body>
+    <div class="container">
+        <h1>Praca z Plikami w Node.js</h1>
+
+        <p>Moduł <code>fs</code> (file system) w Node.js umożliwia wykonywanie operacji na plikach, takich jak odczyt, zapis, usuwanie oraz obsługę błędów I/O. Poniżej znajdziesz podstawowe informacje na temat korzystania z tego modułu, operacji na plikach oraz pracy ze strumieniami.</p>
+
+        <h2>Podstawowe operacje na plikach z modułem <code>fs</code></h2>
+        <p>Moduł <code>fs</code> pozwala na wykonywanie asynchronicznych operacji na plikach, co jest kluczowe w przypadku większych aplikacji. Do najczęstszych operacji należą <strong>odczyt</strong>, <strong>zapis</strong> i <strong>usuwanie</strong> plików.</p>
+        
+        <h3>Odczyt pliku</h3>
+        <pre><code class="language-javascript">
+const fs = require('fs');
+
+fs.readFile('plik.txt', 'utf8', (err, data) => {
+    if (err) {
+        console.error("Błąd podczas odczytu pliku:", err);
+        return;
+    }
+    console.log("Dane z pliku:", data);
+});
+        </code></pre>
+        <p>Funkcja <code>readFile</code> odczytuje zawartość pliku asynchronicznie. Jeśli wystąpi błąd, jest on obsługiwany poprzez sprawdzenie wartości <code>err</code>.</p>
+
+        <h3>Zapis do pliku</h3>
+        <pre><code class="language-javascript">
+const content = 'Przykładowa zawartość';
+
+fs.writeFile('plik.txt', content, err => {
+    if (err) {
+        console.error("Błąd podczas zapisu pliku:", err);
+        return;
+    }
+    console.log("Zapisano dane do pliku.");
+});
+        </code></pre>
+        <p>Funkcja <code>writeFile</code> zapisuje dane do pliku. Jeśli plik nie istnieje, zostanie utworzony. W przypadku błędu zapisania wyświetli się odpowiedni komunikat.</p>
+
+        <h3>Usuwanie pliku</h3>
+        <pre><code class="language-javascript">
+fs.unlink('plik.txt', err => {
+    if (err) {
+        console.error("Błąd podczas usuwania pliku:", err);
+        return;
+    }
+    console.log("Plik został usunięty.");
+});
+        </code></pre>
+        <p>Funkcja <code>unlink</code> usuwa określony plik. W razie wystąpienia błędu wyświetli odpowiedni komunikat.</p>
+
+        <h2>Praca ze strumieniami</h2>
+        <p>Strumienie (ang. streams) umożliwiają efektywną pracę z dużymi plikami, pozwalając na odczyt i zapis fragmentów danych zamiast przetwarzania całego pliku jednocześnie.</p>
+
+        <h3>Odczyt ze strumienia</h3>
+        <pre><code class="language-javascript">
+const readStream = fs.createReadStream('plik.txt', 'utf8');
+// Tworzymy strumień do odczytu pliku 'plik.txt' przy użyciu 'fs.createReadStream'.
+// 'createReadStream' tworzy obiekt strumienia, który umożliwia odczyt pliku w kawałkach (ang. chunk).
+// Pierwszy argument 'plik.txt' to nazwa pliku, który chcemy odczytać.
+// Drugi argument 'utf8' określa kodowanie, co pozwala traktować odczytane dane jako tekst (zamiast danych binarnych).
+// Zmienna 'readStream' jest teraz strumieniem, który będzie emitować zdarzenia związane z odczytem pliku.
+
+readStream.on('data', chunk => {
+    console.log("Odczytano fragment:", chunk);
+    // Metoda 'on' dodaje nasłuchiwanie na zdarzenie 'data', które występuje za każdym razem, gdy dostępny jest fragment danych.
+    // Przy każdym fragmencie (chunk) pliku, który został odczytany, funkcja wyświetla go w konsoli.
+    // 'chunk' reprezentuje fragment tekstu z pliku, a nie cały plik, co jest przydatne przy dużych plikach.
+});
+
+readStream.on('end', () => {
+    console.log("Odczyt zakończony.");
+    // Dodajemy nasłuchiwanie na zdarzenie 'end', które jest wywoływane, gdy cały plik został odczytany.
+    // Gdy strumień zakończy odczyt wszystkich fragmentów, funkcja wyświetla komunikat w konsoli informujący, że odczyt jest zakończony.
+});
+
+readStream.on('error', err => {
+    console.error("Błąd odczytu pliku:", err);
+    // Dodajemy nasłuchiwanie na zdarzenie 'error', które występuje, gdy wystąpi błąd podczas odczytu pliku.
+    // Jeśli coś pójdzie nie tak (np. plik nie istnieje), ta funkcja wyświetli komunikat błędu w konsoli.
+    // 'err' zawiera szczegóły dotyczące błędu.
+});
+        </code></pre>
+        <p>Funkcja <code>createReadStream</code> tworzy strumień odczytu, który emituje zdarzenia <code>data</code>, <code>end</code> i <code>error</code>, umożliwiając odpowiednią obsługę odczytu.</p>
+
+        <h3>Zapis do strumienia</h3>
+        <pre><code class="language-javascript">
+const writeStream = fs.createWriteStream('output.txt');
+// Tworzymy strumień zapisu przy użyciu 'fs.createWriteStream', który pozwala zapisywać dane do pliku 'output.txt'.
+// 'createWriteStream' tworzy obiekt strumienia, który umożliwia zapis do pliku w sposób sekwencyjny, kawałek po kawałku.
+// Zmienna 'writeStream' reprezentuje strumień zapisu, który może emitować zdarzenia związane z procesem zapisu.
+
+writeStream.write("Linia 1\n");
+// Używamy metody 'write', aby zapisać pierwszy wiersz ("Linia 1") do pliku 'output.txt'.
+// Znak '\n' dodaje nową linię na końcu tego tekstu, co pozwoli oddzielić tę linię od kolejnych wpisów.
+
+writeStream.write("Linia 2\n");
+// Ponownie używamy metody 'write', aby zapisać kolejny wiersz ("Linia 2") do pliku.
+// Każde wywołanie 'write' dodaje nową treść do pliku bez zastępowania poprzednich wpisów.
+
+writeStream.end(); 
+// Metoda 'end' sygnalizuje zakończenie zapisu do strumienia. Oznacza to, że więcej danych nie będzie już zapisywanych do pliku.
+// To wywołanie automatycznie zamyka strumień po zakończeniu ostatniego wpisu.
+
+writeStream.on('finish', () => {
+    console.log("Zapis zakończony.");
+    // Nasłuchujemy zdarzenia 'finish', które jest emitowane, gdy strumień zapisze wszystkie dane i zakończy się poprawnie.
+    // Gdy zdarzenie 'finish' zostanie wywołane, pojawia się komunikat "Zapis zakończony." w konsoli.
+});
+
+writeStream.on('error', err => {
+    console.error("Błąd zapisu pliku:", err);
+    // Nasłuchujemy zdarzenia 'error', które występuje, gdy pojawia się problem podczas zapisu do pliku.
+    // Jeśli coś pójdzie nie tak (np. brak dostępu do pliku), zdarzenie 'error' zostanie wywołane, a błąd zostanie wyświetlony w konsoli.
+});
+
+        </code></pre>
+        <p>Funkcja <code>createWriteStream</code> tworzy strumień zapisu, który umożliwia zapis dużych plików w sposób efektywny. Po zakończeniu zapisu wywoływane jest zdarzenie <code>finish</code>.</p>
+
+        <h2>Obsługa błędów I/O</h2>
+        <p>Błędy I/O (wejścia-wyjścia) mogą wystąpić podczas pracy z plikami, szczególnie przy dużych plikach lub ograniczeniach systemowych. Moduł <code>fs</code> oferuje obsługę błędów poprzez funkcje zwrotne lub zdarzenia błędu.</p>
+        <pre><code class="language-javascript">
+fs.readFile('nieIstniejącyPlik.txt', 'utf8', (err, data) => {
+    // Wywołujemy metodę 'readFile' z modułu 'fs', aby spróbować odczytać plik o nazwie 'nieIstniejącyPlik.txt'.
+    // Pierwszy argument 'nieIstniejącyPlik.txt' to nazwa pliku, który chcemy odczytać.
+    // Drugi argument 'utf8' określa kodowanie, co oznacza, że plik ma być odczytany jako tekst.
+    // Trzeci argument to funkcja zwrotna (callback), która zostanie wywołana po zakończeniu operacji odczytu pliku.
+    // Funkcja callback przyjmuje dwa parametry: 'err' (błąd) i 'data' (zawartość pliku, jeśli odczyt się powiedzie).
+
+    if (err) {
+        // Sprawdzamy, czy podczas odczytu pliku wystąpił błąd. Jeśli 'err' jest różne od 'null' lub 'undefined', 
+        // oznacza to, że wystąpił problem.
+
+        if (err.code === 'ENOENT') {
+            console.error("Plik nie istnieje!");
+            // Jeśli kod błędu to 'ENOENT', oznacza to, że plik nie został znaleziony (File Not Found).
+            // W takim przypadku wyświetlamy komunikat "Plik nie istnieje!" w konsoli.
+        } else {
+            console.error("Wystąpił inny błąd:", err);
+            // Jeśli kod błędu jest inny niż 'ENOENT', wyświetlamy ogólny komunikat o błędzie
+            // wraz z pełnym obiektem 'err' (który zawiera więcej informacji o błędzie).
+        }
+        return;
+        // Kończymy działanie funkcji, aby nie przejść do wyświetlania danych pliku.
+    }
+
+    console.log(data);
+    // Jeśli nie wystąpił żaden błąd, przechodzimy do tego miejsca i wyświetlamy zawartość pliku w konsoli.
+    // 'data' zawiera tekst pliku 'nieIstniejącyPlik.txt', o ile plik istnieje i został poprawnie odczytany.
+});
+        </code></pre>
+        <p>W przykładzie, jeśli plik nie istnieje, <code>readFile</code> zwróci błąd z kodem <code>ENOENT</code>. Dzięki temu możemy zidentyfikować i obsłużyć konkretny błąd.</p>
+        <!-- Przycisk otwierający modal -->
+<button id="openModalBtn">Otwórz modal</button>
+    </div>
+
+
+<!-- Modal -->
+<div id="myModal">
+    <div class="modal-content">
+        <span class="close-btn" id="closeModalBtn">&times;</span>
+        <h2>Kody błędów w Node.js</h2>
+<table>
+    <tr>
+        <th>Kod błędu</th>
+        <th>Opis</th>
+        <th>Przykład</th>
+    </tr>
+    <tr>
+        <td>ENOENT</td>
+        <td>Error No Entry – plik lub katalog nie istnieje.</td>
+        <td>Próba odczytu lub zapisu do pliku, który nie istnieje.</td>
+    </tr>
+    <tr>
+        <td>EACCES</td>
+        <td>Error Access – brak uprawnień do dostępu do pliku lub katalogu.</td>
+        <td>Próba odczytu pliku bez wystarczających uprawnień.</td>
+    </tr>
+    <tr>
+        <td>EADDRINUSE</td>
+        <td>Error Address In Use – adres (np. port) jest już używany.</td>
+        <td>Próba uruchomienia serwera na porcie, który jest już zajęty przez inny proces.</td>
+    </tr>
+    <tr>
+        <td>ECONNREFUSED</td>
+        <td>Error Connection Refused – połączenie zostało odrzucone przez serwer.</td>
+        <td>Próba połączenia z serwerem, który odrzucił połączenie (np. gdy serwer nie działa).</td>
+    </tr>
+    <tr>
+        <td>ECONNRESET</td>
+        <td>Error Connection Reset – połączenie zostało zerwane przez drugą stronę.</td>
+        <td>Serwer zerwał połączenie podczas przesyłania danych.</td>
+    </tr>
+    <tr>
+        <td>EEXIST</td>
+        <td>Error Exists – plik lub katalog już istnieje.</td>
+        <td>Próba utworzenia pliku lub katalogu o tej samej nazwie, który już istnieje.</td>
+    </tr>
+    <tr>
+        <td>EISDIR</td>
+        <td>Error Is Directory – próba wykonania operacji pliku na katalogu.</td>
+        <td>Próba odczytu katalogu jako pliku.</td>
+    </tr>
+    <tr>
+        <td>EMFILE</td>
+        <td>Error Too Many Open Files – za dużo otwartych plików jednocześnie.</td>
+        <td>System osiągnął limit otwartych plików, co może wymagać zamknięcia innych plików lub procesów.</td>
+    </tr>
+    <tr>
+        <td>ENOTDIR</td>
+        <td>Error Not a Directory – próba wykonania operacji katalogu na pliku.</td>
+        <td>Próba zmiany katalogu (chdir) do pliku.</td>
+    </tr>
+    <tr>
+        <td>ENOTEMPTY</td>
+        <td>Error Not Empty – katalog nie jest pusty.</td>
+        <td>Próba usunięcia katalogu, który zawiera pliki lub inne katalogi.</td>
+    </tr>
+    <tr>
+        <td>EPERM</td>
+        <td>Error Permission – brak uprawnień do wykonania operacji.</td>
+        <td>Próba usunięcia pliku bez odpowiednich uprawnień.</td>
+    </tr>
+    <tr>
+        <td>EPIPE</td>
+        <td>Error Broken Pipe – wysłanie danych na zamknięte połączenie.</td>
+        <td>Próba zapisania danych do połączenia, które zostało zamknięte przez drugą stronę.</td>
+    </tr>
+    <tr>
+        <td>ETIMEDOUT</td>
+        <td>Error Timed Out – operacja przekroczyła limit czasu.</td>
+        <td>Próba połączenia z serwerem, który nie odpowiada.</td>
+    </tr>
+    <tr>
+        <td>EBUSY</td>
+        <td>Error Busy – zasób jest zajęty.</td>
+        <td>Próba montowania urządzenia lub katalogu, który jest już zajęty przez inny proces.</td>
+    </tr>
+    <tr>
+        <td>ENOSPC</td>
+        <td>Error No Space – brak miejsca na dysku.</td>
+        <td>Próba zapisania danych, gdy na urządzeniu brakuje miejsca.</td>
+    </tr>
+    <tr>
+        <td>EINVAL</td>
+        <td>Error Invalid Argument – podano nieprawidłowy argument.</td>
+        <td>Wykonanie operacji z nieprawidłowymi danymi wejściowymi lub parametrami.</td>
+    </tr>
+    <tr>
+        <td>EMSGSIZE</td>
+        <td>Error Message Size – wiadomość jest zbyt duża, by ją przetworzyć.</td>
+        <td>Próba wysłania danych, które przekraczają maksymalny rozmiar obsługiwany przez system.</td>
+    </tr>
+    <tr>
+        <td>ELOOP</td>
+        <td>Error Too Many Symbolic Links – zbyt wiele symbolicznych linków prowadzących do siebie.</td>
+        <td>System napotkał pętlę, próbując uzyskać dostęp do zasobu przez linki symboliczne.</td>
+    </tr>
+    <tr>
+        <td>ERANGE</td>
+        <td>Error Range – wynik operacji wykracza poza dopuszczalny zakres.</td>
+        <td>Przekroczenie zakresu wartości dla danej operacji lub typu danych.</td>
+    </tr>
+    <tr>
+        <td>ENOTCONN</td>
+        <td>Error Not Connected – połączenie nie zostało nawiązane.</td>
+        <td>Próba przesyłania danych przez połączenie, które nie zostało jeszcze ustanowione.</td>
+    </tr>
+</table>
+    </div>
+</div>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/prism.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/components/prism-javascript.min.js"></script>
+    <script>
+    // Pobranie elementów
+    const modal = document.getElementById("myModal");
+    const openModalBtn = document.getElementById("openModalBtn");
+    const closeModalBtn = document.getElementById("closeModalBtn");
+
+    // Otwieranie modala i blokowanie przewijania strony
+    openModalBtn.onclick = function() {
+        modal.style.display = "block";
+        document.body.style.overflow = "hidden"; // Zablokowanie przewijania strony
+    }
+
+    // Zamykanie modala i przywrócenie przewijania strony
+    closeModalBtn.onclick = function() {
+        modal.style.display = "none";
+        document.body.style.overflow = "auto"; // Przywrócenie przewijania strony
+    }
+
+    // Zamykanie modala po kliknięciu poza jego obszarem
+    window.onclick = function(event) {
+        if (event.target == modal) {
+            modal.style.display = "none";
+            document.body.style.overflow = "auto"; // Przywrócenie przewijania strony
+        }
+    }
+</script>
+</body>
+</html>

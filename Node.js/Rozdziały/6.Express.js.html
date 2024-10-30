@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Express.js w Node.js</title>
+    <link rel="stylesheet" href="../styles.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/themes/prism-tomorrow.min.css" rel="stylesheet" />
+</head>
+<body>
+    <div class="container">
+        <h1>Tworzenie aplikacji webowych z użyciem Express.js</h1>
+
+        <p>Express.js to popularny framework Node.js, który upraszcza tworzenie aplikacji webowych i API. Umożliwia szybkie tworzenie serwerów HTTP, oferując przyjazny interfejs oraz wbudowaną obsługę <strong>middleware</strong> i <strong>routing</strong>. Poniżej znajdziesz podstawowe informacje na temat Express.js, w tym przykłady tworzenia aplikacji, middleware oraz routingu.</p>
+
+        <h2>Tworzenie aplikacji z Express.js</h2>
+        <p>Aby rozpocząć pracę z Express.js, najpierw należy zainstalować pakiet za pomocą npm:</p>
+        <pre><code class="language-shell">
+npm install express
+        </code></pre>
+        
+        <p>Następnie możemy stworzyć podstawową aplikację z serwerem HTTP:</p>
+        <pre><code class="language-javascript">
+const express = require('express');
+const app = express();
+const port = 3000;
+
+app.get('/', (req, res) => {
+    res.send('Witaj w aplikacji Express!');
+});
+
+app.listen(port, () => {
+    console.log(`Serwer działa na porcie ${port}`);
+});
+        </code></pre>
+        <p>W powyższym przykładzie stworzono prosty serwer Express, który nasłuchuje na porcie <code>3000</code> i zwraca odpowiedź <code>Witaj w aplikacji Express!</code> przy wejściu na stronę główną.</p>
+
+        <h2>Middleware w Express.js</h2>
+        <p>Middleware to funkcje, które wykonują się pomiędzy żądaniem (request) a odpowiedzią (response). Umożliwiają modyfikację żądań, logowanie, uwierzytelnianie oraz obsługę błędów.</p>
+        
+        <h3>Przykład podstawowego middleware</h3>
+        <pre><code class="language-javascript">
+app.use((req, res, next) => {
+    console.log(`Żądanie: ${req.method} ${req.url}`);
+    next(); // Przekazuje kontrolę do kolejnego middleware lub routingu
+});
+        </code></pre>
+        <p>Powyższy middleware loguje metodę i URL każdego żądania przed przejściem do dalszej obsługi, dzięki wywołaniu funkcji <code>next()</code>.</p>
+
+        <h3>Middleware dla obsługi JSON</h3>
+        <p>Express oferuje wbudowany middleware do obsługi żądań JSON:</p>
+        <pre><code class="language-javascript">
+app.use(express.json());
+        </code></pre>
+        <p>Ten middleware analizuje dane JSON przesyłane w żądaniach, co jest przydatne podczas tworzenia API.</p>
+
+        <h2>Routing w Express.js</h2>
+        <p>Routing w Express.js pozwala na obsługę różnych ścieżek URL i przypisanie do nich odpowiednich funkcji. Poniżej znajdują się przykłady podstawowego routingu.</p>
+
+        <h3>Podstawowy routing</h3>
+        <pre><code class="language-javascript">
+app.get('/kontakt', (req, res) => {
+    res.send('Strona kontaktowa');
+});
+
+app.get('/o-nas', (req, res) => {
+    res.send('Strona o nas');
+});
+
+app.get('*', (req, res) => {
+    res.status(404).send('Strona nie została znaleziona');
+});
+        </code></pre>
+        <p>W tym przykładzie ścieżki <code>/kontakt</code> oraz <code>/o-nas</code> zwracają odpowiednie treści, natomiast inne ścieżki zwracają kod statusu <code>404</code> z odpowiedzią "Strona nie została znaleziona".</p>
+
+        <h3>Routing dynamiczny z parametrami</h3>
+        <p>Express pozwala również na dynamiczne przekazywanie parametrów w ścieżkach URL, co jest przydatne np. w aplikacjach, gdzie każdy użytkownik ma swój profil.</p>
+        <pre><code class="language-javascript">
+app.get('/uzytkownik/:id', (req, res) => {
+    const userId = req.params.id;
+    res.send(`Profil użytkownika o ID: ${userId}`);
+});
+        </code></pre>
+        <p>W powyższym przykładzie <code>/uzytkownik/:id</code> przyjmuje dynamiczny parametr <code>id</code>, który można odczytać za pomocą <code>req.params.id</code>.</p>
+
+        <h2>Podsumowanie</h2>
+        <p>Express.js jest potężnym frameworkiem do tworzenia aplikacji webowych. Dzięki obsłudze middleware, routingowi oraz łatwej integracji z innymi bibliotekami, umożliwia szybkie i efektywne tworzenie serwerów i API.</p>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/prism.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/components/prism-javascript.min.js"></script>
+</body>
+</html>

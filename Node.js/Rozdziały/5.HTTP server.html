@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>HTTP Server w Node.js</title>
+    <link rel="stylesheet" href="../styles.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/themes/prism-tomorrow.min.css" rel="stylesheet" />
+</head>
+<body>
+    <div class="container">
+        <h1>Tworzenie HTTP Servera w Node.js</h1>
+
+        <p>W Node.js można łatwo stworzyć serwer HTTP bez potrzeby korzystania z zewnętrznych frameworków. Moduł <code>http</code> pozwala na tworzenie serwerów, które mogą obsługiwać żądania (request) i zwracać odpowiedzi (response). W tej sekcji omówimy podstawy tworzenia serwera HTTP, obsługi request/response oraz implementacji podstawowego routingu.</p>
+
+        <h2>Tworzenie serwera HTTP</h2>
+        <p>Serwer HTTP w Node.js można utworzyć za pomocą modułu <code>http</code>. Serwer ten nasłuchuje na określonym porcie, aby obsługiwać żądania i wysyłać odpowiedzi.</p>
+        <pre><code class="language-javascript">
+const http = require('http'); // Importujemy moduł 'http', który umożliwia tworzenie serwera HTTP
+
+// Tworzymy serwer HTTP
+const server = http.createServer((req, res) => { // 'createServer' przyjmuje funkcję z dwoma argumentami: req (żądanie) i res (odpowiedź)
+    res.statusCode = 200; // Ustawiamy kod statusu odpowiedzi na 200 (oznacza sukces)
+    res.setHeader('Content-Type', 'text/plain'); // Ustawiamy nagłówek Content-Type na 'text/plain', co oznacza zwykły tekst
+    res.end('Witaj na moim serwerze!'); // Wysyłamy odpowiedź do klienta z wiadomością 'Witaj na moim serwerze!'
+});
+
+// Serwer nasłuchuje na porcie 3000
+server.listen(3000, () => { // Funkcja 'listen' uruchamia serwer na porcie 3000
+    console.log('Serwer działa na porcie 3000'); // Wyświetlamy informację w konsoli, że serwer działa na porcie 3000
+});
+        </code></pre>
+        <p>W tym przykładzie serwer nasłuchuje na porcie <code>3000</code>. Gdy nadejdzie żądanie, zwraca odpowiedź z kodem statusu <code>200</code> oraz treścią <code>Witaj na moim serwerze!</code>.</p>
+
+        <h2>Obsługa request/response</h2>
+        <p>W Node.js obiekty <code>req</code> (request) i <code>res</code> (response) pozwalają na odczyt informacji o żądaniu oraz wysyłanie odpowiedzi. <code>req</code> zawiera dane o żądaniu, takie jak URL i metoda HTTP, natomiast <code>res</code> pozwala ustawić kod statusu i nagłówki odpowiedzi.</p>
+        <pre><code class="language-javascript">
+const http = require('http'); // Importujemy moduł 'http' do obsługi serwera HTTP
+
+const server = http.createServer((req, res) => { // Tworzymy serwer HTTP, obsługujący każde żądanie
+    console.log(`Otrzymano żądanie: ${req.method} ${req.url}`); // Wyświetlamy metodę i URL każdego żądania w konsoli
+
+    res.statusCode = 200; // Ustawiamy kod statusu na 200 (OK)
+    res.setHeader('Content-Type', 'text/html'); // Ustawiamy nagłówek Content-Type na 'text/html'
+    res.end('<h1>Witaj na moim serwerze!</h1><p>To jest uniwersalna odpowiedź.</p>'); // Wysyłamy tę samą odpowiedź HTML
+});
+
+server.listen(3000, () => { // Serwer nasłuchuje na porcie 3000
+    console.log('Serwer działa na porcie 3000'); // Informacja o uruchomieniu serwera
+});
+        </code></pre>
+        <p>W poniższym przykładzie serwer zwraca tę samą odpowiedź niezależnie od ścieżki i metody żądania, ale wykorzystuje obiekt <code>req</code> do wyświetlania informacji o żądaniu w konsoli.</p>
+<ul>
+    <li><code>req.method</code>: wyświetla metodę żądania (np. <code>GET</code>, <code>POST</code>), co pozwala zobaczyć, jaką metodą przesłano żądanie.</li>
+    <li><code>req.url</code>: wyświetla ścieżkę URL żądania, umożliwiając monitorowanie, które ścieżki są odwiedzane.</li>
+</ul>
+<p>Choć serwer ignoruje różne ścieżki i zawsze zwraca tę samą odpowiedź, te informacje pozwalają analizować żądania i reagować na różne metody lub ścieżki w przyszłości, jeśli będzie to potrzebne.</p>
+
+        <h2>Routing podstawowy</h2>
+        <p>Routing pozwala na obsługę różnych adresów URL i przypisanie do nich odpowiednich funkcji. Możemy sprawdzić wartość <code>req.url</code> i dostosować odpowiedzi na podstawie ścieżki URL.</p>
+        <pre><code class="language-javascript">
+const server = http.createServer((req, res) => { // Tworzymy serwer HTTP, który obsługuje żądania (req) i odpowiedzi (res)
+    res.setHeader('Content-Type', 'text/plain'); // Ustawiamy nagłówek Content-Type na 'text/plain' dla zwracanej treści jako zwykły tekst
+
+    if (req.url === '/') { // Sprawdzamy, czy żądanie dotyczy ścieżki głównej '/'
+        res.statusCode = 200; // Ustawiamy kod statusu odpowiedzi na 200 (OK)
+        res.end('Strona główna'); // Wysyłamy odpowiedź z treścią "Strona główna"
+    } else if (req.url === '/kontakt') { // Sprawdzamy, czy żądanie dotyczy ścieżki '/kontakt'
+        res.statusCode = 200; // Ustawiamy kod statusu odpowiedzi na 200 (OK)
+        res.end('Strona kontaktowa'); // Wysyłamy odpowiedź z treścią "Strona kontaktowa"
+    } else { // Obsługujemy przypadki, gdy żądanie dotyczy innej, nieznanej ścieżki
+        res.statusCode = 404; // Ustawiamy kod statusu odpowiedzi na 404 (Nie znaleziono)
+        res.end('Strona nie znaleziona'); // Wysyłamy odpowiedź z treścią "Strona nie znaleziona"
+    }
+});
+
+server.listen(3000, () => { // Serwer nasłuchuje na porcie 3000
+    console.log('Serwer działa na porcie 3000'); // Wyświetlamy informację w konsoli, że serwer działa na porcie 3000
+});
+        </code></pre>
+        <p>W tym przykładzie serwer sprawdza wartość <code>req.url</code> i zwraca różne odpowiedzi w zależności od ścieżki. Na przykład, gdy użytkownik odwiedza <code>/kontakt</code>, serwer zwraca <code>Strona kontaktowa</code>, a jeśli ścieżka jest nieznana, zwraca kod statusu <code>404</code> oraz odpowiedź <code>Strona nie znaleziona</code>.</p>
+
+        <h2>Podsumowanie</h2>
+        <p>Moduł <code>http</code> w Node.js umożliwia szybkie tworzenie serwera, który obsługuje różne żądania i odpowiedzi. Dzięki podstawowemu routingowi można łatwo przypisać różne adresy URL do określonych funkcji, co stanowi podstawę dla bardziej rozbudowanych aplikacji.</p>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/prism.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/components/prism-javascript.min.js"></script>
+</body>
+</html>

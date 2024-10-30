@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Moduły i Pakiety w Node.js</title>
+    <link rel="stylesheet" href="../styles.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/themes/prism-tomorrow.min.css" rel="stylesheet" />
+</head>
+<body>
+    <div class="container">
+        <h1>Moduły i Pakiety w Node.js</h1>
+
+        <p>W Node.js moduły i pakiety pozwalają na dzielenie kodu na mniejsze, niezależne części, co ułatwia organizację oraz ponowne wykorzystanie kodu. Poniżej omówimy, jak korzystać z wbudowanych modułów, tworzyć własne moduły oraz używać pakietów z npm (Node Package Manager).</p>
+
+        <h2>Użycie <code>require</code> i <code>module.exports</code></h2>
+        <p>W Node.js do importowania modułów używa się funkcji <code>require</code>, a do eksportowania - <code>module.exports</code>. Dzięki temu możemy w jednym pliku stworzyć moduł, a w innym go wykorzystać.</p>
+        <pre><code class="language-javascript">
+        // Plik: mathModule.js
+        const add = (a, b) => a + b;
+        const subtract = (a, b) => a - b;
+
+        // Eksportowanie funkcji
+        module.exports = { add, subtract };
+        </code></pre>
+
+        <pre><code class="language-javascript">
+        // Plik: app.js
+        const math = require('./mathModule');
+
+        console.log(math.add(5, 3)); // Wynik: 8
+        console.log(math.subtract(5, 3)); // Wynik: 2
+        </code></pre>
+        <p>W powyższym przykładzie <code>mathModule.js</code> eksportuje dwie funkcje: <code>add</code> i <code>subtract</code>. Plik <code>app.js</code> importuje te funkcje za pomocą <code>require</code>, dzięki czemu możemy ich użyć w kodzie.</p>
+
+        <h2>Tworzenie własnych modułów</h2>
+        <p>Własne moduły pozwalają na lepszą organizację kodu poprzez wydzielenie funkcji, klas lub danych do oddzielnych plików. Tworzenie modułów polega na pisaniu funkcji lub obiektów i eksportowaniu ich za pomocą <code>module.exports</code>.</p>
+        <pre><code class="language-javascript">
+        // Plik: greetingModule.js
+        function greet(name) {
+            return `Cześć, ${name}!`;
+        }
+
+        module.exports = greet;
+        </code></pre>
+
+        <pre><code class="language-javascript">
+        // Plik: main.js
+        const greet = require('./greetingModule');
+
+        console.log(greet('Adam')); // Wynik: "Cześć, Adam!"
+        </code></pre>
+        <p>W powyższym przykładzie plik <code>greetingModule.js</code> eksportuje funkcję <code>greet</code>, a plik <code>main.js</code> importuje ją i wywołuje.</p>
+
+        <h2>Korzystanie z npm (Node Package Manager)</h2>
+        <p>npm (Node Package Manager) to menedżer pakietów, który umożliwia instalowanie, zarządzanie i udostępnianie bibliotek zewnętrznych. Można go używać do dodawania popularnych pakietów, takich jak Express czy Lodash, do projektu Node.js.</p>
+        <pre><code class="language-shell">
+        # Instalacja pakietu Express
+        npm install express
+        </code></pre>
+
+        <p>Po zainstalowaniu pakietu Express, jest on dostępny w projekcie i można go zaimportować za pomocą <code>require</code>.</p>
+        <pre><code class="language-javascript">
+        const express = require('express');
+        const app = express();
+
+        app.get('/', (req, res) => {
+            res.send('Witaj w aplikacji Express!');
+        });
+
+        app.listen(3000, () => console.log('Serwer działa na porcie 3000'));
+        </code></pre>
+        <p>W powyższym przykładzie używamy <code>express</code> do stworzenia prostego serwera HTTP, który zwraca wiadomość na stronie głównej.</p>
+
+        <h2>Zarządzanie wersjami pakietów</h2>
+        <p>Każdy pakiet zainstalowany przez npm ma swoją wersję, która jest zapisywana w pliku <code>package.json</code>. Możemy aktualizować pakiety za pomocą komendy:</p>
+        <pre><code class="language-shell">
+        npm update [nazwa_pakietu]
+        </code></pre>
+
+        <p>W <code>package.json</code> znajdują się także informacje o wersjach pakietów, które możemy dostosować, aby zachować spójność projektu w przypadku aktualizacji.</p>
+    </div>
+    
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/prism.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/components/prism-javascript.min.js"></script>
+</body>
+</html>

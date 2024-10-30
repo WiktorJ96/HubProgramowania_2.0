@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Deployment aplikacji Node.js</title>
+    <link rel="stylesheet" href="../styles.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/themes/prism-tomorrow.min.css" rel="stylesheet" />
+</head>
+<body>
+    <div class="container">
+        <h1>Deployment aplikacji Node.js</h1>
+
+        <p>Wdrażanie aplikacji Node.js na serwer pozwala na jej udostępnienie użytkownikom. Można użyć różnych platform, takich jak Heroku, AWS oraz Docker, aby skutecznie wdrożyć aplikację. W tej sekcji omówimy kroki związane z wdrażaniem aplikacji na każdej z tych platform.</p>
+
+        <h2>Deployment na Heroku</h2>
+        <p>Heroku jest platformą umożliwiającą szybkie wdrażanie aplikacji webowych bez potrzeby konfigurowania serwera. Aby wdrożyć aplikację na Heroku, wykonaj poniższe kroki:</p>
+        
+        <h3>Krok 1: Konfiguracja aplikacji</h3>
+        <p>W głównym folderze aplikacji Node.js utwórz plik <code>Procfile</code>, który poinformuje Heroku, jak uruchomić aplikację:</p>
+        <pre><code class="language-text">
+web: node index.js
+        </code></pre>
+
+        <h3>Krok 2: Wdrażanie na Heroku</h3>
+        <pre><code class="language-shell">
+# Zaloguj się do Heroku
+heroku login
+
+# Utwórz nową aplikację
+heroku create my-app
+
+# Wypchnij kod do Heroku
+git push heroku main
+
+# Otwórz aplikację w przeglądarce
+heroku open
+        </code></pre>
+
+        <p>Heroku automatycznie instaluje zależności wymienione w <code>package.json</code> oraz uruchamia aplikację według instrukcji zawartych w <code>Procfile</code>.</p>
+
+        <h2>Deployment na AWS</h2>
+        <p>AWS (Amazon Web Services) oferuje wiele rozwiązań do wdrażania aplikacji, takich jak EC2 (Elastic Compute Cloud). Wdrożenie na AWS EC2 wymaga stworzenia instancji serwera oraz skonfigurowania aplikacji.</p>
+        
+        <h3>Krok 1: Tworzenie instancji EC2</h3>
+        <ol>
+            <li>Zaloguj się do AWS i przejdź do sekcji EC2.</li>
+            <li>Wybierz "Launch Instance" i skonfiguruj instancję z systemem operacyjnym (np. Amazon Linux lub Ubuntu).</li>
+            <li>Skonfiguruj dostęp poprzez parę kluczy (PEM), aby uzyskać dostęp do serwera przez SSH.</li>
+        </ol>
+
+        <h3>Krok 2: Instalacja Node.js na serwerze</h3>
+        <pre><code class="language-shell">
+# Połącz się z serwerem przez SSH
+ssh -i "klucz.pem" ec2-user@adres_IP
+
+# Zaktualizuj pakiety i zainstaluj Node.js
+sudo apt update
+sudo apt install nodejs npm -y
+        </code></pre>
+
+        <h3>Krok 3: Przeniesienie i uruchomienie aplikacji</h3>
+        <p>Skopiuj pliki aplikacji na serwer lub pobierz kod z repozytorium Git:</p>
+        <pre><code class="language-shell">
+# Klonowanie repozytorium
+git clone https://github.com/uzytkownik/moj-projekt.git
+
+# Przejdź do folderu projektu i zainstaluj zależności
+cd moj-projekt
+npm install
+
+# Uruchom aplikację (można użyć PM2 do zarządzania procesami)
+node index.js
+        </code></pre>
+
+        <h2>Deployment przy użyciu Dockera</h2>
+        <p>Docker umożliwia konteneryzację aplikacji, co sprawia, że aplikacja jest przenośna i działa spójnie na różnych środowiskach. Poniżej znajduje się przykładowy Dockerfile do wdrożenia aplikacji Node.js.</p>
+
+        <h3>Przykładowy Dockerfile</h3>
+        <pre><code class="language-dockerfile">
+# Użyj obrazu Node.js jako podstawy
+FROM node:14
+
+# Ustaw katalog roboczy
+WORKDIR /app
+
+# Skopiuj package.json i zainstaluj zależności
+COPY package*.json ./
+RUN npm install
+
+# Skopiuj resztę plików aplikacji
+COPY . .
+
+# Eksponuj port, na którym działa aplikacja
+EXPOSE 3000
+
+# Uruchom aplikację
+CMD ["node", "index.js"]
+        </code></pre>
+
+        <h3>Budowanie i uruchamianie kontenera</h3>
+        <pre><code class="language-shell">
+# Zbuduj obraz Dockera
+docker build -t moja-aplikacja .
+
+# Uruchom kontener
+docker run -p 3000:3000 moja-aplikacja
+        </code></pre>
+        
+        <p>Dzięki Dockerowi aplikacja działa w izolowanym środowisku, a konfiguracja serwera jest uproszczona.</p>
+
+        <h2>Podsumowanie</h2>
+        <p>Node.js można wdrożyć na różnych platformach, takich jak Heroku, AWS oraz Docker. Każda z tych metod ma swoje zalety, a wybór zależy od wymagań projektu oraz poziomu kontroli nad środowiskiem wdrożenia.</p>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/prism.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/components/prism-javascript.min.js"></script>
+</body>
+</html>
