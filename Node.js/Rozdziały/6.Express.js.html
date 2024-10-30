@@ -36,23 +36,58 @@ app.listen(port, () => {
         <p>W powyższym przykładzie stworzono prosty serwer Express, który nasłuchuje na porcie <code>3000</code> i zwraca odpowiedź <code>Witaj w aplikacji Express!</code> przy wejściu na stronę główną.</p>
 
         <h2>Middleware w Express.js</h2>
-        <p>Middleware to funkcje, które wykonują się pomiędzy żądaniem (request) a odpowiedzią (response). Umożliwiają modyfikację żądań, logowanie, uwierzytelnianie oraz obsługę błędów.</p>
-        
-        <h3>Przykład podstawowego middleware</h3>
-        <pre><code class="language-javascript">
-app.use((req, res, next) => {
-    console.log(`Żądanie: ${req.method} ${req.url}`);
-    next(); // Przekazuje kontrolę do kolejnego middleware lub routingu
-});
-        </code></pre>
-        <p>Powyższy middleware loguje metodę i URL każdego żądania przed przejściem do dalszej obsługi, dzięki wywołaniu funkcji <code>next()</code>.</p>
 
-        <h3>Middleware dla obsługi JSON</h3>
-        <p>Express oferuje wbudowany middleware do obsługi żądań JSON:</p>
-        <pre><code class="language-javascript">
-app.use(express.json());
-        </code></pre>
-        <p>Ten middleware analizuje dane JSON przesyłane w żądaniach, co jest przydatne podczas tworzenia API.</p>
+<p>W Express middleware to funkcje pośredniczące, które pozwalają przetwarzać żądania HTTP przed ich finalnym obsłużeniem przez serwer. Middleware umożliwia wykonywanie różnych zadań, takich jak logowanie, autoryzacja, przetwarzanie danych i wiele innych. Każde middleware działa na podstawie trzech parametrów: <code>req</code> (żądanie), <code>res</code> (odpowiedź) oraz <code>next</code>, który przekazuje kontrolę do następnego middleware lub funkcji obsługującej trasę.</p>
+
+<h3>Tworzenie i używanie middleware</h3>
+<p>W Express można tworzyć własne middleware, dodając funkcje do <code>app.use()</code> (globalnie) lub bezpośrednio w trasach. Poniżej przedstawiamy przykład prostej funkcji middleware do logowania oraz jej użycia w trasie.</p>
+
+<pre><code class="language-javascript">
+// Plik: loggerMiddleware.js
+const logger = (req, res, next) => {
+    console.log(`Żądanie ${req.method} na trasie ${req.url}`);
+    next(); // Przekazanie kontroli do następnego middleware lub funkcji obsługującej trasę
+};
+
+// Eksportowanie middleware
+module.exports = logger;
+</code></pre>
+
+<pre><code class="language-javascript">
+// Plik: app.js
+const express = require('express');
+const app = express();
+const logger = require('./loggerMiddleware');
+
+// Użycie middleware globalnie
+app.use(logger);
+
+app.get('/', (req, res) => {
+    res.send('Strona główna');
+});
+
+app.get('/about', (req, res) => {
+    res.send('O nas');
+});
+
+app.listen(3000, () => {
+    console.log('Serwer działa na porcie 3000');
+});
+</code></pre>
+
+<p>W powyższym przykładzie plik <code>loggerMiddleware.js</code> eksportuje funkcję <code>logger</code>, która pełni rolę middleware. Gdy jest używana w <code>app.js</code> za pomocą <code>app.use(logger)</code>, Express automatycznie wywołuje ją dla każdej trasy, logując metodę i ścieżkę każdego żądania.</p>
+
+<h3>Użycie middleware w wybranych trasach</h3>
+<p>Middleware może być również dodane tylko do określonej trasy, jak pokazano w poniższym przykładzie.</p>
+
+<pre><code class="language-javascript">
+// Użycie middleware tylko dla trasy /dashboard
+app.get('/dashboard', logger, (req, res) => {
+    res.send('Strona główna dashboardu');
+});
+</code></pre>
+
+<p>W tym przypadku middleware <code>logger</code> działa tylko na trasie <code>/dashboard</code>, logując każde żądanie przychodzące na tę ścieżkę, ale pomijając inne trasy.</p>
 
         <h2>Routing w Express.js</h2>
         <p>Routing w Express.js pozwala na obsługę różnych ścieżek URL i przypisanie do nich odpowiednich funkcji. Poniżej znajdują się przykłady podstawowego routingu.</p>

@@ -61,16 +61,31 @@
 
         <p>Po zainstalowaniu pakietu Express, jest on dostępny w projekcie i można go zaimportować za pomocą <code>require</code>.</p>
         <pre><code class="language-javascript">
-        const express = require('express');
-        const app = express();
+// Importujemy moduł express, który jest frameworkiem do tworzenia aplikacji webowych
+const express = require('express');
 
-        app.get('/', (req, res) => {
-            res.send('Witaj w aplikacji Express!');
-        });
+// Tworzymy instancję aplikacji express, która będzie pełnić rolę serwera
+const app = express();
 
-        app.listen(3000, () => console.log('Serwer działa na porcie 3000'));
+// Dodajemy middleware do obsługi danych JSON przesyłanych w żądaniach POST
+app.use(express.json());
+
+// Dodajemy middleware do obsługi danych formularzy URL-encoded (przesyłanych w formie klucz=wartość)
+// Ustawienie extended: true pozwala na obsługę złożonych obiektów w danych
+app.use(express.urlencoded({ extended: true }));
+
+// Definiujemy trasę GET dla ścieżki głównej "/"
+// Kiedy użytkownik przejdzie pod adres http://localhost:3000/, zwrócimy odpowiedź "Hello from Express!"
+app.get('/', (req, res) => {
+    res.send('Hello from Express!');
+});
+
+// Uruchamiamy serwer na porcie 3000
+// Kiedy serwer zacznie działać, wyświetli komunikat w konsoli
+app.listen(3000, () => console.log('Server running on port 3000'));
         </code></pre>
         <p>W powyższym przykładzie używamy <code>express</code> do stworzenia prostego serwera HTTP, który zwraca wiadomość na stronie głównej.</p>
+
 
         <h2>Zarządzanie wersjami pakietów</h2>
         <p>Każdy pakiet zainstalowany przez npm ma swoją wersję, która jest zapisywana w pliku <code>package.json</code>. Możemy aktualizować pakiety za pomocą komendy:</p>

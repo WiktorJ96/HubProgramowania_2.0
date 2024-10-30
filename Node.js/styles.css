@@ -138,6 +138,23 @@ button:active {
     transform: scale(0.98);
 }
 
+.accordion-item {
+    margin-bottom: 10px;
+    border-radius: 5px;
+}
+
+.accordion-header {
+    padding: 10px;
+    cursor: pointer;
+    font-size: 1.2em;
+}
+
+.accordion-content {
+    padding: 0 20px;
+    max-height: 0;
+    overflow: hidden;
+    transition: max-height 0.3s ease;
+}
 /* Responsywność */
 @media (min-width: 768px) {
     p, ul {
