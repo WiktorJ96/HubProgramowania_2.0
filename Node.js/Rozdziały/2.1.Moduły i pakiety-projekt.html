@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Projekt Node.js - Moduły i Pakiety</title>
+    <link rel="stylesheet" href="../styles.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/themes/prism-tomorrow.min.css" rel="stylesheet" />
+</head>
+<body>
+    <div class="container">
+        <h1>Projekt: Node.js - Moduły i Pakiety</h1>
+        <button id="addOperationBtn">Dodaj Operację</button>
+        <div id="result-container"></div>
+
+        <h2>Kod Frontend</h2>
+        <pre><code class="language-html">
+        &lt;h1&gt;Projekt Node.js - Moduły i Pakiety&lt;/h1&gt;
+        &lt;button id="addOperationBtn"&gt;Dodaj Operację&lt;/button&gt;
+        &lt;div id="result-container"&gt;&lt;/div&gt;
+
+        &lt;script&gt;
+document.getElementById('addOperationBtn').addEventListener('click', async () => {
+    const operation = prompt('Podaj typ operacji (dodawanie, odejmowanie): ', 'dodawanie');
+    const valueA = parseInt(prompt('Podaj pierwszą wartość: ', '0'), 10);
+    const valueB = parseInt(prompt('Podaj drugą wartość: ', '0'), 10);
+
+    const endpoint = operation === "dodawanie" ? '/add' : '/subtract';
+    
+    const response = await fetch(`http://localhost:3000${endpoint}`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ a: valueA, b: valueB })
+    });
+    const result = await response.json();
+
+    const resultContainer = document.getElementById('result-container');
+    const resultElement = document.createElement('p');
+    resultElement.textContent = `Wynik ${operation}: ${result.result}`;
+    resultContainer.appendChild(resultElement);
+});
+        &lt;/script&gt;
+        </code></pre>
+
+        <h2>Kod Node.js</h2>
+        <pre><code class="language-javascript">
+        // server.js
+const express = require('express');
+const math = require('./mathModule');
+
+const app = express();
+app.use(express.json());
+
+// Endpoint do dodawania
+app.post('/add', (req, res) => {
+    const { a, b } = req.body;
+    const result = math.add(a, b);
+    res.json({ result });
+});
+
+// Endpoint do odejmowania
+app.post('/subtract', (req, res) => {
+    const { a, b } = req.body;
+    const result = math.subtract(a, b);
+    res.json({ result });
+});
+
+// Uruchamianie serwera na porcie 3000
+app.listen(3000, () => console.log('Server running on port 3000'));
+        </code></pre>
+
+        <h2>Moduł Math</h2>
+        <pre><code class="language-javascript">
+            // mathModule.js
+const add = (a, b) => a + b;
+const subtract = (a, b) => a - b;
+
+module.exports = { add, subtract };
+        </code></pre>
+
+
+        <h2>Jak działa projekt?</h2>
+        <p>Projekt ten demonstruje, jak Node.js może obsługiwać żądania frontendu, wykonując operacje matematyczne za pomocą oddzielnego modułu (`mathModule.js`). Poniżej znajduje się szczegółowy opis przepływu danych i komunikacji:</p>
+
+        <ol>
+            <li><strong>Frontend (JavaScript w przeglądarce)</strong>:
+                <p>Użytkownik klika przycisk na stronie i wprowadza dane, takie jak typ operacji (np. dodawanie, odejmowanie) oraz dwie liczby. Kod JavaScript w przeglądarce następnie wysyła te dane do serwera za pomocą żądania HTTP (POST).</p>
+            </li>
+
+            <li><strong>Serwer (Node.js w <code>app.js</code>)</strong>:
+                <p>Serwer w pliku <code>app.js</code> odbiera żądanie od frontendu i przetwarza dane, kierując je do modułu matematycznego (<code>mathModule.js</code>). <code>app.js</code> pełni rolę pośrednika, który komunikuje frontend z modułem matematycznym, ale sam nie wykonuje obliczeń.</p>
+            </li>
+
+            <li><strong>Moduł matematyczny (<code>mathModule.js</code>)</strong>:
+                <p>Moduł ten zawiera funkcje matematyczne, takie jak <code>add</code> (dodawanie) i <code>subtract</code> (odejmowanie). Kiedy serwer w <code>app.js</code> wywołuje jedną z tych funkcji, moduł wykonuje operację matematyczną na liczbach przesłanych przez użytkownika i zwraca wynik do serwera.</p>
+            </li>
+
+            <li><strong>Odpowiedź do frontendu</strong>:
+                <p>Serwer odbiera wynik z <code>mathModule.js</code> i wysyła go z powrotem do przeglądarki. JavaScript po stronie klienta odbiera ten wynik i wyświetla go na stronie, tak aby użytkownik mógł zobaczyć rezultat operacji.</p>
+            </li>
+        </ol>
+
+        <h2>Podsumowanie</h2>
+        <p>Struktura projektu zapewnia jasny podział odpowiedzialności:</p>
+        <ul>
+            <li>Frontend obsługuje interakcje z użytkownikiem i wysyła dane do serwera.</li>
+            <li>Serwer w <code>app.js</code> działa jako pośrednik między frontendem a modułem matematycznym, przetwarzając dane i zwracając wynik.</li>
+            <li>Moduł <code>mathModule.js</code> wykonuje operacje matematyczne, dzięki czemu kod jest bardziej przejrzysty i łatwy do ponownego wykorzystania.</li>
+        </ul>
+        
+        <p>Taka struktura zapewnia elastyczność i modularność, co ułatwia rozwijanie projektu i ponowne użycie modułów w innych aplikacjach.</p>
+    </div>
+    </div>
+
+        
+    <script>
+        document.getElementById('addOperationBtn').addEventListener('click', async () => {
+            const operation = prompt('Podaj typ operacji (dodawanie, odejmowanie): ', 'dodawanie');
+            const valueA = parseInt(prompt('Podaj pierwszą wartość: ', '0'), 10);
+            const valueB = parseInt(prompt('Podaj drugą wartość: ', '0'), 10);
+
+            const endpoint = operation === "dodawanie" ? '/add' : '/subtract';
+            
+            const response = await fetch(`http://localhost:3000${endpoint}`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ a: valueA, b: valueB })
+            });
+            const result = await response.json();
+
+            const resultContainer = document.getElementById('result-container');
+            const resultElement = document.createElement('p');
+            resultElement.textContent = `Wynik ${operation}: ${result.result}`;
+            resultContainer.appendChild(resultElement);
+        });
+    </script>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/prism.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/components/prism-javascript.min.js"></script>
+</body>
+</html>

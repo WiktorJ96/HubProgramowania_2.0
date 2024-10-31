@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Projekt Node.js - Express.js</title>
+    <link rel="stylesheet" href="../styles.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/themes/prism-tomorrow.min.css" rel="stylesheet" />
+</head>
+<body>
+    <div class="container">
+        <h1>Projekt: Node.js - Express.js</h1>
+        <button onclick="window.location.href='http://localhost:3000/'">Home</button>
+        <button onclick="window.location.href='http://localhost:3000/json'">JSON Response</button>
+        <button onclick="window.location.href='http://localhost:3000/error'">Error Page</button>
+
+        <h2>Kod Frontend</h2>
+        <pre><code class="language-html">
+        &lt;h1&gt;Projekt: Node.js - Express.js&lt;/h1&gt;
+        &lt;button onclick="window.location.href='http://localhost:3000/'"&gt;Home&lt;/button&gt;
+        &lt;button onclick="window.location.href='http://localhost:3000/json'"&gt;JSON Response&lt;/button&gt;
+        &lt;button onclick="window.location.href='http://localhost:3000/error'"&gt;Error Page&lt;/button&gt;
+        </code></pre>
+
+        <h2>Kod Node.js z Express.js</h2>
+        <pre><code class="language-javascript">
+        // server.js
+const express = require('express');
+const app = express();
+const PORT = 3000;
+
+// Endpoint główny
+app.get('/', (req, res) => {
+    res.send('&lt;h1&gt;Witaj na stronie głównej!&lt;/h1&gt;&lt;p&gt;To jest serwer Express w Node.js&lt;/p&gt;');
+});
+
+// Endpoint JSON
+app.get('/json', (req, res) => {
+    res.json({ message: 'To jest odpowiedź JSON' });
+});
+
+// Endpoint błędu
+app.get('/error', (req, res) => {
+    res.status(404).send('&lt;h1&gt;Błąd 404&lt;/h1&gt;&lt;p&gt;Strona nie została znaleziona&lt;/p&gt;');
+});
+
+// Uruchomienie serwera
+app.listen(PORT, () => {
+    console.log(`Serwer działa na http://localhost:${PORT}`);
+});
+        </code></pre>
+
+        <h2>Jak działa projekt?</h2>
+        <p>Projekt ten demonstruje użycie Express.js w Node.js. Poniżej znajduje się szczegółowy opis przepływu danych i komunikacji:</p>
+
+        <ol>
+            <li><strong>Frontend (HTML)</strong>:
+                <p>Użytkownik klika jeden z przycisków, aby wysłać żądanie HTTP na określoną ścieżkę (`/`, `/json` lub `/error`). Każdy przycisk przekierowuje użytkownika na odpowiedni endpoint serwera.</p>
+            </li>
+
+            <li><strong>Serwer Express (Node.js w <code>server.js</code>)</strong>:
+                <p>Serwer w pliku <code>server.js</code> obsługuje różne żądania przychodzące na różne ścieżki URL. Każda ścieżka zwraca inny typ odpowiedzi (HTML, JSON lub komunikat błędu 404).</p>
+            </li>
+        </ol>
+
+        <h2>Podsumowanie</h2>
+        <p>Ten projekt pokazuje, jak Express.js upraszcza zarządzanie ścieżkami i odpowiedziami HTTP w Node.js. Dzięki Express łatwo tworzyć endpointy, które zwracają różne typy danych i odpowiednio reagują na różne żądania.</p>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/prism.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/components/prism-javascript.min.js"></script>
+</body>
+</html>

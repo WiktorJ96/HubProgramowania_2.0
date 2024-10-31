@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Projekt Node.js - WebSockets</title>
+    <link rel="stylesheet" href="../styles.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/themes/prism-tomorrow.min.css" rel="stylesheet" />
+</head>
+<body>
+    <div class="container">
+        <h1>Projekt: Node.js - WebSockets</h1>
+
+        <h2>Kod HTML (Frontend)</h2>
+        <pre><code class="language-html">
+        &lt;input type="text" id="messageInput" placeholder="Wpisz wiadomość"&gt;
+        &lt;button id="sendMessageBtn"&gt;Wyślij wiadomość&lt;/button&gt;
+        &lt;div id="messagesContainer"&gt;&lt;/div&gt;
+        </code></pre>
+
+        <h2>Kod JavaScript (Frontend)</h2>
+        <pre><code class="language-javascript">
+        // Tworzenie połączenia WebSocket z serwerem
+        const ws = new WebSocket('ws://localhost:3000');
+
+        // Obsługa połączenia
+        ws.onopen = () => {
+            console.log("Połączono z serwerem WebSocket");
+        };
+
+        // Obsługa odbierania wiadomości od serwera
+        ws.onmessage = (event) => {
+            const messagesContainer = document.getElementById('messagesContainer');
+            const newMessage = document.createElement('p');
+            newMessage.textContent = `Odebrano: ${event.data}`;
+            messagesContainer.appendChild(newMessage);
+        };
+
+        // Obsługa błędów
+        ws.onerror = (error) => {
+            console.error("Błąd WebSocket:", error);
+        };
+
+        // Obsługa zamknięcia połączenia
+        ws.onclose = () => {
+            console.log("Połączenie z serwerem WebSocket zostało zamknięte");
+        };
+
+        // Wysyłanie wiadomości do serwera
+        document.getElementById('sendMessageBtn').addEventListener('click', () => {
+            const messageInput = document.getElementById('messageInput');
+            const message = messageInput.value;
+            ws.send(message);
+            messageInput.value = '';
+        });
+        </code></pre>
+
+        <h2>Kod Node.js (Backend)</h2>
+        <pre><code class="language-javascript">
+        // server.js
+const WebSocket = require('ws');
+const server = new WebSocket.Server({ port: 3000 });
+
+server.on('connection', (ws) => {
+    console.log("Nowe połączenie WebSocket");
+
+    // Obsługa odbierania wiadomości od klienta
+    ws.on('message', (message) => {
+        console.log(\`Otrzymano: \${message}\`);
+
+        // Wysyłanie wiadomości do wszystkich podłączonych klientów
+        server.clients.forEach(client => {
+            if (client.readyState === WebSocket.OPEN) {
+                client.send(\`Serwer otrzymał: \${message}\`);
+            }
+        });
+    });
+
+    // Obsługa zamknięcia połączenia
+    ws.on('close', () => {
+        console.log("Połączenie WebSocket zostało zamknięte");
+    });
+});
+
+console.log("Serwer WebSocket działa na ws://localhost:3000");
+        </code></pre>
+
+        <h2>Jak działa projekt?</h2>
+        <p>Ten projekt demonstruje, jak skonfigurować WebSockety w Node.js i nawiązać połączenie w czasie rzeczywistym. W momencie, gdy użytkownik wysyła wiadomość, serwer odbiera ją i przesyła do wszystkich klientów, którzy są aktualnie połączeni.</p>
+
+        <ol>
+            <li><strong>Frontend</strong>:
+                <p>W pliku HTML tworzymy połączenie WebSocket, umożliwiając użytkownikowi wysyłanie i odbieranie wiadomości w czasie rzeczywistym.</p>
+            </li>
+
+            <li><strong>Backend</strong>:
+                <p>Serwer w Node.js (z `ws`) słucha na porcie `3000`. Każda wiadomość odebrana od jednego klienta jest wysyłana do wszystkich podłączonych klientów.</p>
+            </li>
+        </ol>
+
+        <h2>Podsumowanie</h2>
+        <p>WebSockety pozwalają na dwukierunkową komunikację między serwerem a klientem, co jest szczególnie przydatne w aplikacjach w czasie rzeczywistym, takich jak czaty.</p>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/prism.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/components/prism-javascript.min.js"></script>
+</body>
+</html>

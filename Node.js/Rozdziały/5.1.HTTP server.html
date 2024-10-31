@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Projekt Node.js - Tworzenie HTTP Servera</title>
+    <link rel="stylesheet" href="../styles.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/themes/prism-tomorrow.min.css" rel="stylesheet" />
+</head>
+<body>
+    <div class="container">
+        <h1>Projekt: Node.js - Tworzenie HTTP Servera</h1>
+
+        <h2>Kod Frontend</h2>
+        <pre><code class="language-html">
+        &lt;h1&gt;Projekt: Node.js - Tworzenie HTTP Servera&lt;/h1&gt;
+        &lt;button onclick="window.location.href='http://localhost:3000/'"&gt;Home&lt;/button&gt;
+        &lt;button onclick="window.location.href='http://localhost:3000/json'"&gt;JSON Response&lt;/button&gt;
+        &lt;button onclick="window.location.href='http://localhost:3000/error'"&gt;Error Page&lt;/button&gt;
+        </code></pre>
+
+        <h2>Kod Node.js</h2>
+        <pre><code class="language-javascript">
+        // server.js
+const http = require('http');
+
+// Tworzymy serwer HTTP
+const server = http.createServer((req, res) => {
+    // Ustawiamy nagłówki odpowiedzi
+    res.setHeader('Content-Type', 'text/html; charset=utf-8');
+    
+    // Obsługa różnych ścieżek
+    if (req.url === '/') {
+        res.statusCode = 200;
+        res.end('&lt;h1&gt;Witaj na stronie głównej!&lt;/h1&gt;&lt;p&gt;To jest prosty serwer HTTP w Node.js&lt;/p&gt;');
+    } else if (req.url === '/json') {
+        res.setHeader('Content-Type', 'application/json');
+        res.statusCode = 200;
+        res.end(JSON.stringify({ message: 'To jest odpowiedź JSON' }));
+    } else if (req.url === '/error') {
+        res.statusCode = 404;
+        res.end('&lt;h1&gt;Błąd 404&lt;/h1&gt;&lt;p&gt;Strona nie została znaleziona&lt;/p&gt;');
+    } else {
+        res.statusCode = 404;
+        res.end('&lt;h1&gt;Błąd 404&lt;/h1&gt;&lt;p&gt;Strona nie istnieje&lt;/p&gt;');
+    }
+});
+
+// Uruchamiamy serwer na porcie 3000
+server.listen(3000, () => {
+    console.log('Serwer działa na http://localhost:3000');
+});
+        </code></pre>
+
+        <h2>Jak działa projekt?</h2>
+        <p>Projekt ten demonstruje tworzenie prostego serwera HTTP w Node.js. Poniżej znajduje się szczegółowy opis przepływu danych i komunikacji:</p>
+
+        <ol>
+            <li><strong>Frontend (HTML)</strong>:
+                <p>Użytkownik klika jeden z przycisków, aby wysłać żądanie HTTP na określoną ścieżkę (`/`, `/json` lub `/error`). Każdy przycisk przekierowuje użytkownika na odpowiedni endpoint serwera.</p>
+            </li>
+
+            <li><strong>Serwer HTTP (Node.js w <code>server.js</code>)</strong>:
+                <p>Serwer w pliku <code>server.js</code> obsługuje różne żądania przychodzące na różne ścieżki URL. Każda ścieżka zwraca inny typ odpowiedzi (tekst HTML, JSON lub komunikat błędu).</p>
+            </li>
+        </ol>
+
+        <h2>Podsumowanie</h2>
+        <p>Ten projekt pokazuje podstawy tworzenia serwera HTTP w Node.js bez użycia dodatkowych bibliotek, co pozwala lepiej zrozumieć, jak działa przetwarzanie żądań HTTP na niskim poziomie.</p>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/prism.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/components/prism-javascript.min.js"></script>
+</body>
+</html>

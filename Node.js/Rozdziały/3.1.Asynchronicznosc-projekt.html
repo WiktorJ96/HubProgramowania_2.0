@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Projekt Node.js - Asynchroniczność</title>
+    <link rel="stylesheet" href="../styles.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/themes/prism-tomorrow.min.css" rel="stylesheet" />
+</head>
+<body>
+    <div class="container">
+        <h1>Projekt: Node.js - Asynchroniczność</h1>
+        <div id="result-container"></div>
+
+        <h2>Kod Frontend</h2>
+        <pre><code class="language-html">
+        &lt;h1&gt;Projekt Node.js - Asynchroniczność&lt;/h1&gt;
+        &lt;button id="startAsyncOperation"&gt;Uruchom Operację Asynchroniczną&lt;/button&gt;
+        &lt;div id="result-container"&gt;&lt;/div&gt;
+
+        &lt;script&gt;
+document.getElementById('startAsyncOperation').addEventListener('click', async () => {
+    const response = await fetch('http://localhost:3000/delayed');
+    const result = await response.json();
+    
+    const resultContainer = document.getElementById('result-container');
+    const resultElement = document.createElement('p');
+    resultElement.textContent = `Odpowiedź serwera: ${result.message}`;
+    resultContainer.appendChild(resultElement);
+});
+        &lt;/script&gt;
+        </code></pre>
+
+        <h2>Kod Node.js</h2>
+        <pre><code class="language-javascript">
+        // server.js
+const express = require('express');
+const asyncModule = require('./asyncModule');
+
+const app = express();
+app.use(express.json());
+
+// Endpoint symulujący opóźnioną odpowiedź
+app.get('/delayed', async (req, res) => {
+    const message = await asyncModule.getDelayedMessage();
+    res.json({ message });
+});
+
+// Uruchamianie serwera na porcie 3000
+app.listen(3000, () => console.log('Server running on port 3000'));
+        </code></pre>
+
+        <h2>Moduł Asynchroniczny</h2>
+        <pre><code class="language-javascript">
+            // asyncModule.js
+const getDelayedMessage = () => {
+    return new Promise((resolve) => {
+        setTimeout(() => {
+            resolve("To jest odpowiedź z opóźnieniem 2 sekund");
+        }, 2000);
+    });
+};
+
+module.exports = { getDelayedMessage };
+        </code></pre>
+
+        <h2>Jak działa projekt?</h2>
+        <p>Projekt ten demonstruje, jak Node.js może obsługiwać żądania frontendu, wykorzystując asynchroniczność, aby wprowadzić opóźnienie w odpowiedzi serwera. Poniżej znajduje się szczegółowy opis przepływu danych i komunikacji:</p>
+
+        <ol>
+            <li><strong>Frontend (JavaScript w przeglądarce)</strong>:
+                <p>Użytkownik klika przycisk na stronie, co wywołuje żądanie HTTP do serwera, aby uruchomić operację asynchroniczną.</p>
+            </li>
+
+            <li><strong>Serwer (Node.js w <code>server.js</code>)</strong>:
+                <p>Serwer w pliku <code>server.js</code> odbiera żądanie i przekazuje je do modułu asynchronicznego (<code>asyncModule.js</code>), który zwraca wynik z opóźnieniem.</p>
+            </li>
+
+            <li><strong>Moduł asynchroniczny (<code>asyncModule.js</code>)</strong>:
+                <p>Moduł ten zawiera funkcję <code>getDelayedMessage</code>, która używa <code>Promise</code> oraz <code>setTimeout</code>, aby symulować opóźnienie odpowiedzi o 2 sekundy.</p>
+            </li>
+
+            <li><strong>Odpowiedź do frontendu</strong>:
+                <p>Serwer odbiera wynik z <code>asyncModule.js</code> i wysyła go z powrotem do przeglądarki. JavaScript po stronie klienta odbiera ten wynik i wyświetla go na stronie, tak aby użytkownik mógł zobaczyć rezultat operacji.</p>
+            </li>
+        </ol>
+
+        <h2>Podsumowanie</h2>
+        <p>Struktura projektu zapewnia jasny podział odpowiedzialności:</p>
+        <ul>
+            <li>Frontend obsługuje interakcje z użytkownikiem i wysyła dane do serwera.</li>
+            <li>Serwer w <code>server.js</code> działa jako pośrednik między frontendem a modułem asynchronicznym, przetwarzając dane i zwracając wynik.</li>
+            <li>Moduł <code>asyncModule.js</code> symuluje operacje asynchroniczne, dzięki czemu kod jest bardziej przejrzysty i łatwy do ponownego wykorzystania.</li>
+        </ul>
+        
+        <p>Taka struktura zapewnia elastyczność i modularność, co ułatwia rozwijanie projektu i ponowne użycie modułów w innych aplikacjach.</p>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/prism.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/components/prism-javascript.min.js"></script>
+</body>
+</html>
