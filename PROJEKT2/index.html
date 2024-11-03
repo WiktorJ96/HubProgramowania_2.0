@@ -1,0 +1,70 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title></title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+  </head>
+  <body class="bg-dark">
+    <div class="container d-flex justify-content-center align-items-center flex-column rounded-1 border border-1 border-dark bg-light">
+        <h1 class="text-dark">TODO APP</h1>
+        <header>
+            <input class="rounded-1" type="text" id="task"><button id="add" class="rounded-1">Dodaj</button>
+        </header>
+        <div id="tasksContainer" class="bg-light rounded-1">
+            <ul>
+            </ul>
+        </div>
+    </div>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.min.js"></script>
+    <script>
+const add = document.querySelector('#add');
+const tasksContainer = document.querySelector('#tasksContainer');
+
+// Dodanie nasłuchiwania na kliknięcie przycisku
+add.addEventListener('click', () => {
+    const taskText = document.querySelector('#task').value.trim(); // Odczyt wartości tekstu po kliknięciu
+
+    if (taskText) { // Sprawdzenie, czy pole nie jest puste
+        fetch('http://localhost:3000/tasks', { // Poprawiony adres URL serwera
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json' // Określenie typu danych
+            },
+            body: JSON.stringify({ data: taskText }) // Przesyłanie danych w formacie JSON
+        })
+        .then(response => response.json()) // Przetwarzanie odpowiedzi z serwera na JSON
+        .then(data => {
+            // Dodanie nowego taska do kontenera
+            const taskElement = document.createElement('p');
+            taskElement.textContent = data.message;
+            tasksContainer.appendChild(taskElement);
+        })
+        .catch(error => {
+            console.error('Błąd podczas zapisywania taska:', error); // Logowanie błędów do konsoli
+            tasksContainer.innerHTML = 'Wystąpił błąd podczas zapisywania taska.'; // Wyświetlenie komunikatu o błędzie
+        });
+    } else {
+        tasksContainer.innerHTML = 'Proszę wpisać task przed zapisem.'; // Komunikat, jeśli pole jest puste
+    }
+});
+
+// Połączanie się z serwerem i pobieranie notatek
+fetch('http://localhost:3000/tasks') // Poprawiony adres URL serwera
+  .then(response => response.json())
+  .then(data => {
+    data.tasks.forEach(task => {
+      const taskElement = document.createElement('p');
+      taskElement.textContent = task.data;
+      tasksContainer.appendChild(taskElement); // Wyświetlenie wszystkich notatek
+    });
+  })
+  .catch(error => {
+    console.error('Błąd podczas pobierania notatek:', error);
+  });
+</script>
+
+  </body>
+</html>

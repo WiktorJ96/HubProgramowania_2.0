@@ -46,7 +46,7 @@
     <div class="container py-5">
 
         <div class="iconMongoDB">
-            <img src="/mongoDB-logo.png"  width="50" height="100">
+            <img src="/mongoDB-logo.png" width="50" height="100">
         </div>
 
         <hr class="mongodb-hr">
@@ -61,6 +61,22 @@
                         <i class="fas fa-database skill-icon mb-3"></i>
                         <h5 class="card-title">Podstawy MongoDB</h5>
                         <p class="card-text">Instalacja MongoDB, uruchamianie serwera, użycie Mongo Shell.</p>
+                    </div>
+                    <div class="card-footer">
+                        <span class="badge bg-success">
+                            <i class="fas fa-smile" data-bs-toggle="tooltip" title="Dobry"></i>
+                        </span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Operacje CRUD -->
+            <div class="col" data-difficulty="Dobry" data-category="operacje-crud">
+                <div class="card skill-card h-100">
+                    <div class="card-body text-center">
+                        <i class="fas fa-edit skill-icon mb-3"></i>
+                        <h5 class="card-title">Operacje CRUD</h5>
+                        <p class="card-text">Tworzenie, odczytywanie, aktualizacja i usuwanie dokumentów.</p>
                     </div>
                     <div class="card-footer">
                         <span class="badge bg-success">
@@ -86,13 +102,13 @@
                 </div>
             </div>
 
-            <!-- Operacje CRUD -->
-            <div class="col" data-difficulty="Dobry" data-category="operacje-crud">
+            <!-- Integracja z Aplikacjami -->
+            <div class="col" data-difficulty="Dobry" data-category="integracja">
                 <div class="card skill-card h-100">
                     <div class="card-body text-center">
-                        <i class="fas fa-edit skill-icon mb-3"></i>
-                        <h5 class="card-title">Operacje CRUD</h5>
-                        <p class="card-text">Tworzenie, odczytywanie, aktualizacja i usuwanie dokumentów.</p>
+                        <i class="fas fa-plug skill-icon mb-3"></i>
+                        <h5 class="card-title">Integracja z Aplikacjami</h5>
+                        <p class="card-text">Korzystanie z bibliotek dla Node.js (Mongoose)</p>
                     </div>
                     <div class="card-footer">
                         <span class="badge bg-success">
@@ -134,6 +150,54 @@
                 </div>
             </div>
 
+            <!-- Transakcje -->
+            <div class="col" data-difficulty="Średni" data-category="transakcje">
+                <div class="card skill-card h-100">
+                    <div class="card-body text-center">
+                        <i class="fas fa-exchange-alt skill-icon mb-3"></i>
+                        <h5 class="card-title">Transakcje</h5>
+                        <p class="card-text">Użycie transakcji ACID w MongoDB, zarządzanie sesjami transakcyjnymi.</p>
+                    </div>
+                    <div class="card-footer">
+                        <span class="badge bg-warning">
+                            <i class="fas fa-meh" data-bs-toggle="tooltip" title="Średni"></i>
+                        </span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Bezpieczeństwo -->
+            <div class="col" data-difficulty="Średni" data-category="bezpieczenstwo">
+                <div class="card skill-card h-100">
+                    <div class="card-body text-center">
+                        <i class="fas fa-shield-alt skill-icon mb-3"></i>
+                        <h5 class="card-title">Bezpieczeństwo</h5>
+                        <p class="card-text">Uwierzytelnianie, autoryzacja, szyfrowanie danych, role użytkowników.</p>
+                    </div>
+                    <div class="card-footer">
+                        <span class="badge bg-warning">
+                            <i class="fas fa-meh" data-bs-toggle="tooltip" title="Średni"></i>
+                        </span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Narzędzia administracyjne -->
+            <div class="col" data-difficulty="Średni" data-category="administracyjne">
+                <div class="card skill-card h-100">
+                    <div class="card-body text-center">
+                        <i class="fas fa-tools skill-icon mb-3"></i>
+                        <h5 class="card-title">Narzędzia administracyjne</h5>
+                        <p class="card-text">MongoDB Compass, mongosh, narzędzia monitoringu.</p>
+                    </div>
+                    <div class="card-footer">
+                        <span class="badge bg-warning">
+                            <i class="fas fa-meh" data-bs-toggle="tooltip" title="Średni"></i>
+                        </span>
+                    </div>
+                </div>
+            </div>
+
             <!-- Replikacja -->
             <div class="col" data-difficulty="Słaby" data-category="replikacja">
                 <div class="card skill-card h-100">
@@ -166,22 +230,6 @@
                 </div>
             </div>
 
-            <!-- Bezpieczeństwo -->
-            <div class="col" data-difficulty="Średni" data-category="bezpieczenstwo">
-                <div class="card skill-card h-100">
-                    <div class="card-body text-center">
-                        <i class="fas fa-shield-alt skill-icon mb-3"></i>
-                        <h5 class="card-title">Bezpieczeństwo</h5>
-                        <p class="card-text">Uwierzytelnianie, autoryzacja, szyfrowanie danych, role użytkowników.</p>
-                    </div>
-                    <div class="card-footer">
-                        <span class="badge bg-warning">
-                            <i class="fas fa-meh" data-bs-toggle="tooltip" title="Średni"></i>
-                        </span>
-                    </div>
-                </div>
-            </div>
-
             <!-- Backup i Odzyskiwanie -->
             <div class="col" data-difficulty="Słaby" data-category="backup">
                 <div class="card skill-card h-100">
@@ -209,54 +257,6 @@
                     <div class="card-footer">
                         <span class="badge bg-danger">
                             <i class="fas fa-frown" data-bs-toggle="tooltip" title="Słaby"></i>
-                        </span>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Integracja z Aplikacjami -->
-            <div class="col" data-difficulty="Dobry" data-category="integracja">
-                <div class="card skill-card h-100">
-                    <div class="card-body text-center">
-                        <i class="fas fa-plug skill-icon mb-3"></i>
-                        <h5 class="card-title">Integracja z Aplikacjami</h5>
-                        <p class="card-text">Korzystanie z bibliotek dla Node.js (Mongoose), Java, Python, PHP.</p>
-                    </div>
-                    <div class="card-footer">
-                        <span class="badge bg-success">
-                            <i class="fas fa-smile" data-bs-toggle="tooltip" title="Dobry"></i>
-                        </span>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Transakcje -->
-            <div class="col" data-difficulty="Średni" data-category="transakcje">
-                <div class="card skill-card h-100">
-                    <div class="card-body text-center">
-                        <i class="fas fa-exchange-alt skill-icon mb-3"></i>
-                        <h5 class="card-title">Transakcje</h5>
-                        <p class="card-text">Użycie transakcji ACID w MongoDB, zarządzanie sesjami transakcyjnymi.</p>
-                    </div>
-                    <div class="card-footer">
-                        <span class="badge bg-warning">
-                            <i class="fas fa-meh" data-bs-toggle="tooltip" title="Średni"></i>
-                        </span>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Narzedzia administracyjne -->
-            <div class="col">
-                <div class="card skill-card h-100">
-                    <div class="card-body text-center">
-                        <i class="fas fa-tools skill-icon mb-3"></i>
-                        <h5 class="card-title">Narzędzia administracyjne:</h5>
-                        <p class="card-text">MongoDB Compass, mongosh, narzędzia monitoringu</p>
-                    </div>
-                    <div class="card-footer">
-                        <span class="badge bg-warning">
-                            <i class="fas fa-meh" data-bs-toggle="tooltip" title="Średni"></i>
                         </span>
                     </div>
                 </div>
