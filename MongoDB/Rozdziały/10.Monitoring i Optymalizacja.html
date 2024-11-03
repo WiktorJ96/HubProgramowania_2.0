@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Monitoring i Optymalizacja w MongoDB</title>
+    <link rel="stylesheet" href="../styles.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/themes/prism-tomorrow.min.css" rel="stylesheet" />
+</head>
+<body>
+    <div class="container">
+        <h1>Monitoring i Optymalizacja w MongoDB</h1>
+        <p>Monitorowanie i optymalizacja to kluczowe aspekty zapewnienia wydajności bazy danych MongoDB. Dzięki odpowiednim narzędziom i technikom można zidentyfikować i rozwiązać problemy z wydajnością.</p>
+
+        <h2>Monitorowanie Wydajności</h2>
+        <p>Monitorowanie bazy danych pomaga w wykrywaniu problemów i analizowaniu obciążenia. MongoDB oferuje kilka narzędzi do monitorowania wydajności:</p>
+        <ul>
+            <li><strong>mongostat:</strong> Narzędzie wiersza poleceń, które wyświetla statystyki w czasie rzeczywistym, takie jak liczba operacji wstawiania, odczytu, aktualizacji i usuwania.</li>
+            <pre><code class="language-bash">
+# Uruchamianie mongostat
+mongostat --host localhost
+            </code></pre>
+            <li><strong>mongotop:</strong> Narzędzie, które pokazuje czas spędzony przez MongoDB na odczycie i zapisie danych w poszczególnych kolekcjach.</li>
+            <pre><code class="language-bash">
+# Uruchamianie mongotop
+mongotop 1
+            </code></pre>
+        </ul>
+
+        <h2>Analiza Statystyk</h2>
+        <p>MongoDB przechowuje różne statystyki, które można wykorzystać do analizy wydajności:</p>
+        <ul>
+            <li><strong>Profilowanie bazy danych:</strong> Używanie polecenia <code>db.setProfilingLevel()</code> do włączenia profilowania zapytań, które rejestruje operacje wraz z ich czasem wykonania.</li>
+        </ul>
+        <pre><code class="language-javascript">
+// Włączenie profilowania na poziomie 2 (rejestrowanie wszystkich zapytań)
+db.setProfilingLevel(2);
+        </code></pre>
+
+        <h2>Optymalizacja Zapytania</h2>
+        <p>Optymalizacja zapytań pozwala na poprawę wydajności bazy danych poprzez minimalizację czasu potrzebnego na wykonanie operacji. Kilka technik optymalizacji obejmuje:</p>
+        <ul>
+            <li><strong>Indeksy:</strong> Używanie indeksów pozwala na szybkie odnajdywanie dokumentów. Można tworzyć indeksy jednopolowe i wielopolowe w zależności od potrzeb zapytań.</li>
+            <li><strong>Analiza planu zapytania:</strong> Użycie metody <code>explain()</code> do analizy planu wykonania zapytania i zidentyfikowania potencjalnych problemów.</li>
+        </ul>
+        <pre><code class="language-javascript">
+// Analiza zapytania przy użyciu explain()
+db.kolekcja.find({ imie: \"Jan\" }).explain(\"executionStats\");
+        </code></pre>
+
+        <h2>Narzędzia Zewnętrzne</h2>
+        <p>Poza wbudowanymi narzędziami MongoDB, istnieją również zewnętrzne narzędzia do monitorowania, takie jak:</p>
+        <ul>
+            <li><strong>MongoDB Atlas:</strong> Chmurowa platforma MongoDB, która oferuje zaawansowane monitorowanie i automatyczne alerty.</li>
+            <li><strong>Prometheus i Grafana:</strong> Zestaw narzędzi do monitorowania i wizualizacji metryk, który można zintegrować z MongoDB.</li>
+        </ul>
+
+        <h2>Podsumowanie</h2>
+        <ul>
+            <li>Monitorowanie bazy danych za pomocą narzędzi takich jak <code>mongostat</code> i <code>mongotop</code> pomaga śledzić wydajność.</li>
+            <li>Profilowanie zapytań i analiza planów wykonania są kluczowe do optymalizacji.</li>
+            <li>Indeksy i analiza zapytań za pomocą <code>explain()</code> mogą znacząco poprawić wydajność bazy danych.</li>
+            <li>Zewnętrzne narzędzia, takie jak Prometheus i Grafana, mogą uzupełniać monitorowanie MongoDB.</li>
+        </ul>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/prism.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/components/prism-javascript.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/components/prism-bash.min.js"></script>
+</body>
+</html>

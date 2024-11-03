@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Integracja z Aplikacjami w MongoDB</title>
+    <link rel="stylesheet" href="../styles.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/themes/prism-tomorrow.min.css" rel="stylesheet" />
+</head>
+<body>
+    <div class="container">
+        <h1>Integracja z Aplikacjami w MongoDB</h1>
+        <p>MongoDB można zintegrować z różnymi językami programowania, korzystając z dedykowanych bibliotek i sterowników. Poniżej omówiono, jak używać MongoDB z Node.js, Java, Python i PHP.</p>
+
+        <h2>Node.js - Mongoose</h2>
+        <p>Mongoose to popularna biblioteka ODM (Object Data Modeling) dla Node.js, która upraszcza pracę z MongoDB. Umożliwia tworzenie schematów, walidację danych i wykonywanie operacji CRUD.</p>
+        <pre><code class="language-javascript">
+// Instalacja Mongoose
+npm install mongoose
+
+// Przykład użycia Mongoose
+const mongoose = require('mongoose');
+mongoose.connect('mongodb://localhost:27017/mojabaza', { useNewUrlParser: true, useUnifiedTopology: true });
+
+const UzytkownikSchema = new mongoose.Schema({
+    imie: String,
+    wiek: Number
+});
+
+const Uzytkownik = mongoose.model('Uzytkownik', UzytkownikSchema);
+
+Uzytkownik.create({ imie: 'Anna', wiek: 28 })
+    .then(doc => console.log('Utworzono użytkownika:', doc))
+    .catch(err => console.error('Błąd:', err));
+        </code></pre>
+
+        <h2>Java - MongoDB Driver</h2>
+        <p>Dla języka Java MongoDB udostępnia oficjalny sterownik, który umożliwia bezpośrednią pracę z bazą danych.</p>
+        <pre><code class="language-java">
+// Dodanie zależności do projektu (Maven)
+<dependency>
+    <groupId>org.mongodb</groupId>
+    <artifactId>mongodb-driver-sync</artifactId>
+    <version>4.3.1</version>
+</dependency>
+
+// Przykład połączenia z MongoDB
+import com.mongodb.client.MongoClients;
+import com.mongodb.client.MongoClient;
+import com.mongodb.client.MongoDatabase;
+
+public class MongoDBExample {
+    public static void main(String[] args) {
+        try (MongoClient mongoClient = MongoClients.create("mongodb://localhost:27017")) {
+            MongoDatabase database = mongoClient.getDatabase("mojabaza");
+            System.out.println("Połączono z bazą danych: " + database.getName());
+        }
+    }
+}
+        </code></pre>
+
+        <h2>Python - PyMongo</h2>
+        <p>PyMongo to oficjalna biblioteka umożliwiająca integrację MongoDB z aplikacjami Python.</p>
+        <pre><code class="language-python">
+# Instalacja PyMongo
+pip install pymongo
+
+# Przykład połączenia z MongoDB
+from pymongo import MongoClient
+
+client = MongoClient('mongodb://localhost:27017/')
+db = client.mojabaza
+kolekcja = db.uzytkownicy
+
+wynik = kolekcja.insert_one({'imie': 'Jan', 'wiek': 35})
+print('Dodano dokument o ID:', wynik.inserted_id)
+        </code></pre>
+
+        <h2>PHP - MongoDB Driver</h2>
+        <p>Dla PHP istnieje oficjalny sterownik MongoDB, który pozwala na integrację z bazą danych.</p>
+        <pre><code class="language-php">
+<?php
+// Instalacja za pomocą Composer
+// composer require mongodb/mongodb
+
+require 'vendor/autoload.php';
+
+$klient = new MongoDB\\Client(\"mongodb://localhost:27017\");
+$baza = $klient->mojabaza;
+$kolekcja = $baza->uzytkownicy;
+
+$wynik = $kolekcja->insertOne(['imie' => 'Piotr', 'wiek' => 29]);
+echo \"Dodano dokument o ID: \" . $wynik->getInsertedId();
+?>
+        </code></pre>
+
+        <h2>Podsumowanie</h2>
+        <ul>
+            <li>Mongoose jest popularną biblioteką ODM dla Node.js.</li>
+            <li>Oficjalne sterowniki MongoDB dla Javy i PHP umożliwiają łatwą integrację.</li>
+            <li>PyMongo to preferowane narzędzie do pracy z MongoDB w Pythonie.</li>
+        </ul>
+    </div>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/prism.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/components/prism-javascript.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/components/prism-java.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/components/prism-python.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/components/prism-php.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/components/prism-php-extras.min.js"></script>
+</body>
+</html>

@@ -1,0 +1,313 @@
+<!DOCTYPE html>
+<html lang="pl">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Umiejętności MongoDB</title>
+    <link rel="icon" type="image/png" href="assets/mongodb-icon.png" sizes="16x16">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet"
+        href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <link rel="stylesheet" href="skills.css">
+    <style>
+        .mongodb-hr {
+            border: none;
+            height: 3px;
+            background: linear-gradient(to right, #4DB33D, rgba(77, 179, 61, 0), #2F5D50);
+            margin: 40px 0;
+            position: relative;
+            overflow: visible;
+        }
+
+        .mongodb-hr::before {
+            content: 'MongoDB';
+            display: block;
+            position: absolute;
+            top: -14px;
+            left: 50%;
+            transform: translateX(-50%);
+            font-size: 24px;
+            color: #4DB33D;
+            font-weight: bold;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        .iconMongoDB {
+            font-size: 100px;
+            color: #4DB33D;
+            display: block;
+            text-align: center;
+        }
+    </style>
+</head>
+
+<body data-page="mongodb">
+    <div class="container py-5">
+
+        <div class="iconMongoDB">
+            <img src="/mongoDB-logo.png"  width="50" height="100">
+        </div>
+
+        <hr class="mongodb-hr">
+
+        <!-- Zawartość kart umiejętności -->
+        <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4">
+
+            <!-- Podstawy MongoDB -->
+            <div class="col" data-difficulty="Dobry" data-category="podstawy-mongodb">
+                <div class="card skill-card h-100">
+                    <div class="card-body text-center">
+                        <i class="fas fa-database skill-icon mb-3"></i>
+                        <h5 class="card-title">Podstawy MongoDB</h5>
+                        <p class="card-text">Instalacja MongoDB, uruchamianie serwera, użycie Mongo Shell.</p>
+                    </div>
+                    <div class="card-footer">
+                        <span class="badge bg-success">
+                            <i class="fas fa-smile" data-bs-toggle="tooltip" title="Dobry"></i>
+                        </span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Modelowanie Danych -->
+            <div class="col" data-difficulty="Dobry" data-category="modelowanie-danych">
+                <div class="card skill-card h-100">
+                    <div class="card-body text-center">
+                        <i class="fas fa-project-diagram skill-icon mb-3"></i>
+                        <h5 class="card-title">Modelowanie Danych</h5>
+                        <p class="card-text">Tworzenie kolekcji, dokumentów, zasady modelowania danych w MongoDB.</p>
+                    </div>
+                    <div class="card-footer">
+                        <span class="badge bg-success">
+                            <i class="fas fa-smile" data-bs-toggle="tooltip" title="Dobry"></i>
+                        </span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Operacje CRUD -->
+            <div class="col" data-difficulty="Dobry" data-category="operacje-crud">
+                <div class="card skill-card h-100">
+                    <div class="card-body text-center">
+                        <i class="fas fa-edit skill-icon mb-3"></i>
+                        <h5 class="card-title">Operacje CRUD</h5>
+                        <p class="card-text">Tworzenie, odczytywanie, aktualizacja i usuwanie dokumentów.</p>
+                    </div>
+                    <div class="card-footer">
+                        <span class="badge bg-success">
+                            <i class="fas fa-smile" data-bs-toggle="tooltip" title="Dobry"></i>
+                        </span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Indeksy -->
+            <div class="col" data-difficulty="Średni" data-category="indeksy">
+                <div class="card skill-card h-100">
+                    <div class="card-body text-center">
+                        <i class="fas fa-hashtag skill-icon mb-3"></i>
+                        <h5 class="card-title">Indeksy</h5>
+                        <p class="card-text">Tworzenie i zarządzanie indeksami, indeksy jednopolowe i wielopolowe.</p>
+                    </div>
+                    <div class="card-footer">
+                        <span class="badge bg-warning">
+                            <i class="fas fa-meh" data-bs-toggle="tooltip" title="Średni"></i>
+                        </span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Agregacje -->
+            <div class="col" data-difficulty="Średni" data-category="agregacje">
+                <div class="card skill-card h-100">
+                    <div class="card-body text-center">
+                        <i class="fas fa-filter skill-icon mb-3"></i>
+                        <h5 class="card-title">Agregacje</h5>
+                        <p class="card-text">Użycie pipeline agregacji, operatory agregacyjne, map-reduce.</p>
+                    </div>
+                    <div class="card-footer">
+                        <span class="badge bg-warning">
+                            <i class="fas fa-meh" data-bs-toggle="tooltip" title="Średni"></i>
+                        </span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Replikacja -->
+            <div class="col" data-difficulty="Słaby" data-category="replikacja">
+                <div class="card skill-card h-100">
+                    <div class="card-body text-center">
+                        <i class="fas fa-copy skill-icon mb-3"></i>
+                        <h5 class="card-title">Replikacja</h5>
+                        <p class="card-text">Konfiguracja replik setów, zarządzanie replikacją danych.</p>
+                    </div>
+                    <div class="card-footer">
+                        <span class="badge bg-danger">
+                            <i class="fas fa-frown" data-bs-toggle="tooltip" title="Słaby"></i>
+                        </span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Sharding -->
+            <div class="col" data-difficulty="Słaby" data-category="sharding">
+                <div class="card skill-card h-100">
+                    <div class="card-body text-center">
+                        <i class="fas fa-server skill-icon mb-3"></i>
+                        <h5 class="card-title">Sharding</h5>
+                        <p class="card-text">Podział bazy danych na fragmenty, skalowanie horyzontalne.</p>
+                    </div>
+                    <div class="card-footer">
+                        <span class="badge bg-danger">
+                            <i class="fas fa-frown" data-bs-toggle="tooltip" title="Słaby"></i>
+                        </span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Bezpieczeństwo -->
+            <div class="col" data-difficulty="Średni" data-category="bezpieczenstwo">
+                <div class="card skill-card h-100">
+                    <div class="card-body text-center">
+                        <i class="fas fa-shield-alt skill-icon mb-3"></i>
+                        <h5 class="card-title">Bezpieczeństwo</h5>
+                        <p class="card-text">Uwierzytelnianie, autoryzacja, szyfrowanie danych, role użytkowników.</p>
+                    </div>
+                    <div class="card-footer">
+                        <span class="badge bg-warning">
+                            <i class="fas fa-meh" data-bs-toggle="tooltip" title="Średni"></i>
+                        </span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Backup i Odzyskiwanie -->
+            <div class="col" data-difficulty="Słaby" data-category="backup">
+                <div class="card skill-card h-100">
+                    <div class="card-body text-center">
+                        <i class="fas fa-undo skill-icon mb-3"></i>
+                        <h5 class="card-title">Backup i Odzyskiwanie</h5>
+                        <p class="card-text">Tworzenie kopii zapasowych, przywracanie danych, narzędzia backupu.</p>
+                    </div>
+                    <div class="card-footer">
+                        <span class="badge bg-danger">
+                            <i class="fas fa-frown" data-bs-toggle="tooltip" title="Słaby"></i>
+                        </span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Monitoring i Optymalizacja -->
+            <div class="col" data-difficulty="Słaby" data-category="monitoring">
+                <div class="card skill-card h-100">
+                    <div class="card-body text-center">
+                        <i class="fas fa-chart-line skill-icon mb-3"></i>
+                        <h5 class="card-title">Monitoring i Optymalizacja</h5>
+                        <p class="card-text">Monitorowanie wydajności, optymalizacja zapytań, analiza statystyk.</p>
+                    </div>
+                    <div class="card-footer">
+                        <span class="badge bg-danger">
+                            <i class="fas fa-frown" data-bs-toggle="tooltip" title="Słaby"></i>
+                        </span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Integracja z Aplikacjami -->
+            <div class="col" data-difficulty="Dobry" data-category="integracja">
+                <div class="card skill-card h-100">
+                    <div class="card-body text-center">
+                        <i class="fas fa-plug skill-icon mb-3"></i>
+                        <h5 class="card-title">Integracja z Aplikacjami</h5>
+                        <p class="card-text">Korzystanie z bibliotek dla Node.js (Mongoose), Java, Python, PHP.</p>
+                    </div>
+                    <div class="card-footer">
+                        <span class="badge bg-success">
+                            <i class="fas fa-smile" data-bs-toggle="tooltip" title="Dobry"></i>
+                        </span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Transakcje -->
+            <div class="col" data-difficulty="Średni" data-category="transakcje">
+                <div class="card skill-card h-100">
+                    <div class="card-body text-center">
+                        <i class="fas fa-exchange-alt skill-icon mb-3"></i>
+                        <h5 class="card-title">Transakcje</h5>
+                        <p class="card-text">Użycie transakcji ACID w MongoDB, zarządzanie sesjami transakcyjnymi.</p>
+                    </div>
+                    <div class="card-footer">
+                        <span class="badge bg-warning">
+                            <i class="fas fa-meh" data-bs-toggle="tooltip" title="Średni"></i>
+                        </span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Narzedzia administracyjne -->
+            <div class="col">
+                <div class="card skill-card h-100">
+                    <div class="card-body text-center">
+                        <i class="fas fa-tools skill-icon mb-3"></i>
+                        <h5 class="card-title">Narzędzia administracyjne:</h5>
+                        <p class="card-text">MongoDB Compass, mongosh, narzędzia monitoringu</p>
+                    </div>
+                    <div class="card-footer">
+                        <span class="badge bg-warning">
+                            <i class="fas fa-meh" data-bs-toggle="tooltip" title="Średni"></i>
+                        </span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Geospatial Queries -->
+            <div class="col" data-difficulty="Słaby" data-category="geospatial">
+                <div class="card skill-card h-100">
+                    <div class="card-body text-center">
+                        <i class="fas fa-map-marker-alt skill-icon mb-3"></i>
+                        <h5 class="card-title">Geospatial Queries</h5>
+                        <p class="card-text">Praca z danymi geolokalizacyjnymi, zapytania przestrzenne.</p>
+                    </div>
+                    <div class="card-footer">
+                        <span class="badge bg-danger">
+                            <i class="fas fa-frown" data-bs-toggle="tooltip" title="Słaby"></i>
+                        </span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- GridFS -->
+            <div class="col" data-difficulty="Słaby" data-category="gridfs">
+                <div class="card skill-card h-100">
+                    <div class="card-body text-center">
+                        <i class="fas fa-file-upload skill-icon mb-3"></i>
+                        <h5 class="card-title">GridFS</h5>
+                        <p class="card-text">Przechowywanie i pobieranie dużych plików za pomocą GridFS.</p>
+                    </div>
+                    <div class="card-footer">
+                        <span class="badge bg-danger">
+                            <i class="fas fa-frown" data-bs-toggle="tooltip" title="Słaby"></i>
+                        </span>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://kit.fontawesome.com/a076d05399.js" crossorigin="anonymous"></script>
+    <script src="skills.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            var tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'))
+            var tooltipList = tooltipTriggerList.map(function (tooltipTriggerElement) {
+                return new bootstrap.Tooltip(tooltipTriggerElement)
+            })
+        });
+    </script>
+</body>
+
+</html>

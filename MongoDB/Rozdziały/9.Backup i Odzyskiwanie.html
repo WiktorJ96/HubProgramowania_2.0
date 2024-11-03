@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Backup i Odzyskiwanie w MongoDB</title>
+    <link rel="stylesheet" href="../styles.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/themes/prism-tomorrow.min.css" rel="stylesheet" />
+</head>
+<body>
+    <div class="container">
+        <h1>Backup i Odzyskiwanie w MongoDB</h1>
+        <p>Tworzenie kopii zapasowych i odzyskiwanie danych są kluczowe dla zapewnienia ciągłości działania i ochrony przed utratą danych. MongoDB oferuje różne metody i narzędzia do wykonywania backupów i przywracania danych.</p>
+
+        <h2>Tworzenie Kopii Zapasowych</h2>
+        <p>MongoDB umożliwia tworzenie kopii zapasowych na kilka sposobów:</p>
+        <ul>
+            <li><strong>Kopia plików binarnych:</strong> Tworzenie kopii plików bazy danych za pomocą narzędzi systemowych, takich jak <code>cp</code> lub <code>rsync</code>. Wymaga zatrzymania serwera lub użycia replikacji do tworzenia kopii z drugorzędnego węzła.</li>
+            <li><strong>mongodump:</strong> Narzędzie do eksportowania danych z bazy MongoDB w formacie BSON.</li>
+        </ul>
+        <pre><code class="language-bash">
+# Tworzenie kopii zapasowej za pomocą mongodump
+mongodump --db mojaBazaDanych --out /ścieżka/do/backupu
+        </code></pre>
+
+        <h2>Przywracanie Danych</h2>
+        <p>Do przywracania danych z kopii zapasowej można użyć narzędzia <code>mongorestore</code>, które importuje dane z plików BSON do bazy danych MongoDB.</p>
+        <pre><code class="language-bash">
+# Przywracanie danych za pomocą mongorestore
+mongorestore --db mojaBazaDanych /ścieżka/do/backupu/mojaBazaDanych
+        </code></pre>
+
+        <h2>Narzędzia do Backupu</h2>
+        <ul>
+            <li><strong>mongodump/mongorestore:</strong> Narzędzia wiersza poleceń do eksportowania i importowania danych z baz MongoDB.</li>
+            <li><strong>Backup oparty na replikacji:</strong> Tworzenie kopii zapasowej z drugorzędnego węzła replika setu w celu minimalizacji wpływu na działanie podstawowej bazy danych.</li>
+            <li><strong>MongoDB Atlas:</strong> Chmurowa usługa MongoDB oferująca zautomatyzowane kopie zapasowe i przywracanie danych.</li>
+        </ul>
+
+        <h2>Backup Inkrementalny</h2>
+        <p>W MongoDB można również tworzyć kopie zapasowe w sposób inkrementalny, co oznacza, że zapisuje się tylko zmiany od ostatniego pełnego backupu. Tego typu backup zmniejsza czas i przestrzeń potrzebną do przechowywania danych.</p>
+
+        <h2>Podsumowanie</h2>
+        <ul>
+            <li>Backupy są kluczowe dla ochrony danych i przywracania ich w przypadku awarii.</li>
+            <li>Do tworzenia kopii zapasowych można używać narzędzi takich jak <code>mongodump</code> oraz strategii opartych na replikacji.</li>
+            <li>Odzyskiwanie danych można przeprowadzić za pomocą <code>mongorestore</code> lub innych dostępnych metod.</li>
+            <li>MongoDB Atlas oferuje zaawansowane funkcje backupu i przywracania danych.</li>
+        </ul>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/prism.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/components/prism-javascript.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/components/prism-bash.min.js"></script>
+</body>
+</html>

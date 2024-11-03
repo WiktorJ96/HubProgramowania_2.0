@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Zapytania Geolokalizacyjne w MongoDB</title>
+    <link rel="stylesheet" href="../styles.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/themes/prism-tomorrow.min.css" rel="stylesheet" />
+</head>
+<body>
+    <div class="container">
+        <h1>Zapytania Geolokalizacyjne w MongoDB</h1>
+        <p>MongoDB obsługuje dane geolokalizacyjne i umożliwia wykonywanie zapytań przestrzennych, które są przydatne do pracy z danymi związanymi z lokalizacją, takimi jak wyszukiwanie najbliższych punktów czy obszarów w określonym zasięgu.</p>
+
+        <h2>Praca z Danymi Geolokalizacyjnymi</h2>
+        <p>Dane geolokalizacyjne są przechowywane w formacie GeoJSON lub jako współrzędne <code>[longitude, latitude]</code>. Przykład dokumentu z danymi geolokalizacyjnymi:</p>
+        <pre><code class="language-javascript">
+{
+    "nazwa": "Przykładowe Miejsce",
+    "lokalizacja": {
+        "type": "Point",
+        "coordinates": [19.9449799, 50.0646501] // [longitude, latitude]
+    }
+}
+        </code></pre>
+
+        <h2>Tworzenie Indeksów Geolokalizacyjnych</h2>
+        <p>Aby umożliwić zapytania przestrzenne, należy utworzyć indeks geolokalizacyjny na polu z danymi geolokalizacyjnymi:</p>
+        <pre><code class="language-javascript">
+// Tworzenie indeksu 2dsphere dla danych GeoJSON
+db.kolekcja.createIndex({ lokalizacja: "2dsphere" });
+        </code></pre>
+
+        <h2>Zapytania Przestrzenne</h2>
+        <p>MongoDB umożliwia wykonywanie różnych zapytań geolokalizacyjnych, takich jak:</p>
+
+        <h3>Wyszukiwanie Najbliższych Punktów</h3>
+        <p>Zapytanie <code>$near</code> zwraca dokumenty ułożone według odległości od podanego punktu:</p>
+        <pre><code class="language-javascript">
+db.kolekcja.find({
+    lokalizacja: {
+        $near: {
+            $geometry: {
+                type: "Point",
+                coordinates: [19.9449799, 50.0646501]
+            },
+            $maxDistance: 5000 // Odległość w metrach
+        }
+    }
+});
+        </code></pre>
+
+        <h3>Wyszukiwanie w Określonym Obszarze</h3>
+        <p>Zapytanie <code>$geoWithin</code> służy do wyszukiwania dokumentów znajdujących się wewnątrz określonego obszaru:</p>
+        <pre><code class="language-javascript">
+db.kolekcja.find({
+    lokalizacja: {
+        $geoWithin: {
+            $geometry: {
+                type: "Polygon",
+                coordinates: [[
+                    [19.944, 50.064],
+                    [19.945, 50.064],
+                    [19.945, 50.065],
+                    [19.944, 50.065],
+                    [19.944, 50.064] // Zamyka obszar
+                ]]
+            }
+        }
+    }
+});
+        </code></pre>
+
+        <h2>Typy Zapytań Geolokalizacyjnych</h2>
+        <ul>
+            <li><strong>$near:</strong> Wyszukiwanie dokumentów w pobliżu podanej lokalizacji.</li>
+            <li><strong>$geoWithin:</strong> Wyszukiwanie dokumentów wewnątrz określonego obszaru.</li>
+            <li><strong>$geoIntersects:</strong> Znajdowanie dokumentów, których lokalizacja przecina podany obszar.</li>
+        </ul>
+
+        <h2>Podsumowanie</h2>
+        <ul>
+            <li>MongoDB obsługuje dane geolokalizacyjne i umożliwia wykonywanie zaawansowanych zapytań przestrzennych.</li>
+            <li>Indeksy geolokalizacyjne, takie jak <code>2dsphere</code>, są niezbędne do efektywnego wyszukiwania danych przestrzennych.</li>
+            <li>Można używać zapytań takich jak <code>$near</code> i <code>$geoWithin</code> do wyszukiwania najbliższych punktów lub danych w określonym obszarze.</li>
+        </ul>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/prism.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/components/prism-javascript.min.js"></script>
+</body>
+</html>

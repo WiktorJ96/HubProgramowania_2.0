@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sharding w MongoDB</title>
+    <link rel="stylesheet" href="../styles.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/themes/prism-tomorrow.min.css" rel="stylesheet" />
+</head>
+<body>
+    <div class="container">
+        <h1>Sharding w MongoDB</h1>
+        <p>Sharding to proces podziału bazy danych na mniejsze fragmenty (shardy) w celu skalowania horyzontalnego. Umożliwia rozłożenie danych na wiele serwerów, co zwiększa wydajność i pojemność przechowywania danych.</p>
+
+        <h2>Dlaczego Sharding?</h2>
+        <p>Sharding jest stosowany, gdy pojedynczy serwer nie jest w stanie obsłużyć rosnącej ilości danych ani zwiększającej się liczby zapytań. Podział bazy danych na fragmenty pozwala na:</p>
+        <ul>
+            <li>Rozłożenie obciążenia na wiele maszyn.</li>
+            <li>Zwiększenie wydajności zapytań.</li>
+            <li>Skalowanie pojemności bazy danych.</li>
+        </ul>
+
+        <h2>Podstawowe Pojęcia Shardingu</h2>
+        <ul>
+            <li><strong>Shard:</strong> Pojedyncza jednostka przechowująca fragment danych.</li>
+            <li><strong>Config Server:</strong> Serwer zarządzający metadanymi shardingu i utrzymujący informacje o rozkładzie danych.</li>
+            <li><strong>Mongos:</strong> Router, który obsługuje zapytania od aplikacji i kieruje je do odpowiednich shardów.</li>
+        </ul>
+
+        <h2>Konfiguracja Shardingu</h2>
+        <p>Aby skonfigurować sharding, wykonaj poniższe kroki:</p>
+        <ol>
+            <li><strong>Uruchom serwery config:</strong> Config serwery są niezbędne do zarządzania informacjami o shardach.</li>
+            <pre><code class="language-bash">
+mongod --configsvr --replSet configReplSet --port 27019 --dbpath /data/configdb
+            </code></pre>
+            <li><strong>Uruchom shardy:</strong> Każdy shard jest instancją <code>mongod</code> z uruchomioną replikacją.</li>
+            <pre><code class="language-bash">
+mongod --shardsvr --replSet shardReplSet1 --port 27018 --dbpath /data/shard1
+            </code></pre>
+            <li><strong>Uruchom <code>mongos</code>:</strong> Router, który kieruje zapytania do odpowiednich shardów.</li>
+            <pre><code class="language-bash">
+mongos --configdb configReplSet/localhost:27019 --port 27017
+            </code></pre>
+        </ol>
+
+        <h2>Włączanie Shardingu na Kolekcji</h2>
+        <p>Po skonfigurowaniu shardingu możesz włączyć sharding dla określonej bazy danych i kolekcji:</p>
+        <pre><code class="language-javascript">
+// Włączenie shardingu na bazie danych
+sh.enableSharding(\"mojaBazaDanych\");
+
+// Tworzenie klucza shardingu i włączenie shardingu na kolekcji
+sh.shardCollection(\"mojaBazaDanych.mojaKolekcja\", { poleKluczowe: 1 });
+        </code></pre>
+
+        <h2>Podsumowanie</h2>
+        <ul>
+            <li>Sharding umożliwia skalowanie horyzontalne przez podział danych na wiele shardów.</li>
+            <li>Podstawowe komponenty shardingu to shardy, serwery config oraz router <code>mongos</code>.</li>
+            <li>Konfiguracja shardingu obejmuje uruchomienie serwerów config, shardów i routera.</li>
+        </ul>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/prism.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/components/prism-javascript.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/components/prism-bash.min.js"></script>
+</body>
+</html>

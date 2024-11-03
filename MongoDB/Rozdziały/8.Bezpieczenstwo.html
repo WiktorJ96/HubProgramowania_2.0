@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bezpieczeństwo w MongoDB</title>
+    <link rel="stylesheet" href="../styles.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/themes/prism-tomorrow.min.css" rel="stylesheet" />
+</head>
+    <style>
+        /* Styl dla modala */
+        .modal {
+            display: none; /* Ukryty domyślnie */
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 50%;
+            max-height: 80%; /* Umożliwia przewijanie w pionie */
+            overflow-y: auto; /* Dodaje przewijanie */
+            background-color: #2e2e31;
+            padding: 20px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+            border-radius: 8px;
+            z-index: 1000;
+        }
+
+        /* Tło pod modala */
+        .modal-overlay {
+            display: none; /* Ukryte domyślnie */
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5);
+            z-index: 999;
+        }
+
+        /* Ukrywanie przewijania dla body, gdy modal jest aktywny */
+        body.modal-active {
+            overflow: hidden;
+        }
+    </style>
+<body>
+    <div class="container">
+        <h1>Bezpieczeństwo w MongoDB</h1>
+        <p>Bezpieczeństwo danych w MongoDB jest kluczowe dla zapewnienia integralności i ochrony przed nieautoryzowanym dostępem. Obejmuje uwierzytelnianie, autoryzację, szyfrowanie oraz zarządzanie rolami użytkowników.</p>
+
+        <h2>Uwierzytelnianie</h2>
+        <p>Uwierzytelnianie to proces weryfikacji tożsamości użytkownika. MongoDB obsługuje różne metody uwierzytelniania, takie jak:</p>
+        <ul>
+            <li><strong>Uwierzytelnianie lokalne:</strong> Używanie wewnętrznych mechanizmów MongoDB do weryfikacji użytkowników.</li>
+            <li><strong>LDAP:</strong> Integracja z zewnętrznymi usługami katalogowymi, takimi jak LDAP.</li>
+            <li><strong>Kerberos:</strong> Uwierzytelnianie w środowiskach korporacyjnych.</li>
+        </ul>
+        <pre><code class="language-bash">
+# Uruchomienie MongoDB z włączonym uwierzytelnianiem
+mongod --auth --port 27017 --dbpath /data/db
+        </code></pre>
+
+        <h2>Autoryzacja</h2>
+        <p>Autoryzacja definiuje, jakie operacje użytkownik może wykonywać po uwierzytelnieniu. MongoDB wykorzystuje role, które przypisują uprawnienia do wykonywania konkretnych czynności, takich jak odczyt lub zapis danych.</p>
+        <pre><code class="language-javascript">
+// Tworzenie użytkownika z rolami
+db.createUser({
+    user: \"adminUser\",
+    pwd: \"bezpieczneHaslo123\",
+    roles: [ { role: \"readWrite\", db: \"mojaBaza\" } ]
+});
+        </code></pre>
+
+        <h2>Szyfrowanie Danych</h2>
+        <p>MongoDB wspiera szyfrowanie danych zarówno podczas przesyłania (TLS/SSL), jak i w stanie spoczynku (szyfrowanie danych na dysku). Użycie szyfrowania pomaga chronić dane przed nieautoryzowanym dostępem.</p>
+        <ul>
+            <li><strong>Szyfrowanie podczas przesyłania:</strong> Używanie TLS/SSL, aby zabezpieczyć dane przesyłane między klientem a serwerem.</li>
+            <li><strong>Szyfrowanie w stanie spoczynku:</strong> Funkcja dostępna w MongoDB Enterprise, umożliwiająca szyfrowanie danych zapisanych na dysku.</li>
+        </ul>
+        <pre><code class="language-bash">
+# Przykład uruchomienia MongoDB z TLS/SSL
+mongod --tlsMode requireTLS --tlsCertificateKeyFile /path/to/cert.pem --tlsCAFile /path/to/ca.pem
+        </code></pre>
+
+        <h2>Role Użytkowników</h2>
+        <p>Role w MongoDB to zestawy uprawnień przypisanych użytkownikom, które kontrolują dostęp do bazy danych. Przykładowe role to:</p>
+        <ul>
+            <li><strong>read:</strong> Uprawnienia do odczytu danych z określonej bazy.</li>
+            <li><strong>readWrite:</strong> Uprawnienia do odczytu i zapisu danych.</li>
+            <li><strong>dbAdmin:</strong> Uprawnienia do zarządzania bazą danych, np. tworzenie indeksów.</li>
+            <li><strong>userAdmin:</strong> Uprawnienia do zarządzania użytkownikami i ich rolami.</li>
+        </ul>
+
+        <h2>Podsumowanie</h2>
+        <ul>
+            <li>Bezpieczeństwo w MongoDB obejmuje uwierzytelnianie, autoryzację, szyfrowanie danych i role użytkowników.</li>
+            <li>Uwierzytelnianie weryfikuje tożsamość użytkowników, a autoryzacja kontroluje ich uprawnienia.</li>
+            <li>Szyfrowanie zabezpiecza dane podczas przesyłania i w stanie spoczynku.</li>
+            <li>Role użytkowników pozwalają na precyzyjne zarządzanie dostępem do zasobów.</li>
+        </ul>
+    <button id="openModalBtn">Pojęcia</button>
+    </div>
+<!-- Tło pod modala -->
+    <div id="modalOverlay" class="modal-overlay"></div>
+
+    <!-- Modal -->
+    <div id="modal" class="modal">
+
+        <h2>LDAP</h2>
+    <p>System, który działa jak książka kontaktowa w firmie - przechowuje informacje o wszystkich użytkownikach w jednym miejscu. Dzięki temu pracownicy mogą używać tego samego loginu i hasła do różnych systemów w firmie, zamiast pamiętać osobne hasła do każdego z nich.</p>
+
+    <h2>Kerberos</h2>
+    <p>System bezpieczeństwa działający jak portier w budynku firmowym - sprawdza tożsamość użytkownika raz, a następnie wydaje mu specjalny "bilet" (token), który pozwala na dostęp do różnych zasobów bez potrzeby ponownego wpisywania hasła.</p>
+
+    <h2>TLS/SSL</h2>
+    <p>Zabezpieczenie działające jak koperta na listy - gdy dane są przesyłane między użytkownikiem a bazą danych, są one "zapieczętowane" w sposób, który uniemożliwia osobom niepowołanym podejrzenie ich zawartości podczas przesyłania.</p>
+
+        <button id="closeModalBtn">Zamknij</button>
+    </div>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/prism.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/components/prism-javascript.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/components/prism-bash.min.js"></script>
+     <script>
+        // Pobieranie elementów
+        const openModalBtn = document.getElementById('openModalBtn');
+        const closeModalBtn = document.getElementById('closeModalBtn');
+        const modal = document.getElementById('modal');
+        const modalOverlay = document.getElementById('modalOverlay');
+
+        // Funkcja otwierająca modal
+        openModalBtn.addEventListener('click', () => {
+            modal.style.display = 'block';
+            modalOverlay.style.display = 'block';
+            document.body.classList.add('modal-active'); // Zablokowanie przewijania body
+        });
+
+        // Funkcja zamykająca modal
+        closeModalBtn.addEventListener('click', () => {
+            modal.style.display = 'none';
+            modalOverlay.style.display = 'none';
+            document.body.classList.remove('modal-active'); // Odblokowanie przewijania body
+        });
+
+        // Zamknięcie modala po kliknięciu w overlay
+        modalOverlay.addEventListener('click', () => {
+            modal.style.display = 'none';
+            modalOverlay.style.display = 'none';
+            document.body.classList.remove('modal-active'); // Odblokowanie przewijania body
+        });
+    </script>
+</body>
+</html>

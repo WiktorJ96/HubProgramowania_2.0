@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Narzędzia Administracyjne w MongoDB</title>
+    <link rel="stylesheet" href="../styles.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/themes/prism-tomorrow.min.css" rel="stylesheet" />
+</head>
+<body>
+    <div class="container">
+        <h1>Narzędzia Administracyjne w MongoDB</h1>
+        <p>MongoDB oferuje różne narzędzia administracyjne, które ułatwiają zarządzanie bazą danych, monitorowanie jej wydajności oraz przeprowadzanie operacji administracyjnych. Oto najpopularniejsze narzędzia:</p>
+
+        <h2>MongoDB Compass</h2>
+        <p>MongoDB Compass to graficzny interfejs użytkownika, który umożliwia eksplorację i analizę danych w bazie MongoDB. Dzięki niemu można:</p>
+        <ul>
+            <li>Przeglądać i edytować dokumenty w kolekcjach.</li>
+            <li>Tworzyć zapytania oraz analizować ich wydajność.</li>
+            <li>Tworzyć indeksy i optymalizować strukturę danych.</li>
+        </ul>
+        <p><strong>Zalety:</strong> Intuicyjny interfejs, wizualizacja danych, narzędzia do tworzenia zapytań.</p>
+
+        <h2>mongosh</h2>
+        <p><code>mongosh</code> to nowoczesna powłoka wiersza poleceń dla MongoDB, zastępująca starą powłokę <code>mongo</code>. Umożliwia wykonywanie poleceń administracyjnych, zapytań oraz operacji na danych.</p>
+        <pre><code class="language-bash">
+# Uruchamianie mongosh
+mongosh
+        </code></pre>
+        <p>Przykładowe polecenia:</p>
+        <pre><code class="language-javascript">
+// Sprawdzenie bazy danych
+show dbs;
+
+// Przełączenie na konkretną bazę
+use mojaBaza;
+
+// Tworzenie użytkownika
+db.createUser({
+    user: \"adminUser\",
+    pwd: \"bezpieczneHaslo123\",
+    roles: [ { role: \"readWrite\", db: \"mojaBaza\" } ]
+});
+        </code></pre>
+
+        <h2>Narzędzia Monitoringu</h2>
+        <p>Monitorowanie bazy danych pomaga zapewnić jej wydajność i stabilność. Do monitorowania MongoDB można używać:</p>
+        <ul>
+            <li><strong>mongostat:</strong> Narzędzie wiersza poleceń, które pokazuje statystyki w czasie rzeczywistym, takie jak liczba operacji odczytu, zapisu czy opóźnienia.</li>
+            <pre><code class="language-bash">
+# Uruchamianie mongostat
+mongostat --host localhost
+            </code></pre>
+            <li><strong>mongotop:</strong> Narzędzie do śledzenia czasu spędzonego na odczycie i zapisie danych w kolekcjach.</li>
+            <pre><code class="language-bash">
+# Uruchamianie mongotop
+mongotop 1
+            </code></pre>
+            <li><strong>MongoDB Atlas:</strong> Kompleksowe narzędzie monitorujące dostępne w chmurze, oferujące zaawansowane funkcje monitorowania, alerty oraz wizualizacje metryk.</li>
+        </ul>
+
+        <h2>Inne Narzędzia</h2>
+        <ul>
+            <li><strong>Profiler:</strong> Narzędzie do analizy wydajności zapytań i operacji w MongoDB, które można uruchomić za pomocą <code>db.setProfilingLevel()</code>.</li>
+            <li><strong>Prometheus i Grafana:</strong> Zewnętrzne narzędzia do monitorowania i wizualizacji danych, które można zintegrować z MongoDB w celu śledzenia wydajności.</li>
+        </ul>
+
+        <h2>Podsumowanie</h2>
+        <ul>
+            <li>MongoDB Compass ułatwia administrację dzięki graficznemu interfejsowi.</li>
+            <li><code>mongosh</code> jest nowoczesnym narzędziem do wykonywania operacji z wiersza poleceń.</li>
+            <li>Narzędzia monitoringu, takie jak <code>mongostat</code> i <code>mongotop</code>, pomagają analizować wydajność bazy danych.</li>
+            <li>MongoDB Atlas oferuje kompleksowe funkcje monitorowania i zarządzania w chmurze.</li>
+        </ul>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/prism.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/components/prism-javascript.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/components/prism-bash.min.js"></script>
+</body>
+</html>

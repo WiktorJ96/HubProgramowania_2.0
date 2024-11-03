@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Operacje CRUD w MongoDB</title>
+    <link rel="stylesheet" href="../styles.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/themes/prism-tomorrow.min.css" rel="stylesheet" />
+</head>
+<body>
+    <div class="container">
+        <h1>Operacje CRUD w MongoDB</h1>
+        <p>Operacje CRUD (ang. Create, Read, Update, Delete) to podstawowe operacje wykonywane na dokumentach w bazie danych MongoDB.</p>
+
+        <h2>Tworzenie Dokumentu (Create)</h2>
+        <p>Aby dodać dokument do kolekcji, używa się metody <code>insertOne</code> lub <code>insertMany</code>:</p>
+        <pre><code class="language-javascript">
+// Dodanie pojedynczego dokumentu
+db.kolekcja.insertOne({ imie: \"Jan\", wiek: 30 });
+
+// Dodanie wielu dokumentów
+db.kolekcja.insertMany([
+    { imie: \"Anna\", wiek: 25 },
+    { imie: \"Piotr\", wiek: 35 }
+]);
+        </code></pre>
+
+        <h2>Odczytywanie Dokumentów (Read)</h2>
+        <p>Do odczytu dokumentów służy metoda <code>find</code>. Można użyć filtrów, aby zwrócić określone dokumenty:</p>
+        <pre><code class="language-javascript">
+// Odczytanie wszystkich dokumentów
+db.kolekcja.find();
+
+// Odczytanie dokumentów z filtrem
+db.kolekcja.find({ wiek: { $gt: 25 } });
+        </code></pre>
+
+        <h2>Aktualizacja Dokumentów (Update)</h2>
+        <p>Aktualizowanie dokumentów można wykonać za pomocą metod <code>updateOne</code> lub <code>updateMany</code>:</p>
+        <pre><code class="language-javascript">
+// Aktualizacja pojedynczego dokumentu
+db.kolekcja.updateOne(
+    { imie: \"Jan\" },
+    { $set: { wiek: 31 } }
+);
+
+// Aktualizacja wielu dokumentów
+db.kolekcja.updateMany(
+    { wiek: { $lt: 30 } },
+    { $set: { status: \"mlody\" } }
+);
+        </code></pre>
+
+        <h2>Usuwanie Dokumentów (Delete)</h2>
+        <p>Usuwanie dokumentów odbywa się za pomocą metod <code>deleteOne</code> lub <code>deleteMany</code>:</p>
+        <pre><code class="language-javascript">
+// Usunięcie jednego dokumentu
+db.kolekcja.deleteOne({ imie: \"Piotr\" });
+
+// Usunięcie wielu dokumentów
+db.kolekcja.deleteMany({ status: \"mlody\" });
+        </code></pre>
+
+        <h2>Podsumowanie</h2>
+        <ul>
+            <li><strong>Tworzenie:</strong> <code>insertOne</code>, <code>insertMany</code></li>
+            <li><strong>Odczytywanie:</strong> <code>find</code> z opcjonalnymi filtrami</li>
+            <li><strong>Aktualizacja:</strong> <code>updateOne</code>, <code>updateMany</code> z operatorem <code>$set</code></li>
+            <li><strong>Usuwanie:</strong> <code>deleteOne</code>, <code>deleteMany</code></li>
+        </ul>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/prism.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/components/prism-javascript.min.js"></script>
+</body>
+</html>

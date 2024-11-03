@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Notatnik</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f4f4f4;
+        }
+        .notatnik-container {
+            width: 80%;
+            margin: 50px auto;
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+        textarea {
+            width: 100%;
+            height: 400px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            padding: 10px;
+            font-size: 16px;
+            box-sizing: border-box;
+            resize: vertical;
+        }
+        button {
+            display: block;
+            margin: 20px 0;
+            padding: 10px 20px;
+            font-size: 16px;
+            cursor: pointer;
+            background-color: #28a745;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            transition: background-color 0.3s;
+        }
+        button:hover {
+            background-color: #218838;
+        }
+    </style>
+</head>
+<body>
+    <div class="notatnik-container">
+        <h1>Notatnik</h1>
+        <textarea id="noteText" placeholder="Wpisz tutaj swoje notatki..."></textarea>
+        <button id="save">Zapisz</button>
+
+        <div id="notesContainer"></div>
+    </div>
+    <script>
+const save = document.querySelector('#save');
+const notesContainer = document.querySelector('#notesContainer');
+
+// Dodanie nasłuchiwania na kliknięcie przycisku
+save.addEventListener('click', () => {
+    const noteText = document.querySelector('#noteText').value.trim(); // Odczyt wartości tekstu po kliknięciu
+
+    if (noteText) { // Sprawdzenie, czy pole nie jest puste
+        fetch('http://localhost:3000/notes', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json' // Określenie typu danych
+            },
+            body: JSON.stringify({ data: noteText }) // Przesyłanie danych w formacie JSON
+        })
+        .then(response => response.json()) // Przetwarzanie odpowiedzi z serwera na JSON
+        .then(data => {
+            notesContainer.innerHTML = `${data.message}`; // Wyświetlenie odpowiedzi serwera
+        })
+        .catch(error => {
+            console.error('Błąd podczas zapisywania notatki:', error); // Logowanie błędów do konsoli
+            notesContainer.innerHTML = 'Wystąpił błąd podczas zapisywania notatki.'; // Wyświetlenie komunikatu o błędzie
+        });
+    } else {
+        notesContainer.innerHTML = 'Proszę wpisać notatkę przed zapisem.'; // Komunikat, jeśli pole jest puste
+    }
+});
+
+// Połączanie się z serwerem i pobieranie notatek
+fetch('http://localhost:3000/notes')
+  .then(response => response.json())
+  .then(data => {
+    data.notes.forEach(note => {
+      notesContainer.innerHTML += `<p>${note.data}</p>`; // Wyświetlenie wszystkich notatek
+    });
+  })
+  .catch(error => {
+    console.error('Błąd podczas pobierania notatek:', error);
+  });
+
+
+    </script>
+</body>
+</html>

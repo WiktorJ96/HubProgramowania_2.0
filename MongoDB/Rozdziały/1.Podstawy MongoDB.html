@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Podstawy MongoDB</title>
+    <link rel="stylesheet" href="../styles.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/themes/prism-tomorrow.min.css" rel="stylesheet" />
+</head>
+<body>
+    <div class="container">
+        <h1>Podstawy MongoDB</h1>
+
+        <p>MongoDB to nierelacyjna baza danych NoSQL, która przechowuje dane w formacie dokumentów BSON (Binary JSON). Jest znana ze swojej elastyczności i skalowalności, co czyni ją popularnym wyborem dla wielu aplikacji internetowych.</p>
+
+        <h2>Instalacja MongoDB</h2>
+        <p>Aby zainstalować MongoDB, postępuj zgodnie z poniższymi krokami:</p>
+        <ol>
+            <li>Odwiedź <a href="https://www.mongodb.com/try/download/community" target="_blank">stronę pobierania MongoDB</a> i pobierz odpowiednią wersję dla swojego systemu operacyjnego.</li>
+            <li>Zainstaluj pobrany pakiet, postępując zgodnie z instrukcjami instalatora.</li>
+        </ol>
+
+        <h2>Uruchamianie serwera MongoDB</h2>
+        <p>Aby uruchomić serwer MongoDB, wykonaj następujące kroki:</p>
+        <pre><code class="language-bash">
+# W systemie Windows
+"C:\Program Files\MongoDB\Server\5.0\bin\mongod.exe" --dbpath "C:\data\db"
+
+# W systemie macOS/Linux (po zainstalowaniu z Homebrew)
+mongod --dbpath /usr/local/var/mongodb
+        </code></pre>
+        <p><code>--dbpath</code> wskazuje lokalizację, w której MongoDB przechowuje dane. Upewnij się, że ten folder istnieje przed uruchomieniem serwera.</p>
+
+        <h2>Użycie Mongo Shell</h2>
+        <p>Mongo Shell to interaktywne środowisko wiersza poleceń umożliwiające pracę z bazą danych MongoDB.</p>
+        <pre><code class="language-bash">
+# Uruchamianie Mongo Shell
+mongo
+        </code></pre>
+        <p>Po uruchomieniu polecenia <code>mongo</code>, możesz wykonywać zapytania i operacje na bazie danych. Oto kilka podstawowych komend:</p>
+        <pre><code class="language-javascript">
+// Sprawdzenie dostępnych baz danych
+db.adminCommand('listDatabases');
+
+// Przełączenie na określoną bazę danych
+use myDatabase;
+
+// Dodanie dokumentu do kolekcji
+db.myCollection.insert({ name: "Jan", age: 30 });
+
+// Wyświetlenie wszystkich dokumentów z kolekcji
+db.myCollection.find();
+        </code></pre>
+        <p>Komendy w Mongo Shell przypominają JavaScript, co czyni je intuicyjnymi dla programistów front-end i back-end.</p>
+
+        <h2>Podsumowanie</h2>
+        <ul>
+            <li>MongoDB to baza danych NoSQL, przechowująca dane w formacie dokumentów BSON.</li>
+            <li>Aby uruchomić serwer MongoDB, użyj polecenia <code>mongod</code> i podaj <code>--dbpath</code>.</li>
+            <li>Mongo Shell pozwala na interaktywne zarządzanie bazą danych i wykonywanie operacji CRUD.</li>
+        </ul>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/prism.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/components/prism-javascript.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/components/prism-bash.min.js"></script>
+</body>
+</html>

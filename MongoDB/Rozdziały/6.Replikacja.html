@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Replikacja w MongoDB</title>
+    <link rel="stylesheet" href="../styles.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/themes/prism-tomorrow.min.css" rel="stylesheet" />
+</head>
+    <style>
+        /* Styl dla modala */
+        .modal {
+            display: none; /* Ukryty domyślnie */
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 50%;
+            max-height: 80%; /* Umożliwia przewijanie w pionie */
+            overflow-y: auto; /* Dodaje przewijanie */
+            background-color: #2e2e31;
+            padding: 20px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+            border-radius: 8px;
+            z-index: 1000;
+        }
+
+        /* Tło pod modala */
+        .modal-overlay {
+            display: none; /* Ukryte domyślnie */
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5);
+            z-index: 999;
+        }
+
+        /* Ukrywanie przewijania dla body, gdy modal jest aktywny */
+        body.modal-active {
+            overflow: hidden;
+        }
+    </style>
+<body>
+    <div class="container">
+        <h1>Replikacja w MongoDB</h1>
+        <p>Replikacja to proces utrzymywania wielu kopii danych na różnych serwerach w celu zwiększenia dostępności i niezawodności systemu. MongoDB używa replik setów (ang. replica sets), które zapewniają automatyczne przełączanie awaryjne i redundancję danych.</p>
+
+        <h2>Konfiguracja Replik Setów</h2>
+        <p>Replik set w MongoDB składa się z jednego podstawowego (ang. primary) i co najmniej jednego lub więcej replik drugorzędnych (ang. secondary). Aby skonfigurować repliki, wykonaj poniższe kroki:</p>
+        <pre><code class="language-bash">
+# Uruchomienie MongoDB jako członka replika setu
+mongod --replSet \"mójReplSet\" --port 27017 --dbpath /data/db1 --bind_ip localhost
+        </code></pre>
+
+        <p>Następnie, po uruchomieniu instancji, skonfiguruj replik set w Mongo Shell:</p>
+        <pre><code class="language-javascript">
+// Inicjalizacja replika setu
+rs.initiate({
+    _id: \"mójReplSet\",
+    members: [
+        { _id: 0, host: \"localhost:27017\" },
+        { _id: 1, host: \"localhost:27018\" },
+        { _id: 2, host: \"localhost:27019\" }
+    ]
+});
+        </code></pre>
+
+        <h2>Zarządzanie Replikacją Danych</h2>
+        <p>Podstawowe operacje związane z zarządzaniem replikacją danych obejmują:</p>
+        <ul>
+            <li><strong>Monitorowanie stanu replik setu:</strong> Użyj <code>rs.status()</code>, aby sprawdzić aktualny stan repliki.</li>
+            <li><strong>Dodawanie nowych członków:</strong> Nowe instancje można dodać za pomocą <code>rs.add()</code>. Przykład:</li>
+        </ul>
+        <pre><code class="language-javascript">
+rs.add(\"localhost:27020\");
+        </code></pre>
+        <ul>
+            <li><strong>Usuwanie członków:</strong> Użyj <code>rs.remove()</code>, aby usunąć członka z replik setu. Przykład:</li>
+        </ul>
+        <pre><code class="language-javascript">
+rs.remove(\"localhost:27020\");
+        </code></pre>
+
+        <h2>Automatyczne Przełączanie Awaryjne</h2>
+        <p>W przypadku awarii instancji podstawowej jeden z członków drugorzędnych automatycznie przejmuje rolę podstawową, zapewniając ciągłość działania systemu. Replik set obsługuje to za pomocą algorytmu wyboru lidera.</p>
+
+        <h2>Podsumowanie</h2>
+        <ul>
+            <li>Replikacja w MongoDB zapewnia wysoką dostępność danych poprzez replik sety.</li>
+            <li>Replik sety umożliwiają automatyczne przełączanie awaryjne i redundancję danych.</li>
+            <li>Można zarządzać replikacją za pomocą komend <code>rs.initiate()</code>, <code>rs.add()</code>, <code>rs.status()</code>, i <code>rs.remove()</code>.</li>
+        </ul>
+    <!-- Przycisk otwierający modal -->
+    <button id="openModalBtn">Pojęcia</button>
+    </div>
+    <!-- Tło pod modala -->
+    <div id="modalOverlay" class="modal-overlay"></div>
+
+    <!-- Modal -->
+    <div id="modal" class="modal">
+        <p><h2>Replikacja</h2>
+    <p>Proces utrzymywania wielu kopii danych na różnych serwerach w celu zwiększenia dostępności i niezawodności systemu. MongoDB używa replik setów, które zapewniają automatyczne przełączanie awaryjne i redundancję danych.</p>
+
+    <h2>Replica Set (Zestaw replik)</h2>
+    <p>Grupa serwerów MongoDB składająca się z jednego podstawowego (primary) i co najmniej jednego lub więcej replik drugorzędnych (secondary), która utrzymuje ten sam zestaw danych.</p>
+
+    <h2>Primary Node (Węzeł podstawowy)</h2>
+    <p>Główny węzeł w replica set, który jako jedyny przyjmuje operacje zapisu i domyślnie obsługuje wszystkie operacje odczytu.</p>
+
+    <h2>Secondary Node (Węzeł drugorzędny)</h2>
+    <p>Węzeł w replica set, który utrzymuje kopię danych z węzła podstawowego. Może obsługiwać operacje odczytu, ale nie może przyjmować operacji zapisu.</p>
+
+    <h2>Failover (Przełączanie awaryjne)</h2>
+    <p>Automatyczny proces, w którym w przypadku awarii węzła podstawowego jeden z węzłów drugorzędnych przejmuje rolę podstawowego, zapewniając ciągłość działania systemu.</p></p>
+        <button id="closeModalBtn">Zamknij</button>
+    </div>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/prism.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/components/prism-javascript.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/components/prism-bash.min.js"></script>
+    <script>
+        // Pobieranie elementów
+        const openModalBtn = document.getElementById('openModalBtn');
+        const closeModalBtn = document.getElementById('closeModalBtn');
+        const modal = document.getElementById('modal');
+        const modalOverlay = document.getElementById('modalOverlay');
+
+        // Funkcja otwierająca modal
+        openModalBtn.addEventListener('click', () => {
+            modal.style.display = 'block';
+            modalOverlay.style.display = 'block';
+            document.body.classList.add('modal-active'); // Zablokowanie przewijania body
+        });
+
+        // Funkcja zamykająca modal
+        closeModalBtn.addEventListener('click', () => {
+            modal.style.display = 'none';
+            modalOverlay.style.display = 'none';
+            document.body.classList.remove('modal-active'); // Odblokowanie przewijania body
+        });
+
+        // Zamknięcie modala po kliknięciu w overlay
+        modalOverlay.addEventListener('click', () => {
+            modal.style.display = 'none';
+            modalOverlay.style.display = 'none';
+            document.body.classList.remove('modal-active'); // Odblokowanie przewijania body
+        });
+    </script>
+</body>
+</html>

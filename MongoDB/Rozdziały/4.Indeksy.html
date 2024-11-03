@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Indeksy w MongoDB</title>
+    <link rel="stylesheet" href="../styles.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/themes/prism-tomorrow.min.css" rel="stylesheet" />
+</head>
+<body>
+    <div class="container">
+        <h1>Indeksy w MongoDB</h1>
+        <p>Indeksy w MongoDB są używane do przyspieszania operacji wyszukiwania. Umożliwiają szybki dostęp do danych bez konieczności przeszukiwania wszystkich dokumentów w kolekcji.</p>
+
+        <h2>Tworzenie Indeksów</h2>
+        <p>Aby utworzyć indeks, można użyć metody <code>createIndex</code>:</p>
+        <pre><code class="language-javascript">
+// Tworzenie indeksu jednopolowego na polu \"nazwa\"
+db.kolekcja.createIndex({ nazwa: 1 });
+
+// Tworzenie indeksu malejącego
+db.kolekcja.createIndex({ nazwa: -1 });
+        </code></pre>
+
+        <h2>Indeksy Jednopolowe</h2>
+        <p>Indeks jednopolowy to indeks utworzony na jednym polu w dokumencie. Jest przydatny, gdy często wykonujemy zapytania na jednym polu:</p>
+        <pre><code class="language-javascript">
+// Przykład indeksu na polu \"wiek\"
+db.kolekcja.createIndex({ wiek: 1 });
+        </code></pre>
+
+        <h2>Indeksy Wielopolowe</h2>
+        <p>Indeksy wielopolowe (kompozytowe) obejmują więcej niż jedno pole. Są użyteczne, gdy zapytania filtrują dane na podstawie wielu pól:</p>
+        <pre><code class="language-javascript">
+// Tworzenie indeksu wielopolowego na polach \"imie\" i \"wiek\"
+db.kolekcja.createIndex({ imie: 1, wiek: -1 });
+        </code></pre>
+        <p>W przypadku indeksów wielopolowych kolejność pól ma znaczenie. Zapytania korzystające z indeksu powinny odzwierciedlać tę kolejność.</p>
+
+        <h2>Zarządzanie Indeksami</h2>
+        <p>Aby zobaczyć istniejące indeksy w kolekcji, używamy metody <code>getIndexes</code>:</p>
+        <pre><code class="language-javascript">
+// Wyświetlanie wszystkich indeksów w kolekcji
+db.kolekcja.getIndexes();
+        </code></pre>
+
+        <p>Aby usunąć indeks, używamy metody <code>dropIndex</code>:</p>
+        <pre><code class="language-javascript">
+// Usuwanie indeksu na polu \"nazwa\"
+db.kolekcja.dropIndex(\"nazwa_1\");
+        </code></pre>
+
+        <h2>Podsumowanie</h2>
+        <ul>
+            <li>Indeksy przyspieszają wyszukiwanie danych w kolekcjach.</li>
+            <li>Można tworzyć indeksy jednopolowe i wielopolowe.</li>
+            <li>Metody <code>createIndex</code>, <code>getIndexes</code> i <code>dropIndex</code> służą do zarządzania indeksami.</li>
+        </ul>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/prism.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/components/prism-javascript.min.js"></script>
+</body>
+</html>

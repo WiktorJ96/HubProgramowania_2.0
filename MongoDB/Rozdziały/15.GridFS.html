@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GridFS w MongoDB</title>
+    <link rel="stylesheet" href="../styles.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/themes/prism-tomorrow.min.css" rel="stylesheet" />
+</head>
+<body>
+    <div class="container">
+        <h1>GridFS w MongoDB</h1>
+        <p>GridFS to specyficzna funkcjonalność MongoDB, która umożliwia przechowywanie i pobieranie dużych plików, takich jak obrazy, filmy i inne pliki, które przekraczają limit 16 MB pojedynczego dokumentu BSON.</p>
+
+        <h2>Jak Działa GridFS?</h2>
+        <p>GridFS dzieli plik na mniejsze fragmenty (domyślnie 255 kB każdy) i przechowuje je w dwóch kolekcjach:</p>
+        <ul>
+            <li><strong>fs.files:</strong> Kolekcja zawierająca metadane o pliku, takie jak jego nazwa i rozmiar.</li>
+            <li><strong>fs.chunks:</strong> Kolekcja zawierająca rzeczywiste fragmenty pliku.</li>
+        </ul>
+
+        <h2>Przechowywanie Plików za Pomocą GridFS</h2>
+        <p>Aby przechowywać pliki w MongoDB za pomocą GridFS, można użyć różnych języków programowania i bibliotek. Poniżej znajduje się przykład w Node.js z wykorzystaniem biblioteki <code>mongodb</code>:</p>
+        <pre><code class="language-javascript">
+// Instalacja pakietu MongoDB
+npm install mongodb
+
+const { MongoClient, GridFSBucket } = require('mongodb');
+const fs = require('fs');
+
+async function uploadFile() {
+    const client = new MongoClient('mongodb://localhost:27017');
+    await client.connect();
+    const db = client.db('mojabaza');
+    const bucket = new GridFSBucket(db);
+
+    fs.createReadStream('./plik.txt')
+        .pipe(bucket.openUploadStream('plik.txt'))
+        .on('finish', () => {
+            console.log('Plik został zapisany w GridFS');
+            client.close();
+        });
+}
+
+uploadFile();
+        </code></pre>
+
+        <h2>Pobieranie Plików z GridFS</h2>
+        <p>Oto przykład pobierania pliku z GridFS w Node.js:</p>
+        <pre><code class="language-javascript">
+async function downloadFile() {
+    const client = new MongoClient('mongodb://localhost:27017');
+    await client.connect();
+    const db = client.db('mojabaza');
+    const bucket = new GridFSBucket(db);
+
+    bucket.openDownloadStreamByName('plik.txt')
+        .pipe(fs.createWriteStream('./pobrany_plik.txt'))
+        .on('finish', () => {
+            console.log('Plik został pobrany z GridFS');
+            client.close();
+        });
+}
+
+downloadFile();
+        </code></pre>
+
+        <h2>Przykład w Pythonie</h2>
+        <p>W Pythonie można użyć biblioteki <code>gridfs</code> z <code>pymongo</code>:</p>
+        <pre><code class="language-python">
+from pymongo import MongoClient
+import gridfs
+
+client = MongoClient('mongodb://localhost:27017/')
+db = client['mojabaza']
+fs = gridfs.GridFS(db)
+
+# Przechowywanie pliku
+with open('plik.txt', 'rb') as f:
+    fs.put(f, filename='plik.txt')
+
+# Pobieranie pliku
+with open('pobrany_plik.txt', 'wb') as f:
+    f.write(fs.get_last_version('plik.txt').read())
+
+print('Plik został zapisany i pobrany przy użyciu GridFS')
+        </code></pre>
+
+        <h2>Podsumowanie</h2>
+        <ul>
+            <li>GridFS pozwala na przechowywanie i pobieranie dużych plików poprzez dzielenie ich na mniejsze fragmenty.</li>
+            <li>Pliki są przechowywane w kolekcjach <code>fs.files</code> i <code>fs.chunks</code>.</li>
+            <li>Można używać GridFS z różnymi językami programowania, w tym Node.js i Pythonem.</li>
+        </ul>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/prism.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/components/prism-javascript.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/components/prism-python.min.js"></script>
+</body>
+</html>

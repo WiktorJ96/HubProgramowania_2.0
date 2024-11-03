@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Transakcje w MongoDB</title>
+    <link rel="stylesheet" href="../styles.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/themes/prism-tomorrow.min.css" rel="stylesheet" />
+</head>
+<body>
+    <div class="container">
+        <h1>Transakcje w MongoDB</h1>
+        <p>MongoDB obsługuje transakcje ACID (ang. Atomicity, Consistency, Isolation, Durability), które pozwalają na wykonywanie wielu operacji w sposób atomowy, zapewniając spójność danych i trwałość wyników.</p>
+
+        <h2>Co to są Transakcje ACID?</h2>
+        <p>Transakcje ACID to zbiór właściwości, które gwarantują niezawodność operacji na danych:</p>
+        <ul>
+            <li><strong>Atomicity (Atomiczność):</strong> Wszystkie operacje w transakcji są wykonywane w całości lub wcale.</li>
+            <li><strong>Consistency (Spójność):</strong> Transakcje przekształcają dane z jednego spójnego stanu do innego.</li>
+            <li><strong>Isolation (Izolacja):</strong> Operacje w jednej transakcji są izolowane od operacji w innych transakcjach.</li>
+            <li><strong>Durability (Trwałość):</strong> Wyniki zakończonej transakcji są trwałe, nawet w przypadku awarii systemu.</li>
+        </ul>
+
+        <h2>Użycie Transakcji w MongoDB</h2>
+        <p>Aby używać transakcji, MongoDB wymaga zastosowania replik setów lub MongoDB Sharded Cluster. Przykładowa transakcja w Node.js:</p>
+        <pre><code class="language-javascript">
+// Połączenie z MongoDB i rozpoczęcie sesji
+const { MongoClient } = require('mongodb');
+const uri = 'mongodb://localhost:27017';
+const client = new MongoClient(uri, { useUnifiedTopology: true });
+
+async function wykonajTransakcje() {
+    try {
+        await client.connect();
+        const session = client.startSession();
+
+        session.startTransaction();
+        const db = client.db('mojabaza');
+        const kolekcja = db.collection('uzytkownicy');
+
+        // Operacje w transakcji
+        await kolekcja.insertOne({ imie: 'Jan', wiek: 30 }, { session });
+        await kolekcja.updateOne({ imie: 'Jan' }, { $set: { wiek: 31 } }, { session });
+
+        // Zatwierdzenie transakcji
+        await session.commitTransaction();
+        console.log('Transakcja zakończona pomyślnie');
+    } catch (err) {
+        console.error('Błąd podczas transakcji:', err);
+        await session.abortTransaction(); // Wycofanie transakcji w przypadku błędu
+    } finally {
+        session.endSession();
+        await client.close();
+    }
+}
+
+wykonajTransakcje();
+        </code></pre>
+
+        <h2>Zarządzanie Sesjami Transakcyjnymi</h2>
+        <p>Sesje transakcyjne umożliwiają wykonywanie operacji w ramach jednej transakcji. Sesje muszą być jawnie rozpoczęte i zakończone.</p>
+        <ul>
+            <li><strong>startSession():</strong> Rozpoczyna sesję transakcyjną.</li>
+            <li><strong>startTransaction():</strong> Inicjuje transakcję w ramach aktywnej sesji.</li>
+            <li><strong>commitTransaction():</strong> Zatwierdza transakcję.</li>
+            <li><strong>abortTransaction():</strong> Wycofuje transakcję.</li>
+        </ul>
+
+        <h2>Przykład w Pythonie</h2>
+        <pre><code class="language-python">
+from pymongo import MongoClient
+
+client = MongoClient('mongodb://localhost:27017/')
+db = client['mojabaza']
+kolekcja = db['uzytkownicy']
+
+with client.start_session() as session:
+    with session.start_transaction():
+        kolekcja.insert_one({'imie': 'Anna', 'wiek': 25}, session=session)
+        kolekcja.update_one({'imie': 'Anna'}, {'$set': {'wiek': 26}}, session=session)
+        print('Transakcja zakończona pomyślnie')
+        # Jeśli wystąpi błąd, transakcja zostanie automatycznie wycofana
+        </code></pre>
+
+        <h2>Podsumowanie</h2>
+        <ul>
+            <li>Transakcje ACID zapewniają niezawodność i spójność operacji na danych w MongoDB.</li>
+            <li>Zarządzanie sesjami pozwala na wykonywanie operacji w ramach transakcji.</li>
+            <li>Przykłady pokazują, jak rozpocząć i zakończyć transakcję w Node.js i Pythonie.</li>
+        </ul>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/prism.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/components/prism-javascript.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/components/prism-python.min.js"></script>
+</body>
+</html>

@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Modelowanie Danych w MongoDB</title>
+    <link rel="stylesheet" href="../styles.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/themes/prism-tomorrow.min.css" rel="stylesheet" />
+</head>
+<body>
+    <div class="container">
+        <h1>Modelowanie Danych w MongoDB</h1>
+
+        <p>MongoDB to nierelacyjna baza danych NoSQL, która przechowuje dane w formacie dokumentów BSON (Binary JSON). Właściwe modelowanie danych jest kluczowe dla wydajności i skalowalności aplikacji.</p>
+
+        <h2>Tworzenie Kolekcji</h2>
+        <p>Kolekcje są grupami dokumentów przechowującymi dane o podobnej strukturze. Możesz utworzyć kolekcję automatycznie poprzez dodanie do niej dokumentu lub ręcznie:</p>
+        <pre><code class="language-javascript">
+// Tworzenie kolekcji
+db.createCollection("nazwaKolekcji");
+
+// Dodanie dokumentu, co automatycznie tworzy kolekcję
+db.nazwaKolekcji.insert({ imie: "Anna", wiek: 25 });
+        </code></pre>
+
+        <h2>Struktura Dokumentów</h2>
+        <p>Dokumenty to podstawowe jednostki danych w MongoDB, zapisane w formacie BSON. Przykładowy dokument:</p>
+        <pre><code class="language-javascript">
+{
+    "_id": ObjectId("507f1f77bcf86cd799439011"),
+    "imie": "Kamil",
+    "wiek": 28,
+    "adres": {
+        "ulica": "Kwiatowa 15",
+        "miasto": "Warszawa"
+    }
+}
+        </code></pre>
+
+        <h2>Zasady Modelowania Danych</h2>
+        <p>Podstawowe zasady modelowania danych obejmują:</p>
+        <ul>
+            <li><strong>Denormalizacja:</strong> Osadzanie danych w dokumentach dla szybszego dostępu kosztem większej redundancji.</li>
+            <li><strong>Normalizacja:</strong> Rozdzielanie danych na mniejsze dokumenty i stosowanie referencji dla zachowania integralności danych.</li>
+            <li><strong>Modelowanie relacji:</strong>
+                <ul>
+                    <li><strong>Osadzanie:</strong> Używane, gdy dane są ściśle powiązane i rzadko zmieniają się niezależnie.</li>
+                    <li><strong>Referencje:</strong> Wskazywanie na inny dokument za pomocą <code>_id</code> dla elastyczności.</li>
+                </ul>
+            </li>
+            <li><strong>Optymalizacja pod kątem zapytań:</strong> Projektowanie danych w taki sposób, aby minimalizować liczbę zapytań do bazy.</li>
+        </ul>
+
+        <h3>Przykład Modelu z Osadzaniem</h3>
+        <pre><code class="language-javascript">
+{
+    "_id": ObjectId("507f1f77bcf86cd799439012"),
+    "zamowienieID": 12345,
+    "klient": {
+        "imie": "Jan",
+        "nazwisko": "Kowalski"
+    },
+    "produkty": [
+        { "nazwa": "Laptop", "cena": 3000 },
+        { "nazwa": "Myszka", "cena": 100 }
+    ]
+}
+        </code></pre>
+
+        <h3>Przykład Modelu z Referencjami</h3>
+        <pre><code class="language-javascript">
+{
+    "_id": ObjectId("507f1f77bcf86cd799439013"),
+    "zamowienieID": 67890,
+    "klientID": ObjectId("507f1f77bcf86cd799439014"),
+    "produktyIDs": [
+        ObjectId("507f1f77bcf86cd799439015"),
+        ObjectId("507f1f77bcf86cd799439016")
+    ]
+}
+        </code></pre>
+
+        <h2>Podsumowanie</h2>
+        <ul>
+            <li>Modelowanie danych w MongoDB wymaga zrozumienia zasad osadzania i referencji.</li>
+            <li>Denormalizacja przyspiesza dostęp do danych kosztem ich duplikacji.</li>
+            <li>Referencje są elastyczne, ale wymagają dodatkowych zapytań do bazy.</li>
+        </ul>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/prism.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/components/prism-javascript.min.js"></script>
+</body>
+</html>
