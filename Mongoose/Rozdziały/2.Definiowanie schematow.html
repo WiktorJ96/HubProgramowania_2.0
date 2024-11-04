@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Definiowanie Schematów w Mongoose</title>
+    <link rel="stylesheet" href="../styles.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/themes/prism-tomorrow.min.css" rel="stylesheet" />
+</head>
+<body>
+    <div class="container">
+        <h1>Definiowanie Schematów w Mongoose</h1>
+
+        <p>Mongoose pozwala na tworzenie schematów, które definiują strukturę dokumentów przechowywanych w bazie danych MongoDB. Dzięki temu możemy z łatwością kontrolować i walidować dane przed zapisaniem ich do bazy.</p>
+
+        <h2>Tworzenie schematów</h2>
+        <p>Do stworzenia schematu w Mongoose używamy obiektu <code>mongoose.Schema</code>. Oto przykład prostego schematu:</p>
+
+        <pre><code class="language-javascript">
+const mongoose = require('mongoose');
+// Importowanie Mongoose
+
+// Definiowanie schematu użytkownika
+const userSchema = new mongoose.Schema({
+    name: {
+        type: String,
+        required: [true, 'Nazwa użytkownika jest wymagana'],
+        minlength: [3, 'Nazwa musi mieć co najmniej 3 znaki']
+    },
+    age: {
+        type: Number,
+        min: [0, 'Wiek nie może być ujemny'],
+        max: [120, 'Wiek nie może przekraczać 120 lat']
+    },
+    email: {
+        type: String,
+        required: [true, 'Adres e-mail jest wymagany'],
+        match: [/^\S+@\S+\.\S+$/, 'Adres e-mail jest nieprawidłowy']
+    },
+    createdAt: {
+        type: Date,
+        default: Date.now
+    }
+});
+// Tworzenie modelu na podstawie schematu
+const User = mongoose.model('User', userSchema);
+
+module.exports = User;
+        </code></pre>
+
+        <h2>Walidacja pól</h2>
+        <p>Walidacja w Mongoose pozwala na sprawdzanie poprawności danych przed ich zapisaniem do bazy. Możemy ustawić walidację dla każdego pola za pomocą opcji w schemacie, takich jak <code>required</code>, <code>min</code>, <code>max</code>, <code>match</code>, czy <code>enum</code>.</p>
+
+        <h3>Przykłady walidacji</h3>
+        <ul>
+            <li><strong>required:</strong> Wymaga obecności pola.</li>
+            <li><strong>min/max:</strong> Ogranicza minimalną i maksymalną wartość dla pola typu liczbowego.</li>
+            <li><strong>match:</strong> Sprawdza, czy pole pasuje do wyrażenia regularnego.</li>
+            <li><strong>enum:</strong> Ogranicza wartość pola do określonej listy wartości.</li>
+        </ul>
+
+        <h3>Dodanie użytkownika z walidacją</h3>
+        <p>Oto przykład dodania użytkownika z walidacją:</p>
+
+        <pre><code class="language-javascript">
+async function addUser() {
+    try {
+        const user = new User({ name: 'Anna', age: 25, email: 'anna@example.com' });
+        const result = await user.save();
+        console.log('Dodano użytkownika:', result);
+    } catch (error) {
+        console.error('Błąd podczas dodawania użytkownika:', error.message);
+    }
+}
+
+addUser();
+        </code></pre>
+
+        <h2>Obsługa błędów walidacji</h2>
+        <p>W przypadku błędów walidacji Mongoose zwraca szczegółowe informacje o błędach. Można je przechwycić i wyświetlić użytkownikowi:</p>
+
+        <pre><code class="language-javascript">
+User.create({ name: 'Jo', age: -5, email: 'zły-email' })
+    .then(user => console.log('Dodano użytkownika:', user))
+    .catch(err => {
+        if (err.name === 'ValidationError') {
+            for (field in err.errors) {
+                console.error('Błąd walidacji:', err.errors[field].message);
+            }
+        } else {
+            console.error('Inny błąd:', err);
+        }
+    });
+        </code></pre>
+
+        <h2>Praktyczne wskazówki</h2>
+        <ul>
+            <li>Stosuj szczegółowe komunikaty błędów, aby użytkownicy wiedzieli, co poprawić.</li>
+            <li>Rozważ użycie niestandardowych funkcji walidacji, jeśli potrzebujesz bardziej zaawansowanej logiki.</li>
+            <li>Pamiętaj o zabezpieczeniach, takich jak walidacja adresów e-mail czy ograniczenie wartości pól numerycznych.</li>
+        </ul>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/prism.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/components/prism-javascript.min.js"></script>
+</body>
+</html>

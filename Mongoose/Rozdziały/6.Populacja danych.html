@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Populacja Danych w Mongoose</title>
+    <link rel="stylesheet" href="../styles.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/themes/prism-tomorrow.min.css" rel="stylesheet" />
+</head>
+<body>
+    <div class="container">
+        <h1>Populacja Danych w Mongoose</h1>
+
+        <p>Populacja danych to funkcja w Mongoose, która pozwala na łączenie dokumentów z różnych kolekcji, tworząc bardziej złożone struktury danych. Dzięki temu można łatwo dołączać dane z jednej kolekcji do dokumentów innej kolekcji, co przypomina relacje w bazach danych SQL.</p>
+
+        <h2>Definiowanie relacji między kolekcjami</h2>
+        <p>Aby używać funkcji <code>populate()</code>, musisz najpierw zdefiniować relacje między dokumentami. Oto przykład definiowania relacji między schematami:</p>
+
+        <pre><code class="language-javascript">
+const mongoose = require('mongoose');
+
+// Schemat użytkownika
+const userSchema = new mongoose.Schema({
+    name: String,
+    posts: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Post' }]
+    // Pole 'posts' przechowuje tablicę identyfikatorów dokumentów z kolekcji 'Post'
+});
+
+// Schemat posta
+const postSchema = new mongoose.Schema({
+    title: String,
+    content: String,
+    author: { type: mongoose.Schema.Types.ObjectId, ref: 'User' }
+    // Pole 'author' przechowuje identyfikator dokumentu z kolekcji 'User'
+});
+
+// Tworzenie modeli
+const User = mongoose.model('User', userSchema);
+const Post = mongoose.model('Post', postSchema);
+
+module.exports = { User, Post };
+        </code></pre>
+
+        <h2>Używanie funkcji <code>populate()</code></h2>
+        <p>Funkcja <code>populate()</code> pozwala na dołączanie pełnych dokumentów z powiązanych kolekcji do wyników zapytania. Oto przykład:</p>
+
+        <pre><code class="language-javascript">
+async function getUserWithPosts(userId) {
+    try {
+        const user = await User.findById(userId).populate('posts');
+        // Użycie populate() do dołączenia dokumentów z kolekcji 'Post' do użytkownika
+        console.log('Użytkownik z postami:', user);
+    } catch (error) {
+        console.error('Błąd podczas pobierania użytkownika:', error);
+    }
+}
+
+getUserWithPosts('ID_UŻYTKOWNIKA');
+        </code></pre>
+
+        <h2>Populacja zagnieżdżona</h2>
+        <p>Mongoose pozwala na populację zagnieżdżoną, czyli dołączanie dokumentów do już dołączonych dokumentów. Przykład:</p>
+
+        <pre><code class="language-javascript">
+async function getPostWithAuthor(postId) {
+    try {
+        const post = await Post.findById(postId).populate({
+            path: 'author',
+            select: 'name'
+            // Dołączenie pola 'name' autora do dokumentu 'Post'
+        });
+        console.log('Post z autorem:', post);
+    } catch (error) {
+        console.error('Błąd podczas pobierania posta:', error);
+    }
+}
+
+getPostWithAuthor('ID_POSTA');
+        </code></pre>
+
+        <h2>Opcje zaawansowane</h2>
+        <p>Funkcja <code>populate()</code> obsługuje również zaawansowane opcje, takie jak:</p>
+        <ul>
+            <li><strong>select:</strong> Wybieranie określonych pól do dołączenia.</li>
+            <li><strong>match:</strong> Filtrowanie dokumentów, które mają być dołączone.</li>
+            <li><strong>populate:</strong> Zagnieżdżona populacja, umożliwiająca wielopoziomowe dołączanie dokumentów.</li>
+        </ul>
+
+        <pre><code class="language-javascript">
+async function getUserWithFilteredPosts(userId) {
+    try {
+        const user = await User.findById(userId).populate({
+            path: 'posts',
+            match: { title: /ważne/i }, // Filtrowanie postów zawierających 'ważne' w tytule
+            select: 'title content'
+        });
+        console.log('Użytkownik z filtrowanymi postami:', user);
+    } catch (error) {
+        console.error('Błąd podczas pobierania użytkownika z filtrowanymi postami:', error);
+    }
+}
+
+getUserWithFilteredPosts('ID_UŻYTKOWNIKA');
+        </code></pre>
+
+        <h2>Podsumowanie</h2>
+        <ul>
+            <li><strong>Funkcja <code>populate()</code>:</strong> Służy do dołączania powiązanych dokumentów do wyników zapytania.</li>
+            <li><strong>Relacje:</strong> Definiowane za pomocą typu <code>ObjectId</code> z odniesieniem <code>ref</code> do innej kolekcji.</li>
+            <li><strong>Zaawansowane opcje:</strong> Obejmują <code>select</code>, <code>match</code> oraz zagnieżdżoną populację.</li>
+        </ul>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/prism.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/components/prism-javascript.min.js"></script>
+</body>
+</html>

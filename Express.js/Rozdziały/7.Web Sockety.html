@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>WebSockety w Express.js</title>
+    <link rel="stylesheet" href="../styles.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/themes/prism-tomorrow.min.css" rel="stylesheet" />
+</head>
+<body>
+    <div class="container">
+        <h1>WebSockety w Express.js</h1>
+
+        <p>WebSockety umożliwiają dwukierunkową komunikację w czasie rzeczywistym między klientem a serwerem. W połączeniu z Express.js pozwalają na budowanie aplikacji, które mogą dynamicznie reagować na działania użytkowników, np. w przypadku czatów czy aktualizacji danych na żywo.</p>
+
+        <h2>Tworzenie serwera WebSocket</h2>
+        <p>Aby dodać WebSockety do aplikacji Express.js, można skorzystać z pakietu <code>ws</code>, który jest prosty w użyciu i dobrze współpracuje z Node.js. Oto przykład tworzenia serwera WebSocket:</p>
+
+        <pre><code class="language-javascript">
+const express = require('express');
+const http = require('http');
+const WebSocket = require('ws');
+// Importowanie Express, http i WebSocket
+
+const app = express();
+const server = http.createServer(app);
+// Tworzenie serwera HTTP na podstawie aplikacji Express
+
+const wss = new WebSocket.Server({ server });
+// Tworzenie serwera WebSocket powiązanego z serwerem HTTP
+
+wss.on('connection', (ws) => {
+    console.log('Nowe połączenie WebSocket');
+    
+    ws.on('message', (message) => {
+        console.log(`Otrzymano wiadomość: ${message}`);
+        // Odbieranie wiadomości od klienta
+
+        ws.send(`Odpowiedź serwera: ${message}`);
+        // Wysyłanie odpowiedzi do klienta
+    });
+
+    ws.on('close', () => {
+        console.log('Połączenie WebSocket zostało zamknięte');
+    });
+    // Obsługa zamknięcia połączenia
+});
+
+app.get('/', (req, res) => {
+    res.send('Serwer WebSocket działa');
+    // Prosta odpowiedź na żądanie GET
+});
+
+const PORT = 3000;
+server.listen(PORT, () => {
+    console.log(`Serwer działa na http://localhost:${PORT}`);
+});
+        </code></pre>
+
+        <p>W powyższym przykładzie serwer WebSocket nasłuchuje na połączenia i odbiera oraz wysyła wiadomości do podłączonych klientów.</p>
+
+        <h2>Tworzenie klienta WebSocket</h2>
+        <p>Do komunikacji z serwerem WebSocket można użyć przeglądarki lub aplikacji klienckiej. Oto prosty przykład kodu HTML do obsługi WebSocketów po stronie klienta:</p>
+
+        <pre><code class="language-html">
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <title>Klient WebSocket</title>
+</head>
+<body>
+    <h1>WebSocket Klient</h1>
+    <script>
+        const socket = new WebSocket('ws://localhost:3000');
+        // Utworzenie połączenia WebSocket
+
+        socket.onopen = () => {
+            console.log('Połączono z serwerem');
+            socket.send('Witaj, serwerze!');
+            // Wysłanie wiadomości do serwera po połączeniu
+        };
+
+        socket.onmessage = (event) => {
+            console.log(`Otrzymano wiadomość od serwera: ${event.data}`);
+            // Odbieranie wiadomości od serwera
+        };
+
+        socket.onclose = () => {
+            console.log('Połączenie z serwerem zostało zamknięte');
+        };
+    </script>
+</body>
+</html>
+        </code></pre>
+
+        <p>Ten prosty klient WebSocket łączy się z serwerem, wysyła wiadomość i odbiera odpowiedź.</p>
+
+        <h2>Zastosowania WebSocketów</h2>
+        <ul>
+            <li><strong>Czaty i komunikatory:</strong> Umożliwiają przesyłanie wiadomości w czasie rzeczywistym.</li>
+            <li><strong>Gry wieloosobowe:</strong> Synchronizowanie ruchów graczy i wydarzeń gry.</li>
+            <li><strong>Powiadomienia:</strong> Wysyłanie aktualizacji do użytkowników na żywo.</li>
+            <li><strong>Monitorowanie danych:</strong> Pokazywanie na żywo danych np. z giełdy lub systemów monitorujących.</li>
+        </ul>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/prism.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/components/prism-javascript.min.js"></script>
+</body>
+</html>

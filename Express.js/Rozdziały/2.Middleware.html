@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Middleware w Express.js</title>
+    <link rel="stylesheet" href="../styles.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/themes/prism-tomorrow.min.css" rel="stylesheet" />
+</head>
+<body>
+    <div class="container">
+        <h1>Middleware w Express.js</h1>
+
+        <p>Middleware w Express.js to funkcje, które są wykonywane pomiędzy otrzymaniem żądania a wysłaniem odpowiedzi. Umożliwiają one przetwarzanie żądań, modyfikowanie obiektów <code>req</code> i <code>res</code>, kończenie cyklu żądanie-odpowiedź lub przekazywanie sterowania do kolejnej funkcji middleware.</p>
+
+        <h2>Tworzenie funkcji middleware</h2>
+        <p>Tworzenie własnej funkcji middleware jest proste. Funkcja middleware przyjmuje trzy parametry: <code>req</code>, <code>res</code> oraz <code>next</code>. Oto przykład:</p>
+
+        <pre><code class="language-javascript">
+const express = require('express');
+// Importowanie frameworka Express
+
+const app = express();
+// Tworzenie nowej aplikacji Express
+
+// Tworzenie funkcji middleware
+const loggerMiddleware = (req, res, next) => {
+    console.log(`Otrzymano żądanie: ${req.method} ${req.url}`);
+    // Wyświetlanie metody HTTP i ścieżki żądania
+    next();
+    // Przekazanie sterowania do następnej funkcji middleware
+};
+
+app.use(loggerMiddleware);
+// Użycie funkcji middleware we wszystkich żądaniach
+
+app.get('/', (req, res) => {
+    res.send('Witaj w Express.js z middleware!');
+    // Obsługa żądania GET na ścieżce głównej
+});
+
+const PORT = 3000;
+app.listen(PORT, () => {
+    console.log(`Serwer działa na http://localhost:${PORT}`);
+    // Uruchomienie serwera i nasłuchiwanie na określonym porcie
+});
+        </code></pre>
+
+        <p>W powyższym przykładzie funkcja <code>loggerMiddleware</code> wyświetla informacje o każdym otrzymanym żądaniu i przekazuje sterowanie do kolejnej funkcji dzięki wywołaniu <code>next()</code>.</p>
+
+        <h2>Rodzaje funkcji middleware</h2>
+        <p>Express.js obsługuje różne rodzaje middleware:</p>
+        <ul>
+            <li><strong>Middleware aplikacji:</strong> Funkcje zarejestrowane za pomocą <code>app.use()</code> lub <code>app.METHOD()</code>.</li>
+            <li><strong>Middleware routera:</strong> Funkcje middleware używane tylko w routerach Express.</li>
+            <li><strong>Middleware wbudowane:</strong> Express posiada wbudowane middleware, takie jak <code>express.json()</code> czy <code>express.static()</code>.</li>
+            <li><strong>Middleware zewnętrzne:</strong> Funkcje dostarczane przez zewnętrzne biblioteki, takie jak <code>morgan</code> czy <code>cors</code>.</li>
+        </ul>
+
+        <h2>Używanie middleware w aplikacji</h2>
+        <p>Express umożliwia łatwe dodawanie różnych funkcji middleware. Przykład użycia wbudowanego middleware:</p>
+
+        <pre><code class="language-javascript">
+app.use(express.json());
+// Middleware do parsowania danych JSON w żądaniach
+        </code></pre>
+
+        <p>Dzięki temu każda aplikacja Express.js może łatwo obsługiwać dane przesyłane w formacie JSON.</p>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/prism.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/components/prism-javascript.min.js"></script>
+</body>
+</html>

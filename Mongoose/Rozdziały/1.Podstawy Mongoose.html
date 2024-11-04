@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Podstawy Mongoose</title>
+    <link rel="stylesheet" href="../styles.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/themes/prism-tomorrow.min.css" rel="stylesheet" />
+</head>
+<body>
+    <div class="container">
+        <h1>Podstawy Mongoose</h1>
+
+        <p>Mongoose to popularna biblioteka ODM (Object Data Modeling) dla Node.js, która upraszcza pracę z MongoDB. Zapewnia wygodną strukturę do definiowania schematów, walidacji i obsługi zapytań do bazy danych.</p>
+
+        <h2>Instalacja Mongoose</h2>
+        <p>Aby zainstalować Mongoose, wystarczy użyć menedżera pakietów npm:</p>
+        <pre><code class="language-bash">
+npm install mongoose
+        </code></pre>
+
+        <h2>Konfiguracja i łączenie z bazą danych</h2>
+        <p>Po zainstalowaniu Mongoose można go zaimportować do projektu i połączyć z bazą danych MongoDB. Oto przykład konfiguracji:</p>
+
+        <pre><code class="language-javascript">
+const mongoose = require('mongoose');
+// Importowanie Mongoose
+
+const DB_URI = 'mongodb://localhost:27017/mojabaza';
+// Adres URL do lokalnej bazy danych MongoDB
+
+mongoose.connect(DB_URI, { useNewUrlParser: true, useUnifiedTopology: true })
+    .then(() => console.log('Połączono z bazą danych MongoDB'))
+    .catch(err => console.error('Błąd połączenia z MongoDB:', err));
+// Próba połączenia z MongoDB z obsługą błędów
+
+// Definiowanie schematu MongoDB
+const userSchema = new mongoose.Schema({
+    name: {
+        type: String,
+        required: true
+    },
+    age: {
+        type: Number,
+        min: 0
+    }
+});
+// Tworzenie modelu na podstawie schematu
+const User = mongoose.model('User', userSchema);
+
+// Przykład dodania użytkownika do bazy
+async function addUser() {
+    try {
+        const user = new User({ name: 'Jan', age: 30 });
+        const result = await user.save();
+        console.log('Dodano użytkownika:', result);
+    } catch (error) {
+        console.error('Błąd podczas dodawania użytkownika:', error);
+    }
+}
+
+addUser();
+        </code></pre>
+
+        <h2>Podstawowe operacje CRUD</h2>
+        <p>Mongoose umożliwia wykonywanie podstawowych operacji CRUD (Create, Read, Update, Delete) w prosty sposób. Oto przykłady:</p>
+
+        <h3>Odczyt danych</h3>
+        <pre><code class="language-javascript">
+// Znalezienie wszystkich użytkowników
+User.find()
+    .then(users => console.log('Użytkownicy:', users))
+    .catch(err => console.error('Błąd odczytu danych:', err));
+        </code></pre>
+
+        <h3>Aktualizacja danych</h3>
+        <pre><code class="language-javascript">
+// Aktualizacja użytkownika o określonym ID
+User.findByIdAndUpdate('ID_UŻYTKOWNIKA', { age: 35 }, { new: true })
+    .then(updatedUser => console.log('Zaktualizowano użytkownika:', updatedUser))
+    .catch(err => console.error('Błąd aktualizacji danych:', err));
+        </code></pre>
+
+        <h3>Usuwanie danych</h3>
+        <pre><code class="language-javascript">
+// Usunięcie użytkownika o określonym ID
+User.findByIdAndDelete('ID_UŻYTKOWNIKA')
+    .then(() => console.log('Użytkownik usunięty'))
+    .catch(err => console.error('Błąd usuwania użytkownika:', err));
+        </code></pre>
+
+        <h2>Wskazówki dotyczące pracy z Mongoose</h2>
+        <ul>
+            <li>Używaj <strong>walidacji</strong> w schematach, aby zapewnić integralność danych.</li>
+            <li>Stosuj <strong>indeksy</strong> w polach, które często są wyszukiwane, aby poprawić wydajność zapytań.</li>
+            <li>Korzystaj z <strong>middleware Mongoose</strong>, aby wykonywać operacje przed lub po zapisaniu danych do bazy.</li>
+        </ul>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/prism.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/components/prism-javascript.min.js"></script>
+</body>
+</html>

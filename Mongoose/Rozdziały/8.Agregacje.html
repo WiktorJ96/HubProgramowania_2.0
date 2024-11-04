@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Agregacje w Mongoose</title>
+    <link rel="stylesheet" href="../styles.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/themes/prism-tomorrow.min.css" rel="stylesheet" />
+</head>
+<body>
+    <div class="container">
+        <h1>Agregacje w Mongoose</h1>
+
+        <p>Funkcja <code>aggregate()</code> w Mongoose umożliwia tworzenie zaawansowanych zapytań do MongoDB, które wykonują operacje grupowania, filtrowania, sortowania i inne przekształcenia na danych. Agregacje pozwalają na zaawansowane analizy danych i przetwarzanie dokumentów bezpośrednio w bazie danych.</p>
+
+        <h2>Podstawy użycia <code>aggregate()</code></h2>
+        <p>Funkcja <code>aggregate()</code> przyjmuje tablicę etapów (stages), które są wykonywane w określonej kolejności. Oto prosty przykład użycia:</p>
+
+        <pre><code class="language-javascript">
+const mongoose = require('mongoose');
+
+// Definiowanie schematu
+const orderSchema = new mongoose.Schema({
+    product: String,
+    quantity: Number,
+    price: Number,
+    customer: String,
+    date: { type: Date, default: Date.now }
+});
+
+const Order = mongoose.model('Order', orderSchema);
+
+// Przykład użycia aggregate() do obliczenia łącznej sprzedaży
+async function getTotalSales() {
+    try {
+        const result = await Order.aggregate([
+            { $group: { _id: null, totalSales: { $sum: { $multiply: ["$quantity", "$price"] } } } }
+            // Grupowanie wszystkich dokumentów i obliczanie łącznej sprzedaży
+        ]);
+        console.log('Łączna sprzedaż:', result);
+    } catch (error) {
+        console.error('Błąd podczas wykonywania agregacji:', error);
+    }
+}
+
+getTotalSales();
+        </code></pre>
+
+        <h2>Etapy agregacji</h2>
+        <p>Poniżej przedstawiono najczęściej używane etapy agregacji:</p>
+        <ul>
+            <li><strong>$match:</strong> Filtrowanie dokumentów na podstawie określonych kryteriów.</li>
+            <li><strong>$group:</strong> Grupowanie dokumentów i wykonywanie operacji agregujących (np. <code>$sum</code>, <code>$avg</code>).</li>
+            <li><strong>$sort:</strong> Sortowanie dokumentów na podstawie jednego lub więcej pól.</li>
+            <li><strong>$project:</strong> Wybieranie i formatowanie pól w wyniku zapytania.</li>
+            <li><strong>$limit:</strong> Ograniczanie liczby zwracanych dokumentów.</li>
+            <li><strong>$skip:</strong> Pomijanie określonej liczby dokumentów.</li>
+            <li><strong>$lookup:</strong> Dołączanie dokumentów z innych kolekcji (działa podobnie do <code>JOIN</code> w SQL).</li>
+        </ul>
+
+        <h2>Przykład z użyciem wielu etapów</h2>
+        <p>Oto bardziej zaawansowany przykład użycia agregacji z etapami <code>$match</code>, <code>$group</code> i <code>$sort</code>:</p>
+
+        <pre><code class="language-javascript">
+async function getTopCustomers() {
+    try {
+        const result = await Order.aggregate([
+            { $match: { date: { $gte: new Date('2024-01-01') } } },
+            // Filtrowanie zamówień od początku roku 2024
+
+            { $group: { _id: "$customer", totalSpent: { $sum: { $multiply: ["$quantity", "$price"] } } } },
+            // Grupowanie zamówień po kliencie i obliczanie łącznej kwoty wydanej przez każdego klienta
+
+            { $sort: { totalSpent: -1 } },
+            // Sortowanie wyników malejąco po polu 'totalSpent'
+
+            { $limit: 5 }
+            // Ograniczenie wyników do 5 najlepszych klientów
+        ]);
+        console.log('Top klienci:', result);
+    } catch (error) {
+        console.error('Błąd podczas wykonywania agregacji:', error);
+    }
+}
+
+getTopCustomers();
+        </code></pre>
+
+        <h2>Dołączanie danych z innych kolekcji</h2>
+        <p>Używając etapu <code>$lookup</code>, można dołączać dokumenty z innych kolekcji. Oto przykład:</p>
+
+        <pre><code class="language-javascript">
+// Dołączenie danych klientów do zamówień
+async function getOrdersWithCustomerDetails() {
+    try {
+        const result = await Order.aggregate([
+            {
+                $lookup: {
+                    from: 'customers', // Nazwa kolekcji do dołączenia
+                    localField: 'customer',
+                    foreignField: 'name',
+                    as: 'customerDetails'
+                    // Nazwa pola, pod którą będą dołączone dane
+                }
+            },
+            { $unwind: '$customerDetails' }
+            // Rozwinięcie tablicy, aby uzyskać pojedyncze dokumenty dla każdego zamówienia z detalami
+        ]);
+        console.log('Zamówienia z detalami klienta:', result);
+    } catch (error) {
+        console.error('Błąd podczas wykonywania agregacji:', error);
+    }
+}
+
+getOrdersWithCustomerDetails();
+        </code></pre>
+
+        <h2>Podsumowanie</h2>
+        <ul>
+            <li>Agregacje w Mongoose pozwalają na wykonywanie zaawansowanych operacji przetwarzania danych.</li>
+            <li>Etapy takie jak <code>$match</code>, <code>$group</code>, <code>$sort</code> i <code>$lookup</code> umożliwiają elastyczne budowanie zapytań.</li>
+            <li>Agregacje są szczególnie przydatne do analizy danych, generowania raportów i łączenia danych z różnych kolekcji.</li>
+        </ul>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/prism.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/components/prism-javascript.min.js"></script>
+</body>
+</html>

@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Operacje CRUD w Mongoose</title>
+    <link rel="stylesheet" href="../styles.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/themes/prism-tomorrow.min.css" rel="stylesheet" />
+</head>
+<body>
+    <div class="container">
+        <h1>Operacje CRUD w Mongoose</h1>
+
+        <p>Mongoose umożliwia łatwe wykonywanie operacji CRUD (Create, Read, Update, Delete) na dokumentach w bazie danych MongoDB. Poniżej znajdziesz przykłady implementacji każdej z tych operacji.</p>
+
+        <h2>Tworzenie dokumentów</h2>
+        <p>Tworzenie dokumentów w Mongoose jest proste — wystarczy użyć metody <code>save()</code> lub <code>create()</code>. Oto przykład:</p>
+
+        <pre><code class="language-javascript">
+const mongoose = require('mongoose');
+
+// Definiowanie schematu
+const userSchema = new mongoose.Schema({
+    name: String,
+    age: Number,
+    email: String
+});
+
+const User = mongoose.model('User', userSchema);
+
+// Tworzenie i zapisywanie nowego dokumentu
+async function createUser() {
+    try {
+        const user = new User({ name: 'Anna', age: 28, email: 'anna@example.com' });
+        const result = await user.save();
+        console.log('Utworzono użytkownika:', result);
+    } catch (error) {
+        console.error('Błąd tworzenia użytkownika:', error);
+    }
+}
+
+createUser();
+        </code></pre>
+
+        <h2>Odczytywanie dokumentów</h2>
+        <p>Aby odczytać dokumenty, można użyć metod takich jak <code>find()</code>, <code>findOne()</code> czy <code>findById()</code>. Przykład:</p>
+
+        <pre><code class="language-javascript">
+// Odczyt wszystkich dokumentów
+async function getAllUsers() {
+    try {
+        const users = await User.find();
+        console.log('Lista użytkowników:', users);
+    } catch (error) {
+        console.error('Błąd odczytu danych:', error);
+    }
+}
+
+getAllUsers();
+        </code></pre>
+
+        <h3>Odczyt konkretnego dokumentu</h3>
+        <pre><code class="language-javascript">
+// Odczyt użytkownika na podstawie ID
+async function getUserById(id) {
+    try {
+        const user = await User.findById(id);
+        if (user) {
+            console.log('Znaleziono użytkownika:', user);
+        } else {
+            console.log('Użytkownik nie został znaleziony');
+        }
+    } catch (error) {
+        console.error('Błąd odczytu użytkownika:', error);
+    }
+}
+
+getUserById('ID_UŻYTKOWNIKA');
+        </code></pre>
+
+        <h2>Aktualizowanie dokumentów</h2>
+        <p>Aktualizowanie dokumentów może być realizowane przy użyciu metod takich jak <code>findByIdAndUpdate()</code> czy <code>updateOne()</code>. Przykład:</p>
+
+        <pre><code class="language-javascript">
+// Aktualizacja użytkownika na podstawie ID
+async function updateUser(id) {
+    try {
+        const updatedUser = await User.findByIdAndUpdate(id, { age: 30 }, { new: true });
+        if (updatedUser) {
+            console.log('Zaktualizowano użytkownika:', updatedUser);
+        } else {
+            console.log('Nie znaleziono użytkownika do aktualizacji');
+        }
+    } catch (error) {
+        console.error('Błąd aktualizacji użytkownika:', error);
+    }
+}
+
+updateUser('ID_UŻYTKOWNIKA');
+        </code></pre>
+
+        <h2>Usuwanie dokumentów</h2>
+        <p>Usuwanie dokumentów jest możliwe dzięki metodom <code>findByIdAndDelete()</code>, <code>deleteOne()</code> czy <code>deleteMany()</code>. Przykład:</p>
+
+        <pre><code class="language-javascript">
+// Usunięcie użytkownika na podstawie ID
+async function deleteUser(id) {
+    try {
+        const deletedUser = await User.findByIdAndDelete(id);
+        if (deletedUser) {
+            console.log('Usunięto użytkownika:', deletedUser);
+        } else {
+            console.log('Nie znaleziono użytkownika do usunięcia');
+        }
+    } catch (error) {
+        console.error('Błąd usuwania użytkownika:', error);
+    }
+}
+
+deleteUser('ID_UŻYTKOWNIKA');
+        </code></pre>
+
+        <h2>Podsumowanie</h2>
+        <ul>
+            <li>Używaj <code>save()</code> lub <code>create()</code> do tworzenia dokumentów.</li>
+            <li>Stosuj <code>find()</code> i <code>findById()</code> do odczytywania danych.</li>
+            <li>Używaj <code>findByIdAndUpdate()</code> do aktualizowania dokumentów.</li>
+            <li>Stosuj <code>findByIdAndDelete()</code> do usuwania dokumentów.</li>
+        </ul>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/prism.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/components/prism-javascript.min.js"></script>
+</body>
+</html>

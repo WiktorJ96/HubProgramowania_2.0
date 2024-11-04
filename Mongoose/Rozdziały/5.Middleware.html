@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Middleware w Mongoose</title>
+    <link rel="stylesheet" href="../styles.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/themes/prism-tomorrow.min.css" rel="stylesheet" />
+</head>
+<body>
+    <div class="container">
+        <h1>Middleware w Mongoose</h1>
+
+        <p>Middleware w Mongoose to funkcje, które mogą być wykonywane przed (pre) lub po (post) określonych operacjach w bazie danych. Umożliwiają modyfikację danych, walidację lub wykonywanie dodatkowych operacji. Middleware można definiować na poziomie schematu i działa na różne metody Mongoose, takie jak <code>save</code>, <code>find</code>, <code>update</code> itp.</p>
+
+        <h2>Pre middleware</h2>
+        <p>Pre middleware jest uruchamiane przed wykonaniem operacji. Umożliwia modyfikację danych lub wykonanie dodatkowych zadań, takich jak walidacja lub logowanie. Oto przykład użycia pre middleware:</p>
+
+        <pre><code class="language-javascript">
+const mongoose = require('mongoose');
+
+// Definiowanie schematu użytkownika
+const userSchema = new mongoose.Schema({
+    name: String,
+    email: String,
+    password: String
+});
+
+// Pre middleware uruchamiane przed zapisaniem dokumentu
+userSchema.pre('save', function(next) {
+    console.log(`Przygotowanie do zapisania użytkownika: ${this.name}`);
+    // Można dodać logikę, np. haszowanie hasła przed zapisaniem
+    next();
+    // Wywołanie funkcji next() oznacza, że middleware zakończyło działanie i można przejść do następnej funkcji
+});
+
+// Tworzenie modelu
+const User = mongoose.model('User', userSchema);
+
+module.exports = User;
+        </code></pre>
+
+        <h2>Post middleware</h2>
+        <p>Post middleware jest wykonywane po zakończeniu operacji. Może być używane do logowania, wysyłania powiadomień lub innych działań wykonywanych po zapisaniu lub odczytaniu danych.</p>
+
+        <pre><code class="language-javascript">
+// Post middleware uruchamiane po zapisaniu dokumentu
+userSchema.post('save', function(doc) {
+    console.log(`Użytkownik ${doc.name} został zapisany.`);
+    // Można tu np. wysłać e-mail powitalny lub powiadomienie
+});
+        </code></pre>
+
+        <h2>Użycie funkcji <code>next()</code></h2>
+        <p>Funkcja <code>next()</code> jest kluczowa w pre middleware, ponieważ sygnalizuje, że middleware zakończyło swoje działanie i można przejść do następnej funkcji lub zakończyć operację. Bez wywołania <code>next()</code> operacja zatrzyma się, a zapytanie do bazy danych nigdy nie zostanie zakończone.</p>
+
+        <pre><code class="language-javascript">
+// Przykład użycia funkcji next() z dodatkową logiką
+userSchema.pre('save', function(next) {
+    if (!this.isModified('password')) {
+        return next();
+        // Jeśli hasło nie zostało zmienione, pomiń operację haszowania
+    }
+    // Logika do haszowania hasła, np. bcrypt
+    console.log('Haszowanie hasła...');
+    next();
+});
+        </code></pre>
+
+        <h2>Przykładowe zastosowania middleware</h2>
+        <ul>
+            <li><strong>Walidacja:</strong> Pre middleware może być używane do walidacji danych przed zapisaniem.</li>
+            <li><strong>Logowanie:</strong> Post middleware może logować operacje po ich zakończeniu.</li>
+            <li><strong>Haszowanie haseł:</strong> Pre middleware często jest używane do haszowania haseł przed zapisaniem ich w bazie danych.</li>
+            <li><strong>Wysyłanie powiadomień:</strong> Post middleware może być używane do wysyłania powiadomień po zakończeniu operacji.</li>
+        </ul>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/prism.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/components/prism-javascript.min.js"></script>
+</body>
+</html>

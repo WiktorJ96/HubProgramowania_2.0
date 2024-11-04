@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Integracja z Bazą Danych w Express.js</title>
+    <link rel="stylesheet" href="../styles.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/themes/prism-tomorrow.min.css" rel="stylesheet" />
+</head>
+<body>
+    <div class="container">
+        <h1>Integracja z Bazą Danych w Express.js</h1>
+
+        <p>Express.js można łatwo zintegrować z różnymi bazami danych, takimi jak MongoDB i MySQL. Dzięki temu możliwe jest tworzenie aplikacji webowych z funkcjonalnością przechowywania i pobierania danych.</p>
+
+        <h2>Podłączanie do MongoDB</h2>
+        <p>Aby połączyć się z MongoDB, możemy użyć biblioteki <code>mongoose</code>, która upraszcza pracę z MongoDB w Node.js. Oto przykład podłączenia do bazy danych:</p>
+
+        <pre><code class="language-javascript">
+const express = require('express');
+const mongoose = require('mongoose');
+// Importowanie Express i Mongoose
+
+const app = express();
+app.use(express.json());
+// Middleware do parsowania JSON
+
+const DB_URI = 'mongodb://localhost:27017/mojabaza';
+// Adres URL do lokalnej bazy danych MongoDB
+
+mongoose.connect(DB_URI, { useNewUrlParser: true, useUnifiedTopology: true })
+    .then(() => console.log('Połączono z bazą danych MongoDB'))
+    .catch(err => console.error('Błąd połączenia z MongoDB:', err));
+// Próba połączenia z bazą danych MongoDB
+
+// Definiowanie schematu i modelu MongoDB
+const userSchema = new mongoose.Schema({
+    name: String,
+    age: Number
+});
+const User = mongoose.model('User', userSchema);
+
+// Przykładowy endpoint do dodawania użytkownika
+app.post('/users', async (req, res) => {
+    try {
+        const user = new User(req.body);
+        const savedUser = await user.save();
+        res.status(201).json(savedUser);
+    } catch (err) {
+        res.status(400).json({ error: 'Błąd podczas dodawania użytkownika' });
+    }
+});
+
+const PORT = 3000;
+app.listen(PORT, () => {
+    console.log(`Serwer działa na http://localhost:${PORT}`);
+});
+        </code></pre>
+
+        <p>W powyższym przykładzie aplikacja Express łączy się z bazą danych MongoDB i obsługuje zapytania dodające użytkowników do bazy.</p>
+
+        <h2>Podłączanie do MySQL</h2>
+        <p>Aby połączyć się z bazą danych MySQL, można użyć pakietu <code>mysql2</code> lub <code>sequelize</code>, który jest ORM-em (Object-Relational Mapping). Oto przykład podłączenia do MySQL:</p>
+
+        <pre><code class="language-javascript">
+const express = require('express');
+const mysql = require('mysql2/promise');
+// Importowanie Express i mysql2
+
+const app = express();
+app.use(express.json());
+// Middleware do parsowania JSON
+
+// Konfiguracja połączenia z bazą danych MySQL
+const dbConfig = {
+    host: 'localhost',
+    user: 'root',
+    password: 'haslo',
+    database: 'mojabaza'
+};
+
+let connection;
+mysql.createConnection(dbConfig)
+    .then(conn => {
+        connection = conn;
+        console.log('Połączono z bazą danych MySQL');
+    })
+    .catch(err => console.error('Błąd połączenia z MySQL:', err));
+
+// Przykładowy endpoint do pobierania danych z MySQL
+app.get('/products', async (req, res) => {
+    try {
+        const [rows] = await connection.execute('SELECT * FROM produkty');
+        res.status(200).json(rows);
+    } catch (err) {
+        res.status(500).json({ error: 'Błąd podczas pobierania danych' });
+    }
+});
+
+const PORT = 3000;
+app.listen(PORT, () => {
+    console.log(`Serwer działa na http://localhost:${PORT}`);
+});
+        </code></pre>
+
+        <p>W tym przykładzie aplikacja Express łączy się z bazą danych MySQL, a endpoint <code>/products</code> zwraca listę produktów.</p>
+
+        <h2>Wskazówki dotyczące bezpieczeństwa</h2>
+        <ul>
+            <li>Przechowuj dane uwierzytelniające (takie jak hasła do bazy danych) w zmiennych środowiskowych.</li>
+            <li>Stosuj mechanizmy walidacji danych wejściowych, aby zabezpieczyć aplikację przed atakami typu SQL Injection lub NoSQL Injection.</li>
+            <li>Korzystaj z odpowiednich uprawnień i ról w bazie danych, aby ograniczyć dostęp do danych.</li>
+        </ul>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/prism.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/components/prism-javascript.min.js"></script>
+</body>
+</html>

@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Skalowalność i Optymalizacja w Express.js</title>
+    <link rel="stylesheet" href="../styles.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/themes/prism-tomorrow.min.css" rel="stylesheet" />
+</head>
+<body>
+    <div class="container">
+        <h1>Skalowalność i Optymalizacja w Express.js</h1>
+
+        <p>Skalowalność i optymalizacja aplikacji to kluczowe elementy, które wpływają na wydajność i zdolność do obsługi wielu użytkowników jednocześnie. W Express.js istnieje wiele technik, które mogą pomóc w optymalizacji aplikacji i zarządzaniu obciążeniem serwera.</p>
+
+        <h2>Techniki optymalizacji aplikacji</h2>
+        <ul>
+            <li><strong>Używanie middleware z rozwagą:</strong> Upewnij się, że używasz tylko tych middleware, które są niezbędne, aby uniknąć zbędnych operacji w każdym żądaniu.</li>
+            <li><strong>Cache'owanie odpowiedzi:</strong> Stosowanie cache'owania na poziomie aplikacji lub przy użyciu zewnętrznych narzędzi, takich jak Redis, może znacznie zmniejszyć obciążenie serwera.</li>
+            <li><strong>Używanie strumieni:</strong> W przypadku dużych plików lub danych, użycie strumieni (streams) pozwala na przetwarzanie danych w kawałkach, co zmniejsza zużycie pamięci.</li>
+        </ul>
+
+        <h3>Przykład cache'owania odpowiedzi</h3>
+        <p>Poniżej znajduje się przykład implementacji prostego cache'owania przy użyciu pamięci podręcznej:</p>
+
+        <pre><code class="language-javascript">
+const express = require('express');
+const NodeCache = require('node-cache');
+// Importowanie Express i modułu NodeCache
+
+const app = express();
+const cache = new NodeCache({ stdTTL: 100 });
+// Tworzenie nowego obiektu cache z czasem wygaśnięcia 100 sekund
+
+app.get('/data', (req, res) => {
+    const cachedData = cache.get('data');
+    if (cachedData) {
+        return res.json(cachedData);
+        // Zwracanie danych z cache, jeśli są dostępne
+    }
+
+    // Przykładowe dane do wysłania
+    const data = { message: 'Świeże dane z serwera' };
+    cache.set('data', data);
+    // Zapisanie danych do cache
+
+    res.json(data);
+});
+
+const PORT = 3000;
+app.listen(PORT, () => {
+    console.log(`Serwer działa na http://localhost:${PORT}`);
+});
+        </code></pre>
+
+        <h2>Zarządzanie obciążeniem serwera</h2>
+        <p>Aby zwiększyć skalowalność, warto rozważyć stosowanie poniższych technik:</p>
+        <ul>
+            <li><strong>Load Balancing:</strong> Rozkładanie obciążenia na wiele instancji serwera za pomocą narzędzi takich jak Nginx lub specjalistyczne usługi load balancingu.</li>
+            <li><strong>Cluster Mode:</strong> Używanie modułu <code>cluster</code> w Node.js pozwala na wykorzystanie wielu rdzeni procesora do obsługi żądań.</li>
+            <li><strong>Monitorowanie aplikacji:</strong> Regularne monitorowanie aplikacji przy użyciu narzędzi takich jak PM2, New Relic czy Datadog umożliwia szybką identyfikację i naprawę problemów wydajnościowych.</li>
+        </ul>
+
+        <h3>Przykład użycia modułu cluster</h3>
+        <pre><code class="language-javascript">
+const cluster = require('cluster');
+const os = require('os');
+const express = require('express');
+
+if (cluster.isMaster) {
+    const numCPUs = os.cpus().length;
+    console.log(`Master proces działa, forkuję ${numCPUs} workers`);
+
+    for (let i = 0; i < numCPUs; i++) {
+        cluster.fork();
+        // Tworzenie nowych workerów na każdy rdzeń procesora
+    }
+
+    cluster.on('exit', (worker, code, signal) => {
+        console.log(`Worker ${worker.process.pid} zakończył działanie`);
+        cluster.fork(); // Forkowanie nowego workera po zakończeniu poprzedniego
+    });
+} else {
+    const app = express();
+    app.get('/', (req, res) => {
+        res.send('Serwer działający na workerze ' + process.pid);
+    });
+
+    app.listen(3000, () => {
+        console.log(`Worker ${process.pid} uruchomiony`);
+    });
+}
+        </code></pre>
+
+        <p>W tym przykładzie, jeśli serwer główny wykryje zakończenie działania workera, natychmiast uruchamia nowego, co zapewnia większą odporność aplikacji.</p>
+
+        <h2>Praktyki najlepsze w optymalizacji</h2>
+        <ul>
+            <li>Używaj <strong>gzip</strong> do kompresji odpowiedzi serwera.</li>
+            <li>Minimalizuj i optymalizuj kody JavaScript i CSS, aby zmniejszyć rozmiar przesyłanych danych.</li>
+            <li>Upewnij się, że aplikacja obsługuje <strong>persistent connections</strong>, aby zmniejszyć liczbę nawiązywanych połączeń.</li>
+        </ul>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/prism.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/components/prism-javascript.min.js"></script>
+</body>
+</html>

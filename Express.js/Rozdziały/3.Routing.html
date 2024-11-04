@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Routing w Express.js</title>
+    <link rel="stylesheet" href="../styles.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/themes/prism-tomorrow.min.css" rel="stylesheet" />
+</head>
+<body>
+    <div class="container">
+        <h1>Routing w Express.js</h1>
+
+        <p>Routing w Express.js polega na definiowaniu różnych tras, które odpowiadają na żądania HTTP. Każda trasa jest powiązana z określoną funkcją, która przetwarza żądanie i wysyła odpowiedź.</p>
+
+        <h2>Definiowanie podstawowych tras</h2>
+        <p>Aby zdefiniować trasę w Express.js, używamy metod takich jak <code>app.get()</code>, <code>app.post()</code>, <code>app.put()</code> oraz <code>app.delete()</code>. Oto przykład prostej trasy:</p>
+
+        <pre><code class="language-javascript">
+const express = require('express');
+// Importowanie frameworka Express
+
+const app = express();
+// Tworzenie nowej aplikacji Express
+
+app.get('/', (req, res) => {
+    res.send('Witaj na stronie głównej!');
+    // Obsługa żądania GET na ścieżce '/'
+});
+
+app.get('/kontakt', (req, res) => {
+    res.send('Strona kontaktowa');
+    // Obsługa żądania GET na ścieżce '/kontakt'
+});
+
+const PORT = 3000;
+app.listen(PORT, () => {
+    console.log(`Serwer działa na http://localhost:${PORT}`);
+    // Uruchomienie serwera i nasłuchiwanie na określonym porcie
+});
+        </code></pre>
+
+        <h2>Dynamiczne parametry w trasach</h2>
+        <p>Express.js pozwala na definiowanie tras z dynamicznymi parametrami, które można wykorzystać w aplikacji. Dynamiczne parametry są oznaczane za pomocą dwukropka <code>:</code> przed nazwą parametru.</p>
+
+        <pre><code class="language-javascript">
+app.get('/uzytkownik/:id', (req, res) => {
+    const userId = req.params.id;
+    // Pobranie parametru 'id' z obiektu 'req.params'
+    res.send(`Profil użytkownika o ID: ${userId}`);
+    // Odpowiedź zawierająca dynamiczny parametr
+});
+        </code></pre>
+
+        <p>W powyższym przykładzie <code>/uzytkownik/123</code> zwróci odpowiedź <em>„Profil użytkownika o ID: 123”</em>.</p>
+
+        <h2>Wildcardy w trasach</h2>
+        <p>Wildcardy (znaki wieloznaczne) pozwalają na obsługę tras pasujących do różnych wzorców. Używamy znaku <code>*</code>, aby dopasować dowolną ścieżkę.</p>
+
+        <pre><code class="language-javascript">
+app.get('/produkty/*', (req, res) => {
+    res.send('Pasująca ścieżka do produktów');
+    // Obsługa dowolnej ścieżki zaczynającej się od '/produkty/'
+});
+        </code></pre>
+
+        <p>Ścieżka <code>/produkty/elektronika/laptopy</code> będzie pasować do powyższej trasy i zwróci odpowiedź <em>„Pasująca ścieżka do produktów”</em>.</p>
+
+        <h2>Łączenie tras z middleware</h2>
+        <p>Express.js umożliwia stosowanie middleware na poziomie tras, co pozwala na wykonywanie dodatkowych operacji przed obsługą żądania.</p>
+
+        <pre><code class="language-javascript">
+app.get('/admin', (req, res, next) => {
+    console.log('Ścieżka admina została odwiedzona.');
+    next(); // Przejście do następnej funkcji obsługi
+}, (req, res) => {
+    res.send('Panel administracyjny');
+    // Ostateczna odpowiedź po middleware
+});
+        </code></pre>
+
+        <p>W tym przykładzie middleware wyświetla komunikat w konsoli przed wysłaniem odpowiedzi.</p>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/prism.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/components/prism-javascript.min.js"></script>
+</body>
+</html>

@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Walidacja Danych w Mongoose</title>
+    <link rel="stylesheet" href="../styles.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/themes/prism-tomorrow.min.css" rel="stylesheet" />
+</head>
+<body>
+    <div class="container">
+        <h1>Walidacja Danych w Mongoose</h1>
+
+        <p>Mongoose oferuje wbudowane mechanizmy walidacji, które pozwalają na zapewnienie poprawności danych przed ich zapisaniem do bazy danych. Reguły walidacyjne są definiowane na poziomie schematów i umożliwiają szczegółową kontrolę nad wartościami pól.</p>
+
+        <h2>Podstawowe reguły walidacyjne</h2>
+        <p>Mongoose pozwala na użycie wielu wbudowanych reguł walidacyjnych, takich jak <code>required</code>, <code>min</code>, <code>max</code>, <code>match</code>, <code>enum</code> i inne. Oto przykład definiowania schematu z walidacją:</p>
+
+        <pre><code class="language-javascript">
+const mongoose = require('mongoose');
+
+// Definiowanie schematu z regułami walidacyjnymi
+const userSchema = new mongoose.Schema({
+    name: {
+        type: String,
+        required: [true, 'Pole "name" jest wymagane'],
+        minlength: [3, 'Pole "name" musi mieć co najmniej 3 znaki']
+    },
+    age: {
+        type: Number,
+        min: [0, 'Wiek nie może być ujemny'],
+        max: [120, 'Wiek nie może przekraczać 120 lat']
+    },
+    email: {
+        type: String,
+        required: [true, 'Adres e-mail jest wymagany'],
+        match: [/^\\S+@\\S+\\.\\S+$/, 'Nieprawidłowy format adresu e-mail']
+    },
+    status: {
+        type: String,
+        enum: ['aktywny', 'nieaktywny'],
+        default: 'aktywny'
+        // Wartość musi należeć do wyznaczonego zbioru wartości
+    }
+});
+
+// Tworzenie modelu
+const User = mongoose.model('User', userSchema);
+
+module.exports = User;
+        </code></pre>
+
+        <h2>Walidacja niestandardowa</h2>
+        <p>Można także definiować własne reguły walidacyjne za pomocą funkcji. Oto przykład dodania niestandardowej walidacji:</p>
+
+        <pre><code class="language-javascript">
+// Niestandardowa walidacja pola
+userSchema.path('email').validate({
+    validator: function(value) {
+        // Przykład niestandardowej logiki walidacyjnej
+        return value.includes('@example.com');
+    },
+    message: 'Adres e-mail musi być z domeny @example.com'
+});
+
+// Tworzenie modelu
+const User = mongoose.model('User', userSchema);
+        </code></pre>
+
+        <h2>Obsługa błędów walidacji</h2>
+        <p>Błędy walidacji są zwracane jako obiekt typu <code>ValidationError</code>. Można je przechwycić i obsłużyć w kodzie:</p>
+
+        <pre><code class="language-javascript">
+async function createUser() {
+    try {
+        const user = new User({ name: 'An', age: -5, email: 'zly-email' });
+        await user.save();
+    } catch (error) {
+        if (error.name === 'ValidationError') {
+            for (let field in error.errors) {
+                console.error(`Błąd w polu "${field}":`, error.errors[field].message);
+            }
+        } else {
+            console.error('Inny błąd:', error);
+        }
+    }
+}
+
+createUser();
+        </code></pre>
+
+        <h2>Popularne reguły walidacyjne</h2>
+        <ul>
+            <li><strong>required:</strong> Wymaga obecności pola.</li>
+            <li><strong>min/max:</strong> Ogranicza minimalną i maksymalną wartość dla pola typu liczbowego.</li>
+            <li><strong>minlength/maxlength:</strong> Ogranicza minimalną i maksymalną długość dla pól typu <code>String</code>.</li>
+            <li><strong>match:</strong> Sprawdza, czy wartość pasuje do wyrażenia regularnego.</li>
+            <li><strong>enum:</strong> Ogranicza wartość pola do określonego zbioru wartości.</li>
+        </ul>
+
+        <h2>Przykłady użycia</h2>
+        <p>Walidacja jest szczególnie przydatna do zapewnienia integralności danych. Przykłady:</p>
+        <ul>
+            <li><strong>Adres e-mail:</strong> Sprawdzenie poprawności formatu za pomocą wyrażenia regularnego.</li>
+            <li><strong>Wiek:</strong> Ograniczenie wieku użytkownika do akceptowalnych wartości.</li>
+            <li><strong>Rola użytkownika:</strong> Określenie, jakie wartości są dopuszczalne za pomocą <code>enum</code>.</li>
+        </ul>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/prism.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/components/prism-javascript.min.js"></script>
+</body>
+</html>

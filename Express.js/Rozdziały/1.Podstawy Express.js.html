@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Podstawy Express.js</title>
+    <link rel="stylesheet" href="../styles.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/themes/prism-tomorrow.min.css" rel="stylesheet" />
+</head>
+<body>
+    <div class="container">
+        <h1>Podstawy Express.js</h1>
+
+        <p>Express.js to popularny framework dla Node.js, który upraszcza tworzenie aplikacji webowych i API. Oferuje narzędzia do szybkiego tworzenia serwerów, obsługi żądań i odpowiedzi oraz zarządzania routingiem.</p>
+
+        <h2>Tworzenie serwera</h2>
+        <p>Aby utworzyć podstawowy serwer za pomocą Express.js, potrzebujesz zainstalowanego Node.js i pakietu <code>express</code>. Poniżej znajduje się przykład prostego serwera:</p>
+
+        <pre><code class="language-javascript">
+const express = require('express');
+// Importowanie frameworka Express
+
+const app = express();
+// Tworzenie nowej aplikacji Express
+
+const PORT = 3000;
+// Definiowanie portu, na którym serwer będzie nasłuchiwał
+
+app.get('/', (req, res) => {
+    res.send('Witaj w Express.js!');
+    // Obsługa żądania GET na ścieżce '/' i wysyłanie odpowiedzi
+});
+
+app.listen(PORT, () => {
+    console.log(`Serwer działa na http://localhost:${PORT}`);
+    // Uruchomienie serwera i nasłuchiwanie na określonym porcie
+});
+        </code></pre>
+
+        <p>Powyższy kod tworzy serwer, który odpowiada na żądanie GET do ścieżki głównej <code>/</code> i zwraca wiadomość <em>\"Witaj w Express.js!\"</em>.</p>
+
+        <h2>Obsługa żądań i odpowiedzi</h2>
+        <p>Express.js umożliwia obsługę różnych typów żądań HTTP, takich jak <strong>GET</strong>, <strong>POST</strong>, <strong>PUT</strong> i <strong>DELETE</strong>. Oto przykład obsługi żądania POST:</p>
+
+        <pre><code class="language-javascript">
+app.post('/dane', (req, res) => {
+    res.send('Dane zostały odebrane.');
+    // Obsługa żądania POST na ścieżce '/dane' i wysyłanie odpowiedzi
+});
+        </code></pre>
+
+        <p>W ten sposób Express.js umożliwia obsługę różnych endpointów aplikacji.</p>
+
+    </div>
+
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/prism.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/components/prism-javascript.min.js"></script>
+
+</body>
+</html>

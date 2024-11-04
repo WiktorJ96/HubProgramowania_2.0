@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Modele w Mongoose</title>
+    <link rel="stylesheet" href="../styles.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/themes/prism-tomorrow.min.css" rel="stylesheet" />
+</head>
+<body>
+    <div class="container">
+        <h1>Modele w Mongoose</h1>
+
+        <p>Modele w Mongoose są odpowiednikami kolekcji w MongoDB i umożliwiają interakcję z dokumentami. Oferują także metody do manipulacji danymi oraz definiowania funkcji instancyjnych i statycznych.</p>
+
+        <h2>Tworzenie modeli</h2>
+        <p>Aby utworzyć model w Mongoose, należy najpierw zdefiniować schemat, a następnie utworzyć na jego podstawie model.</p>
+
+        <pre><code class="language-javascript">
+const mongoose = require('mongoose');
+
+// Definiowanie schematu użytkownika
+const userSchema = new mongoose.Schema({
+    name: {
+        type: String,
+        required: true
+    },
+    age: {
+        type: Number,
+        min: 0
+    },
+    email: {
+        type: String,
+        required: true
+    }
+});
+
+// Tworzenie modelu
+const User = mongoose.model('User', userSchema);
+
+module.exports = User;
+        </code></pre>
+
+        <h2>Metody instancyjne</h2>
+        <p>Metody instancyjne to funkcje definiowane na poziomie pojedynczego dokumentu. Umożliwiają wykonywanie operacji na konkretnym dokumencie. Oto przykład metody instancyjnej:</p>
+
+        <pre><code class="language-javascript">
+// Dodanie metody instancyjnej do schematu
+userSchema.methods.greet = function() {
+    return `Witaj, nazywam się ${this.name} i mam ${this.age} lat.`;
+};
+
+// Użycie metody instancyjnej
+async function showGreeting() {
+    const user = new User({ name: 'Jan', age: 30, email: 'jan@example.com' });
+    await user.save();
+    console.log(user.greet()); // Wypisze: "Witaj, nazywam się Jan i mam 30 lat."
+}
+
+showGreeting();
+        </code></pre>
+
+        <h2>Metody statyczne</h2>
+        <p>Metody statyczne są definiowane na poziomie modelu i mogą być wywoływane bezpośrednio na modelu. Umożliwiają wykonywanie operacji na poziomie kolekcji.</p>
+
+        <pre><code class="language-javascript">
+// Dodanie metody statycznej do schematu
+userSchema.statics.findByEmail = function(email) {
+    return this.findOne({ email });
+};
+
+// Użycie metody statycznej
+async function findUserByEmail() {
+    const user = await User.findByEmail('jan@example.com');
+    if (user) {
+        console.log(`Znaleziono użytkownika: ${user.name}`);
+    } else {
+        console.log('Nie znaleziono użytkownika');
+    }
+}
+
+findUserByEmail();
+        </code></pre>
+
+        <h2>Zalety używania metod instancyjnych i statycznych</h2>
+        <ul>
+            <li><strong>Metody instancyjne:</strong> Idealne do wykonywania operacji związanych z pojedynczym dokumentem, takich jak formatowanie danych lub walidacja.</li>
+            <li><strong>Metody statyczne:</strong> Używane do wykonywania operacji na całej kolekcji, takich jak wyszukiwanie dokumentów na podstawie złożonych kryteriów.</li>
+        </ul>
+
+        <h2>Przykładowe zastosowania</h2>
+        <p>Metody instancyjne i statyczne mogą być używane do różnych zadań, np.:</p>
+        <ul>
+            <li><strong>Metody instancyjne:</strong> Formatowanie danych użytkownika przed wyświetleniem, walidacja specyficzna dla dokumentu.</li>
+            <li><strong>Metody statyczne:</strong> Wyszukiwanie użytkowników na podstawie warunków, agregacje danych w kolekcji.</li>
+        </ul>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/prism.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/components/prism-javascript.min.js"></script>
+</body>
+</html>

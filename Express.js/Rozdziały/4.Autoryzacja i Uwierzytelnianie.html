@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Autoryzacja i Uwierzytelnianie w Express.js</title>
+    <link rel="stylesheet" href="../styles.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/themes/prism-tomorrow.min.css" rel="stylesheet" />
+</head>
+<body>
+    <div class="container">
+        <h1>Autoryzacja i Uwierzytelnianie w Express.js</h1>
+
+        <p>Autoryzacja i uwierzytelnianie to kluczowe elementy każdej aplikacji webowej. W Express.js można zaimplementować uwierzytelnianie za pomocą tokenów JWT (JSON Web Token), które są bezpieczne i łatwe w użyciu.</p>
+
+        <h2>Implementacja JWT</h2>
+        <p>JWT to token, który jest generowany po pomyślnym zalogowaniu użytkownika i przesyłany z każdym kolejnym żądaniem, aby uwierzytelnić użytkownika. Poniżej znajduje się przykład generowania tokena JWT:</p>
+
+        <pre><code class="language-javascript">
+const express = require('express');
+const jwt = require('jsonwebtoken');
+// Importowanie Express i biblioteki JWT
+
+const app = express();
+app.use(express.json());
+// Middleware do parsowania JSON
+
+const SECRET_KEY = 'supersecretkey';
+// Klucz do podpisywania tokenów (powinien być przechowywany bezpiecznie)
+
+app.post('/login', (req, res) => {
+    const { username, password } = req.body;
+    // Pobieranie danych użytkownika z żądania
+
+    if (username === 'admin' && password === 'password') {
+        // Prosta walidacja przykładowego użytkownika
+        const token = jwt.sign({ username }, SECRET_KEY, { expiresIn: '1h' });
+        // Generowanie tokena JWT z danymi użytkownika i określonym czasem ważności
+        res.json({ token });
+        // Wysyłanie tokena jako odpowiedź
+    } else {
+        res.status(401).send('Błędne dane logowania');
+        // Odpowiedź 401 w przypadku niepowodzenia
+    }
+});
+
+const PORT = 3000;
+app.listen(PORT, () => {
+    console.log(`Serwer działa na http://localhost:${PORT}`);
+    // Uruchomienie serwera
+});
+        </code></pre>
+
+        <h2>Middleware uwierzytelniania</h2>
+        <p>Middleware uwierzytelniania weryfikuje, czy token JWT jest prawidłowy i czy użytkownik ma dostęp do określonych zasobów. Oto przykład middleware:</p>
+
+        <pre><code class="language-javascript">
+const authMiddleware = (req, res, next) => {
+    const token = req.headers['authorization'];
+    // Pobranie tokena z nagłówków żądania
+
+    if (!token) {
+        return res.status(403).send('Brak tokena');
+        // Zwrócenie błędu, jeśli token nie jest obecny
+    }
+
+    jwt.verify(token, SECRET_KEY, (err, decoded) => {
+        // Weryfikacja tokena za pomocą klucza
+        if (err) {
+            return res.status(401).send('Token jest nieprawidłowy');
+            // Zwrócenie błędu w przypadku niepowodzenia
+        }
+        req.user = decoded;
+        // Przechowywanie danych użytkownika z tokena w obiekcie 'req'
+        next();
+        // Przejście do następnej funkcji middleware
+    });
+};
+
+app.get('/secure-data', authMiddleware, (req, res) => {
+    res.send('Dane chronione dostępne tylko po uwierzytelnieniu');
+    // Endpoint chroniony middlewarem
+});
+        </code></pre>
+
+        <p>W tym przykładzie middleware <code>authMiddleware</code> weryfikuje token i pozwala na dostęp do chronionego zasobu, jeśli token jest poprawny.</p>
+
+        <h2>Zalecenia bezpieczeństwa</h2>
+        <ul>
+            <li>Przechowuj klucz tajny (<code>SECRET_KEY</code>) w zmiennych środowiskowych lub bezpiecznych miejscach.</li>
+            <li>Używaj HTTPS, aby zabezpieczyć transmisję danych.</li>
+            <li>Tokeny JWT powinny mieć ograniczony czas ważności (<code>expiresIn</code>), aby zmniejszyć ryzyko naruszeń bezpieczeństwa.</li>
+        </ul>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/prism.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/components/prism-javascript.min.js"></script>
+</body>
+</html>

@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Obsługa Błędów w Express.js</title>
+    <link rel="stylesheet" href="../styles.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/themes/prism-tomorrow.min.css" rel="stylesheet" />
+</head>
+<body>
+    <div class="container">
+        <h1>Obsługa Błędów w Express.js</h1>
+
+        <p>Obsługa błędów jest kluczowym elementem każdej aplikacji webowej. W Express.js można z łatwością stworzyć middleware, które obsłuży błędy i wyśle odpowiednie komunikaty.</p>
+
+        <h2>Tworzenie middleware do obsługi błędów</h2>
+        <p>Middleware do obsługi błędów w Express.js jest podobne do innych funkcji middleware, ale posiada cztery parametry: <code>err</code>, <code>req</code>, <code>res</code> oraz <code>next</code>. Oto przykład:</p>
+
+        <pre><code class="language-javascript">
+const express = require('express');
+
+const app = express();
+app.use(express.json());
+
+// Przykładowy endpoint, który może generować błąd
+app.get('/error', (req, res, next) => {
+    const error = new Error('Coś poszło nie tak!');
+    error.status = 500;
+    next(error);
+    // Przekazanie błędu do middleware obsługi błędów
+});
+
+// Middleware do obsługi błędów
+app.use((err, req, res, next) => {
+    const status = err.status || 500;
+    const message = err.message || 'Wewnętrzny błąd serwera';
+    res.status(status).json({ error: message });
+    // Wysłanie odpowiedzi z odpowiednim kodem statusu i komunikatem błędu
+});
+
+const PORT = 3000;
+app.listen(PORT, () => {
+    console.log(`Serwer działa na http://localhost:${PORT}`);
+});
+        </code></pre>
+
+        <p>W tym przykładzie, jeśli żądanie do <code>/error</code> napotka błąd, zostanie on przekazany do middleware obsługi błędów, które zwróci odpowiedni status i komunikat.</p>
+
+        <h2>Wysyłanie odpowiednich komunikatów</h2>
+        <p>Middleware do obsługi błędów powinno zwracać przejrzyste i zrozumiałe komunikaty dla klienta. Dla lepszej obsługi można użyć różnych podejść:</p>
+
+        <ul>
+            <li><strong>Określanie kodu błędu:</strong> Jeśli błąd posiada właściwość <code>status</code>, można jej użyć do ustawienia kodu odpowiedzi.</li>
+            <li><strong>Domyślny komunikat:</strong> Jeśli brak jest szczegółowego komunikatu, middleware może zwracać domyślny tekst, np. „Wewnętrzny błąd serwera”.</li>
+        </ul>
+
+        <pre><code class="language-javascript">
+// Przykład bardziej zaawansowanej obsługi błędów
+app.use((err, req, res, next) => {
+    const status = err.status || 500;
+    const message = err.expose ? err.message : 'Wystąpił nieoczekiwany błąd';
+    res.status(status).json({
+        error: message,
+        timestamp: new Date().toISOString()
+    });
+    // Dodanie znacznika czasu do odpowiedzi dla lepszej diagnostyki
+});
+        </code></pre>
+
+        <h2>Generowanie błędów</h2>
+        <p>W Express.js możesz łatwo generować błędy i przekazywać je do middleware za pomocą <code>next()</code>. Przykłady użycia:</p>
+
+        <pre><code class="language-javascript">
+app.get('/not-found', (req, res, next) => {
+    const error = new Error('Nie znaleziono zasobu');
+    error.status = 404;
+    next(error);
+    // Przekazanie błędu 404 do middleware
+});
+        </code></pre>
+
+        <p>Umożliwia to obsługę różnych typów błędów z odpowiednimi komunikatami i kodami statusu.</p>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/prism.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/components/prism-javascript.min.js"></script>
+</body>
+</html>
