@@ -44,7 +44,39 @@ app.listen(PORT, () => {
 });
         </code></pre>
 
-        <p>W tym przykładzie, jeśli żądanie do <code>/error</code> napotka błąd, zostanie on przekazany do middleware obsługi błędów, które zwróci odpowiedni status i komunikat.</p>
+        
+        <h3>Endpoint <code>/error</code></h3>
+        <p>Endpoint <code>/error</code> symuluje błąd. Kiedy użytkownik odwiedza adres <code>/error</code>:</p>
+        <ul>
+            <li>Wywoływana jest funkcja tworząca nowy obiekt błędu <code>Error</code>.</li>
+            <li>Do obiektu błędu <code>error</code> przypisujemy komunikat <code>"Coś poszło nie tak!"</code> oraz status HTTP <code>500</code>.</li>
+            <li>Wywołujemy <code>next(error)</code>, co przekazuje ten błąd do następnego middleware, czyli middleware obsługi błędów.</li>
+        </ul>
+
+        <h3>Middleware obsługi błędów</h3>
+        <p>Middleware obsługi błędów przechwytuje przekazane błędy:</p>
+        <ul>
+            <li>Express rozpoznaje, że middleware obsługuje błędy, ponieważ pierwszy parametr funkcji to <code>err</code> (error).</li>
+            <li>Middleware obsługi błędów przyjmuje obiekty <code>err</code>, <code>req</code>, <code>res</code> i <code>next</code>.</li>
+            <li><strong>status</strong>: Kod błędu, który aplikacja próbuje ustawić (poprzez <code>err.status</code>). Jeśli nie jest ustawiony, domyślnie ustawiamy <code>500</code>, co oznacza „Wewnętrzny błąd serwera”.</li>
+            <li><strong>message</strong>: Komunikat błędu – jeśli żaden nie został podany, używamy domyślnego komunikatu <code>"Wewnętrzny błąd serwera"</code>.</li>
+            <li>Middleware wysyła odpowiedź JSON z odpowiednim kodem statusu i komunikatem błędu.</li>
+        </ul>
+
+        <h3>Przykład odpowiedzi JSON przy błędzie</h3>
+        <pre><code class="language-json">
+{
+  "error": "Coś poszło nie tak!"
+}
+        </code></pre>
+
+        <p>Jeśli status błędu lub komunikat nie jest określony, domyślna odpowiedź może wyglądać następująco:</p>
+        <pre><code class="language-json">
+{
+  "error": "Wewnętrzny błąd serwera"
+}
+        </code></pre>
+   
 
         <h2>Wysyłanie odpowiednich komunikatów</h2>
         <p>Middleware do obsługi błędów powinno zwracać przejrzyste i zrozumiałe komunikaty dla klienta. Dla lepszej obsługi można użyć różnych podejść:</p>
@@ -66,7 +98,7 @@ app.use((err, req, res, next) => {
     // Dodanie znacznika czasu do odpowiedzi dla lepszej diagnostyki
 });
         </code></pre>
-
+        
         <h2>Generowanie błędów</h2>
         <p>W Express.js możesz łatwo generować błędy i przekazywać je do middleware za pomocą <code>next()</code>. Przykłady użycia:</p>
 

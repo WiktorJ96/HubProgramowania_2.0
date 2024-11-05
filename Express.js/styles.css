@@ -52,7 +52,7 @@ p {
 }
 
 p:hover {
-    color: #3a85f6;
+    color: #ffff;
 }
 
 /* Stylowanie bloków kodu */
@@ -67,7 +67,7 @@ pre {
 }
 
 code {
-    background-color: #3a85f6; /* Błękitne tło inline */
+    background-color: #5092f5; /* Błękitne tło inline */
     padding: 4px 6px;
     border-radius: 6px;
     font-size: 0.9rem;

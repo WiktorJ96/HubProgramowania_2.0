@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Wbudowane metody i właściwości w Express.js</title>
+    <link rel="stylesheet" href="../styles.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/themes/prism-tomorrow.min.css" rel="stylesheet" />
+</head>
+<body>
+    <div class="container">
+        <h1>Lista nagłówków HTTP</h1>
+        <p>Oto lista najczęściej używanych nagłówków HTTP wraz z krótkimi opisami ich zastosowania.</p>
+
+        <h2>Ogólne nagłówki</h2>
+        <ul>
+            <li><strong>Host</strong>: Określa nazwę hosta (domenę), do którego kierowane jest żądanie. Przykład: <code>Host: www.example.com</code>.</li>
+            <li><strong>Authorization</strong>: Zawiera dane uwierzytelniające użytkownika, np. tokeny dostępu. Przykład: <code>Authorization: Bearer abc123</code>.</li>
+            <li><strong>User-Agent</strong>: Identyfikuje typ klienta (np. przeglądarki), który wysyła żądanie. Przykład: <code>User-Agent: Mozilla/5.0</code>.</li>
+            <li><strong>Referer</strong>: Wskazuje adres URL strony, z której użytkownik przeszedł na bieżącą stronę. Przykład: <code>Referer: http://example.com/previous-page</code>.</li>
+            <li><strong>Cookie</strong>: Przechowuje dane sesji i inne informacje użytkownika. Przykład: <code>Cookie: sessionId=abc123</code>.</li>
+        </ul>
+
+        <h2>Nagłówki dotyczące treści</h2>
+        <ul>
+            <li><strong>Content-Type</strong>: Określa typ danych zawartych w ciele żądania lub odpowiedzi. Przykład: <code>Content-Type: application/json</code>.</li>
+            <li><strong>Content-Length</strong>: Informuje o długości danych w ciele żądania lub odpowiedzi. Przykład: <code>Content-Length: 348</code>.</li>
+            <li><strong>Content-Encoding</strong>: Informuje o rodzaju kodowania ciała żądania lub odpowiedzi, np. kompresji. Przykład: <code>Content-Encoding: gzip</code>.</li>
+            <li><strong>Content-Language</strong>: Określa język użyty w treści odpowiedzi. Przykład: <code>Content-Language: pl</code>.</li>
+            <li><strong>Content-Disposition</strong>: Określa, jak treść odpowiedzi powinna być wyświetlana (np. jako załącznik do pobrania). Przykład: <code>Content-Disposition: attachment; filename="plik.txt"</code>.</li>
+        </ul>
+
+        <h2>Nagłówki akceptacji</h2>
+        <ul>
+            <li><strong>Accept</strong>: Określa typy danych, które klient może zaakceptować. Przykład: <code>Accept: text/html, application/json</code>.</li>
+            <li><strong>Accept-Language</strong>: Wskazuje preferowany język odpowiedzi. Przykład: <code>Accept-Language: pl-PL</code>.</li>
+            <li><strong>Accept-Encoding</strong>: Określa metody kompresji, które klient może zaakceptować. Przykład: <code>Accept-Encoding: gzip, deflate</code>.</li>
+            <li><strong>Accept-Charset</strong>: Określa preferowane zestawy znaków dla odpowiedzi. Przykład: <code>Accept-Charset: utf-8</code>.</li>
+        </ul>
+
+        <h2>Inne nagłówki</h2>
+        <ul>
+            <li><strong>Cache-Control</strong>: Służy do zarządzania cache'owaniem odpowiedzi. Przykład: <code>Cache-Control: no-cache</code>.</li>
+            <li><strong>Connection</strong>: Określa, czy połączenie powinno być utrzymane. Przykład: <code>Connection: keep-alive</code>.</li>
+            <li><strong>Date</strong>: Informuje o dacie i czasie wysłania żądania lub odpowiedzi. Przykład: <code>Date: Tue, 15 Nov 1994 08:12:31 GMT</code>.</li>
+            <li><strong>ETag</strong>: Jest unikalnym identyfikatorem wersji zasobu, który pozwala na sprawdzenie, czy zasób się zmienił. Przykład: <code>ETag: "abc123"</code>.</li>
+            <li><strong>Expires</strong>: Wskazuje, kiedy odpowiedź przestanie być aktualna. Przykład: <code>Expires: Wed, 21 Oct 2022 07:28:00 GMT</code>.</li>
+            <li><strong>Last-Modified</strong>: Informuje o dacie ostatniej modyfikacji zasobu. Przykład: <code>Last-Modified: Wed, 21 Oct 2022 07:28:00 GMT</code>.</li>
+            <li><strong>X-Forwarded-For</strong>: Przechowuje adres IP klienta końcowego, zwłaszcza przy korzystaniu z serwerów proxy. Przykład: <code>X-Forwarded-For: 203.0.113.195</code>.</li>
+            <li><strong>X-Requested-With</strong>: Określa sposób wysłania żądania, np. AJAX. Przykład: <code>X-Requested-With: XMLHttpRequest</code>.</li>
+        </ul>
+
+        <h2>Niestandardowe nagłówki</h2>
+        <p>Można także tworzyć nagłówki niestandardowe dla specyficznych funkcji aplikacji. Zazwyczaj mają one przedrostek <code>X-</code>, np. <code>X-Custom-Header</code>.</p>
+    </div>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/prism.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/components/prism-javascript.min.js"></script>
+</body>
+</html>

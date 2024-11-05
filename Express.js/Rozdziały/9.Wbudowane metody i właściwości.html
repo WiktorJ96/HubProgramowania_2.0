@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Wbudowane metody i właściwości w Express.js</title>
+    <link rel="stylesheet" href="../styles.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/themes/prism-tomorrow.min.css" rel="stylesheet" />
+</head>
+<body>
+    <div class="container">
+        <h1>Wbudowane metody i właściwości w Express.js</h1>
+
+        <p>Express.js oferuje szereg wbudowanych metod i właściwości, które ułatwiają zarządzanie żądaniami i odpowiedziami HTTP. Poniżej znajduje się przegląd najważniejszych metod i właściwości dostępnych w obiektach <code>req</code> (żądanie), <code>res</code> (odpowiedź) oraz <code>next</code> w Express.js.</p>
+
+        <h2>1. Obiekt <code>req</code> (żądanie)</h2>
+        <p>Obiekt <code>req</code> reprezentuje przychodzące żądanie HTTP i zawiera dane przesyłane przez klienta.</p>
+
+        <h3>Właściwości obiektu <code>req</code></h3>
+        <ul>
+            <li><strong>req.method</strong>: Zwraca metodę HTTP żądania, np. <code>GET</code>, <code>POST</code>.</li>
+            <li><strong>req.url</strong>: Zwraca URL żądania (ścieżka, do której chce uzyskać dostęp użytkownik).</li>
+            <li><strong>req.headers</strong>: Zawiera wszystkie nagłówki HTTP żądania, np. <code>req.headers['authorization']</code>.</li>
+            <li><strong>req.params</strong>: Zawiera parametry zdefiniowane w ścieżce URL, np. <code>/user/:id</code>, gdzie <code>id</code> można odczytać przez <code>req.params.id</code>.</li>
+            <li><strong>req.query</strong>: Zawiera parametry zapytania z URL, np. dla <code>?name=John</code> wartość <code>req.query.name</code> to "John".</li>
+            <li><strong>req.body</strong>: Zawiera dane wysłane w ciele żądania (głównie dla metod <code>POST</code> i <code>PUT</code>), np. dane formularza lub JSON.</li>
+        </ul>
+
+        <h2>2. Obiekt <code>res</code> (odpowiedź)</h2>
+        <p>Obiekt <code>res</code> reprezentuje odpowiedź HTTP, którą serwer wysyła do klienta.</p>
+
+        <h3>Metody obiektu <code>res</code></h3>
+        <ul>
+            <li><strong>res.send()</strong>: Wysyła odpowiedź do klienta. Może to być tekst, HTML, JSON itd.</li>
+            <li><strong>res.json()</strong>: Wysyła dane w formacie JSON do klienta, np. <code>res.json({ message: 'Hello World' })</code>.</li>
+            <li><strong>res.status()</strong>: Ustawia kod statusu HTTP odpowiedzi, np. <code>res.status(404).send('Not Found')</code>.</li>
+            <li><strong>res.redirect()</strong>: Przekierowuje klienta na inny URL, np. <code>res.redirect('/home')</code>.</li>
+            <li><strong>res.set()</strong>: Ustawia nagłówki HTTP odpowiedzi, np. <code>res.set('Content-Type', 'text/html')</code>.</li>
+        </ul>
+
+        <h2>3. Obiekt <code>next</code></h2>
+        <p>Funkcja <code>next()</code> jest używana w middleware do przekazywania żądania do następnego middleware lub do końcowego handlera. Jeśli nie wywołasz <code>next()</code>, przetwarzanie żądania zostanie zatrzymane.</p>
+
+        <h2>4. Przykłady użycia</h2>
+        <p>Poniżej znajdują się przykłady implementacji niektórych z wymienionych metod i właściwości:</p>
+
+        <pre><code class="language-javascript">
+// Importowanie Express
+const express = require('express');
+const app = express();
+
+// Middleware logujące metodę i URL
+app.use((req, res, next) => {
+    console.log(`Metoda: ${req.method}, URL: ${req.url}`);
+    next(); // Przekazanie dalej
+});
+
+// Przykład użycia res.send() i res.status()
+app.get('/', (req, res) => {
+    res.status(200).send('Witaj na stronie głównej!');
+});
+
+// Przykład użycia res.json() i res.set()
+app.get('/json', (req, res) => {
+    res.set('Content-Type', 'application/json');
+    res.json({ message: 'Witaj w formacie JSON!' });
+});
+
+app.listen(3000, () => {
+    console.log('Serwer działa na porcie 3000');
+});
+        </code></pre>
+
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/prism.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/components/prism-javascript.min.js"></script>
+</body>
+</html>

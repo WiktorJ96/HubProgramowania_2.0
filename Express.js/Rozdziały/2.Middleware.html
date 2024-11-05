@@ -7,6 +7,71 @@
     <link rel="stylesheet" href="../styles.css">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/themes/prism-tomorrow.min.css" rel="stylesheet" />
 </head>
+<style>
+        /* Stylizacja dla tła modala */
+        #myModal {
+            display: none;
+            position: fixed;
+            z-index: 1;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.8); /* ciemniejsze tło */
+        }
+
+        /* Stylizacja dla zawartości modala */
+        .modal-content {
+            background-color: #333;
+            color: #ffff;
+            margin: 5% auto;
+            padding: 20px;
+            border-radius: 8px;
+            width: 90%;
+            max-width: 800px;
+            max-height: 80vh; /* Maksymalna wysokość modal z przewijaniem */
+            overflow-y: auto; /* Dodaje przewijanie dla zawartości modala */
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.5);
+        }
+
+        /* Przycisk zamykający */
+        .close-btn {
+            color: #888;
+            float: right;
+            font-size: 24px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+
+        .close-btn:hover,
+        .close-btn:focus {
+            color: #000;
+            text-decoration: none;
+            cursor: pointer;
+        }
+
+        /* Stylowanie tabeli wewnątrz modala */
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+
+        th, td {
+            padding: 12px;
+            text-align: left;
+            border-bottom: 1px solid #ddd;
+        }
+
+        th {
+            background-color: #4CAF50;
+            color: white;
+        }
+
+        td {
+            background-color: #f9f9f9;
+        }
+    </style>
 <body>
     <div class="container">
         <h1>Middleware w Express.js</h1>
@@ -48,6 +113,60 @@ app.listen(PORT, () => {
 
         <p>W powyższym przykładzie funkcja <code>loggerMiddleware</code> wyświetla informacje o każdym otrzymanym żądaniu i przekazuje sterowanie do kolejnej funkcji dzięki wywołaniu <code>next()</code>.</p>
 
+        <h2>Praktyczny przykład</h2>
+        <pre><code class="language-javascript">
+            const express = require('express');
+const express = require('express');
+// Importowanie frameworka Express
+
+const app = express();
+// Tworzenie nowej aplikacji Express
+
+// Proste middleware do logowania każdej wizyty
+const logMiddleware = (req, res, next) => {
+    const currentTime = new Date().toLocaleString();
+    // Pobieranie aktualnej daty i godziny w czytelnym formacie
+
+    console.log(`[${currentTime}] Odwiedzono: ${req.url}`);
+    // Wyświetlenie w konsoli informacji o odwiedzonym URL i czasie wizyty
+
+    next(); // Przekazanie sterowania do następnej funkcji
+};
+
+// Użycie middleware na wszystkich ścieżkach
+app.use(logMiddleware);
+
+app.get('/', (req, res) => {
+    res.send('Witaj na stronie głównej!');
+    // Strona główna, wyświetla wiadomość po wejściu
+});
+
+app.get('/about', (req, res) => {
+    res.send('To jest strona o nas.');
+    // Strona "O nas", wyświetla wiadomość po wejściu
+});
+
+const PORT = 3000;
+app.listen(PORT, () => {
+    console.log(`Serwer działa na http://localhost:${PORT}`);
+    // Uruchomienie serwera i nasłuchiwanie na określonym porcie
+});
+    </code></pre>
+        <h3>Middleware logujące</h3>
+        <p><code>logMiddleware</code> to proste middleware, które wywoływane jest przy każdym żądaniu.</p>
+        <p>Pobiera aktualny czas (<code>currentTime</code>) i wyświetla go wraz z odwiedzonym adresem URL (<code>req.url</code>) w konsoli. Przykładowa linia w konsoli może wyglądać tak:</p>
+        <pre><code>[2024-11-04 12:34:56] Odwiedzono: /about</code></pre>
+
+        <h3>Funkcja <code>next()</code></h3>
+        <p><code>next()</code> pozwala kontynuować przetwarzanie żądania i przekazuje je dalej do funkcji obsługującej ścieżkę, np. <code>app.get('/')</code>.</p>
+        <p>Dzięki temu middleware tylko loguje informacje i nie blokuje dostępu do stron.</p>
+
+        <h3>Przykładowe ścieżki</h3>
+        <ul>
+            <li>Główna strona <code>/</code> odpowiada tekstem „Witaj na stronie głównej!”.</li>
+            <li>Strona <code>/about</code> odpowiada tekstem „To jest strona o nas.”</li>
+        </ul>
+        
         <h2>Rodzaje funkcji middleware</h2>
         <p>Express.js obsługuje różne rodzaje middleware:</p>
         <ul>
@@ -66,9 +185,87 @@ app.use(express.json());
         </code></pre>
 
         <p>Dzięki temu każda aplikacja Express.js może łatwo obsługiwać dane przesyłane w formacie JSON.</p>
-    </div>
+        <h2>Zastosowania middleware</h2>
+        <h3>Logowanie</h3>
+        <p>Middleware może rejestrować działania użytkowników w konsoli lub zapisywać logi do pliku. Może to być przydatne zarówno w development, jak i w produkcji, aby monitorować ruch na stronie, śledzić błędy lub analizować dane.</p>
 
+        <h3>Obsługa błędów</h3>
+        <p>Middleware często przechwytuje błędy, które pojawią się w trakcie działania aplikacji, i wyświetla odpowiednie komunikaty lub przekierowuje na stronę błędu. Dzięki temu użytkownicy widzą odpowiedni komunikat, a programista może zbierać informacje o błędach.</p>
+
+        <h3>Przetwarzanie danych żądania</h3>
+        <p>Middleware może modyfikować dane przed dalszym przetwarzaniem, np.:</p>
+        <ul>
+            <li>Parsowanie danych z formularzy (np. przy użyciu <code>express.urlencoded()</code>).</li>
+            <li>Parsowanie JSON-a (np. <code>express.json()</code>), co jest kluczowe przy pracy z API.</li>
+        </ul>
+
+        <h3>Uwierzytelnianie i autoryzacja</h3>
+        <p>Middleware pozwala na sprawdzanie, czy użytkownik ma uprawnienia do wykonania danego działania, np. czy jest zalogowany lub ma odpowiednią rolę. To zapewnia bezpieczeństwo aplikacji.</p>
+
+        <h3>Cache’owanie (buforowanie)</h3>
+        <p>Middleware może przechowywać wyniki żądań w pamięci podręcznej, co przyspiesza czas odpowiedzi. To rozwiązanie jest często stosowane w aplikacjach o dużym ruchu.</p>
+
+        <h3>Obsługa plików statycznych</h3>
+        <p>Middleware, takie jak <code>express.static()</code>, pozwala na serwowanie plików statycznych (np. obrazów, CSS, JavaScript) z określonego katalogu, co jest istotne dla poprawnego działania witryny.</p>
+
+        <h3>Bezpieczeństwo</h3>
+        <p>Middleware może służyć do dodawania zabezpieczeń, np. blokowania pewnych rodzajów żądań, filtrowania niebezpiecznych danych lub wymuszania użycia HTTPS.</p>
+
+
+        <button id="openModalBtn">Analogia</button>
+    </div>
+<!-- Modal -->
+<div id="myModal">
+    <div class="modal-content">
+        <span class="close-btn" id="closeModalBtn">&times;</span>
+        <h2>Analogia dla Middleware</h2>
+                <p>Wyobraź sobie, że restauracja działa jak aplikacja internetowa, a klient składający zamówienie to żądanie (<strong>request</strong>). Klient chce otrzymać jedzenie (odpowiedź). W tej restauracji przed dostarczeniem zamówienia do kuchni może być kilka etapów przetwarzania – to są nasze „middleware” (funkcje pośredniczące).</p>
+
+        <h2>Etapy middleware:</h2>
+
+        <h3>Recepcja (Powitanie i pytania)</h3>
+        <p>Recepcjonista może przyjąć zamówienie, zapytać o preferencje, sprawdzić alergie i zanotować to, co jest potrzebne. Tutaj podobnie jak w middleware, przetwarzamy informacje przed ich przekazaniem dalej. Przykładem middleware w aplikacji może być sprawdzenie, czy użytkownik jest zalogowany.</p>
+
+        <h3>Kasa (Płatność)</h3>
+        <p>Kolejnym etapem może być obsługa płatności. Kasa sprawdza, czy klient zapłacił. To jak middleware, który sprawdza, czy użytkownik ma odpowiednie uprawnienia do wykonania danej akcji. Jeśli klient nie zapłacił, proces zostaje zatrzymany (czyli middleware nie przekazuje sterowania dalej).</p>
+
+        <h3>Przekazanie zamówienia do kuchni</h3>
+        <p>Po przejściu przez wszystkie „etapy” zamówienie trafia do kuchni. Tutaj można to porównać do „przekazania sterowania do kolejnej funkcji” za pomocą <code>next()</code> w middleware, które pozwala na kontynuację procesu aż do uzyskania finalnej odpowiedzi.</p>
+
+        <h3>Podanie posiłku (Odpowiedź)</h3>
+        <p>Na koniec klient otrzymuje jedzenie, czyli odpowiedź na swoje zamówienie.</p>
+
+        <p>W ten sposób middleware w aplikacji działa jak zestaw etapów, które przetwarzają, weryfikują lub modyfikują żądanie, zanim dotrze ono do „kuchni” (funkcji odpowiedzialnej za odpowiedź).</p>
+    </div>
+    </div>
+</div>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/prism.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/components/prism-javascript.min.js"></script>
+        <script>
+    // Pobranie elementów
+    const modal = document.getElementById("myModal");
+    const openModalBtn = document.getElementById("openModalBtn");
+    const closeModalBtn = document.getElementById("closeModalBtn");
+
+    // Otwieranie modala i blokowanie przewijania strony
+    openModalBtn.onclick = function() {
+        modal.style.display = "block";
+        document.body.style.overflow = "hidden"; // Zablokowanie przewijania strony
+    }
+
+    // Zamykanie modala i przywrócenie przewijania strony
+    closeModalBtn.onclick = function() {
+        modal.style.display = "none";
+        document.body.style.overflow = "auto"; // Przywrócenie przewijania strony
+    }
+
+    // Zamykanie modala po kliknięciu poza jego obszarem
+    window.onclick = function(event) {
+        if (event.target == modal) {
+            modal.style.display = "none";
+            document.body.style.overflow = "auto"; // Przywrócenie przewijania strony
+        }
+    }
+</script>
 </body>
 </html>
