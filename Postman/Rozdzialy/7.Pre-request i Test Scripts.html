@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pre-request i Test Scripts w Postmanie</title>
+    <link rel="stylesheet" href="../styles.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/themes/prism-tomorrow.min.css" rel="stylesheet" />
+</head>
+<body>
+    <div class="container">
+        <h1>Pre-request i Test Scripts w Postmanie</h1>
+
+        <p>Postman pozwala na uruchamianie skryptów JavaScript przed i po wysłaniu żądania. "Pre-request Scripts" są wykonywane przed wysłaniem żądania i służą do przygotowania danych, np. ustawienia nagłówków czy generowania tokenów. Z kolei "Test Scripts" wykonują testy na odpowiedzi API po zakończeniu żądania.</p>
+
+        <h2>Pre-request Scripts</h2>
+        <p>Skrypty Pre-request są wykonywane przed wysłaniem żądania i mogą być używane do manipulacji danymi lub ustawienia zmiennych, które będą używane w żądaniu.</p>
+
+        <h3>Przykład: Generowanie tokena autoryzacyjnego</h3>
+        <p>W tym przykładzie generujemy losowy token, który jest ustawiany jako nagłówek autoryzacji przed wysłaniem żądania:</p>
+        <pre><code class="language-javascript">
+// Generowanie losowego tokena
+var token = Math.random().toString(36).substring(2);
+
+// Ustawienie tokena jako nagłówka
+pm.environment.set("authToken", token);
+pm.request.headers.add({ key: "Authorization", value: "Bearer " + token });
+        </code></pre>
+
+        <h3>Przykład: Ustawienie dynamicznego parametru daty</h3>
+        <p>Jeśli chcemy wysłać bieżącą datę jako parametr, możemy ją ustawić w skrypcie Pre-request:</p>
+        <pre><code class="language-javascript">
+// Ustawienie dzisiejszej daty jako zmiennej
+var today = new Date().toISOString().split("T")[0];
+pm.environment.set("todayDate", today);
+        </code></pre>
+        <p>Zmienne <code>authToken</code> i <code>todayDate</code> będą dostępne w żądaniu jako {{authToken}} oraz {{todayDate}}.</p>
+
+        <h2>Test Scripts</h2>
+        <p>Test Scripts pozwalają na wykonywanie testów i manipulację odpowiedzią API po zakończeniu żądania. Są często używane do sprawdzenia statusu odpowiedzi, wartości danych lub ustawienia zmiennych na podstawie odpowiedzi.</p>
+
+        <h3>Przykład: Sprawdzenie statusu odpowiedzi</h3>
+        <p>Najczęstszy test to sprawdzenie, czy odpowiedź API jest prawidłowa (np. status 200):</p>
+        <pre><code class="language-javascript">
+// Test sprawdzający status odpowiedzi
+pm.test("Status odpowiedzi to 200", function () {
+    pm.response.to.have.status(200);
+});
+        </code></pre>
+
+        <h3>Przykład: Zapisywanie wartości z odpowiedzi do zmiennej</h3>
+        <p>Można zapisać wartości z odpowiedzi API jako zmienne, które będą używane w kolejnych żądaniach. W tym przykładzie zapisujemy identyfikator użytkownika z odpowiedzi:</p>
+        <pre><code class="language-javascript">
+// Zapisywanie ID użytkownika jako zmiennej
+var jsonData = pm.response.json();
+pm.environment.set("userId", jsonData.user.id);
+        </code></pre>
+
+        <h3>Przykład: Sprawdzenie zawartości odpowiedzi JSON</h3>
+        <p>Ten test sprawdza, czy odpowiedź zawiera konkretne pole, np. <code>username</code>:</p>
+        <pre><code class="language-javascript">
+// Test sprawdzający zawartość odpowiedzi JSON
+pm.test("Odpowiedź zawiera pole 'username'", function () {
+    var jsonData = pm.response.json();
+    pm.expect(jsonData).to.have.property("username");
+});
+        </code></pre>
+
+        <h2>Przykładowe połączenie Pre-request i Test Scripts</h2>
+        <p>Możemy połączyć oba typy skryptów, aby dynamicznie ustawić dane w Pre-request Scripts i sprawdzić odpowiedź w Test Scripts. Na przykład:</p>
+        <h3>Pre-request Script</h3>
+        <pre><code class="language-javascript">
+// Ustawienie losowego ID przed wysłaniem żądania
+pm.environment.set("randomId", Math.floor(Math.random() * 1000));
+        </code></pre>
+
+        <h3>Test Script</h3>
+        <pre><code class="language-javascript">
+// Sprawdzenie, czy ID w odpowiedzi zgadza się z wysłanym losowym ID
+pm.test("Odpowiedź zawiera odpowiednie ID", function () {
+    var jsonData = pm.response.json();
+    pm.expect(jsonData.id).to.eql(pm.environment.get("randomId"));
+});
+        </code></pre>
+
+        <h2>Podsumowanie</h2>
+        <p>Pre-request i Test Scripts w Postmanie pozwalają na dynamiczne zarządzanie żądaniami oraz testowanie odpowiedzi API, co ułatwia testowanie i debugowanie aplikacji. Manipulacja zmiennymi umożliwia bardziej zaawansowane scenariusze testowe i automatyzację działań.</p>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/prism.min.js"></script>
+</body>
+</html>

@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mockowanie API w Postmanie</title>
+    <link rel="stylesheet" href="../styles.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/themes/prism-tomorrow.min.css" rel="stylesheet" />
+</head>
+<body>
+    <div class="container">
+        <h1>Mockowanie API w Postmanie</h1>
+
+        <p>Postman umożliwia tworzenie serwerów mock (symulacji), które pozwalają na symulowanie odpowiedzi serwera API bez potrzeby wdrażania prawdziwego serwera. Jest to przydatne przy testowaniu frontendu, prototypowaniu aplikacji lub kiedy serwer jest jeszcze w fazie tworzenia.</p>
+
+        <h2>Dlaczego warto korzystać z mockowania API?</h2>
+        <p>Mockowanie API pozwala na niezależne testowanie aplikacji, bez konieczności czekania na gotowe API. Dzięki mockom można symulować różne scenariusze odpowiedzi, co przyspiesza proces rozwoju i testowania aplikacji.</p>
+
+        <h2>Tworzenie serwera mock w Postmanie</h2>
+        <p>Aby utworzyć serwer mock, wykonaj następujące kroki:</p>
+        <ol>
+            <li>Otwórz Postmana i kliknij przycisk <strong>"New"</strong>, a następnie wybierz <strong>"Mock Server"</strong>.</li>
+            <li>Wprowadź nazwę serwera mock, wybierz kolekcję (lub utwórz nową), która będzie zawierać żądania, i kliknij <strong>"Create Mock Server"</strong>.</li>
+            <li>Postman wygeneruje URL dla serwera mock, który można używać jako adres bazowy w aplikacji do symulowania odpowiedzi.</li>
+        </ol>
+
+        <h2>Konfiguracja odpowiedzi mock</h2>
+        <p>W serwerze mock można skonfigurować odpowiedzi dla różnych endpointów. Każde żądanie może mieć przypisaną specyficzną odpowiedź, która symuluje rzeczywiste dane z serwera.</p>
+
+        <h3>Przykład odpowiedzi mock</h3>
+        <p>Załóżmy, że nasz endpoint <code>/users</code> zwraca listę użytkowników. Możemy skonfigurować odpowiedź w formie JSON:</p>
+        <pre><code class="language-json">
+{
+    "users": [
+        {"id": 1, "name": "Jan Kowalski"},
+        {"id": 2, "name": "Anna Nowak"}
+    ]
+}
+        </code></pre>
+
+        <p>W ten sposób każde żądanie GET na <code>/users</code> zwróci powyższą odpowiedź, nawet jeśli prawdziwe API nie jest dostępne.</p>
+
+        <h2>Symulowanie różnych kodów statusu</h2>
+        <p>Postman pozwala również na symulowanie odpowiedzi z różnymi kodami statusu, co jest przydatne przy testowaniu scenariuszy błędów, takich jak 404 (Not Found) czy 500 (Internal Server Error).</p>
+        <p>Aby skonfigurować kod statusu odpowiedzi:</p>
+        <ul>
+            <li>Otwórz szczegóły żądania w kolekcji.</li>
+            <li>W sekcji <strong>"Example"</strong> ustaw oczekiwany kod statusu, np. 404.</li>
+            <li>Dodaj treść odpowiedzi, która zostanie zwrócona w przypadku tego błędu.</li>
+        </ul>
+
+        <h3>Przykład odpowiedzi błędu 404</h3>
+        <pre><code class="language-json">
+{
+    "error": "User not found"
+}
+        </code></pre>
+
+        <p>Każde żądanie do endpointu, który jest ustawiony na zwrócenie 404, zwróci tę odpowiedź jako symulację błędu "User not found".</p>
+
+        <h2>Testowanie aplikacji z serwerem mock</h2>
+        <p>Po skonfigurowaniu serwera mock można używać wygenerowanego URL do testowania aplikacji. Zamieniając rzeczywisty URL API na URL serwera mock, aplikacja będzie otrzymywać dane tak, jakby pochodziły z prawdziwego API, co ułatwia debugowanie i testowanie różnych przypadków.</p>
+
+        <h3>Przykład użycia URL mocka w aplikacji</h3>
+        <pre><code class="language-javascript">
+const apiUrl = "https://<mock-url>.mock.pstmn.io/users";
+
+fetch(apiUrl)
+    .then(response => response.json())
+    .then(data => console.log(data))
+    .catch(error => console.error('Błąd:', error));
+        </code></pre>
+
+        <p>W ten sposób aplikacja będzie pobierać dane z serwera mock, co pozwala testować zachowanie aplikacji na różnych odpowiedziach serwera bez potrzeby wdrażania backendu.</p>
+
+        <h2>Podsumowanie</h2>
+        <p>Mockowanie API w Postmanie jest potężnym narzędziem do symulowania odpowiedzi serwera i testowania aplikacji w różnych warunkach. Pozwala na prototypowanie, testowanie i rozwijanie aplikacji niezależnie od dostępności prawdziwego API, co przyspiesza proces tworzenia aplikacji.</p>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/prism.min.js"></script>
+</body>
+</html>

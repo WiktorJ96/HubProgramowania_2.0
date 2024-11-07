@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Postman - Strona Główna</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="container">
+        <h1>Witaj na stronie o Postman</h1>
+        <p>Wybierz temat, aby dowiedzieć się więcej o różnych aspektach Postman.</p>
+
+        <div class="accordion">
+
+            <div class="accordion-item">
+                <h2 class="accordion-header">Podstawowy</h2>
+                <div class="accordion-content">
+                    <ul>
+                        <li><a href="./Rozdzialy/1.Podstawy Postman.html">Podstawy Postman</a></li>
+                        <li><a href="./Rozdzialy/2.Kolekcje i środowiska.html">Kolekcje i środowiska</a></li>
+                        <li><a href="./Rozdzialy/3.Testowanie.html">Testowanie</a></li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="accordion-item"> 
+                <h2 class="accordion-header">Średnio zaawansowany</h2>
+                <div class="accordion-content">
+                    <ul>
+                        <li><a href="./Rozdzialy/4.Automatyzacja.html">Automatyzacja</a></li>
+                        <li><a href="./Rozdzialy/5.Mockowanie API.html">Mockowanie API</a></li>
+                        <li><a href="./Rozdzialy/6.Monitorowanie.html">Monitorowanie</a></li>
+                        <li><a href="./Rozdzialy/7.Pre-request i Test Scripts.html">Pre-request i Test Scripts</a></li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="accordion-item">
+                <h2 class="accordion-header">Zaawansowany</h2>
+                <div class="accordion-content">
+                    <ul>
+                        <li><a href="./Rozdzialy/8.Dokumentacja API.html">Dokumentacja API</a></li>
+                        <li><a href="./Rozdzialy/9.Wspolpraca w zespole.html">Współpraca w zespole</a></li>
+                    </ul>
+                </div>
+            </div>
+
+        </div>
+
+    </div>
+    
+    <script>
+        document.querySelectorAll('.accordion-header').forEach(header => {
+            header.addEventListener('click', function() {
+                const accordionContent = this.nextElementSibling;
+
+                if (accordionContent.style.maxHeight) {
+                    accordionContent.style.maxHeight = null; // Zwijanie
+                } else {
+                    accordionContent.style.maxHeight = accordionContent.scrollHeight + "px"; // Rozwijanie
+                }
+            });
+        });
+    </script>
+</body>
+</html>

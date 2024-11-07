@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Obsługa Błędów w API</title>
+    <link rel="stylesheet" href="../styles.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/themes/prism-tomorrow.min.css" rel="stylesheet" />
+</head>
+<body>
+    <div class="container">
+        <h1>Obsługa Błędów w API</h1>
+
+        <p>Odpowiednia obsługa błędów w API jest kluczowa dla zapewnienia przejrzystości komunikacji między klientem a serwerem. Poprawne używanie kodów statusu HTTP i czytelnych komunikatów błędów pomaga użytkownikom API zrozumieć, co poszło nie tak i jak można to naprawić.</p>
+
+        <h2>Kody statusu HTTP</h2>
+        <p>Kody statusu HTTP są standardem używanym do informowania o rezultacie żądania. Poniżej znajdują się najważniejsze kody statusu, które powinny być używane w odpowiedzi na różne sytuacje:</p>
+
+        <ul>
+            <li><strong>200 OK</strong> - Żądanie zakończyło się sukcesem, a serwer zwrócił dane.</li>
+            <li><strong>201 Created</strong> - Nowy zasób został pomyślnie utworzony (używane z metodą POST).</li>
+            <li><strong>400 Bad Request</strong> - Żądanie było nieprawidłowe, np. brak wymaganych parametrów.</li>
+            <li><strong>401 Unauthorized</strong> - Żądanie wymaga uwierzytelnienia, ale brak ważnych danych autoryzacyjnych.</li>
+            <li><strong>403 Forbidden</strong> - Serwer rozumie żądanie, ale odmawia jego wykonania, np. z powodu braku uprawnień.</li>
+            <li><strong>404 Not Found</strong> - Żądany zasób nie został znaleziony.</li>
+            <li><strong>500 Internal Server Error</strong> - Błąd wewnętrzny serwera, który nie pozwala na realizację żądania.</li>
+        </ul>
+
+        <h2>Przykłady implementacji obsługi błędów w API</h2>
+
+        <h3>Obsługa błędów w Node.js (Express)</h3>
+        <p>Poniżej przedstawiono przykładową implementację obsługi błędów w API z użyciem frameworka Express. Implementacja ta zwraca odpowiednie kody statusu oraz komunikaty błędów zależnie od sytuacji.</p>
+
+        <h4>Przykład obsługi błędu 404 - Zasób nie znaleziony</h4>
+        <pre><code class="language-javascript">
+// Endpoint do pobierania użytkownika
+app.get('/users/:id', (req, res) => {
+    const user = users.find(u => u.id === parseInt(req.params.id));
+    if (!user) {
+        return res.status(404).json({ error: "Użytkownik nie znaleziony" });
+    }
+    res.json(user);
+});
+        </code></pre>
+
+        <h4>Przykład obsługi błędu 400 - Nieprawidłowe żądanie</h4>
+        <p>W przypadku brakujących lub nieprawidłowych parametrów zwróć status 400 i komunikat błędu:</p>
+        <pre><code class="language-javascript">
+// Endpoint do tworzenia nowego użytkownika
+app.post('/users', (req, res) => {
+    if (!req.body.name) {
+        return res.status(400).json({ error: "Brak wymaganego pola 'name'" });
+    }
+    const newUser = { id: users.length + 1, name: req.body.name };
+    users.push(newUser);
+    res.status(201).json(newUser);
+});
+        </code></pre>
+
+        <h4>Przykład obsługi błędu 500 - Błąd serwera</h4>
+        <p>Obsługuj nieoczekiwane błędy serwera za pomocą statusu 500, aby użytkownik wiedział, że problem leży po stronie serwera:</p>
+        <pre><code class="language-javascript">
+app.get('/error', (req, res) => {
+    try {
+        // Kod, który może wygenerować błąd
+        throw new Error("Wewnętrzny błąd serwera");
+    } catch (error) {
+        res.status(500).json({ error: "Wewnętrzny błąd serwera" });
+    }
+});
+        </code></pre>
+
+        <h3>Dodanie globalnego middleware do obsługi błędów w Express</h3>
+        <p>W Express można również dodać globalny middleware do obsługi błędów, aby przechwytywać i obsługiwać wszystkie nieoczekiwane błędy:</p>
+        <pre><code class="language-javascript">
+// Globalny middleware do obsługi błędów
+app.use((err, req, res, next) => {
+    console.error(err.stack);
+    res.status(500).json({ error: "Wewnętrzny błąd serwera" });
+});
+        </code></pre>
+
+        <h2>Komunikaty błędów</h2>
+        <p>Komunikaty błędów powinny być zwięzłe i informacyjne, tak aby programista lub użytkownik wiedział, co poszło nie tak i jak może poprawić żądanie. Oto kilka wskazówek dotyczących tworzenia skutecznych komunikatów błędów:</p>
+        <ul>
+            <li><strong>Jasność</strong>: Wyjaśnij problem w prostych słowach, np. <code>"Brak wymaganego pola 'email'"</code>.</li>
+            <li><strong>Zwięzłość</strong>: Unikaj długich komunikatów – wystarczy krótki opis problemu.</li>
+            <li><strong>Konkretyzacja</strong>: Podaj, które parametry są nieprawidłowe lub brakujące.</li>
+            <li><strong>Brak szczegółów technicznych</strong>: Użytkownik nie musi znać szczegółów wewnętrznych API, takich jak błędy baz danych.</li>
+        </ul>
+
+        <h2>Przykładowa struktura odpowiedzi błędu</h2>
+        <p>Odpowiedzi błędów mogą być ujednolicone, aby były czytelne i przewidywalne. Poniżej przedstawiono przykład struktury odpowiedzi błędu w formacie JSON:</p>
+        <pre><code class="language-json">
+{
+    "error": {
+        "code": 400,
+        "message": "Brak wymaganego pola 'name'",
+        "details": {
+            "parameter": "name",
+            "expected": "string"
+        }
+    }
+}
+        </code></pre>
+
+        <h2>Podsumowanie</h2>
+        <p>Odpowiednia obsługa błędów w API wymaga stosowania odpowiednich kodów statusu HTTP oraz informacyjnych komunikatów błędów. Takie podejście ułatwia użytkownikom zrozumienie, co poszło nie tak, i pozwala szybko rozwiązywać problemy.</p>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/prism.min.js"></script>
+</body>
+</html>

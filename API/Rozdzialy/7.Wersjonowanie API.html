@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Wersjonowanie API</title>
+    <link rel="stylesheet" href="../styles.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/themes/prism-tomorrow.min.css" rel="stylesheet" />
+</head>
+<body>
+    <div class="container">
+        <h1>Wersjonowanie API</h1>
+
+        <p>Wersjonowanie API to proces zarządzania zmianami w interfejsie API w sposób, który umożliwia współistnienie wielu wersji. Jest to ważne, aby utrzymać zgodność wstecz, umożliwiając użytkownikom korzystanie ze starszych wersji API, podczas gdy wprowadzane są nowe funkcje i poprawki.</p>
+
+        <h2>Dlaczego wersjonowanie API jest ważne?</h2>
+        <p>Wersjonowanie API pozwala na wprowadzanie zmian bez zakłócania działania aplikacji, które korzystają z poprzednich wersji API. Pomaga w utrzymaniu stabilności, zapewniając użytkownikom API ciągłość dostępu do wcześniej udostępnionych funkcji.</p>
+
+        <h2>Strategie wersjonowania API</h2>
+        <p>Istnieje kilka popularnych metod wersjonowania API, które różnią się sposobem, w jaki oznacza się wersje API i zarządza ich zmianami. Poniżej omówimy najczęściej stosowane podejścia.</p>
+
+        <h3>1. Wersjonowanie w URL</h3>
+        <p>Wersja API jest umieszczona w URL-u, co czyni ją widoczną i łatwą do identyfikacji. Jest to jedno z najczęściej stosowanych podejść do wersjonowania.</p>
+        <p><strong>Przykład:</strong> <code>https://api.example.com/v1/users</code></p>
+
+        <h4>Zalety:</h4>
+        <ul>
+            <li>Łatwe do zrozumienia i wdrożenia.</li>
+            <li>Użytkownicy API widzą, z jakiej wersji korzystają.</li>
+        </ul>
+
+        <h4>Wady:</h4>
+        <ul>
+            <li>Wymaga zmiany wszystkich endpointów przy każdej nowej wersji.</li>
+        </ul>
+
+        <h3>2. Wersjonowanie w nagłówkach (Headers)</h3>
+        <p>Wersja API jest określona w nagłówkach HTTP, co pozwala na bardziej elastyczne wersjonowanie, bez zmiany URL-i.</p>
+        <p><strong>Przykład:</strong> <code>GET /users</code> z nagłówkiem <code>Accept: application/vnd.example.v1+json</code></p>
+
+        <h4>Zalety:</h4>
+        <ul>
+            <li>URL pozostaje czysty, co ułatwia czytelność.</li>
+            <li>Elastyczne dodawanie i usuwanie wersji API bez zmiany URL.</li>
+        </ul>
+
+        <h4>Wady:</h4>
+        <ul>
+            <li>Trudniejsze do wykrycia przez użytkowników, ponieważ wersja nie jest widoczna w URL.</li>
+        </ul>
+
+        <h3>3. Wersjonowanie na poziomie parametrów zapytania (Query Parameters)</h3>
+        <p>Wersja API jest określona jako parametr zapytania (query), co pozwala użytkownikom na wybór wersji w zapytaniu.</p>
+        <p><strong>Przykład:</strong> <code>https://api.example.com/users?version=1</code></p>
+
+        <h4>Zalety:</h4>
+        <ul>
+            <li>Elastyczne wersjonowanie bez zmiany struktury URL.</li>
+            <li>Łatwe do wdrożenia przy mniejszych zmianach.</li>
+        </ul>
+
+        <h4>Wady:</h4>
+        <ul>
+            <li>Nie jest zalecane w przypadku dużych zmian, które wpływają na strukturę odpowiedzi.</li>
+            <li>Mniej przejrzyste niż wersjonowanie w URL.</li>
+        </ul>
+
+        <h3>4. Wersjonowanie w ciele odpowiedzi (Response Body)</h3>
+        <p>Wersja API jest zwracana w ciele odpowiedzi jako pole, co pozwala klientowi dowiedzieć się, z jakiej wersji API korzysta.</p>
+        <p><strong>Przykład:</strong> <code>{"version": "1", "data": {...}}</code></p>
+
+        <h4>Zalety:</h4>
+        <ul>
+            <li>Nie wymaga zmiany struktury URL ani dodawania nagłówków.</li>
+        </ul>
+
+        <h4>Wady:</h4>
+        <ul>
+            <li>Brak możliwości bezpośredniego wybrania wersji przez użytkownika API.</li>
+            <li>Może być trudne do zarządzania w dużych projektach.</li>
+        </ul>
+
+        <h2>Implementacja wersjonowania API</h2>
+        <p>Wersjonowanie API można zaimplementować w aplikacji za pomocą frameworków, takich jak Express w Node.js. Poniżej znajduje się przykład wersjonowania za pomocą URL w Express.</p>
+
+        <h3>Przykład wersjonowania API w Express (Node.js)</h3>
+        <pre><code class="language-javascript">
+const express = require('express');
+const app = express();
+
+// Wersja 1 API
+app.get('/v1/users', (req, res) => {
+    res.json({ version: "v1", users: [{ id: 1, name: "Jan Kowalski" }] });
+});
+
+// Wersja 2 API z rozszerzonymi danymi
+app.get('/v2/users', (req, res) => {
+    res.json({ version: "v2", users: [{ id: 1, name: "Jan Kowalski", email: "jan@example.com" }] });
+});
+
+app.listen(3000, () => console.log('API działa na porcie 3000'));
+        </code></pre>
+
+        <h2>Rekomendacje przy wersjonowaniu API</h2>
+        <ul>
+            <li><strong>Stosuj wersjonowanie tylko przy większych zmianach</strong>, aby nie komplikować zarządzania API.</li>
+            <li><strong>Dokumentuj każdą wersję API</strong> i informuj użytkowników o wprowadzanych zmianach.</li>
+            <li><strong>Ustal politykę wycofywania starszych wersji</strong>, np. po 6 miesiącach od wprowadzenia nowszej wersji.</li>
+        </ul>
+
+        <h2>Podsumowanie</h2>
+        <p>Wersjonowanie API to istotny element zarządzania cyklem życia API. Wybór odpowiedniej strategii wersjonowania zależy od potrzeb projektu i przewidywanej ilości zmian. Najważniejsze jest zapewnienie stabilności API i dostarczenie jasnej informacji o wersjach dla użytkowników.</p>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/prism.min.js"></script>
+</body>
+</html>

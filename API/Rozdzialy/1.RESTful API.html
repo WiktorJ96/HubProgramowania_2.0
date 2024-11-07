@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>RESTful API - Projektowanie i Implementacja</title>
+    <link rel="stylesheet" href="../styles.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/themes/prism-tomorrow.min.css" rel="stylesheet" />
+</head>
+<body>
+    <div class="container">
+        <h1>RESTful API - Projektowanie i Implementacja</h1>
+
+        <p>RESTful API (Representational State Transfer) to popularny sposób tworzenia interfejsów komunikacyjnych pomiędzy aplikacjami. API zgodne z architekturą REST wykorzystuje HTTP do wykonywania operacji na danych i jest zaprojektowane zgodnie z zasadami REST, które pomagają zapewnić skalowalność, czytelność i spójność.</p>
+
+        <h2>Zasady projektowania RESTful API</h2>
+        <p>RESTful API bazuje na kilku podstawowych zasadach, które zapewniają, że interfejs będzie spójny, łatwy do zrozumienia i zgodny z najlepszymi praktykami. Poniżej znajdują się kluczowe zasady projektowania RESTful API:</p>
+        
+        <ul>
+            <li><strong>Bezstanowość (Statelessness)</strong>: Każde żądanie do serwera musi zawierać wszystkie informacje potrzebne do jego przetworzenia. Serwer nie przechowuje informacji o stanie użytkownika między żądaniami, co ułatwia skalowanie i upraszcza architekturę API.</li>
+            <li><strong>Zasoby (Resources)</strong>: Wszystkie dane są reprezentowane jako zasoby, które są identyfikowane za pomocą unikalnych URL-i. Każdy zasób odpowiada pewnym danym, np. użytkownikom, produktom czy zamówieniom.</li>
+            <li><strong>Metody HTTP</strong>: RESTful API wykorzystuje metody HTTP zgodnie z ich specyficznymi funkcjami:
+                <ul>
+                    <li><strong>GET</strong> - Pobieranie danych zasobu.</li>
+                    <li><strong>POST</strong> - Tworzenie nowego zasobu.</li>
+                    <li><strong>PUT</strong> - Aktualizacja istniejącego zasobu.</li>
+                    <li><strong>DELETE</strong> - Usuwanie zasobu.</li>
+                </ul>
+            </li>
+            <li><strong>Format odpowiedzi</strong>: Dane zwracane przez API powinny być ujednolicone, najczęściej w formacie JSON.</li>
+            <li><strong>Kodowanie odpowiedzi HTTP</strong>: RESTful API powinno wykorzystywać kody statusu HTTP do informowania o wynikach żądania, np. 200 dla sukcesu, 404 dla braku zasobu, 500 dla błędów serwera itp.</li>
+        </ul>
+
+        <h2>Projektowanie RESTful API</h2>
+        <p>Tworzenie RESTful API zaczyna się od zdefiniowania zasobów i odpowiednich endpointów. Na przykład, dla systemu zarządzania użytkownikami mogłyby istnieć następujące zasoby i endpointy:</p>
+        
+        <ul>
+            <li><code>/users</code> - Lista użytkowników (GET)</li>
+            <li><code>/users/{id}</code> - Informacje o konkretnym użytkowniku (GET)</li>
+            <li><code>/users</code> - Dodanie nowego użytkownika (POST)</li>
+            <li><code>/users/{id}</code> - Aktualizacja informacji o użytkowniku (PUT)</li>
+            <li><code>/users/{id}</code> - Usunięcie użytkownika (DELETE)</li>
+        </ul>
+
+        <h3>Przykład implementacji w Node.js z Express</h3>
+        <p>Poniżej przedstawiono prosty przykład implementacji RESTful API w Node.js z użyciem frameworka Express:</p>
+        <pre><code class="language-javascript">
+// Import Express
+const express = require('express');
+const app = express();
+app.use(express.json()); // Parser JSON
+
+// Przykładowa baza danych (w pamięci)
+const users = [
+    { id: 1, name: 'Jan Kowalski' },
+    { id: 2, name: 'Anna Nowak' }
+];
+
+// Endpoint do pobrania listy użytkowników
+app.get('/users', (req, res) => {
+    res.json(users);
+});
+
+// Endpoint do pobrania konkretnego użytkownika po ID
+app.get('/users/:id', (req, res) => {
+    const user = users.find(u => u.id === parseInt(req.params.id));
+    if (!user) return res.status(404).send('Użytkownik nie znaleziony');
+    res.json(user);
+});
+
+// Endpoint do dodania nowego użytkownika
+app.post('/users', (req, res) => {
+    const newUser = {
+        id: users.length + 1,
+        name: req.body.name
+    };
+    users.push(newUser);
+    res.status(201).json(newUser);
+});
+
+// Endpoint do aktualizacji użytkownika
+app.put('/users/:id', (req, res) => {
+    const user = users.find(u => u.id === parseInt(req.params.id));
+    if (!user) return res.status(404).send('Użytkownik nie znaleziony');
+
+    user.name = req.body.name;
+    res.json(user);
+});
+
+// Endpoint do usunięcia użytkownika
+app.delete('/users/:id', (req, res) => {
+    const userIndex = users.findIndex(u => u.id === parseInt(req.params.id));
+    if (userIndex === -1) return res.status(404).send('Użytkownik nie znaleziony');
+
+    users.splice(userIndex, 1);
+    res.sendStatus(204);
+});
+
+// Uruchomienie serwera
+app.listen(3000, () => {
+    console.log('Serwer API działa na http://localhost:3000');
+});
+        </code></pre>
+
+        <h2>Przykład odpowiedzi API</h2>
+        <p>Przykładowa odpowiedź API dla endpointu <code>/users</code>:</p>
+        <pre><code class="language-json">
+{
+    "users": [
+        { "id": 1, "name": "Jan Kowalski" },
+        { "id": 2, "name": "Anna Nowak" }
+    ]
+}
+        </code></pre>
+
+        <h2>Zalety i wady RESTful API</h2>
+        <p>RESTful API ma wiele zalet, ale także kilka ograniczeń, które należy brać pod uwagę:</p>
+        <ul>
+            <li><strong>Zalety:</strong> Skalowalność, prostota, możliwość pracy z wieloma platformami, szybkie działanie przy korzystaniu z pamięci podręcznej (cache).</li>
+            <li><strong>Wady:</strong> Bezstanowość może być ograniczeniem przy skomplikowanych operacjach, a RESTful API może być mniej wydajne w aplikacjach o dużej ilości operacji na wielu zasobach.</li>
+        </ul>
+
+        <h2>Podsumowanie</h2>
+        <p>RESTful API to popularny i skuteczny sposób na projektowanie interfejsów komunikacyjnych dla aplikacji. Przestrzeganie zasad REST oraz używanie odpowiednich metod HTTP pozwala stworzyć łatwe do zrozumienia i skalowalne API, które może być wykorzystywane w różnych środowiskach.</p>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/prism.min.js"></script>
+</body>
+</html>

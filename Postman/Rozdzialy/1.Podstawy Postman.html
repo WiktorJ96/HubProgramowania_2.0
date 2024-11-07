@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Podstawy Postman</title>
+    <link rel="stylesheet" href="../styles.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/themes/prism-tomorrow.min.css" rel="stylesheet" />
+</head>
+<body>
+    <div class="container">
+        <h1>Podstawy Postman</h1>
+
+        <p>Postman to popularne narzędzie do testowania API, które umożliwia wysyłanie żądań HTTP do serwera, co jest przydatne przy tworzeniu i testowaniu aplikacji działających na różnych metodach HTTP. Poniżej znajdziesz omówienie podstawowych metod HTTP oraz przykłady ich użycia w Postmanie.</p>
+
+        <h2>Instalacja Postman</h2>
+        <p>Aby rozpocząć pracę z Postmanem, można pobrać aplikację ze strony <a href="https://www.postman.com/downloads/" target="_blank">postman.com</a>. Narzędzie to jest dostępne na systemy Windows, Mac oraz Linux i pozwala szybko testować różne API.</p>
+
+        <h2>Wysyłanie żądań HTTP</h2>
+        <p>Postman obsługuje różne metody HTTP, takie jak GET, POST, PUT i DELETE, które są używane do komunikacji z serwerem. Każda metoda ma inną funkcję:</p>
+        <ul>
+            <li><strong>GET</strong>: Pobiera dane z serwera.</li>
+            <li><strong>POST</strong>: Wysyła nowe dane do serwera.</li>
+            <li><strong>PUT</strong>: Aktualizuje istniejące dane na serwerze.</li>
+            <li><strong>DELETE</strong>: Usuwa dane z serwera.</li>
+        </ul>
+
+        <h2>Przykłady użycia metod HTTP w Postman</h2>
+        <p>Poniżej znajdują się przykłady użycia każdej z metod HTTP w Postmanie. Aby wysłać żądanie, należy wybrać odpowiednią metodę, wprowadzić URL API, a następnie skonfigurować wymagane nagłówki i parametry (jeśli są potrzebne).</p>
+
+        <h3>GET</h3>
+        <pre><code class="language-json">
+# Użycie metody GET
+GET https://api.example.com/users
+
+# Odpowiedź
+{
+    "users": [
+        {"id": 1, "name": "Jan Kowalski"},
+        {"id": 2, "name": "Anna Nowak"}
+    ]
+}
+        </code></pre>
+        <p>Metoda GET pobiera dane, takie jak lista użytkowników z serwera. Wystarczy wpisać URL i kliknąć "Send" w Postmanie.</p>
+
+        <h3>POST</h3>
+        <pre><code class="language-json">
+# Użycie metody POST
+POST https://api.example.com/users
+Body:
+{
+    "name": "Piotr Zieliński"
+}
+
+# Odpowiedź
+{
+    "id": 3,
+    "name": "Piotr Zieliński"
+}
+        </code></pre>
+        <p>Metoda POST jest używana do dodawania nowych danych. W Postmanie należy wybrać "Body" i wprowadzić dane, które chcemy przesłać.</p>
+
+        <h3>PUT</h3>
+        <pre><code class="language-json">
+# Użycie metody PUT
+PUT https://api.example.com/users/3
+Body:
+{
+    "name": "Piotr Z."
+}
+
+# Odpowiedź
+{
+    "id": 3,
+    "name": "Piotr Z."
+}
+        </code></pre>
+        <p>Metoda PUT pozwala na aktualizację istniejących danych. W przykładzie aktualizujemy dane użytkownika o ID 3.</p>
+
+        <h3>DELETE</h3>
+        <pre><code class="language-json">
+# Użycie metody DELETE
+DELETE https://api.example.com/users/3
+
+# Odpowiedź
+{
+    "message": "User deleted successfully."
+}
+        </code></pre>
+        <p>Metoda DELETE usuwa dane, w tym przypadku użytkownika o ID 3. Wystarczy wprowadzić URL i wysłać żądanie, aby usunąć dane z serwera.</p>
+
+        <h2>Obsługa nagłówków i parametrów</h2>
+        <p>W Postmanie można także dodawać nagłówki (headers) i parametry do żądań. Są one potrzebne, aby przekazywać dodatkowe informacje, takie jak tokeny autoryzacyjne lub parametry filtrowania. Wystarczy przejść do zakładki "Headers" lub "Params" w Postmanie i dodać wymagane dane.</p>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/prism.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/components/prism-json.min.js"></script>
+</body>
+</html>

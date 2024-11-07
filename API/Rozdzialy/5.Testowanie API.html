@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Testowanie API - Postman i Newman</title>
+    <link rel="stylesheet" href="../styles.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/themes/prism-tomorrow.min.css" rel="stylesheet" />
+</head>
+<body>
+    <div class="container">
+        <h1>Testowanie API - Postman i Newman</h1>
+
+        <p>Testowanie API jest kluczowe, aby upewnić się, że wszystkie endpointy działają zgodnie z założeniami. Narzędzia takie jak Postman i Newman pozwalają na łatwe testowanie, automatyzację i monitorowanie API.</p>
+
+        <h2>Postman - Testowanie API w interfejsie graficznym</h2>
+        <p><strong>Postman</strong> to popularne narzędzie, które pozwala wysyłać żądania HTTP do API, testować odpowiedzi i automatyzować testy. Posiada intuicyjny interfejs, który umożliwia łatwe konfiguracje żądań i testów.</p>
+
+        <h3>Konfiguracja żądań w Postmanie</h3>
+        <p>Aby rozpocząć testowanie API w Postmanie, wykonaj następujące kroki:</p>
+        <ol>
+            <li>Otwórz Postmana i utwórz nową kolekcję, aby zorganizować swoje testy.</li>
+            <li>Dodaj nowe żądanie do kolekcji, wybierając metodę HTTP (GET, POST, PUT, DELETE) i wpisując URL endpointu.</li>
+            <li>Skonfiguruj nagłówki, parametry i body żądania (jeśli są wymagane).</li>
+            <li>Wyślij żądanie i sprawdź odpowiedź zwróconą przez API.</li>
+        </ol>
+
+        <h3>Dodawanie testów w Postmanie</h3>
+        <p>Postman umożliwia dodawanie skryptów testowych, które weryfikują, czy odpowiedź API jest zgodna z oczekiwaniami. Skrypty te można pisać w JavaScript i są wykonywane po każdorazowym otrzymaniu odpowiedzi.</p>
+
+        <h4>Przykład testu w Postmanie</h4>
+        <pre><code class="language-javascript">
+// Test sprawdzający status odpowiedzi
+pm.test("Status odpowiedzi to 200", function () {
+    pm.response.to.have.status(200);
+});
+
+// Test sprawdzający, czy odpowiedź zawiera pole 'username'
+pm.test("Odpowiedź zawiera pole 'username'", function () {
+    var jsonData = pm.response.json();
+    pm.expect(jsonData).to.have.property("username");
+});
+        </code></pre>
+
+        <h2>Newman - Automatyzacja testów Postmana w linii komend</h2>
+        <p><strong>Newman</strong> to narzędzie CLI (Command Line Interface) do uruchamiania kolekcji Postmana w linii komend, co umożliwia automatyczne testowanie API, szczególnie w procesach CI/CD (ciągłej integracji i dostarczania).</p>
+
+        <h3>Instalacja Newmana</h3>
+        <p>Aby zainstalować Newmana, potrzebujesz Node.js. Możesz go zainstalować za pomocą npm:</p>
+        <pre><code class="language-shell">
+npm install -g newman
+        </code></pre>
+
+        <h3>Uruchamianie kolekcji Postmana za pomocą Newmana</h3>
+        <p>Po utworzeniu kolekcji w Postmanie, wyeksportuj ją do pliku JSON i użyj Newmana do jej uruchomienia:</p>
+        <pre><code class="language-shell">
+newman run sciezka/do/pliku_kolekcji.json
+        </code></pre>
+
+        <h3>Przykład uruchomienia z dodatkowymi opcjami</h3>
+        <p>Newman oferuje wiele opcji konfiguracyjnych, np. ustawienie środowiska, określenie formatu raportu oraz timeoutu dla żądań.</p>
+        <pre><code class="language-shell">
+newman run sciezka/do/pliku_kolekcji.json -e sciezka/do/pliku_srodowiska.json --reporters cli,json --timeout 5000
+        </code></pre>
+
+        <h2>Integracja Newmana z CI/CD</h2>
+        <p>Newman może być łatwo zintegrowany z systemami CI/CD, takimi jak Jenkins, GitHub Actions czy GitLab CI, co pozwala na automatyczne uruchamianie testów API po każdym wdrożeniu kodu. Dzięki temu zespoły mogą szybko wykrywać problemy z API na wczesnym etapie.</p>
+
+        <h3>Przykład: Integracja z GitHub Actions</h3>
+        <p>Poniżej znajduje się przykładowy plik konfiguracyjny <code>.github/workflows/api-tests.yml</code> do uruchamiania testów Newmana za pomocą GitHub Actions:</p>
+        <pre><code class="language-yaml">
+name: API Tests
+
+on: [push, pull_request]
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v2
+
+    - name: Install Node.js
+      uses: actions/setup-node@v2
+      with:
+        node-version: '14'
+
+    - name: Install Newman
+      run: npm install -g newman
+
+    - name: Run API tests
+      run: newman run sciezka/do/pliku_kolekcji.json -e sciezka/do/pliku_srodowiska.json
+        </code></pre>
+
+        <h2>Raportowanie wyników testów</h2>
+        <p>Newman obsługuje różne formaty raportów, takie jak CLI, JSON, HTML i XML, co umożliwia elastyczne zarządzanie wynikami testów. Raporty w formacie HTML są szczególnie przydatne dla zespołów, które przeglądają wyniki testów w przeglądarce.</p>
+        
+        <h3>Przykład raportu HTML</h3>
+        <pre><code class="language-shell">
+newman run sciezka/do/pliku_kolekcji.json --reporters html --reporter-html-export raport.html
+        </code></pre>
+
+        <p>Wygenerowany plik <code>raport.html</code> można otworzyć w przeglądarce, aby zobaczyć szczegółowy raport wyników testów.</p>
+
+        <h2>Podsumowanie</h2>
+        <p>Postman i Newman to potężne narzędzia do testowania API, które pozwalają na ręczne i automatyczne sprawdzanie poprawności działania endpointów. Postman oferuje intuicyjny interfejs do konfiguracji i testowania, a Newman pozwala na integrację testów z procesami CI/CD, co pomaga w utrzymaniu jakości API na każdym etapie rozwoju.</p>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/prism.min.js"></script>
+</body>
+</html>

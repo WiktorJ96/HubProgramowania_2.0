@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Automatyzacja Testów w Postmanie</title>
+    <link rel="stylesheet" href="../styles.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/themes/prism-tomorrow.min.css" rel="stylesheet" />
+</head>
+<body>
+    <div class="container">
+        <h1>Automatyzacja Testów w Postmanie</h1>
+
+        <p>Automatyzacja testów w Postmanie z użyciem Newmana pozwala na uruchamianie testów API w linii komend, co jest kluczowe przy integracji testów z procesami CI/CD. Newman jest narzędziem wiersza poleceń, które pozwala na uruchamianie kolekcji Postmana automatycznie i bez interakcji użytkownika.</p>
+
+        <h2>Instalacja Newmana</h2>
+        <p>Aby używać Newmana, należy zainstalować go za pomocą Node.js i npm. Można to zrobić za pomocą poniższego polecenia:</p>
+        <pre><code class="language-shell">
+npm install -g newman
+        </code></pre>
+
+        <p>Po instalacji Newman będzie dostępny jako komenda <code>newman</code> w linii poleceń.</p>
+
+        <h2>Uruchamianie Kolekcji z użyciem Newmana</h2>
+        <p>Aby uruchomić kolekcję w Postmanie przy użyciu Newmana, najpierw wyeksportuj kolekcję z Postmana (w formacie JSON), a następnie użyj następującego polecenia:</p>
+        <pre><code class="language-shell">
+newman run ścieżka/do/pliku_kolekcji.json
+        </code></pre>
+
+        <p>Newman wyświetli wyniki testów w linii komend, co jest przydatne przy automatycznych testach API.</p>
+
+        <h3>Przykład z dodatkowymi opcjami</h3>
+        <p>Newman oferuje różne opcje konfiguracji, takie jak ustawienie środowiska, raportowanie wyników testów i ustawienie timeoutu dla żądań:</p>
+        <pre><code class="language-shell">
+newman run ścieżka/do/pliku_kolekcji.json -e ścieżka/do/pliku_środowiska.json --reporters cli,json --timeout 5000
+        </code></pre>
+        <p>W powyższym przykładzie użyto środowiska oraz włączono raportowanie w formatach CLI i JSON.</p>
+
+        <h2>Integracja z CI/CD</h2>
+        <p>Integracja Newmana z systemami CI/CD, takimi jak GitHub Actions, Jenkins, czy GitLab CI, pozwala na automatyczne uruchamianie testów API podczas każdego wdrożenia. Dzięki temu możemy monitorować stabilność API przy każdej zmianie kodu.</p>
+
+        <h3>Przykład: GitHub Actions</h3>
+        <p>Oto przykład prostego pliku konfiguracyjnego <code>.github/workflows/test.yml</code> do uruchamiania testów z użyciem GitHub Actions:</p>
+        <pre><code class="language-yaml">
+name: API Tests
+
+on: [push, pull_request]
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v2
+
+    - name: Install Node.js
+      uses: actions/setup-node@v2
+      with:
+        node-version: '14'
+
+    - name: Install Newman
+      run: npm install -g newman
+
+    - name: Run API tests
+      run: newman run ścieżka/do/pliku_kolekcji.json -e ścieżka/do/pliku_środowiska.json
+        </code></pre>
+        
+        <p>Ten plik konfiguruje GitHub Actions do uruchamiania testów Postmana przy każdym pushu lub pull request do repozytorium. Testy zostaną wykonane w systemie Ubuntu, gdzie zainstalowany zostanie Node.js i Newman.</p>
+
+        <h3>Przykład: Jenkins</h3>
+        <p>Aby zintegrować Newman z Jenkinsa, można stworzyć zadanie, które uruchamia Newmana jako skrypt wiersza poleceń. W polu "Execute Shell" można wpisać:</p>
+        <pre><code class="language-shell">
+newman run ścieżka/do/pliku_kolekcji.json -e ścieżka/do/pliku_środowiska.json
+        </code></pre>
+
+        <p>Dzięki temu Jenkins automatycznie uruchomi testy podczas procesu budowania lub wdrażania aplikacji.</p>
+
+        <h2>Raportowanie wyników testów</h2>
+        <p>Newman obsługuje różne formaty raportów, takie jak CLI, JSON, HTML, XML, co pozwala na elastyczne dostosowanie wyników do potrzeb projektu. Przykład użycia raportu HTML:</p>
+        <pre><code class="language-shell">
+newman run ścieżka/do/pliku_kolekcji.json --reporters html --reporter-html-export wynik.html
+        </code></pre>
+
+        <p>Powstały plik <code>wynik.html</code> zawiera szczegółowy raport wyników testów, co jest przydatne dla osób przeglądających wyniki testów bezpośrednio w przeglądarce.</p>
+
+        <h2>Podsumowanie</h2>
+        <p>Automatyzacja testów Postmana z użyciem Newmana i integracja z CI/CD pozwalają na stałe monitorowanie i testowanie stabilności API przy każdej zmianie kodu. Użycie raportowania pomaga również w szybkim identyfikowaniu problemów w odpowiedziach API.</p>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/prism.min.js"></script>
+</body>
+</html>

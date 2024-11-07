@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tworzenie Dokumentacji API - Swagger i OpenAPI</title>
+    <link rel="stylesheet" href="../styles.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/themes/prism-tomorrow.min.css" rel="stylesheet" />
+</head>
+<body>
+    <div class="container">
+        <h1>Tworzenie Dokumentacji API - Swagger i OpenAPI</h1>
+
+        <p>Swagger i OpenAPI to popularne narzędzia do tworzenia i udostępniania dokumentacji API. Dokumentacja API jest kluczowym elementem, który pozwala programistom zrozumieć, jak korzystać z API, jakie zasoby są dostępne i jakie dane można uzyskać.</p>
+
+        <h2>Czym jest OpenAPI?</h2>
+        <p>OpenAPI to standardowy format opisujący specyfikację API w sposób czytelny zarówno dla ludzi, jak i maszyn. Jest to otwarty standard używany do definiowania interfejsów API RESTful, który pozwala na tworzenie interaktywnej dokumentacji.</p>
+
+        <h2>Swagger i jego narzędzia</h2>
+        <p>Swagger to zestaw narzędzi opartych na specyfikacji OpenAPI. Narzędzia te umożliwiają tworzenie, testowanie i publikowanie dokumentacji API. Główne narzędzia Swagger to:</p>
+        <ul>
+            <li><strong>Swagger Editor</strong>: Edytor online umożliwiający tworzenie specyfikacji OpenAPI.</li>
+            <li><strong>Swagger UI</strong>: Interaktywna dokumentacja, która pozwala użytkownikom testować endpointy bezpośrednio z poziomu przeglądarki.</li>
+            <li><strong>Swagger Codegen</strong>: Narzędzie generujące kod dla klienta lub serwera na podstawie specyfikacji API.</li>
+        </ul>
+
+        <h2>Tworzenie dokumentacji API przy użyciu OpenAPI</h2>
+        <p>Dokumentację API można tworzyć poprzez opisanie wszystkich endpointów i zasobów w formacie OpenAPI. Poniżej znajduje się przykładowa specyfikacja API w formacie OpenAPI dla endpointu <code>/users</code>.</p>
+
+        <h3>Przykład specyfikacji OpenAPI</h3>
+        <pre><code class="language-yaml">
+openapi: 3.0.0
+info:
+  title: User API
+  version: "1.0"
+  description: API do zarządzania użytkownikami
+
+paths:
+  /users:
+    get:
+      summary: Pobiera listę użytkowników
+      responses:
+        '200':
+          description: Lista użytkowników
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    id:
+                      type: integer
+                    name:
+                      type: string
+    post:
+      summary: Tworzy nowego użytkownika
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                name:
+                  type: string
+      responses:
+        '201':
+          description: Użytkownik został utworzony
+  /users/{id}:
+    get:
+      summary: Pobiera użytkownika o podanym ID
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Dane użytkownika
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  id:
+                    type: integer
+                  name:
+                    type: string
+        '404':
+          description: Użytkownik nie znaleziony
+        </code></pre>
+
+        <h2>Implementacja Swagger UI</h2>
+        <p>Swagger UI to narzędzie, które pozwala na wizualizację dokumentacji API i umożliwia interakcję z endpointami bezpośrednio z przeglądarki. Można go dodać do projektu, instalując odpowiednią bibliotekę lub korzystając z wersji hostowanej.</p>
+
+        <h3>Instalacja Swagger UI w Node.js (Express)</h3>
+        <pre><code class="language-javascript">
+// Instalacja Swagger UI Express
+npm install swagger-ui-express
+
+// Implementacja w aplikacji Express
+const swaggerUi = require('swagger-ui-express');
+const swaggerDocument = require('./swagger.json'); // Plik specyfikacji OpenAPI
+
+app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocument));
+
+console.log('Dokumentacja API dostępna na http://localhost:3000/api-docs');
+        </code></pre>
+
+        <p>Po dodaniu Swagger UI do projektu dokumentacja będzie dostępna pod podanym URL, a użytkownicy będą mogli testować endpointy bezpośrednio z przeglądarki.</p>
+
+        <h2>Korzyści z używania Swagger i OpenAPI</h2>
+        <ul>
+            <li><strong>Czytelność</strong>: Specyfikacja OpenAPI tworzy przejrzystą i łatwą do zrozumienia dokumentację API.</li>
+            <li><strong>Interaktywność</strong>: Swagger UI pozwala na testowanie endpointów bezpośrednio w dokumentacji.</li>
+            <li><strong>Automatyzacja</strong>: Swagger Codegen umożliwia generowanie kodu serwera lub klienta na podstawie specyfikacji API.</li>
+            <li><strong>Standaryzacja</strong>: OpenAPI jest standardem branżowym, co ułatwia integrację z innymi narzędziami.</li>
+        </ul>
+
+        <h2>Podsumowanie</h2>
+        <p>Swagger i OpenAPI to potężne narzędzia do tworzenia i udostępniania dokumentacji API. Dzięki nim dokumentacja jest czytelna, interaktywna i łatwo dostępna, co ułatwia programistom pracę z API. OpenAPI umożliwia również generowanie kodu i standaryzację dokumentacji, co jest przydatne w dużych projektach.</p>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/prism.min.js"></script>
+</body>
+</html>

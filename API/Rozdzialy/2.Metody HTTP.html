@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Metody HTTP i ich zastosowanie w API</title>
+    <link rel="stylesheet" href="../styles.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/themes/prism-tomorrow.min.css" rel="stylesheet" />
+</head>
+<body>
+    <div class="container">
+        <h1>Metody HTTP i ich zastosowanie w API</h1>
+
+        <p>W kontekście API, metody HTTP definiują rodzaj operacji, które chcemy wykonać na zasobach serwera. Każda z metod (GET, POST, PUT, DELETE) ma specyficzne zastosowania, które są kluczowe przy tworzeniu RESTful API. Poniżej omówimy najczęściej używane metody HTTP i ich zastosowanie w API.</p>
+
+        <h2>GET</h2>
+        <p>Metoda GET służy do pobierania danych z serwera. Jest to operacja odczytu, która nie powinna modyfikować danych na serwerze. GET jest wykorzystywana do uzyskiwania dostępu do zasobów, takich jak lista użytkowników, szczegóły produktów czy treści artykułów.</p>
+
+        <h3>Przykład żądania GET</h3>
+        <pre><code class="language-http">
+GET /users HTTP/1.1
+Host: api.example.com
+        </code></pre>
+        <p>W odpowiedzi na powyższe żądanie serwer zwróci listę użytkowników w formacie JSON:</p>
+        <pre><code class="language-json">
+{
+    "users": [
+        { "id": 1, "name": "Jan Kowalski" },
+        { "id": 2, "name": "Anna Nowak" }
+    ]
+}
+        </code></pre>
+
+        <h2>POST</h2>
+        <p>Metoda POST jest używana do tworzenia nowych zasobów na serwerze, takich jak dodawanie nowych użytkowników lub produktów. Żądanie POST zazwyczaj zawiera dane w treści (body), które są potrzebne do utworzenia zasobu.</p>
+
+        <h3>Przykład żądania POST</h3>
+        <pre><code class="language-http">
+POST /users HTTP/1.1
+Host: api.example.com
+Content-Type: application/json
+
+{
+    "name": "Piotr Zieliński"
+}
+        </code></pre>
+        <p>Odpowiedź serwera na to żądanie potwierdzi utworzenie nowego użytkownika:</p>
+        <pre><code class="language-json">
+{
+    "id": 3,
+    "name": "Piotr Zieliński"
+}
+        </code></pre>
+
+        <h2>PUT</h2>
+        <p>Metoda PUT służy do aktualizowania istniejących zasobów na serwerze. W przypadku użycia PUT cały zasób jest nadpisywany nowymi danymi. PUT jest często używany do modyfikacji danych użytkownika, edycji zamówień itp.</p>
+
+        <h3>Przykład żądania PUT</h3>
+        <pre><code class="language-http">
+PUT /users/3 HTTP/1.1
+Host: api.example.com
+Content-Type: application/json
+
+{
+    "name": "Piotr Z."
+}
+        </code></pre>
+        <p>Odpowiedź serwera potwierdza aktualizację zasobu:</p>
+        <pre><code class="language-json">
+{
+    "id": 3,
+    "name": "Piotr Z."
+}
+        </code></pre>
+
+        <h2>DELETE</h2>
+        <p>Metoda DELETE jest używana do usuwania zasobów z serwera. Usuwa zasób na podstawie identyfikatora (ID) lub innego unikalnego atrybutu. Przykładowo, możemy usunąć użytkownika lub zamówienie za pomocą metody DELETE.</p>
+
+        <h3>Przykład żądania DELETE</h3>
+        <pre><code class="language-http">
+DELETE /users/3 HTTP/1.1
+Host: api.example.com
+        </code></pre>
+        <p>Odpowiedź serwera może zwracać komunikat potwierdzający usunięcie zasobu:</p>
+        <pre><code class="language-json">
+{
+    "message": "Użytkownik został pomyślnie usunięty."
+}
+        </code></pre>
+
+        <h2>Podsumowanie zastosowań metod HTTP</h2>
+        <table>
+            <tr>
+                <th>Metoda</th>
+                <th>Opis</th>
+                <th>Zastosowanie</th>
+            </tr>
+            <tr>
+                <td>GET</td>
+                <td>Pobieranie danych</td>
+                <td>Odczyt danych bez modyfikacji serwera</td>
+            </tr>
+            <tr>
+                <td>POST</td>
+                <td>Tworzenie nowych zasobów</td>
+                <td>Dodawanie nowych użytkowników, produktów, zamówień itp.</td>
+            </tr>
+            <tr>
+                <td>PUT</td>
+                <td>Aktualizacja istniejących zasobów</td>
+                <td>Modyfikacja danych użytkownika, edycja zamówień</td>
+            </tr>
+            <tr>
+                <td>DELETE</td>
+                <td>Usuwanie zasobów</td>
+                <td>Usuwanie użytkowników, zamówień, produktów</td>
+            </tr>
+        </table>
+
+        <h2>Zalety stosowania metod HTTP</h2>
+        <ul>
+            <li><strong>Spójność</strong>: Każda metoda HTTP ma określone zastosowanie, co ułatwia zrozumienie i rozwój API.</li>
+            <li><strong>Skalowalność</strong>: Rozdzielenie operacji na pobieranie, tworzenie, aktualizację i usuwanie zasobów ułatwia skalowanie API.</li>
+            <li><strong>Integracja</strong>: Metody HTTP są standardem w komunikacji między serwerami, co ułatwia integrację z innymi systemami.</li>
+        </ul>
+
+        <h2>Podsumowanie</h2>
+        <p>Metody HTTP, takie jak GET, POST, PUT i DELETE, są podstawą projektowania RESTful API. Każda z tych metod ma specyficzne zastosowania i pomaga w efektywnej pracy z danymi w API. Zrozumienie, jak prawidłowo stosować metody HTTP, jest kluczowe dla tworzenia dobrze zaprojektowanego API.</p>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/prism.min.js"></script>
+</body>
+</html>

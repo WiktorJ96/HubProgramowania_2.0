@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tworzenie API z użyciem GraphQL</title>
+    <link rel="stylesheet" href="../styles.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/themes/prism-tomorrow.min.css" rel="stylesheet" />
+</head>
+<body>
+    <div class="container">
+        <h1>Tworzenie API z użyciem GraphQL</h1>
+
+        <p>GraphQL to alternatywa dla tradycyjnych API REST, która umożliwia elastyczne pobieranie i aktualizowanie danych. Zamiast predefiniowanych endpointów, GraphQL pozwala klientom na dokładne określenie, jakie dane chcą uzyskać, co zmniejsza liczbę niepotrzebnych zapytań i optymalizuje przepływ danych.</p>
+
+        <h2>Dlaczego warto wybrać GraphQL?</h2>
+        <p>GraphQL jest elastyczny i umożliwia pobieranie dokładnie tych danych, które są potrzebne. W odróżnieniu od REST, gdzie każda operacja może wymagać innego endpointu, w GraphQL wszystko obsługiwane jest za pomocą jednego endpointu. Oto główne zalety GraphQL:</p>
+        <ul>
+            <li><strong>Redukcja nadmiaru danych</strong> – Klienci mogą określić, jakie pola ich interesują, co zmniejsza ilość przesyłanych danych.</li>
+            <li><strong>Wydajność</strong> – Możliwość agregacji wielu zapytań w jedno żądanie, co zmniejsza liczbę połączeń sieciowych.</li>
+            <li><strong>Elastyczność</strong> – Możliwość dostosowania zapytań przez klienta bez potrzeby zmiany backendu.</li>
+        </ul>
+
+        <h2>Podstawowe pojęcia GraphQL</h2>
+        <ul>
+            <li><strong>Query</strong> – Zapytania służące do pobierania danych z serwera, podobnie jak operacje GET w REST.</li>
+            <li><strong>Mutation</strong> – Operacje modyfikujące dane na serwerze, odpowiednik POST, PUT i DELETE w REST.</li>
+            <li><strong>Schema</strong> – Definicja struktur danych, które API udostępnia. Schemat jest sercem GraphQL i opisuje dostępne typy i relacje między nimi.</li>
+            <li><strong>Resolver</strong> – Funkcje odpowiedzialne za obsługę zapytań i mutacji, które pobierają lub modyfikują dane.</li>
+        </ul>
+
+        <h2>Tworzenie API z GraphQL przy użyciu Node.js i Express</h2>
+        <p>Przykład API GraphQL w Node.js z użyciem frameworka Express oraz biblioteki <code>graphql</code> i <code>express-graphql</code>. Biblioteka <code>graphql</code> umożliwia definiowanie schematów i resolverów, natomiast <code>express-graphql</code> integruje GraphQL z Express.</p>
+
+        <h3>Instalacja bibliotek GraphQL</h3>
+        <pre><code class="language-shell">
+npm install express express-graphql graphql
+        </code></pre>
+
+        <h3>Przykładowy kod API GraphQL</h3>
+        <p>W poniższym przykładzie definiujemy prosty schemat z typem <code>User</code>, zapytaniem <code>user</code> do pobierania użytkowników i mutacją <code>addUser</code> do dodawania nowych użytkowników.</p>
+        <pre><code class="language-javascript">
+const express = require('express');
+const { graphqlHTTP } = require('express-graphql');
+const { buildSchema } = require('graphql');
+
+// Definiowanie schematu GraphQL
+const schema = buildSchema(`
+    type User {
+        id: ID!
+        name: String!
+        email: String!
+    }
+
+    type Query {
+        user(id: ID!): User
+        users: [User]
+    }
+
+    type Mutation {
+        addUser(name: String!, email: String!): User
+    }
+`);
+
+// Przykładowe dane
+let users = [
+    { id: '1', name: 'Jan Kowalski', email: 'jan@example.com' },
+    { id: '2', name: 'Anna Nowak', email: 'anna@example.com' }
+];
+
+// Definiowanie resolverów
+const root = {
+    user: ({ id }) => users.find(user => user.id === id),
+    users: () => users,
+    addUser: ({ name, email }) => {
+        const newUser = { id: String(users.length + 1), name, email };
+        users.push(newUser);
+        return newUser;
+    }
+};
+
+// Konfiguracja Express i GraphQL
+const app = express();
+app.use('/graphql', graphqlHTTP({
+    schema: schema,
+    rootValue: root,
+    graphiql: true // Interfejs do testowania zapytań GraphQL
+}));
+
+app.listen(4000, () => console.log('GraphQL API działa na porcie 4000'));
+        </code></pre>
+
+        <h2>Przykład zapytań GraphQL</h2>
+        <p>Poniżej znajdują się przykłady zapytań, które można przetestować w interfejsie GraphiQL:</p>
+
+        <h3>1. Pobranie wszystkich użytkowników</h3>
+        <pre><code class="language-graphql">
+query {
+    users {
+        id
+        name
+        email
+    }
+}
+        </code></pre>
+
+        <h3>2. Pobranie użytkownika po ID</h3>
+        <pre><code class="language-graphql">
+query {
+    user(id: "1") {
+        id
+        name
+        email
+    }
+}
+        </code></pre>
+
+        <h3>3. Dodanie nowego użytkownika (mutacja)</h3>
+        <pre><code class="language-graphql">
+mutation {
+    addUser(name: "Piotr Zieliński", email: "piotr@example.com") {
+        id
+        name
+        email
+    }
+}
+        </code></pre>
+
+        <h2>GraphiQL – interaktywne testowanie zapytań GraphQL</h2>
+        <p><strong>GraphiQL</strong> to narzędzie, które pozwala na interaktywne testowanie zapytań GraphQL bezpośrednio w przeglądarce. Po uruchomieniu serwera możemy wejść na <code>http://localhost:4000/graphql</code>, aby korzystać z tego interfejsu.</p>
+
+        <h2>Najlepsze praktyki przy tworzeniu API GraphQL</h2>
+        <ul>
+            <li><strong>Twórz szczegółowe schematy</strong> – Dobrze zdefiniowane schematy ułatwiają klientom zrozumienie struktury API.</li>
+            <li><strong>Zadbaj o bezpieczeństwo</strong> – Ogranicz dostęp do mutacji, aby uniknąć nieautoryzowanych zmian.</li>
+            <li><strong>Optymalizuj zapytania</strong> – Przy dużych zbiorach danych stosuj paginację i limituj wyniki, aby uniknąć obciążenia serwera.</li>
+        </ul>
+
+        <h2>Podsumowanie</h2>
+        <p>GraphQL oferuje nowoczesne podejście do tworzenia API, umożliwiając bardziej elastyczne pobieranie i modyfikowanie danych. W porównaniu do REST, GraphQL jest bardziej wydajny i pozwala klientom na precyzyjne określenie potrzebnych danych. Tworzenie API z użyciem GraphQL to świetne rozwiązanie dla dynamicznych aplikacji z dużą ilością zależnych danych.</p>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/prism.min.js"></script>
+</body>
+</html>

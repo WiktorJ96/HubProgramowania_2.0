@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Konfiguracja CORS w API</title>
+    <link rel="stylesheet" href="../styles.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/themes/prism-tomorrow.min.css" rel="stylesheet" />
+</head>
+<body>
+    <div class="container">
+        <h1>Konfiguracja CORS w API</h1>
+
+        <p>CORS (Cross-Origin Resource Sharing) to mechanizm, który pozwala aplikacjom działającym w przeglądarkach na dostęp do zasobów z serwera na innej domenie. Konfiguracja CORS w API jest niezbędna, aby umożliwić bezpieczną komunikację między różnymi źródłami (domenami), a jednocześnie ograniczyć ryzyko związane z nieautoryzowanym dostępem.</p>
+
+        <h2>Dlaczego CORS jest potrzebny?</h2>
+        <p>Ze względów bezpieczeństwa przeglądarki domyślnie blokują żądania do innych domen. CORS pozwala serwerowi zdefiniować, jakie domeny mogą uzyskiwać dostęp do jego zasobów. Dzięki temu mechanizmowi można kontrolować, które aplikacje mają uprawnienia do korzystania z API.</p>
+
+        <h2>Jak działa CORS?</h2>
+        <p>Kiedy aplikacja (klient) wysyła żądanie do API na innej domenie, przeglądarka wysyła zapytanie typu "OPTIONS" (tzw. preflight request) do serwera, aby sprawdzić, czy dany klient ma prawo do uzyskania dostępu. Serwer odpowiada, określając zasady dostępu, np. dozwolone metody, nagłówki i czas przechowywania uprawnień.</p>
+
+        <h2>Kluczowe nagłówki CORS</h2>
+        <ul>
+            <li><strong>Access-Control-Allow-Origin</strong> – określa, jakie domeny mają dostęp do API (np. <code>*</code> dla wszystkich domen).</li>
+            <li><strong>Access-Control-Allow-Methods</strong> – lista metod HTTP, które są dozwolone (np. <code>GET</code>, <code>POST</code>, <code>PUT</code>, <code>DELETE</code>).</li>
+            <li><strong>Access-Control-Allow-Headers</strong> – określa nagłówki, które klient może wysyłać z żądaniami.</li>
+            <li><strong>Access-Control-Allow-Credentials</strong> – pozwala na wysyłanie ciasteczek i innych danych uwierzytelniających.</li>
+        </ul>
+
+        <h2>Konfiguracja CORS w API za pomocą Express (Node.js)</h2>
+        <p>W aplikacjach Node.js z wykorzystaniem frameworka Express można skonfigurować CORS za pomocą dedykowanej biblioteki <code>cors</code>.</p>
+
+        <h3>Instalacja biblioteki CORS</h3>
+        <p>Aby dodać obsługę CORS do aplikacji Express, zainstaluj bibliotekę <code>cors</code>:</p>
+        <pre><code class="language-shell">
+npm install cors
+        </code></pre>
+
+        <h3>Konfiguracja CORS w Express</h3>
+        <p>W poniższym przykładzie konfigurujemy CORS, aby pozwolić na dostęp do API z określonej domeny i przy określonych metodach:</p>
+        <pre><code class="language-javascript">
+const express = require('express');
+const cors = require('cors');
+const app = express();
+
+// Konfiguracja CORS - pozwalamy na dostęp z domeny https://example.com
+const corsOptions = {
+    origin: 'https://example.com',
+    methods: ['GET', 'POST', 'PUT', 'DELETE'],
+    allowedHeaders: ['Content-Type', 'Authorization'],
+    credentials: true // Pozwala na wysyłanie ciasteczek
+};
+
+app.use(cors(corsOptions));
+
+// Przykładowy endpoint
+app.get('/data', (req, res) => {
+    res.json({ message: "Dostęp udzielony z https://example.com" });
+});
+
+app.listen(3000, () => console.log('API działa na porcie 3000'));
+        </code></pre>
+
+        <h2>Przykład globalnej konfiguracji CORS</h2>
+        <p>Można również zastosować globalną konfigurację CORS, która pozwoli na dostęp z dowolnej domeny, co może być przydatne na etapie testowania.</p>
+        <pre><code class="language-javascript">
+// Globalne ustawienie CORS dla wszystkich domen i metod
+app.use(cors());
+        </code></pre>
+
+        <h2>Bezpieczeństwo CORS</h2>
+        <p>W konfiguracji CORS warto przestrzegać dobrych praktyk, aby zapewnić bezpieczeństwo aplikacji:</p>
+        <ul>
+            <li><strong>Ogranicz dostęp do konkretnych domen</strong> – unikaj ustawienia <code>*</code> (dostępu dla wszystkich), szczególnie w środowisku produkcyjnym.</li>
+            <li><strong>Określ dozwolone metody</strong> – pozwól tylko na te metody, które są niezbędne.</li>
+            <li><strong>Kontroluj nagłówki</strong> – upewnij się, że tylko określone nagłówki są akceptowane przez serwer.</li>
+            <li><strong>Unikaj wysyłania danych uwierzytelniających</strong> – o ile nie jest to absolutnie konieczne, wyłącz obsługę ciasteczek i danych uwierzytelniających.</li>
+        </ul>
+
+        <h2>Przykładowe odpowiedzi CORS</h2>
+        <p>Poniżej znajduje się przykład odpowiedzi serwera na zapytanie "OPTIONS" (preflight request) z nagłówkami CORS:</p>
+        <pre><code class="language-http">
+HTTP/1.1 200 OK
+Access-Control-Allow-Origin: https://example.com
+Access-Control-Allow-Methods: GET, POST, PUT, DELETE
+Access-Control-Allow-Headers: Content-Type, Authorization
+Access-Control-Allow-Credentials: true
+        </code></pre>
+
+        <h2>Podsumowanie</h2>
+        <p>CORS jest kluczowym mechanizmem zabezpieczającym, który umożliwia dostęp do API tylko z określonych źródeł. Poprawna konfiguracja CORS w API zwiększa bezpieczeństwo aplikacji i pozwala na bezpieczne współdzielenie zasobów między domenami.</p>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/prism.min.js"></script>
+</body>
+</html>

@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Testowanie w Postmanie</title>
+    <link rel="stylesheet" href="../styles.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/themes/prism-tomorrow.min.css" rel="stylesheet" />
+</head>
+<body>
+    <div class="container">
+        <h1>Testowanie w Postmanie</h1>
+
+        <p>Postman jest nie tylko narzędziem do wysyłania żądań HTTP, ale także pozwala na automatyczne testowanie odpowiedzi z API. Można pisać testy przy użyciu JavaScript oraz wykorzystywać bibliotekę <strong>Chai.js</strong>, która jest wbudowana w Postmana do sprawdzania poprawności odpowiedzi.</p>
+
+        <h2>Dlaczego testowanie w Postmanie jest ważne?</h2>
+        <p>Testowanie w Postmanie pozwala na automatyczne sprawdzanie odpowiedzi API, co pomaga zapewnić ich poprawność i zgodność z oczekiwaniami. Dzięki temu można łatwo wykrywać błędy i monitorować stabilność usług.</p>
+
+        <h2>Tworzenie testu w Postmanie</h2>
+        <p>Aby dodać test do żądania w Postmanie:</p>
+        <ol>
+            <li>Otwórz zakładkę <strong>"Tests"</strong> w oknie żądania.</li>
+            <li>Dodaj kod testu w języku JavaScript, który będzie sprawdzał odpowiedź.</li>
+        </ol>
+
+        <h2>Przykłady testów z użyciem Chai.js</h2>
+        <p>Postman używa Chai.js do pisania asercji (sprawdzania warunków) w testach. Można sprawdzić różne właściwości odpowiedzi, jak status kodu, treść odpowiedzi czy nagłówki.</p>
+
+        <h3>1. Sprawdzenie statusu odpowiedzi</h3>
+        <p>Ten test sprawdza, czy odpowiedź ma status 200, co oznacza, że żądanie zakończyło się sukcesem.</p>
+        <pre><code class="language-javascript">
+// Sprawdzenie statusu odpowiedzi
+pm.test("Status odpowiedzi to 200", function () {
+    pm.response.to.have.status(200);
+});
+        </code></pre>
+
+        <h3>2. Sprawdzenie struktury danych JSON</h3>
+        <p>Można również sprawdzić, czy odpowiedź zawiera oczekiwane dane. Na przykład, jeśli API zwraca listę użytkowników, możemy sprawdzić, czy odpowiedź zawiera konkretne pola.</p>
+        <pre><code class="language-javascript">
+// Sprawdzenie, czy odpowiedź zawiera dane użytkownika
+pm.test("Odpowiedź zawiera pole 'users'", function () {
+    var jsonData = pm.response.json();
+    pm.expect(jsonData).to.have.property("users");
+});
+        </code></pre>
+
+        <h3>3. Sprawdzenie wartości w odpowiedzi</h3>
+        <p>Możemy też testować, czy konkretne pole ma oczekiwaną wartość. W tym przykładzie sprawdzamy, czy imię użytkownika to "Jan Kowalski".</p>
+        <pre><code class="language-javascript">
+// Sprawdzenie wartości imienia użytkownika
+pm.test("Pierwszy użytkownik nazywa się Jan Kowalski", function () {
+    var jsonData = pm.response.json();
+    pm.expect(jsonData.users[0].name).to.eql("Jan Kowalski");
+});
+        </code></pre>
+
+        <h3>4. Sprawdzenie nagłówków odpowiedzi</h3>
+        <p>W Postmanie można także sprawdzić, czy odpowiedź zawiera oczekiwane nagłówki, takie jak <code>Content-Type</code>.</p>
+        <pre><code class="language-javascript">
+// Sprawdzenie nagłówka Content-Type
+pm.test("Nagłówek Content-Type to application/json", function () {
+    pm.response.to.have.header("Content-Type", "application/json");
+});
+        </code></pre>
+
+        <h3>5. Sprawdzenie czasu odpowiedzi</h3>
+        <p>Postman pozwala także na sprawdzenie, czy czas odpowiedzi API jest poniżej określonego limitu, np. 500 ms.</p>
+        <pre><code class="language-javascript">
+// Sprawdzenie czasu odpowiedzi
+pm.test("Czas odpowiedzi poniżej 500 ms", function () {
+    pm.expect(pm.response.responseTime).to.be.below(500);
+});
+        </code></pre>
+
+        <h2>Podsumowanie</h2>
+        <p>Postman umożliwia automatyczne testowanie API przy użyciu testów w JavaScript i Chai.js, co pozwala na łatwe sprawdzanie poprawności odpowiedzi. Warto korzystać z tych testów, aby zwiększyć stabilność i przewidywalność działania API.</p>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/prism.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/components/prism-json.min.js"></script>
+</body>
+</html>

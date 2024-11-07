@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Monitoring i Logowanie API</title>
+    <link rel="stylesheet" href="../styles.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/themes/prism-tomorrow.min.css" rel="stylesheet" />
+</head>
+<body>
+    <div class="container">
+        <h1>Monitoring i Logowanie API</h1>
+
+        <p>Monitoring i logowanie są kluczowymi elementami w utrzymaniu i optymalizacji API. Pozwalają one na śledzenie działania API, wykrywanie błędów, analizę wydajności oraz szybkie reagowanie na problemy. Dzięki tym technikom można zapewnić stabilność i lepszą wydajność API.</p>
+
+        <h2>Dlaczego monitoring i logowanie są ważne?</h2>
+        <p>Wdrażanie monitoringu i logowania pozwala na lepsze zrozumienie działania API, analizę błędów i efektywne zarządzanie zasobami. Dzięki odpowiednio skonfigurowanemu monitoringowi można w czasie rzeczywistym śledzić stan API i szybko reagować na incydenty.</p>
+
+        <h2>Rodzaje logowania w API</h2>
+        <ul>
+            <li><strong>Logi błędów</strong> – rejestracja wszystkich błędów i wyjątków, co pozwala na ich analizę i naprawę.</li>
+            <li><strong>Logi dostępu</strong> – zapisywanie informacji o każdym żądaniu (np. metoda, endpoint, status odpowiedzi, czas wykonania), co pozwala analizować ruch i obciążenie API.</li>
+            <li><strong>Logi operacyjne</strong> – informacje o operacjach wewnętrznych API, np. użycie zasobów, informacje diagnostyczne.</li>
+        </ul>
+
+        <h2>Implementacja logowania w Node.js z użyciem bibliotek</h2>
+
+        <h3>1. Instalacja biblioteki Winston</h3>
+        <p><code>Winston</code> to popularna biblioteka logowania dla Node.js, która pozwala na tworzenie wielopoziomowych logów i zapisywanie ich do plików lub innych miejsc docelowych.</p>
+        <pre><code class="language-shell">
+npm install winston
+        </code></pre>
+
+        <h3>2. Przykład konfiguracji Winsona</h3>
+        <p>W poniższym przykładzie konfiguruje się Winsona do zapisywania logów w pliku o różnych poziomach logowania: <code>info</code> dla informacji i <code>error</code> dla błędów.</p>
+        <pre><code class="language-javascript">
+const winston = require('winston');
+
+const logger = winston.createLogger({
+    level: 'info',
+    format: winston.format.json(),
+    transports: [
+        new winston.transports.File({ filename: 'error.log', level: 'error' }),
+        new winston.transports.File({ filename: 'combined.log' })
+    ]
+});
+
+// Przykład logowania informacji i błędów
+logger.info('API zostało uruchomione');
+logger.error('Wystąpił błąd przy obsłudze żądania');
+        </code></pre>
+
+        <h3>3. Dodanie logowania do middleware w Express</h3>
+        <p>Logi dostępu można dodać jako middleware w Express, aby automatycznie rejestrować informacje o każdym żądaniu:</p>
+        <pre><code class="language-javascript">
+const express = require('express');
+const app = express();
+
+app.use((req, res, next) => {
+    logger.info(`Żądanie: ${req.method} ${req.url}`);
+    next();
+});
+
+app.get('/data', (req, res) => {
+    res.json({ message: "Dane z API" });
+});
+
+app.listen(3000, () => logger.info('API działa na porcie 3000'));
+        </code></pre>
+
+        <h2>Monitoring API za pomocą narzędzi APM</h2>
+        <p>Aby śledzić działanie API i mierzyć jego wydajność, można użyć narzędzi APM (Application Performance Monitoring), takich jak:</p>
+        <ul>
+            <li><strong>New Relic</strong> – Śledzi czas odpowiedzi, liczbę żądań, zużycie CPU i pamięci.</li>
+            <li><strong>Datadog</strong> – Oferuje kompleksowy monitoring API, pozwala na tworzenie alertów i wykrywanie anomalii.</li>
+            <li><strong>AppDynamics</strong> – Umożliwia monitorowanie wydajności aplikacji i identyfikację wąskich gardeł.</li>
+        </ul>
+
+        <h2>Konfiguracja podstawowego monitoringu przy użyciu Prometheus i Grafana</h2>
+        <p>Prometheus i Grafana to narzędzia open-source, które umożliwiają monitorowanie API i wizualizację danych. Prometheus zbiera metryki, a Grafana pozwala je analizować na graficznych dashboardach.</p>
+
+        <h3>Przykład integracji z Prometheus</h3>
+        <p>Instalujemy Prometheus dla Node.js:</p>
+        <pre><code class="language-shell">
+npm install prom-client
+        </code></pre>
+
+        <h3>Konfiguracja zbierania metryk z Express</h3>
+        <p>Dodajemy middleware do zbierania metryk, takich jak czas odpowiedzi i liczba żądań:</p>
+        <pre><code class="language-javascript">
+const promClient = require('prom-client');
+const express = require('express');
+const app = express();
+
+// Inicjalizacja Prometheus
+const collectDefaultMetrics = promClient.collectDefaultMetrics;
+collectDefaultMetrics({ timeout: 5000 });
+
+const httpRequestDurationMicroseconds = new promClient.Histogram({
+    name: 'http_request_duration_ms',
+    help: 'Czas odpowiedzi HTTP w milisekundach',
+    labelNames: ['method', 'route', 'status_code'],
+    buckets: [50, 100, 200, 300, 400, 500]
+});
+
+// Middleware do zbierania danych o każdym żądaniu
+app.use((req, res, next) => {
+    const end = httpRequestDurationMicroseconds.startTimer();
+    res.on('finish', () => {
+        end({ method: req.method, route: req.url, status_code: res.statusCode });
+    });
+    next();
+});
+
+// Endpoint dla Prometheus
+app.get('/metrics', async (req, res) => {
+    res.set('Content-Type', promClient.register.contentType);
+    res.end(await promClient.register.metrics());
+});
+
+app.listen(3000, () => logger.info('API działa na porcie 3000'));
+        </code></pre>
+
+        <h2>Najlepsze praktyki monitoringu i logowania</h2>
+        <ul>
+            <li><strong>Przechowuj logi przez określony czas</strong> – przechowuj logi tylko przez czas niezbędny do analizy, aby ograniczyć zajmowaną przestrzeń.</li>
+            <li><strong>Twórz alerty na krytyczne zdarzenia</strong> – ustaw alerty na krytyczne błędy i przekroczenia limitów czasu odpowiedzi.</li>
+            <li><strong>Analizuj wzorce i trendy</strong> – regularnie przeglądaj logi i metryki, aby zidentyfikować powtarzające się problemy.</li>
+        </ul>
+
+        <h2>Podsumowanie</h2>
+        <p>Monitoring i logowanie są nieodzownymi elementami zarządzania API, które pomagają w szybkiej diagnozie problemów oraz optymalizacji wydajności. Dzięki odpowiednim narzędziom można nie tylko wykrywać błędy, ale także zrozumieć, jak API jest używane, co umożliwia ciągłe doskonalenie aplikacji.</p>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/prism.min.js"></script>
+</body>
+</html>

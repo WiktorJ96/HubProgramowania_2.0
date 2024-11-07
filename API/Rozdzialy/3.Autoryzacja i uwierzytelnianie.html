@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Autoryzacja i Uwierzytelnianie w API</title>
+    <link rel="stylesheet" href="../styles.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/themes/prism-tomorrow.min.css" rel="stylesheet" />
+</head>
+<body>
+    <div class="container">
+        <h1>Autoryzacja i Uwierzytelnianie w API</h1>
+
+        <p>Uwierzytelnianie i autoryzacja to kluczowe elementy zabezpieczające API przed nieautoryzowanym dostępem. W API często stosuje się popularne mechanizmy, takie jak OAuth i JWT (JSON Web Token), aby zapewnić bezpieczne korzystanie z zasobów. Poniżej omówimy podstawy obu mechanizmów oraz sposoby ich implementacji.</p>
+
+        <h2>Uwierzytelnianie i Autoryzacja - różnice</h2>
+        <ul>
+            <li><strong>Uwierzytelnianie</strong>: Proces weryfikacji tożsamości użytkownika, np. za pomocą loginu i hasła.</li>
+            <li><strong>Autoryzacja</strong>: Proces sprawdzania, do jakich zasobów użytkownik ma dostęp po uwierzytelnieniu.</li>
+        </ul>
+
+        <h2>JWT (JSON Web Token)</h2>
+        <p>JWT to lekki i bezpieczny sposób uwierzytelniania użytkowników. Token JWT jest generowany po pomyślnym zalogowaniu się użytkownika i jest dołączany do każdego żądania, aby potwierdzić tożsamość użytkownika.</p>
+
+        <h3>Struktura JWT</h3>
+        <p>Token JWT składa się z trzech części:</p>
+        <ul>
+            <li><strong>Header</strong> - Metadane tokena, zawierające informacje o algorytmie szyfrowania.</li>
+            <li><strong>Payload</strong> - Zawiera dane o użytkowniku i inne informacje (np. uprawnienia), które są zaszyfrowane.</li>
+            <li><strong>Signature</strong> - Podpis, który zabezpiecza token przed manipulacją.</li>
+        </ul>
+
+        <h3>Przykład generowania JWT</h3>
+        <pre><code class="language-javascript">
+// Przykład w Node.js z użyciem biblioteki jsonwebtoken
+const jwt = require('jsonwebtoken');
+
+const token = jwt.sign({ userId: 1, role: 'admin' }, 'sekret', { expiresIn: '1h' });
+console.log(token); // Wygenerowany token JWT
+        </code></pre>
+
+        <h3>Implementacja JWT w API</h3>
+        <p>Token JWT jest przesyłany w nagłówku każdego żądania, zazwyczaj jako nagłówek <code>Authorization</code> z wartością <code>Bearer token</code>. Serwer weryfikuje token i sprawdza jego ważność przed udzieleniem dostępu do zasobów API.</p>
+        <pre><code class="language-javascript">
+// Middleware do weryfikacji JWT w Express
+const jwt = require('jsonwebtoken');
+
+function authMiddleware(req, res, next) {
+    const token = req.headers['authorization']?.split(' ')[1];
+    if (!token) return res.status(401).send('Brak tokenu');
+
+    jwt.verify(token, 'sekret', (err, decoded) => {
+        if (err) return res.status(403).send('Nieprawidłowy token');
+        req.user = decoded;
+        next();
+    });
+}
+
+app.get('/secure-data', authMiddleware, (req, res) => {
+    res.json({ message: 'Dane chronione', user: req.user });
+});
+        </code></pre>
+
+        <h2>OAuth 2.0</h2>
+        <p>OAuth 2.0 to otwarty standard uwierzytelniania, który pozwala na autoryzację użytkowników przez zewnętrzne serwisy (np. Google, Facebook). OAuth działa poprzez przekierowanie użytkownika do strony logowania dostawcy, który po weryfikacji tożsamości przekazuje token autoryzacyjny.</p>
+
+        <h3>Podstawowe elementy OAuth 2.0</h3>
+        <ul>
+            <li><strong>Resource Owner</strong> - Użytkownik, który chce uzyskać dostęp do zasobów.</li>
+            <li><strong>Client</strong> - Aplikacja żądająca dostępu do zasobów.</li>
+            <li><strong>Authorization Server</strong> - Serwer dostawcy (np. Google), który uwierzytelnia użytkownika i wydaje token dostępu.</li>
+            <li><strong>Resource Server</strong> - Serwer API, który udostępnia zasoby na podstawie tokena dostępu.</li>
+        </ul>
+
+        <h3>Przykładowy proces autoryzacji OAuth</h3>
+        <ol>
+            <li>Aplikacja wysyła żądanie autoryzacyjne do serwera OAuth (np. Google) i przekierowuje użytkownika do logowania.</li>
+            <li>Użytkownik loguje się, a serwer OAuth zwraca kod autoryzacyjny do aplikacji.</li>
+            <li>Aplikacja wymienia kod autoryzacyjny na token dostępu, który jest używany do uzyskiwania dostępu do zasobów API.</li>
+        </ol>
+
+        <h3>Przykład żądania tokena dostępu</h3>
+        <p>Po uzyskaniu kodu autoryzacyjnego, aplikacja może wysłać żądanie na endpoint dostawcy, aby wymienić kod na token dostępu:</p>
+        <pre><code class="language-http">
+POST /token HTTP/1.1
+Host: oauth.example.com
+Content-Type: application/x-www-form-urlencoded
+
+client_id=YOUR_CLIENT_ID&client_secret=YOUR_CLIENT_SECRET&code=AUTHORIZATION_CODE&grant_type=authorization_code
+        </code></pre>
+
+        <h3>Używanie tokena OAuth w API</h3>
+        <p>Podobnie jak w przypadku JWT, token OAuth jest dołączany do nagłówka <code>Authorization</code> z wartością <code>Bearer token</code>, a serwer API weryfikuje ten token przed udzieleniem dostępu do zasobów.</p>
+
+        <h2>Zalety i wady JWT i OAuth</h2>
+        <table>
+            <tr>
+                <th>Mechanizm</th>
+                <th>Zalety</th>
+                <th>Wady</th>
+            </tr>
+            <tr>
+                <td>JWT</td>
+                <td>Prostota, brak konieczności kontaktu z serwerem autoryzacji przy każdym żądaniu, łatwość integracji</td>
+                <td>Brak możliwości unieważnienia tokenów przed ich wygaśnięciem, ryzyko przy długotrwałych tokenach</td>
+            </tr>
+            <tr>
+                <td>OAuth</td>
+                <td>Bezpieczeństwo, możliwość autoryzacji przez zewnętrzne serwisy, kontrola nad sesjami</td>
+                <td>Większa złożoność, konieczność interakcji z zewnętrznym serwerem autoryzacji</td>
+            </tr>
+        </table>
+
+        <h2>Podsumowanie</h2>
+        <p>Mechanizmy uwierzytelniania i autoryzacji, takie jak JWT i OAuth, są niezbędne dla zabezpieczenia API. Wybór mechanizmu zależy od potrzeb aplikacji - JWT jest wygodnym rozwiązaniem dla prostych systemów, natomiast OAuth sprawdza się tam, gdzie wymagana jest autoryzacja zewnętrzna i wysoki poziom bezpieczeństwa.</p>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/prism.min.js"></script>
+</body>
+</html>

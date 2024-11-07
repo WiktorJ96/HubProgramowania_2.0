@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dokumentacja API w Postmanie</title>
+    <link rel="stylesheet" href="../styles.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/themes/prism-tomorrow.min.css" rel="stylesheet" />
+</head>
+<body>
+    <div class="container">
+        <h1>Dokumentacja API w Postmanie</h1>
+
+        <p>Postman umożliwia łatwe generowanie i udostępnianie dokumentacji API bezpośrednio z poziomu aplikacji. Dokumentacja tworzona w Postmanie jest przydatna do przekazywania szczegółów technicznych dotyczących API współpracownikom oraz użytkownikom końcowym.</p>
+
+        <h2>Dlaczego dokumentacja API jest ważna?</h2>
+        <p>Dobra dokumentacja API pozwala na szybkie zrozumienie, jak działa API, jakie metody są dostępne oraz jakie dane trzeba przekazać i jakie można uzyskać w odpowiedzi. Dzięki temu programiści i testerzy mogą łatwiej integrować API i monitorować jego działanie.</p>
+
+        <h2>Tworzenie dokumentacji API w Postmanie</h2>
+        <p>Aby wygenerować dokumentację w Postmanie, wykonaj poniższe kroki:</p>
+        <ol>
+            <li>Otwórz kolekcję, którą chcesz udokumentować, i kliknij na opcję <strong>"View Documentation"</strong>.</li>
+            <li>Postman automatycznie wygeneruje podgląd dokumentacji na podstawie zapisanych żądań i odpowiedzi.</li>
+            <li>Możesz dodać opis do każdego endpointu, opisując cel żądania, parametry, nagłówki oraz przykładowe odpowiedzi.</li>
+            <li>Kliknij <strong>"Publish"</strong>, aby udostępnić dokumentację publicznie lub prywatnie.</li>
+        </ol>
+
+        <h2>Dodawanie szczegółowych opisów do dokumentacji</h2>
+        <p>Aby zwiększyć czytelność dokumentacji, możesz dodać szczegółowe opisy parametrów, nagłówków i ciała żądania:</p>
+        <ul>
+            <li>Przejdź do każdego żądania w kolekcji i kliknij <strong>"Edit"</strong>.</li>
+            <li>W polach takich jak <strong>Params</strong>, <strong>Headers</strong> i <strong>Body</strong>, możesz dodawać opisy do każdego parametru, co ułatwi zrozumienie ich znaczenia.</li>
+            <li>W zakładce <strong>Tests</strong> możesz również dodać przykłady odpowiedzi i skrypty, które pomogą użytkownikom API lepiej zrozumieć możliwe scenariusze testowe.</li>
+        </ul>
+
+        <h3>Przykład opisu żądania</h3>
+        <p>Przykładowy opis dla żądania GET, które zwraca listę użytkowników:</p>
+        <pre><code class="language-json">
+{
+    "endpoint": "/users",
+    "method": "GET",
+    "description": "Pobiera listę wszystkich użytkowników z serwera.",
+    "parameters": [],
+    "headers": [
+        {
+            "name": "Authorization",
+            "description": "Bearer token do autoryzacji żądania"
+        }
+    ],
+    "example_response": {
+        "users": [
+            { "id": 1, "name": "Jan Kowalski" },
+            { "id": 2, "name": "Anna Nowak" }
+        ]
+    }
+}
+        </code></pre>
+
+        <h2>Publikowanie i udostępnianie dokumentacji</h2>
+        <p>Po zakończeniu edycji dokumentacji możesz ją opublikować i udostępnić w formie linku:</p>
+        <ol>
+            <li>Kliknij <strong>"Publish"</strong> w prawym górnym rogu strony dokumentacji.</li>
+            <li>Wybierz, czy chcesz, aby dokumentacja była publiczna (dostępna dla każdego) czy prywatna (dostępna tylko dla wybranych osób).</li>
+            <li>Po opublikowaniu otrzymasz link do dokumentacji, który możesz udostępnić zespołowi lub klientom.</li>
+        </ol>
+
+        <h3>Opcje prywatności</h3>
+        <p>Postman oferuje różne opcje prywatności dla dokumentacji:</p>
+        <ul>
+            <li><strong>Publiczna</strong>: dostępna dla każdego, kto posiada link.</li>
+            <li><strong>Prywatna</strong>: tylko dla osób posiadających dostęp do twojego zespołu w Postmanie.</li>
+        </ul>
+
+        <h2>Automatyczne aktualizacje dokumentacji</h2>
+        <p>Każda zmiana w kolekcji, taka jak dodanie nowego endpointu lub modyfikacja istniejącego, automatycznie aktualizuje opublikowaną dokumentację. Dzięki temu zawsze masz pewność, że dokumentacja odzwierciedla najnowszy stan API.</p>
+
+        <h2>Integracja dokumentacji z CI/CD</h2>
+        <p>Możesz zintegrować dokumentację z procesami CI/CD, aby zapewnić, że dokumentacja zawsze jest aktualizowana i dostępna dla zespołu. Dzięki Postman API można programowo pobierać kolekcje i generować dokumentację na podstawie najnowszych zmian.</p>
+
+        <h2>Podsumowanie</h2>
+        <p>Dokumentacja API w Postmanie jest łatwa do wygenerowania i udostępnienia, co ułatwia współpracę w zespole i wspiera integrację API. Dzięki opublikowanej dokumentacji każdy użytkownik API może zrozumieć, jak korzystać z dostępnych endpointów i jakie dane są wymagane.</p>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/prism.min.js"></script>
+</body>
+</html>

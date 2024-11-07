@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Kolekcje i Środowiska w Postman</title>
+    <link rel="stylesheet" href="../styles.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/themes/prism-tomorrow.min.css" rel="stylesheet" />
+</head>
+<body>
+    <div class="container">
+        <h1>Kolekcje i Środowiska w Postman</h1>
+
+        <p>Postman umożliwia zarządzanie żądaniami API za pomocą kolekcji, które pozwalają organizować i grupować zestawy żądań w jednym miejscu. Ponadto, korzystanie ze środowisk ułatwia dynamiczne konfigurowanie parametrów, co jest szczególnie przydatne przy testowaniu aplikacji na różnych serwerach lub konfiguracjach.</p>
+
+        <h2>Tworzenie Kolekcji</h2>
+        <p>Kolekcje to zbiory żądań API, które można organizować i uruchamiać razem. Są one szczególnie przydatne, gdy testujesz wiele żądań na różnych endpointach (punktach końcowych API).</p>
+        <ol>
+            <li>Aby utworzyć nową kolekcję, kliknij na przycisk <strong>"New Collection"</strong> w Postmanie.</li>
+            <li>Następnie nazwij swoją kolekcję i dodaj opis, jeśli jest potrzebny.</li>
+            <li>Możesz dodawać żądania do kolekcji, wybierając opcję <strong>"Add Request"</strong> i konfigurując metodę HTTP oraz URL.</li>
+        </ol>
+
+        <h2>Zarządzanie Kolekcjami</h2>
+        <p>Postman pozwala na zarządzanie kolekcjami w intuicyjny sposób:</p>
+        <ul>
+            <li>Możesz dodać foldery wewnątrz kolekcji, aby grupować podobne żądania.</li>
+            <li>Każde żądanie w kolekcji można ustawić z różnymi parametrami, nagłówkami i danymi w zależności od potrzeb.</li>
+            <li>Uruchomienie całej kolekcji pozwala na testowanie serii żądań jednocześnie.</li>
+        </ul>
+
+        <h2>Środowiska i Zmienne</h2>
+        <p>Środowiska w Postmanie pozwalają na tworzenie zestawów zmiennych, które można wykorzystywać w różnych żądaniach. Dzięki temu możesz z łatwością przełączać się między środowiskami (np. testowym, produkcyjnym) bez konieczności edytowania każdego żądania.</p>
+
+        <h3>Tworzenie Środowiska</h3>
+        <ol>
+            <li>Aby utworzyć środowisko, przejdź do zakładki <strong>"Environments"</strong> i kliknij <strong>"Add"</strong>.</li>
+            <li>Nadaj nazwę środowisku (np. "Test", "Production") i dodaj zmienne, które będą specyficzne dla tego środowiska.</li>
+            <li>Każda zmienna powinna mieć klucz (np. <code>baseUrl</code>) oraz wartość, którą można odczytać i używać w żądaniach.</li>
+        </ol>
+
+        <h3>Konfiguracja Zmiennych w Kolekcji</h3>
+        <p>Zmiennych środowiskowych można używać w kolekcjach, co ułatwia dynamiczne modyfikowanie URL-i lub nagłówków.</p>
+        <pre><code class="language-json">
+# Przykład zmiennej
+{{baseUrl}}/users
+
+# Przykładowe środowisko
+{
+    "baseUrl": "https://api.test.com"
+}
+        </code></pre>
+        <p>W przykładzie powyżej, wartość <code>{{baseUrl}}</code> zostanie zastąpiona przez adres URL przypisany w środowisku.</p>
+
+        <h3>Przełączanie Środowisk</h3>
+        <p>Przełączanie między środowiskami jest proste i szybkie. Wybierz odpowiednie środowisko z listy rozwijanej w górnej części aplikacji, a wszystkie zmienne automatycznie dostosują się do ustawień dla tego środowiska.</p>
+
+        <h2>Podsumowanie</h2>
+        <p>Kolekcje i środowiska w Postmanie ułatwiają zarządzanie żądaniami API, pozwalając na organizację testów oraz dynamiczne konfigurowanie parametrów. Dzięki temu można skutecznie testować aplikację w różnych konfiguracjach bez ręcznego edytowania żądań.</p>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/prism.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/components/prism-json.min.js"></script>
+</body>
+</html>

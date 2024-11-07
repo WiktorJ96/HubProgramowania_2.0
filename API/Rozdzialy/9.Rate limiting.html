@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Rate Limiting - Ograniczenia liczby żądań do API</title>
+    <link rel="stylesheet" href="../styles.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/themes/prism-tomorrow.min.css" rel="stylesheet" />
+</head>
+<body>
+    <div class="container">
+        <h1>Rate Limiting - Ograniczenia liczby żądań do API</h1>
+
+        <p>Rate Limiting to technika pozwalająca ograniczyć liczbę żądań, które użytkownicy mogą wysłać do API w określonym czasie. Pomaga to w ochronie zasobów serwera przed nadużyciami i umożliwia sprawiedliwe rozdzielanie zasobów między użytkowników.</p>
+
+        <h2>Dlaczego Rate Limiting jest ważne?</h2>
+        <p>Rate Limiting zapobiega przeciążeniu serwera oraz ochronie API przed spamem, atakami DDoS (Distributed Denial of Service) i nieuczciwymi użytkownikami. Pomaga również zarządzać wykorzystaniem zasobów i może zapewnić lepsze wrażenia dla użytkowników.</p>
+
+        <h2>Popularne strategie Rate Limiting</h2>
+        <p>Istnieje kilka strategii implementacji Rate Limiting, z których każda ma swoje zalety i zastosowania:</p>
+
+        <h3>1. Token Bucket</h3>
+        <p>Mechanizm oparty na „wiadrze tokenów” (bucket of tokens). Każde żądanie API wymaga jednego tokena. Wiadro jest uzupełniane o nowe tokeny w określonych odstępach czasu.</p>
+        <p><strong>Zalety:</strong> Efektywność w zarządzaniu burstami (krótkimi wzrostami ruchu).</p>
+
+        <h3>2. Fixed Window</h3>
+        <p>Prosty mechanizm, który ogranicza liczbę żądań w określonych odstępach czasu, np. maksymalnie 100 żądań na minutę.</p>
+        <p><strong>Zalety:</strong> Łatwość implementacji.</p>
+
+        <h3>3. Sliding Window</h3>
+        <p>Mechanizm, który liczy żądania na podstawie „przesuwającego się” okna czasowego. Jest bardziej precyzyjny niż Fixed Window, gdyż liczy żądania w aktualnym oknie czasowym.</p>
+        <p><strong>Zalety:</strong> Sprawiedliwy podział zasobów przy dużym ruchu.</p>
+
+        <h2>Implementacja Rate Limiting w API za pomocą Express i Redis</h2>
+        <p>Redis może być używany jako szybka pamięć podręczna do zarządzania limitem żądań, gdy aplikacja jest skalowana na wiele serwerów. W połączeniu z Express, możemy zrealizować prostą implementację Rate Limiting.</p>
+
+        <h3>Instalacja potrzebnych bibliotek</h3>
+        <pre><code class="language-shell">
+npm install express rate-limit redis
+        </code></pre>
+
+        <h3>Przykład implementacji Rate Limiting z użyciem Fixed Window</h3>
+        <p>W poniższym przykładzie limitujemy liczbę żądań do 100 na minutę dla każdego klienta:</p>
+        <pre><code class="language-javascript">
+const express = require('express');
+const rateLimit = require('express-rate-limit');
+
+const app = express();
+
+// Konfiguracja limitu żądań
+const limiter = rateLimit({
+    windowMs: 60 * 1000, // Okno czasowe 1 minuta
+    max: 100, // Maksymalnie 100 żądań na minutę
+    message: "Przekroczono limit żądań. Spróbuj ponownie za minutę."
+});
+
+// Zastosowanie limitu do wszystkich żądań
+app.use(limiter);
+
+app.get('/data', (req, res) => {
+    res.json({ message: "Dane z API" });
+});
+
+app.listen(3000, () => console.log('API działa na porcie 3000'));
+        </code></pre>
+
+        <h2>Implementacja z Redis dla skalowalnych aplikacji</h2>
+        <p>Jeśli Twoje API działa na wielu serwerach, warto zastosować Redis jako przechowywanie informacji o limitach. Redis działa jak wspólna pamięć cache, co pozwala na efektywne zarządzanie limitami między serwerami.</p>
+
+        <h3>Przykład kodu z użyciem Redis</h3>
+        <p>Instalujemy <code>redis</code> i konfigurujemy Rate Limiting tak, aby zapisywał informacje w Redisie:</p>
+        <pre><code class="language-javascript">
+const redis = require('redis');
+const rateLimit = require('express-rate-limit');
+const RedisStore = require('rate-limit-redis');
+
+const redisClient = redis.createClient();
+const limiter = rateLimit({
+    store: new RedisStore({
+        sendCommand: (...args) => redisClient.sendCommand(args),
+    }),
+    windowMs: 60 * 1000,
+    max: 100,
+    message: "Przekroczono limit żądań. Spróbuj ponownie za minutę."
+});
+
+app.use(limiter);
+        </code></pre>
+
+        <h2>Informowanie użytkowników o stanie limitu</h2>
+        <p>Warto zwracać dodatkowe nagłówki HTTP informujące użytkowników o aktualnym stanie limitu:</p>
+        <ul>
+            <li><code>X-RateLimit-Limit</code> – maksymalna liczba żądań w oknie czasowym.</li>
+            <li><code>X-RateLimit-Remaining</code> – liczba pozostałych żądań w bieżącym oknie.</li>
+            <li><code>X-RateLimit-Reset</code> – czas, po którym limit się resetuje.</li>
+        </ul>
+
+        <h2>Podsumowanie</h2>
+        <p>Rate Limiting to kluczowy element zabezpieczający API przed przeciążeniem i nadużyciami. Poprawna implementacja tego mechanizmu pozwala utrzymać stabilność i efektywne zarządzanie zasobami, zwłaszcza w skalowalnych aplikacjach.</p>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/prism.min.js"></script>
+</body>
+</html>

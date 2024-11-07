@@ -1,0 +1,268 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Wbudowane metody i właściwości w Node.js oraz popularnych modułach</title>
+    <link rel="stylesheet" href="../styles.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/themes/prism-tomorrow.min.css" rel="stylesheet" />
+</head>
+    <style>
+        .hidden { display: none; }
+        
+        /* Stylizacja kontenera wyszukiwarki */
+        #search-container {
+            margin-bottom: 20px;
+            padding: 10px;
+            background-color: #333;
+            border-radius: 8px;
+        }
+        
+        /* Stylizacja etykiety wyszukiwania */
+        #search-container label {
+            color: #fff;
+            font-weight: bold;
+            display: block;
+            margin-bottom: 8px;
+            font-size: 1.1em;
+        }
+        
+        /* Stylizacja pola wyszukiwania */
+        #search {
+            width: 100%;
+            padding: 10px;
+            border: none;
+            border-radius: 5px;
+            font-size: 1em;
+            background-color: #444;
+            color: #fff;
+        }
+        
+        /* Stylizacja pola wyszukiwania w stanie aktywnym */
+        #search:focus {
+            outline: 2px solid #61dafb;
+            background-color: #555;
+        }
+    </style>
+<body>
+    <div class="container">
+        <h1>Wbudowane metody i właściwości w Node.js</h1>
+
+        <!-- Wyszukiwarka -->
+        <label for="search">Wyszukaj właściwość lub metodę:</label>
+        <input type="text" id="search" oninput="searchModules()" placeholder="Wpisz nazwę modułu lub metody...">
+
+        <p>Node.js oferuje liczne wbudowane moduły oraz właściwości, które ułatwiają operacje na plikach, systemie, tworzenie serwerów i pracę z danymi. Poniżej znajduje się przegląd najważniejszych metod i właściwości dostępnych w Node.js oraz w najczęściej używanych modułach, takich jak <code>fs</code>, <code>http</code>, <code>path</code>, <code>os</code> i <code>process</code>.</p>
+
+        <div id="module-list">
+        <h2>1. Obiekt <code>process</code></h2>
+        <p>Obiekt <code>process</code> zapewnia informacje o bieżącym procesie Node.js.</p>
+        <ul>
+            <li><strong>process.env</strong>: Zawiera zmienne środowiskowe procesu.</li>
+            <li><strong>process.argv</strong>: Tablica argumentów wiersza poleceń.</li>
+            <li><strong>process.exit()</strong>: Kończy proces, opcjonalnie z kodem wyjścia.</li>
+            <li><strong>process.cwd()</strong>: Zwraca bieżący katalog roboczy.</li>
+            <li><strong>process.memoryUsage()</strong>: Zwraca użycie pamięci procesu.</li>
+            <li><strong>process.uptime()</strong>: Zwraca czas działania procesu.</li>
+            <li><strong>process.nextTick()</strong>: Wykonuje funkcję przy następnym cyklu event loop.</li>
+        </ul>
+
+        <h2>2. Moduł <code>fs</code> (system plików)</h2>
+        <p>Moduł <code>fs</code> umożliwia operacje na plikach i katalogach.</p>
+        <ul>
+            <li><strong>fs.readFile()</strong>: Asynchronicznie odczytuje plik.</li>
+            <li><strong>fs.writeFile()</strong>: Zapisuje dane do pliku.</li>
+            <li><strong>fs.appendFile()</strong>: Dopisuje dane do istniejącego pliku.</li>
+            <li><strong>fs.unlink()</strong>: Usuwa plik.</li>
+            <li><strong>fs.rename()</strong>: Zmienia nazwę pliku lub przenosi go.</li>
+            <li><strong>fs.mkdir()</strong>: Tworzy katalog.</li>
+            <li><strong>fs.rmdir()</strong>: Usuwa pusty katalog.</li>
+            <li><strong>fs.stat()</strong>: Zwraca statystyki pliku lub katalogu.</li>
+            <li><strong>fs.copyFile()</strong>: Kopiuje plik.</li>
+        </ul>
+
+        <h2>3. Moduł <code>http</code> (tworzenie serwera)</h2>
+        <p>Moduł <code>http</code> pozwala na tworzenie serwerów HTTP.</p>
+        <ul>
+            <li><strong>http.createServer()</strong>: Tworzy serwer HTTP.</li>
+            <li><strong>req.method</strong>: Zwraca metodę HTTP żądania.</li>
+            <li><strong>req.url</strong>: Zwraca URL żądania.</li>
+            <li><strong>req.headers</strong>: Zawiera nagłówki HTTP żądania.</li>
+            <li><strong>res.writeHead()</strong>: Ustawia nagłówki odpowiedzi HTTP.</li>
+            <li><strong>res.end()</strong>: Kończy odpowiedź.</li>
+            <li><strong>res.write()</strong>: Wysyła fragment odpowiedzi.</li>
+        </ul>
+
+        <h2>4. Moduł <code>path</code> (operacje na ścieżkach)</h2>
+        <p>Moduł <code>path</code> upraszcza operacje na ścieżkach do plików i katalogów.</p>
+        <ul>
+            <li><strong>path.basename()</strong>: Zwraca ostatnią część ścieżki.</li>
+            <li><strong>path.dirname()</strong>: Zwraca katalog nadrzędny ścieżki.</li>
+            <li><strong>path.extname()</strong>: Zwraca rozszerzenie pliku.</li>
+            <li><strong>path.join()</strong>: Łączy segmenty ścieżki.</li>
+            <li><strong>path.resolve()</strong>: Zwraca pełną ścieżkę absolutną.</li>
+            <li><strong>path.isAbsolute()</strong>: Sprawdza, czy ścieżka jest absolutna.</li>
+            <li><strong>path.parse()</strong>: Parsuje ścieżkę do obiektu.</li>
+            <li><strong>path.format()</strong>: Tworzy ścieżkę z obiektu.</li>
+        </ul>
+
+        <h2>5. Moduł <code>os</code> (informacje o systemie)</h2>
+        <p>Moduł <code>os</code> zapewnia informacje o systemie operacyjnym.</p>
+        <ul>
+            <li><strong>os.platform()</strong>: Zwraca platformę systemową.</li>
+            <li><strong>os.arch()</strong>: Zwraca architekturę procesora.</li>
+            <li><strong>os.cpus()</strong>: Zwraca informacje o rdzeniach procesora.</li>
+            <li><strong>os.freemem()</strong>: Zwraca wolną pamięć RAM.</li>
+            <li><strong>os.totalmem()</strong>: Zwraca całkowitą pamięć RAM.</li>
+            <li><strong>os.homedir()</strong>: Zwraca katalog domowy użytkownika.</li>
+            <li><strong>os.tmpdir()</strong>: Zwraca katalog tymczasowy.</li>
+            <li><strong>os.uptime()</strong>: Zwraca czas działania systemu.</li>
+        </ul>
+
+        <h2>6. Moduł <code>events</code> (obsługa zdarzeń)</h2>
+        <p>Moduł <code>events</code> pozwala na obsługę zdarzeń i emitowanie ich.</p>
+        <ul>
+            <li><strong>EventEmitter.on()</strong>: Rejestruje listener dla zdarzenia.</li>
+            <li><strong>EventEmitter.emit()</strong>: Emisja zdarzenia.</li>
+            <li><strong>EventEmitter.removeListener()</strong>: Usuwa listener zdarzenia.</li>
+            <li><strong>EventEmitter.once()</strong>: Rejestruje listener dla jednorazowego zdarzenia.</li>
+            <li><strong>EventEmitter.listeners()</strong>: Zwraca listę listenerów dla zdarzenia.</li>
+        </ul>
+
+        <h2>7. Moduł <code>crypto</code> (kryptografia)</h2>
+        <p>Moduł <code>crypto</code> zawiera funkcje do obsługi szyfrowania i funkcji skrótu.</p>
+        <ul>
+            <li><strong>crypto.createHash()</strong>: Tworzy obiekt skrótu (hash).</li>
+            <li><strong>crypto.createCipher()</strong>: Tworzy obiekt szyfrowania.</li>
+            <li><strong>crypto.createDecipher()</strong>: Tworzy obiekt deszyfrowania.</li>
+            <li><strong>crypto.randomBytes()</strong>: Generuje losowe bajty.</li>
+            <li><strong>crypto.pbkdf2()</strong>: Funkcja skrótu z użyciem PBKDF2.</li>
+        </ul>
+
+        <h2>8. Moduł <code>console</code></h2>
+        <p>Moduł <code>console</code> zapewnia metody do wyświetlania informacji w konsoli.</p>
+        <ul>
+            <li><strong>console.log()</strong>: Wyświetla informacje.</li>
+            <li><strong>console.error()</strong>: Wyświetla błędy.</li>
+            <li><strong>console.warn()</strong>: Wyświetla ostrzeżenia.</li>
+            <li><strong>console.time()</strong>: Rozpoczyna mierzenie czasu z unikalnym identyfikatorem.</li>
+            <li><strong>console.timeEnd()</strong>: Kończy mierzenie czasu i wyświetla wynik w milisekundach.</li>
+            <li><strong>console.table()</strong>: Wyświetla dane w formie tabeli.</li>
+        </ul>
+
+        <h2>9. Moduł <code>buffer</code></h2>
+        <p>Moduł <code>buffer</code> pozwala na przechowywanie surowych danych binarnych. Buffery są przydatne przy operacjach na danych, które nie są w formacie tekstowym.</p>
+        <ul>
+            <li><strong>Buffer.alloc()</strong>: Tworzy bufor o określonym rozmiarze.</li>
+            <li><strong>Buffer.from()</strong>: Tworzy bufor z istniejących danych (np. ciągu znaków).</li>
+            <li><strong>buf.toString()</strong>: Konwertuje zawartość bufora na tekst.</li>
+            <li><strong>buf.length</strong>: Zwraca rozmiar bufora w bajtach.</li>
+        </ul>
+
+        <h2>10. Moduł <code>timers</code></h2>
+        <p>Moduł <code>timers</code> zawiera funkcje, które zarządzają czasem w Node.js (podobne do metod globalnych <code>setTimeout</code> i <code>setInterval</code>).</p>
+        <ul>
+            <li><strong>setTimeout()</strong>: Wywołuje funkcję po określonym czasie (w milisekundach).</li>
+            <li><strong>setInterval()</strong>: Wywołuje funkcję cyklicznie co określony czas.</li>
+            <li><strong>clearTimeout()</strong>: Anuluje działanie <code>setTimeout</code>.</li>
+            <li><strong>clearInterval()</strong>: Anuluje działanie <code>setInterval</code>.</li>
+            <li><strong>setImmediate()</strong>: Wykonuje funkcję asynchronicznie, tak szybko jak to możliwe.</li>
+            <li><strong>clearImmediate()</strong>: Anuluje wywołanie <code>setImmediate</code>.</li>
+        </ul>
+
+        <h2>11. Moduł <code>body-parser</code></h2>
+        <p>Moduł <code>body-parser</code> jest używany w Node.js do parsowania (przetwarzania) danych przychodzących w treści żądania HTTP. Jest to middleware, który umożliwia odczyt danych z żądań, szczególnie przydatny w przypadku formularzy i JSON.</p>
+        <ul>
+            <li><strong>bodyParser.json()</strong>: Przetwarza treść żądania jako JSON. Przydatne do odbierania danych w formacie JSON z żądań typu POST.</li>
+            <li><strong>bodyParser.urlencoded()</strong>: Przetwarza treść żądania jako dane zakodowane w formacie URL (formularze HTML). Wymaga parametru <code>extended</code> (true lub false) dla zdefiniowania formatu kodowania.</li>
+            <li><strong>bodyParser.raw()</strong>: Przetwarza treść żądania jako surowe dane binarne (przydatne dla plików).</li>
+            <li><strong>bodyParser.text()</strong>: Przetwarza treść żądania jako tekst (przydatne, gdy oczekujemy danych tekstowych).</li>
+        </ul>
+
+
+        <h2>12. Obiekt <code>global</code></h2>
+        <p>Obiekt <code>global</code> jest globalnym obiektem w Node.js, odpowiednikiem <code>window</code> w przeglądarce. Zapewnia dostęp do zmiennych i funkcji globalnych.</p>
+        <ul>
+            <li><strong>console.log()</strong>: Wyświetla informacje w konsoli.</li>
+            <li><strong>setTimeout()</strong>: Ustawia opóźnienie wykonania funkcji.</li>
+            <li><strong>setInterval()</strong>: Ustawia cykliczne wywoływanie funkcji co określony czas.</li>
+            <li><strong>clearTimeout()</strong>: Zatrzymuje działanie <code>setTimeout()</code>.</li>
+            <li><strong>clearInterval()</strong>: Zatrzymuje działanie <code>setInterval()</code>.</li>
+            <li><strong>require()</strong>: Importuje moduły Node.js.</li>
+            <li><strong>__dirname</strong>: Zwraca pełną ścieżkę do katalogu bieżącego modułu.</li>
+            <li><strong>__filename</strong>: Zwraca pełną ścieżkę i nazwę pliku bieżącego modułu.</li>
+        </ul>
+        </div>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/prism.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/components/prism-javascript.min.js"></script>
+<script>
+    function searchModules() {
+        const query = document.getElementById('search').value.toLowerCase();
+        const modules = document.querySelectorAll('#module-list > h2');
+        const descriptions = document.querySelectorAll('#module-list > p');
+        const lists = document.querySelectorAll('#module-list > ul');
+
+        // Usuwanie poprzednich podświetleń
+        removeHighlights();
+
+        modules.forEach((module, index) => {
+            const description = descriptions[index];
+            const list = lists[index];
+            
+            // Szukaj nazwy modułu lub treści w liście właściwości
+            const matchesModule = module.textContent.toLowerCase().includes(query);
+            const matchesProperties = Array.from(list.querySelectorAll('li')).some(li =>
+                li.textContent.toLowerCase().includes(query)
+            );
+
+            // Ukryj lub pokaż moduł, opis i listę właściwości na podstawie wyniku wyszukiwania
+            if (matchesModule || matchesProperties) {
+                module.classList.remove('hidden');
+                description.classList.remove('hidden');
+                list.classList.remove('hidden');
+            } else {
+                module.classList.add('hidden');
+                description.classList.add('hidden');
+                list.classList.add('hidden');
+            }
+
+            // Podświetlanie wyników w module i liście właściwości
+            if (query) {
+                highlightText(module, query);
+                highlightText(description, query);
+                list.querySelectorAll('li').forEach(li => highlightText(li, query));
+            }
+        });
+    }
+
+    function highlightText(element, query) {
+        element.childNodes.forEach(node => {
+            if (node.nodeType === Node.TEXT_NODE) {
+                const text = node.textContent;
+                const index = text.toLowerCase().indexOf(query);
+
+                if (index !== -1) {
+                    const beforeMatch = document.createTextNode(text.slice(0, index));
+                    const matchText = document.createElement('mark');
+                    matchText.textContent = text.slice(index, index + query.length);
+                    const afterMatch = document.createTextNode(text.slice(index + query.length));
+
+                    node.replaceWith(beforeMatch, matchText, afterMatch);
+                }
+            } else if (node.nodeType === Node.ELEMENT_NODE) {
+                highlightText(node, query); // Rekurencyjne przetwarzanie elementów dzieci
+            }
+        });
+    }
+
+    function removeHighlights() {
+        document.querySelectorAll('mark').forEach(mark => {
+            mark.replaceWith(mark.textContent);
+        });
+    }
+</script>
+
+</body>
+</html>

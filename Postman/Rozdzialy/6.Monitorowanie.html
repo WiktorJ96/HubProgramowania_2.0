@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Monitorowanie API w Postmanie</title>
+    <link rel="stylesheet" href="../styles.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/themes/prism-tomorrow.min.css" rel="stylesheet" />
+</head>
+<body>
+    <div class="container">
+        <h1>Monitorowanie API w Postmanie</h1>
+
+        <p>Monitorowanie w Postmanie pozwala na automatyczne testowanie endpointów API w regularnych odstępach czasu. Dzięki monitorom możesz sprawdzać, czy Twoje API działa zgodnie z oczekiwaniami i otrzymywać powiadomienia, jeśli wystąpią problemy.</p>
+
+        <h2>Dlaczego monitorowanie API jest ważne?</h2>
+        <p>Monitorowanie pozwala na szybkie wykrycie problemów z API, takich jak nieoczekiwane błędy lub wydłużony czas odpowiedzi. Dzięki temu możesz natychmiast zareagować i zapewnić użytkownikom stabilne i responsywne API.</p>
+
+        <h2>Tworzenie monitora w Postmanie</h2>
+        <p>Aby utworzyć monitor dla kolekcji w Postmanie, wykonaj następujące kroki:</p>
+        <ol>
+            <li>Otwórz Postmana, wybierz kolekcję, którą chcesz monitorować, a następnie kliknij opcję <strong>"Monitor Collection"</strong>.</li>
+            <li>Nadaj nazwę monitorowi, wybierz częstotliwość jego uruchamiania (np. co 5 minut, co godzinę, raz dziennie) i ustaw strefę czasową.</li>
+            <li>Możesz również wybrać środowisko, w którym monitor ma działać, oraz ustawić dodatkowe opcje powiadomień.</li>
+            <li>Kliknij <strong>"Create Monitor"</strong> — monitor jest teraz aktywny.</li>
+        </ol>
+
+        <h2>Konfiguracja testów dla monitora</h2>
+        <p>Monitory wykonują testy zapisane w kolekcji. Możesz dodać testy do każdego żądania w zakładce <strong>"Tests"</strong>, aby sprawdzić status odpowiedzi, strukturę danych, czas odpowiedzi itp.</p>
+
+        <h3>Przykładowe testy dla monitora</h3>
+        <p>Poniżej znajduje się kilka przykładów testów, które można dodać do monitora w Postmanie.</p>
+
+        <h3>1. Sprawdzenie statusu odpowiedzi</h3>
+        <pre><code class="language-javascript">
+// Test sprawdzający, czy status odpowiedzi to 200 (OK)
+pm.test("Status odpowiedzi to 200", function () {
+    pm.response.to.have.status(200);
+});
+        </code></pre>
+
+        <h3>2. Sprawdzenie czasu odpowiedzi</h3>
+        <pre><code class="language-javascript">
+// Test sprawdzający, czy czas odpowiedzi jest poniżej 1000 ms
+pm.test("Czas odpowiedzi poniżej 1000 ms", function () {
+    pm.expect(pm.response.responseTime).to.be.below(1000);
+});
+        </code></pre>
+
+        <h3>3. Sprawdzenie struktury danych JSON</h3>
+        <pre><code class="language-javascript">
+// Test sprawdzający, czy odpowiedź zawiera pole 'users'
+pm.test("Odpowiedź zawiera pole 'users'", function () {
+    var jsonData = pm.response.json();
+    pm.expect(jsonData).to.have.property("users");
+});
+        </code></pre>
+
+        <h2>Powiadomienia i raporty</h2>
+        <p>Postman umożliwia wysyłanie powiadomień emailowych, jeśli monitor wykryje problem. Możesz skonfigurować powiadomienia podczas tworzenia monitora lub później w ustawieniach monitora.</p>
+        <p>Każde uruchomienie monitora generuje raport z wynikami testów, który można przeglądać w historii monitorowania. Dzięki raportom możesz analizować stabilność i wydajność API na przestrzeni czasu.</p>
+
+        <h2>Integracja z CI/CD</h2>
+        <p>Postman umożliwia integrację monitorów z systemami CI/CD, takimi jak Jenkins, GitHub Actions czy GitLab CI. Możesz uruchamiać monitory automatycznie w ramach procesu wdrażania, co pozwala na bieżąco sprawdzać stan API po każdej aktualizacji.</p>
+
+        <h3>Przykład: Integracja monitora z CI/CD</h3>
+        <p>W systemach CI/CD możesz uruchamiać monitory Postmana za pomocą Newmana i sprawdzać, czy wszystkie testy przechodzą pomyślnie przed wdrożeniem aplikacji na produkcję.</p>
+
+        <h2>Podsumowanie</h2>
+        <p>Monitorowanie w Postmanie jest potężnym narzędziem do automatycznego testowania API i zapewnienia jego stabilności. Dzięki monitorom można szybko wykrywać problemy, otrzymywać powiadomienia o błędach oraz analizować wydajność API na przestrzeni czasu.</p>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/prism.min.js"></script>
+</body>
+</html>

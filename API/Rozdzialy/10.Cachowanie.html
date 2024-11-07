@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cache'owanie w API - Optymalizacja</title>
+    <link rel="stylesheet" href="../styles.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/themes/prism-tomorrow.min.css" rel="stylesheet" />
+</head>
+<body>
+    <div class="container">
+        <h1>Cache'owanie w API - Optymalizacja</h1>
+
+        <p>Cache'owanie to technika przechowywania odpowiedzi API w pamięci podręcznej, aby skrócić czas odpowiedzi i zredukować obciążenie serwera. Dzięki cache'owaniu możemy znacznie przyspieszyć działanie API, zwłaszcza w przypadku zasobów, które nie zmieniają się często.</p>
+
+        <h2>Dlaczego Cache'owanie jest ważne?</h2>
+        <p>Cache'owanie pozwala na ponowne wykorzystanie wcześniej pobranych danych, co zmniejsza liczbę zapytań do serwera i poprawia wydajność. Jest to szczególnie istotne w przypadku API o dużym natężeniu ruchu, gdzie każde dodatkowe żądanie może wpłynąć na obciążenie serwera i czas odpowiedzi.</p>
+
+        <h2>Rodzaje cache'owania</h2>
+        <p>Istnieje kilka poziomów cache'owania, które mogą być używane w API:</p>
+        <ul>
+            <li><strong>Cache po stronie klienta</strong> – dane są przechowywane lokalnie na urządzeniu użytkownika.</li>
+            <li><strong>Cache po stronie serwera</strong> – serwer przechowuje wyniki, aby szybciej odpowiedzieć na podobne żądania.</li>
+            <li><strong>Cache pośredni</strong> – dane przechowywane w pamięci podręcznej pomiędzy klientem a serwerem, np. w usługach CDN.</li>
+        </ul>
+
+        <h2>Implementacja cache'owania w API</h2>
+
+        <h3>Cache'owanie w nagłówkach HTTP</h3>
+        <p>Serwer może ustawiać nagłówki HTTP, które kontrolują zachowanie cache'u po stronie klienta i przeglądarki. Poniżej najczęściej stosowane nagłówki:</p>
+        <ul>
+            <li><strong>Cache-Control</strong> – określa czas, przez jaki dane mogą być przechowywane w pamięci podręcznej (np. <code>Cache-Control: max-age=3600</code> oznacza 1 godzinę).</li>
+            <li><strong>ETag</strong> – unikalny identyfikator zasobu; jeśli zasób się nie zmienił, klient używa wersji z pamięci podręcznej.</li>
+            <li><strong>Expires</strong> – określa dokładny czas, do którego odpowiedź jest ważna.</li>
+            <li><strong>Last-Modified</strong> – informuje klienta, kiedy zasób był ostatnio modyfikowany; klient może sprawdzić, czy zasób się zmienił, zanim go pobierze.</li>
+        </ul>
+
+        <h3>Przykład ustawienia nagłówków cache'owania w Express</h3>
+        <pre><code class="language-javascript">
+const express = require('express');
+const app = express();
+
+// Endpoint z nagłówkami cache'owania
+app.get('/data', (req, res) => {
+    res.set('Cache-Control', 'public, max-age=3600'); // Cache na 1 godzinę
+    res.set('ETag', '12345'); // Przykładowy ETag
+    res.set('Last-Modified', new Date().toUTCString());
+    res.json({ message: "Dane z cache'owaniem" });
+});
+
+app.listen(3000, () => console.log('API działa na porcie 3000'));
+        </code></pre>
+
+        <h3>Cache'owanie po stronie serwera z Redis</h3>
+        <p>Redis jest popularnym narzędziem do przechowywania danych w pamięci podręcznej na serwerze. Możemy przechowywać odpowiedzi API w Redisie i zwracać je bez potrzeby wykonywania operacji na bazie danych przy każdym żądaniu.</p>
+
+        <h4>Instalacja Redis</h4>
+        <pre><code class="language-shell">
+npm install redis
+        </code></pre>
+
+        <h4>Przykład cache'owania danych z Redis</h4>
+        <pre><code class="language-javascript">
+const redis = require('redis');
+const client = redis.createClient();
+const express = require('express');
+const app = express();
+
+// Endpoint z cache'owaniem w Redis
+app.get('/data', (req, res) => {
+    const cacheKey = 'dataCache';
+
+    // Sprawdzenie, czy dane są już w Redisie
+    client.get(cacheKey, (err, cachedData) => {
+        if (cachedData) {
+            return res.json(JSON.parse(cachedData)); // Zwrot danych z cache'u
+        }
+
+        // Dane nie są w cache'u - wykonaj operacje na bazie danych lub inne
+        const data = { message: "Dane pobrane z bazy" };
+        
+        // Zapisanie danych w Redis na 1 godzinę (3600 sekund)
+        client.setex(cacheKey, 3600, JSON.stringify(data));
+        res.json(data);
+    });
+});
+
+app.listen(3000, () => console.log('API działa na porcie 3000'));
+        </code></pre>
+
+        <h2>Przykład nagłówków w odpowiedzi HTTP</h2>
+        <p>Poniżej przedstawiono przykład nagłówków HTTP, które mogą być używane do cache'owania:</p>
+        <pre><code class="language-http">
+HTTP/1.1 200 OK
+Cache-Control: public, max-age=3600
+ETag: "12345"
+Last-Modified: Mon, 18 Oct 2021 12:00:00 GMT
+        </code></pre>
+
+        <h2>Najlepsze praktyki cache'owania</h2>
+        <ul>
+            <li><strong>Ustal czas przechowywania cache'u w zależności od zasobu</strong> – statyczne zasoby mogą być przechowywane dłużej, natomiast dynamiczne krócej.</li>
+            <li><strong>Wykorzystaj ETag i Last-Modified</strong> – pozwala na łatwiejszą weryfikację, czy zasób zmienił się od ostatniego zapytania.</li>
+            <li><strong>Monitoruj efektywność cache'owania</strong> – sprawdzaj, ile żądań jest obsługiwanych z pamięci podręcznej.</li>
+        </ul>
+
+        <h2>Podsumowanie</h2>
+        <p>Cache'owanie w API to kluczowa technika optymalizacji, która pozwala zmniejszyć obciążenie serwera i skrócić czas odpowiedzi. Poprawne wdrożenie mechanizmów cache'owania, takich jak Redis czy nagłówki HTTP, może znacznie poprawić wydajność aplikacji i doświadczenia użytkowników.</p>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/prism.min.js"></script>
+</body>
+</html>
