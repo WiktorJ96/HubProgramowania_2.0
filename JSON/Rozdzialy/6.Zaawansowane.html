@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Zaawansowane Koncepcje JSON</title>
+    <link rel="stylesheet" href="../styles.css"> <!-- Stylowanie w osobnym pliku CSS -->
+</head>
+<body>
+    <div class="container">
+        <h1>Zaawansowane Koncepcje JSON</h1>
+
+        <!-- Sekcja: JSON Schema -->
+        <section>
+            <h2>JSON Schema</h2>
+            <p>JSON Schema to sposób definiowania struktury i walidacji dokumentów JSON. Pozwala określić, jakie typy danych i formaty są akceptowane, co ułatwia walidację i zapewnia zgodność danych w dużych systemach.</p>
+            <p>Podstawowy przykład JSON Schema:</p>
+            <pre><code class="language-json">{
+    "$schema": "http://json-schema.org/draft-07/schema#",
+    "title": "User",
+    "type": "object",
+    "properties": {
+        "id": { "type": "integer" },
+        "name": { "type": "string" },
+        "email": { "type": "string", "format": "email" }
+    },
+    "required": ["id", "name", "email"]
+}</code></pre>
+            <p>Ten schemat określa, że obiekt JSON musi zawierać pola <code>id</code>, <code>name</code> i <code>email</code>, gdzie <code>id</code> jest liczbą całkowitą, a <code>email</code> musi być w formacie e-mail.</p>
+        </section>
+
+        <!-- Sekcja: JSON-LD (Linked Data) -->
+        <section>
+            <h2>JSON-LD (Linked Data)</h2>
+            <p>JSON-LD (JSON for Linked Data) to format rozszerzający JSON, który umożliwia dodawanie kontekstu do danych, co pomaga zintegrować je z siecią semantyczną. JSON-LD jest szeroko stosowany do oznaczania danych na stronach internetowych, aby umożliwić lepsze rozpoznawanie treści przez wyszukiwarki.</p>
+            <p>Przykład JSON-LD:</p>
+            <pre><code class="language-json">{
+    "@context": "https://schema.org",
+    "@type": "Person",
+    "name": "Alice",
+    "jobTitle": "Software Engineer",
+    "telephone": "+1-555-555-5555",
+    "url": "http://www.example.com/alice"
+}</code></pre>
+            <p>W powyższym przykładzie <code>@context</code> wskazuje na kontekst z <code>schema.org</code>, co pozwala wyszukiwarkom lepiej rozpoznać, że ten obiekt JSON opisuje osobę.</p>
+        </section>
+
+        <!-- Sekcja: JSON Web Tokens (JWT) -->
+        <section>
+            <h2>JSON Web Tokens (JWT)</h2>
+            <p>JSON Web Tokens (JWT) to standard służący do bezpiecznego przesyłania informacji między dwiema stronami. JWT są używane głównie do autoryzacji i uwierzytelniania w aplikacjach internetowych, gdzie klient po zalogowaniu otrzymuje token dołączany do kolejnych żądań.</p>
+            <p>Struktura JWT składa się z trzech części:</p>
+            <ul>
+                <li><strong>Header</strong> - zawiera typ tokenu (JWT) i algorytm szyfrowania.</li>
+                <li><strong>Payload</strong> - zawiera dane, np. identyfikator użytkownika i uprawnienia.</li>
+                <li><strong>Signature</strong> - zapewnia integralność danych, zapobiegając ich modyfikacji.</li>
+            </ul>
+            <p>Przykład JWT:</p>
+            <pre><code class="language-text">eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjEyMywiZW1haWwiOiJhbGljZUBleGFtcGxlLmNvbSJ9.TJVA95OrM7E2cBab30RMHrHDcEfxjoYZgeFONFh7HgQ</code></pre>
+            <p>JWT jest używany głównie w nagłówkach autoryzacyjnych, np. <code>Authorization: Bearer [token]</code>, aby potwierdzić tożsamość użytkownika podczas dostępu do zasobów chronionych.</p>
+        </section>
+
+        <!-- Sekcja: Zastosowanie zaawansowanych koncepcji JSON -->
+        <section>
+            <h2>Zastosowanie zaawansowanych koncepcji JSON</h2>
+            <ul>
+                <li><strong>JSON Schema</strong> - zapewnia walidację i spójność danych w aplikacjach, przydatne do tworzenia złożonych systemów i API.</li>
+                <li><strong>JSON-LD</strong> - umożliwia lepsze zrozumienie struktury danych przez wyszukiwarki i integrację z siecią semantyczną.</li>
+                <li><strong>JWT</strong> - stosowany do bezpiecznego uwierzytelniania i autoryzacji, zwłaszcza w aplikacjach internetowych.</li>
+            </ul>
+        </section>
+    </div>
+</body>
+</html>

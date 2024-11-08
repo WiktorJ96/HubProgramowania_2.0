@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>JSON w API RESTful</title>
+    <link rel="stylesheet" href="../styles.css"> <!-- Stylowanie w osobnym pliku CSS -->
+</head>
+<body>
+    <div class="container">
+        <h1>JSON w API RESTful</h1>
+
+        <!-- Sekcja: Wykorzystanie JSON w komunikacji między klientem a serwerem -->
+        <section>
+            <h2>Wykorzystanie JSON w komunikacji między klientem a serwerem</h2>
+            <p>W API RESTful JSON jest najczęściej używanym formatem do wymiany danych między klientem (np. przeglądarką) a serwerem. Jego lekka struktura i czytelność sprawiają, że jest idealnym wyborem do przesyłania informacji, takich jak dane użytkowników, wyniki zapytań czy konfiguracje.</p>
+            <p>Przykład podstawowego zapytania klienta do serwera:</p>
+            <pre><code class="language-http">GET /api/users HTTP/1.1
+Host: example.com
+Accept: application/json
+</code></pre>
+            <p>Serwer odpowiada danymi w formacie JSON:</p>
+            <pre><code class="language-json">[
+    {
+        "id": 1,
+        "name": "Alice",
+        "email": "alice@example.com"
+    },
+    {
+        "id": 2,
+        "name": "Bob",
+        "email": "bob@example.com"
+    }
+]</code></pre>
+        </section>
+
+        <!-- Sekcja: Tworzenie JSON w API -->
+        <section>
+            <h2>Tworzenie JSON w API</h2>
+            <p>Serwer tworzy odpowiedzi JSON poprzez konwersję obiektów danych na JSON. W większości frameworków backendowych, jak Express.js (JavaScript), Django (Python) czy Spring Boot (Java), JSON jest generowany automatycznie.</p>
+            <p>Przykład w Express.js:</p>
+            <pre><code class="language-js">const express = require('express');
+const app = express();
+
+app.get('/api/users', (req, res) => {
+    const users = [
+        { id: 1, name: "Alice", email: "alice@example.com" },
+        { id: 2, name: "Bob", email: "bob@example.com" }
+    ];
+    res.json(users); // Wysyłanie danych w formacie JSON
+});
+
+app.listen(3000, () => console.log("Serwer działa na porcie 3000"));
+</code></pre>
+            <p>W powyższym przykładzie metoda <code>res.json()</code> automatycznie konwertuje obiekt <code>users</code> na JSON, który jest następnie przesyłany do klienta.</p>
+        </section>
+
+        <!-- Sekcja: Obsługa JSON w API -->
+        <section>
+            <h2>Obsługa JSON w API</h2>
+            <p>API RESTful nie tylko zwraca dane w formacie JSON, ale również odbiera dane od klienta. W tym celu należy odpowiednio przetworzyć żądanie i wyciągnąć zawartość JSON.</p>
+            <p>Przykład odbierania danych JSON w Express.js:</p>
+            <pre><code class="language-js">const express = require('express');
+const app = express();
+app.use(express.json()); // Middleware do parsowania JSON
+
+app.post('/api/users', (req, res) => {
+    const newUser = req.body; // Pobieranie danych JSON z żądania
+    console.log("Nowy użytkownik:", newUser);
+    res.status(201).json({ message: "Użytkownik dodany", user: newUser });
+});
+
+app.listen(3000, () => console.log("Serwer działa na porcie 3000"));
+</code></pre>
+            <p>W tym przykładzie middleware <code>express.json()</code> pozwala na parsowanie treści JSON z żądań POST i ich przetwarzanie w aplikacji.</p>
+        </section>
+
+        <!-- Sekcja: Zalety JSON w API RESTful -->
+        <section>
+            <h2>Zalety JSON w API RESTful</h2>
+            <ul>
+                <li>JSON jest lekki, co przyspiesza przesyłanie danych między klientem a serwerem.</li>
+                <li>JSON jest łatwy do czytania i zrozumienia, zarówno dla ludzi, jak i maszyn.</li>
+                <li>Wiele języków programowania obsługuje JSON bezpośrednio, co upraszcza tworzenie i analizowanie danych.</li>
+                <li>JSON jest niezależny od platformy, więc może być używany w różnych systemach.</li>
+            </ul>
+        </section>
+    </div>
+</body>
+</html>

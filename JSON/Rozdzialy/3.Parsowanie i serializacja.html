@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Parsowanie i Serializacja JSON</title>
+    <link rel="stylesheet" href="../styles.css"> <!-- Stylowanie w osobnym pliku CSS -->
+</head>
+<body>
+    <div class="container">
+        <h1>Parsowanie i Serializacja JSON</h1>
+
+        <!-- Sekcja: Konwersja między obiektami JavaScript a JSON -->
+        <section>
+            <h2>Konwersja między obiektami JavaScript a JSON</h2>
+            <p>W JavaScript JSON jest używany do przesyłania danych między serwerem a klientem, co wymaga konwersji między obiektami JavaScript a JSON.</p>
+            <p>Dwie podstawowe metody JavaScript do pracy z JSON to:</p>
+            <ul>
+                <li><strong>JSON.parse()</strong> - służy do konwersji ciągu znaków JSON na obiekt JavaScript.</li>
+                <li><strong>JSON.stringify()</strong> - służy do konwersji obiektu JavaScript na ciąg znaków JSON.</li>
+            </ul>
+        </section>
+
+        <!-- Sekcja: JSON.parse() -->
+        <section>
+            <h2>Metoda JSON.parse()</h2>
+            <p>Metoda <code>JSON.parse()</code> konwertuje ciąg JSON na obiekt JavaScript, co jest przydatne, gdy dane są otrzymywane jako tekst JSON i muszą być przetworzone w aplikacji.</p>
+            <p><strong>Składnia:</strong> <code>JSON.parse(text)</code></p>
+            <p>Przykład:</p>
+            <pre><code class="language-js">
+const jsonString = '{"name": "Alice", "age": 25}';
+const jsObject = JSON.parse(jsonString);
+console.log(jsObject.name); // Wyjście: "Alice"
+</code></pre>
+            <p>W tym przykładzie, <code>JSON.parse()</code> przekształca tekst JSON w obiekt JavaScript, który można używać w kodzie.</p>
+        </section>
+
+        <!-- Sekcja: JSON.stringify() -->
+        <section>
+            <h2>Metoda JSON.stringify()</h2>
+            <p>Metoda <code>JSON.stringify()</code> konwertuje obiekt JavaScript na ciąg JSON, co jest przydatne, gdy chcemy przesłać dane do serwera w formacie JSON.</p>
+            <p><strong>Składnia:</strong> <code>JSON.stringify(value)</code></p>
+            <p>Przykład:</p>
+            <pre><code class="language-js">
+const jsObject = { name: "Alice", age: 25 };
+const jsonString = JSON.stringify(jsObject);
+console.log(jsonString); // Wyjście: '{"name":"Alice","age":25}'
+</code></pre>
+            <p>W tym przykładzie, <code>JSON.stringify()</code> konwertuje obiekt JavaScript na tekst JSON, który można wysłać do serwera.</p>
+        </section>
+
+        <!-- Sekcja: Przykłady zastosowań -->
+        <section>
+            <h2>Przykłady Zastosowań</h2>
+            <ul>
+                <li><strong>Parsowanie danych</strong>: Przetwarzanie danych pobranych z API, które zwracają wyniki w formacie JSON.</li>
+                <li><strong>Serializacja danych</strong>: Przekształcanie obiektów JavaScript na JSON w celu ich zapisania, np. w plikach lub bazach danych.</li>
+                <li><strong>Przesyłanie danych</strong>: Wysyłanie danych z aplikacji klienta na serwer w formacie JSON.</li>
+            </ul>
+        </section>
+    </div>
+</body>
+</html>

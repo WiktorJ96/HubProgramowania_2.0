@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Struktura i składnia JSON</title>
+    <link rel="stylesheet" href="../styles.css"> <!-- Stylowanie w osobnym pliku CSS -->
+</head>
+<body>
+    <div class="container">
+        <h1>Struktura i składnia JSON</h1>
+
+        <!-- Sekcja: Obiekty -->
+        <section>
+            <h2>Obiekty</h2>
+            <p>Obiekt w JSON to zbiór par klucz-wartość, gdzie klucz jest zawsze ciągiem znaków (string) ujętym w podwójne cudzysłowy `"`. Każda para klucz-wartość jest oddzielona dwukropkiem `:`, a kolejne pary oddziela się przecinkiem. Obiekt otoczony jest nawiasami klamrowymi `{ }`.</p>
+            <p>Przykład obiektu JSON:</p>
+            <pre><code class="language-json">{
+    "name": "Alice",
+    "age": 25,
+    "isStudent": false
+}</code></pre>
+        </section>
+
+        <!-- Sekcja: Tablice -->
+        <section>
+            <h2>Tablice</h2>
+            <p>Tablica w JSON to lista wartości otoczona nawiasami kwadratowymi `[ ]`. Elementy tablicy są oddzielone przecinkami i mogą przyjmować różne typy danych, takie jak liczby, stringi, obiekty lub inne tablice.</p>
+            <p>Przykład tablicy JSON:</p>
+            <pre><code class="language-json">[
+    "Red",
+    "Green",
+    "Blue"
+]</code></pre>
+        </section>
+
+        <!-- Sekcja: Typy danych JSON -->
+        <section>
+            <h2>Typy Danych JSON</h2>
+            <p>JSON obsługuje następujące typy danych:</p>
+            <ul>
+                <li><strong>String</strong>: Ujęty w cudzysłowy, np. `"Hello"`</li>
+                <li><strong>Number</strong>: Liczby całkowite lub zmiennoprzecinkowe, np. `42`, `3.14`</li>
+                <li><strong>Boolean</strong>: Wartości logiczne, np. `true`, `false`</li>
+                <li><strong>Null</strong>: Wartość pusta lub nieznana, zapisana jako `null`</li>
+                <li><strong>Obiekt</strong>: Zestaw par klucz-wartość, ujęty w `{ }`</li>
+                <li><strong>Tablica</strong>: Lista wartości, ujęta w `[ ]`</li>
+            </ul>
+        </section>
+
+        <!-- Sekcja: Poprawność Składniowa JSON -->
+        <section>
+            <h2>Poprawność Składniowa JSON</h2>
+            <ul>
+                <li>JSON musi być zapisany w formacie UTF-8.</li>
+                <li>Klucze muszą być zawsze ujęte w podwójne cudzysłowy `"`.</li>
+                <li>Obiekty otaczamy nawiasami klamrowymi `{ }`, a tablice nawiasami kwadratowymi `[ ]`.</li>
+                <li>Każda para klucz-wartość w obiekcie musi być oddzielona przecinkiem, ale ostatni element nie powinien mieć przecinka.</li>
+                <li>JSON nie obsługuje komentarzy, więc w plikach JSON nie można dodawać żadnych adnotacji.</li>
+            </ul>
+        </section>
+
+        <!-- Sekcja: Tworzenie Poprawnych Dokumentów JSON -->
+        <section>
+            <h2>Tworzenie Poprawnych Dokumentów JSON</h2>
+            <p>Aby utworzyć poprawny dokument JSON, należy stosować się do zasad składniowych JSON. Ważne jest, aby każdy klucz był ujęty w cudzysłowy, a wartości miały poprawne typy. JSON obsługuje stringi, liczby, boolean, null, obiekty oraz tablice.</p>
+            <p>Przykład poprawnego dokumentu JSON:</p>
+            <pre><code class="language-json">{
+    "person": {
+        "name": "Alice",
+        "age": 25,
+        "isStudent": false
+    },
+    "colors": ["Red", "Green", "Blue"],
+    "height": 5.8,
+    "nullValue": null,
+    "isMember": true
+}</code></pre>
+        </section>
+    </div>
+</body>
+</html>
