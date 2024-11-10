@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Autoryzacja i Uwierzytelnianie w API</title>
+    <link rel="stylesheet" href="../styles.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/themes/prism-tomorrow.min.css" rel="stylesheet" />
+</head>
+<body>
+    <div class="container">
+<h1>Przykładowy projekt</h1>
+
+        <pre><code class="language-javascript">
+// Importujemy wymagane moduły
+const express = require('express');
+const jwt = require('jsonwebtoken');
+
+// Tworzymy aplikację Express
+const app = express();
+
+// Sekret do podpisywania i weryfikowania JWT
+const SECRET = 'sekret';
+
+// Endpoint do generowania tokenu JWT
+app.get('/generate-token', (req, res) => {
+    // Przykładowe dane użytkownika, które będą zaszyfrowane w tokenie
+    const payload = { userId: 1, role: 'admin' };
+
+    // Generujemy token z czasem wygaśnięcia 1 godziny
+    const token = jwt.sign(payload, SECRET, { expiresIn: '1h' });
+
+    // Wysyłamy wygenerowany token jako odpowiedź
+    res.json({ token });
+});
+
+// Middleware do weryfikacji JWT
+function authMiddleware(req, res, next) {
+    // Pobieramy token z nagłówka Authorization
+    const authHeader = req.headers['authorization'];
+    const token = authHeader?.split(' ')[1]; // Token jest po "Bearer"
+
+    // Jeśli token nie jest obecny, zwracamy błąd 401 (Brak tokenu)
+    if (!token) return res.status(401).send('Brak tokenu');
+
+    // Weryfikujemy token
+    jwt.verify(token, SECRET, (err, decoded) => {
+        if (err) return res.status(403).send('Nieprawidłowy token'); // Błąd weryfikacji tokenu
+
+        // Dodajemy dane z tokenu do obiektu `req` i przechodzimy dalej
+        req.user = decoded;
+        next();
+    });
+}
+
+// Endpoint chroniony, wymagający poprawnego JWT
+app.get('/secure-data', authMiddleware, (req, res) => {
+    // Jeśli token jest poprawny, zwracamy chronione dane
+    res.json({ message: 'Dane chronione', user: req.user });
+});
+
+// Uruchamiamy serwer na porcie 3000
+const PORT = 3000;
+app.listen(PORT, () => {
+    console.log(`Serwer działa na porcie ${PORT}`);
+});
+
+        </code></pre>
+<h2>Jak działa ten kod:</h2>
+
+    <h3>Generowanie tokenu JWT (<code>/generate-token</code>):</h3>
+    <ul>
+        <li>Klient wywołuje ten endpoint, aby otrzymać token JWT.</li>
+        <li>Token zawiera zakodowane dane użytkownika (np. <code>userId</code> i <code>role</code>) oraz jest podpisany za pomocą sekretu.</li>
+    </ul>
+
+    <h3>Weryfikacja tokenu (<code>authMiddleware</code>):</h3>
+    <ul>
+        <li>Middleware sprawdza obecność tokenu w nagłówku <code>Authorization</code> (w formacie <code>Bearer &lt;token&gt;</code>).</li>
+        <li>Weryfikuje token za pomocą funkcji <code>jwt.verify()</code> i klucza sekretnego.</li>
+        <li>Jeśli token jest poprawny, dane użytkownika (dekodowane z tokenu) są przekazywane w obiekcie <code>req.user</code>.</li>
+    </ul>
+
+    <h3>Endpoint chroniony (<code>/secure-data</code>):</h3>
+    <ul>
+        <li>Klient musi dostarczyć poprawny token JWT w nagłówku <code>Authorization</code>.</li>
+        <li>Jeśli token jest ważny, serwer zwraca chronione dane wraz z informacjami użytkownika.</li>
+    </ul>
+
+    <h3>Jak to przetestować:</h3>
+    <ol>
+        <li>Uruchom serwer za pomocą <code>node nazwa_pliku.js</code>.</li>
+        <li>Otwórz przeglądarkę lub użyj narzędzia takiego jak Postman:</li>
+        <ul>
+            <li><strong>Wygeneruj token:</strong> Wywołaj <code>GET http://localhost:3000/generate-token</code>.</li>
+            <li><strong>Uzyskaj dostęp do chronionych danych:</strong> Wywołaj <code>GET http://localhost:3000/secure-data</code> z nagłówkiem:
+                <div class="code-block">
+                    Authorization: Bearer &lt;wygenerowany_token&gt;
+                </div>
+            </li>
+        </ul>
+    </ol>
+
+    <h3>Uwagi:</h3>
+    <ul>
+        <li>Zmienna <code>SECRET</code> powinna być dłuższym, bardziej złożonym kluczem w rzeczywistej aplikacji.</li>
+        <li>W rzeczywistej aplikacji należy dodać więcej obsługi błędów i logiki (np. obsługa tokenów wygasłych).</li>
+    </ul>
+        
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/prism.min.js"></script>
+</body>
+</html>

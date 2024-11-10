@@ -17,89 +17,137 @@
         <p>Wersjonowanie API pozwala na wprowadzanie zmian bez zakłócania działania aplikacji, które korzystają z poprzednich wersji API. Pomaga w utrzymaniu stabilności, zapewniając użytkownikom API ciągłość dostępu do wcześniej udostępnionych funkcji.</p>
 
         <h2>Strategie wersjonowania API</h2>
-        <p>Istnieje kilka popularnych metod wersjonowania API, które różnią się sposobem, w jaki oznacza się wersje API i zarządza ich zmianami. Poniżej omówimy najczęściej stosowane podejścia.</p>
+        <p>Istnieje kilka popularnych metod wersjonowania API, które różnią się sposobem, w jaki oznacza się wersje API i zarządza ich zmianami. Poniżej omówimy najczęściej stosowane podejścia oraz ich wady i zalety.</p>
 
         <h3>1. Wersjonowanie w URL</h3>
         <p>Wersja API jest umieszczona w URL-u, co czyni ją widoczną i łatwą do identyfikacji. Jest to jedno z najczęściej stosowanych podejść do wersjonowania.</p>
         <p><strong>Przykład:</strong> <code>https://api.example.com/v1/users</code></p>
-
-        <h4>Zalety:</h4>
-        <ul>
-            <li>Łatwe do zrozumienia i wdrożenia.</li>
-            <li>Użytkownicy API widzą, z jakiej wersji korzystają.</li>
-        </ul>
-
-        <h4>Wady:</h4>
-        <ul>
-            <li>Wymaga zmiany wszystkich endpointów przy każdej nowej wersji.</li>
-        </ul>
-
-        <h3>2. Wersjonowanie w nagłówkach (Headers)</h3>
-        <p>Wersja API jest określona w nagłówkach HTTP, co pozwala na bardziej elastyczne wersjonowanie, bez zmiany URL-i.</p>
-        <p><strong>Przykład:</strong> <code>GET /users</code> z nagłówkiem <code>Accept: application/vnd.example.v1+json</code></p>
-
-        <h4>Zalety:</h4>
-        <ul>
-            <li>URL pozostaje czysty, co ułatwia czytelność.</li>
-            <li>Elastyczne dodawanie i usuwanie wersji API bez zmiany URL.</li>
-        </ul>
-
-        <h4>Wady:</h4>
-        <ul>
-            <li>Trudniejsze do wykrycia przez użytkowników, ponieważ wersja nie jest widoczna w URL.</li>
-        </ul>
-
-        <h3>3. Wersjonowanie na poziomie parametrów zapytania (Query Parameters)</h3>
-        <p>Wersja API jest określona jako parametr zapytania (query), co pozwala użytkownikom na wybór wersji w zapytaniu.</p>
-        <p><strong>Przykład:</strong> <code>https://api.example.com/users?version=1</code></p>
-
-        <h4>Zalety:</h4>
-        <ul>
-            <li>Elastyczne wersjonowanie bez zmiany struktury URL.</li>
-            <li>Łatwe do wdrożenia przy mniejszych zmianach.</li>
-        </ul>
-
-        <h4>Wady:</h4>
-        <ul>
-            <li>Nie jest zalecane w przypadku dużych zmian, które wpływają na strukturę odpowiedzi.</li>
-            <li>Mniej przejrzyste niż wersjonowanie w URL.</li>
-        </ul>
-
-        <h3>4. Wersjonowanie w ciele odpowiedzi (Response Body)</h3>
-        <p>Wersja API jest zwracana w ciele odpowiedzi jako pole, co pozwala klientowi dowiedzieć się, z jakiej wersji API korzysta.</p>
-        <p><strong>Przykład:</strong> <code>{"version": "1", "data": {...}}</code></p>
-
-        <h4>Zalety:</h4>
-        <ul>
-            <li>Nie wymaga zmiany struktury URL ani dodawania nagłówków.</li>
-        </ul>
-
-        <h4>Wady:</h4>
-        <ul>
-            <li>Brak możliwości bezpośredniego wybrania wersji przez użytkownika API.</li>
-            <li>Może być trudne do zarządzania w dużych projektach.</li>
-        </ul>
-
-        <h2>Implementacja wersjonowania API</h2>
-        <p>Wersjonowanie API można zaimplementować w aplikacji za pomocą frameworków, takich jak Express w Node.js. Poniżej znajduje się przykład wersjonowania za pomocą URL w Express.</p>
-
-        <h3>Przykład wersjonowania API w Express (Node.js)</h3>
         <pre><code class="language-javascript">
+// Wersjonowanie w URL
 const express = require('express');
 const app = express();
 
-// Wersja 1 API
 app.get('/v1/users', (req, res) => {
     res.json({ version: "v1", users: [{ id: 1, name: "Jan Kowalski" }] });
 });
 
-// Wersja 2 API z rozszerzonymi danymi
 app.get('/v2/users', (req, res) => {
     res.json({ version: "v2", users: [{ id: 1, name: "Jan Kowalski", email: "jan@example.com" }] });
 });
 
 app.listen(3000, () => console.log('API działa na porcie 3000'));
         </code></pre>
+        <h4>Zalety</h4>
+        <ul>
+            <li>Proste i intuicyjne – wersja widoczna w URL-u.</li>
+            <li>Łatwe do zaimplementowania i przetestowania.</li>
+            <li>Możliwość równoczesnego uruchamiania wielu wersji API.</li>
+        </ul>
+        <h4>Wady</h4>
+        <ul>
+            <li>Mniej elastyczne – każda zmiana wymaga zmiany URL-a.</li>
+            <li>Powoduje "bałagan" w strukturze URL-i przy wielu wersjach.</li>
+            <li>Wymusza aktualizacje w dokumentacji i integracjach.</li>
+        </ul>
+
+        <h3>2. Wersjonowanie w nagłówkach (Headers)</h3>
+        <p>Wersja API jest określona w nagłówkach HTTP, co pozwala na bardziej elastyczne wersjonowanie, bez zmiany URL-i.</p>
+        <p><strong>Przykład:</strong> <code>GET /users</code> z nagłówkiem <code>Accept: application/vnd.example.v1+json</code></p>
+        <pre><code class="language-javascript">
+// Wersjonowanie w nagłówkach
+const express = require('express');
+const app = express();
+
+app.get('/users', (req, res) => {
+    const accept = req.headers['accept'];
+
+    if (accept === 'application/vnd.example.v1+json') {
+        res.json({ version: "v1", users: [{ id: 1, name: "Jan Kowalski" }] });
+    } else if (accept === 'application/vnd.example.v2+json') {
+        res.json({ version: "v2", users: [{ id: 1, name: "Jan Kowalski", email: "jan@example.com" }] });
+    } else {
+        res.status(400).send('Nieobsługiwana wersja API');
+    }
+});
+
+app.listen(3000, () => console.log('API działa na porcie 3000'));
+        </code></pre>
+        <h4>Zalety</h4>
+        <ul>
+            <li>Elastyczne – brak konieczności zmiany URL-a.</li>
+            <li>Czysty URL – brak widocznych wersji w adresie.</li>
+            <li>Precyzyjne sterowanie wersjami dzięki nagłówkom.</li>
+        </ul>
+        <h4>Wady</h4>
+        <ul>
+            <li>Mniej intuicyjne – użytkownik musi znać specyfikację nagłówków.</li>
+            <li>Wymaga dodatkowej konfiguracji po stronie klienta i serwera.</li>
+        </ul>
+
+        <h3>3. Wersjonowanie na poziomie parametrów zapytania (Query Parameters)</h3>
+        <p>Wersja API jest określona jako parametr zapytania (query), co pozwala użytkownikom na wybór wersji w zapytaniu.</p>
+        <p><strong>Przykład:</strong> <code>https://api.example.com/users?version=1</code></p>
+        <pre><code class="language-javascript">
+// Wersjonowanie przez query parameters
+const express = require('express');
+const app = express();
+
+app.get('/users', (req, res) => {
+    const version = req.query.version;
+
+    if (version === '1') {
+        res.json({ version: "v1", users: [{ id: 1, name: "Jan Kowalski" }] });
+    } else if (version === '2') {
+        res.json({ version: "v2", users: [{ id: 1, name: "Jan Kowalski", email: "jan@example.com" }] });
+    } else {
+        res.status(400).send('Nieobsługiwana wersja API');
+    }
+});
+
+app.listen(3000, () => console.log('API działa na porcie 3000'));
+        </code></pre>
+        <h4>Zalety</h4>
+        <ul>
+            <li>Łatwe w implementacji – parametr zapytania jest powszechnie używany.</li>
+            <li>Możliwość dynamicznego wyboru wersji API przez klienta.</li>
+        </ul>
+        <h4>Wady</h4>
+        <ul>
+            <li>Mniej czytelne – parametry mogą być łatwo pominięte.</li>
+            <li>Wymaga dodatkowego sprawdzania parametrów po stronie serwera.</li>
+        </ul>
+
+        <h3>4. Wersjonowanie w ciele odpowiedzi (Response Body)</h3>
+        <p>Wersja API jest zwracana w ciele odpowiedzi jako pole, co pozwala klientowi dowiedzieć się, z jakiej wersji API korzysta.</p>
+        <p><strong>Przykład:</strong> <code>{"version": "1", "data": {...}}</code></p>
+        <pre><code class="language-javascript">
+// Wersjonowanie w ciele odpowiedzi
+const express = require('express');
+const app = express();
+
+app.get('/users', (req, res) => {
+    // Przyjmij wersję na podstawie domyślnych danych lub innych kryteriów
+    const response = {
+        version: "v1",
+        users: [{ id: 1, name: "Jan Kowalski" }]
+    };
+
+    // Zwróć odpowiedź z wersją API w ciele
+    res.json(response);
+});
+
+app.listen(3000, () => console.log('API działa na porcie 3000'));
+        </code></pre>
+        <h4>Zalety</h4>
+        <ul>
+            <li>Brak konieczności zmiany URL-i lub nagłówków.</li>
+            <li>Ułatwia debugowanie – wersja jest widoczna w odpowiedzi.</li>
+        </ul>
+        <h4>Wady</h4>
+        <ul>
+            <li>Nie pozwala na wybór wersji przez klienta.</li>
+            <li>Brak precyzyjnej kontroli nad używaną wersją API.</li>
+        </ul>
 
         <h2>Rekomendacje przy wersjonowaniu API</h2>
         <ul>

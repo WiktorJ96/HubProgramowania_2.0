@@ -40,54 +40,64 @@ npm install express express-graphql graphql
         <h3>Przykładowy kod API GraphQL</h3>
         <p>W poniższym przykładzie definiujemy prosty schemat z typem <code>User</code>, zapytaniem <code>user</code> do pobierania użytkowników i mutacją <code>addUser</code> do dodawania nowych użytkowników.</p>
         <pre><code class="language-javascript">
-const express = require('express');
-const { graphqlHTTP } = require('express-graphql');
-const { buildSchema } = require('graphql');
+// Importowanie wymaganych modułów
+const express = require('express'); // Framework do obsługi serwera HTTP
+const { graphqlHTTP } = require('express-graphql'); // Middleware umożliwiający integrację GraphQL z Express
+const { buildSchema } = require('graphql'); // Narzędzie do tworzenia schematu GraphQL
 
 // Definiowanie schematu GraphQL
 const schema = buildSchema(`
-    type User {
-        id: ID!
-        name: String!
-        email: String!
+    type User { 
+        id: ID!  // Typ ID (unikalny identyfikator), wymagane (!)
+        name: String! // Imię użytkownika jako string, wymagane (!)
+        email: String! // E-mail użytkownika jako string, wymagane (!)
     }
 
     type Query {
-        user(id: ID!): User
-        users: [User]
+        user(id: ID!): User // Zapytanie, które zwraca użytkownika na podstawie identyfikatora
+        users: [User] // Zapytanie, które zwraca listę wszystkich użytkowników
     }
 
     type Mutation {
-        addUser(name: String!, email: String!): User
+        addUser(name: String!, email: String!): User // Mutacja do dodania nowego użytkownika
     }
 `);
 
-// Przykładowe dane
+// Przykładowe dane użytkowników przechowywane w tablicy
 let users = [
-    { id: '1', name: 'Jan Kowalski', email: 'jan@example.com' },
-    { id: '2', name: 'Anna Nowak', email: 'anna@example.com' }
+    { id: '1', name: 'Jan Kowalski', email: 'jan@example.com' }, // Użytkownik 1
+    { id: '2', name: 'Anna Nowak', email: 'anna@example.com' }  // Użytkownik 2
 ];
 
-// Definiowanie resolverów
+// Definiowanie resolverów - funkcji odpowiadających na zapytania i mutacje
 const root = {
-    user: ({ id }) => users.find(user => user.id === id),
-    users: () => users,
+    // Funkcja resolver dla zapytania user(id: ID!)
+    user: ({ id }) => users.find(user => user.id === id), // Szuka użytkownika po identyfikatorze
+
+    // Funkcja resolver dla zapytania users
+    users: () => users, // Zwraca listę wszystkich użytkowników
+
+    // Funkcja resolver dla mutacji addUser
     addUser: ({ name, email }) => {
-        const newUser = { id: String(users.length + 1), name, email };
-        users.push(newUser);
-        return newUser;
+        const newUser = { id: String(users.length + 1), name, email }; // Tworzy nowego użytkownika z unikalnym ID
+        users.push(newUser); // Dodaje nowego użytkownika do tablicy
+        return newUser; // Zwraca nowo utworzonego użytkownika
     }
 };
 
-// Konfiguracja Express i GraphQL
-const app = express();
+// Konfiguracja serwera Express i middleware GraphQL
+const app = express(); // Tworzenie instancji aplikacji Express
+
+// Ustawienie middleware na ścieżce /graphql
 app.use('/graphql', graphqlHTTP({
-    schema: schema,
-    rootValue: root,
-    graphiql: true // Interfejs do testowania zapytań GraphQL
+    schema: schema, // Przekazanie schematu GraphQL
+    rootValue: root, // Przekazanie resolverów
+    graphiql: true // Włączenie narzędzia GraphiQL do testowania zapytań w przeglądarce
 }));
 
-app.listen(4000, () => console.log('GraphQL API działa na porcie 4000'));
+// Uruchomienie serwera na porcie 4000
+app.listen(4000, () => console.log('GraphQL API działa na porcie 4000')); // Logowanie informacji o uruchomieniu
+
         </code></pre>
 
         <h2>Przykład zapytań GraphQL</h2>

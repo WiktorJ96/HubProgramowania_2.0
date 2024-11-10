@@ -110,10 +110,62 @@ client_id=YOUR_CLIENT_ID&client_secret=YOUR_CLIENT_SECRET&code=AUTHORIZATION_COD
                 <td>Większa złożoność, konieczność interakcji z zewnętrznym serwerem autoryzacji</td>
             </tr>
         </table>
+        <h2>OAuth 2.0 i JWT: Proste Analogie</h2>
+    <p>Wyobraźmy sobie, że organizujesz przyjęcie i chcesz, aby Twoi goście mogli wejść do różnych pomieszczeń w Twoim domu.</p>
 
+    <h3>OAuth 2.0: Klucz do domu</h3>
+    <div class="highlight">
+        <p><strong>Ty</strong> jesteś serwerem autoryzacji (np. Facebook).</p>
+        <p><strong>Twoi goście</strong> to użytkownicy, którzy chcą uzyskać dostęp do różnych pomieszczeń (np. aplikacji mobilnej).</p>
+        <p><strong>Klucz do domu</strong> to token dostępu.</p>
+        <p>Kiedy gość przychodzi na Twoje przyjęcie, pokazuje Ci swoje identyfikatory (np. dowód osobisty). Jeśli go rozpoznajesz, dajesz mu klucz, który otwiera konkretne drzwi (np. do salonu, ale nie do sypialni).</p>
+    </div>
+
+    <p>OAuth 2.0 działa podobnie:</p>
+    <ul>
+        <li>Użytkownik loguje się do aplikacji A (np. Google) i wyraża zgodę na udostępnienie swoich danych aplikacji B (np. aplikacji do zarządzania zadaniami).</li>
+        <li>Aplikacja A (Google) wydaje token dostępu (klucz), który pozwala aplikacji B na dostęp do określonych zasobów użytkownika (np. lista kontaktów).</li>
+    </ul>
+
+    <h3>JWT: Bilet wstępu z pieczątką</h3>
+    <div class="highlight">
+        <p><strong>Bilet wstępu</strong> to JWT. Zawiera informacje o posiadaczu biletu (użytkowniku), do których miejsc może wejść (uprawnienia) oraz datę ważności.</p>
+        <p><strong>Pieczątka</strong> to podpis elektroniczny, który gwarantuje, że bilet jest autentyczny i nie został podrobiony.</p>
+        <p>Kiedy gość ma bilet, nie musi pokazywać go za każdym razem, gdy przechodzi przez drzwi. Wystarczy, że przy wejściu do pomieszczenia ochroniarz (serwer) sprawdzi ważność pieczątki.</p>
+    </div>
+
+    <p>JWT działa podobnie:</p>
+    <ul>
+        <li>Aplikacja generuje JWT, który zawiera informacje o użytkowniku i jego uprawnieniach.</li>
+        <li>Ten token jest wysyłany do aplikacji mobilnej.</li>
+        <li>Aplikacja mobilna dołącza token do każdego żądania do serwera.</li>
+        <li>Serwer weryfikuje podpis tokenu i sprawdza, czy użytkownik ma odpowiednie uprawnienia.</li>
+    </ul>
+
+    <h3>Podsumowanie analogii</h3>
+    <ul>
+        <li><strong>OAuth 2.0</strong> jest jak ochroniarz przy drzwiach, który sprawdza tożsamość gościa i wydaje mu klucz do odpowiednich pomieszczeń.</li>
+        <li><strong>JWT</strong> jest jak bilet wstępu, który pozwala gościowi swobodnie poruszać się po domu, o ile bilet jest ważny i nie został podrobiony.</li>
+    </ul>
+
+    <h3>Dlaczego używamy OAuth 2.0 i JWT?</h3>
+    <ul>
+        <li><strong>Bezpieczeństwo:</strong> Zapewniają, że tylko autoryzowani użytkownicy mogą uzyskać dostęp do określonych zasobów.</li>
+        <li><strong>Elastyczność:</strong> Pozwala na precyzyjne zarządzanie uprawnieniami użytkowników.</li>
+        <li><strong>Wygoda:</strong> Ułatwiają integrację różnych systemów i aplikacji.</li>
+    </ul>
+
+    <h3>W praktyce:</h3>
+    <ul>
+        <li><strong>OAuth 2.0</strong> jest często używany do logowania się do aplikacji za pomocą kont na portalach społecznościowych (np. Facebook, Google).</li>
+        <li><strong>JWT</strong> są wykorzystywane w API, aby zabezpieczyć dostęp do danych i funkcji.</li>
+    </ul>
+    
         <h2>Podsumowanie</h2>
         <p>Mechanizmy uwierzytelniania i autoryzacji, takie jak JWT i OAuth, są niezbędne dla zabezpieczenia API. Wybór mechanizmu zależy od potrzeb aplikacji - JWT jest wygodnym rozwiązaniem dla prostych systemów, natomiast OAuth sprawdza się tam, gdzie wymagana jest autoryzacja zewnętrzna i wysoki poziom bezpieczeństwa.</p>
+        <a href="./3.1.Autoryzacja i uwierzytelnianie - projekt.html"><button>Projekt</button></a>
     </div>
+    
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/prism.min.js"></script>
 </body>
