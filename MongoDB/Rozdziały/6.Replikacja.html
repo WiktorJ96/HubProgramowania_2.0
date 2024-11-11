@@ -45,55 +45,86 @@
 <body>
     <div class="container">
         <h1>Replikacja w MongoDB</h1>
-        <p>Replikacja to proces utrzymywania wielu kopii danych na różnych serwerach w celu zwiększenia dostępności i niezawodności systemu. MongoDB używa replik setów (ang. replica sets), które zapewniają automatyczne przełączanie awaryjne i redundancję danych.</p>
+        <p>
+            Replikacja to proces przechowywania tych samych danych na kilku serwerach.
+            Wyobraź sobie, że masz kopię zapasową ważnych dokumentów w chmurze i na pendrive – jeśli jedno źródło danych zawiedzie, masz drugie. MongoDB działa podobnie: tworzy kopie swojej bazy na wielu serwerach, co zwiększa niezawodność systemu.
+        </p>
 
         <h2>Konfiguracja Replik Setów</h2>
-        <p>Replik set w MongoDB składa się z jednego podstawowego (ang. primary) i co najmniej jednego lub więcej replik drugorzędnych (ang. secondary). Aby skonfigurować repliki, wykonaj poniższe kroki:</p>
+        <p>
+            Replik set (zestaw replik) działa jak drużyna: jeden serwer jest liderem (primary), a inni to jego zastępcy (secondary). Lider zajmuje się wszystkimi zapytaniami o zapis danych, podczas gdy zastępcy tworzą kopie tych danych. Jeśli lider "opuści drużynę" (np. serwer ulegnie awarii), drużyna automatycznie wybierze nowego lidera, zapewniając ciągłość działania.
+        </p>
         <pre><code class="language-bash">
 # Uruchomienie MongoDB jako członka replika setu
-mongod --replSet \"mójReplSet\" --port 27017 --dbpath /data/db1 --bind_ip localhost
+# Przykład: MongoDB pracujący jako część drużyny o nazwie "mójReplSet".
+mongod --replSet "mójReplSet" --port 27017 --dbpath /data/db1 --bind_ip localhost
         </code></pre>
+        <p>
+            To polecenie uruchamia serwer MongoDB z następującymi parametrami:
+            <ul>
+                <li><strong>--replSet:</strong> Definiuje nazwę drużyny replik (np. "mójReplSet"). Wszystkie serwery w drużynie muszą mieć tę samą nazwę.</li>
+                <li><strong>--port:</strong> Określa, na którym porcie działa serwer (np. 27017).</li>
+                <li><strong>--dbpath:</strong> Ścieżka, w której przechowywane są dane tej konkretnej instancji.</li>
+                <li><strong>--bind_ip:</strong> Określa, do których adresów sieciowych serwer może być podłączony (np. tylko localhost).</li>
+            </ul>
+            Jeśli chcesz dodać więcej serwerów, uruchamiasz kolejne instancje z innymi portami i ścieżkami danych.
+        </p>
 
-        <p>Następnie, po uruchomieniu instancji, skonfiguruj replik set w Mongo Shell:</p>
+        <p>Po uruchomieniu serwerów, skonfiguruj zestaw replik w Mongo Shell (narzędzie do zarządzania MongoDB):</p>
         <pre><code class="language-javascript">
 // Inicjalizacja replika setu
+// Wyobraź sobie, że konfigurujesz drużynę: każdy członek ma swój numer (ID) i adres (host).
 rs.initiate({
-    _id: \"mójReplSet\",
+    _id: "mójReplSet", // Nazwa drużyny
     members: [
-        { _id: 0, host: \"localhost:27017\" },
-        { _id: 1, host: \"localhost:27018\" },
-        { _id: 2, host: \"localhost:27019\" }
+        { _id: 0, host: "localhost:27017" }, // Lider
+        { _id: 1, host: "localhost:27018" }, // Zastępca 1
+        { _id: 2, host: "localhost:27019" }  // Zastępca 2
     ]
 });
         </code></pre>
+        <p>
+            Powyższy kod mówi MongoDB, że chcesz stworzyć zestaw replik o nazwie "mójReplSet", w którym:
+            <ul>
+                <li><strong>_id:</strong> To unikalny identyfikator każdego członka drużyny (0, 1, 2 itp.).</li>
+                <li><strong>host:</strong> Adres i port każdego serwera (np. "localhost:27017").</li>
+            </ul>
+            Gdy uruchomisz ten kod w Mongo Shell, serwery zaczną synchronizować swoje dane.
+        </p>
 
         <h2>Zarządzanie Replikacją Danych</h2>
-        <p>Podstawowe operacje związane z zarządzaniem replikacją danych obejmują:</p>
+        <p>Możesz zarządzać zestawem replik za pomocą następujących poleceń:</p>
         <ul>
-            <li><strong>Monitorowanie stanu replik setu:</strong> Użyj <code>rs.status()</code>, aby sprawdzić aktualny stan repliki.</li>
-            <li><strong>Dodawanie nowych członków:</strong> Nowe instancje można dodać za pomocą <code>rs.add()</code>. Przykład:</li>
+            <li>
+                <strong>Monitorowanie stanu drużyny:</strong> Użyj <code>rs.status()</code>,
+                aby sprawdzić, czy członkowie są dostępni i działają poprawnie.
+            </li>
+            <li>
+                <strong>Dodawanie nowych członków:</strong> Jeśli chcesz powiększyć drużynę, użyj <code>rs.add()</code>.
+                Przykład: dodanie nowego serwera.
+            </li>
         </ul>
         <pre><code class="language-javascript">
-rs.add(\"localhost:27020\");
+rs.add("localhost:27020"); // Dodaj nowego członka do drużyny
         </code></pre>
-        <ul>
-            <li><strong>Usuwanie członków:</strong> Użyj <code>rs.remove()</code>, aby usunąć członka z replik setu. Przykład:</li>
-        </ul>
-        <pre><code class="language-javascript">
-rs.remove(\"localhost:27020\");
-        </code></pre>
+        <p>
+            Wyobraź sobie, że nowy serwer dołącza do Twojej drużyny jako nowy zastępca. MongoDB automatycznie zadba, by miał aktualną kopię danych.
+        </p>
 
         <h2>Automatyczne Przełączanie Awaryjne</h2>
-        <p>W przypadku awarii instancji podstawowej jeden z członków drugorzędnych automatycznie przejmuje rolę podstawową, zapewniając ciągłość działania systemu. Replik set obsługuje to za pomocą algorytmu wyboru lidera.</p>
+        <p>
+            Wyobraź sobie, że lider drużyny nagle rezygnuje (np. awaria serwera). MongoDB automatycznie przeprowadzi wybory, by wybrać nowego lidera spośród dostępnych zastępców. Dzięki temu baza danych nadal działa, a użytkownicy nie odczuwają przerw w dostępie do danych.
+        </p>
 
         <h2>Podsumowanie</h2>
         <ul>
-            <li>Replikacja w MongoDB zapewnia wysoką dostępność danych poprzez replik sety.</li>
-            <li>Replik sety umożliwiają automatyczne przełączanie awaryjne i redundancję danych.</li>
-            <li>Można zarządzać replikacją za pomocą komend <code>rs.initiate()</code>, <code>rs.add()</code>, <code>rs.status()</code>, i <code>rs.remove()</code>.</li>
+            <li>Replikacja w MongoDB to proces zapewniający dostępność danych nawet w przypadku awarii.</li>
+            <li>Replik sety umożliwiają redundancję i automatyczne przełączanie awaryjne.</li>
+            <li>Do zarządzania drużyną (zestawem replik) używaj poleceń takich jak <code>rs.initiate()</code>, <code>rs.add()</code>, <code>rs.status()</code>, i <code>rs.remove()</code>.</li>
         </ul>
-    <!-- Przycisk otwierający modal -->
-    <button id="openModalBtn">Pojęcia</button>
+
+        <!-- Przycisk otwierający modal -->
+        <button id="openModalBtn">Pojęcia</button>
     </div>
     <!-- Tło pod modala -->
     <div id="modalOverlay" class="modal-overlay"></div>

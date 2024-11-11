@@ -98,12 +98,107 @@ db.kolekcja.mapReduce(
     }
 );
         </code></pre>
-        <p>W tym przykładzie:</p>
+
+    <div class="section">
+        <h2>Czym jest mapReduce?</h2>
+        <p><strong>mapReduce</strong> to metoda w MongoDB używana do przetwarzania dużej ilości danych i ich agregacji. Jest podzielona na dwa etapy:</p>
         <ul>
-            <li><code>map</code> – funkcja emitująca klucz „kategoria” z wartością 1.</li>
-            <li><code>reduce</code> – funkcja sumująca wartości dla danego klucza.</li>
-            <li><code>out</code> – określa, gdzie mają zostać zapisane wyniki.</li>
+            <li><strong>Map:</strong> Odpowiada za przekształcenie dokumentów w pary klucz-wartość.</li>
+            <li><strong>Reduce:</strong> Łączy wartości o tych samych kluczach.</li>
         </ul>
+    </div>
+
+    <div class="section">
+        <h2>Funkcja Map</h2>
+        <p>Funkcja mapująca (map) jest wykonywana dla każdego dokumentu w kolekcji:</p>
+        <pre><code class="language-javascript">
+function() {
+    emit(this.kategoria, 1);
+}
+        </code></pre>
+        <p>Opis:</p>
+        <ul>
+            <li><code>this.kategoria</code>: Odnosi się do pola <code>kategoria</code> w bieżącym dokumencie.</li>
+            <li><code>emit(klucz, wartość)</code>: Tworzy pary klucz-wartość, np. "Elektronika" -> 1.</li>
+        </ul>
+        <p>Przykładowe dane wejściowe:</p>
+        <pre><code class="language-javascript">
+{ "kategoria": "Elektronika" }
+{ "kategoria": "Książki" }
+{ "kategoria": "Elektronika" }
+        </code></pre>
+        <p>Po mapowaniu:</p>
+        <pre><code class="language-javascript">
+"Elektronika" -> 1
+"Książki" -> 1
+"Elektronika" -> 1
+        </code></pre>
+    </div>
+
+    <div class="section">
+        <h2>Funkcja Reduce</h2>
+        <p>Funkcja redukująca (reduce) grupuje wartości o tych samych kluczach:</p>
+        <pre><code class="language-javascript">
+function(klucz, wartosci) {
+    return Array.sum(wartosci);
+}
+        </code></pre>
+        <p>Opis:</p>
+        <ul>
+            <li><code>klucz</code>: Klucz, czyli kategoria (np. "Elektronika").</li>
+            <li><code>wartosci</code>: Tablica wartości emitowanych w map (np. [1, 1]).</li>
+            <li><code>Array.sum(wartosci)</code>: Dodaje wartości w tablicy.</li>
+        </ul>
+        <p>Przykład działania:</p>
+        <pre><code class="language-javascript">
+"Elektronika": [1, 1] -> 2
+"Książki": [1] -> 1
+        </code></pre>
+    </div>
+
+    <div class="section">
+        <h2>Wynik działania</h2>
+        <p>Wynik funkcji mapReduce jest zapisywany w nowej kolekcji:</p>
+        <pre><code class="language-javascript">
+{
+    out: "wynikiAgregacji"
+}
+        </code></pre>
+        <p>Przykładowe dane wejściowe:</p>
+        <pre><code class="language-javascript">
+db.kolekcja.insertMany([
+    { "kategoria": "Elektronika" },
+    { "kategoria": "Książki" },
+    { "kategoria": "Elektronika" },
+    { "kategoria": "Odzież" },
+    { "kategoria": "Odzież" },
+    { "kategoria": "Odzież" }
+]);
+        </code></pre>
+        <p>Wynik w kolekcji <code>wynikiAgregacji</code>:</p>
+        <pre><code class="language-javascript">
+{
+    "_id": "Elektronika",
+    "value": 2
+},
+{
+    "_id": "Książki",
+    "value": 1
+},
+{
+    "_id": "Odzież",
+    "value": 3
+}
+        </code></pre>
+    </div>
+
+    <div class="section">
+        <h2>Zalety i wady</h2>
+        <ul>
+            <li><strong>Zalety:</strong> Pozwala przetwarzać duże zbiory danych, umożliwia zaawansowaną agregację.</li>
+            <li><strong>Wady:</strong> Może być wolniejszy od <code>aggregation framework</code> w MongoDB.</li>
+        </ul>
+    </div>
 
         <h2>Podsumowanie</h2>
         <ul>

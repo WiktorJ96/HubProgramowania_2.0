@@ -10,83 +10,111 @@
 <body>
     <div class="container">
         <h1>Transakcje w MongoDB</h1>
-        <p>MongoDB obsługuje transakcje ACID (ang. Atomicity, Consistency, Isolation, Durability), które pozwalają na wykonywanie wielu operacji w sposób atomowy, zapewniając spójność danych i trwałość wyników.</p>
+        <p>Transakcje w MongoDB pozwalają na grupowanie wielu operacji w jeden zestaw, który działa w całości (lub wcale). Dzięki temu dane w bazie są zawsze poprawne, nawet jeśli wystąpią błędy w trakcie działania programu.</p>
 
         <h2>Co to są Transakcje ACID?</h2>
-        <p>Transakcje ACID to zbiór właściwości, które gwarantują niezawodność operacji na danych:</p>
+        <p>ACID to zbiór zasad, które gwarantują, że operacje na danych są bezpieczne i niezawodne:</p>
         <ul>
-            <li><strong>Atomicity (Atomiczność):</strong> Wszystkie operacje w transakcji są wykonywane w całości lub wcale.</li>
-            <li><strong>Consistency (Spójność):</strong> Transakcje przekształcają dane z jednego spójnego stanu do innego.</li>
-            <li><strong>Isolation (Izolacja):</strong> Operacje w jednej transakcji są izolowane od operacji w innych transakcjach.</li>
-            <li><strong>Durability (Trwałość):</strong> Wyniki zakończonej transakcji są trwałe, nawet w przypadku awarii systemu.</li>
+            <li><strong>Atomicity (Atomiczność):</strong> Wszystkie operacje wchodzące w skład transakcji wykonują się razem. Jeśli jedna operacja się nie uda, to żadna z nich nie zostanie zapisana.</li>
+            <li><strong>Consistency (Spójność):</strong> Dane w bazie są zawsze poprawne i zgodne z zasadami logiki. Transakcja nie może pozostawić danych w niepoprawnym stanie.</li>
+            <li><strong>Isolation (Izolacja):</strong> Różne transakcje nie wpływają na siebie wzajemnie, nawet jeśli są wykonywane jednocześnie.</li>
+            <li><strong>Durability (Trwałość):</strong> Po zakończeniu transakcji zmiany w danych są trwałe, nawet jeśli system się wyłączy lub wystąpi awaria.</li>
         </ul>
 
-        <h2>Użycie Transakcji w MongoDB</h2>
-        <p>Aby używać transakcji, MongoDB wymaga zastosowania replik setów lub MongoDB Sharded Cluster. Przykładowa transakcja w Node.js:</p>
+        <h2>Jak działają transakcje w MongoDB?</h2>
+        <p>Aby korzystać z transakcji w MongoDB, musisz używać bazy danych skonfigurowanej jako replika (Replica Set) lub w klastrze sharded (Sharded Cluster). Transakcje pozwalają na wykonywanie wielu operacji (np. dodawania, usuwania, zmiany danych) jako jednej całości.</p>
+
+        <h2>Przykład w Node.js</h2>
+        <p>Poniżej znajduje się prosty przykład pokazujący, jak utworzyć transakcję w MongoDB przy użyciu Node.js:</p>
         <pre><code class="language-javascript">
-// Połączenie z MongoDB i rozpoczęcie sesji
-const { MongoClient } = require('mongodb');
+// Importowanie klienta MongoDB
+const { MongoClient } = require('mongodb'); 
+// Definiowanie URI (adresu) połączenia z lokalną bazą danych MongoDB
 const uri = 'mongodb://localhost:27017';
+// Tworzenie nowego klienta MongoDB z włączoną opcją `useUnifiedTopology` dla optymalizacji połączeń
 const client = new MongoClient(uri, { useUnifiedTopology: true });
 
+// Asynchroniczna funkcja do wykonywania transakcji
 async function wykonajTransakcje() {
     try {
+        // Połączenie z bazą danych MongoDB
         await client.connect();
+
+        // Rozpoczęcie nowej sesji w MongoDB
         const session = client.startSession();
 
+        // Rozpoczęcie transakcji w ramach sesji
         session.startTransaction();
+
+        // Uzyskanie dostępu do bazy danych `mojabaza`
         const db = client.db('mojabaza');
+        // Uzyskanie dostępu do kolekcji `uzytkownicy` w tej bazie danych
         const kolekcja = db.collection('uzytkownicy');
 
-        // Operacje w transakcji
+        // Pierwsza operacja w transakcji: dodanie nowego użytkownika do kolekcji
         await kolekcja.insertOne({ imie: 'Jan', wiek: 30 }, { session });
+
+        // Druga operacja w transakcji: aktualizacja wieku dodanego użytkownika
         await kolekcja.updateOne({ imie: 'Jan' }, { $set: { wiek: 31 } }, { session });
 
-        // Zatwierdzenie transakcji
+        // Zatwierdzenie transakcji (wszystkie operacje zostaną zapisane w bazie)
         await session.commitTransaction();
         console.log('Transakcja zakończona pomyślnie');
     } catch (err) {
+        // Obsługa błędu: wypisanie błędu do konsoli
         console.error('Błąd podczas transakcji:', err);
-        await session.abortTransaction(); // Wycofanie transakcji w przypadku błędu
+
+        // Wycofanie transakcji w przypadku wystąpienia błędu
+        await session.abortTransaction();
     } finally {
+        // Zakończenie sesji, niezależnie od tego, czy transakcja się powiodła czy nie
         session.endSession();
+
+        // Zamknięcie połączenia z MongoDB
         await client.close();
     }
 }
 
+// Wywołanie funkcji do wykonania transakcji
 wykonajTransakcje();
         </code></pre>
 
-        <h2>Zarządzanie Sesjami Transakcyjnymi</h2>
-        <p>Sesje transakcyjne umożliwiają wykonywanie operacji w ramach jednej transakcji. Sesje muszą być jawnie rozpoczęte i zakończone.</p>
+        <h2>Co to jest sesja w transakcji?</h2>
+        <p>Sesja to coś w rodzaju "kontenera", w którym MongoDB zapisuje informacje o transakcji. Każda transakcja musi być wykonana w ramach sesji.</p>
         <ul>
-            <li><strong>startSession():</strong> Rozpoczyna sesję transakcyjną.</li>
-            <li><strong>startTransaction():</strong> Inicjuje transakcję w ramach aktywnej sesji.</li>
-            <li><strong>commitTransaction():</strong> Zatwierdza transakcję.</li>
-            <li><strong>abortTransaction():</strong> Wycofuje transakcję.</li>
+            <li><strong>startSession():</strong> Rozpoczyna sesję, w której będziesz wykonywać operacje.</li>
+            <li><strong>startTransaction():</strong> Mówi MongoDB, że rozpoczynasz transakcję.</li>
+            <li><strong>commitTransaction():</strong> Zatwierdza zmiany i zapisuje je w bazie.</li>
+            <li><strong>abortTransaction():</strong> Wycofuje zmiany, jeśli wystąpi problem.</li>
         </ul>
 
         <h2>Przykład w Pythonie</h2>
+        <p>Oto przykład, jak wykonać transakcję w MongoDB używając języka Python:</p>
         <pre><code class="language-python">
 from pymongo import MongoClient
 
-client = MongoClient('mongodb://localhost:27017/')
-db = client['mojabaza']
-kolekcja = db['uzytkownicy']
+# Połączenie z bazą danych MongoDB
+client = MongoClient('mongodb://localhost:27017/')  # Tworzenie połączenia do lokalnej bazy danych MongoDB
+db = client['mojabaza']  # Uzyskanie dostępu do bazy danych o nazwie 'mojabaza'
+kolekcja = db['uzytkownicy']  # Uzyskanie dostępu do kolekcji 'uzytkownicy' w tej bazie danych
 
-with client.start_session() as session:
-    with session.start_transaction():
+# Rozpoczęcie sesji i transakcji
+with client.start_session() as session:  # Rozpoczęcie nowej sesji
+    with session.start_transaction():  # Rozpoczęcie transakcji w ramach sesji
+        # Dodanie nowego użytkownika do kolekcji
         kolekcja.insert_one({'imie': 'Anna', 'wiek': 25}, session=session)
+        # Aktualizacja wieku użytkownika 'Anna' w kolekcji
         kolekcja.update_one({'imie': 'Anna'}, {'$set': {'wiek': 26}}, session=session)
+        # Wypisanie komunikatu, jeśli wszystkie operacje zakończą się sukcesem
         print('Transakcja zakończona pomyślnie')
-        # Jeśli wystąpi błąd, transakcja zostanie automatycznie wycofana
+        # Jeśli wystąpi błąd w dowolnej operacji, transakcja zostanie automatycznie wycofana
         </code></pre>
 
         <h2>Podsumowanie</h2>
         <ul>
-            <li>Transakcje ACID zapewniają niezawodność i spójność operacji na danych w MongoDB.</li>
-            <li>Zarządzanie sesjami pozwala na wykonywanie operacji w ramach transakcji.</li>
-            <li>Przykłady pokazują, jak rozpocząć i zakończyć transakcję w Node.js i Pythonie.</li>
+            <li>Transakcje w MongoDB umożliwiają grupowanie operacji w jeden zestaw, który działa w całości.</li>
+            <li>ACID to kluczowe zasady gwarantujące bezpieczeństwo i spójność danych.</li>
+            <li>Przykłady w Node.js i Pythonie pokazują, jak rozpocząć, wykonać i zakończyć transakcję.</li>
         </ul>
     </div>
 

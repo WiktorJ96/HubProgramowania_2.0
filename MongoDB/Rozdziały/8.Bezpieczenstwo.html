@@ -48,11 +48,21 @@
         <p>Bezpieczeństwo danych w MongoDB jest kluczowe dla zapewnienia integralności i ochrony przed nieautoryzowanym dostępem. Obejmuje uwierzytelnianie, autoryzację, szyfrowanie oraz zarządzanie rolami użytkowników.</p>
 
         <h2>Uwierzytelnianie</h2>
-        <p>Uwierzytelnianie to proces weryfikacji tożsamości użytkownika. MongoDB obsługuje różne metody uwierzytelniania, takie jak:</p>
+        <p>
+            Uwierzytelnianie to proces sprawdzania, kim jest użytkownik. 
+            Wyobraź sobie, że logujesz się na konto bankowe – wpisujesz login i hasło, a system sprawdza, czy są poprawne. 
+            W MongoDB możesz wybrać różne sposoby weryfikacji użytkowników:
+        </p>
         <ul>
-            <li><strong>Uwierzytelnianie lokalne:</strong> Używanie wewnętrznych mechanizmów MongoDB do weryfikacji użytkowników.</li>
-            <li><strong>LDAP:</strong> Integracja z zewnętrznymi usługami katalogowymi, takimi jak LDAP.</li>
-            <li><strong>Kerberos:</strong> Uwierzytelnianie w środowiskach korporacyjnych.</li>
+            <li>
+                <strong>Uwierzytelnianie lokalne:</strong> MongoDB sam przechowuje login i hasło użytkowników, jak mały sejf w domu, gdzie trzymasz swoje dane.
+            </li>
+            <li>
+                <strong>LDAP:</strong> MongoDB łączy się z zewnętrzną "książką kontaktową" firmy (LDAP), gdzie zapisane są wszystkie dane logowania pracowników. Dzięki temu jeden login działa w wielu miejscach.
+            </li>
+            <li>
+                <strong>Kerberos:</strong> System logowania, który działa jak portier w budynku firmy – sprawdza Twoją tożsamość raz, a potem daje "przepustkę", którą możesz pokazać w różnych miejscach, zamiast logować się ponownie.
+            </li>
         </ul>
         <pre><code class="language-bash">
 # Uruchomienie MongoDB z włączonym uwierzytelnianiem
@@ -60,34 +70,55 @@ mongod --auth --port 27017 --dbpath /data/db
         </code></pre>
 
         <h2>Autoryzacja</h2>
-        <p>Autoryzacja definiuje, jakie operacje użytkownik może wykonywać po uwierzytelnieniu. MongoDB wykorzystuje role, które przypisują uprawnienia do wykonywania konkretnych czynności, takich jak odczyt lub zapis danych.</p>
+        <p>
+            Autoryzacja to proces, który decyduje, co dany użytkownik może robić po zalogowaniu. 
+            Wyobraź sobie, że jesteś w biurze. Może masz klucz tylko do swojego gabinetu, a nie do całego budynku. MongoDB przypisuje użytkownikom takie "klucze" w formie ról.
+        </p>
+        <p>
+            Przykładowa rola: jeśli jesteś analitykiem, możesz odczytywać dane (rola <code>read</code>), ale nie możesz ich zmieniać. Jeśli jesteś programistą, masz rolę <code>readWrite</code>, więc możesz odczytywać i zmieniać dane.
+        </p>
         <pre><code class="language-javascript">
-// Tworzenie użytkownika z rolami
+// Tworzenie użytkownika z przypisaną rolą
 db.createUser({
-    user: \"adminUser\",
-    pwd: \"bezpieczneHaslo123\",
-    roles: [ { role: \"readWrite\", db: \"mojaBaza\" } ]
+    user: "adminUser", // Nazwa użytkownika
+    pwd: "bezpieczneHaslo123", // Bezpieczne hasło
+    roles: [ 
+        { role: "readWrite", db: "mojaBaza" } // Rola: odczyt i zapis w "mojaBaza"
+    ]
 });
         </code></pre>
 
         <h2>Szyfrowanie Danych</h2>
-        <p>MongoDB wspiera szyfrowanie danych zarówno podczas przesyłania (TLS/SSL), jak i w stanie spoczynku (szyfrowanie danych na dysku). Użycie szyfrowania pomaga chronić dane przed nieautoryzowanym dostępem.</p>
+        <p>
+            Szyfrowanie to technika, która "koduje" Twoje dane, tak aby nikt niepowołany nie mógł ich odczytać.
+            Wyobraź sobie, że przesyłasz list w zamkniętej kopercie – tylko odbiorca, który zna kod (klucz), może go otworzyć i przeczytać.
+        </p>
         <ul>
-            <li><strong>Szyfrowanie podczas przesyłania:</strong> Używanie TLS/SSL, aby zabezpieczyć dane przesyłane między klientem a serwerem.</li>
-            <li><strong>Szyfrowanie w stanie spoczynku:</strong> Funkcja dostępna w MongoDB Enterprise, umożliwiająca szyfrowanie danych zapisanych na dysku.</li>
+            <li>
+                <strong>Szyfrowanie podczas przesyłania:</strong> MongoDB używa TLS/SSL, które zabezpiecza dane przesyłane między Twoim komputerem a serwerem. To jak zapieczętowana koperta podczas wysyłki listu.
+            </li>
+            <li>
+                <strong>Szyfrowanie w stanie spoczynku:</strong> Dane zapisane na dysku są również zaszyfrowane – nawet jeśli ktoś fizycznie ukradnie dysk, nie będzie mógł odczytać jego zawartości bez klucza.
+            </li>
         </ul>
         <pre><code class="language-bash">
-# Przykład uruchomienia MongoDB z TLS/SSL
+# Włączenie szyfrowania podczas przesyłania danych
 mongod --tlsMode requireTLS --tlsCertificateKeyFile /path/to/cert.pem --tlsCAFile /path/to/ca.pem
         </code></pre>
 
         <h2>Role Użytkowników</h2>
-        <p>Role w MongoDB to zestawy uprawnień przypisanych użytkownikom, które kontrolują dostęp do bazy danych. Przykładowe role to:</p>
+        <p>
+            Role to zestawy uprawnień, które MongoDB przypisuje użytkownikom, by kontrolować ich dostęp do zasobów. 
+            Wyobraź sobie, że masz różne klucze w biurze: jeden otwiera Twój gabinet (rola <code>read</code>), a inny otwiera także magazyn (rola <code>readWrite</code>).
+        </p>
+        <p>
+            Przykładowe role:
+        </p>
         <ul>
-            <li><strong>read:</strong> Uprawnienia do odczytu danych z określonej bazy.</li>
-            <li><strong>readWrite:</strong> Uprawnienia do odczytu i zapisu danych.</li>
-            <li><strong>dbAdmin:</strong> Uprawnienia do zarządzania bazą danych, np. tworzenie indeksów.</li>
-            <li><strong>userAdmin:</strong> Uprawnienia do zarządzania użytkownikami i ich rolami.</li>
+            <li><strong>read:</strong> Użytkownik może tylko odczytywać dane, ale nie może ich zmieniać.</li>
+            <li><strong>readWrite:</strong> Użytkownik może zarówno odczytywać, jak i zmieniać dane.</li>
+            <li><strong>dbAdmin:</strong> Użytkownik może zarządzać bazą danych, np. tworzyć indeksy.</li>
+            <li><strong>userAdmin:</strong> Użytkownik może zarządzać innymi użytkownikami i ich uprawnieniami.</li>
         </ul>
 
         <h2>Podsumowanie</h2>

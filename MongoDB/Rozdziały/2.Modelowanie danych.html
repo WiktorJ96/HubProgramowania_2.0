@@ -7,6 +7,41 @@
     <link rel="stylesheet" href="../styles.css">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/themes/prism-tomorrow.min.css" rel="stylesheet" />
 </head>
+<style>
+            /* Styl dla modala */
+        .modal {
+            display: none; /* Ukryty domyślnie */
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 50%;
+            max-height: 80%; /* Umożliwia przewijanie w pionie */
+            overflow-y: auto; /* Dodaje przewijanie */
+            background-color: #2e2e31;
+            padding: 20px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+            border-radius: 8px;
+            z-index: 1000;
+        }
+
+        /* Tło pod modala */
+        .modal-overlay {
+            display: none; /* Ukryte domyślnie */
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5);
+            z-index: 999;
+        }
+
+        /* Ukrywanie przewijania dla body, gdy modal jest aktywny */
+        body.modal-active {
+            overflow: hidden;
+        }
+</style>
 <body>
     <div class="container">
         <h1>Modelowanie Danych w MongoDB</h1>
@@ -86,9 +121,131 @@ db.nazwaKolekcji.insert({ imie: "Anna", wiek: 25 });
             <li>Denormalizacja przyspiesza dostęp do danych kosztem ich duplikacji.</li>
             <li>Referencje są elastyczne, ale wymagają dodatkowych zapytań do bazy.</li>
         </ul>
+        <button id="openModalBtn">Pojęcia</button>
+    </div>
+    <!-- Tło pod modala -->
+    <div id="modalOverlay" class="modal-overlay"></div>
+
+    <!-- Modal -->
+    <div id="modal" class="modal">
+
+<h2>Co to jest redundancja?</h2>
+<p><strong>Redundancja</strong> oznacza powtarzanie tych samych danych w różnych miejscach. Na przykład, jeśli przechowujesz adres użytkownika w każdym jego zamówieniu, adres będzie zapisany wiele razy. Dzięki temu odczyt danych jest szybszy, ale jeśli adres się zmieni, musisz zaktualizować go we wszystkich miejscach, co jest bardziej skomplikowane.</p>
+<p><strong>Przykład redundancji:</strong></p>
+<pre>
+[
+    { "orderId": "1", "user": { "name": "Jan Kowalski", "address": "Główna 1, Warszawa" } },
+    { "orderId": "2", "user": { "name": "Jan Kowalski", "address": "Główna 1, Warszawa" } }
+]
+</pre>
+
+<h2>Denormalizacja</h2>
+<p>Denormalizacja oznacza, że przechowujesz wszystkie dane w jednym miejscu, nawet jeśli się powtarzają (czyli występuje redundancja). Jest to używane, gdy zależy Ci na szybkim dostępie do danych.</p>
+<p><strong>Przykład:</strong> Zapisanie adresu użytkownika w każdym zamówieniu:</p>
+<pre>
+{
+    "orderId": "12345",
+    "user": {
+        "name": "Jan Kowalski",
+        "address": "Główna 1, Warszawa"
+    }
+}
+</pre>
+<p><strong>Zaleta:</strong> Dane można szybko odczytać.</p>
+<p><strong>Wada:</strong> Jeśli użytkownik zmieni adres, trzeba poprawić go w każdym miejscu.</p>
+
+<h2>Normalizacja</h2>
+<p>Normalizacja oznacza, że dane są podzielone na mniejsze części, aby uniknąć redundancji. Dane są połączone za pomocą identyfikatorów (<code>_id</code>).</p>
+<p><strong>Przykład:</strong> Zamiast przechowywać adres w każdym zamówieniu, odwołujesz się do niego za pomocą identyfikatora:</p>
+<pre>
+{
+    "userId": "abc123",
+    "name": "Jan Kowalski",
+    "addressId": "def456"
+}
+
+{
+    "addressId": "def456",
+    "address": "Główna 1, Warszawa"
+}
+</pre>
+<p><strong>Zaleta:</strong> Jeśli adres użytkownika się zmieni, wystarczy zmodyfikować go w jednym miejscu.</p>
+<p><strong>Wada:</strong> Odczyt danych może być wolniejszy, bo trzeba sprawdzić kilka miejsc.</p>
+
+<h2>Modelowanie relacji</h2>
+<p>Modelowanie relacji to sposób przechowywania powiązanych danych. Możesz to zrobić na dwa sposoby:</p>
+<ul>
+    <li>
+        <strong>Osadzanie:</strong> Dane są zapisane razem, gdy są ściśle powiązane. Na przykład lista produktów w zamówieniu:
+        <pre>
+{
+    "orderId": "12345",
+    "products": [
+        { "name": "Laptop", "price": 3000 },
+        { "name": "Myszka", "price": 100 }
+    ]
+}
+        </pre>
+    </li>
+    <li>
+        <strong>Referencje:</strong> Dane są zapisane osobno i połączone identyfikatorem (<code>_id</code>):
+        <pre>
+{
+    "orderId": "12345",
+    "productIds": ["laptop123", "mouse456"]
+}
+
+{
+    "productId": "laptop123",
+    "name": "Laptop",
+    "price": 3000
+}
+        </pre>
+    </li>
+</ul>
+
+<h2>Optymalizacja pod kątem zapytań</h2>
+<p>Optymalizacja zapytań polega na projektowaniu danych tak, aby można je było szybko odczytać. Możesz to zrobić, na przykład:</p>
+<ul>
+    <li>Tworząc indeksy – pomagają szybko znaleźć dane, np. po nazwie użytkownika.</li>
+    <li>Osadzając dane – jeśli wiesz, że często będziesz je odczytywać razem.</li>
+    <li>Unikając nadmiaru zapytań – projektuj dane tak, żeby można było je odczytać w jednym kroku.</li>
+</ul>
+
+
+
+        <button id="closeModalBtn">Zamknij</button>
     </div>
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/prism.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/components/prism-javascript.min.js"></script>
+    <script>
+        // Pobieranie elementów
+        const openModalBtn = document.getElementById('openModalBtn');
+        const closeModalBtn = document.getElementById('closeModalBtn');
+        const modal = document.getElementById('modal');
+        const modalOverlay = document.getElementById('modalOverlay');
+
+        // Funkcja otwierająca modal
+        openModalBtn.addEventListener('click', () => {
+            modal.style.display = 'block';
+            modalOverlay.style.display = 'block';
+            document.body.classList.add('modal-active'); // Zablokowanie przewijania body
+        });
+
+        // Funkcja zamykająca modal
+        closeModalBtn.addEventListener('click', () => {
+            modal.style.display = 'none';
+            modalOverlay.style.display = 'none';
+            document.body.classList.remove('modal-active'); // Odblokowanie przewijania body
+        });
+
+        // Zamknięcie modala po kliknięciu w overlay
+        modalOverlay.addEventListener('click', () => {
+            modal.style.display = 'none';
+            modalOverlay.style.display = 'none';
+            document.body.classList.remove('modal-active'); // Odblokowanie przewijania body
+        });
+    </script>
 </body>
 </html>
