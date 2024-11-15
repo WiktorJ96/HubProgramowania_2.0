@@ -79,6 +79,21 @@ function ChildComponent(props) {
         </code></pre>
 
         <p>W tym przykładzie <code>ParentComponent</code> działa jak nauczyciel, który zarządza tablicą (stanem <code>message</code>) i przekazuje jej zawartość do <code>ChildComponent</code>, czyli ucznia, który odczytuje tę wiadomość. Kliknięcie przycisku sprawia, że nauczyciel zmienia wiadomość na tablicy, co automatycznie powoduje, że uczeń widzi nową treść. Dzięki temu <code>ChildComponent</code> zawsze pokazuje aktualną wiadomość przekazaną z <code>ParentComponent</code>.</p>
+<h2>Podsumowanie</h2>
+        <!-- Props -->
+<p><strong>Props:</strong></p>
+<ul>
+  <li>Dane przekazywane z rodzica do dziecka jako argumenty.</li>
+  <li>Tylko do odczytu (niemodyfikowalne przez komponent).</li>
+</ul>
+
+<!-- State -->
+<p><strong>State:</strong></p>
+<ul>
+  <li>Lokalny stan komponentu, który można modyfikować.</li>
+  <li>Używany do dynamicznego zarządzania danymi.</li>
+  <li>W komponentach funkcyjnych zarządzany za pomocą hooka <code>useState</code>.</li>
+</ul>
 
     </div>
 

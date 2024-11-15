@@ -24,42 +24,51 @@ npm install mongoose
 
         <pre><code class="language-javascript">
 const mongoose = require('mongoose');
-// Importowanie Mongoose
+// Importowanie Mongoose - biblioteki do pracy z MongoDB w Node.js
 
 const DB_URI = 'mongodb://localhost:27017/mojabaza';
-// Adres URL do lokalnej bazy danych MongoDB
+// Adres URL lokalnej bazy danych MongoDB (mojabaza - nazwa bazy danych)
 
 mongoose.connect(DB_URI, { useNewUrlParser: true, useUnifiedTopology: true })
     .then(() => console.log('Połączono z bazą danych MongoDB'))
+    // Jeśli połączenie z bazą zakończy się sukcesem, wyświetl komunikat w konsoli
     .catch(err => console.error('Błąd połączenia z MongoDB:', err));
-// Próba połączenia z MongoDB z obsługą błędów
+// Jeśli wystąpi błąd podczas próby połączenia, wypisz go w konsoli
 
 // Definiowanie schematu MongoDB
 const userSchema = new mongoose.Schema({
     name: {
-        type: String,
-        required: true
+        type: String, // Pole typu tekstowego
+        required: true // Pole jest wymagane, brak wartości spowoduje błąd walidacji
     },
     age: {
-        type: Number,
-        min: 0
+        type: Number, // Pole typu liczbowego
+        min: 0 // Minimalna wartość to 0 (wiek nie może być ujemny)
     }
 });
 // Tworzenie modelu na podstawie schematu
 const User = mongoose.model('User', userSchema);
+// Model `User` reprezentuje dokumenty w kolekcji MongoDB o strukturze `userSchema`
 
-// Przykład dodania użytkownika do bazy
+// Funkcja asynchroniczna do dodawania użytkownika do bazy danych
 async function addUser() {
     try {
         const user = new User({ name: 'Jan', age: 30 });
+        // Tworzenie nowej instancji modelu `User` z danymi: name: 'Jan', age: 30
+        
         const result = await user.save();
+        // Zapisanie obiektu `user` do bazy danych za pomocą metody `save`
+        
         console.log('Dodano użytkownika:', result);
+        // Wyświetlenie w konsoli informacji o dodanym użytkowniku
     } catch (error) {
         console.error('Błąd podczas dodawania użytkownika:', error);
+        // Obsługa błędów - wypisanie informacji o problemie w konsoli
     }
 }
 
 addUser();
+// Wywołanie funkcji `addUser` w celu dodania użytkownika do bazy danych
         </code></pre>
 
         <h2>Podstawowe operacje CRUD</h2>

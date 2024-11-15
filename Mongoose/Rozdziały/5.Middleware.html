@@ -7,6 +7,45 @@
     <link rel="stylesheet" href="../styles.css">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/themes/prism-tomorrow.min.css" rel="stylesheet" />
 </head>
+    <style>
+        /* Styl dla modala */
+        .modal {
+            display: none; /* Ukryty domyślnie */
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 50%;
+            max-height: 80%; /* Umożliwia przewijanie w pionie */
+            overflow-y: auto; /* Dodaje przewijanie */
+            background-color: #2e2e31;
+            padding: 20px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+            border-radius: 8px;
+            z-index: 1000;
+            color: #d6d6d6;
+        }
+
+        /* Tło pod modala */
+        .modal-overlay {
+            display: none; /* Ukryte domyślnie */
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5);
+            z-index: 999;
+        }
+
+        .modal.active {
+    display: block; /* Pokazuje modal, gdy jest aktywny */
+}
+
+.modal-overlay.active {
+    display: block; /* Pokazuje overlay, gdy jest aktywny */
+}
+    </style>
 <body>
     <div class="container">
         <h1>Middleware w Mongoose</h1>
@@ -18,26 +57,39 @@
 
         <pre><code class="language-javascript">
 const mongoose = require('mongoose');
+// Importujemy bibliotekę Mongoose, która pozwala na łatwą pracę z MongoDB w Node.js
 
 // Definiowanie schematu użytkownika
 const userSchema = new mongoose.Schema({
-    name: String,
-    email: String,
-    password: String
+    name: String, // Pole `name` przechowuje imię użytkownika jako ciąg znaków (String)
+    email: String, // Pole `email` przechowuje adres e-mail użytkownika jako String
+    password: String // Pole `password` przechowuje hasło użytkownika jako String
 });
+// Schemat określa strukturę danych w dokumentach kolekcji MongoDB oraz dodatkowe reguły walidacji.
 
-// Pre middleware uruchamiane przed zapisaniem dokumentu
+// Middleware `pre` uruchamiane przed zapisaniem dokumentu do bazy
 userSchema.pre('save', function(next) {
+    // Metoda `pre('save')` pozwala zdefiniować czynności, które mają zostać wykonane przed zapisaniem dokumentu w bazie danych
     console.log(`Przygotowanie do zapisania użytkownika: ${this.name}`);
-    // Można dodać logikę, np. haszowanie hasła przed zapisaniem
+    // `this` odnosi się do aktualnego dokumentu (obiektu użytkownika), który ma być zapisany
+    // Można dodać dodatkową logikę, np.:
+    // - Haszowanie hasła użytkownika
+    // - Dodanie domyślnych wartości do pól
+    // - Walidację bardziej zaawansowaną niż ta zdefiniowana w schemacie
+
     next();
-    // Wywołanie funkcji next() oznacza, że middleware zakończyło działanie i można przejść do następnej funkcji
+    // Funkcja `next()` informuje Mongoose, że middleware zakończyło działanie
+    // Bez wywołania `next()`, proces zapisu zostanie zatrzymany.
 });
 
-// Tworzenie modelu
+// Tworzenie modelu na podstawie schematu
 const User = mongoose.model('User', userSchema);
+// `mongoose.model('User', userSchema)` tworzy model o nazwie `User`.
+// Model umożliwia wykonywanie operacji na dokumentach w kolekcji MongoDB powiązanej z tym schematem.
+// Nazwa kolekcji w MongoDB zostanie automatycznie utworzona w liczbie mnogiej, np. `users`.
 
 module.exports = User;
+// Eksportujemy model `User`, aby można było go używać w innych plikach aplikacji.
         </code></pre>
 
         <h2>Post middleware</h2>
@@ -74,9 +126,166 @@ userSchema.pre('save', function(next) {
             <li><strong>Haszowanie haseł:</strong> Pre middleware często jest używane do haszowania haseł przed zapisaniem ich w bazie danych.</li>
             <li><strong>Wysyłanie powiadomień:</strong> Post middleware może być używane do wysyłania powiadomień po zakończeniu operacji.</li>
         </ul>
+        <button id="openModalBtn">Metody dla middleware</button>
     </div>
+    <!-- Tło pod modala -->
+    <div id="modalOverlay" class="modal-overlay"></div>
 
+    <!-- Modal -->
+    <div id="modal" class="modal">
+
+            <h2>Pre Middleware</h2>
+    <p>Wykonuje się przed określoną operacją (np. zapisaniem dokumentu).</p>
+    <p><strong>Użycie:</strong> <code>schema.pre('event', function(next) { ... });</code></p>
+
+    <h2>Post Middleware</h2>
+    <p>Wykonuje się po zakończeniu określonej operacji.</p>
+    <p><strong>Użycie:</strong> <code>schema.post('event', function(doc, next) { ... });</code></p>
+
+    <h2>Dostępne metody i zdarzenia middleware</h2>
+
+    <h3>1. Document Middleware (Operacje na poziomie dokumentów)</h3>
+    <p>Dotyczą pojedynczego dokumentu.</p>
+    <table>
+        <thead>
+            <tr>
+                <th>Metoda</th>
+                <th>Opis</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td><code>'save'</code></td>
+                <td>Wykonuje się przed/po zapisaniu dokumentu do bazy.</td>
+            </tr>
+            <tr>
+                <td><code>'remove'</code></td>
+                <td>Wykonuje się przed/po usunięciu dokumentu z bazy.</td>
+            </tr>
+            <tr>
+                <td><code>'updateOne'</code></td>
+                <td>Wykonuje się przed/po aktualizacji pojedynczego dokumentu.</td>
+            </tr>
+            <tr>
+                <td><code>'validate'</code></td>
+                <td>Wykonuje się przed/po walidacji dokumentu.</td>
+            </tr>
+            <tr>
+                <td><code>'init'</code></td>
+                <td>Wykonuje się po inicjalizacji dokumentu, np. w wyniku odczytu.</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <h3>2. Query Middleware (Operacje na zapytaniach)</h3>
+    <p>Dotyczą zapytań do bazy, np. <code>find</code>, <code>update</code>.</p>
+    <table>
+        <thead>
+            <tr>
+                <th>Metoda</th>
+                <th>Opis</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td><code>'count'</code></td>
+                <td>Wykonuje się przed/po zapytaniu liczącym dokumenty (<code>count()</code>).</td>
+            </tr>
+            <tr>
+                <td><code>'countDocuments'</code></td>
+                <td>Wykonuje się przed/po zapytaniu <code>countDocuments()</code>.</td>
+            </tr>
+            <tr>
+                <td><code>'deleteMany'</code></td>
+                <td>Wykonuje się przed/po usunięciu wielu dokumentów.</td>
+            </tr>
+            <tr>
+                <td><code>'deleteOne'</code></td>
+                <td>Wykonuje się przed/po usunięciu pojedynczego dokumentu.</td>
+            </tr>
+            <tr>
+                <td><code>'find'</code></td>
+                <td>Wykonuje się przed/po wykonaniu zapytania <code>find()</code>.</td>
+            </tr>
+            <tr>
+                <td><code>'findOne'</code></td>
+                <td>Wykonuje się przed/po wykonaniu zapytania <code>findOne()</code>.</td>
+            </tr>
+            <tr>
+                <td><code>'findOneAndDelete'</code></td>
+                <td>Wykonuje się przed/po wykonaniu zapytania <code>findOneAndDelete()</code>.</td>
+            </tr>
+            <tr>
+                <td><code>'findOneAndRemove'</code></td>
+                <td>Wykonuje się przed/po wykonaniu zapytania <code>findOneAndRemove()</code>.</td>
+            </tr>
+            <tr>
+                <td><code>'findOneAndUpdate'</code></td>
+                <td>Wykonuje się przed/po wykonaniu zapytania <code>findOneAndUpdate()</code>.</td>
+            </tr>
+            <tr>
+                <td><code>'update'</code></td>
+                <td>Wykonuje się przed/po wykonaniu zapytania <code>update()</code>.</td>
+            </tr>
+            <tr>
+                <td><code>'updateMany'</code></td>
+                <td>Wykonuje się przed/po wykonaniu zapytania <code>updateMany()</code>.</td>
+            </tr>
+            <tr>
+                <td><code>'updateOne'</code></td>
+                <td>Wykonuje się przed/po wykonaniu zapytania <code>updateOne()</code>.</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <h3>3. Model Middleware (Operacje na poziomie modelu)</h3>
+    <p>Dotyczą metod wywoływanych na modelu.</p>
+    <table>
+        <thead>
+            <tr>
+                <th>Metoda</th>
+                <th>Opis</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td><code>'insertMany'</code></td>
+                <td>Wykonuje się przed/po wykonaniu <code>insertMany()</code> na modelu.</td>
+            </tr>
+        </tbody>
+    </table>
+    <br>
+        <button id="closeModalBtn">Zamknij</button>
+    </div>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/prism.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/components/prism-javascript.min.js"></script>
+    <script>
+        // Pobieranie elementów
+        const openModalBtn = document.getElementById('openModalBtn');
+        const closeModalBtn = document.getElementById('closeModalBtn');
+        const modal = document.getElementById('modal');
+        const modalOverlay = document.getElementById('modalOverlay');
+
+        // Funkcja otwierająca modal
+        openModalBtn.addEventListener('click', () => {
+            modal.style.display = 'block';
+            modalOverlay.style.display = 'block';
+            document.body.classList.add('modal-active'); // Zablokowanie przewijania body
+        });
+
+        // Funkcja zamykająca modal
+        closeModalBtn.addEventListener('click', () => {
+            modal.style.display = 'none';
+            modalOverlay.style.display = 'none';
+            document.body.classList.remove('modal-active'); // Odblokowanie przewijania body
+        });
+
+        // Zamknięcie modala po kliknięciu w overlay
+        modalOverlay.addEventListener('click', () => {
+            modal.style.display = 'none';
+            modalOverlay.style.display = 'none';
+            document.body.classList.remove('modal-active'); // Odblokowanie przewijania body
+        });
+    </script>
 </body>
 </html>

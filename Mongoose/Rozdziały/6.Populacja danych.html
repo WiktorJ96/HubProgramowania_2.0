@@ -40,22 +40,120 @@ const Post = mongoose.model('Post', postSchema);
 
 module.exports = { User, Post };
         </code></pre>
+        <h3>1. Importowanie Mongoose</h3>
+    <p><pre><code class="language-javascript">const mongoose = require('mongoose');</code></pre></p>
+    <p>Importujemy bibliotekę <strong>Mongoose</strong>, aby definiować schematy, modele i umożliwić interakcję z bazą danych MongoDB.</p>
+
+    <h3>2. Schemat użytkownika (User)</h3>
+    <p>
+        <pre><code class="language-javascript">
+        const userSchema = new mongoose.Schema({<br>
+            &nbsp;&nbsp;name: String, // Przechowuje imię użytkownika<br>
+            &nbsp;&nbsp;posts: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Post' }] // Tablica ID dokumentów z kolekcji Post<br>
+        });
+        </code></pre>
+    </p>
+    <ul>
+        <li><strong>name:</strong> Pole przechowujące imię użytkownika w formie tekstu.</li>
+        <li><strong>posts:</strong> Tablica, która przechowuje identyfikatory (<code>ObjectId</code>) dokumentów z kolekcji <code>Post</code>. Oznacza to, że użytkownik może mieć wiele postów.</li>
+        <li><strong>ref:</strong> Określa, że identyfikatory w tym polu wskazują na dokumenty w kolekcji <code>Post</code>.</li>
+    </ul>
+
+    <h3>3. Schemat posta (Post)</h3>
+    <p>
+        <pre><code class="language-javascript">
+        const postSchema = new mongoose.Schema({<br>
+            &nbsp;&nbsp;title: String, // Tytuł posta<br>
+            &nbsp;&nbsp;content: String, // Treść posta<br>
+            &nbsp;&nbsp;author: { type: mongoose.Schema.Types.ObjectId, ref: 'User' } // ID użytkownika, który napisał post<br>
+        });
+        </code></pre>
+    </p>
+    <ul>
+        <li><strong>title:</strong> Przechowuje tytuł posta w formie tekstu.</li>
+        <li><strong>content:</strong> Przechowuje treść posta w formie tekstu.</li>
+        <li><strong>author:</strong> Pole, które przechowuje identyfikator użytkownika (<code>ObjectId</code>) z kolekcji <code>User</code>. Wskazuje, kto jest autorem posta.</li>
+        <li><strong>ref:</strong> Określa, że identyfikator w polu <code>author</code> odnosi się do kolekcji <code>User</code>.</li>
+    </ul>
+
+    <h3>4. Tworzenie modeli</h3>
+    <p>
+        <pre><code class="language-javascript">
+        const User = mongoose.model('User', userSchema);<br>
+        const Post = mongoose.model('Post', postSchema);
+        </code></pre>
+    </p>
+    <ul>
+        <li><strong>Model User:</strong> Klasa umożliwiająca pracę z dokumentami w kolekcji <code>users</code> (MongoDB automatycznie tworzy nazwę w liczbie mnogiej).</li>
+        <li><strong>Model Post:</strong> Klasa umożliwiająca pracę z dokumentami w kolekcji <code>posts</code>.</li>
+    </ul>
+
+    <h3>5. Eksportowanie modeli</h3>
+    <p>
+        <pre><code class="language-javascript">
+        module.exports = { User, Post };
+        </code></pre>
+    </p>
+    <p>Dzięki eksportowi modeli możemy ich używać w innych częściach aplikacji, np. w kontrolerach lub funkcjach API.</p>
+
+    <h3>6. Relacje między schematami</h3>
+    <ul>
+        <li><strong>Relacja jeden-do-wielu (User -> Post):</strong> Jeden użytkownik może mieć wiele postów, co jest realizowane przez pole <code>posts</code> w schemacie <code>User</code>.</li>
+        <li><strong>Relacja jeden-do-jednego (Post -> User):</strong> Jeden post ma dokładnie jednego autora, co jest realizowane przez pole <code>author</code> w schemacie <code>Post</code>.</li>
+    </ul>
+
+    <h3>7. Przykładowe dokumenty w bazie danych</h3>
+    <h4>Użytkownik (User):</h4>
+    <pre>
+    {
+        "_id": "64a8e84912c34e1e5b123456",
+        "name": "Jan",
+        "posts": [
+            "64a8e84912c34e1e5b789012",
+            "64a8e84912c34e1e5b789013"
+        ]
+    }
+    </pre>
+    <h4>Post (Post):</h4>
+    <pre>
+    {
+        "_id": "64a8e84912c34e1e5b789012",
+        "title": "Pierwszy post",
+        "content": "To jest treść posta",
+        "author": "64a8e84912c34e1e5b123456"
+    }
+    </pre>
+
+    <h3>8. Podsumowanie</h3>
+    <p>Ten kod definiuje dwa modele (<code>User</code> i <code>Post</code>) oraz ich relacje. Użytkownik może mieć wiele postów, a każdy post ma jednego autora. Dzięki opcji <code>ref</code> możemy łatwo łączyć dane z różnych kolekcji w MongoDB.</p>
 
         <h2>Używanie funkcji <code>populate()</code></h2>
         <p>Funkcja <code>populate()</code> pozwala na dołączanie pełnych dokumentów z powiązanych kolekcji do wyników zapytania. Oto przykład:</p>
 
         <pre><code class="language-javascript">
 async function getUserWithPosts(userId) {
+    // Definicja funkcji asynchronicznej, która przyjmuje identyfikator użytkownika (userId) jako argument.
     try {
         const user = await User.findById(userId).populate('posts');
-        // Użycie populate() do dołączenia dokumentów z kolekcji 'Post' do użytkownika
+        // 1. `User.findById(userId)`:
+        //    - Znajduje użytkownika w kolekcji `users` na podstawie podanego identyfikatora (`userId`).
+        // 2. `.populate('posts')`:
+        //    - Dołącza (populuje) dokumenty z kolekcji `posts`, których identyfikatory znajdują się w polu `posts` użytkownika.
+        //    - Dzięki temu w obiekcie `user` znajdziemy pełne dane o postach, a nie tylko ich identyfikatory.
+
         console.log('Użytkownik z postami:', user);
+        // Wyświetla użytkownika wraz z jego postami w konsoli. 
+        // Użytkownik jest obiektem zawierającym dane z kolekcji `users` i pełne informacje o powiązanych dokumentach `posts`.
+
     } catch (error) {
         console.error('Błąd podczas pobierania użytkownika:', error);
+        // W przypadku błędu (np. użytkownik nie istnieje, błąd połączenia z bazą) zostaje on przechwycony i wyświetlony w konsoli.
     }
 }
 
 getUserWithPosts('ID_UŻYTKOWNIKA');
+// Wywołanie funkcji z podanym identyfikatorem użytkownika (`userId`).
+// Należy podać rzeczywisty identyfikator użytkownika (np. "64a8e84912c34e1e5b123456").
         </code></pre>
 
         <h2>Populacja zagnieżdżona</h2>
@@ -63,19 +161,28 @@ getUserWithPosts('ID_UŻYTKOWNIKA');
 
         <pre><code class="language-javascript">
 async function getPostWithAuthor(postId) {
+    // Funkcja asynchroniczna, która pobiera post na podstawie jego ID
+    // oraz dołącza dane autora (tylko pole 'name') do wynikowego dokumentu.
     try {
         const post = await Post.findById(postId).populate({
-            path: 'author',
-            select: 'name'
-            // Dołączenie pola 'name' autora do dokumentu 'Post'
+            path: 'author', // Wskazuje, że pole 'author' w dokumencie 'Post' zawiera odniesienie (ObjectId) do kolekcji 'User'.
+            select: 'name'  // Dołącza do wynikowego dokumentu tylko pole 'name' z kolekcji 'User'.
+            // Dzięki temu dane autora będą miały formę: { _id: '...', name: '...' }.
         });
+
         console.log('Post z autorem:', post);
+        // Wyświetla szczegóły posta, w tym jego autora, w konsoli.
+        // Jeśli autor jest poprawnie powiązany, dane autora zostaną dołączone do wyniku.
     } catch (error) {
         console.error('Błąd podczas pobierania posta:', error);
+        // W przypadku błędu (np. nieistniejący post, problem z bazą danych)
+        // błąd zostanie przechwycony i wyświetlony w konsoli.
     }
 }
 
 getPostWithAuthor('ID_POSTA');
+// Wywołanie funkcji z podanym ID posta.
+// Należy podać rzeczywiste ID dokumentu 'Post' (np. "64a8e84912c34e1e5b789012").
         </code></pre>
 
         <h2>Opcje zaawansowane</h2>
@@ -88,19 +195,28 @@ getPostWithAuthor('ID_POSTA');
 
         <pre><code class="language-javascript">
 async function getUserWithFilteredPosts(userId) {
+    // Funkcja asynchroniczna pobierająca użytkownika na podstawie jego ID
+    // oraz tylko te posty, które spełniają określone kryteria.
+
     try {
         const user = await User.findById(userId).populate({
-            path: 'posts',
-            match: { title: /ważne/i }, // Filtrowanie postów zawierających 'ważne' w tytule
-            select: 'title content'
+            path: 'posts', // Pole 'posts' w schemacie 'User' przechowuje identyfikatory postów
+            match: { title: /ważne/i }, // Filtrowanie: szukamy tylko postów, których tytuł zawiera 'ważne' (bez względu na wielkość liter)
+            select: 'title content' // Dołączamy tylko pola 'title' i 'content' do wynikowego dokumentu postów
         });
+
         console.log('Użytkownik z filtrowanymi postami:', user);
+        // Wyświetlamy użytkownika w konsoli wraz z tylko tymi postami, które przeszły filtr.
     } catch (error) {
         console.error('Błąd podczas pobierania użytkownika z filtrowanymi postami:', error);
+        // Jeśli wystąpi błąd (np. nieprawidłowe ID użytkownika lub problem z bazą danych), 
+        // zostanie on przechwycony i wyświetlony w konsoli.
     }
 }
 
 getUserWithFilteredPosts('ID_UŻYTKOWNIKA');
+// Wywołanie funkcji z ID użytkownika, którego posty mają być filtrowane.
+// Należy podać rzeczywiste ID użytkownika z bazy danych.
         </code></pre>
 
         <h2>Podsumowanie</h2>

@@ -1,5 +1,5 @@
 :root{
-    --main-color:#a00b0b;
+    --main-color:#a43838;
 }
 
 body {
@@ -17,7 +17,7 @@ body {
 /* Stylowanie głównego kontenera */
 .container {
     max-width: 720px;
-    background-color: #2e2e2e; /* Ciemniejsze tło przypominające Mongoose */
+    background-color: #212121; /* Ciemniejsze tło przypominające Mongoose */
     padding: 30px;
     border-radius: 15px;
     box-shadow: 0 8px 16px rgba(0, 0, 0, 0.5);

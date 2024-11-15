@@ -7,13 +7,6 @@
     <link rel="stylesheet" href="../styles.css">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/themes/prism-tomorrow.min.css" rel="stylesheet" />
 </head>
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Modal Example</title>
     <style>
         /* Styl dla modala */
         .modal {
@@ -44,10 +37,13 @@
             z-index: 999;
         }
 
-        /* Ukrywanie przewijania dla body, gdy modal jest aktywny */
-        body.modal-active {
-            overflow: hidden;
-        }
+        .modal.active {
+    display: block; /* Pokazuje modal, gdy jest aktywny */
+}
+
+.modal-overlay.active {
+    display: block; /* Pokazuje overlay, gdy jest aktywny */
+}
     </style>
 <body>
     <div class="container">
@@ -59,12 +55,11 @@
         <pre><code class="language-javascript">
 // Przykład pipeline agregacji
 db.kolekcja.aggregate([
-    { $match: { status: \"aktywny\" } },
-    { $group: { _id: \"$kategoria\", liczba: { $sum: 1 } } },
+    { $match: { status: "aktywny" } },
+    { $group: { _id: "$kategoria", liczba: { $sum: 1 } } },
     { $sort: { liczba: -1 } }
 ]);
         </code></pre>
-
         <p>W tym przykładzie:</p>
         <ul>
             <li><code>$match</code> – filtruje dokumenty o statusie „aktywny”.</li>
@@ -72,141 +67,90 @@ db.kolekcja.aggregate([
             <li><code>$sort</code> – sortuje wyniki malejąco według liczby.</li>
         </ul>
 
-        <h2>Operatory Agregacyjne</h2>
-        <p>Podczas tworzenia pipeline agregacji można używać różnych operatorów, takich jak:</p>
+        <h2>Popularne Etapy Pipeline'u</h2>
+        <p>Oprócz <code>$match</code>, <code>$group</code> i <code>$sort</code>, inne popularne etapy to:</p>
         <ul>
-            <li><code>$sum</code> – sumuje wartości.</li>
-            <li><code>$avg</code> – oblicza średnią.</li>
-            <li><code>$min</code>, <code>$max</code> – zwraca minimalną lub maksymalną wartość.</li>
-            <li><code>$push</code> – tworzy tablicę z wartościami.</li>
-            <li><code>$first</code>, <code>$last</code> – zwraca pierwszą lub ostatnią wartość w grupie.</li>
+            <li><code>$project</code> – wybiera i przekształca pola dokumentów.</li>
+            <li><code>$unwind</code> – rozwija tablice na pojedyncze dokumenty.</li>
+            <li><code>$lookup</code> – łączy dane z innej kolekcji (JOIN).</li>
+            <li><code>$facet</code> – pozwala na równoległe wykonywanie wielu pipeline'ów.</li>
         </ul>
 
-        <h2>Map-Reduce</h2>
-        <p>Map-Reduce to alternatywna metoda agregacji danych, która jest bardziej elastyczna, ale wolniejsza w porównaniu do pipeline agregacji. Używa dwóch funkcji: <code>map</code> i <code>reduce</code>.</p>
+        <h3>Przykład dla <code>$unwind</code></h3>
         <pre><code class="language-javascript">
-// Przykład użycia map-reduce
+db.kolekcja.aggregate([
+    { $unwind: "$produkty" },
+    { $group: { _id: "$produkty.kategoria", liczba: { $sum: 1 } } }
+]);
+        </code></pre>
+
+        <h2>Optymalizacja Agregacji</h2>
+        <ul>
+            <li>Używaj indeksów na polach używanych w <code>$match</code> lub <code>$sort</code>.</li>
+            <li>Ustaw opcję <code>allowDiskUse: true</code> dla dużych zbiorów danych.</li>
+            <li>Przemyśl kolejność etapów w pipeline – zaczynaj od filtracji (<code>$match</code>).</li>
+        </ul>
+
+        <h2>Agregacje w Środowisku Shardowanym</h2>
+        <p>MongoDB obsługuje agregacje w środowisku shardowanym. Niektóre etapy, takie jak <code>$lookup</code>, mają ograniczenia, ponieważ wymagają przesyłania danych między shardami.</p>
+
+        <h2>Statystyki i Metryki</h2>
+        <p>Możesz użyć etapów takich jak <code>$count</code> i <code>$bucket</code> do grupowania danych i obliczania ich ilości.</p>
+        <pre><code class="language-javascript">
+db.kolekcja.aggregate([
+    { $bucket: { 
+        groupBy: "$cena", 
+        boundaries: [0, 100, 200, 300], 
+        default: "Inne", 
+        output: { liczba: { $sum: 1 } }
+    }}
+]);
+        </code></pre>
+
+        <h2>Przykład Praktyczny</h2>
+        <p>Analiza danych sprzedażowych – grupowanie sprzedaży według miesięcy i obliczanie średnich wartości:</p>
+        <pre><code class="language-javascript">
+db.sprzedaz.aggregate([
+    { $group: { 
+        _id: { miesiac: { $month: "$data" } }, 
+        sredniaSprzedaz: { $avg: "$kwota" } 
+    }},
+    { $sort: { "_id.miesiac": 1 } }
+]);
+        </code></pre>
+
+        <h2>Agregacje w Aplikacjach</h2>
+        <p>Integracja z aplikacją Node.js za pomocą Mongoose:</p>
+        <pre><code class="language-javascript">
+// Przyklad użycia agregacji w Mongoose
+Model.aggregate([
+    { $match: { status: "aktywny" } },
+    { $group: { _id: "$kategoria", liczba: { $sum: 1 } } }
+]).then(wyniki => console.log(wyniki));
+        </code></pre>
+
+                <h2>Map-Reduce</h2>
+        <p>Map-Reduce to alternatywa dla pipeline agregacji, ale jest wolniejsza i bardziej zasobożerna. Składa się z dwóch etapów:</p>
+        <ul>
+            <li><strong>Map:</strong> Tworzy pary klucz-wartość.</li>
+            <li><strong>Reduce:</strong> Łączy wartości o tych samych kluczach.</li>
+        </ul>
+        <pre><code class="language-javascript">
 db.kolekcja.mapReduce(
-    function() {
-        emit(this.kategoria, 1);
-    },
-    function(klucz, wartosci) {
-        return Array.sum(wartosci);
-    },
-    {
-        out: \"wynikiAgregacji\"
-    }
+    function() { emit(this.kategoria, 1); },
+    function(klucz, wartosci) { return Array.sum(wartosci); },
+    { out: "wynikiAgregacji" }
 );
         </code></pre>
 
-    <div class="section">
-        <h2>Czym jest mapReduce?</h2>
-        <p><strong>mapReduce</strong> to metoda w MongoDB używana do przetwarzania dużej ilości danych i ich agregacji. Jest podzielona na dwa etapy:</p>
-        <ul>
-            <li><strong>Map:</strong> Odpowiada za przekształcenie dokumentów w pary klucz-wartość.</li>
-            <li><strong>Reduce:</strong> Łączy wartości o tych samych kluczach.</li>
-        </ul>
-    </div>
-
-    <div class="section">
-        <h2>Funkcja Map</h2>
-        <p>Funkcja mapująca (map) jest wykonywana dla każdego dokumentu w kolekcji:</p>
-        <pre><code class="language-javascript">
-function() {
-    emit(this.kategoria, 1);
-}
-        </code></pre>
-        <p>Opis:</p>
-        <ul>
-            <li><code>this.kategoria</code>: Odnosi się do pola <code>kategoria</code> w bieżącym dokumencie.</li>
-            <li><code>emit(klucz, wartość)</code>: Tworzy pary klucz-wartość, np. "Elektronika" -> 1.</li>
-        </ul>
-        <p>Przykładowe dane wejściowe:</p>
-        <pre><code class="language-javascript">
-{ "kategoria": "Elektronika" }
-{ "kategoria": "Książki" }
-{ "kategoria": "Elektronika" }
-        </code></pre>
-        <p>Po mapowaniu:</p>
-        <pre><code class="language-javascript">
-"Elektronika" -> 1
-"Książki" -> 1
-"Elektronika" -> 1
-        </code></pre>
-    </div>
-
-    <div class="section">
-        <h2>Funkcja Reduce</h2>
-        <p>Funkcja redukująca (reduce) grupuje wartości o tych samych kluczach:</p>
-        <pre><code class="language-javascript">
-function(klucz, wartosci) {
-    return Array.sum(wartosci);
-}
-        </code></pre>
-        <p>Opis:</p>
-        <ul>
-            <li><code>klucz</code>: Klucz, czyli kategoria (np. "Elektronika").</li>
-            <li><code>wartosci</code>: Tablica wartości emitowanych w map (np. [1, 1]).</li>
-            <li><code>Array.sum(wartosci)</code>: Dodaje wartości w tablicy.</li>
-        </ul>
-        <p>Przykład działania:</p>
-        <pre><code class="language-javascript">
-"Elektronika": [1, 1] -> 2
-"Książki": [1] -> 1
-        </code></pre>
-    </div>
-
-    <div class="section">
-        <h2>Wynik działania</h2>
-        <p>Wynik funkcji mapReduce jest zapisywany w nowej kolekcji:</p>
-        <pre><code class="language-javascript">
-{
-    out: "wynikiAgregacji"
-}
-        </code></pre>
-        <p>Przykładowe dane wejściowe:</p>
-        <pre><code class="language-javascript">
-db.kolekcja.insertMany([
-    { "kategoria": "Elektronika" },
-    { "kategoria": "Książki" },
-    { "kategoria": "Elektronika" },
-    { "kategoria": "Odzież" },
-    { "kategoria": "Odzież" },
-    { "kategoria": "Odzież" }
-]);
-        </code></pre>
-        <p>Wynik w kolekcji <code>wynikiAgregacji</code>:</p>
-        <pre><code class="language-javascript">
-{
-    "_id": "Elektronika",
-    "value": 2
-},
-{
-    "_id": "Książki",
-    "value": 1
-},
-{
-    "_id": "Odzież",
-    "value": 3
-}
-        </code></pre>
-    </div>
-
-    <div class="section">
-        <h2>Zalety i wady</h2>
-        <ul>
-            <li><strong>Zalety:</strong> Pozwala przetwarzać duże zbiory danych, umożliwia zaawansowaną agregację.</li>
-            <li><strong>Wady:</strong> Może być wolniejszy od <code>aggregation framework</code> w MongoDB.</li>
-        </ul>
-    </div>
-
         <h2>Podsumowanie</h2>
         <ul>
-            <li>Pipeline agregacji pozwala na wydajne przetwarzanie i analizę danych.</li>
-            <li>Operatory agregacyjne umożliwiają wykonywanie różnych obliczeń na danych.</li>
-            <li>Map-Reduce jest elastyczne, ale zwykle mniej wydajne niż pipeline agregacji.</li>
+            <li>Pipeline agregacji jest potężnym narzędziem do przetwarzania danych.</li>
+            <li>Map-Reduce jest elastyczne, ale mniej wydajne.</li>
+            <li>Optymalizacja pipeline'u pozwala na wydajne przetwarzanie dużych zbiorów danych.</li>
         </ul>
         <button id="openModalBtn">Pojęcia</button>
+        <button id="openModalBtn2">Operatory agregacji</button>
     </div>
     <!-- Tło pod modala -->
     <div id="modalOverlay" class="modal-overlay"></div>
@@ -225,6 +169,140 @@ db.kolekcja.insertMany([
 
         <button id="closeModalBtn">Zamknij</button>
     </div>
+
+    <!-- Tło dla drugiego modala -->
+<div id="modalOverlay2" class="modal-overlay"></div>
+
+<!-- Drugi modal -->
+<div id="modal2" class="modal">
+    <h2>Operatory etapów (stages)</h2>
+        <ul>
+            <li><code>$match</code> – Filtruje dokumenty.</li>
+            <li><code>$project</code> – Wybiera lub przekształca pola w dokumentach.</li>
+            <li><code>$group</code> – Grupuje dokumenty w celu wykonania operacji zbiorczych.</li>
+            <li><code>$sort</code> – Sortuje dokumenty.</li>
+            <li><code>$limit</code> – Ogranicza liczbę dokumentów w wyniku.</li>
+            <li><code>$skip</code> – Pomija określoną liczbę dokumentów.</li>
+            <li><code>$unwind</code> – Rozwija tablice na pojedyncze dokumenty.</li>
+            <li><code>$lookup</code> – Łączy dane z innej kolekcji (JOIN).</li>
+            <li><code>$facet</code> – Wykonuje wiele pipeline'ów równocześnie.</li>
+            <li><code>$bucket</code> – Grupuje dokumenty w określonych przedziałach.</li>
+            <li><code>$bucketAuto</code> – Automatycznie tworzy przedziały do grupowania.</li>
+            <li><code>$out</code> – Zapisuje wyniki do innej kolekcji.</li>
+            <li><code>$merge</code> – Łączy wyniki z istniejącą kolekcją.</li>
+            <li><code>$count</code> – Liczy dokumenty.</li>
+            <li><code>$sortByCount</code> – Liczy i sortuje grupy dokumentów.</li>
+            <li><code>$addFields</code> – Dodaje nowe pola do dokumentów.</li>
+            <li><code>$replaceRoot</code> – Zamienia dokument na inny dokument lub poddokument.</li>
+            <li><code>$replaceWith</code> – Zastępuje dokument nowym dokumentem.</li>
+            <li><code>$set</code> – Alias dla <code>$addFields</code>.</li>
+            <li><code>$unset</code> – Usuwa pola z dokumentów.</li>
+            <li><code>$redact</code> – Kontroluje dostęp do danych.</li>
+            <li><code>$text</code> – Wyszukuje dokumenty na podstawie indeksów tekstowych.</li>
+            <li><code>$search</code> – Wyszukiwanie pełnotekstowe (MongoDB Atlas).</li>
+            <li><code>$graphLookup</code> – Rekurencyjnie wyszukuje dane w relacjach grafowych.</li>
+            <li><code>$unionWith</code> – Łączy dane z innej kolekcji lub pipeline.</li>
+        </ul>
+
+        <h2>Operatory w <code>$project</code> i <code>$addFields</code></h2>
+        <ul>
+            <li><code>$arrayElemAt</code> – Pobiera element z tablicy.</li>
+            <li><code>$arrayToObject</code> – Konwertuje tablicę na obiekt.</li>
+            <li><code>$concat</code> – Łączy ciągi znaków.</li>
+            <li><code>$concatArrays</code> – Łączy tablice.</li>
+            <li><code>$dateFromParts</code> – Tworzy datę z podanych części.</li>
+            <li><code>$dateToParts</code> – Rozdziela datę na części.</li>
+            <li><code>$dateFromString</code> – Tworzy datę z ciągu znaków.</li>
+            <li><code>$dateToString</code> – Konwertuje datę na ciąg znaków.</li>
+            <li><code>$literal</code> – Zwraca określoną wartość dosłowną.</li>
+            <li><code>$mergeObjects</code> – Łączy obiekty w jeden.</li>
+            <li><code>$objectToArray</code> – Konwertuje obiekt na tablicę.</li>
+            <li><code>$range</code> – Tworzy tablicę liczb w określonym zakresie.</li>
+            <li><code>$reduce</code> – Przetwarza tablicę na jedną wartość.</li>
+            <li><code>$reverseArray</code> – Odwraca kolejność elementów tablicy.</li>
+            <li><code>$slice</code> – Pobiera fragment tablicy.</li>
+            <li><code>$type</code> – Zwraca typ pola.</li>
+            <li><code>$zip</code> – Łączy wiele tablic w jedną.</li>
+        </ul>
+
+        <h2>Operatory grupowania (w <code>$group</code>)</h2>
+        <ul>
+            <li><code>$sum</code> – Sumuje wartości.</li>
+            <li><code>$avg</code> – Oblicza średnią.</li>
+            <li><code>$min</code> – Zwraca najmniejszą wartość.</li>
+            <li><code>$max</code> – Zwraca największą wartość.</li>
+            <li><code>$first</code> – Zwraca pierwszy dokument w grupie.</li>
+            <li><code>$last</code> – Zwraca ostatni dokument w grupie.</li>
+            <li><code>$push</code> – Tworzy tablicę wartości w grupie.</li>
+            <li><code>$addToSet</code> – Tworzy tablicę unikalnych wartości.</li>
+        </ul>
+
+        <h2>Operatory logiczne i porównawcze</h2>
+        <ul>
+            <li><code>$eq</code> – Równe.</li>
+            <li><code>$ne</code> – Nierówne.</li>
+            <li><code>$gt</code> – Większe niż.</li>
+            <li><code>$gte</code> – Większe lub równe.</li>
+            <li><code>$lt</code> – Mniejsze niż.</li>
+            <li><code>$lte</code> – Mniejsze lub równe.</li>
+            <li><code>$in</code> – Znajduje się w tablicy.</li>
+            <li><code>$nin</code> – Nie znajduje się w tablicy.</li>
+            <li><code>$and</code> – Logiczne "i".</li>
+            <li><code>$or</code> – Logiczne "lub".</li>
+            <li><code>$not</code> – Negacja logiczna.</li>
+            <li><code>$nor</code> – Logiczne "ani".</li>
+            <li><code>$exists</code> – Sprawdza, czy pole istnieje.</li>
+            <li><code>$regex</code> – Pasuje do wyrażenia regularnego.</li>
+        </ul>
+
+        <h2>Operatory matematyczne</h2>
+        <ul>
+            <li><code>$abs</code> – Wartość bezwzględna.</li>
+            <li><code>$add</code> – Dodaje liczby.</li>
+            <li><code>$ceil</code> – Zaokrągla w górę.</li>
+            <li><code>$divide</code> – Dzieli liczby.</li>
+            <li><code>$exp</code> – Oblicza potęgę.</li>
+            <li><code>$floor</code> – Zaokrągla w dół.</li>
+            <li><code>$ln</code> – Logarytm naturalny.</li>
+            <li><code>$log</code> – Logarytm o określonej podstawie.</li>
+            <li><code>$log10</code> – Logarytm dziesiętny.</li>
+            <li><code>$mod</code> – Reszta z dzielenia.</li>
+            <li><code>$multiply</code> – Mnoży liczby.</li>
+            <li><code>$pow</code> – Oblicza potęgę.</li>
+            <li><code>$round</code> – Zaokrągla do najbliższej liczby.</li>
+            <li><code>$sqrt</code> – Pierwiastek kwadratowy.</li>
+            <li><code>$subtract</code> – Odejmowanie.</li>
+            <li><code>$trunc</code> – Obcina do liczby całkowitej.</li>
+        </ul>
+
+        <h2>Operatory daty</h2>
+        <ul>
+            <li><code>$dayOfYear</code> – Dzień roku.</li>
+            <li><code>$dayOfMonth</code> – Dzień miesiąca.</li>
+            <li><code>$dayOfWeek</code> – Dzień tygodnia.</li>
+            <li><code>$year</code> – Rok.</li>
+            <li><code>$month</code> – Miesiąc.</li>
+            <li><code>$week</code> – Tydzień.</li>
+            <li><code>$hour</code> – Godzina.</li>
+            <li><code>$minute</code> – Minuta.</li>
+            <li><code>$second</code> – Sekunda.</li>
+            <li><code>$millisecond</code> – Milisekunda.</li>
+            <li><code>$isoWeekYear</code> – Rok ISO tygodnia.</li>
+            <li><code>$isoWeek</code> – Tydzień ISO.</li>
+            <li><code>$isoDayOfWeek</code> – Dzień tygodnia ISO.</li>
+        </ul>
+
+        <h2>Operatory tekstowe</h2>
+        <ul>
+            <li><code>$concat</code> – Łączy ciągi znaków.</li>
+            <li><code>$substrBytes</code>, <code>$substrCP</code> – Pobiera fragment tekstu w bajtach/kodach.</li>
+            <li><code>$toLower</code> – Konwertuje na małe litery.</li>
+            <li><code>$toUpper</code> – Konwertuje na wielkie litery.</li>
+            <li><code>$strLenBytes</code> – Liczy długość tekstu w bajtach.</li>
+            <li><code>$strLenCP</code> – Liczy długość tekstu w kodach.</li>
+        </ul>
+    <button id="closeModalBtn2">Zamknij</button>
+</div>
         
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/prism.min.js"></script>
@@ -256,6 +334,27 @@ db.kolekcja.insertMany([
             modalOverlay.style.display = 'none';
             document.body.classList.remove('modal-active'); // Odblokowanie przewijania body
         });
+
+        // Obsługa drugiego modala
+const openModalBtn2 = document.getElementById('openModalBtn2');
+const closeModalBtn2 = document.getElementById('closeModalBtn2');
+const modal2 = document.getElementById('modal2');
+const modalOverlay2 = document.getElementById('modalOverlay2');
+
+openModalBtn2.addEventListener('click', () => {
+    modal2.classList.add('active');
+    modalOverlay2.classList.add('active');
+});
+
+closeModalBtn2.addEventListener('click', () => {
+    modal2.classList.remove('active');
+    modalOverlay2.classList.remove('active');
+});
+
+modalOverlay2.addEventListener('click', () => {
+    modal2.classList.remove('active');
+    modalOverlay2.classList.remove('active');
+});
     </script>
 </body>
 </html>

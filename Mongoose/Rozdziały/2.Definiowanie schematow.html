@@ -7,6 +7,7 @@
     <link rel="stylesheet" href="../styles.css">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/themes/prism-tomorrow.min.css" rel="stylesheet" />
 </head>
+
 <body>
     <div class="container">
         <h1>Definiowanie Schematów w Mongoose</h1>
@@ -48,7 +49,7 @@ const User = mongoose.model('User', userSchema);
 module.exports = User;
         </code></pre>
 
-        <h2>Walidacja pól</h2>
+        <!-- <h2>Walidacja pól</h2>
         <p>Walidacja w Mongoose pozwala na sprawdzanie poprawności danych przed ich zapisaniem do bazy. Możemy ustawić walidację dla każdego pola za pomocą opcji w schemacie, takich jak <code>required</code>, <code>min</code>, <code>max</code>, <code>match</code>, czy <code>enum</code>.</p>
 
         <h3>Przykłady walidacji</h3>
@@ -63,18 +64,37 @@ module.exports = User;
         <p>Oto przykład dodania użytkownika z walidacją:</p>
 
         <pre><code class="language-javascript">
-async function addUser() {
-    try {
-        const user = new User({ name: 'Anna', age: 25, email: 'anna@example.com' });
-        const result = await user.save();
-        console.log('Dodano użytkownika:', result);
-    } catch (error) {
-        console.error('Błąd podczas dodawania użytkownika:', error.message);
-    }
-}
+User.create({ name: 'Jo', age: -5, email: 'zły-email' })
+// Próba stworzenia nowego użytkownika w bazie danych przy użyciu modelu `User`.
+// Przekazujemy dane: name, age, email, które nie spełniają walidacji zdefiniowanej w schemacie.
 
-addUser();
+    .then(user => console.log('Dodano użytkownika:', user))
+// Jeśli operacja zakończy się sukcesem (wszystkie dane są poprawne), wypiszemy w konsoli
+// komunikat "Dodano użytkownika:" wraz z danymi zapisanymi w bazie danych.
+
+    .catch(err => {
+// Obsługa błędów - jeżeli wystąpi jakikolwiek błąd (np. walidacja), kod w bloku `.catch` zostanie wykonany.
+
+        if (err.name === 'ValidationError') {
+// Sprawdzamy, czy typ błędu to `ValidationError`.
+// Oznacza to, że dane wejściowe nie spełniają wymagań określonych w schemacie Mongoose.
+
+            for (field in err.errors) {
+// Iterujemy przez wszystkie pola, które zawierają błędy walidacji.
+
+                console.error('Błąd walidacji:', err.errors[field].message);
+// Wypisujemy w konsoli wiadomość o błędzie dla każdego pola.
+// Przykładowe komunikaty: "Age must be greater than or equal to 0.", "Email is invalid."
+            }
+        } else {
+// Jeżeli błąd nie jest związany z walidacją, przechodzimy do tego bloku.
+
+            console.error('Inny błąd:', err);
+// Wypisujemy w konsoli szczegóły innego błędu, np. problem z połączeniem do bazy danych.
+        }
+    });
         </code></pre>
+<p>Lista innych typów błedów dla Mongoose poniżej</p>
 
         <h2>Obsługa błędów walidacji</h2>
         <p>W przypadku błędów walidacji Mongoose zwraca szczegółowe informacje o błędach. Można je przechwycić i wyświetlić użytkownikowi:</p>
@@ -99,9 +119,100 @@ User.create({ name: 'Jo', age: -5, email: 'zły-email' })
             <li>Rozważ użycie niestandardowych funkcji walidacji, jeśli potrzebujesz bardziej zaawansowanej logiki.</li>
             <li>Pamiętaj o zabezpieczeniach, takich jak walidacja adresów e-mail czy ograniczenie wartości pól numerycznych.</li>
         </ul>
+        <button id="openModalBtn">Typy błędów</button> -->
     </div>
+    <!-- Tło pod modala -->
+    <div id="modalOverlay" class="modal-overlay"></div>
 
+    <!-- Modal -->
+    <div id="modal" class="modal">
+
+        <ul>
+        <li>
+            <strong>ValidationError</strong>
+            <p>Występuje, gdy dane wejściowe nie spełniają reguł walidacji zdefiniowanych w schemacie.</p>
+            <p><strong>Przykład:</strong> Niepoprawny format e-maila, brak wymaganej wartości, wartość spoza zakresu.</p>
+            <p><strong>Sprawdzanie:</strong> <code>err.name === 'ValidationError'</code></p>
+        </li>
+        <hr>
+        <li>
+            <strong>ValidatorError</strong>
+            <p>Specyficzny rodzaj błędu walidacji dla pojedynczego pola w schemacie.</p>
+            <p><strong>Przykład:</strong> Pole <code>age</code> ma wartość mniejszą niż minimalna dozwolona.</p>
+        </li>
+        <hr>
+        <li>
+            <strong>CastError</strong>
+            <p>Występuje, gdy nie można skonwertować wartości na wymagany typ w schemacie (np. <code>_id</code> musi być typu ObjectId).</p>
+            <p><strong>Przykład:</strong> Przekazano tekst zamiast liczby lub ObjectId.</p>
+            <p><strong>Sprawdzanie:</strong> <code>err.name === 'CastError'</code></p>
+        </li>
+        <hr>
+        <li>
+            <strong>MongoError</strong>
+            <p>Błąd pochodzący z MongoDB, często związany z problemami z serwerem lub operacjami na kolekcjach.</p>
+            <p><strong>Przykład:</strong> Duplikat wartości dla unikalnego pola (<code>E11000 duplicate key error</code>).</p>
+            <p><strong>Sprawdzanie:</strong> <code>err.name === 'MongoError'</code></p>
+        </li>
+        <hr>
+        <li>
+            <strong>DocumentNotFoundError</strong>
+            <p>Występuje, gdy próbujesz znaleźć dokument w bazie danych, ale go nie ma.</p>
+            <p><strong>Przykład:</strong> <code>findOneAndUpdate</code> zwraca brak dokumentu.</p>
+        </li>
+        <hr>
+        <li>
+            <strong>MissingSchemaError</strong>
+            <p>Występuje, gdy próbujesz użyć modelu bez przypisanego schematu.</p>
+        </li>
+        <hr>
+        <li>
+            <strong>OverwritingModelError</strong>
+            <p>Występuje, gdy próbujesz nadpisać istniejący model Mongoose.</p>
+        </li>
+        <hr>
+        <li>
+            <strong>DisconnectedError</strong>
+            <p>Występuje, gdy próbujesz wykonać operację na bazie danych, ale połączenie z MongoDB zostało przerwane.</p>
+        </li>
+        <hr>
+        <li>
+            <strong>ParallelSaveError</strong>
+            <p>Występuje, gdy próbujesz zapisać ten sam dokument wielokrotnie w tym samym czasie.</p>
+        </li>
+    </ul>
+
+        <button id="closeModalBtn">Zamknij</button>
+    </div>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/prism.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/components/prism-javascript.min.js"></script>
+    <script>
+                // Pobieranie elementów
+        const openModalBtn = document.getElementById('openModalBtn');
+        const closeModalBtn = document.getElementById('closeModalBtn');
+        const modal = document.getElementById('modal');
+        const modalOverlay = document.getElementById('modalOverlay');
+
+        // Funkcja otwierająca modal
+        openModalBtn.addEventListener('click', () => {
+            modal.style.display = 'block';
+            modalOverlay.style.display = 'block';
+            document.body.classList.add('modal-active'); // Zablokowanie przewijania body
+        });
+
+        // Funkcja zamykająca modal
+        closeModalBtn.addEventListener('click', () => {
+            modal.style.display = 'none';
+            modalOverlay.style.display = 'none';
+            document.body.classList.remove('modal-active'); // Odblokowanie przewijania body
+        });
+
+        // Zamknięcie modala po kliknięciu w overlay
+        modalOverlay.addEventListener('click', () => {
+            modal.style.display = 'none';
+            modalOverlay.style.display = 'none';
+            document.body.classList.remove('modal-active'); // Odblokowanie przewijania body
+        });
+    </script>
 </body>
 </html>

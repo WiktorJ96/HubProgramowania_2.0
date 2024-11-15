@@ -18,32 +18,49 @@
 
         <pre><code class="language-javascript">
 const mongoose = require('mongoose');
+// Importujemy Mongoose, aby definiować schematy i operować na bazie MongoDB.
 
 // Definiowanie schematu
 const orderSchema = new mongoose.Schema({
-    product: String,
-    quantity: Number,
-    price: Number,
-    customer: String,
-    date: { type: Date, default: Date.now }
+    product: String, // Pole przechowuje nazwę produktu jako tekst.
+    quantity: Number, // Pole przechowuje ilość zamówionego produktu.
+    price: Number, // Pole przechowuje cenę jednostkową produktu.
+    customer: String, // Pole przechowuje nazwę klienta jako tekst.
+    date: { type: Date, default: Date.now } 
+    // Pole przechowuje datę zamówienia. Domyślnie ustawiana na aktualny czas.
 });
 
 const Order = mongoose.model('Order', orderSchema);
+// Tworzymy model `Order` na podstawie schematu `orderSchema`.
+// Model reprezentuje kolekcję `orders` w bazie danych MongoDB.
 
 // Przykład użycia aggregate() do obliczenia łącznej sprzedaży
 async function getTotalSales() {
     try {
         const result = await Order.aggregate([
-            { $group: { _id: null, totalSales: { $sum: { $multiply: ["$quantity", "$price"] } } } }
-            // Grupowanie wszystkich dokumentów i obliczanie łącznej sprzedaży
+            // Rozpoczynamy agregację dokumentów z kolekcji `orders`.
+
+            {
+                $group: {
+                    _id: null, // Grupujemy wszystkie dokumenty razem (brak podziału na kategorie).
+                    totalSales: { $sum: { $multiply: ["$quantity", "$price"] } }
+                    // Obliczamy łączną sprzedaż, mnożąc ilość (`quantity`) przez cenę (`price`) dla każdego dokumentu
+                    // i sumując wyniki dla wszystkich dokumentów.
+                }
+            }
         ]);
+
         console.log('Łączna sprzedaż:', result);
+        // Wyświetlamy wynik w konsoli. Wynik to tablica z jednym obiektem:
+        // [{ _id: null, totalSales: WARTOŚĆ }]
     } catch (error) {
         console.error('Błąd podczas wykonywania agregacji:', error);
+        // Obsługa błędu w przypadku problemów z bazą danych lub agregacją.
     }
 }
 
 getTotalSales();
+// Wywołujemy funkcję, aby obliczyć łączną sprzedaż.
         </code></pre>
 
         <h2>Etapy agregacji</h2>
@@ -90,28 +107,36 @@ getTopCustomers();
         <p>Używając etapu <code>$lookup</code>, można dołączać dokumenty z innych kolekcji. Oto przykład:</p>
 
         <pre><code class="language-javascript">
-// Dołączenie danych klientów do zamówień
+// Funkcja asynchroniczna dołącza dane klientów do zamówień z użyciem pipeline'u agregacyjnego
 async function getOrdersWithCustomerDetails() {
     try {
+        // Uruchamianie metody agregacji na kolekcji Order
         const result = await Order.aggregate([
             {
+                // Operacja $lookup pozwala dołączyć dane z innej kolekcji
                 $lookup: {
-                    from: 'customers', // Nazwa kolekcji do dołączenia
-                    localField: 'customer',
-                    foreignField: 'name',
+                    from: 'customers', // Kolekcja, z której pobierane są dane (tu: 'customers')
+                    localField: 'customer', // Pole w kolekcji 'Order', które łączy dane (tu: 'customer')
+                    foreignField: 'name', // Pole w kolekcji 'customers', które odpowiada localField (tu: 'name')
                     as: 'customerDetails'
-                    // Nazwa pola, pod którą będą dołączone dane
+                    // Nazwa pola, w którym zostaną zapisane dołączone dane z kolekcji 'customers'
                 }
             },
-            { $unwind: '$customerDetails' }
-            // Rozwinięcie tablicy, aby uzyskać pojedyncze dokumenty dla każdego zamówienia z detalami
+            { 
+                // Operacja $unwind przekształca pole customerDetails z tablicy na pojedyncze dokumenty
+                $unwind: '$customerDetails'
+                // Jeżeli $lookup zwrócił wiele pasujących dokumentów, każdy z nich stanie się osobnym dokumentem
+            }
         ]);
+        // Logowanie wyników operacji agregacji
         console.log('Zamówienia z detalami klienta:', result);
     } catch (error) {
+        // Obsługa błędów, jeśli operacja agregacji zakończy się niepowodzeniem
         console.error('Błąd podczas wykonywania agregacji:', error);
     }
 }
 
+// Wywołanie funkcji
 getOrdersWithCustomerDetails();
         </code></pre>
 
