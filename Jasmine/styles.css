@@ -1,0 +1,172 @@
+/* Stylowanie ogólne */
+body {
+    font-family: 'Roboto', sans-serif;
+    background-color: #1e1e2e; /* Ciemnoszare tło */
+    color: #c9d1d9; /* Jasnoszary tekst */
+    margin: 0;
+    padding: 20px;
+    line-height: 1.8;
+    display: flex;
+    justify-content: center;
+    flex-direction: column;
+}
+
+/* Stylowanie głównego kontenera */
+.container {
+    max-width: 720px;
+    background-color: #282a36; /* Ciemniejsze tło */
+    padding: 30px;
+    border-radius: 15px;
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.5);
+    width: 90%;
+    margin: auto;
+    transition: transform 0.2s ease-in-out;
+}
+
+/* Stylowanie nagłówków */
+h1 {
+    background-color: #4f3e75; /* Fioletowy akcent */
+    color: #ffffff;
+    padding: 15px;
+    text-align: center;
+    border-radius: 12px;
+    margin-bottom: 40px;
+    font-size: 2rem;
+}
+
+h2 {
+    color: hsla(120, 10%, 96%, 0.95); /* Zielony akcent */
+    border-bottom: 2px solid hsla(0, 17%, 98%, 0.95);
+    padding-bottom: 10px;
+    margin-bottom: 20px;
+    font-size: 1.5rem;
+}
+
+/* Stylowanie paragrafów */
+p {
+    color: #abb2bf; /* Szary tekst */
+    line-height: 1.7;
+    font-size: 1.1rem;
+    margin-bottom: 25px;
+    transition: color 0.3s ease-in-out;
+}
+
+p:hover {
+    color: #ffffff; /* Biały tekst na hover */
+}
+
+/* Stylowanie bloków kodu */
+pre {
+    background-color: #1e1e2e; /* Intensywnie ciemne tło */
+    color: #ff79c6; /* Różowy akcent dla kodu */
+    padding: 20px;
+    border-radius: 12px;
+    font-size: 1rem;
+    overflow-x: auto;
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.4);
+}
+
+code {
+    background-color: hsla(285, 94%, 65%, 0.95); /* Zielone tło inline */
+    padding: 4px 6px;
+    border-radius: 6px;
+    font-size: 0.9rem;
+    color: #282a36; /* Ciemny tekst */
+}
+
+/* Stylowanie list */
+ul {
+    padding-left: 25px;
+    color: #abb2bf;
+}
+
+ul li {
+    margin-bottom: 15px;
+    font-size: 1.1rem;
+    padding: 10px;
+    background-color: #4f3e75b9; /* Fioletowe tło */
+    border-radius: 8px;
+    transition: background-color 0.3s ease-in-out, transform 0.2s ease-in-out;
+}
+
+ul li:hover {
+    background-color: #5e3f92; /* Jaśniejszy fiolet na hover */
+    transform: translateX(10px);
+}
+
+/* Stylowanie linków */
+a {
+    color: #f4f1f1; /* Zielony akcent */
+    text-decoration: none;
+    font-weight: bold;
+    transition: color 0.3s ease-in-out, transform 0.2s ease-in-out;
+}
+
+a:hover {
+    color: #dde0ef; /* Jaśniejszy zielony */
+    transform: scale(1.05);
+    text-decoration: underline;
+}
+
+a:active {
+    color: #4c63cb; /* Ciemniejszy zielony */
+    transform: scale(0.98);
+}
+
+/* Stylowanie przycisku */
+button {
+    background-color: #5eea7d; /* Zielony akcent */
+    color: #1e1e2e;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 8px;
+    font-size: 1rem;
+    font-weight: bold;
+    cursor: pointer;
+    transition: background-color 0.3s ease-in-out, transform 0.2s ease-in-out;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.4);
+    outline: none;
+}
+
+button:hover {
+    background-color: hsla(135, 94%, 65%, 0.95); /* Jaśniejszy zielony */
+    transform: scale(1.05);
+}
+
+button:active {
+    background-color: #4ccb75;
+    transform: scale(0.98);
+}
+
+/* Stylowanie akordeonu */
+.accordion-item {
+    margin-bottom: 10px;
+    border-radius: 5px;
+}
+
+.accordion-header {
+    padding: 10px;
+    cursor: pointer;
+    font-size: 1.2em;
+    color: #ffffff;
+}
+
+.accordion-content {
+    padding: 0 20px;
+    max-height: 0;
+    overflow: hidden;
+    background-color: #282a36; /* Ciemne wnętrze */
+    color: #abb2bf;
+    transition: max-height 0.3s ease;
+}
+
+/* Responsywność */
+@media (min-width: 768px) {
+    p, ul {
+        font-size: 1.2rem;
+    }
+
+    pre {
+        font-size: 1.1rem;
+    }
+}

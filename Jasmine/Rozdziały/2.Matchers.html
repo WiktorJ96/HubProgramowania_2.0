@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Matchers w Jasmine</title>
+    <link rel="stylesheet" href="../styles.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/themes/prism-tomorrow.min.css" rel="stylesheet" />
+</head>
+<body>
+    <div class="container">
+        <h1>Matchers (dopasowywacze) w Jasmine</h1>
+
+        <p>Matchers (dopasowywacze) w Jasmine to funkcje służące do porównywania wartości podczas testów. Pozwalają one określić, czy wynik testu jest zgodny z oczekiwaniami. W tej sekcji omówimy wbudowane matchery oraz sposób rozszerzania ich możliwości.</p>
+
+        <h2>Użycie wbudowanych matcherów</h2>
+        <p>Jasmine dostarcza wiele wbudowanych matcherów, które można wykorzystać w testach. Oto kilka przykładów:</p>
+
+        <h3>Przykład</h3>
+        <pre><code class="language-javascript">
+describe('Testy z wbudowanymi matcherami', () => {
+    it('powinien używać matchera toBe', () => {
+        expect(5).toBe(5);
+        // Porównanie wartości bezpośrednie
+    });
+
+    it('powinien używać matchera toEqual', () => {
+        const obj1 = { klucz: 'wartość' };
+        const obj2 = { klucz: 'wartość' };
+        expect(obj1).toEqual(obj2);
+        // Porównanie wartości obiektów
+    });
+
+    it('powinien używać matchera toContain', () => {
+        const lista = ['jabłko', 'banan', 'gruszka'];
+        expect(lista).toContain('banan');
+        // Sprawdzenie, czy element znajduje się w tablicy
+    });
+
+    it('powinien używać matchera toBeTruthy', () => {
+        const wynik = true;
+        expect(wynik).toBeTruthy();
+        // Sprawdzenie, czy wartość jest prawdziwa (truthy)
+    });
+});
+        </code></pre>
+
+        <p>Wbudowane matchery pozwalają na różne rodzaje porównań, takie jak wartości proste (<code>toBe</code>), struktury danych (<code>toEqual</code>) oraz warunki logiczne (<code>toBeTruthy</code>, <code>toBeFalsy</code>).</p>
+
+        <h2>Rozszerzanie matcherów</h2>
+        <p>Jasmine umożliwia tworzenie własnych matcherów, co pozwala na definiowanie niestandardowych reguł porównywania. Oto przykład, jak zdefiniować własny matcher:</p>
+
+        <h3>Przykład</h3>
+        <pre><code class="language-javascript">
+beforeEach(() => {
+    jasmine.addMatchers({
+        toBeEven: () => {
+            return {
+                compare: (actual) => {
+                    const result = {
+                        pass: actual % 2 === 0,
+                        message: `${actual} nie jest liczbą parzystą`
+                    };
+                    return result;
+                }
+            };
+        }
+    });
+});
+
+describe('Testy z własnym matcherem', () => {
+    it('powinien używać własnego matchera toBeEven', () => {
+        expect(4).toBeEven();
+        // Sprawdzenie, czy liczba jest parzysta
+    });
+
+    it('powinien zwrócić komunikat o błędzie dla liczby nieparzystej', () => {
+        expect(3).not.toBeEven();
+        // Sprawdzenie, czy liczba nie jest parzysta
+    });
+});
+        </code></pre>
+
+        <p>Matcher <code>toBeEven</code> sprawdza, czy liczba jest parzysta. Własne matchery są definiowane za pomocą funkcji <code>jasmine.addMatchers</code>, gdzie określasz logikę porównywania i komunikaty o błędach.</p>
+
+        <h2>Podsumowanie</h2>
+        <p>W Jasmine matchery odgrywają kluczową rolę w testowaniu aplikacji:</p>
+        <ul>
+            <li><strong>Wbudowane matchery</strong> pozwalają na szybkie i proste porównania.</li>
+            <li><strong>Rozszerzanie matcherów</strong> umożliwia dostosowanie testów do specyficznych potrzeb.</li>
+        </ul>
+        <p>Stosowanie odpowiednich matcherów poprawia czytelność i skuteczność testów.</p>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/prism.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/components/prism-javascript.min.js"></script>
+</body>
+</html>

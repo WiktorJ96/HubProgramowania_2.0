@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Metody Before/After w Jasmine</title>
+    <link rel="stylesheet" href="../styles.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/themes/prism-tomorrow.min.css" rel="stylesheet" />
+</head>
+<body>
+    <div class="container">
+        <h1>Metody Before/After w Jasmine</h1>
+
+        <p>Metody <code>beforeAll</code>, <code>afterAll</code>, <code>beforeEach</code> i <code>afterEach</code> są używane w Jasmine do przygotowania środowiska testowego oraz czyszczenia zasobów po testach. Pomagają one w organizacji kodu testowego oraz zapewniają izolację testów.</p>
+
+        <h2>Przygotowanie środowiska testowego</h2>
+        <p>Metoda <code>beforeAll</code> jest wykonywana raz przed uruchomieniem wszystkich testów w danej grupie (<code>describe</code>). Metoda <code>beforeEach</code> jest wywoływana przed każdym indywidualnym testem (<code>it</code>).</p>
+
+        <h3>Przykład użycia <code>beforeAll</code> i <code>beforeEach</code></h3>
+        <pre><code class="language-javascript">
+describe('Przygotowanie środowiska testowego', () => {
+    let licznik;
+
+    beforeAll(() => {
+        console.log('Uruchamiane raz przed wszystkimi testami');
+        licznik = 0;
+    });
+
+    beforeEach(() => {
+        licznik += 1;
+        console.log('Uruchamiane przed każdym testem');
+    });
+
+    it('test 1', () => {
+        expect(licznik).toBe(1);
+    });
+
+    it('test 2', () => {
+        expect(licznik).toBe(2);
+    });
+});
+        </code></pre>
+
+        <p>W tym przykładzie <code>beforeAll</code> ustawia początkowy stan zmiennej <code>licznik</code>, a <code>beforeEach</code> zwiększa ją przed każdym testem.</p>
+
+        <h2>Czyszczenie po testach</h2>
+        <p>Metoda <code>afterEach</code> jest wywoływana po każdym indywidualnym teście, natomiast <code>afterAll</code> jest wykonywana raz po zakończeniu wszystkich testów w danej grupie.</p>
+
+        <h3>Przykład użycia <code>afterEach</code> i <code>afterAll</code></h3>
+        <pre><code class="language-javascript">
+describe('Czyszczenie po testach', () => {
+    let dane;
+
+    beforeEach(() => {
+        dane = [1, 2, 3];
+    });
+
+    afterEach(() => {
+        dane = null;
+        console.log('Czyszczenie zasobów po teście');
+    });
+
+    afterAll(() => {
+        console.log('Czyszczenie po wszystkich testach');
+    });
+
+    it('powinien sprawdzić długość danych', () => {
+        expect(dane.length).toBe(3);
+    });
+
+    it('powinien dodać element do danych', () => {
+        dane.push(4);
+        expect(dane.length).toBe(4);
+    });
+});
+        </code></pre>
+
+        <p>W tym przykładzie <code>afterEach</code> czyści zmienną <code>dane</code> po każdym teście, a <code>afterAll</code> wykonuje końcowe sprzątanie po zakończeniu wszystkich testów.</p>
+
+        <h2>Zalety stosowania metod Before/After</h2>
+        <ul>
+            <li>Eliminacja powtarzającego się kodu w testach.</li>
+            <li>Zapewnienie izolacji testów poprzez resetowanie stanu przed i po każdym teście.</li>
+            <li>Możliwość inicjalizacji zasobów raz na początku (<code>beforeAll</code>) i ich zwolnienia na końcu (<code>afterAll</code>).</li>
+        </ul>
+
+        <h2>Podsumowanie</h2>
+        <p>Metody <code>beforeAll</code>, <code>afterAll</code>, <code>beforeEach</code> i <code>afterEach</code> są kluczowe w organizacji testów:</p>
+        <ul>
+            <li><strong><code>beforeAll</code></strong>: Uruchamiane raz przed wszystkimi testami.</li>
+            <li><strong><code>beforeEach</code></strong>: Uruchamiane przed każdym testem.</li>
+            <li><strong><code>afterEach</code></strong>: Uruchamiane po każdym teście.</li>
+            <li><strong><code>afterAll</code></strong>: Uruchamiane raz po wszystkich testach.</li>
+        </ul>
+        <p>Stosowanie tych metod poprawia organizację i jakość testów, szczególnie w bardziej złożonych scenariuszach.</p>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/prism.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/components/prism-javascript.min.js"></script>
+</body>
+</html>

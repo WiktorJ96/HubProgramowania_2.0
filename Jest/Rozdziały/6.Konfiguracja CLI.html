@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Konfiguracja i CLI w Jest</title>
+    <link rel="stylesheet" href="../styles.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/themes/prism-tomorrow.min.css" rel="stylesheet" />
+</head>
+<body>
+    <div class="container">
+        <h1>Konfiguracja i CLI w Jest</h1>
+
+        <p>Jest jest łatwy w konfiguracji i oferuje rozbudowane opcje CLI (Command Line Interface), które ułatwiają uruchamianie i zarządzanie testami. Poniżej znajdziesz omówienie podstaw konfiguracji oraz dostępnych opcji CLI.</p>
+
+        <h2>1. Ustawianie pliku konfiguracyjnego</h2>
+        <p>Jest umożliwia dostosowanie konfiguracji za pomocą pliku <code>jest.config.js</code>, <code>jest.config.json</code> lub sekcji <code>jest</code> w pliku <code>package.json</code>.</p>
+
+        <h3>Przykład pliku <code>jest.config.js</code></h3>
+        <pre><code class="language-javascript">
+module.exports = {
+    verbose: true, // Szczegółowe logi testów
+    testEnvironment: 'node', // Środowisko testowe
+    testMatch: ['**/__tests__/**/*.js?(x)', '**/?(*.)+(spec|test).js?(x)'], // Wzorzec wyszukiwania plików testowych
+    collectCoverage: true, // Zbieranie pokrycia testów
+    coverageDirectory: 'coverage', // Katalog na raport pokrycia
+};
+        </code></pre>
+
+        <h3>Konfiguracja w <code>package.json</code></h3>
+        <p>Alternatywnie można dodać sekcję <code>jest</code> do pliku <code>package.json</code>:</p>
+        <pre><code class="language-json">
+{
+  "jest": {
+    "verbose": true,
+    "testEnvironment": "node",
+    "collectCoverage": true
+  }
+}
+        </code></pre>
+
+        <h2>2. Uruchamianie testów przez CLI</h2>
+        <p>Testy w Jest można uruchamiać za pomocą CLI. Jeśli Jest nie jest zainstalowany globalnie, możesz użyć <code>npx</code>:</p>
+
+        <pre><code class="language-bash">
+npx jest
+        </code></pre>
+
+        <h3>Uruchamianie konkretnego testu</h3>
+        <p>Aby uruchomić określony plik testowy, podaj jego ścieżkę:</p>
+        <pre><code class="language-bash">
+npx jest path/to/test.spec.js
+        </code></pre>
+
+        <h3>Uruchamianie testów z nazwą pasującą do wzorca</h3>
+        <p>Użyj flagi <code>--testNamePattern</code>, aby uruchomić tylko testy o określonej nazwie:</p>
+        <pre><code class="language-bash">
+npx jest --testNamePattern="powinien dodać liczby"
+        </code></pre>
+
+        <h2>3. Opcje CLI</h2>
+        <p>Jest oferuje wiele opcji CLI do zarządzania testami. Poniżej znajduje się lista najważniejszych:</p>
+
+        <h3>Przykłady:</h3>
+        <ul>
+            <li><code>--watch</code>: Uruchamia testy w trybie "watch", aby automatycznie je powtarzać po zmianach w kodzie.</li>
+            <li><code>--coverage</code>: Generuje raport pokrycia testami.</li>
+            <li><code>--runInBand</code>: Uruchamia testy sekwencyjnie w jednym wątku (przydatne dla testów wymagających dużych zasobów).</li>
+            <li><code>--onlyChanged</code>: Uruchamia tylko testy zmienionych plików.</li>
+            <li><code>--json</code>: Generuje wyniki testów w formacie JSON.</li>
+            <li><code>--bail</code>: Zatrzymuje testy po pierwszym błędzie.</li>
+            <li><code>--listTests</code>: Wyświetla listę plików, które zostaną przetestowane.</li>
+        </ul>
+
+        <h3>Przykłady użycia opcji:</h3>
+        <pre><code class="language-bash">
+# Tryb "watch" z raportem pokrycia
+npx jest --watch --coverage
+
+# Uruchomienie testów w jednym wątku
+npx jest --runInBand
+
+# Generowanie wyników w formacie JSON
+npx jest --json > results.json
+        </code></pre>
+
+        <h2>4. Generowanie raportów pokrycia testami</h2>
+        <p>Raport pokrycia pokazuje, jak duża część kodu została objęta testami. Możesz wygenerować raport za pomocą opcji <code>--coverage</code>:</p>
+        <pre><code class="language-bash">
+npx jest --coverage
+        </code></pre>
+
+        <p>Raport zostanie zapisany w katalogu <code>coverage</code>. Domyślnie obejmuje on statystyki dla linii kodu, funkcji i plików.</p>
+
+        <h2>5. Tworzenie niestandardowych skryptów npm</h2>
+        <p>Aby ułatwić uruchamianie testów, możesz dodać skrypty do pliku <code>package.json</code>:</p>
+        <pre><code class="language-json">
+"scripts": {
+    "test": "jest",
+    "test:watch": "jest --watch",
+    "test:coverage": "jest --coverage"
+}
+        </code></pre>
+
+        <p>Teraz możesz uruchamiać testy za pomocą:</p>
+        <pre><code class="language-bash">
+npm run test:coverage
+        </code></pre>
+
+        <h2>Podsumowanie</h2>
+        <p>Jest oferuje bogate możliwości konfiguracji i uruchamiania testów:</p>
+        <ul>
+            <li>Plik <code>jest.config.js</code> pozwala dostosować ustawienia do projektu.</li>
+            <li>CLI umożliwia zarządzanie testami za pomocą wielu opcji, takich jak <code>--watch</code> czy <code>--coverage</code>.</li>
+            <li>Skrypty npm ułatwiają regularne uruchamianie testów w różnych trybach.</li>
+        </ul>
+        <p>Dzięki elastyczności konfiguracji i zaawansowanym opcjom CLI Jest jest jednym z najwygodniejszych frameworków testowych.</p>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/prism.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/components/prism-javascript.min.js"></script>
+</body>
+</html>

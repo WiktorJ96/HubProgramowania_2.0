@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Optymalizacja testów w Jasmine</title>
+    <link rel="stylesheet" href="../styles.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/themes/prism-tomorrow.min.css" rel="stylesheet" />
+</head>
+<body>
+    <div class="container">
+        <h1>Optymalizacja testów w Jasmine</h1>
+
+        <p>Optymalizacja testów polega na skutecznej organizacji kodu testowego, minimalizacji duplikacji oraz szybkim wykrywaniu błędów. Dobre praktyki w testach jednostkowych pomagają zapewnić ich czytelność, wydajność i niezawodność.</p>
+
+        <h2>1. Skuteczna organizacja testów</h2>
+        <p>Organizacja testów w logiczne grupy i hierarchie ułatwia ich zrozumienie oraz utrzymanie. Kluczowe elementy organizacji:</p>
+
+        <h3>Grupowanie testów</h3>
+        <p>Używaj <code>describe</code>, aby grupować powiązane testy:</p>
+
+        <pre><code class="language-javascript">
+describe('Operacje matematyczne', () => {
+    describe('Dodawanie', () => {
+        it('powinien dodać dwie liczby', () => {
+            expect(2 + 3).toBe(5);
+        });
+    });
+
+    describe('Mnożenie', () => {
+        it('powinien pomnożyć dwie liczby', () => {
+            expect(4 * 3).toBe(12);
+        });
+    });
+});
+        </code></pre>
+
+        <h3>Podział na pliki</h3>
+        <p>Każdy moduł aplikacji powinien mieć swój zestaw testów w oddzielnym pliku, np.:</p>
+        <ul>
+            <li><code>math.service.js</code> → <code>math.service.spec.js</code></li>
+            <li><code>user.service.js</code> → <code>user.service.spec.js</code></li>
+        </ul>
+
+        <h2>2. Szybkie wykrywanie błędów</h2>
+        <p>Testy powinny być krótkie i sprawdzać jedną rzecz na raz. Dzięki temu łatwiej zidentyfikować źródło błędu.</p>
+
+        <h3>Przykład testu z prostą asercją</h3>
+        <pre><code class="language-javascript">
+it('powinien zwrócić sumę dwóch liczb', () => {
+    const suma = dodaj(2, 3);
+    expect(suma).toBe(5);
+});
+        </code></pre>
+
+        <h3>Przerywanie testów po pierwszym błędzie</h3>
+        <p>Ustaw <code>stopSpecOnExpectationFailure</code> w <code>jasmine.json</code>, aby testy zatrzymały się przy pierwszym błędzie:</p>
+
+        <pre><code class="language-json">
+{
+  "stopSpecOnExpectationFailure": true
+}
+        </code></pre>
+
+        <h2>3. Minimalizacja duplikacji</h2>
+        <p>Duplikacja kodu w testach utrudnia ich utrzymanie i zwiększa ryzyko błędów. Można tego uniknąć za pomocą:</p>
+
+        <h3>Użycia <code>beforeEach</code> i <code>afterEach</code></h3>
+        <p>Stosuj te metody do inicjalizacji i czyszczenia wspólnych zasobów:</p>
+
+        <pre><code class="language-javascript">
+let licznik;
+
+beforeEach(() => {
+    licznik = 0;
+});
+
+afterEach(() => {
+    licznik = null;
+});
+
+it('powinien zwiększyć licznik', () => {
+    licznik++;
+    expect(licznik).toBe(1);
+});
+        </code></pre>
+
+        <h3>Funkcji pomocniczych</h3>
+        <p>Przenieś powtarzalny kod do funkcji pomocniczych:</p>
+
+        <pre><code class="language-javascript">
+function inicjalizujDane() {
+    return { nazwa: 'Testowy', wiek: 25 };
+}
+
+it('powinien mieć poprawne dane', () => {
+    const dane = inicjalizujDane();
+    expect(dane.nazwa).toBe('Testowy');
+});
+        </code></pre>
+
+        <h2>4. Automatyzacja testów</h2>
+        <p>Użyj narzędzi takich jak <code>npm scripts</code> lub CI/CD, aby automatycznie uruchamiać testy:</p>
+
+        <h3>Przykład konfiguracji npm scripts</h3>
+        <pre><code class="language-json">
+"scripts": {
+  "test": "jasmine"
+}
+        </code></pre>
+
+        <h3>Integracja z CI/CD</h3>
+        <p>Dodaj uruchamianie testów do swojego pipeline'u CI/CD (np. GitHub Actions):</p>
+
+        <pre><code class="language-yaml">
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - name: Install dependencies
+        run: npm install
+      - name: Run tests
+        run: npm test
+        </code></pre>
+
+        <h2>Podsumowanie</h2>
+        <p>Optymalizacja testów obejmuje:</p>
+        <ul>
+            <li>Skuteczną organizację poprzez grupowanie i podział na pliki.</li>
+            <li>Minimalizację duplikacji za pomocą metod <code>beforeEach</code> i funkcji pomocniczych.</li>
+            <li>Automatyzację testów, aby zapewnić ich regularne uruchamianie.</li>
+        </ul>
+        <p>Dzięki tym praktykom testy stają się bardziej czytelne, wydajne i łatwiejsze w utrzymaniu.</p>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/prism.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/components/prism-javascript.min.js"></script>
+</body>
+</html>

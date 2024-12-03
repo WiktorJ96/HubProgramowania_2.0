@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Testy Równoległe w Jest</title>
+    <link rel="stylesheet" href="../styles.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/themes/prism-tomorrow.min.css" rel="stylesheet" />
+</head>
+<body>
+    <div class="container">
+        <h1>Testy Równoległe w Jest</h1>
+
+        <p>Jest domyślnie uruchamia testy w wielu wątkach (workerach), co pozwala na znaczne przyspieszenie testów w większych projektach. Działa to dzięki podziałowi testów na niezależne procesy. W tym artykule omówimy, jak zarządzać testami równoległymi i zwiększać ich wydajność.</p>
+
+        <h2>1. Jak działają testy równoległe w Jest?</h2>
+        <p>Jest automatycznie dzieli pliki testowe na wątki robocze (workers) i uruchamia je równolegle. Każdy worker działa jako osobny proces Node.js, co pozwala na efektywne wykorzystanie zasobów systemowych.</p>
+
+        <h2>2. Konfiguracja liczby workerów</h2>
+        <p>Możesz dostosować liczbę workerów za pomocą flagi <code>--maxWorkers</code>. Jest obsługuje zarówno wartości procentowe, jak i liczby całkowite:</p>
+        <pre><code class="language-bash">
+# Ustawienie liczby workerów na 50% dostępnych rdzeni CPU
+npx jest --maxWorkers=50%
+
+# Ustawienie dokładnej liczby workerów (np. 2)
+npx jest --maxWorkers=2
+        </code></pre>
+
+        <p>Flaga <code>--maxWorkers</code> jest szczególnie przydatna w środowiskach o ograniczonych zasobach, takich jak CI/CD.</p>
+
+        <h2>3. Testy niezależne</h2>
+        <p>Aby testy mogły działać równolegle, muszą być niezależne od siebie, tj. nie mogą dzielić stanu globalnego. Przykłady dobrych praktyk:</p>
+        <ul>
+            <li>Unikaj mutowania globalnych zmiennych w testach.</li>
+            <li>Każdy test powinien mieć własne dane wejściowe i oczekiwane wyniki.</li>
+            <li>W razie potrzeby korzystaj z hooków, takich jak <code>beforeEach</code>, aby przygotować niezależny stan.</li>
+        </ul>
+
+        <h2>4. Debugowanie w środowisku równoległym</h2>
+        <p>Debugowanie testów w środowisku równoległym może być trudne. Aby uprościć debugowanie, możesz uruchamiać testy w jednym wątku za pomocą flagi <code>--runInBand</code>:</p>
+        <pre><code class="language-bash">
+npx jest --runInBand
+        </code></pre>
+
+        <p>Opcja <code>--runInBand</code> wyłącza równoległość, co ułatwia identyfikację problemów w testach.</p>
+
+        <h2>5. Optymalizacja szybkości testów</h2>
+
+        <h3>5.1. Cache testów</h3>
+        <p>Jest wykorzystuje pamięć podręczną (cache), aby przyspieszyć kolejne uruchomienia testów. Możesz ją włączyć za pomocą flagi <code>--cache</code>:</p>
+        <pre><code class="language-bash">
+npx jest --cache
+        </code></pre>
+
+        <p>Aby wyczyścić pamięć podręczną, użyj:</p>
+        <pre><code class="language-bash">
+npx jest --clearCache
+        </code></pre>
+
+        <h3>5.2. Uruchamianie tylko zmienionych testów</h3>
+        <p>Aby uruchamiać tylko testy związane z ostatnimi zmianami w kodzie, użyj flagi <code>--onlyChanged</code>:</p>
+        <pre><code class="language-bash">
+npx jest --onlyChanged
+        </code></pre>
+
+        <h3>5.3. Grupowanie plików testowych</h3>
+        <p>Możesz grupować testy według folderów lub wzorców, aby równoległe uruchamianie było bardziej efektywne:</p>
+        <pre><code class="language-bash">
+npx jest src/components
+        </code></pre>
+
+        <h2>6. Najlepsze praktyki</h2>
+        <ul>
+            <li>Zapewnij niezależność testów, unikając współdzielonego stanu.</li>
+            <li>Regularnie czyść pamięć podręczną w środowiskach CI/CD.</li>
+            <li>Skonfiguruj liczbę workerów w zależności od dostępnych zasobów.</li>
+            <li>Testuj lokalnie z pełną równoległością, ale debuguj w trybie <code>--runInBand</code>.</li>
+        </ul>
+
+        <h2>7. Podsumowanie</h2>
+        <p>Testy równoległe w Jest oferują:</p>
+        <ul>
+            <li>Zwiększenie szybkości testowania dzięki uruchamianiu wielu testów jednocześnie.</li>
+            <li>Elastyczną konfigurację liczby workerów dla optymalnego wykorzystania zasobów.</li>
+            <li>Opcje debugowania, takie jak <code>--runInBand</code>, aby upraszczać lokalizację problemów.</li>
+        </ul>
+        <p>Stosując te techniki, możesz przyspieszyć rozwój projektu i zwiększyć produktywność zespołu.</p>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/prism.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/components/prism-javascript.min.js"></script>
+</body>
+</html>

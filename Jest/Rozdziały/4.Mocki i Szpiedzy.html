@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mocki i Szpiedzy w Jest</title>
+    <link rel="stylesheet" href="../styles.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/themes/prism-tomorrow.min.css" rel="stylesheet" />
+</head>
+<body>
+    <div class="container">
+        <h1>Mocki i Szpiedzy w Jest</h1>
+
+        <p>Mocki i szpiedzy (spies) w Jest pozwalają testować interakcje między funkcjami oraz śledzić, w jaki sposób są one wywoływane. Umożliwiają także symulowanie działania zależności zewnętrznych.</p>
+
+        <h2>1. Tworzenie mocków</h2>
+        <p>W Jest można tworzyć funkcje mockujące za pomocą <code>jest.fn()</code> lub <code>jest.mock()</code>. Mocki pozwalają na symulowanie zachowania funkcji bez faktycznego jej wykonania.</p>
+
+        <h3>Przykład: Tworzenie funkcji mockującej</h3>
+        <pre><code class="language-javascript">
+// Tworzenie funkcji mockującej
+const mockFn = jest.fn();
+
+mockFn('argument1', 'argument2'); // Wywołanie funkcji
+
+test('powinien śledzić wywołania', () => {
+    expect(mockFn).toHaveBeenCalled(); // Sprawdza, czy funkcja została wywołana
+    expect(mockFn).toHaveBeenCalledWith('argument1', 'argument2'); // Sprawdza przekazane argumenty
+});
+        </code></pre>
+
+        <h3>Przykład: Mockowanie zwracanej wartości</h3>
+        <pre><code class="language-javascript">
+// Funkcja mockująca z zwracaniem wartości
+const mockFn = jest.fn().mockReturnValue('Wynik mocka');
+
+test('powinien zwrócić zdefiniowaną wartość', () => {
+    const result = mockFn();
+    expect(result).toBe('Wynik mocka'); // Sprawdza zwracaną wartość
+});
+        </code></pre>
+
+        <h3>Przykład: Mockowanie z logiką</h3>
+        <pre><code class="language-javascript">
+// Funkcja mockująca z logiką
+const mockFn = jest.fn((x) => x * 2);
+
+test('powinien zwrócić podwojoną wartość', () => {
+    expect(mockFn(2)).toBe(4);
+    expect(mockFn(3)).toBe(6);
+});
+        </code></pre>
+
+        <h2>2. Testowanie wywołań funkcji</h2>
+        <p>Jest pozwala sprawdzać, czy funkcja została wywołana, ile razy oraz z jakimi argumentami.</p>
+
+        <h3>Przykład: Śledzenie liczby wywołań</h3>
+        <pre><code class="language-javascript">
+const mockFn = jest.fn();
+
+mockFn();
+mockFn();
+
+test('powinien zostać wywołany dwa razy', () => {
+    expect(mockFn).toHaveBeenCalledTimes(2); // Sprawdza liczbę wywołań
+});
+        </code></pre>
+
+        <h2>3. Szpiedzy (spies)</h2>
+        <p>Szpiedzy w Jest pozwalają monitorować rzeczywiste funkcje. Za pomocą <code>jest.spyOn()</code> można sprawdzić, czy funkcja została wywołana oraz jakie miała argumenty, bez zmieniania jej zachowania.</p>
+
+        <h3>Przykład: Szpiegowanie funkcji</h3>
+        <pre><code class="language-javascript">
+// Obiekt z funkcją
+const math = {
+    add: (a, b) => a + b,
+};
+
+// Szpiegowanie funkcji add
+jest.spyOn(math, 'add');
+
+test('powinien śledzić wywołanie funkcji add', () => {
+    math.add(2, 3);
+    expect(math.add).toHaveBeenCalledWith(2, 3); // Sprawdza argumenty
+    expect(math.add).toHaveBeenCalledTimes(1); // Sprawdza liczbę wywołań
+});
+        </code></pre>
+
+        <h3>Mockowanie szpiegowanej funkcji</h3>
+        <p>Można zastąpić logikę szpiegowanej funkcji za pomocą <code>mockImplementation</code>:</p>
+
+        <pre><code class="language-javascript">
+const math = {
+    add: (a, b) => a + b,
+};
+
+// Szpiegowanie i mockowanie funkcji add
+jest.spyOn(math, 'add').mockImplementation((a, b) => a * b);
+
+test('powinien zastąpić logikę funkcji add', () => {
+    expect(math.add(2, 3)).toBe(6); // Mockowana logika (mnożenie zamiast dodawania)
+});
+        </code></pre>
+
+        <h2>4. Resetowanie i przywracanie mocków</h2>
+        <p>Aby upewnić się, że mocki są niezależne w każdym teście, można je resetować lub przywracać do oryginalnego stanu.</p>
+
+        <h3>Przykład: Resetowanie mocków</h3>
+        <pre><code class="language-javascript">
+const mockFn = jest.fn();
+
+mockFn('pierwsze wywołanie');
+
+test('powinien śledzić pierwsze wywołanie', () => {
+    expect(mockFn).toHaveBeenCalledWith('pierwsze wywołanie');
+    mockFn.mockReset(); // Resetuje historię wywołań
+    expect(mockFn).not.toHaveBeenCalled(); // Historia jest pusta
+});
+        </code></pre>
+
+        <h3>Przykład: Przywracanie szpiegowanej funkcji</h3>
+        <pre><code class="language-javascript">
+const math = {
+    add: (a, b) => a + b,
+};
+
+// Szpiegowanie funkcji
+const spy = jest.spyOn(math, 'add').mockImplementation((a, b) => a * b);
+
+test('powinien używać mockowanej logiki', () => {
+    expect(math.add(2, 3)).toBe(6);
+    spy.mockRestore(); // Przywraca oryginalną funkcję
+    expect(math.add(2, 3)).toBe(5);
+});
+        </code></pre>
+
+        <h2>Podsumowanie</h2>
+        <p>Mocki i szpiedzy w Jest umożliwiają:</p>
+        <ul>
+            <li>Tworzenie funkcji mockujących za pomocą <code>jest.fn()</code>.</li>
+            <li>Śledzenie wywołań funkcji i przekazanych argumentów.</li>
+            <li>Szpiegowanie rzeczywistych funkcji za pomocą <code>jest.spyOn()</code>.</li>
+            <li>Resetowanie i przywracanie mocków oraz szpiegów.</li>
+        </ul>
+        <p>Dzięki mockom i szpiegom można precyzyjnie testować interakcje między funkcjami, zapewniając lepszą kontrolę nad testami.</p>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/prism.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/components/prism-javascript.min.js"></script>
+</body>
+</html>

@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Matchers w Jest</title>
+    <link rel="stylesheet" href="../styles.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/themes/prism-tomorrow.min.css" rel="stylesheet" />
+</head>
+<body>
+    <div class="container">
+        <h1>Matchers w Jest</h1>
+
+        <p>Matchers w Jest to funkcje, które pozwalają na porównywanie wartości, testowanie zachowań i sprawdzanie wyjątków. Dzięki nim testy stają się precyzyjne i czytelne.</p>
+
+        <h2>1. Porównywanie wartości</h2>
+        <p>Wbudowane matchery umożliwiają porównywanie wartości za pomocą różnych metod. Oto najpopularniejsze z nich:</p>
+
+        <h3>Porównywanie wartości prymitywnych</h3>
+        <pre><code class="language-javascript">
+test('powinien porównać liczby i stringi', () => {
+    expect(5).toBe(5); // Ścisłe porównanie (używa ===)
+    expect('Jest').toBe('Jest');
+});
+        </code></pre>
+
+        <h3>Porównywanie obiektów</h3>
+        <pre><code class="language-javascript">
+test('powinien porównać obiekty', () => {
+    const user = { name: 'Jan', age: 30 };
+    expect(user).toEqual({ name: 'Jan', age: 30 }); // Porównanie struktury i wartości
+});
+        </code></pre>
+
+        <h3>Negacja wyników</h3>
+        <pre><code class="language-javascript">
+test('powinien używać negacji', () => {
+    expect(5).not.toBe(10); // Negacja
+    expect('Jest').not.toBe('Mocha');
+});
+        </code></pre>
+
+        <h2>2. Testowanie liczb</h2>
+        <p>Jest oferuje matchery do sprawdzania wartości liczbowych:</p>
+
+        <pre><code class="language-javascript">
+test('powinien sprawdzić liczby', () => {
+    expect(10).toBeGreaterThan(5);
+    expect(10).toBeGreaterThanOrEqual(10);
+    expect(5).toBeLessThan(10);
+    expect(5).toBeLessThanOrEqual(5);
+});
+        </code></pre>
+
+        <h2>3. Testowanie stringów</h2>
+        <p>Do sprawdzania stringów możesz używać matcherów takich jak <code>toMatch</code>:</p>
+
+        <pre><code class="language-javascript">
+test('powinien dopasować string', () => {
+    expect('Hello, Jest!').toMatch(/Jest/); // Użycie wyrażenia regularnego
+    expect('Hello, Jest!').toMatch('Jest'); // Dopasowanie tekstu
+});
+        </code></pre>
+
+        <h2>4. Testowanie tablic i iterowalnych</h2>
+        <p>Sprawdzanie zawartości tablic za pomocą <code>toContain</code>:</p>
+
+        <pre><code class="language-javascript">
+test('powinien zawierać element w tablicy', () => {
+    const fruits = ['apple', 'banana', 'cherry'];
+    expect(fruits).toContain('banana');
+    expect(fruits).not.toContain('grape');
+});
+        </code></pre>
+
+        <h2>5. Testowanie wyjątków</h2>
+        <p>Sprawdzanie, czy funkcja rzuca wyjątek, jest możliwe za pomocą <code>toThrow</code>:</p>
+
+        <pre><code class="language-javascript">
+function throwError() {
+    throw new Error('Wystąpił błąd');
+}
+
+test('powinien rzucić wyjątek', () => {
+    expect(() => throwError()).toThrow(); // Sprawdza, czy funkcja rzuca wyjątek
+    expect(() => throwError()).toThrow('Wystąpił błąd'); // Sprawdza komunikat błędu
+});
+        </code></pre>
+
+        <h2>6. Matchery dla wartości null, undefined i truthy/falsy</h2>
+        <p>Jest oferuje matchery dla wartości logicznych:</p>
+
+        <pre><code class="language-javascript">
+test('powinien sprawdzić wartości null, undefined i logiczne', () => {
+    expect(null).toBeNull();
+    expect(undefined).toBeUndefined();
+    expect('Tekst').toBeDefined();
+
+    expect(true).toBeTruthy(); // Prawdziwa wartość
+    expect(false).toBeFalsy(); // Fałszywa wartość
+});
+        </code></pre>
+
+        <h2>Podsumowanie</h2>
+        <p>Najczęściej używane matchery w Jest:</p>
+        <ul>
+            <li><code>toBe</code>, <code>toEqual</code> - Porównywanie wartości.</li>
+            <li><code>toMatch</code>, <code>toContain</code> - Sprawdzanie stringów i tablic.</li>
+            <li><code>toThrow</code> - Testowanie wyjątków.</li>
+            <li><code>toBeTruthy</code>, <code>toBeFalsy</code> - Sprawdzanie wartości logicznych.</li>
+        </ul>
+        <p>Matchery w Jest pozwalają na precyzyjne testowanie każdego aspektu aplikacji, co czyni framework niezwykle wszechstronnym.</p>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/prism.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/components/prism-javascript.min.js"></script>
+</body>
+</html>

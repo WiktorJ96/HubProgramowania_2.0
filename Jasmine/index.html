@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Jasmine - Strona Główna</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="container">
+        <h1>Witaj na stronie o Jasmine</h1>
+        <p>Wybierz temat, aby dowiedzieć się więcej o różnych aspektach Jasmine.</p>
+
+        <div class="accordion">
+
+            <div class="accordion-item">
+                <h2 class="accordion-header">Podstawowy</h2>
+                <div class="accordion-content">
+                    <ul>    
+                        <li><a href="./Rozdziały/1.Podstawy Jasmine.html">Podstawy Jasmine</a></li>
+                        <li><a href="./Rozdziały/2.Matchers.html">Matchers</a></li>
+                        <li><a href="./Rozdziały/3.Spies.html">Spies</a></li>
+                        <li><a href="./Rozdziały/11.Uruchamianie testow.html">Uruchamianie testów</a></li>
+                        <li><a href="./Rozdziały/8.Metody Before_After.html">Metody Before/After</a></li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="accordion-item"> 
+                <h2 class="accordion-header">Średnio zaawansowany</h2>
+                <div class="accordion-content">
+                    <ul>
+                        <li><a href="./Rozdziały/4.Asynchroniczne testy.html">Asynchroniczne testy</a></li>
+                        <li><a href="./Rozdziały/5.Fixtures.html">Fixtures</a></li>
+                        <li><a href="./Rozdziały/6.Konfiguracja srodowiska.html">Konfiguracja środowiska</a></li>
+                        <li><a href="./Rozdziały/7.Mock i Stuby.html">Mock i Stuby</a></li>
+                        <li><a href="./Rozdziały/9.TestyBDD.html">Testy BDD</a></li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="accordion-item">
+                <h2 class="accordion-header">Zaawansowany</h2>
+                <div class="accordion-content">
+                    <ul>
+                        <li><a href="./Rozdziały/10.Integracja.html">Integracja</a></li>
+                        <li><a href="./Rozdziały/12.Optymalizacja testow.html">Optymalizacja testów</a></li>
+                    </ul>
+                </div>
+            </div>
+            
+        </div>
+
+    </div>
+    
+    <script>
+        document.querySelectorAll('.accordion-header').forEach(header => {
+            header.addEventListener('click', function() {
+                const accordionContent = this.nextElementSibling;
+
+                if (accordionContent.style.maxHeight) {
+                    accordionContent.style.maxHeight = null; // Zwijanie
+                } else {
+                    accordionContent.style.maxHeight = accordionContent.scrollHeight + "px"; // Rozwijanie
+                }
+            });
+        });
+    </script>
+</body>
+</html>

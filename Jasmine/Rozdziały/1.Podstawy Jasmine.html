@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Podstawy Jasmine</title>
+    <link rel="stylesheet" href="../styles.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/themes/prism-tomorrow.min.css" rel="stylesheet" />
+</head>
+<body>
+    <div class="container">
+        <h1>Podstawy Jasmine</h1>
+
+        <p>Jasmine to popularne narzędzie do testowania aplikacji JavaScript. Jest to framework umożliwiający pisanie testów jednostkowych (unit tests) w prosty i przejrzysty sposób. W tej sekcji przedstawimy konfigurację, uruchamianie testów oraz podstawowe struktury takie jak <code>describe</code> i <code>it</code>.</p>
+
+        <h2>Konfiguracja</h2>
+        <p>Aby rozpocząć korzystanie z Jasmine, musisz go zainstalować za pomocą menedżera pakietów npm:</p>
+
+        <pre><code class="language-bash">
+npm install --save-dev jasmine
+        </code></pre>
+
+        <p>Następnie skonfiguruj Jasmine, uruchamiając polecenie inicjalizujące:</p>
+
+        <pre><code class="language-bash">
+npx jasmine init
+        </code></pre>
+
+        <p>Powyższe polecenie utworzy odpowiednią strukturę katalogów i pliki potrzebne do uruchamiania testów.</p>
+
+        <h2>Uruchamianie testów</h2>
+        <p>Testy w Jasmine można uruchamiać za pomocą polecenia:</p>
+
+        <pre><code class="language-bash">
+npx jasmine
+        </code></pre>
+
+        <p>To polecenie automatycznie znajdzie pliki z testami w katalogu <code>spec</code> i uruchomi je.</p>
+
+        <h2>Podstawowe struktury</h2>
+        <p>Jasmine używa struktur takich jak <code>describe</code> i <code>it</code> do organizowania i definiowania testów.</p>
+
+        <h3>Przykład</h3>
+        <p>Poniżej przedstawiono prosty przykład testu w Jasmine:</p>
+
+        <pre><code class="language-javascript">
+describe('Prosty test', () => {
+    it('powinien dodać dwie liczby', () => {
+        const suma = 2 + 3;
+        expect(suma).toBe(5);
+        // Oczekujemy, że wynik dodawania 2 i 3 wynosi 5
+    });
+});
+        </code></pre>
+
+        <p><code>describe</code> jest używane do grupowania testów w zestawy, a <code>it</code> definiuje pojedynczy test. Oczekiwania (expectations) są definiowane za pomocą funkcji <code>expect</code>.</p>
+
+        <h2>Podsumowanie</h2>
+        <p>Jasmine jest prostym i efektywnym narzędziem do testowania aplikacji JavaScript. Warto pamiętać o podstawowych krokach:</p>
+        <ul>
+            <li>Instalacja i konfiguracja Jasmine</li>
+            <li>Uruchamianie testów za pomocą <code>npx jasmine</code></li>
+            <li>Organizowanie testów przy użyciu <code>describe</code> i <code>it</code></li>
+        </ul>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/prism.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/components/prism-javascript.min.js"></script>
+</body>
+</html>

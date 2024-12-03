@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Spies w Jasmine</title>
+    <link rel="stylesheet" href="../styles.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/themes/prism-tomorrow.min.css" rel="stylesheet" />
+</head>
+<body>
+    <div class="container">
+        <h1>Spies (szpiedzy) w Jasmine</h1>
+
+        <p>Spies (szpiedzy) w Jasmine to narzędzia służące do monitorowania funkcji w czasie testów. Umożliwiają śledzenie wywołań, sprawdzanie argumentów oraz symulowanie zachowań funkcji. W tej sekcji omówimy tworzenie spy, ich zastosowanie oraz sprawdzanie wywołań i argumentów.</p>
+
+        <h2>Tworzenie spy</h2>
+        <p>Spy w Jasmine można utworzyć za pomocą funkcji <code>spyOn</code>, która zastępuje oryginalną funkcję szpiegiem. Oto przykład:</p>
+
+        <pre><code class="language-javascript">
+const obiekt = {
+    funkcja: (x) => x * 2
+};
+
+describe('Tworzenie szpiega', () => {
+    it('powinien śledzić wywołania funkcji', () => {
+        spyOn(obiekt, 'funkcja');
+        obiekt.funkcja(4);
+        expect(obiekt.funkcja).toHaveBeenCalled();
+        // Sprawdzenie, czy funkcja została wywołana
+    });
+});
+        </code></pre>
+
+        <p>Spy umożliwia monitorowanie wywołań oryginalnej funkcji bez ingerencji w jej działanie.</p>
+
+        <h2>Śledzenie wywołań</h2>
+        <p>Jasmine pozwala sprawdzić, ile razy dana funkcja została wywołana oraz jakie argumenty zostały przekazane podczas wywołań:</p>
+
+        <pre><code class="language-javascript">
+describe('Śledzenie wywołań funkcji', () => {
+    it('powinien sprawdzić liczbę wywołań i argumenty', () => {
+        spyOn(obiekt, 'funkcja');
+        obiekt.funkcja(2);
+        obiekt.funkcja(3);
+        expect(obiekt.funkcja).toHaveBeenCalledTimes(2);
+        // Sprawdzenie liczby wywołań
+        expect(obiekt.funkcja).toHaveBeenCalledWith(2);
+        expect(obiekt.funkcja).toHaveBeenCalledWith(3);
+        // Sprawdzenie, czy funkcja była wywołana z odpowiednimi argumentami
+    });
+});
+        </code></pre>
+
+        <p>Dzięki spy można sprawdzać dokładne szczegóły dotyczące zachowania funkcji podczas testów.</p>
+
+        <h2>Symulowanie zachowań</h2>
+        <p>Spy pozwala na symulowanie zachowań funkcji poprzez nadpisanie jej domyślnej implementacji. Można to osiągnąć za pomocą <code>and.returnValue</code> lub <code>and.callFake</code>.</p>
+
+        <h3>Przykład</h3>
+        <pre><code class="language-javascript">
+describe('Symulowanie zachowań', () => {
+    it('powinien zwrócić niestandardową wartość', () => {
+        spyOn(obiekt, 'funkcja').and.returnValue(10);
+        expect(obiekt.funkcja(5)).toBe(10);
+        // Funkcja zawsze zwraca 10, niezależnie od argumentów
+    });
+
+    it('powinien symulować działanie funkcji', () => {
+        spyOn(obiekt, 'funkcja').and.callFake((x) => x + 5);
+        expect(obiekt.funkcja(3)).toBe(8);
+        // Funkcja działa zgodnie z niestandardową logiką
+    });
+});
+        </code></pre>
+
+        <p>Symulowanie zachowań pozwala testować różne scenariusze bez zmiany oryginalnego kodu.</p>
+
+        <h2>Podsumowanie</h2>
+        <p>Spies w Jasmine są potężnym narzędziem do testowania zachowań funkcji:</p>
+        <ul>
+            <li>Umożliwiają <strong>śledzenie wywołań</strong> i sprawdzanie argumentów.</li>
+            <li>Pozwalają na <strong>symulowanie zachowań</strong> za pomocą metod takich jak <code>and.returnValue</code> i <code>and.callFake</code>.</li>
+        </ul>
+        <p>Wykorzystanie szpiegów zwiększa elastyczność i precyzję testów.</p>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/prism.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/components/prism-javascript.min.js"></script>
+</body>
+</html>

@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Test Coverage i Watch Mode w Jest</title>
+    <link rel="stylesheet" href="../styles.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/themes/prism-tomorrow.min.css" rel="stylesheet" />
+</head>
+<body>
+    <div class="container">
+        <h1>Test Coverage i Watch Mode w Jest</h1>
+
+        <p>Jest oferuje narzędzia do mierzenia pokrycia kodu testami oraz tryb obserwacji zmian (Watch Mode), który przyspiesza proces testowania w trakcie rozwoju projektu.</p>
+
+        <h2>1. Test Coverage (Pokrycie kodu)</h2>
+        <p>Test Coverage to pomiar, który pokazuje, jaka część kodu aplikacji jest objęta testami. Jest generuje szczegółowy raport pokrycia.</p>
+
+        <h3>1.1. Generowanie raportu pokrycia</h3>
+        <p>Użyj flagi <code>--coverage</code>, aby wygenerować raport pokrycia kodu:</p>
+        <pre><code class="language-bash">
+npx jest --coverage
+        </code></pre>
+
+        <p>Po uruchomieniu tego polecenia w katalogu projektu pojawi się folder <code>coverage</code>, który zawiera raport w formacie HTML, JSON i tekstowym.</p>
+
+        <h3>1.2. Konfiguracja pokrycia w pliku <code>jest.config.js</code></h3>
+        <p>Możesz dostosować zbieranie pokrycia za pomocą konfiguracji:</p>
+        <pre><code class="language-javascript">
+module.exports = {
+    collectCoverage: true, // Włączenie zbierania pokrycia
+    collectCoverageFrom: ['src/**/*.js'], // Ścieżki plików do analizy
+    coverageThreshold: {
+        global: {
+            branches: 80, // Minimalne pokrycie gałęzi
+            functions: 80, // Minimalne pokrycie funkcji
+            lines: 80, // Minimalne pokrycie linii kodu
+            statements: 80, // Minimalne pokrycie instrukcji
+        },
+    },
+    coverageDirectory: 'coverage', // Lokalizacja raportu
+};
+        </code></pre>
+
+        <h3>1.3. Wykluczanie plików z pokrycia</h3>
+        <p>Możesz wykluczyć określone pliki z raportu pokrycia, np. pliki testowe:</p>
+        <pre><code class="language-javascript">
+module.exports = {
+    collectCoverageFrom: ['src/**/*.js', '!src/**/*.test.js'], // Wykluczenie plików testowych
+};
+        </code></pre>
+
+        <h2>2. Tryb Watch Mode</h2>
+        <p>Tryb Watch Mode umożliwia automatyczne uruchamianie testów po każdej zmianie w kodzie. Jest to przydatne podczas pracy nad dużymi projektami.</p>
+
+        <h3>2.1. Uruchamianie trybu Watch</h3>
+        <p>Aby włączyć tryb obserwacji, użyj flagi <code>--watch</code>:</p>
+        <pre><code class="language-bash">
+npx jest --watch
+        </code></pre>
+
+        <p>W trybie Watch Jest monitoruje zmiany w kodzie i uruchamia tylko te testy, które dotyczą zmodyfikowanych plików.</p>
+
+        <h3>2.2. Tryb Watch All</h3>
+        <p>Jeśli chcesz uruchamiać wszystkie testy po każdej zmianie, użyj flagi <code>--watchAll</code>:</p>
+        <pre><code class="language-bash">
+npx jest --watchAll
+        </code></pre>
+
+        <h3>2.3. Obsługa menu Watch</h3>
+        <p>W trybie Watch dostępne jest interaktywne menu, w którym możesz filtrować testy według nazw plików lub wzorców.</p>
+        <pre><code class="language-text">
+Press "p" to filter by a filename pattern.
+Press "t" to filter by a test name.
+Press "q" to quit watch mode.
+        </code></pre>
+
+        <h2>3. Generowanie raportu pokrycia w trybie Watch</h2>
+        <p>Możesz połączyć tryb Watch z raportem pokrycia za pomocą flag:</p>
+        <pre><code class="language-bash">
+npx jest --watch --coverage
+        </code></pre>
+
+        <h2>4. Tworzenie niestandardowych skryptów</h2>
+        <p>Aby ułatwić uruchamianie testów z pokryciem lub w trybie Watch, dodaj skrypty do <code>package.json</code>:</p>
+        <pre><code class="language-json">
+"scripts": {
+    "test": "jest",
+    "test:watch": "jest --watch",
+    "test:coverage": "jest --coverage",
+    "test:watch:coverage": "jest --watch --coverage"
+}
+        </code></pre>
+
+        <p>Uruchomienie niestandardowych skryptów:</p>
+        <pre><code class="language-bash">
+npm run test:coverage
+npm run test:watch:coverage
+        </code></pre>
+
+        <h2>5. Praktyczne wskazówki</h2>
+        <ul>
+            <li>Używaj trybu Watch Mode podczas aktywnego rozwoju projektu, aby zaoszczędzić czas.</li>
+            <li>Regularnie generuj raport pokrycia, aby monitorować postęp w testowaniu aplikacji.</li>
+            <li>Ustaw minimalne progi pokrycia w konfiguracji Jest, aby wymusić pisanie wystarczającej liczby testów.</li>
+        </ul>
+
+        <h2>Podsumowanie</h2>
+        <p>Test Coverage i Watch Mode to potężne narzędzia w Jest:</p>
+        <ul>
+            <li>Test Coverage mierzy, jaka część kodu jest objęta testami.</li>
+            <li>Tryb Watch automatycznie uruchamia testy po zmianach w kodzie.</li>
+            <li>Kombinacja obu funkcji pozwala na efektywne testowanie i śledzenie postępów w projekcie.</li>
+        </ul>
+        <p>Dzięki tym narzędziom możesz szybko iterować nad kodem i zapewniać jego wysoką jakość.</p>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/prism.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/components/prism-javascript.min.js"></script>
+</body>
+</html>

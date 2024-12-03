@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Asynchroniczne testy w Jasmine</title>
+    <link rel="stylesheet" href="../styles.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/themes/prism-tomorrow.min.css" rel="stylesheet" />
+</head>
+<body>
+    <div class="container">
+        <h1>Asynchroniczne testy w Jasmine</h1>
+
+        <p>Jasmine obsługuje testowanie kodu asynchronicznego, umożliwiając testowanie funkcji korzystających z operacji asynchronicznych, takich jak <code>setTimeout</code>, <code>Promises</code>, czy <code>async/await</code>. Poniżej omówimy, jak używać metody <code>done()</code> oraz podejścia z <code>async/await</code>.</p>
+
+        <h2>Testowanie z <code>done()</code></h2>
+        <p>Jasmine oferuje funkcję <code>done()</code>, która służy do sygnalizowania zakończenia asynchronicznego testu. Przykład:</p>
+
+        <pre><code class="language-javascript">
+describe('Asynchroniczne testy z done()', () => {
+    it('powinien poczekać na zakończenie operacji asynchronicznej', (done) => {
+        setTimeout(() => {
+            expect(true).toBe(true);
+            done();
+            // Informujemy Jasmine, że test został zakończony
+        }, 1000);
+    });
+});
+        </code></pre>
+
+        <p>W tym przypadku <code>done()</code> jest wywoływane po zakończeniu operacji <code>setTimeout</code>, co umożliwia poprawne zakończenie testu.</p>
+
+        <h2>Testowanie z <code>async/await</code></h2>
+        <p>Jasmine wspiera użycie <code>async/await</code>, co pozwala pisać bardziej czytelny kod testów. Przykład:</p>
+
+        <pre><code class="language-javascript">
+function fetchData() {
+    return new Promise((resolve) => {
+        setTimeout(() => resolve('Dane pobrane!'), 1000);
+    });
+}
+
+describe('Asynchroniczne testy z async/await', () => {
+    it('powinien oczekiwać na wynik funkcji asynchronicznej', async () => {
+        const data = await fetchData();
+        expect(data).toBe('Dane pobrane!');
+        // Testuje wynik funkcji asynchronicznej
+    });
+});
+        </code></pre>
+
+        <p>Dzięki <code>async/await</code> testy stają się bardziej przejrzyste i zbliżone do kodu synchronicznego.</p>
+
+        <h2>Obsługa błędów w testach asynchronicznych</h2>
+        <p>W przypadku kodu asynchronicznego ważne jest odpowiednie testowanie błędów. Przykład użycia <code>async/await</code> do testowania błędów:</p>
+
+        <pre><code class="language-javascript">
+function fetchWithError() {
+    return new Promise((_, reject) => {
+        setTimeout(() => reject(new Error('Błąd pobierania danych')), 1000);
+    });
+}
+
+describe('Obsługa błędów w testach', () => {
+    it('powinien obsłużyć błąd asynchroniczny', async () => {
+        try {
+            await fetchWithError();
+        } catch (error) {
+            expect(error.message).toBe('Błąd pobierania danych');
+            // Testuje, czy funkcja rzuca odpowiedni błąd
+        }
+    });
+});
+        </code></pre>
+
+        <p>Obsługa błędów w <code>async/await</code> pozwala testować różne scenariusze, takie jak wyjątki i problemy sieciowe.</p>
+
+        <h2>Podsumowanie</h2>
+        <p>Testowanie asynchronicznego kodu w Jasmine można realizować na kilka sposobów:</p>
+        <ul>
+            <li>Używając <code>done()</code>, aby zakończyć test po wykonaniu operacji asynchronicznej.</li>
+            <li>Stosując <code>async/await</code>, co pozwala pisać czytelniejsze testy.</li>
+            <li>Obsługując błędy w operacjach asynchronicznych za pomocą try-catch.</li>
+        </ul>
+        <p>Każda z tych technik pozwala na elastyczne testowanie kodu, który działa w sposób asynchroniczny.</p>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/prism.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/components/prism-javascript.min.js"></script>
+</body>
+</html>

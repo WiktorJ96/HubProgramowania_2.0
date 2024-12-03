@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Konfiguracja środowiska Jasmine</title>
+    <link rel="stylesheet" href="../styles.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/themes/prism-tomorrow.min.css" rel="stylesheet" />
+</head>
+<body>
+    <div class="container">
+        <h1>Konfiguracja środowiska Jasmine</h1>
+
+        <p>Jasmine to potężny framework testowy dla JavaScript, który można łatwo zintegrować z npm i używać za pomocą CLI. Oferuje również możliwość konfigurowania reporters (raportujących wynik testów), aby dostosować sposób prezentacji wyników testów. W tej sekcji omówimy konfigurację środowiska dla Jasmine.</p>
+
+        <h2>Integracja z npm</h2>
+        <p>Jasmine można zainstalować i skonfigurować jako zależność projektu za pomocą npm:</p>
+
+        <h3>Instalacja</h3>
+        <pre><code class="language-bash">
+npm install --save-dev jasmine
+        </code></pre>
+
+        <h3>Inicjalizacja Jasmine</h3>
+        <p>Po instalacji należy zainicjalizować środowisko Jasmine:</p>
+
+        <pre><code class="language-bash">
+npx jasmine init
+        </code></pre>
+
+        <p>Powyższe polecenie utworzy katalog <code>spec</code> oraz plik <code>spec/support/jasmine.json</code>, który zawiera domyślne ustawienia konfiguracyjne.</p>
+
+        <h2>Jasmine CLI</h2>
+        <p>Jasmine CLI (Command Line Interface) pozwala uruchamiać testy w terminalu. Przykład podstawowego użycia:</p>
+
+        <pre><code class="language-bash">
+npx jasmine
+        </code></pre>
+
+        <p>Możesz również uruchamiać konkretne pliki testowe, podając ich ścieżkę:</p>
+
+        <pre><code class="language-bash">
+npx jasmine spec/nazwa_pliku_spec.js
+        </code></pre>
+
+        <h3>Konfiguracja CLI</h3>
+        <p>Plik <code>jasmine.json</code> zawiera ustawienia CLI, które możesz dostosować, np.:</p>
+
+        <pre><code class="language-json">
+{
+  "spec_dir": "spec",
+  "spec_files": [
+    "**/*[sS]pec.js"
+  ],
+  "helpers": [
+    "helpers/**/*.js"
+  ],
+  "stopSpecOnExpectationFailure": false,
+  "random": false
+}
+        </code></pre>
+
+        <p>Możesz zmienić, czy testy powinny być wykonywane w losowej kolejności (<code>random</code>) oraz czy mają się zatrzymać przy pierwszym błędzie (<code>stopSpecOnExpectationFailure</code>).</p>
+
+        <h2>Ustawienia reporters</h2>
+        <p>Jasmine pozwala dostosować sposób raportowania wyników testów za pomocą reporters. Przykład dodania prostego reportera:</p>
+
+        <h3>Dodanie niestandardowego reportera</h3>
+        <pre><code class="language-javascript">
+const Jasmine = require('jasmine');
+const jasmine = new Jasmine();
+
+const myReporter = {
+    jasmineStarted: function(suiteInfo) {
+        console.log(`Rozpoczęto testowanie z ${suiteInfo.totalSpecsDefined} specyfikacjami.`);
+    },
+    specDone: function(result) {
+        console.log(`Spec: ${result.fullName} zakończony ${result.status}.`);
+        for (let i = 0; i < result.failedExpectations.length; i++) {
+            console.log(`  Błąd: ${result.failedExpectations[i].message}`);
+        }
+    },
+    jasmineDone: function() {
+        console.log('Wszystkie testy zakończone.');
+    }
+};
+
+jasmine.addReporter(myReporter);
+jasmine.execute();
+        </code></pre>
+
+        <p>Powyższy kod dodaje prostego reportera, który loguje informacje o rozpoczęciu testów, wyniki poszczególnych specyfikacji oraz podsumowanie po zakończeniu testowania.</p>
+
+        <h3>Integracja z reporterami zewnętrznymi</h3>
+        <p>Możesz także użyć zewnętrznych reporterów, takich jak <a href="https://github.com/larrymyers/jasmine-reporters" target="_blank">jasmine-reporters</a>, aby generować bardziej rozbudowane raporty, np. w formacie XML:</p>
+
+        <pre><code class="language-bash">
+npm install --save-dev jasmine-reporters
+        </code></pre>
+
+        <p>Dodaj reporter do konfiguracji:</p>
+
+        <pre><code class="language-javascript">
+const JasmineReporters = require('jasmine-reporters');
+jasmine.addReporter(new JasmineReporters.JUnitXmlReporter({
+    savePath: './reports',
+    consolidateAll: false
+}));
+        </code></pre>
+
+        <h2>Podsumowanie</h2>
+        <p>Konfiguracja środowiska Jasmine obejmuje:</p>
+        <ul>
+            <li>Integrację z npm i konfigurację CLI do uruchamiania testów.</li>
+            <li>Dostosowanie ustawień za pomocą pliku <code>jasmine.json</code>.</li>
+            <li>Dodawanie reporterów w celu lepszego raportowania wyników testów.</li>
+        </ul>
+        <p>Dzięki elastycznym możliwościom konfiguracji Jasmine można dostosować do różnych projektów i potrzeb testowych.</p>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/prism.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/components/prism-javascript.min.js"></script>
+</body>
+</html>

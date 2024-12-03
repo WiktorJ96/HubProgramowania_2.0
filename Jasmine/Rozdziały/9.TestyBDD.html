@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Testy BDD w Jasmine</title>
+    <link rel="stylesheet" href="../styles.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/themes/prism-tomorrow.min.css" rel="stylesheet" />
+</head>
+<body>
+    <div class="container">
+        <h1>Testy BDD w Jasmine</h1>
+
+        <p>Testowanie w stylu BDD (Behavior-Driven Development) skupia się na opisywaniu zachowań aplikacji w sposób zrozumiały dla programistów i interesariuszy. Jasmine, jako framework BDD, pozwala pisać czytelne testy za pomocą opisowych metod, takich jak <code>describe</code>, <code>it</code>, i <code>expect</code>.</p>
+
+        <h2>Elementy stylu BDD w Jasmine</h2>
+        <p>Styl BDD w Jasmine opiera się na następujących elementach:</p>
+        <ul>
+            <li><strong><code>describe</code></strong>: Grupa testów opisująca moduł lub funkcję.</li>
+            <li><strong><code>it</code></strong>: Pojedynczy przypadek testowy opisujący konkretne zachowanie.</li>
+            <li><strong><code>expect</code></strong>: Wyrażenie, które sprawdza oczekiwane zachowanie.</li>
+        </ul>
+
+        <h3>Przykład prostego testu w stylu BDD</h3>
+        <pre><code class="language-javascript">
+describe('Kalkulator', () => {
+    it('powinien dodać dwie liczby', () => {
+        const suma = 2 + 3;
+        expect(suma).toBe(5);
+        // Sprawdza, czy dodanie 2 i 3 daje wynik 5
+    });
+
+    it('powinien pomnożyć dwie liczby', () => {
+        const iloczyn = 4 * 3;
+        expect(iloczyn).toBe(12);
+        // Sprawdza, czy mnożenie 4 i 3 daje wynik 12
+    });
+});
+        </code></pre>
+
+        <h2>Opisowe testy</h2>
+        <p>Testy w stylu BDD powinny być zrozumiałe i jasno komunikować oczekiwane zachowanie aplikacji. Stosowanie pełnych zdań w <code>describe</code> i <code>it</code> poprawia czytelność.</p>
+
+        <h3>Przykład testu z czytelnym opisem</h3>
+        <pre><code class="language-javascript">
+describe('Funkcja zamówienia produktu', () => {
+    it('powinna dodać produkt do koszyka, jeśli jest dostępny', () => {
+        const koszyk = [];
+        const produkt = { id: 1, nazwa: 'Laptop', dostepny: true };
+
+        if (produkt.dostepny) {
+            koszyk.push(produkt);
+        }
+
+        expect(koszyk.length).toBe(1);
+        expect(koszyk[0].nazwa).toBe('Laptop');
+        // Sprawdza, czy produkt został dodany do koszyka
+    });
+
+    it('nie powinna dodać produktu do koszyka, jeśli jest niedostępny', () => {
+        const koszyk = [];
+        const produkt = { id: 2, nazwa: 'Telefon', dostepny: false };
+
+        if (produkt.dostepny) {
+            koszyk.push(produkt);
+        }
+
+        expect(koszyk.length).toBe(0);
+        // Sprawdza, czy koszyk pozostał pusty
+    });
+});
+        </code></pre>
+
+        <h2>Organizacja testów w stylu BDD</h2>
+        <p>W stylu BDD testy są organizowane hierarchicznie, aby jasno pokazać zależności między modułami i zachowaniami. Przykład:</p>
+
+        <pre><code class="language-javascript">
+describe('Moduł logowania', () => {
+    describe('Kiedy użytkownik wprowadzi poprawne dane', () => {
+        it('powinien zalogować użytkownika', () => {
+            const isLoggedIn = true;
+            expect(isLoggedIn).toBe(true);
+        });
+    });
+
+    describe('Kiedy użytkownik wprowadzi błędne dane', () => {
+        it('powinien wyświetlić komunikat o błędzie', () => {
+            const komunikat = 'Nieprawidłowe dane logowania';
+            expect(komunikat).toBe('Nieprawidłowe dane logowania');
+        });
+    });
+});
+        </code></pre>
+
+        <p>Taka struktura testów poprawia czytelność i ułatwia zrozumienie zachowania aplikacji.</p>
+
+        <h2>Podsumowanie</h2>
+        <p>Testy BDD w Jasmine pomagają tworzyć czytelne i zrozumiałe testy:</p>
+        <ul>
+            <li>Opisowe <code>describe</code> i <code>it</code> komunikują oczekiwane zachowanie aplikacji.</li>
+            <li>Wyrażenia <code>expect</code> sprawdzają wyniki testów.</li>
+            <li>Hierarchia testów pozwala na jasne grupowanie zachowań.</li>
+        </ul>
+        <p>Styl BDD wspiera współpracę między programistami, testerami i interesariuszami, ułatwiając wspólne zrozumienie wymagań.</p>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/prism.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/components/prism-javascript.min.js"></script>
+</body>
+</html>

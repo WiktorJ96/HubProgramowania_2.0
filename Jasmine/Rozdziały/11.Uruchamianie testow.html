@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Uruchamianie testów w Jasmine</title>
+    <link rel="stylesheet" href="../styles.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/themes/prism-tomorrow.min.css" rel="stylesheet" />
+</head>
+<body>
+    <div class="container">
+        <h1>Uruchamianie testów w Jasmine</h1>
+
+        <p>Jasmine oferuje elastyczne opcje uruchamiania testów, zarówno w przeglądarce, jak i w konsoli. Poniżej opisano proces konfiguracji i uruchamiania testów w obu środowiskach.</p>
+
+        <h2>Konfiguracja testów w przeglądarce</h2>
+        <p>Testy Jasmine można uruchamiać w przeglądarce, korzystając z wygenerowanego interfejsu HTML. Poniżej przedstawiono kroki konfiguracji:</p>
+
+        <h3>1. Instalacja Jasmine</h3>
+        <pre><code class="language-bash">
+npm install --save-dev jasmine
+        </code></pre>
+
+        <h3>2. Inicjalizacja projektu</h3>
+        <pre><code class="language-bash">
+npx jasmine init
+        </code></pre>
+
+        <p>Powyższe polecenie utworzy pliki i foldery potrzebne do uruchamiania testów, w tym <code>spec/support/jasmine.json</code>.</p>
+
+        <h3>3. Dodanie pliku HTML dla testów</h3>
+        <p>Utwórz plik HTML, który załaduje Jasmine i pliki testowe:</p>
+
+        <pre><code class="language-html">
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <title>Testy Jasmine</title>
+    <link rel="stylesheet" href="node_modules/jasmine-core/lib/jasmine-core/jasmine.css">
+</head>
+<body>
+    <script src="node_modules/jasmine-core/lib/jasmine-core/jasmine.js"></script>
+    <script src="node_modules/jasmine-core/lib/jasmine-core/jasmine-html.js"></script>
+    <script src="node_modules/jasmine-core/lib/jasmine-core/boot.js"></script>
+
+    <!-- Dodaj pliki testowe -->
+    <script src="spec/mySpec.js"></script>
+</body>
+</html>
+        </code></pre>
+
+        <p>Otwórz ten plik w przeglądarce, aby uruchomić testy i zobaczyć wyniki w graficznym interfejsie Jasmine.</p>
+
+        <h2>Użycie Jasmine CLI do uruchamiania w konsoli</h2>
+        <p>Jasmine CLI umożliwia uruchamianie testów w konsoli, co jest szczególnie przydatne w zautomatyzowanych środowiskach.</p>
+
+        <h3>1. Instalacja Jasmine CLI</h3>
+        <pre><code class="language-bash">
+npm install --global jasmine
+        </code></pre>
+
+        <h3>2. Uruchamianie testów</h3>
+        <p>Aby uruchomić testy, użyj polecenia:</p>
+
+        <pre><code class="language-bash">
+jasmine
+        </code></pre>
+
+        <p>Możesz także uruchomić konkretne pliki testowe, podając ich ścieżkę:</p>
+
+        <pre><code class="language-bash">
+jasmine spec/mySpec.js
+        </code></pre>
+
+        <h3>3. Konfiguracja pliku <code>jasmine.json</code></h3>
+        <p>Plik <code>jasmine.json</code> pozwala dostosować uruchamianie testów. Przykład konfiguracji:</p>
+
+        <pre><code class="language-json">
+{
+  "spec_dir": "spec",
+  "spec_files": [
+    "**/*[sS]pec.js"
+  ],
+  "helpers": [
+    "helpers/**/*.js"
+  ],
+  "random": true,
+  "stopSpecOnExpectationFailure": false
+}
+        </code></pre>
+
+        <p>Możesz zmienić kolejność testów na losową (<code>random</code>) lub ustawić, czy testy mają się zatrzymać przy pierwszym błędzie (<code>stopSpecOnExpectationFailure</code>).</p>
+
+        <h2>Porównanie przeglądarki i CLI</h2>
+        <table>
+            <thead>
+                <tr>
+                    <th>Środowisko</th>
+                    <th>Zalety</th>
+                    <th>Wady</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>Przeglądarka</td>
+                    <td>
+                        <ul>
+                            <li>Intuicyjny graficzny interfejs.</li>
+                            <li>Łatwe w debugowaniu dzięki narzędziom deweloperskim przeglądarki.</li>
+                        </ul>
+                    </td>
+                    <td>
+                        <ul>
+                            <li>Wymaga ręcznego otwierania pliku HTML.</li>
+                            <li>Mniej odpowiednie dla CI/CD.</li>
+                        </ul>
+                    </td>
+                </tr>
+                <tr>
+                    <td>CLI</td>
+                    <td>
+                        <ul>
+                            <li>Automatyzacja w CI/CD.</li>
+                            <li>Szybkie i wydajne uruchamianie testów.</li>
+                        </ul>
+                    </td>
+                    <td>
+                        <ul>
+                            <li>Brak graficznego interfejsu.</li>
+                            <li>Trudniejsze debugowanie.</li>
+                        </ul>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+
+        <h2>Podsumowanie</h2>
+        <p>Jasmine oferuje dwie wygodne metody uruchamiania testów:</p>
+        <ul>
+            <li>Konfiguracja testów w przeglądarce dla łatwego debugowania i intuicyjnego interfejsu.</li>
+            <li>Użycie CLI do szybkiego i zautomatyzowanego uruchamiania testów w konsoli.</li>
+        </ul>
+        <p>Wybór zależy od potrzeb projektu i środowiska, w którym testy są wykonywane.</p>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/prism.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/components/prism-javascript.min.js"></script>
+</body>
+</html>

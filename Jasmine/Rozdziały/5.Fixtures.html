@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Fixtures w Jasmine</title>
+    <link rel="stylesheet" href="../styles.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/themes/prism-tomorrow.min.css" rel="stylesheet" />
+</head>
+<body>
+    <div class="container">
+        <h1>Fixtures w Jasmine</h1>
+
+        <p>Fixtures w Jasmine pozwalają na załadowanie i testowanie elementów DOM oraz przygotowanie danych testowych. Umożliwiają testowanie interakcji z HTML w realistycznych warunkach bez konieczności korzystania z faktycznego środowiska przeglądarki.</p>
+
+        <h2>Załadowanie elementów DOM</h2>
+        <p>Jasmine posiada funkcję <code>jasmine.getFixtures()</code>, która pozwala na ładowanie szablonów HTML w trakcie testów. Aby z niej skorzystać, należy skonfigurować odpowiednie biblioteki, takie jak <a href="https://github.com/jasmine/jasmine-jquery" target="_blank">jasmine-jquery</a>.</p>
+
+        <h3>Przykład ładowania elementów DOM</h3>
+        <pre><code class="language-javascript">
+// Szablon HTML
+const htmlFixture = `
+    <div id="container">
+        <button id="btn">Kliknij mnie!</button>
+    </div>
+`;
+
+describe('Testowanie elementów DOM', () => {
+    beforeEach(() => {
+        document.body.innerHTML = htmlFixture;
+        // Załadowanie szablonu HTML do DOM
+    });
+
+    it('powinien znaleźć przycisk w DOM', () => {
+        const button = document.querySelector('#btn');
+        expect(button).not.toBeNull();
+        // Sprawdzenie, czy przycisk został załadowany
+    });
+
+    it('powinien zmienić tekst przycisku po kliknięciu', () => {
+        const button = document.querySelector('#btn');
+        button.addEventListener('click', () => {
+            button.textContent = 'Kliknięto!';
+        });
+        button.click();
+        expect(button.textContent).toBe('Kliknięto!');
+        // Sprawdzenie zmiany treści po kliknięciu
+    });
+});
+        </code></pre>
+
+        <p>Powyższy przykład demonstruje, jak ładować i manipulować elementami DOM w czasie testów.</p>
+
+        <h2>Przygotowanie danych testowych</h2>
+        <p>Fixtures mogą być również używane do załadowania danych JSON lub innych struktur danych, które będą wykorzystane w testach. Przykład:</p>
+
+        <h3>Przykład załadowania danych testowych</h3>
+        <pre><code class="language-javascript">
+// Przykładowe dane JSON
+const jsonData = {
+    name: "Produkt",
+    price: 100
+};
+
+describe('Testowanie danych testowych', () => {
+    let product;
+
+    beforeEach(() => {
+        product = { ...jsonData };
+        // Załadowanie danych testowych przed każdym testem
+    });
+
+    it('powinien mieć poprawną nazwę produktu', () => {
+        expect(product.name).toBe('Produkt');
+        // Sprawdzenie poprawności nazwy
+    });
+
+    it('powinien mieć poprawną cenę', () => {
+        expect(product.price).toBe(100);
+        // Sprawdzenie poprawności ceny
+    });
+});
+        </code></pre>
+
+        <p>Przygotowanie danych testowych pozwala na symulowanie różnych scenariuszy w izolowanym środowisku testowym.</p>
+
+        <h2>Podsumowanie</h2>
+        <p>Fixtures w Jasmine oferują szerokie możliwości:</p>
+        <ul>
+            <li>Ładowanie elementów HTML do DOM, co umożliwia testowanie interakcji użytkownika.</li>
+            <li>Przygotowanie danych testowych, takich jak obiekty JSON, dla różnych scenariuszy testowych.</li>
+            <li>Izolowane środowisko testowe, które minimalizuje wpływ zewnętrznych czynników na testy.</li>
+        </ul>
+        <p>Fixtures są niezwykle przydatne w testowaniu aplikacji, które intensywnie korzystają z DOM lub danych wejściowych.</p>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/prism.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/components/prism-javascript.min.js"></script>
+</body>
+</html>

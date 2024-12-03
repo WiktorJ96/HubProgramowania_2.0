@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Integracja Jasmine z Angular</title>
+    <link rel="stylesheet" href="../styles.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/themes/prism-tomorrow.min.css" rel="stylesheet" />
+</head>
+<body>
+    <div class="container">
+        <h1>Integracja Jasmine z Angular</h1>
+
+        <p>Jasmine jest domyślnym frameworkiem testowym w Angular CLI, co umożliwia łatwą integrację i testowanie aplikacji frontendowych. Testy jednostkowe w Angular są tworzone przy użyciu Jasmine oraz narzędzi takich jak Karma, które uruchamiają testy w przeglądarce.</p>
+
+        <h2>Podstawowa konfiguracja w Angular CLI</h2>
+        <p>Podczas tworzenia nowego projektu Angular za pomocą Angular CLI środowisko Jasmine jest automatycznie skonfigurowane. Aby utworzyć nowy projekt z wbudowanymi testami:</p>
+
+        <pre><code class="language-bash">
+ng new my-angular-app --defaults --skip-install
+        </code></pre>
+
+        <p>Powyższe polecenie tworzy strukturę projektu, w której pliki specyfikacji testowych (<code>*.spec.ts</code>) są generowane obok testowanych plików kodu.</p>
+
+        <h2>Przykład testu jednostkowego komponentu w Angular</h2>
+        <p>Angular wykorzystuje Jasmine do testowania komponentów, usług i innych elementów aplikacji. Oto przykład testu dla prostego komponentu:</p>
+
+        <h3>Przykład: Test komponentu</h3>
+        <pre><code class="language-typescript">
+import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { MyComponent } from './my.component';
+
+describe('MyComponent', () => {
+    let component: MyComponent;
+    let fixture: ComponentFixture<MyComponent>;
+
+    beforeEach(async () => {
+        await TestBed.configureTestingModule({
+            declarations: [MyComponent]
+        }).compileComponents();
+    });
+
+    beforeEach(() => {
+        fixture = TestBed.createComponent(MyComponent);
+        component = fixture.componentInstance;
+        fixture.detectChanges();
+    });
+
+    it('powinien utworzyć komponent', () => {
+        expect(component).toBeTruthy();
+    });
+
+    it('powinien renderować tytuł w elemencie h1', () => {
+        const compiled = fixture.nativeElement as HTMLElement;
+        component.title = 'Testowy tytuł';
+        fixture.detectChanges();
+        expect(compiled.querySelector('h1')?.textContent).toContain('Testowy tytuł');
+    });
+});
+        </code></pre>
+
+        <p>W tym przykładzie test sprawdza, czy komponent został poprawnie utworzony oraz czy tytuł jest poprawnie wyświetlany w widoku.</p>
+
+        <h2>Testowanie usług (services)</h2>
+        <p>Angular pozwala również na testowanie usług przy użyciu Jasmine. Oto przykład testu usługi:</p>
+
+        <h3>Przykład: Test usługi</h3>
+        <pre><code class="language-typescript">
+import { TestBed } from '@angular/core/testing';
+import { MyService } from './my.service';
+
+describe('MyService', () => {
+    let service: MyService;
+
+    beforeEach(() => {
+        TestBed.configureTestingModule({});
+        service = TestBed.inject(MyService);
+    });
+
+    it('powinien utworzyć usługę', () => {
+        expect(service).toBeTruthy();
+    });
+
+    it('powinien zwrócić oczekiwany wynik', () => {
+        const result = service.getData();
+        expect(result).toEqual('Oczekiwane dane');
+    });
+});
+        </code></pre>
+
+        <p>W tym przykładzie testowana jest instancja usługi oraz jej metoda <code>getData</code>.</p>
+
+        <h2>Uruchamianie testów w Angular</h2>
+        <p>Testy w Angular można uruchamiać za pomocą polecenia:</p>
+
+        <pre><code class="language-bash">
+ng test
+        </code></pre>
+
+        <p>Uruchamia to narzędzie Karma, które wykonuje testy w przeglądarce i generuje raport wyników.</p>
+
+        <h2>Dodanie niestandardowego reportera</h2>
+        <p>Możesz dodać reporter, np. w formacie HTML, aby ułatwić analizę wyników:</p>
+
+        <pre><code class="language-bash">
+npm install karma-jasmine-html-reporter --save-dev
+        </code></pre>
+
+        <p>Dodaj reporter do konfiguracji Karmy w pliku <code>karma.conf.js</code>:</p>
+
+        <pre><code class="language-javascript">
+reporters: ['progress', 'kjhtml'],
+        </code></pre>
+
+        <p>Powyższa konfiguracja generuje raporty w formie przyjaznej dla użytkownika.</p>
+
+        <h2>Podsumowanie</h2>
+        <p>Integracja Jasmine z Angular umożliwia:</p>
+        <ul>
+            <li>Testowanie komponentów z wykorzystaniem <code>TestBed</code>.</li>
+            <li>Testowanie usług i innych elementów aplikacji.</li>
+            <li>Tworzenie czytelnych raportów za pomocą Karma i dodatkowych reporterów.</li>
+        </ul>
+        <p>Testy jednostkowe w Angular z Jasmine zapewniają niezawodność i wysoką jakość aplikacji frontendowej.</p>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/prism.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/components/prism-typescript.min.js"></script>
+</body>
+</html>

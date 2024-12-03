@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Snapshot Testing w Jest</title>
+    <link rel="stylesheet" href="../styles.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/themes/prism-tomorrow.min.css" rel="stylesheet" />
+</head>
+<body>
+    <div class="container">
+        <h1>Snapshot Testing w Jest</h1>
+
+        <p>Snapshot Testing pozwala porównywać aktualny wynik działania aplikacji z zapisanym wzorcem (snapshotem). Jest to szczególnie przydatne do testowania komponentów frontendowych, struktur danych czy wyników funkcji.</p>
+
+        <h2>1. Tworzenie snapshotów</h2>
+        <p>Snapshoty są generowane automatycznie podczas pierwszego uruchomienia testu. Zostają zapisane w plikach <code>__snapshots__</code>, które są tworzone w katalogu z testami.</p>
+
+        <h3>Przykład: Tworzenie snapshota dla obiektu</h3>
+        <pre><code class="language-javascript">
+// Funkcja do przetestowania
+function getUser() {
+    return {
+        name: 'Jan',
+        age: 30,
+        active: true,
+    };
+}
+
+// Test snapshota
+test('powinien stworzyć poprawny snapshot obiektu', () => {
+    expect(getUser()).toMatchSnapshot();
+});
+        </code></pre>
+
+        <p>Podczas pierwszego uruchomienia testu zostanie zapisany snapshot obiektu w katalogu <code>__snapshots__</code>.</p>
+
+        <h2>2. Porównywanie aktualnego wyniku z zapisanym wzorcem</h2>
+        <p>Podczas kolejnych uruchomień testu Jest porówna aktualny wynik z zapisanym snapshotem. Jeśli wynik się różni, test zakończy się niepowodzeniem.</p>
+
+        <h3>Przykład: Różnice w snapshotach</h3>
+        <pre><code class="language-javascript">
+// Funkcja do przetestowania
+function getUser() {
+    return {
+        name: 'Jan',
+        age: 31, // Zmieniona wartość
+        active: true,
+    };
+}
+
+test('powinien wykryć różnicę w snapshotcie', () => {
+    expect(getUser()).toMatchSnapshot();
+});
+        </code></pre>
+
+        <p>Jeśli dane w wyniku funkcji różnią się od snapshota, test zakończy się błędem i wyświetli różnice.</p>
+
+        <h2>3. Aktualizacja snapshotów</h2>
+        <p>Jeśli zmiany w danych są oczekiwane i poprawne, możesz zaktualizować snapshoty za pomocą flagi <code>-u</code>:</p>
+
+        <pre><code class="language-bash">
+npm test -- -u
+        </code></pre>
+
+        <p>Powyższe polecenie odświeży wszystkie snapshoty w projekcie.</p>
+
+        <h2>4. Testowanie komponentów React</h2>
+        <p>Snapshot Testing jest szczególnie użyteczny w projektach z React. Możesz generować snapshoty komponentów za pomocą <code>react-test-renderer</code>.</p>
+
+        <h3>Przykład: Snapshot komponentu React</h3>
+        <pre><code class="language-javascript">
+import React from 'react';
+import renderer from 'react-test-renderer';
+import Button from './Button'; // Komponent do przetestowania
+
+test('powinien stworzyć snapshot komponentu Button', () => {
+    const tree = renderer.create(<Button label="Kliknij mnie" />).toJSON();
+    expect(tree).toMatchSnapshot();
+});
+        </code></pre>
+
+        <h2>5. Użycie <code>toMatchInlineSnapshot</code></h2>
+        <p>Możesz zapisać snapshoty bezpośrednio w kodzie testu zamiast w osobnych plikach:</p>
+
+        <pre><code class="language-javascript">
+// Funkcja do przetestowania
+function getUser() {
+    return {
+        name: 'Jan',
+        age: 30,
+        active: true,
+    };
+}
+
+test('powinien stworzyć snapshot inline', () => {
+    expect(getUser()).toMatchInlineSnapshot(`
+    Object {
+        "name": "Jan",
+        "age": 30,
+        "active": true,
+    }
+    `);
+});
+        </code></pre>
+
+        <h2>6. Praktyczne wskazówki</h2>
+        <ul>
+            <li>Używaj snapshotów do testowania struktur danych i statycznych komponentów.</li>
+            <li>Unikaj snapshotów dla dynamicznych danych, które mogą się często zmieniać.</li>
+            <li>Regularnie przeglądaj zmiany w snapshotach, aby upewnić się, że są oczekiwane.</li>
+        </ul>
+
+        <h2>Podsumowanie</h2>
+        <p>Snapshot Testing w Jest pozwala:</p>
+        <ul>
+            <li>Porównywać aktualny wynik z zapisanym wzorcem.</li>
+            <li>Zarządzać snapshotami za pomocą <code>--updateSnapshot</code>.</li>
+            <li>Testować komponenty React i inne struktury danych w sposób prosty i czytelny.</li>
+        </ul>
+        <p>Dzięki Snapshot Testing możesz łatwo wykrywać nieoczekiwane zmiany w danych lub wyglądzie komponentów.</p>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/prism.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/components/prism-javascript.min.js"></script>
+</body>
+</html>

@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Testy Asynchroniczne w Jest</title>
+    <link rel="stylesheet" href="../styles.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/themes/prism-tomorrow.min.css" rel="stylesheet" />
+</head>
+<body>
+    <div class="container">
+        <h1>Testy Asynchroniczne w Jest</h1>
+
+        <p>Jest umożliwia testowanie kodu asynchronicznego, takiego jak promisy, funkcje zwracające wartości asynchroniczne i funkcje oparte na async/await. Testowanie takich scenariuszy wymaga odpowiedniego podejścia, aby upewnić się, że test zakończy się dopiero po wykonaniu całej operacji.</p>
+
+        <h2>1. Testowanie z callbackami</h2>
+        <p>Testowanie funkcji korzystających z callbacków wymaga użycia argumentu <code>done</code> w funkcji testowej. <code>done</code> sygnalizuje zakończenie testu.</p>
+
+        <pre><code class="language-javascript">
+// Funkcja asynchroniczna z callbackiem
+function fetchData(callback) {
+    setTimeout(() => {
+        callback('Dane załadowane');
+    }, 1000);
+}
+
+test('powinien zwrócić dane', (done) => {
+    fetchData((data) => {
+        expect(data).toBe('Dane załadowane');
+        done(); // Informuje Jest, że test się zakończył
+    });
+});
+        </code></pre>
+
+        <h2>2. Testowanie promisy</h2>
+        <p>Kod zwracający promisy można testować za pomocą <code>return</code> w bloku testowym lub używając <code>async/await</code>.</p>
+
+        <h3>Przykład z <code>return</code>:</h3>
+        <pre><code class="language-javascript">
+// Funkcja zwracająca promisę
+function fetchData() {
+    return Promise.resolve('Dane załadowane');
+}
+
+test('powinien zwrócić dane (promis)', () => {
+    return fetchData().then(data => {
+        expect(data).toBe('Dane załadowane');
+    });
+});
+        </code></pre>
+
+        <h2>3. Użycie async/await</h2>
+        <p>Async/await jest preferowaną metodą testowania kodu asynchronicznego w Jest, ponieważ jest bardziej czytelna i zwięzła.</p>
+
+        <pre><code class="language-javascript">
+// Funkcja zwracająca promisę
+async function fetchData() {
+    return 'Dane załadowane';
+}
+
+test('powinien zwrócić dane (async/await)', async () => {
+    const data = await fetchData();
+    expect(data).toBe('Dane załadowane');
+});
+        </code></pre>
+
+        <h2>4. Testowanie błędów w promisy</h2>
+        <p>Aby przetestować, czy promis rzuca wyjątek, użyj <code>.catch</code> lub <code>async/await</code> z blokiem <code>try/catch</code>.</p>
+
+        <h3>Przykład z <code>.catch</code>:</h3>
+        <pre><code class="language-javascript">
+// Funkcja zwracająca odrzuconą promisę
+function fetchDataWithError() {
+    return Promise.reject(new Error('Błąd'));
+}
+
+test('powinien obsłużyć błąd (promis)', () => {
+    return fetchDataWithError().catch(e => {
+        expect(e.message).toBe('Błąd');
+    });
+});
+        </code></pre>
+
+        <h3>Przykład z <code>async/await</code>:</h3>
+        <pre><code class="language-javascript">
+// Funkcja zwracająca odrzuconą promisę
+async function fetchDataWithError() {
+    throw new Error('Błąd');
+}
+
+test('powinien obsłużyć błąd (async/await)', async () => {
+    try {
+        await fetchDataWithError();
+    } catch (e) {
+        expect(e.message).toBe('Błąd');
+    }
+});
+        </code></pre>
+
+        <h2>5. Testowanie operacji z użyciem <code>mock</code></h2>
+        <p>W Jest możesz używać funkcji mockujących, aby testować zależności zewnętrzne lub asynchroniczne operacje.</p>
+
+        <pre><code class="language-javascript">
+// Funkcja do przetestowania
+const fetchData = jest.fn(() => Promise.resolve('Dane załadowane'));
+
+test('powinien zwrócić dane (mock)', async () => {
+    const data = await fetchData();
+    expect(data).toBe('Dane załadowane');
+    expect(fetchData).toHaveBeenCalled(); // Sprawdza, czy mock został wywołany
+});
+        </code></pre>
+
+        <h2>Podsumowanie</h2>
+        <p>Testy asynchroniczne w Jest obejmują:</p>
+        <ul>
+            <li>Użycie <code>done</code> dla callbacków.</li>
+            <li>Testowanie promisy za pomocą <code>return</code> lub <code>async/await</code>.</li>
+            <li>Obsługę wyjątków w promisy i kodzie async.</li>
+            <li>Mockowanie zależności zewnętrznych dla lepszej izolacji testów.</li>
+        </ul>
+        <p>Jest oferuje elastyczne i czytelne mechanizmy do testowania operacji asynchronicznych, co sprawia, że jest odpowiedni dla nowoczesnych aplikacji.</p>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/prism.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/components/prism-javascript.min.js"></script>
+</body>
+</html>

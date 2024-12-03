@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Podstawy Jesta</title>
+    <link rel="stylesheet" href="../styles.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/themes/prism-tomorrow.min.css" rel="stylesheet" />
+</head>
+<body>
+    <div class="container">
+        <h1>Podstawy Jesta</h1>
+
+        <p>Jest to popularny framework testowy dla JavaScript, stworzony przez Facebooka. Jest szybki, łatwy w konfiguracji i oferuje potężne możliwości do testowania aplikacji frontendowych i backendowych.</p>
+
+        <h2>Instalacja Jesta</h2>
+        <p>Aby rozpocząć korzystanie z Jesta, należy go zainstalować w projekcie. Upewnij się, że masz zainstalowany Node.js.</p>
+
+        <h3>1. Instalacja za pomocą npm</h3>
+        <pre><code class="language-bash">
+npm install --save-dev jest
+        </code></pre>
+
+        <h3>2. Dodanie skryptu do <code>package.json</code></h3>
+        <p>W pliku <code>package.json</code> dodaj następujący skrypt:</p>
+        <pre><code class="language-json">
+"scripts": {
+    "test": "jest"
+}
+        </code></pre>
+
+        <p>Teraz możesz uruchamiać testy za pomocą polecenia:</p>
+        <pre><code class="language-bash">
+npm test
+        </code></pre>
+
+        <h2>Pierwszy test</h2>
+        <p>Utwórz plik <code>sum.test.js</code> w folderze <code>__tests__</code> lub w tej samej lokalizacji, co testowany kod:</p>
+
+        <h3>Przykład testu:</h3>
+        <pre><code class="language-javascript">
+// Funkcja do przetestowania
+function sum(a, b) {
+    return a + b;
+}
+
+// Testy
+test('dodaje 1 + 2 i zwraca 3', () => {
+    expect(sum(1, 2)).toBe(3);
+});
+
+test('dodaje 5 + 5 i zwraca 10', () => {
+    expect(sum(5, 5)).toBe(10);
+});
+        </code></pre>
+
+        <p>Uruchom testy za pomocą:</p>
+        <pre><code class="language-bash">
+npm test
+        </code></pre>
+
+        <h2>Użycie <code>describe</code> i <code>it</code></h2>
+        <p>W Jest można grupować testy za pomocą <code>describe</code> i definiować poszczególne przypadki testowe za pomocą <code>it</code> (lub <code>test</code>, które jest ich aliasem).</p>
+
+        <h3>Przykład:</h3>
+        <pre><code class="language-javascript">
+describe('Operacje matematyczne', () => {
+    it('powinien dodać dwie liczby', () => {
+        const result = 2 + 3;
+        expect(result).toBe(5);
+    });
+
+    it('powinien pomnożyć dwie liczby', () => {
+        const result = 4 * 3;
+        expect(result).toBe(12);
+    });
+});
+        </code></pre>
+
+        <p>Takie podejście pozwala lepiej organizować testy i zapewnia przejrzystość w raportach wyników.</p>
+
+        <h2>Konfiguracja środowiska</h2>
+        <p>Jest oferuje konfigurację za pomocą pliku <code>jest.config.js</code> lub sekcji <code>jest</code> w <code>package.json</code>. Przykład pliku konfiguracyjnego:</p>
+
+        <h3>Plik <code>jest.config.js</code></h3>
+        <pre><code class="language-javascript">
+module.exports = {
+    verbose: true, // Wyświetla szczegółowe wyniki testów
+    testEnvironment: 'node', // Środowisko testowe (domyślnie 'jsdom')
+    testMatch: ['**/__tests__/**/*.js?(x)', '**/?(*.)+(spec|test).js?(x)'], // Wzorzec wyszukiwania plików testowych
+};
+        </code></pre>
+
+        <p>Dodaj ten plik do głównego katalogu projektu. Możesz także dostosować inne opcje, takie jak obsługa plików TypeScript czy mockowanie.</p>
+
+        <h2>Podsumowanie</h2>
+        <p>Podstawowe kroki pracy z Jest:</p>
+        <ul>
+            <li>Instalacja Jesta i dodanie skryptu do <code>package.json</code>.</li>
+            <li>Tworzenie testów za pomocą <code>test</code>, <code>describe</code> i <code>it</code>.</li>
+            <li>Konfiguracja środowiska za pomocą <code>jest.config.js</code>.</li>
+        </ul>
+        <p>Dzięki prostocie i elastyczności Jest jest doskonałym narzędziem do testowania JavaScriptu.</p>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/prism.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/components/prism-javascript.min.js"></script>
+</body>
+</html>

@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mocki i Stuby w Jasmine</title>
+    <link rel="stylesheet" href="../styles.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/themes/prism-tomorrow.min.css" rel="stylesheet" />
+</head>
+<body>
+    <div class="container">
+        <h1>Mocki i Stuby w Jasmine</h1>
+
+        <p>W testach jednostkowych mocki i stuby pozwalają tworzyć obiekty zastępcze, które imitują zachowanie rzeczywistych komponentów. Dzięki nim można izolować testy i unikać zależności od zewnętrznych zasobów, takich jak bazy danych czy API.</p>
+
+        <h2>Mocki</h2>
+        <p>Mocki to obiekty, które pozwalają na śledzenie wywołań i zachowań funkcji. W Jasmine można je tworzyć za pomocą funkcji <code>spyOn</code> lub <code>jasmine.createSpy</code>.</p>
+
+        <h3>Tworzenie mocków za pomocą <code>spyOn</code></h3>
+        <pre><code class="language-javascript">
+const serwis = {
+    pobierzDane: () => {
+        return 'Dane z API';
+    }
+};
+
+describe('Mocki z spyOn', () => {
+    it('powinien zastąpić funkcję mockiem', () => {
+        spyOn(serwis, 'pobierzDane').and.returnValue('Mockowane dane');
+        const wynik = serwis.pobierzDane();
+        expect(wynik).toBe('Mockowane dane');
+        expect(serwis.pobierzDane).toHaveBeenCalled();
+        // Sprawdzenie, czy mock został wywołany
+    });
+});
+        </code></pre>
+
+        <p>Mock utworzony przez <code>spyOn</code> pozwala na symulowanie zachowań funkcji i śledzenie wywołań.</p>
+
+        <h3>Tworzenie mocków za pomocą <code>jasmine.createSpy</code></h3>
+        <pre><code class="language-javascript">
+describe('Mocki z jasmine.createSpy', () => {
+    it('powinien utworzyć samodzielny mock', () => {
+        const mockFunkcja = jasmine.createSpy('mockFunkcja');
+        mockFunkcja('argument1', 'argument2');
+        expect(mockFunkcja).toHaveBeenCalled();
+        expect(mockFunkcja).toHaveBeenCalledWith('argument1', 'argument2');
+        // Sprawdzenie, czy mock został wywołany z określonymi argumentami
+    });
+});
+        </code></pre>
+
+        <p>Samodzielne mocki są przydatne, gdy chcemy zastąpić funkcje niezwiązane z konkretnymi obiektami.</p>
+
+        <h2>Stuby</h2>
+        <p>Stuby to mocki, które dodatkowo definiują zachowanie zastępowanych funkcji. W Jasmine można je tworzyć za pomocą metod, takich jak <code>and.returnValue</code> lub <code>and.callFake</code>.</p>
+
+        <h3>Przykład użycia <code>and.returnValue</code></h3>
+        <pre><code class="language-javascript">
+describe('Stuby z and.returnValue', () => {
+    it('powinien zastąpić funkcję i zwracać stałą wartość', () => {
+        const mockFunkcja = jasmine.createSpy('mockFunkcja').and.returnValue('Stała wartość');
+        const wynik = mockFunkcja();
+        expect(wynik).toBe('Stała wartość');
+    });
+});
+        </code></pre>
+
+        <h3>Przykład użycia <code>and.callFake</code></h3>
+        <pre><code class="language-javascript">
+describe('Stuby z and.callFake', () => {
+    it('powinien zastąpić funkcję i symulować działanie', () => {
+        const mockFunkcja = jasmine.createSpy('mockFunkcja').and.callFake((x) => x * 2);
+        const wynik = mockFunkcja(5);
+        expect(wynik).toBe(10);
+        // Funkcja działa zgodnie z symulowaną logiką
+    });
+});
+        </code></pre>
+
+        <p>Stuby pozwalają na dokładne kontrolowanie, jak zastępowane funkcje powinny się zachowywać w czasie testów.</p>
+
+        <h2>Izolacja testów</h2>
+        <p>Mocki i stuby są kluczowe dla izolacji testów. Dzięki nim testy koncentrują się wyłącznie na testowanej jednostce, unikając wpływu zewnętrznych zależności.</p>
+
+        <pre><code class="language-javascript">
+const zewnetrznySerwis = {
+    wyslijDane: (dane) => {
+        console.log('Dane wysłane do API:', dane);
+    }
+};
+
+describe('Izolacja testów', () => {
+    it('powinien izolować funkcję', () => {
+        spyOn(zewnetrznySerwis, 'wyslijDane');
+        zewnetrznySerwis.wyslijDane('testowe dane');
+        expect(zewnetrznySerwis.wyslijDane).toHaveBeenCalledWith('testowe dane');
+        // Sprawdzenie, czy funkcja została wywołana bez faktycznego działania
+    });
+});
+        </code></pre>
+
+        <p>Dzięki izolacji testów możliwe jest szybkie i niezawodne testowanie jednostek bez potrzeby faktycznego działania zależności.</p>
+
+        <h2>Podsumowanie</h2>
+        <p>Mocki i stuby w Jasmine oferują szerokie możliwości:</p>
+        <ul>
+            <li>Mocki pozwalają na śledzenie wywołań funkcji.</li>
+            <li>Stuby definiują symulowane zachowanie funkcji.</li>
+            <li>Izolacja testów eliminuje wpływ zewnętrznych zależności.</li>
+        </ul>
+        <p>Użycie mocków i stubów znacząco poprawia jakość testów jednostkowych, zwiększając ich elastyczność i niezawodność.</p>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/prism.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/components/prism-javascript.min.js"></script>
+</body>
+</html>

@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Jest - Strona Główna</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="container">
+        <h1>Witaj na stronie o Jest</h1>
+        <p>Wybierz temat, aby dowiedzieć się więcej o różnych aspektach Jest.</p>
+
+        <div class="accordion">
+
+            <div class="accordion-item">
+                <h2 class="accordion-header">Podstawowy</h2>
+                <div class="accordion-content">
+                    <ul>    
+                        <li><a href="./Rozdziały/1.Podstawy Jest.html">Podstawy Jest</a></li>
+                        <li><a href="./Rozdziały/2.Matchers.html">Matchers</a></li>
+                        <li><a href="./Rozdziały/3.Testy asynchroniczne.html">Testy asynchroniczne</a></li>
+                        <li><a href="./Rozdziały/4.Mocki i Szpiedzy.html">Mock i szpiedzy</a></li>
+                        <li><a href="./Rozdziały/5.Snapshot testing.html">Snapshot testing</a></li>
+                        <li><a href="./Rozdziały/6.Konfiguracja CLI.html">Konfiguracja CLI</a></li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="accordion-item"> 
+                <h2 class="accordion-header">Średnio zaawansowany</h2>
+                <div class="accordion-content">
+                    <ul>
+                        <li><a href="./Rozdziały/7.Integracja z Babel i Typescript.html">Integracja z Babel i Typescript</a></li>
+                        <li><a href="./Rozdziały/8.Test coverage i watch mode.html">Test coverage i watch mode</a></li>
+                        <li><a href="./Rozdziały/9.Setup_teardown hook.html">Setup/Teardown hooks</a></li>
+                        <li><a href="./Rozdziały/10.Testowanie kodu Reacta.html">Testowanie kodu React</a></li>
+                        <li><a href="./Rozdziały/14.Debugowanie testow.html">Debugowanie testów</a></li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="accordion-item">
+                <h2 class="accordion-header">Zaawansowany</h2>
+                <div class="accordion-content">
+                    <ul>
+                        <li><a href="./Rozdziały/11.Optymalizacja i wydajnosc.html">Optymalizacja i wydajność</a></li>
+                        <li><a href="./Rozdziały/12.Integracja z CI CD.html">Integracja z CI/CD</a></li>
+                        <li><a href="./Rozdziały/13.Testy rownolegle.html">Testy równoległe</a></li>
+                    </ul>
+                </div>
+            </div>
+            
+        </div>
+
+    </div>
+    
+    <script>
+        document.querySelectorAll('.accordion-header').forEach(header => {
+            header.addEventListener('click', function() {
+                const accordionContent = this.nextElementSibling;
+
+                if (accordionContent.style.maxHeight) {
+                    accordionContent.style.maxHeight = null; // Zwijanie
+                } else {
+                    accordionContent.style.maxHeight = accordionContent.scrollHeight + "px"; // Rozwijanie
+                }
+            });
+        });
+    </script>
+</body>
+</html>

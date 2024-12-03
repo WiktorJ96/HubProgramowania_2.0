@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Debugowanie Testów w Jest</title>
+    <link rel="stylesheet" href="../styles.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/themes/prism-tomorrow.min.css" rel="stylesheet" />
+</head>
+<body>
+    <div class="container">
+        <h1>Debugowanie Testów w Jest</h1>
+
+        <p>Debugowanie testów jest kluczowe w rozwoju i utrzymaniu aplikacji. W Jest możesz używać takich narzędzi jak <code>console.log</code>, breakpointy oraz debugery zintegrowane z IDE. Poniżej znajdziesz szczegółowe instrukcje dla każdej z tych metod.</p>
+
+        <h2>1. Debugowanie za pomocą <code>console.log</code></h2>
+        <p>Najprostszym sposobem debugowania testów jest dodanie logów za pomocą <code>console.log</code>. Jest wyświetla te logi w konsoli podczas wykonywania testów.</p>
+
+        <h3>Przykład</h3>
+        <pre><code class="language-javascript">
+test('powinien dodać dwa liczby', () => {
+    const sum = (a, b) => a + b;
+    const result = sum(2, 3);
+    console.log('Wynik:', result); // Wyświetli "Wynik: 5" w konsoli
+    expect(result).toBe(5);
+});
+        </code></pre>
+
+        <p>Używaj <code>console.log</code>, aby sprawdzać wartości zmiennych i wyników w trakcie wykonywania testów.</p>
+
+        <h2>2. Debugowanie za pomocą breakpointów</h2>
+        <p>Możesz użyć breakpointów w swoim IDE, aby zatrzymać wykonywanie kodu w określonym miejscu i przeanalizować jego stan.</p>
+
+        <h3>Konfiguracja w Visual Studio Code</h3>
+        <ol>
+            <li>Otwórz plik <code>launch.json</code> w katalogu <code>.vscode</code>.</li>
+            <li>Dodaj konfigurację debugowania dla Jest:</li>
+        </ol>
+        <pre><code class="language-json">
+{
+  "configurations": [
+    {
+      "type": "node",
+      "request": "launch",
+      "name": "Debug Jest Tests",
+      "program": "${workspaceFolder}/node_modules/jest/bin/jest.js",
+      "args": ["--runInBand"],
+      "console": "integratedTerminal",
+      "internalConsoleOptions": "neverOpen"
+    }
+  ]
+}
+        </code></pre>
+
+        <h3>Debugowanie</h3>
+        <ol>
+            <li>Dodaj breakpoint w pliku testowym, klikając w lewą stronę linii kodu w VS Code.</li>
+            <li>Uruchom debugowanie, wybierając konfigurację <code>Debug Jest Tests</code> z menu debugowania w VS Code.</li>
+            <li>Kod zatrzyma się w miejscu ustawionego breakpointu, umożliwiając analizę wartości zmiennych i stanu aplikacji.</li>
+        </ol>
+
+        <h2>3. Użycie <code>debugger</code></h2>
+        <p>Instrukcja <code>debugger</code> zatrzymuje wykonywanie kodu w danym miejscu, jeśli uruchomiono debugowanie.</p>
+
+        <h3>Przykład</h3>
+        <pre><code class="language-javascript">
+test('powinien pomnożyć liczby', () => {
+    const multiply = (a, b) => a * b;
+    const result = multiply(2, 3);
+    debugger; // Kod zatrzyma się tutaj podczas debugowania
+    expect(result).toBe(6);
+});
+        </code></pre>
+
+        <p>Aby aktywować <code>debugger</code>, uruchom testy w trybie debugowania w IDE lub z użyciem polecenia:</p>
+        <pre><code class="language-bash">
+node --inspect-brk node_modules/jest/bin/jest.js --runInBand
+        </code></pre>
+
+        <h2>4. Debugowanie w przeglądarce</h2>
+        <p>Jeśli testujesz kod zależny od DOM lub Reacta, możesz użyć narzędzi developerskich przeglądarki. Skonfiguruj testy, aby uruchamiały się w środowisku przeglądarkowym, takim jak <code>jsdom</code>.</p>
+
+        <h3>Przykład</h3>
+        <pre><code class="language-javascript">
+module.exports = {
+    testEnvironment: "jsdom",
+};
+        </code></pre>
+
+        <p>Uruchom testy w trybie debugowania i użyj narzędzi developerskich w przeglądarce, aby debugować strukturę DOM i komponenty.</p>
+
+        <h2>5. Najlepsze praktyki debugowania</h2>
+        <ul>
+            <li>Rozpocznij debugowanie od <code>console.log</code>, aby szybko zidentyfikować podstawowe problemy.</li>
+            <li>Używaj breakpointów i <code>debugger</code> do analizy złożonych problemów.</li>
+            <li>Konfiguruj debugowanie w IDE, aby zaoszczędzić czas.</li>
+            <li>W przypadku testów frontendu, korzystaj z narzędzi developerskich przeglądarki.</li>
+        </ul>
+
+        <h2>6. Podsumowanie</h2>
+        <p>Debugowanie testów w Jest oferuje różne podejścia:</p>
+        <ul>
+            <li><code>console.log</code>: Szybkie i proste debugowanie.</li>
+            <li>Breakpointy: Analiza kodu w IDE z pełnym dostępem do stanu aplikacji.</li>
+            <li><code>debugger</code>: Ręczne zatrzymywanie kodu w trakcie debugowania.</li>
+            <li>Debugowanie w przeglądarce: Analiza DOM i komponentów w testach frontendowych.</li>
+        </ul>
+        <p>Wybierz metodę najlepiej pasującą do Twojego przypadku i zwiększ efektywność debugowania testów.</p>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/prism.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/components/prism-javascript.min.js"></script>
+</body>
+</html>

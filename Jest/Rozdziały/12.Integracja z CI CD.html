@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Integracja z CI/CD w Jest</title>
+    <link rel="stylesheet" href="../styles.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/themes/prism-tomorrow.min.css" rel="stylesheet" />
+</head>
+<body>
+    <div class="container">
+        <h1>Integracja z CI/CD w Jest</h1>
+
+        <p>Automatyczne uruchamianie testów na serwerach CI/CD to kluczowy krok w zapewnianiu jakości kodu i sprawnej pracy zespołu. Dzięki integracji z narzędziami CI/CD, takimi jak GitHub Actions, GitLab CI/CD czy Jenkins, testy mogą być uruchamiane automatycznie na każdym etapie cyklu życia aplikacji.</p>
+
+        <h2>1. Podstawy integracji z CI/CD</h2>
+        <p>Aby zintegrować Jest z procesem CI/CD, potrzebne są następujące kroki:</p>
+        <ul>
+            <li>Dodanie skryptów do pliku <code>package.json</code>, aby uruchamiać testy.</li>
+            <li>Skonfigurowanie narzędzia CI/CD do wykonywania skryptów testowych.</li>
+            <li>Generowanie raportów wyników testów i pokrycia kodu.</li>
+        </ul>
+
+        <h2>2. Konfiguracja pliku <code>package.json</code></h2>
+        <p>Dodaj skrypty do uruchamiania testów i raportowania wyników:</p>
+        <pre><code class="language-json">
+"scripts": {
+    "test": "jest",
+    "test:ci": "jest --ci --reporters=default --reporters=jest-junit"
+}
+        </code></pre>
+
+        <h2>3. GitHub Actions</h2>
+        <p>GitHub Actions to łatwe w użyciu narzędzie do konfiguracji CI/CD. Przykład workflow do uruchamiania testów:</p>
+        <pre><code class="language-yaml">
+name: Testy
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+
+jobs:
+  jest-tests:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v3
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: 16
+
+      - name: Install dependencies
+        run: npm install
+
+      - name: Run tests
+        run: npm run test:ci
+        env:
+          CI: true
+
+      - name: Upload test results
+        uses: actions/upload-artifact@v3
+        with:
+          name: jest-results
+          path: jest-report.xml
+        </code></pre>
+
+        <h2>4. GitLab CI/CD</h2>
+        <p>Przykład konfiguracji dla GitLab CI/CD w pliku <code>.gitlab-ci.yml</code>:</p>
+        <pre><code class="language-yaml">
+stages:
+  - test
+
+jest-tests:
+  stage: test
+  image: node:16
+  script:
+    - npm install
+    - npm run test:ci
+  artifacts:
+    paths:
+      - jest-report.xml
+        </code></pre>
+
+        <h2>5. Jenkins</h2>
+        <p>W Jenkins możesz użyć pipeline, aby uruchamiać testy. Przykład konfiguracji w pliku <code>Jenkinsfile</code>:</p>
+        <pre><code class="language-groovy">
+pipeline {
+    agent any
+
+    stages {
+        stage('Install dependencies') {
+            steps {
+                sh 'npm install'
+            }
+        }
+        stage('Run tests') {
+            steps {
+                sh 'npm run test:ci'
+            }
+        }
+    }
+
+    post {
+        always {
+            archiveArtifacts artifacts: 'jest-report.xml', allowEmptyArchive: true
+        }
+    }
+}
+        </code></pre>
+
+        <h2>6. Raportowanie wyników</h2>
+        <p>Wygenerowany plik <code>jest-junit</code> można wykorzystać w narzędziach CI/CD do wizualizacji wyników testów.</p>
+        <ul>
+            <li>W GitHub Actions: użyj <code>actions/upload-artifact</code>, aby przesłać raport.</li>
+            <li>W GitLab: dodaj raport jako artefakt w sekcji <code>artifacts</code>.</li>
+            <li>W Jenkins: użyj wtyczki JUnit do analizy wyników.</li>
+        </ul>
+
+        <h2>7. Najlepsze praktyki</h2>
+        <ul>
+            <li>Regularnie uruchamiaj testy na gałęzi głównej.</li>
+            <li>Automatycznie uruchamiaj testy dla pull requestów, aby wykrywać błędy przed scaleniem.</li>
+            <li>Generuj raporty pokrycia kodu i analizuj je w celu zwiększenia jakości testów.</li>
+        </ul>
+
+        <h2>Podsumowanie</h2>
+        <p>Integracja z CI/CD w Jest pozwala na:</p>
+        <ul>
+            <li>Automatyczne uruchamianie testów na każdym etapie procesu developmentu.</li>
+            <li>Generowanie raportów wyników testów i pokrycia kodu.</li>
+            <li>Zapewnienie jakości i spójności kodu w zespole.</li>
+        </ul>
+        <p>Dzięki tej konfiguracji możesz zautomatyzować proces testowania i skupić się na rozwoju aplikacji.</p>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/prism.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/components/prism-javascript.min.js"></script>
+</body>
+</html>

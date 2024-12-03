@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Integracja z Babel/TypeScript w Jest</title>
+    <link rel="stylesheet" href="../styles.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/themes/prism-tomorrow.min.css" rel="stylesheet" />
+</head>
+<body>
+    <div class="container">
+        <h1>Integracja z Babel/TypeScript w Jest</h1>
+
+        <p>Jest obsługuje kod transpilowany za pomocą Babel lub TypeScript. Dzięki odpowiedniej konfiguracji możesz testować nowoczesny kod JavaScript/TypeScript z wykorzystaniem funkcji takich jak moduły ES6 czy typy.</p>
+
+        <h2>1. Integracja z Babel</h2>
+        <p>Aby używać Babela z Jest, należy zainstalować odpowiednie pakiety i skonfigurować plik <code>babel.config.js</code>.</p>
+
+        <h3>1.1. Instalacja</h3>
+        <pre><code class="language-bash">
+npm install --save-dev babel-jest @babel/core @babel/preset-env
+        </code></pre>
+
+        <h3>1.2. Konfiguracja Babela</h3>
+        <p>Utwórz plik <code>babel.config.js</code> w głównym katalogu projektu:</p>
+        <pre><code class="language-javascript">
+module.exports = {
+    presets: ['@babel/preset-env'],
+};
+        </code></pre>
+
+        <h3>1.3. Testowanie kodu</h3>
+        <p>Po skonfigurowaniu możesz pisać testy w nowoczesnym JavaScript. Przykład:</p>
+        <pre><code class="language-javascript">
+// Kod w ES6
+export function sum(a, b) {
+    return a + b;
+}
+
+// Test
+import { sum } from './sum';
+
+test('dodaje 1 + 2 i zwraca 3', () => {
+    expect(sum(1, 2)).toBe(3);
+});
+        </code></pre>
+
+        <h2>2. Integracja z TypeScript</h2>
+        <p>Aby testować kod TypeScript w Jest, musisz zainstalować <code>ts-jest</code> oraz TypeScript.</p>
+
+        <h3>2.1. Instalacja</h3>
+        <pre><code class="language-bash">
+npm install --save-dev ts-jest @types/jest typescript
+        </code></pre>
+
+        <h3>2.2. Konfiguracja Jest dla TypeScript</h3>
+        <p>Uruchom polecenie inicjalizujące <code>ts-jest</code>, aby stworzyć konfigurację:</p>
+        <pre><code class="language-bash">
+npx ts-jest config:init
+        </code></pre>
+
+        <p>To polecenie utworzy plik <code>jest.config.js</code> z konfiguracją dostosowaną do TypeScript.</p>
+
+        <h3>Przykładowa konfiguracja <code>jest.config.js</code></h3>
+        <pre><code class="language-javascript">
+module.exports = {
+    preset: 'ts-jest',
+    testEnvironment: 'node',
+    testMatch: ['**/__tests__/**/*.ts?(x)', '**/?(*.)+(spec|test).ts?(x)'],
+};
+        </code></pre>
+
+        <h3>2.3. Testowanie kodu TypeScript</h3>
+        <p>Przykład pliku TypeScript i jego testu:</p>
+        <pre><code class="language-typescript">
+// Kod w TypeScript
+export function multiply(a: number, b: number): number {
+    return a * b;
+}
+
+// Test w TypeScript
+import { multiply } from './multiply';
+
+test('mnoży 2 * 3 i zwraca 6', () => {
+    expect(multiply(2, 3)).toBe(6);
+});
+        </code></pre>
+
+        <h2>3. Wspólna konfiguracja Babel i TypeScript</h2>
+        <p>Możesz używać Babela do transpilacji TypeScript, korzystając z presetów Babela.</p>
+
+        <h3>3.1. Instalacja</h3>
+        <pre><code class="language-bash">
+npm install --save-dev babel-jest @babel/preset-env @babel/preset-typescript
+        </code></pre>
+
+        <h3>3.2. Konfiguracja Babela</h3>
+        <p>Rozszerz plik <code>babel.config.js</code> o preset TypeScript:</p>
+        <pre><code class="language-javascript">
+module.exports = {
+    presets: ['@babel/preset-env', '@babel/preset-typescript'],
+};
+        </code></pre>
+
+        <h3>3.3. Testowanie kodu TypeScript z Bablem</h3>
+        <p>Po tej konfiguracji możesz pisać testy TypeScript tak samo jak testy JavaScript.</p>
+
+        <h2>4. Praktyczne wskazówki</h2>
+        <ul>
+            <li>Kiedy używasz TypeScript, preferuj <code>ts-jest</code>, jeśli zależy Ci na pełnej obsłudze typów.</li>
+            <li>Babel sprawdzi się lepiej w przypadku projektów mieszanych (JavaScript + TypeScript).</li>
+            <li>Używaj plików <code>.babelrc</code> lub <code>babel.config.js</code>, aby dostosować konfigurację do swoich potrzeb.</li>
+        </ul>
+
+        <h2>Podsumowanie</h2>
+        <p>Integracja z Babel lub TypeScript w Jest pozwala na:</p>
+        <ul>
+            <li>Testowanie nowoczesnego JavaScript z wykorzystaniem Babela.</li>
+            <li>Obsługę kodu TypeScript z pełnym wsparciem typów za pomocą <code>ts-jest</code>.</li>
+            <li>Elastyczność w projektach mieszanych dzięki presetom Babela.</li>
+        </ul>
+        <p>Dzięki tej konfiguracji możesz pisać i testować kod w dowolnym nowoczesnym języku JavaScript lub TypeScript.</p>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/prism.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/components/prism-javascript.min.js"></script>
+</body>
+</html>

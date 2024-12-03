@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Optymalizacja i Wydajność w Jest</title>
+    <link rel="stylesheet" href="../styles.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/themes/prism-tomorrow.min.css" rel="stylesheet" />
+</head>
+<body>
+    <div class="container">
+        <h1>Optymalizacja i Wydajność w Jest</h1>
+
+        <p>Wydajność testów i ich dobra organizacja mają kluczowe znaczenie w dużych projektach. Poniżej znajdziesz techniki optymalizacji, minimalizacji duplikacji kodu oraz szybkie sposoby wykrywania problemów.</p>
+
+        <h2>1. Organizacja testów</h2>
+        <p>Struktura testów powinna być logiczna i łatwa w utrzymaniu. Podziel testy według modułów, funkcjonalności lub komponentów.</p>
+
+        <h3>Przykładowa struktura katalogów</h3>
+        <pre><code class="language-bash">
+src/
+├── components/
+│   ├── Button/
+│   │   ├── Button.js
+│   │   ├── Button.test.js
+│   └── Modal/
+│       ├── Modal.js
+│       ├── Modal.test.js
+├── utils/
+│   ├── helpers.js
+│   ├── helpers.test.js
+        </code></pre>
+
+        <p>Każdy komponent lub moduł powinien mieć swój plik testowy, co ułatwia nawigację i lokalizowanie problemów.</p>
+
+        <h2>2. Minimalizacja duplikacji</h2>
+        <p>Unikaj powtarzania kodu w testach, używając funkcji pomocniczych, mocków i hooków testowych.</p>
+
+        <h3>2.1. Użycie funkcji pomocniczych</h3>
+        <pre><code class="language-javascript">
+// Funkcja pomocnicza do mockowania danych
+function createUser(name, age) {
+    return { name, age };
+}
+
+test('powinien stworzyć użytkownika', () => {
+    const user = createUser('Jan', 30);
+    expect(user).toEqual({ name: 'Jan', age: 30 });
+});
+
+test('powinien stworzyć innego użytkownika', () => {
+    const user = createUser('Anna', 25);
+    expect(user).toEqual({ name: 'Anna', age: 25 });
+});
+        </code></pre>
+
+        <h3>2.2. Wykorzystanie hooków testowych</h3>
+        <pre><code class="language-javascript">
+let users;
+
+beforeEach(() => {
+    users = [];
+});
+
+test('powinien dodać użytkownika', () => {
+    users.push({ name: 'Jan', age: 30 });
+    expect(users).toHaveLength(1);
+});
+
+test('powinien usunąć użytkownika', () => {
+    users.push({ name: 'Jan', age: 30 });
+    users.pop();
+    expect(users).toHaveLength(0);
+});
+        </code></pre>
+
+        <h2>3. Szybkie wykrywanie problemów</h2>
+
+        <h3>3.1. Uruchamianie tylko zmienionych testów</h3>
+        <p>Użyj flagi <code>--onlyChanged</code>, aby uruchomić testy dla zmienionych plików:</p>
+        <pre><code class="language-bash">
+npx jest --onlyChanged
+        </code></pre>
+
+        <h3>3.2. Filtrowanie testów</h3>
+        <p>Wykorzystaj flagę <code>--testNamePattern</code>, aby uruchomić tylko wybrane testy:</p>
+        <pre><code class="language-bash">
+npx jest --testNamePattern="powinien dodać użytkownika"
+        </code></pre>
+
+        <h3>3.3. Tryb Watch</h3>
+        <p>Użyj trybu Watch, aby automatycznie uruchamiać testy po każdej zmianie:</p>
+        <pre><code class="language-bash">
+npx jest --watch
+        </code></pre>
+
+        <h3>3.4. Logowanie błędów</h3>
+        <p>Dodaj szczegółowe logi do testów, aby łatwiej zidentyfikować problemy:</p>
+        <pre><code class="language-javascript">
+test('powinien dodać użytkownika', () => {
+    const user = { name: 'Jan', age: 30 };
+    console.log('Dodano użytkownika:', user);
+    expect(user.name).toBe('Jan');
+});
+        </code></pre>
+
+        <h2>4. Optymalizacja wydajności testów</h2>
+
+        <h3>4.1. Uruchamianie testów w jednym wątku</h3>
+        <p>W projektach wymagających dużych zasobów możesz uruchomić testy sekwencyjnie:</p>
+        <pre><code class="language-bash">
+npx jest --runInBand
+        </code></pre>
+
+        <h3>4.2. Wykluczanie ciężkich testów</h3>
+        <p>Oznacz testy jako pomijane w danym momencie:</p>
+        <pre><code class="language-javascript">
+test.skip('ciężki test do optymalizacji', () => {
+    // Kod testu
+});
+        </code></pre>
+
+        <h3>4.3. Buforowanie wyników</h3>
+        <p>Użyj <code>--cache</code>, aby przyspieszyć kolejne uruchomienia testów:</p>
+        <pre><code class="language-bash">
+npx jest --cache
+        </code></pre>
+
+        <h2>5. Najlepsze praktyki</h2>
+        <ul>
+            <li>Unikaj globalnego stanu w testach — każda iteracja powinna być niezależna.</li>
+            <li>Testuj kluczowe funkcjonalności w pierwszej kolejności, a następnie rozwijaj testy.</li>
+            <li>Regularnie uruchamiaj pełne testy z raportem pokrycia kodu.</li>
+            <li>Twórz czytelne i dobrze opisane testy, aby łatwiej było je debugować.</li>
+        </ul>
+
+        <h2>Podsumowanie</h2>
+        <p>Wydajne i dobrze zorganizowane testy w Jest to klucz do szybkiego rozwoju projektu:</p>
+        <ul>
+            <li>Używaj funkcji pomocniczych i hooków do minimalizacji duplikacji kodu.</li>
+            <li>Uruchamiaj tylko zmienione testy i korzystaj z trybu Watch.</li>
+            <li>Optymalizuj ciężkie testy przez oznaczanie ich jako pomijane lub uruchamianie w jednym wątku.</li>
+        </ul>
+        <p>Dzięki tym technikom testy staną się szybsze, czytelniejsze i bardziej niezawodne.</p>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/prism.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/components/prism-javascript.min.js"></script>
+</body>
+</html>

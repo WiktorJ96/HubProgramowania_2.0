@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Testowanie kodu Reacta</title>
+    <link rel="stylesheet" href="../styles.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/themes/prism-tomorrow.min.css" rel="stylesheet" />
+</head>
+<body>
+    <div class="container">
+        <h1>Testowanie kodu Reacta w Jest</h1>
+
+        <p>React Testing Library (RTL) to popularne narzędzie do testowania komponentów React. Umożliwia testowanie z punktu widzenia użytkownika, skupiając się na zachowaniu komponentów, a nie na ich implementacji. W połączeniu z <code>jest-dom matchers</code> oferuje bogate możliwości testowania DOM.</p>
+
+        <h2>1. Instalacja</h2>
+        <p>Aby rozpocząć, zainstaluj React Testing Library i powiązane pakiety:</p>
+        <pre><code class="language-bash">
+npm install --save-dev @testing-library/react @testing-library/jest-dom
+        </code></pre>
+
+        <h3>Konfiguracja Jest</h3>
+        <p>Dodaj <code>@testing-library/jest-dom</code> do pliku setupowego Jest (np. <code>jest.setup.js</code>):</p>
+        <pre><code class="language-javascript">
+import '@testing-library/jest-dom';
+        </code></pre>
+
+        <p>W pliku <code>jest.config.js</code> możesz wskazać plik setupowy:</p>
+        <pre><code class="language-javascript">
+module.exports = {
+    setupFilesAfterEnv: ['<rootDir>/jest.setup.js'],
+};
+        </code></pre>
+
+        <h2>2. Podstawy React Testing Library</h2>
+
+        <h3>Renderowanie komponentu</h3>
+        <p>Podstawowym sposobem testowania jest renderowanie komponentu za pomocą funkcji <code>render</code>:</p>
+        <pre><code class="language-javascript">
+import { render } from '@testing-library/react';
+import React from 'react';
+import Button from './Button';
+
+test('powinien renderować komponent Button', () => {
+    const { getByText } = render(<Button label="Kliknij mnie" />);
+    expect(getByText('Kliknij mnie')).toBeInTheDocument();
+});
+        </code></pre>
+
+        <h3>Interakcje z użytkownikiem</h3>
+        <p>Możesz symulować interakcje użytkownika za pomocą <code>fireEvent</code>:</p>
+        <pre><code class="language-javascript">
+import { render, fireEvent } from '@testing-library/react';
+import React from 'react';
+import Counter from './Counter';
+
+test('powinien zwiększyć licznik po kliknięciu', () => {
+    const { getByText } = render(<Counter />);
+    const button = getByText('Zwiększ');
+    fireEvent.click(button);
+    expect(getByText('Licznik: 1')).toBeInTheDocument();
+});
+        </code></pre>
+
+        <h2>3. Użycie jest-dom matchers</h2>
+        <p>Matchery z <code>jest-dom</code> umożliwiają testowanie stanu DOM w sposób czytelny:</p>
+
+        <h3>Przykłady matcherów</h3>
+        <pre><code class="language-javascript">
+import { render } from '@testing-library/react';
+import React from 'react';
+import Alert from './Alert';
+
+test('powinien wyświetlić alert z odpowiednią klasą', () => {
+    const { getByRole } = render(<Alert message="Błąd!" type="error" />);
+    const alert = getByRole('alert');
+    expect(alert).toHaveClass('alert-error'); // Sprawdza klasę
+    expect(alert).toBeVisible(); // Sprawdza widoczność
+    expect(alert).toHaveTextContent('Błąd!'); // Sprawdza tekst
+});
+        </code></pre>
+
+        <h2>4. Debugowanie</h2>
+        <p>RTL oferuje metodę <code>screen.debug()</code> do wyświetlania aktualnego stanu DOM w testach:</p>
+        <pre><code class="language-javascript">
+import { render, screen } from '@testing-library/react';
+import React from 'react';
+import App from './App';
+
+test('powinien wyświetlić strukturę DOM', () => {
+    render(<App />);
+    screen.debug(); // Wyświetla aktualny stan DOM
+});
+        </code></pre>
+
+        <h2>5. Organizacja testów</h2>
+        <p>Najlepsze praktyki w testowaniu Reacta:</p>
+        <ul>
+            <li>Testuj zachowanie komponentów, a nie ich implementację.</li>
+            <li>Unikaj bezpośredniego testowania metod czy stanu wewnętrznego komponentu.</li>
+            <li>Używaj <code>jest-dom matchers</code>, aby testy były czytelne i przejrzyste.</li>
+        </ul>
+
+        <h2>Podsumowanie</h2>
+        <p>React Testing Library w połączeniu z Jest i jest-dom matchers pozwala na:</p>
+        <ul>
+            <li>Testowanie komponentów w sposób zbliżony do interakcji użytkownika.</li>
+            <li>Testowanie zachowania DOM w sposób czytelny i wyrazisty.</li>
+            <li>Debugowanie struktury DOM w trakcie testów.</li>
+        </ul>
+        <p>Dzięki tym narzędziom możesz łatwo zapewnić wysoką jakość i niezawodność swoich komponentów React.</p>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/prism.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/components/prism-javascript.min.js"></script>
+</body>
+</html>

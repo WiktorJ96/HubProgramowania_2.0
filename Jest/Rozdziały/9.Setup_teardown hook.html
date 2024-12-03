@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Setup/Teardown Hooks w Jest</title>
+    <link rel="stylesheet" href="../styles.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/themes/prism-tomorrow.min.css" rel="stylesheet" />
+</head>
+<body>
+    <div class="container">
+        <h1>Setup/Teardown Hooks w Jest</h1>
+
+        <p>W Jest możesz używać hooków, takich jak <code>beforeAll</code>, <code>afterAll</code>, <code>beforeEach</code>, i <code>afterEach</code>, aby przygotować środowisko testowe oraz posprzątać po testach. Hooki te ułatwiają zarządzanie zasobami oraz redukują duplikację kodu.</p>
+
+        <h2>1. Podstawowe hooki</h2>
+        <ul>
+            <li><code>beforeAll</code>: Wykonywane raz przed wszystkimi testami w bloku <code>describe</code>.</li>
+            <li><code>afterAll</code>: Wykonywane raz po wszystkich testach w bloku <code>describe</code>.</li>
+            <li><code>beforeEach</code>: Wykonywane przed każdym testem w bloku <code>describe</code>.</li>
+            <li><code>afterEach</code>: Wykonywane po każdym teście w bloku <code>describe</code>.</li>
+        </ul>
+
+        <h2>2. Przykłady zastosowań</h2>
+
+        <h3>2.1. Przykład z <code>beforeEach</code> i <code>afterEach</code></h3>
+        <p>Użycie <code>beforeEach</code> do przygotowania danych i <code>afterEach</code> do ich resetowania:</p>
+        <pre><code class="language-javascript">
+let counter;
+
+beforeEach(() => {
+    counter = 0; // Przygotowanie danych przed każdym testem
+});
+
+afterEach(() => {
+    counter = null; // Czyszczenie po każdym teście
+});
+
+test('powinien zwiększyć licznik', () => {
+    counter++;
+    expect(counter).toBe(1);
+});
+
+test('powinien zmniejszyć licznik', () => {
+    counter--;
+    expect(counter).toBe(-1);
+});
+        </code></pre>
+
+        <h3>2.2. Przykład z <code>beforeAll</code> i <code>afterAll</code></h3>
+        <p>Użycie <code>beforeAll</code> do inicjalizacji zasobów oraz <code>afterAll</code> do ich zwolnienia:</p>
+        <pre><code class="language-javascript">
+let database;
+
+beforeAll(() => {
+    database = {}; // Inicjalizacja zasobów przed wszystkimi testami
+});
+
+afterAll(() => {
+    database = null; // Zwolnienie zasobów po wszystkich testach
+});
+
+test('powinien dodać dane do bazy', () => {
+    database['key'] = 'value';
+    expect(database['key']).toBe('value');
+});
+
+test('powinien usunąć dane z bazy', () => {
+    delete database['key'];
+    expect(database['key']).toBeUndefined();
+});
+        </code></pre>
+
+        <h3>2.3. Łączenie hooków</h3>
+        <p>Możesz używać kombinacji hooków w jednym bloku <code>describe</code>:</p>
+        <pre><code class="language-javascript">
+describe('Testowanie operacji', () => {
+    let data;
+
+    beforeAll(() => {
+        console.log('Uruchamianie setupu globalnego');
+    });
+
+    afterAll(() => {
+        console.log('Czyszczenie setupu globalnego');
+    });
+
+    beforeEach(() => {
+        data = []; // Przygotowanie przed każdym testem
+        console.log('Przygotowanie danych');
+    });
+
+    afterEach(() => {
+        data = null; // Czyszczenie po każdym teście
+        console.log('Czyszczenie danych');
+    });
+
+    test('powinien dodać element do danych', () => {
+        data.push('element');
+        expect(data).toContain('element');
+    });
+
+    test('powinien usunąć element z danych', () => {
+        data.push('element');
+        data.pop();
+        expect(data).not.toContain('element');
+    });
+});
+        </code></pre>
+
+        <h2>3. Zastosowanie praktyczne</h2>
+        <ul>
+            <li><code>beforeAll</code> i <code>afterAll</code> są idealne do zarządzania zasobami globalnymi, np. połączeniami z bazą danych.</li>
+            <li><code>beforeEach</code> i <code>afterEach</code> przydają się do inicjalizacji i czyszczenia stanu przed/po każdym teście.</li>
+            <li>Hooki pomagają uniknąć duplikacji kodu, dzięki czemu testy są bardziej czytelne i łatwiejsze do utrzymania.</li>
+        </ul>
+
+        <h2>4. Najlepsze praktyki</h2>
+        <ul>
+            <li>Unikaj skomplikowanej logiki w hookach — powinny one zajmować się tylko przygotowaniem i sprzątaniem.</li>
+            <li>Używaj hooków tylko w zakresie, w którym są one potrzebne (np. w określonych blokach <code>describe</code>).</li>
+            <li>Jeśli wiele testów współdzieli stan, użyj <code>beforeAll</code>/<code>afterAll</code>, aby uniknąć powielania kodu.</li>
+        </ul>
+
+        <h2>Podsumowanie</h2>
+        <p>Hooki w Jest oferują wygodne narzędzia do zarządzania przygotowaniem i sprzątaniem w testach:</p>
+        <ul>
+            <li><code>beforeAll</code> i <code>afterAll</code>: Przygotowanie i czyszczenie zasobów globalnych.</li>
+            <li><code>beforeEach</code> i <code>afterEach</code>: Przygotowanie i czyszczenie stanu dla każdego testu.</li>
+            <li>Zwiększają czytelność i utrzymanie testów poprzez redukcję duplikacji kodu.</li>
+        </ul>
+        <p>Stosowanie hooków to klucz do efektywnego zarządzania testami w dużych projektach.</p>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/prism.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/components/prism-javascript.min.js"></script>
+</body>
+</html>
