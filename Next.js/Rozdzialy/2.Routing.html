@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Routing w Next.js</title>
+    <link rel="stylesheet" href="../styles.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/themes/prism-tomorrow.min.css" rel="stylesheet" />
+</head>
+<body>
+    <div class="container">
+        <h1>Routing w Next.js</h1>
+
+        <p>Next.js oferuje system routingu oparty na strukturze plików w katalogu <code>pages</code>. Pliki w tym katalogu automatycznie stają się stronami dostępnymi pod odpowiadającymi im ścieżkami URL.</p>
+
+        <h2>Tworzenie stron</h2>
+        <p>Aby utworzyć nową stronę, wystarczy dodać nowy plik do katalogu <code>pages</code>. Przykład:</p>
+        <pre><code class="language-text">
+pages/
+├── index.js        <!-- Strona główna -->
+├── about.js        <!-- Strona dostępna pod /about -->
+        </code></pre>
+        <p>Plik <code>about.js</code> będzie odpowiadał ścieżce <code>/about</code> w aplikacji.</p>
+
+        <h2>Dynamiczne ścieżki</h2>
+        <p>Next.js obsługuje dynamiczne ścieżki za pomocą nazw plików z nawiasami kwadratowymi. Przykład:</p>
+        <pre><code class="language-text">
+pages/
+├── product/
+│   ├── [id].js   <!-- Strona dynamiczna -->
+        </code></pre>
+        <p>Plik <code>[id].js</code> odpowiada dynamicznym ścieżkom, np. <code>/product/1</code> lub <code>/product/abc</code>. Wartość <code>id</code> można pobrać za pomocą <code>getStaticProps</code> lub <code>useRouter</code>.</p>
+        <pre><code class="language-javascript">
+// Przykład dynamicznej strony w [id].js
+import { useRouter } from 'next/router';
+
+const ProductPage = () => {
+  const router = useRouter();
+  const { id } = router.query; // Pobranie dynamicznego id
+
+  return <h1>Produkt o ID: {id}</h1>;
+};
+
+export default ProductPage;
+        </code></pre>
+
+        <h2>Link</h2>
+        <p>Komponent <code>Link</code> pozwala na nawigację między stronami bez przeładowania strony. Przykład:</p>
+        <pre><code class="language-javascript">
+import Link from 'next/link';
+
+const HomePage = () => {
+  return (
+    <div>
+      <h1>Strona główna</h1>
+      <Link href="/about">
+        <a>Przejdź do strony About</a>
+      </Link>
+    </div>
+  );
+};
+
+export default HomePage;
+        </code></pre>
+        <p>Użycie <code>Link</code> zapewnia lepszą wydajność dzięki wbudowanemu systemowi optymalizacji Next.js.</p>
+
+        <h2>useRouter</h2>
+        <p>Hook <code>useRouter</code> daje dostęp do informacji o bieżącej trasie oraz pozwala na programową nawigację. Przykład:</p>
+        <pre><code class="language-javascript">
+import { useRouter } from 'next/router';
+
+const NavigationExample = () => {
+  const router = useRouter();
+
+  const goToAbout = () => {
+    router.push('/about'); // Przejście do strony /about
+  };
+
+  return (
+    <div>
+      <button onClick={goToAbout}>Przejdź do About</button>
+    </div>
+  );
+};
+
+export default NavigationExample;
+        </code></pre>
+        <p>Metoda <code>router.push()</code> pozwala na przejście do innej strony z poziomu kodu JavaScript.</p>
+
+        <h2>Nawigacja między podstronami</h2>
+        <p>Next.js umożliwia łatwe przechodzenie między stronami za pomocą komponentu <code>Link</code> oraz programowo za pomocą <code>useRouter</code>. Przykładowa nawigacja:</p>
+        <pre><code class="language-javascript">
+import Link from 'next/link';
+
+const NavBar = () => {
+  return (
+    <nav>
+      <ul>
+        <li><Link href="/"><a>Strona główna</a></Link></li>
+        <li><Link href="/about"><a>About</a></Link></li>
+        <li><Link href="/contact"><a>Kontakt</a></Link></li>
+      </ul>
+    </nav>
+  );
+};
+
+export default NavBar;
+        </code></pre>
+
+        <h2>Podsumowanie</h2>
+        <p>Routing w Next.js jest prosty i intuicyjny dzięki strukturze plików, dynamicznym ścieżkom, komponentowi <code>Link</code> oraz hookowi <code>useRouter</code>. Dzięki temu budowanie aplikacji wielostronicowych jest szybkie i wydajne. Więcej informacji znajdziesz w <a href="https://nextjs.org/docs/routing/introduction" target="_blank">dokumentacji Next.js</a>.</p>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/prism.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/components/prism-javascript.min.js"></script>
+</body>
+</html>

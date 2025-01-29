@@ -1,12 +1,17 @@
 :root {
-    --maincolor: #3fd4fd;
+    --main-color: #61DAFB; /* Błękitny - kolor React */
+    --secondary-color: #1e1e1e; /* Ciemne tło */
+    --text-color: #eaeaea; /* Jasny tekst */
+    --accent-color: #00bcd4; /* Jasnoniebieski - dodatkowy akcent */
+    --code-key: #61DAFB; /* Błękitny dla kluczy */
+    --code-string: #ffca28; /* Żółty dla wartości tekstowych */
+    --code-number: #ff7043; /* Pomarańczowy dla liczb */
 }
 
-/* Stylowanie ogólne */
 body {
-    font-family: 'Roboto', sans-serif;
-    background-color: #0a192f; /* Ciemne tło w kolorach React */
-    color: #e0e0e0; /* Jasnoszary tekst */
+    font-family: 'Inter', sans-serif;
+    background-color: var(--secondary-color);
+    color: var(--text-color);
     margin: 0;
     padding: 20px;
     line-height: 1.8;
@@ -15,157 +20,187 @@ body {
     flex-direction: column;
 }
 
-/* Stylowanie głównego kontenera */
 .container {
-    max-width: 720px;
-    background-color: #111e34; /* Ciemniejsze tło inspirowane motywem React */
-    padding: 30px;
-    border-radius: 15px;
-    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.5);
+    max-width: 950px;
+    background-color: #292929;
+    padding: 40px;
+    border-radius: 12px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.7);
     width: 90%;
     margin: auto;
     transition: transform 0.2s ease-in-out;
 }
 
-/* Stylowanie nagłówków */
 h1 {
-    background-color: var(--maincolor); /* Kolor React */
-    color: #0a192f; /* Kontrastujący ciemny tekst */
-    padding: 15px;
+    background: linear-gradient(90deg, var(--main-color), var(--accent-color));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
     text-align: center;
-    border-radius: 12px;
+    font-size: 2.8rem;
     margin-bottom: 40px;
-    font-size: 2rem;
+    font-weight: bold;
 }
 
 h2 {
-    color: var(--maincolor); /* React blue */
-    border-bottom: 2px solid var(--maincolor);
+    color: var(--main-color);
+    border-bottom: 2px solid var(--accent-color);
     padding-bottom: 10px;
     margin-bottom: 20px;
-    font-size: 1.5rem;
+    font-size: 2rem;
 }
 
-/* Stylowanie paragrafów */
+h3 {
+    color: var(--accent-color);
+    margin-top: 30px;
+    margin-bottom: 15px;
+    font-size: 1.5rem;
+    border-left: 4px solid var(--main-color);
+    padding-left: 10px;
+}
+
 p {
-    color: #b0bec5; /* Lżejszy szary kolor dla tekstu */
+    color: var(--text-color);
     line-height: 1.7;
     font-size: 1.1rem;
-    margin-bottom: 25px;
+    margin-bottom: 20px;
     transition: color 0.3s ease-in-out;
 }
 
 p:hover {
-    color: #d6d6d6; /* Rozjaśnienie tekstu po najechaniu */
+    color: #ffffff;
 }
 
-/* Stylowanie bloków kodu */
+/* Stylowanie kodu */
 pre {
-    background-color: #1f2937; /* Ciemniejszy niebieski odcień dla tła kodu */
-    color: #e5e7eb; /* Jasny szary tekst */
+    background-color: #1f1f1f;
     padding: 20px;
-    border-radius: 12px;
+    border-radius: 8px;
     font-size: 1rem;
     overflow-x: auto;
-    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.4);
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.5);
+    margin-bottom: 25px;
+}
+
+/* Stylowanie składni JSX */
+pre .json-key {
+    color: var(--code-key);
+}
+
+pre .json-string {
+    color: var(--code-string);
+}
+
+pre .json-number {
+    color: var(--code-number);
 }
 
 code {
-    background-color: #282c34; /* React-theme ciemniejsze tło */
-    padding: 4px 6px;
+    background-color: var(--accent-color);
+    padding: 6px 8px;
     border-radius: 6px;
-    font-size: 0.9rem;
-    color: var(--maincolor); /* Kolor React */
+    font-size: 0.95rem;
+    color: #000000;
 }
 
-/* Stylowanie list */
 ul {
     padding-left: 25px;
-    color: #b0bec5;
+    color: var(--text-color);
 }
 
 ul li {
     margin-bottom: 15px;
     font-size: 1.1rem;
-    padding: 10px;
-    background-color: #1f2937; /* Tło podobne do kodu */
+    padding: 12px;
+    background-color: #333333;
+    border-left: 4px solid var(--main-color);
     border-radius: 8px;
     transition: background-color 0.3s ease-in-out, transform 0.2s ease-in-out;
 }
 
 ul li:hover {
-    background-color: #374151; /* Zmiana tła po najechaniu */
+    background-color: #444444;
     transform: translateX(10px);
 }
 
-/* Stylowanie linków */
 a {
-    color: var(--maincolor); /* Kolor React */
+    color: var(--main-color);
     text-decoration: none;
     font-weight: bold;
     transition: color 0.3s ease-in-out, transform 0.2s ease-in-out;
 }
 
 a:hover {
-    color: #93e6fd; /* Jaśniejszy niebieski odcień na hover */
+    color: var(--accent-color);
     transform: scale(1.05);
     text-decoration: underline;
 }
 
 a:active {
-    color: #41c8fb; /* Ciemniejszy odcień w momencie kliknięcia */
+    color: #008ba3;
     transform: scale(0.98);
 }
 
-.accordion-item {
-    margin-bottom: 10px;
-    border-radius: 5px;
-}
-
-.accordion-header {
-    padding: 10px;
-    cursor: pointer;
-    font-size: 1.2em;
-}
-
-.accordion-content {
-    padding: 0 20px;
-    max-height: 0;
-    overflow: hidden;
-    transition: max-height 0.3s ease;
-}
-
-/* Stylowanie przycisku */
 button {
-    background-color: var(--maincolor); /* Kolor React */
-    color: #0a192f; /* Kontrastujący ciemny tekst */
+    background: linear-gradient(90deg, var(--main-color), var(--accent-color));
+    color: #fff;
     border: none;
-    padding: 10px 10px;
+    padding: 14px 18px;
     border-radius: 8px;
-    font-size: 0.9rem;
+    font-size: 1.1rem;
     font-weight: bold;
     cursor: pointer;
     transition: background-color 0.3s ease-in-out, transform 0.2s ease-in-out;
-    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.4);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.5);
     outline: none;
 }
 
 button:hover {
-    background-color: #93e6fd; /* Jaśniejszy odcień przy najechaniu */
+    background: linear-gradient(90deg, var(--accent-color), var(--main-color));
     transform: scale(1.05);
 }
 
 button:active {
-    background-color: #41c8fb; /* Ciemniejszy odcień przy kliknięciu */
+    background-color: #008ba3;
     transform: scale(0.98);
 }
 
-/* Responsywność */
+.accordion-item {
+    margin-bottom: 15px;
+    border-radius: 8px;
+    background-color: #333333;
+}
+
+.accordion-header {
+    padding: 12px;
+    cursor: pointer;
+    font-size: 1.2em;
+    background: linear-gradient(90deg, var(--main-color), var(--accent-color));
+    color: #fff;
+    border-radius: 5px;
+}
+
+.accordion-content {
+    max-height: 0;
+    overflow: hidden;
+    transition: max-height 0.3s ease;
+    background-color: #1f1f1f;
+}
+
+blockquote {
+    font-style: italic;
+    color: var(--main-color);
+    padding: 10px 20px;
+    border-left: 4px solid var(--accent-color);
+    margin: 20px 0;
+    background-color: #292929;
+    border-radius: 8px;
+}
+
 @media (min-width: 768px) {
     p, ul {
         font-size: 1.2rem;
     }
-
+    
     pre {
         font-size: 1.1rem;
     }

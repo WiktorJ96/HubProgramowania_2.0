@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Testowanie w Next.js</title>
+    <link rel="stylesheet" href="../styles.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/themes/prism-tomorrow.min.css" rel="stylesheet" />
+</head>
+<body>
+    <div class="container">
+        <h1>Testowanie w Next.js</h1>
+
+        <p>Next.js wspiera różne narzędzia do testowania, takie jak Jest, React Testing Library oraz Cypress. Możesz tworzyć zarówno testy jednostkowe, jak i testy e2e (end-to-end).</p>
+
+        <h2>1. Integracja z Jest</h2>
+        <p><code>Jest</code> to popularne narzędzie do testowania JavaScript i React. Aby go zintegrować z Next.js, wykonaj poniższe kroki:</p>
+
+        <h3>Instalacja:</h3>
+        <pre><code class="language-shell">
+npm install --save-dev jest babel-jest @testing-library/react @testing-library/jest-dom
+        </code></pre>
+
+        <h3>Konfiguracja pliku <code>jest.config.js</code>:</h3>
+        <pre><code class="language-javascript">
+module.exports = &#123;
+  testEnvironment: 'jsdom',
+  moduleNameMapper: &#123;
+    '^@/(.*)$': '<rootDir>/$1',
+  &#125;,
+  setupFilesAfterEnv: ['<rootDir>/jest.setup.js'],
+&#125;;
+        </code></pre>
+
+        <h3>Ustawienia w pliku <code>jest.setup.js</code>:</h3>
+        <pre><code class="language-javascript">
+import '@testing-library/jest-dom/extend-expect';
+        </code></pre>
+
+        <h3>Przykładowy test komponentu:</h3>
+        <pre><code class="language-javascript">
+import { render, screen } from '@testing-library/react';
+import Home from '../pages/index';
+
+test('renderuje stronę główną', () =&gt; &#123;
+  render(&lt;Home /&gt;);
+  expect(screen.getByText('Witaj na stronie głównej!')).toBeInTheDocument();
+&#125;);
+        </code></pre>
+
+        <h2>2. React Testing Library</h2>
+        <p>React Testing Library jest narzędziem ułatwiającym testowanie komponentów React w sposób, który imituje rzeczywiste zachowanie użytkownika.</p>
+        <h3>Przykład testowania przycisku:</h3>
+        <pre><code class="language-javascript">
+import { render, fireEvent } from '@testing-library/react';
+import Button from '../components/Button';
+
+test('kliknięcie przycisku wywołuje funkcję', () =&gt; &#123;
+  const onClick = jest.fn();
+  const &#123; getByText &#125; = render(&lt;Button onClick=&#123;onClick&#125;&gt;Kliknij mnie&lt;/Button&gt;);
+  fireEvent.click(getByText('Kliknij mnie'));
+  expect(onClick).toHaveBeenCalledTimes(1);
+&#125;);
+        </code></pre>
+
+        <h2>3. Integracja z Cypress</h2>
+        <p><code>Cypress</code> to narzędzie do testów e2e (end-to-end). Aby go zintegrować, wykonaj poniższe kroki:</p>
+
+        <h3>Instalacja:</h3>
+        <pre><code class="language-shell">
+npm install cypress --save-dev
+        </code></pre>
+
+        <h3>Uruchamianie Cypress:</h3>
+        <pre><code class="language-shell">
+npx cypress open
+        </code></pre>
+
+        <h3>Przykładowy test e2e:</h3>
+        <pre><code class="language-javascript">
+describe('Testowanie strony głównej', () =&gt; &#123;
+  it('powinno załadować stronę główną', () =&gt; &#123;
+    cy.visit('/');
+    cy.contains('Witaj na stronie głównej!');
+  &#125;);
+&#125;);
+        </code></pre>
+
+        <h2>4. Testy e2e z Playwright</h2>
+        <p>Playwright to alternatywa dla Cypress, pozwalająca na testowanie aplikacji w różnych przeglądarkach.</p>
+        <h3>Instalacja:</h3>
+        <pre><code class="language-shell">
+npm install --save-dev playwright
+        </code></pre>
+
+        <h3>Przykładowy test e2e:</h3>
+        <pre><code class="language-javascript">
+const &#123; test, expect &#125; = require('@playwright/test');
+
+test('Strona główna ładuje się poprawnie', async (&#123; page &#125;) =&gt; &#123;
+  await page.goto('http://localhost:3000');
+  const title = await page.title();
+  expect(title).toBe('Strona Główna');
+&#125;);
+        </code></pre>
+
+        <h2>Podsumowanie</h2>
+        <p>Next.js integruje się z różnymi narzędziami do testowania, takimi jak Jest, React Testing Library, Cypress czy Playwright. Dzięki tym narzędziom możesz testować komponenty, funkcjonalności oraz całą aplikację end-to-end.</p>
+        <p>Więcej informacji znajdziesz w <a href="https://nextjs.org/docs/testing" target="_blank">dokumentacji Next.js</a>.</p>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/prism.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/components/prism-javascript.min.js"></script>
+</body>
+</html>

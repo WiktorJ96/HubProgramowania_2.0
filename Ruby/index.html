@@ -43,5 +43,19 @@
             <li><a href=""></a>Instalacja gemów</li>
         </ul>
     </div>
+
+        <script>
+        document.querySelectorAll('.accordion-header').forEach(header => {
+            header.addEventListener('click', function() {
+                const accordionContent = this.nextElementSibling;
+
+                if (accordionContent.style.maxHeight) {
+                    accordionContent.style.maxHeight = null; // Zwijanie
+                } else {
+                    accordionContent.style.maxHeight = accordionContent.scrollHeight + "px"; // Rozwijanie
+                }
+            });
+        });
+    </script>
 </body>
 </html>

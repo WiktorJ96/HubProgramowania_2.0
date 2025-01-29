@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Konfiguracja Next.js</title>
+    <link rel="stylesheet" href="../styles.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/themes/prism-tomorrow.min.css" rel="stylesheet" />
+</head>
+<body>
+    <div class="container">
+        <h1>Konfiguracja Next.js</h1>
+
+        <p>Next.js umożliwia konfigurację aplikacji poprzez plik <code>next.config.js</code>. Można w nim dostosować ustawienia optymalizacji, obsługę zmiennych środowiskowych, budowanie oraz definiowanie własnego serwera.</p>
+
+        <h2>Plik <code>next.config.js</code></h2>
+        <p>Podstawowa konfiguracja Next.js znajduje się w pliku <code>next.config.js</code> w katalogu głównym projektu. Przykład:</p>
+        <pre><code class="language-javascript">
+/** @type {import('next').NextConfig} */
+const nextConfig = {
+  reactStrictMode: true, // Włącza tryb ścisły React
+  swcMinify: true, // Optymalizacja kodu poprzez SWC
+  images: {
+    domains: ['example.com'], // Pozwala na ładowanie obrazów z zewnętrznych domen
+  },
+};
+
+module.exports = nextConfig;
+        </code></pre>
+
+        <h2>Optymalizacja buildu</h2>
+        <p>Next.js oferuje kilka technik optymalizacji aplikacji, które można skonfigurować w <code>next.config.js</code>:</p>
+        <ul>
+            <li><strong>Minifikacja kodu:</strong> Włączona domyślnie dzięki <code>swcMinify: true</code>.</li>
+            <li><strong>Usuwanie nieużywanego kodu:</strong> Optymalizacja statycznych zasobów.</li>
+            <li><strong>Obsługa Webpack:</strong> Można dostosować ustawienia Webpack, np.:</li>
+        </ul>
+        <pre><code class="language-javascript">
+module.exports = {
+  webpack: (config, { isServer }) => {
+    if (!isServer) {
+      config.resolve.fallback = { fs: false }; // Wyłączenie modułu fs po stronie klienta
+    }
+    return config;
+  },
+};
+        </code></pre>
+
+        <h2>Customowy serwer</h2>
+        <p>Next.js domyślnie korzysta z wbudowanego serwera, ale można stworzyć własny, np. za pomocą Express:</p>
+        <pre><code class="language-javascript">
+const express = require('express');
+const next = require('next');
+
+const dev = process.env.NODE_ENV !== 'production';
+const app = next({ dev });
+const handle = app.getRequestHandler();
+
+app.prepare().then(() => {
+  const server = express();
+
+  server.get('/custom-route', (req, res) => {
+    return app.render(req, res, '/custom-page');
+  });
+
+  server.all('*', (req, res) => {
+    return handle(req, res);
+  });
+
+  server.listen(3000, () => {
+    console.log('Serwer działa na http://localhost:3000');
+  });
+});
+        </code></pre>
+        <p>Własny serwer umożliwia np. obsługę niestandardowych tras, middleware czy autoryzacji.</p>
+
+        <h2>Zmienne środowiskowe</h2>
+        <p>Next.js obsługuje zmienne środowiskowe przechowywane w plikach <code>.env</code>. Przykład pliku <code>.env.local</code>:</p>
+        <pre><code class="language-text">
+NEXT_PUBLIC_API_URL=https://api.example.com
+SECRET_KEY=super_tajne_haslo
+        </code></pre>
+        <p>Zmienne z prefiksem <code>NEXT_PUBLIC_</code> są dostępne po stronie klienta:</p>
+        <pre><code class="language-javascript">
+console.log(process.env.NEXT_PUBLIC_API_URL); // Wartość zmiennej dostępna w przeglądarce
+        </code></pre>
+        <p>Zmienne bez tego prefiksu są dostępne tylko po stronie serwera.</p>
+
+        <h2>Podsumowanie</h2>
+        <p>Konfiguracja Next.js pozwala na dostosowanie aplikacji do różnych wymagań poprzez plik <code>next.config.js</code>, zmienne środowiskowe i opcjonalnie własny serwer. Dzięki tym możliwościom można zoptymalizować wydajność aplikacji oraz dostosować jej działanie do specyficznych potrzeb.</p>
+        <p>Więcej informacji znajdziesz w <a href="https://nextjs.org/docs/api-reference/next.config.js/introduction" target="_blank">dokumentacji Next.js</a>.</p>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/prism.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/components/prism-javascript.min.js"></script>
+</body>
+</html>

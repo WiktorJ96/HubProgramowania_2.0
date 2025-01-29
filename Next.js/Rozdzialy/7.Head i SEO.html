@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Head i SEO w Next.js</title>
+    <link rel="stylesheet" href="../styles.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/themes/prism-tomorrow.min.css" rel="stylesheet" />
+</head>
+<body>
+    <div class="container">
+        <h1>Head i SEO w Next.js</h1>
+
+        <p>Next.js oferuje wbudowany komponent <code>Head</code>, który pozwala zarządzać zawartością sekcji <code>&lt;head&gt;</code> w dokumentach HTML. Dzięki temu można łatwo dodać meta tagi, tytuł strony oraz inne elementy wspierające SEO.</p>
+
+        <h2>Komponent <code>Head</code></h2>
+        <p>Komponent <code>Head</code> umożliwia dodawanie tytułu strony, meta tagów oraz innych elementów do sekcji <code>&lt;head&gt;</code> w każdej stronie Next.js. Przykład:</p>
+        <pre><code class="language-javascript">
+import Head from 'next/head';
+
+const HomePage = () =&gt; {
+  return (
+    &lt;&gt;
+      &lt;Head&gt;
+        &lt;title&gt;Strona Główna - Moja Aplikacja&lt;/title&gt;
+        &lt;meta name="description" content="Opis strony głównej, który wspiera SEO." /&gt;
+        &lt;meta name="viewport" content="width=device-width, initial-scale=1" /&gt;
+      &lt;/Head&gt;
+      &lt;div&gt;
+        &lt;h1&gt;Witaj na mojej stronie!&lt;/h1&gt;
+      &lt;/div&gt;
+    &lt;/&gt;
+  );
+};
+
+export default HomePage;
+        </code></pre>
+
+        <h2>Meta tagi</h2>
+        <p>Meta tagi są kluczowe dla SEO i określają, jak strona powinna być interpretowana przez wyszukiwarki oraz jak wyświetlać jej zawartość. Oto kilka ważnych meta tagów:</p>
+        <ul>
+            <li><strong><code>description</code>:</strong> Krótki opis strony, który pojawia się w wynikach wyszukiwania.</li>
+            <li><strong><code>viewport</code>:</strong> Ustawienia widoku dla urządzeń mobilnych.</li>
+            <li><strong><code>robots</code>:</strong> Instrukcje dla robotów wyszukiwarek (np. <code>index, follow</code>).</li>
+        </ul>
+        <pre><code class="language-javascript">
+&lt;Head&gt;
+  &lt;meta name="robots" content="index, follow" /&gt;
+  &lt;meta name="author" content="Twoje Imię" /&gt;
+&lt;/Head&gt;
+        </code></pre>
+
+        <h2>Tytuł strony</h2>
+        <p>Tytuł strony powinien być unikalny dla każdej podstrony, aby ułatwić wyszukiwarkom i użytkownikom identyfikację treści. Przykład dynamicznego tytułu:</p>
+        <pre><code class="language-javascript">
+import Head from 'next/head';
+
+const AboutPage = () =&gt; {
+  const title = "O nas - Moja Aplikacja";
+  return (
+    &lt;Head&gt;
+      &lt;title&gt;{title}&lt;/title&gt;
+    &lt;/Head&gt;
+  );
+};
+
+export default AboutPage;
+        </code></pre>
+
+        <h2>Podstawy SEO</h2>
+        <p>SEO (Search Engine Optimization) to optymalizacja strony dla wyszukiwarek internetowych. Kilka podstawowych wskazówek:</p>
+        <ul>
+            <li>Dodawaj unikalne tytuły i opisy dla każdej strony.</li>
+            <li>Używaj semantycznych znaczników HTML (np. <code>&lt;header&gt;</code>, <code>&lt;main&gt;</code>, <code>&lt;footer&gt;</code>).</li>
+            <li>Zadbaj o odpowiednią hierarchię nagłówków (np. <code>&lt;h1&gt;</code>, <code>&lt;h2&gt;</code>).</li>
+            <li>Optymalizuj szybkość ładowania strony za pomocą narzędzi takich jak Lighthouse.</li>
+        </ul>
+
+        <h2>Open Graph</h2>
+        <p>Open Graph to protokół, który umożliwia dostosowanie sposobu wyświetlania strony w mediach społecznościowych. Przykład:</p>
+        <pre><code class="language-javascript">
+&lt;Head&gt;
+  &lt;meta property="og:title" content="Moja Aplikacja - Strona Główna" /&gt;
+  &lt;meta property="og:description" content="To jest przykładowy opis strony głównej." /&gt;
+  &lt;meta property="og:image" content="/example-image.jpg" /&gt;
+  &lt;meta property="og:url" content="https://moja-aplikacja.com" /&gt;
+&lt;/Head&gt;
+        </code></pre>
+        <p>Open Graph umożliwia ustawienie tytułu, opisu, obrazu oraz adresu URL strony, co poprawia jej widoczność na platformach takich jak Facebook czy LinkedIn.</p>
+
+        <h2>Podsumowanie</h2>
+        <p>Komponent <code>Head</code> w Next.js to potężne narzędzie do zarządzania elementami HTML wspierającymi SEO. Dodanie odpowiednich meta tagów, unikalnych tytułów i wykorzystanie protokołu Open Graph poprawia widoczność strony w wyszukiwarkach i mediach społecznościowych. Więcej informacji znajdziesz w <a href="https://nextjs.org/docs/api-reference/next/head" target="_blank">dokumentacji Next.js</a>.</p>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/prism.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/components/prism-javascript.min.js"></script>
+</body>
+</html>

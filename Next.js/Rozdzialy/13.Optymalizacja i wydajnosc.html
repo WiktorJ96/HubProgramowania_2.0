@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Optymalizacja i Wydajność w Next.js</title>
+    <link rel="stylesheet" href="../styles.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/themes/prism-tomorrow.min.css" rel="stylesheet" />
+</head>
+<body>
+    <div class="container">
+        <h1>Optymalizacja i Wydajność w Next.js</h1>
+
+        <p>Next.js oferuje wbudowane mechanizmy optymalizacji, które pomagają zmniejszyć rozmiar aplikacji, poprawić czas ładowania i zwiększyć wydajność. W tej sekcji omówimy analizę rozmiaru bundla, lazy loading, code splitting i Lighthouse.</p>
+
+        <h2>1. Analiza rozmiaru bundla</h2>
+        <p>Aby sprawdzić, jakie biblioteki zajmują najwięcej miejsca w bundlu, można użyć wbudowanego narzędzia <code>next-bundle-analyzer</code>.</p>
+        <h3>Instalacja:</h3>
+        <pre><code class="language-shell">
+npm install @next/bundle-analyzer
+        </code></pre>
+
+        <h3>Konfiguracja w <code>next.config.js</code>:</h3>
+        <pre><code class="language-javascript">
+const withBundleAnalyzer = require('@next/bundle-analyzer')(&#123;
+  enabled: process.env.ANALYZE === 'true',
+&#125;);
+
+module.exports = withBundleAnalyzer(&#123;
+  reactStrictMode: true,
+&#125;);
+        </code></pre>
+
+        <h3>Uruchomienie analizy:</h3>
+        <pre><code class="language-shell">
+ANALYZE=true npm run build
+        </code></pre>
+        <p>Otworzy się interaktywna wizualizacja rozmiaru plików w aplikacji.</p>
+
+        <h2>2. Lazy Loading (opóźnione ładowanie)</h2>
+        <p>Next.js obsługuje lazy loading komponentów oraz zasobów, co pozwala na szybsze renderowanie pierwszego widoku użytkownika.</p>
+
+        <h3>Lazy loading komponentów:</h3>
+        <pre><code class="language-javascript">
+import dynamic from 'next/dynamic';
+
+const DynamicComponent = dynamic(() =&gt; import('../components/HeavyComponent'), &#123;
+  loading: () =&gt; &lt;p&gt;Ładowanie...&lt;/p&gt;
+&#125;);
+
+const Home = () =&gt; &#123;
+  return (
+    &lt;div&gt;
+      &lt;h1&gt;Strona główna&lt;/h1&gt;
+      &lt;DynamicComponent /&gt;
+    &lt;/div&gt;
+  );
+&#125;;
+
+export default Home;
+        </code></pre>
+
+        <h3>Lazy loading obrazów:</h3>
+        <pre><code class="language-javascript">
+import Image from 'next/image';
+
+const OptimizedImage = () =&gt; &#123;
+  return (
+    &lt;Image 
+      src="/example.jpg" 
+      alt="Optymalizowany obraz" 
+      width={500} 
+      height={300} 
+      loading="lazy"
+    /&gt;
+  );
+&#125;;
+
+export default OptimizedImage;
+        </code></pre>
+
+        <h2>3. Code Splitting</h2>
+        <p>Next.js automatycznie dzieli kod na mniejsze części, ale można go również optymalizować ręcznie.</p>
+
+        <h3>Importowanie modułów na żądanie:</h3>
+        <pre><code class="language-javascript">
+import dynamic from 'next/dynamic';
+
+const HeavyComponent = dynamic(() =&gt; import('../components/HeavyComponent'), &#123;
+  ssr: false,
+&#125;);
+        </code></pre>
+
+        <h3>Usuwanie niepotrzebnych bibliotek:</h3>
+        <pre><code class="language-javascript">
+import dayjs from 'dayjs'; // Zamiast importowania całej biblioteki moment.js
+        </code></pre>
+
+        <h2>4. Lighthouse – analiza wydajności</h2>
+        <p>Narzędzie Lighthouse pozwala na ocenę wydajności strony i sugeruje optymalizacje.</p>
+
+        <h3>Uruchomienie Lighthouse w Chrome:</h3>
+        <ul>
+            <li>Otwórz DevTools (F12) w Chrome.</li>
+            <li>Przejdź do zakładki "Lighthouse".</li>
+            <li>Wybierz "Performance" i kliknij "Analyze page load".</li>
+        </ul>
+
+        <h3>Uruchomienie Lighthouse w terminalu:</h3>
+        <pre><code class="language-shell">
+npx lighthouse https://twoja-strona.com --view
+        </code></pre>
+
+        <h2>Podsumowanie</h2>
+        <p>Next.js oferuje wiele wbudowanych mechanizmów optymalizacji, takich jak lazy loading, code splitting i analiza rozmiaru bundla. Narzędzie Lighthouse pozwala dodatkowo monitorować wydajność aplikacji i wprowadzać ulepszenia.</p>
+        <p>Więcej informacji znajdziesz w <a href="https://nextjs.org/docs/advanced-features/measuring-performance" target="_blank">dokumentacji Next.js</a>.</p>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/prism.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/components/prism-javascript.min.js"></script>
+</body>
+</html>

@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Style i CSS Modules w Next.js</title>
+    <link rel="stylesheet" href="../styles.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/themes/prism-tomorrow.min.css" rel="stylesheet" />
+</head>
+<body>
+    <div class="container">
+        <h1>Style i CSS Modules w Next.js</h1>
+
+        <p>Next.js oferuje różne sposoby stylizowania aplikacji, w tym style globalne, CSS Modules, styled-jsx oraz integrację z Tailwind CSS. Dzięki temu możesz wybrać najlepsze rozwiązanie dla swojego projektu.</p>
+
+        <h2>Konfiguracja stylów globalnych</h2>
+        <p>Style globalne w Next.js definiuje się w plikach CSS, które importuje się w pliku <code>_app.js</code> (lub <code>_app.tsx</code> w TypeScript). Przykład:</p>
+        <pre><code class="language-javascript">
+// pages/_app.js
+import '../styles/globals.css';
+
+export default function MyApp({ Component, pageProps }) {
+  return <Component {...pageProps} />;
+}
+        </code></pre>
+        <p>Plik <code>globals.css</code> znajduje się w katalogu <code>styles</code> i zawiera stylizację globalną aplikacji.</p>
+        <pre><code class="language-css">
+/* styles/globals.css */
+body {
+  margin: 0;
+  font-family: Arial, sans-serif;
+  background-color: #f5f5f5;
+}
+        </code></pre>
+
+        <h2>CSS Modules</h2>
+        <p>CSS Modules to sposób stylizowania, w którym klasy są izolowane do konkretnego komponentu. Aby użyć CSS Modules, utwórz plik z rozszerzeniem <code>.module.css</code> i zaimportuj go do komponentu.</p>
+        <pre><code class="language-javascript">
+// components/Button.js
+import styles from './Button.module.css';
+
+const Button = () => {
+  return <button className={styles.button}>Kliknij mnie</button>;
+};
+
+export default Button;
+        </code></pre>
+        <pre><code class="language-css">
+/* components/Button.module.css */
+.button {
+  background-color: #0070f3;
+  color: white;
+  padding: 10px 20px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.button:hover {
+  background-color: #005bb5;
+}
+        </code></pre>
+
+        <h2>Styled-JSX</h2>
+        <p>Next.js obsługuje styled-jsx, co pozwala na definiowanie stylów bezpośrednio w plikach komponentów jako CSS-in-JS. Przykład:</p>
+        <pre><code class="language-javascript">
+const StyledComponent = () => {
+  return (
+    <div>
+      <p>Stylowane za pomocą styled-jsx</p>
+      <style jsx>{`
+        p {
+          color: blue;
+          font-size: 18px;
+        }
+      `}</style>
+    </div>
+  );
+};
+
+export default StyledComponent;
+        </code></pre>
+        <p>Styled-jsx umożliwia definiowanie unikalnych stylów dla każdego komponentu bez konfliktów nazw klas.</p>
+
+        <h2>Integracja z Tailwind CSS</h2>
+        <p>Next.js łatwo integruje się z Tailwind CSS, co umożliwia korzystanie z klasycznych utility-first stylów. Aby zintegrować Tailwind CSS, wykonaj poniższe kroki:</p>
+        <pre><code class="language-shell">
+# Instalacja Tailwind CSS
+npm install tailwindcss postcss autoprefixer
+npx tailwindcss init
+        </code></pre>
+        <p>W pliku <code>tailwind.config.js</code> skonfiguruj ścieżki do swoich plików:</p>
+        <pre><code class="language-javascript">
+module.exports = {
+  content: [
+    './pages/**/*.{js,ts,jsx,tsx}',
+    './components/**/*.{js,ts,jsx,tsx}',
+  ],
+  theme: {
+    extend: {},
+  },
+  plugins: [],
+};
+        </code></pre>
+        <p>Następnie zaimportuj Tailwind CSS w pliku <code>globals.css</code>:</p>
+        <pre><code class="language-css">
+/* styles/globals.css */
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+        </code></pre>
+        <p>Po konfiguracji możesz używać klas Tailwind w swoich komponentach:</p>
+        <pre><code class="language-javascript">
+const TailwindComponent = () => {
+  return <button className="bg-blue-500 text-white px-4 py-2 rounded">Kliknij</button>;
+};
+
+export default TailwindComponent;
+        </code></pre>
+
+        <h2>Podsumowanie</h2>
+        <p>Next.js oferuje różne możliwości stylizowania aplikacji: od tradycyjnych stylów globalnych, przez CSS Modules, aż po nowoczesne podejścia jak styled-jsx i Tailwind CSS. Wybór metody zależy od potrzeb projektu i preferencji zespołu.</p>
+        <p>Więcej informacji znajdziesz w <a href="https://nextjs.org/docs/basic-features/built-in-css-support" target="_blank">dokumentacji Next.js</a>.</p>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/prism.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/components/prism-javascript.min.js"></script>
+</body>
+</html>

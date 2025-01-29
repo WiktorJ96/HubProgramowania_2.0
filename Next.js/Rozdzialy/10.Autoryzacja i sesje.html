@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Autoryzacja i Sesje w Next.js</title>
+    <link rel="stylesheet" href="../styles.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/themes/prism-tomorrow.min.css" rel="stylesheet" />
+</head>
+<body>
+    <div class="container">
+        <h1>Autoryzacja i Sesje w Next.js</h1>
+
+        <p>Next.js obsługuje autoryzację i sesje za pomocą pakietu <code>next-auth</code>. Dzięki temu można łatwo dodać logowanie, przechowywanie sesji oraz ochronę stron.</p>
+
+        <h2>Instalacja i konfiguracja NextAuth.js</h2>
+        <p>Aby rozpocząć, należy zainstalować pakiet <code>next-auth</code>:</p>
+        <pre><code class="language-shell">
+npm install next-auth
+        </code></pre>
+
+        <p>Następnie w katalogu <code>pages/api/auth</code> tworzymy plik <code>[...nextauth].js</code>:</p>
+        <pre><code class="language-javascript">
+import NextAuth from 'next-auth';
+import Providers from 'next-auth/providers';
+
+export default NextAuth({
+  providers: [
+    Providers.Google({
+      clientId: process.env.GOOGLE_CLIENT_ID,
+      clientSecret: process.env.GOOGLE_CLIENT_SECRET,
+    }),
+  ],
+  secret: process.env.NEXTAUTH_SECRET,
+});
+        </code></pre>
+        <p>W powyższym przykładzie używamy dostawcy Google do autoryzacji. Klucze API przechowujemy w pliku <code>.env.local</code>:</p>
+        <pre><code class="language-text">
+GOOGLE_CLIENT_ID=twoje-google-client-id
+GOOGLE_CLIENT_SECRET=twoje-google-client-secret
+NEXTAUTH_SECRET=super-tajny-klucz
+        </code></pre>
+
+        <h2>Logowanie i wylogowanie</h2>
+        <p>NextAuth.js zapewnia funkcje do zarządzania sesjami. W komponentach React można użyć hooka <code>useSession</code>:</p>
+        <pre><code class="language-javascript">
+import &#123; useSession, signIn, signOut &#125; from 'next-auth/react';
+
+const AuthComponent = () =&gt; &#123;
+  const &#123; data: session &#125; = useSession();
+
+  if (session) &#123;
+    return (
+      &lt;div&gt;
+        &lt;p&gt;Zalogowany jako &#123;session.user.email&#125;&lt;/p&gt;
+        &lt;button onClick=&#123;() =&gt; signOut()&#125;&gt;Wyloguj&lt;/button&gt;
+      &lt;/div&gt;
+    );
+  &#125;
+
+  return &lt;button onClick=&#123;() =&gt; signIn()&#125;&gt;Zaloguj&lt;/button&gt;;
+&#125;;
+
+export default AuthComponent;
+        </code></pre>
+
+        <h2>Przechowywanie sesji</h2>
+        <p>NextAuth przechowuje sesję w plikach cookies. Domyślnie sesje są przechowywane w pamięci, ale można je zapisywać w bazie danych:</p>
+        <pre><code class="language-javascript">
+import NextAuth from 'next-auth';
+import Providers from 'next-auth/providers';
+import Adapters from 'next-auth/adapters';
+import &#123; PrismaClient &#125; from '@prisma/client';
+
+const prisma = new PrismaClient();
+
+export default NextAuth(&#123;
+  providers: [
+    Providers.GitHub(&#123;
+      clientId: process.env.GITHUB_CLIENT_ID,
+      clientSecret: process.env.GITHUB_CLIENT_SECRET,
+    &#125;),
+  ],
+  adapter: Adapters.Prisma.Adapter(&#123; prisma &#125;),
+&#125;);
+        </code></pre>
+        <p>W tym przykładzie sesje są przechowywane w bazie danych PostgreSQL, MySQL lub SQLite za pomocą Prisma ORM.</p>
+
+        <h2>Ochrona stron</h2>
+        <p>Aby chronić strony, można użyć <code>middleware</code> lub sprawdzić sesję w <code>getServerSideProps</code>:</p>
+        <pre><code class="language-javascript">
+import &#123; getSession &#125; from 'next-auth/react';
+
+export async function getServerSideProps(context) &#123;
+  const session = await getSession(context);
+
+  if (!session) &#123;
+    return &#123;
+      redirect: &#123; destination: '/login', permanent: false &#125;,
+    &#125;;
+  &#125;
+
+  return &#123; props: &#123; user: session.user &#125; &#125;;
+&#125;
+        </code></pre>
+        <p>Jeśli użytkownik nie jest zalogowany, zostanie przekierowany na stronę logowania.</p>
+
+        <h2>Middleware do ochrony stron</h2>
+        <p>Możemy użyć middleware do globalnej ochrony określonych ścieżek:</p>
+        <pre><code class="language-javascript">
+import &#123; NextResponse &#125; from 'next/server';
+import &#123; getToken &#125; from 'next-auth/jwt';
+
+export async function middleware(req) &#123;
+  const token = await getToken(&#123; req, secret: process.env.NEXTAUTH_SECRET &#125;);
+
+  if (!token) &#123;
+    return NextResponse.redirect(new URL('/login', req.url));
+  &#125;
+
+  return NextResponse.next();
+&#125;
+
+export const config = &#123;
+  matcher: ['/dashboard/:path*'], // Middleware działa dla stron w /dashboard
+&#125;;
+        </code></pre>
+
+        <h2>Podsumowanie</h2>
+        <p>Next.js pozwala na łatwą integrację autoryzacji za pomocą <code>next-auth</code>. Możemy przechowywać sesje w pamięci lub bazie danych, chronić strony za pomocą <code>getServerSideProps</code> lub middleware, a także obsługiwać logowanie i wylogowanie za pomocą hooka <code>useSession</code>.</p>
+        <p>Więcej informacji znajdziesz w <a href="https://next-auth.js.org/" target="_blank">dokumentacji NextAuth.js</a>.</p>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/prism.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/components/prism-javascript.min.js"></script>
+</body>
+</html>

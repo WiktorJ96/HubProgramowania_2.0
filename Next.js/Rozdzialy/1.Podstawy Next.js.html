@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Podstawy Next.js</title>
+    <link rel="stylesheet" href="../styles.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/themes/prism-tomorrow.min.css" rel="stylesheet" />
+</head>
+<body>
+    <div class="container">
+        <h1>Podstawy Next.js</h1>
+
+        <p>Next.js to popularny framework oparty na React, który umożliwia budowanie aplikacji z renderowaniem po stronie serwera (SSR) oraz statycznym generowaniem stron (SSG). Poniżej znajdziesz informacje o strukturze projektu, instalacji, konfiguracji oraz podstawowych komendach.</p>
+
+        <h2>Struktura projektu</h2>
+        <p>Podstawowa struktura projektu Next.js wygląda następująco:</p>
+        <pre><code class="language-text">
+my-next-app/
+├── pages/          <!-- Pliki stron -->
+├── public/         <!-- Zasoby publiczne -->
+├── styles/         <!-- Pliki CSS -->
+├── components/     <!-- Komponenty wielokrotnego użytku -->
+├── .next/          <!-- Pliki builda (generowane automatycznie) -->
+├── package.json    <!-- Informacje o projekcie -->
+├── node_modules/   <!-- Zainstalowane moduły npm -->
+        </code></pre>
+        <p>Folder <code>pages/</code> zawiera pliki, które automatycznie odpowiadają różnym ścieżkom URL w aplikacji.</p>
+
+        <h2>Instalacja</h2>
+        <p>Aby zainstalować Next.js, musisz mieć zainstalowanego Node.js. Następnie wykonaj poniższe kroki:</p>
+        <pre><code class="language-shell">
+# Tworzenie nowego projektu Next.js
+npx create-next-app@latest my-next-app
+
+# Przejście do katalogu projektu
+cd my-next-app
+        </code></pre>
+        <p>Komenda <code>npx create-next-app</code> utworzy nowy projekt z domyślną konfiguracją i podstawowymi plikami.</p>
+
+        <h2>Konfiguracja</h2>
+        <p>Plik <code>next.config.js</code> pozwala dostosować konfigurację projektu. Przykład:</p>
+        <pre><code class="language-javascript">
+module.exports = {
+  reactStrictMode: true,
+  images: {
+    domains: ['example.com'], // Zezwolenie na ładowanie obrazów z określonych domen
+  },
+};
+        </code></pre>
+        <p>Możesz w nim ustawiać opcje, takie jak optymalizacja obrazów, routing czy wsparcie dla innych technologii.</p>
+
+        <h2>Podstawowe komendy</h2>
+        <p>Next.js oferuje kilka podstawowych komend do zarządzania projektem:</p>
+        <ul>
+            <li><code>npm run dev</code>: Uruchamia projekt w trybie deweloperskim (na żywo z aktualizacjami).</li>
+            <li><code>npm run build</code>: Tworzy zoptymalizowaną wersję produkcyjną aplikacji.</li>
+            <li><code>npm start</code>: Uruchamia wcześniej zbudowaną wersję aplikacji w trybie produkcyjnym.</li>
+        </ul>
+        <pre><code class="language-shell">
+# Tryb deweloperski
+npm run dev
+
+# Budowanie aplikacji
+npm run build
+
+# Start w trybie produkcyjnym
+npm start
+        </code></pre>
+        <p>Komenda <code>npm run dev</code> jest najbardziej przydatna podczas codziennej pracy, ponieważ automatycznie odświeża aplikację po zapisaniu zmian w plikach.</p>
+
+        <h2>Podsumowanie</h2>
+        <p>Next.js to potężne narzędzie do budowania nowoczesnych aplikacji webowych. Dzięki możliwościom SSR i SSG pozwala na tworzenie szybkich i zoptymalizowanych stron. Pamiętaj, aby zapoznać się z dokumentacją na <a href="https://nextjs.org" target="_blank">oficjalnej stronie Next.js</a>, aby dowiedzieć się więcej!</p>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/prism.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/components/prism-javascript.min.js"></script>
+</body>
+</html>

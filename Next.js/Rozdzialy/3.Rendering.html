@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Rendering w Next.js</title>
+    <link rel="stylesheet" href="../styles.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/themes/prism-tomorrow.min.css" rel="stylesheet" />
+</head>
+<body>
+    <div class="container">
+        <h1>Rendering w Next.js</h1>
+
+        <p>Next.js oferuje kilka strategii renderowania stron: SSR (Server-Side Rendering), SSG (Static Site Generation) i ISR (Incremental Static Regeneration). Poniżej omówimy te metody, jak je wykorzystać oraz jak optymalizować ładowanie stron.</p>
+
+        <h2>Server-Side Rendering (SSR)</h2>
+        <p>SSR polega na generowaniu strony po stronie serwera na żądanie dla każdego użytkownika. W Next.js SSR realizowany jest za pomocą funkcji <code>getServerSideProps</code>.</p>
+        <pre><code class="language-javascript">
+// Przykład SSR z getServerSideProps
+export async function getServerSideProps(context) {
+  const res = await fetch('https://api.example.com/data');
+  const data = await res.json();
+
+  return { props: { data } };
+}
+
+const SSRPage = ({ data }) => {
+  return <div>Serwer wygenerował: {data.message}</div>;
+};
+
+export default SSRPage;
+        </code></pre>
+        <p>Funkcja <code>getServerSideProps</code> jest wywoływana na serwerze dla każdego żądania, co gwarantuje, że dane będą zawsze aktualne.</p>
+
+        <h2>Static Site Generation (SSG)</h2>
+        <p>SSG generuje statyczne strony podczas procesu budowania (<code>build</code>). Dzięki temu strony są szybkie, a serwer nie jest obciążony generowaniem treści na żądanie. W Next.js SSG używa funkcji <code>getStaticProps</code>.</p>
+        <pre><code class="language-javascript">
+// Przykład SSG z getStaticProps
+export async function getStaticProps() {
+  const res = await fetch('https://api.example.com/data');
+  const data = await res.json();
+
+  return { props: { data } };
+}
+
+const SSGPage = ({ data }) => {
+  return <div>Statycznie wygenerowano: {data.message}</div>;
+};
+
+export default SSGPage;
+        </code></pre>
+        <p>Funkcja <code>getStaticProps</code> działa tylko podczas procesu budowania aplikacji. Dzięki temu strony ładują się bardzo szybko.</p>
+
+        <h2>Incremental Static Regeneration (ISR)</h2>
+        <p>ISR pozwala na aktualizowanie statycznych stron po określonym czasie, bez konieczności pełnego przebudowania aplikacji. Używa się go z <code>getStaticProps</code> poprzez dodanie parametru <code>revalidate</code>.</p>
+        <pre><code class="language-javascript">
+// Przykład ISR z revalidate
+export async function getStaticProps() {
+  const res = await fetch('https://api.example.com/data');
+  const data = await res.json();
+
+  return {
+    props: { data },
+    revalidate: 10, // Strona będzie odświeżana co 10 sekund
+  };
+}
+
+const ISRPage = ({ data }) => {
+  return <div>Statyczna regeneracja: {data.message}</div>;
+};
+
+export default ISRPage;
+        </code></pre>
+        <p>Dzięki ISR można korzystać z wydajności statycznych stron przy jednoczesnej aktualizacji danych w określonych odstępach czasu.</p>
+
+        <h2>Optymalizacja ładowania stron</h2>
+        <p>Next.js oferuje szereg funkcji wspierających optymalizację ładowania stron:</p>
+        <ul>
+            <li><strong>Prefetching:</strong> Linki w Next.js automatycznie ładują dane dla podstron, zanim użytkownik na nie kliknie.</li>
+            <li><strong>Lazy Loading:</strong> Obrazy i komponenty można ładować leniwie, aby zmniejszyć początkowy czas ładowania.</li>
+            <li><strong>Code Splitting:</strong> Next.js dzieli kod na mniejsze fragmenty, które są ładowane na żądanie.</li>
+            <li><strong>Image Optimization:</strong> Next.js automatycznie optymalizuje obrazy za pomocą komponentu <code>next/image</code>.</li>
+        </ul>
+        <pre><code class="language-javascript">
+// Lazy loading obrazu z next/image
+import Image from 'next/image';
+
+const OptimizedImage = () => {
+  return <Image src="/example.jpg" alt="Example" width={500} height={300} />;
+};
+
+export default OptimizedImage;
+        </code></pre>
+        <p>Te techniki znacząco poprawiają czas ładowania stron i doświadczenie użytkownika.</p>
+
+        <h2>Podsumowanie</h2>
+        <p>Next.js oferuje elastyczne strategie renderowania (SSR, SSG, ISR), które można dostosować do różnych potrzeb projektu. Dzięki funkcjom, takim jak <code>getStaticProps</code> i <code>getServerSideProps</code>, oraz technikom optymalizacji ładowania stron, Next.js jest świetnym wyborem do budowy nowoczesnych aplikacji webowych.</p>
+        <p>Więcej szczegółów znajdziesz w <a href="https://nextjs.org/docs/basic-features/data-fetching" target="_blank">dokumentacji Next.js</a>.</p>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/prism.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/components/prism-javascript.min.js"></script>
+</body>
+</html>

@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Middleware w Next.js</title>
+    <link rel="stylesheet" href="../styles.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/themes/prism-tomorrow.min.css" rel="stylesheet" />
+</head>
+<body>
+    <div class="container">
+        <h1>Middleware w Next.js</h1>
+
+        <p>Middleware (pośrednik) w Next.js pozwala na kontrolę ruchu HTTP, autoryzację, obsługę sesji oraz przekierowania. Dzięki niemu można manipulować żądaniami i odpowiedziami przed ich dotarciem do konkretnego endpointu lub strony.</p>
+
+        <h2>Tworzenie Middleware</h2>
+        <p>W Next.js middleware definiuje się w pliku <code>middleware.js</code> znajdującym się w katalogu głównym projektu. Przykład podstawowego middleware:</p>
+        <pre><code class="language-javascript">
+import { NextResponse } from 'next/server';
+
+export function middleware(request) {
+  console.log('Middleware działa dla każdej ścieżki');
+  return NextResponse.next();
+}
+        </code></pre>
+        <p>Funkcja <code>middleware</code> jest wywoływana dla każdego żądania i może zwracać:</p>
+        <ul>
+            <li><code>NextResponse.next()</code>: Kontynuuj przetwarzanie.</li>
+            <li><code>NextResponse.redirect()</code>: Przekierowanie żądania.</li>
+            <li><code>NextResponse.rewrite()</code>: Przepisanie ścieżki żądania.</li>
+        </ul>
+
+        <h2>Kontrola ruchu</h2>
+        <p>Middleware może być używane do kontrolowania ruchu na podstawie adresów URL, nagłówków lub innych danych z żądania. Przykład ograniczenia dostępu do określonej ścieżki:</p>
+        <pre><code class="language-javascript">
+import { NextResponse } from 'next/server';
+
+export function middleware(request) {
+  const url = request.nextUrl;
+
+  // Przekierowanie jeśli ścieżka to /restricted
+  if (url.pathname === '/restricted') {
+    return NextResponse.redirect(new URL('/login', url.origin));
+  }
+
+  return NextResponse.next();
+}
+        </code></pre>
+
+        <h2>Autoryzacja</h2>
+        <p>Middleware może sprawdzać, czy użytkownik jest zalogowany, zanim pozwoli mu na dostęp do chronionych zasobów. Przykład użycia tokenu w nagłówku:</p>
+        <pre><code class="language-javascript">
+import { NextResponse } from 'next/server';
+
+export function middleware(request) {
+  const token = request.cookies.get('authToken');
+
+  // Jeśli brak tokenu, przekierowanie do strony logowania
+  if (!token) {
+    return NextResponse.redirect(new URL('/login', request.url));
+  }
+
+  return NextResponse.next();
+}
+        </code></pre>
+        <p>W powyższym przykładzie middleware sprawdza, czy użytkownik posiada ciasteczko z tokenem, i w razie jego braku przekierowuje na stronę logowania.</p>
+
+        <h2>Przekierowania</h2>
+        <p>Middleware umożliwia łatwe przekierowania na inne strony lub domeny. Przykład przekierowania użytkownika w zależności od języka przeglądarki:</p>
+        <pre><code class="language-javascript">
+import { NextResponse } from 'next/server';
+
+export function middleware(request) {
+  const { nextUrl } = request;
+  const locale = request.headers.get('accept-language')?.split(',')[0];
+
+  if (locale === 'pl') {
+    return NextResponse.redirect(new URL('/pl', nextUrl.origin));
+  } else if (locale === 'en') {
+    return NextResponse.redirect(new URL('/en', nextUrl.origin));
+  }
+
+  return NextResponse.next();
+}
+        </code></pre>
+
+        <h2>Restrukturyzacja ścieżek</h2>
+        <p>Dzięki funkcji <code>rewrite</code> można zmieniać ścieżki URL bez zmiany widocznych adresów w przeglądarce. Przykład:</p>
+        <pre><code class="language-javascript">
+import { NextResponse } from 'next/server';
+
+export function middleware(request) {
+  const url = request.nextUrl;
+
+  // Przepisanie ścieżki /about na /info
+  if (url.pathname === '/about') {
+    return NextResponse.rewrite(new URL('/info', url.origin));
+  }
+
+  return NextResponse.next();
+}
+        </code></pre>
+        <p>Użytkownik odwiedza <code>/about</code>, ale w tle serwer przepisuje tę ścieżkę na <code>/info</code>.</p>
+
+        <h2>Ograniczenie middleware do ścieżek</h2>
+        <p>Możesz ograniczyć, na jakie ścieżki middleware ma reagować, definiując je w pliku <code>middleware.js</code>:</p>
+        <pre><code class="language-javascript">
+export const config = {
+  matcher: ['/restricted', '/profile/:path*'], // Middleware działa tylko na tych ścieżkach
+};
+        </code></pre>
+
+        <h2>Podsumowanie</h2>
+        <p>Middleware w Next.js to potężne narzędzie do zarządzania ruchem, autoryzacji i przekierowań w aplikacji. Możesz dzięki niemu dynamicznie reagować na żądania użytkowników i dostosowywać działanie aplikacji w czasie rzeczywistym. Więcej szczegółów znajdziesz w <a href="https://nextjs.org/docs/middleware" target="_blank">dokumentacji Next.js</a>.</p>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/prism.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/components/prism-javascript.min.js"></script>
+</body>
+</html>

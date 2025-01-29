@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Baza Danych i ORM w Next.js</title>
+    <link rel="stylesheet" href="../styles.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/themes/prism-tomorrow.min.css" rel="stylesheet" />
+</head>
+<body>
+    <div class="container">
+        <h1>Baza Danych i ORM w Next.js</h1>
+
+        <p>Next.js obsługuje różne bazy danych, takie jak MongoDB i PostgreSQL, które można połączyć z aplikacją za pomocą ORM (np. Prisma). W tej sekcji omówimy sposoby konfiguracji bazy oraz użycie ORM.</p>
+
+        <h2>Podłączenie do MongoDB</h2>
+        <p>Najprostszym sposobem na podłączenie MongoDB do Next.js jest użycie biblioteki <code>mongoose</code>. Instalujemy ją za pomocą:</p>
+        <pre><code class="language-shell">
+npm install mongoose
+        </code></pre>
+
+        <p>Następnie tworzymy plik <code>lib/mongodb.js</code>, który będzie zarządzał połączeniem:</p>
+        <pre><code class="language-javascript">
+import mongoose from 'mongoose';
+
+const MONGODB_URI = process.env.MONGODB_URI;
+
+if (!MONGODB_URI) {
+  throw new Error('Brak zmiennej środowiskowej MONGODB_URI');
+}
+
+let cached = global.mongoose || &#123; conn: null, promise: null &#125;;
+
+export async function connectToDatabase() &#123;
+  if (cached.conn) return cached.conn;
+
+  if (!cached.promise) &#123;
+    cached.promise = mongoose.connect(MONGODB_URI, &#123;
+      useNewUrlParser: true,
+      useUnifiedTopology: true,
+    &#125;).then((mongoose) =&gt; mongoose);
+  &#125;
+  
+  cached.conn = await cached.promise;
+  return cached.conn;
+&#125;
+        </code></pre>
+
+        <p>Następnie w pliku <code>.env.local</code> ustawiamy zmienną środowiskową:</p>
+        <pre><code class="language-text">
+MONGODB_URI=mongodb+srv://user:password@cluster.mongodb.net/mydatabase
+        </code></pre>
+
+        <h2>Podłączenie do PostgreSQL z Prisma</h2>
+        <p>Prisma to popularne ORM, które obsługuje PostgreSQL, MySQL, SQLite i inne bazy. Instalujemy je za pomocą:</p>
+        <pre><code class="language-shell">
+npm install @prisma/client
+npx prisma init
+        </code></pre>
+
+        <p>Po uruchomieniu komendy <code>npx prisma init</code> zostanie utworzony plik <code>prisma/schema.prisma</code>, który konfigurujemy dla PostgreSQL:</p>
+        <pre><code class="language-text">
+generator client &#123;
+  provider = "prisma-client-js"
+&#125;
+
+datasource db &#123;
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+&#125;
+        </code></pre>
+
+        <p>W pliku <code>.env</code> dodajemy połączenie do PostgreSQL:</p>
+        <pre><code class="language-text">
+DATABASE_URL=postgresql://user:password@localhost:5432/mydatabase
+        </code></pre>
+
+        <h2>Tworzenie modelu bazy danych</h2>
+        <p>Dodajemy model użytkownika do <code>prisma/schema.prisma</code>:</p>
+        <pre><code class="language-text">
+model User &#123;
+  id    Int     @id @default(autoincrement())
+  name  String
+  email String  @unique
+&#125;
+        </code></pre>
+
+        <p>Następnie aktualizujemy bazę:</p>
+        <pre><code class="language-shell">
+npx prisma migrate dev --name init
+        </code></pre>
+
+        <h2>Użycie Prisma w Next.js</h2>
+        <p>Tworzymy plik <code>lib/prisma.js</code>, aby uniknąć wielokrotnych połączeń z bazą:</p>
+        <pre><code class="language-javascript">
+import { PrismaClient } from '@prisma/client';
+
+const globalForPrisma = globalThis;
+
+const prisma = globalForPrisma.prisma || new PrismaClient();
+
+if (process.env.NODE_ENV !== 'production') globalForPrisma.prisma = prisma;
+
+export default prisma;
+        </code></pre>
+
+        <p>Przykładowe API Next.js do pobierania użytkowników:</p>
+        <pre><code class="language-javascript">
+import prisma from '../../lib/prisma';
+
+export default async function handler(req, res) &#123;
+  const users = await prisma.user.findMany();
+  res.json(users);
+&#125;
+        </code></pre>
+
+        <h2>Podsumowanie</h2>
+        <p>Next.js obsługuje bazy danych takie jak MongoDB i PostgreSQL. Możemy je podłączyć za pomocą <code>mongoose</code> lub ORM jak <code>Prisma</code>, co upraszcza operacje na bazie danych. Więcej informacji znajdziesz w <a href="https://www.prisma.io/docs/" target="_blank">dokumentacji Prisma</a>.</p>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/prism.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/components/prism-javascript.min.js"></script>
+</body>
+</html>

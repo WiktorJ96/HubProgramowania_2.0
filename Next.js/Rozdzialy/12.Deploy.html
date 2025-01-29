@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Deploy Next.js na Vercel i Netlify</title>
+    <link rel="stylesheet" href="../styles.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/themes/prism-tomorrow.min.css" rel="stylesheet" />
+</head>
+<body>
+    <div class="container">
+        <h1>Deploy Next.js na Vercel i Netlify</h1>
+
+        <p>Next.js można łatwo wdrożyć na platformach takich jak Vercel i Netlify. Obie te usługi oferują darmowy hosting, automatyczne wdrażanie i integrację z GitHub.</p>
+
+        <h2>1. Deploy na Vercel</h2>
+        <p>Vercel to platforma stworzona przez twórców Next.js, oferująca natywną obsługę tego frameworka.</p>
+
+        <h3>Kroki wdrożenia:</h3>
+        <ul>
+            <li>Utwórz konto na <a href="https://vercel.com" target="_blank">Vercel</a>.</li>
+            <li>Połącz swoje repozytorium GitHub/GitLab/Bitbucket.</li>
+            <li>Wybierz repozytorium z aplikacją Next.js.</li>
+            <li>Vercel automatycznie wykryje Next.js i skonfiguruje projekt.</li>
+            <li>Po wdrożeniu otrzymasz adres URL aplikacji.</li>
+        </ul>
+
+        <h3>Deploy z terminala:</h3>
+        <p>Można również wdrożyć aplikację ręcznie za pomocą CLI:</p>
+        <pre><code class="language-shell">
+npm install -g vercel
+vercel
+        </code></pre>
+        <p>Po uruchomieniu <code>vercel</code> aplikacja zostanie wdrożona, a Vercel wygeneruje URL.</p>
+
+        <h2>2. Deploy na Netlify</h2>
+        <p>Netlify to popularna platforma do hostowania aplikacji statycznych i dynamicznych, obsługująca Next.js.</p>
+
+        <h3>Kroki wdrożenia:</h3>
+        <ul>
+            <li>Załóż konto na <a href="https://www.netlify.com/" target="_blank">Netlify</a>.</li>
+            <li>Połącz repozytorium z GitHub.</li>
+            <li>Podczas konfiguracji wybierz framework <strong>Next.js</strong>.</li>
+            <li>W polu <code>Build command</code> wpisz: <code>next build</code></li>
+            <li>W polu <code>Publish directory</code> wpisz: <code>.next</code></li>
+            <li>Rozpocznij wdrażanie.</li>
+        </ul>
+
+        <h3>Deploy z terminala:</h3>
+        <pre><code class="language-shell">
+npm install -g netlify-cli
+netlify deploy
+        </code></pre>
+
+        <h2>3. CI/CD z GitHub Actions</h2>
+        <p>Można skonfigurować automatyczne wdrażanie na każdą zmianę w repozytorium za pomocą GitHub Actions:</p>
+        <pre><code class="language-yaml">
+name: Deploy to Vercel
+on:
+  push:
+    branches:
+      - main
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - name: Install dependencies
+        run: npm install
+      - name: Build project
+        run: npm run build
+      - name: Deploy to Vercel
+        run: vercel --token ${{ secrets.VERCEL_TOKEN }}
+        </code></pre>
+
+        <p>Plik ten umieszczamy w katalogu <code>.github/workflows/deploy.yml</code>, co pozwala na automatyczny deploy po każdej zmianie w branchu <code>main</code>.</p>
+
+        <h2>4. Konfiguracja domen</h2>
+        <p>Na Vercel i Netlify można podłączyć własną domenę:</p>
+        <ul>
+            <li>Wejdź w ustawienia projektu.</li>
+            <li>Dodaj domenę w sekcji "Custom Domains".</li>
+            <li>Skonfiguruj rekordy DNS w panelu domeny.</li>
+        </ul>
+
+        <h2>Podsumowanie</h2>
+        <p>Next.js można łatwo wdrożyć na Vercel i Netlify. Można także dodać CI/CD do automatycznego wdrażania aplikacji oraz podłączyć własną domenę. Więcej informacji znajdziesz w <a href="https://nextjs.org/docs/deployment" target="_blank">dokumentacji Next.js</a>.</p>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/prism.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/components/prism-javascript.min.js"></script>
+</body>
+</html>

@@ -1,8 +1,14 @@
-/* Stylowanie ogólne */
+:root {
+    --main-color: #007bff; /* Niebieski - symbol technologii i API */
+    --secondary-color: #1c1c1c; /* Głęboka szarość dla tła */
+    --text-color: #e8e8e8; /* Jasnoszary dla tekstu */
+    --accent-color: #ff4500; /* Pomarańczowy akcent - wyróżnienia */
+}
+
 body {
-    font-family: 'Roboto', sans-serif;
-    background-color: #1a1f36; /* Ciemny granatowy */
-    color: #c0c7d1; /* Jasnoszary tekst dla lepszego kontrastu */
+    font-family: 'Inter', sans-serif;
+    background-color: var(--secondary-color);
+    color: var(--text-color);
     margin: 0;
     padding: 20px;
     line-height: 1.8;
@@ -11,43 +17,49 @@ body {
     flex-direction: column;
 }
 
-/* Stylowanie głównego kontenera */
 .container {
-    max-width: 720px;
-    background-color: #242b3a; /* Ciemny, neutralny kolor */
-    padding: 30px;
-    border-radius: 15px;
-    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.5);
+    max-width: 950px;
+    background-color: #292929;
+    padding: 40px;
+    border-radius: 12px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
     width: 90%;
     margin: auto;
     transition: transform 0.2s ease-in-out;
 }
 
-/* Stylowanie nagłówków */
 h1 {
-    background-color: #007acc; /* Niebieski (kojarzący się z API) */
-    color: #ffffff;
-    padding: 15px;
+    background: linear-gradient(90deg, var(--main-color), var(--accent-color));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
     text-align: center;
-    border-radius: 12px;
+    font-size: 2.8rem;
     margin-bottom: 40px;
-    font-size: 2rem;
+    font-weight: bold;
 }
 
 h2 {
-    color: #007acc; /* Niebieski akcent */
-    border-bottom: 2px solid #007acc;
+    color: var(--main-color);
+    border-bottom: 2px solid var(--accent-color);
     padding-bottom: 10px;
     margin-bottom: 20px;
-    font-size: 1.5rem;
+    font-size: 2rem;
 }
 
-/* Stylowanie paragrafów */
+h3 {
+    color: var(--accent-color);
+    margin-top: 30px;
+    margin-bottom: 15px;
+    font-size: 1.5rem;
+    border-left: 4px solid var(--main-color);
+    padding-left: 10px;
+}
+
 p {
-    color: #c0c7d1; /* Jasnoszary kolor */
+    color: var(--text-color);
     line-height: 1.7;
     font-size: 1.1rem;
-    margin-bottom: 25px;
+    margin-bottom: 20px;
     transition: color 0.3s ease-in-out;
 }
 
@@ -55,96 +67,125 @@ p:hover {
     color: #ffffff;
 }
 
-/* Stylowanie bloków kodu */
 pre {
-    background-color: #2d3446; /* Ciemne, neutralne tło */
-    color: #80bfff; /* Jasnoniebieski tekst kodu */
+    background-color: #121212;
+    color: #79b8ff;
     padding: 20px;
-    border-radius: 12px;
+    border-radius: 8px;
     font-size: 1rem;
     overflow-x: auto;
     box-shadow: 0 6px 12px rgba(0, 0, 0, 0.4);
+    margin-bottom: 25px;
 }
 
 code {
-    background-color: #007acc; /* Niebieskie tło dla inline code */
-    padding: 4px 6px;
+    background-color: var(--accent-color);
+    padding: 6px 8px;
     border-radius: 6px;
-    font-size: 0.9rem;
-    color: #ffffff; /* Biały tekst */
+    font-size: 0.95rem;
+    color: #ffffff;
 }
 
-/* Stylowanie linków */
+ul {
+    padding-left: 25px;
+    color: var(--text-color);
+}
+
+ul li {
+    margin-bottom: 15px;
+    font-size: 1.1rem;
+    padding: 12px;
+    background-color: #1f1f1f;
+    border-left: 4px solid var(--main-color);
+    border-radius: 8px;
+    transition: background-color 0.3s ease-in-out, transform 0.2s ease-in-out;
+}
+
+ul li:hover {
+    background-color: #333333;
+    transform: translateX(10px);
+}
+
 a {
-    color: #3683b6;
+    color: var(--main-color);
     text-decoration: none;
     font-weight: bold;
     transition: color 0.3s ease-in-out, transform 0.2s ease-in-out;
 }
 
 a:hover {
-    color: #80bfff; /* Jaśniejszy niebieski */
+    color: var(--accent-color);
     transform: scale(1.05);
     text-decoration: underline;
 }
 
 a:active {
-    color: #005f99; /* Ciemniejszy niebieski */
+    color: #0056b3;
     transform: scale(0.98);
 }
 
-/* Stylowanie przycisku */
 button {
-    background-color: #007acc;
-    color: #ffffff;
+    background: linear-gradient(90deg, var(--main-color), var(--accent-color));
+    color: #fff;
     border: none;
-    padding: 10px 10px;
+    padding: 14px 18px;
     border-radius: 8px;
-    font-size: 0.9rem;
+    font-size: 1.1rem;
     font-weight: bold;
     cursor: pointer;
     transition: background-color 0.3s ease-in-out, transform 0.2s ease-in-out;
-    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.4);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4);
     outline: none;
 }
 
 button:hover {
-    background-color: #80bfff;
+    background: linear-gradient(90deg, var(--accent-color), var(--main-color));
     transform: scale(1.05);
 }
 
 button:active {
-    background-color: #005f99;
+    background-color: #0044cc;
     transform: scale(0.98);
 }
 
-/* Stylowanie elementów akordeonu */
 .accordion-item {
-    margin-bottom: 10px;
-    border-radius: 5px;
+    margin-bottom: 15px;
+    border-radius: 8px;
+    background-color: #1f1f1f;
 }
 
 .accordion-header {
-    padding: 10px;
+    padding: 12px;
     cursor: pointer;
     font-size: 1.2em;
-    background-color: #242b3a; /* Ciemny neutralny */
-    color: #3c9ddd; /* Akcent niebieski */
+    background: linear-gradient(90deg, var(--main-color), var(--accent-color));
+    color: #fff;
+    border-radius: 5px;
 }
 
 .accordion-content {
-    padding: 0 20px;
+    padding: 10px 20px;
     max-height: 0;
     overflow: hidden;
     transition: max-height 0.3s ease;
+    background-color: #222;
 }
 
-/* Responsywność */
+blockquote {
+    font-style: italic;
+    color: var(--accent-color);
+    padding: 10px 20px;
+    border-left: 4px solid var(--main-color);
+    margin: 20px 0;
+    background-color: #292929;
+    border-radius: 8px;
+}
+
 @media (min-width: 768px) {
     p, ul {
         font-size: 1.2rem;
     }
-
+    
     pre {
         font-size: 1.1rem;
     }

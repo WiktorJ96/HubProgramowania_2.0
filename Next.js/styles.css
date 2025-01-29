@@ -1,11 +1,8 @@
 :root {
-    --main-color: #CC342D; /* Czerwony - kolor Ruby */
-    --secondary-color: #1e1e1e; /* Ciemne tło */
-    --text-color: #eaeaea; /* Jasny tekst */
-    --accent-color: #FF5733; /* Pomarańczowy - dodatkowy akcent */
-    --code-key: #CC342D; /* Czerwony dla kluczy */
-    --code-string: #FFCA28; /* Żółty dla wartości tekstowych */
-    --code-number: #FF7043; /* Pomarańczowy dla liczb */
+    --main-color: #0070f3; /* Niebieski Next.js */
+    --secondary-color: #0a0a0a; /* Głęboka czerń dla kontrastu */
+    --text-color: #e0e0e0; /* Jasnoszary dla tekstu */
+    --accent-color: #7928ca; /* Fioletowy akcent */
 }
 
 body {
@@ -21,11 +18,11 @@ body {
 }
 
 .container {
-    max-width: 950px;
-    background-color: #292929;
+    max-width: 800px;
+    background-color: #111;
     padding: 40px;
     border-radius: 12px;
-    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.7);
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
     width: 90%;
     margin: auto;
     transition: transform 0.2s ease-in-out;
@@ -36,7 +33,7 @@ h1 {
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
     text-align: center;
-    font-size: 2.8rem;
+    font-size: 2.5rem;
     margin-bottom: 40px;
     font-weight: bold;
 }
@@ -46,23 +43,14 @@ h2 {
     border-bottom: 2px solid var(--accent-color);
     padding-bottom: 10px;
     margin-bottom: 20px;
-    font-size: 2rem;
-}
-
-h3 {
-    color: var(--accent-color);
-    margin-top: 30px;
-    margin-bottom: 15px;
     font-size: 1.5rem;
-    border-left: 4px solid var(--main-color);
-    padding-left: 10px;
 }
 
 p {
     color: var(--text-color);
     line-height: 1.7;
     font-size: 1.1rem;
-    margin-bottom: 20px;
+    margin-bottom: 25px;
     transition: color 0.3s ease-in-out;
 }
 
@@ -70,36 +58,22 @@ p:hover {
     color: #ffffff;
 }
 
-/* Stylowanie kodu */
 pre {
-    background-color: #1f1f1f;
+    background-color: #0a0a0a;
+    color: #79b8ff;
     padding: 20px;
     border-radius: 8px;
     font-size: 1rem;
     overflow-x: auto;
-    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.5);
-    margin-bottom: 25px;
-}
-
-/* Stylowanie składni Ruby */
-pre .json-key {
-    color: var(--code-key);
-}
-
-pre .json-string {
-    color: var(--code-string);
-}
-
-pre .json-number {
-    color: var(--code-number);
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.4);
 }
 
 code {
     background-color: var(--accent-color);
-    padding: 6px 8px;
+    padding: 4px 6px;
     border-radius: 6px;
-    font-size: 0.95rem;
-    color: #000000;
+    font-size: 0.9rem;
+    color: #ffffff;
 }
 
 ul {
@@ -108,18 +82,17 @@ ul {
 }
 
 ul li {
-    margin-bottom: 15px;
+    margin-bottom: 10px;
     font-size: 1.1rem;
-    padding: 12px;
-    background-color: #333333;
-    border-left: 4px solid var(--main-color);
+    padding: 10px;
+    background-color: #1a1a1a;
     border-radius: 8px;
     transition: background-color 0.3s ease-in-out, transform 0.2s ease-in-out;
 }
 
 ul li:hover {
-    background-color: #444444;
-    transform: translateX(10px);
+    background-color: #222;
+    transform: translateX(8px);
 }
 
 a {
@@ -136,7 +109,7 @@ a:hover {
 }
 
 a:active {
-    color: #990000;
+    color: #0051b3;
     transform: scale(0.98);
 }
 
@@ -144,13 +117,13 @@ button {
     background: linear-gradient(90deg, var(--main-color), var(--accent-color));
     color: #fff;
     border: none;
-    padding: 14px 18px;
+    padding: 12px 16px;
     border-radius: 8px;
-    font-size: 1.1rem;
+    font-size: 1rem;
     font-weight: bold;
     cursor: pointer;
     transition: background-color 0.3s ease-in-out, transform 0.2s ease-in-out;
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.5);
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.4);
     outline: none;
 }
 
@@ -160,14 +133,14 @@ button:hover {
 }
 
 button:active {
-    background-color: #990000;
+    background-color: #0047ab;
     transform: scale(0.98);
 }
 
 .accordion-item {
-    margin-bottom: 15px;
-    border-radius: 8px;
-    background-color: #333333;
+    margin-bottom: 10px;
+    border-radius: 5px;
+    background-color: #1a1a1a;
 }
 
 .accordion-header {
@@ -180,20 +153,11 @@ button:active {
 }
 
 .accordion-content {
+    padding: 10px 20px;
     max-height: 0;
     overflow: hidden;
     transition: max-height 0.3s ease;
-    background-color: #1f1f1f;
-}
-
-blockquote {
-    font-style: italic;
-    color: var(--main-color);
-    padding: 10px 20px;
-    border-left: 4px solid var(--accent-color);
-    margin: 20px 0;
-    background-color: #292929;
-    border-radius: 8px;
+    background-color: #222;
 }
 
 @media (min-width: 768px) {

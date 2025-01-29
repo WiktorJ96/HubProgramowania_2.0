@@ -1,0 +1,321 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title data-lang-key="title-nextjs-skills">Umiejętności Next.js</title>
+  <link rel="icon" type="image/png" href="assets/nextjs-logo.png" sizes="16x16">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+  <link rel="stylesheet" href="skills.css">
+  <style>
+    .nextjs-hr {
+      border: none;
+      height: 3px;
+      background: linear-gradient(to right, #000000, rgba(0, 0, 0, 0), #0070f3);
+      margin: 40px 0;
+      margin-top: 15px;
+      position: relative;
+      overflow: visible;
+    }
+
+    .nextjs-hr::before {
+      content: 'Next.js';
+      display: block;
+      position: absolute;
+      top: -14px;
+      left: 50%;
+      transform: translateX(-50%);
+      font-size: 24px;
+      letter-spacing: 3px;
+      color: #000;
+      font-weight: bold;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      text-shadow: 2px 2px 2px rgba(0,0,0,0.5);
+    }
+  </style>
+</head>
+<body data-page="nextjs">
+  <div class="language-switch">
+    <button id="lang-pl">PL</button>
+    <button id="lang-en">EN</button>
+  </div>
+
+  <div class="container py-5">
+    <div class="text-center iconNextjs">
+      <img src="assets/nextjs-logo.png" style="width: 70px; height: 70px;" class="mb-4" alt="Next.js Logo">
+    </div>
+
+    <hr class="nextjs-hr">
+
+    <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4">
+
+      <!-- Podstawy Next.js -->
+      <div class="col">
+        <div class="card skill-card h-100">
+          <div class="card-body text-center">
+            <i class="fas fa-seedling skill-icon mb-3"></i>
+            <h5 class="card-title">Podstawy Next.js</h5>
+            <p class="card-text">
+              Struktura projektu, instalacja, konfiguracja, podstawowe komendy (dev, build, start).
+            </p>
+          </div>
+          <div class="card-footer">
+            <span class="badge bg-success">
+              <i class="fas fa-smile" data-bs-toggle="tooltip" title="Dobry"></i>
+            </span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Routing -->
+      <div class="col">
+        <div class="card skill-card h-100">
+          <div class="card-body text-center">
+            <i class="fas fa-route skill-icon mb-3"></i>
+            <h5 class="card-title">Routing</h5>
+            <p class="card-text">
+              Strony (pages), dynamiczne ścieżki (np. [id].js), Link, useRouter, nawigacja między podstronami.
+            </p>
+          </div>
+          <div class="card-footer">
+            <span class="badge bg-success">
+              <i class="fas fa-smile" data-bs-toggle="tooltip" title="Dobry"></i>
+            </span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Rendering (SSR, SSG, ISR) -->
+      <div class="col">
+        <div class="card skill-card h-100">
+          <div class="card-body text-center">
+            <i class="fas fa-sync-alt skill-icon mb-3"></i>
+            <h5 class="card-title">Rendering (SSR/SSG/ISR)</h5>
+            <p class="card-text">
+              getStaticProps, getServerSideProps, Incremental Static Regeneration, optymalizacja ładowania stron.
+            </p>
+          </div>
+          <div class="card-footer">
+            <span class="badge bg-success">
+              <i class="fas fa-smile" data-bs-toggle="tooltip" title="Dobry"></i>
+            </span>
+          </div>
+        </div>
+      </div>
+
+      <!-- API Routes -->
+      <div class="col">
+        <div class="card skill-card h-100">
+          <div class="card-body text-center">
+            <i class="fas fa-code skill-icon mb-3"></i>
+            <h5 class="card-title">API Routes</h5>
+            <p class="card-text">
+              Tworzenie własnych endpointów (api/), obsługa żądań (GET, POST), autoryzacja.
+            </p>
+          </div>
+          <div class="card-footer">
+            <span class="badge bg-success">
+              <i class="fas fa-smile" data-bs-toggle="tooltip" title="Dobry"></i>
+            </span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Style i CSS Modules -->
+      <div class="col">
+        <div class="card skill-card h-100">
+          <div class="card-body text-center">
+            <i class="fas fa-palette skill-icon mb-3"></i>
+            <h5 class="card-title">Style i CSS Modules</h5>
+            <p class="card-text">
+              Konfiguracja stylów globalnych, pliki .module.css, styled-jsx, integracja z Tailwind CSS.
+            </p>
+          </div>
+          <div class="card-footer">
+            <span class="badge bg-warning">
+              <i class="fas fa-meh" data-bs-toggle="tooltip" title="Średni"></i>
+            </span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Optymalizacja Obrazów -->
+      <div class="col">
+        <div class="card skill-card h-100">
+          <div class="card-body text-center">
+            <i class="fas fa-image skill-icon mb-3"></i>
+            <h5 class="card-title">Optymalizacja Obrazów</h5>
+            <p class="card-text">
+              Komponent <code>Image</code>, ładowanie obrazów z zewnętrznych źródeł, responsywne rozmiary.
+            </p>
+          </div>
+          <div class="card-footer">
+            <span class="badge bg-warning">
+              <i class="fas fa-meh" data-bs-toggle="tooltip" title="Średni"></i>
+            </span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Next.js Head i SEO -->
+      <div class="col">
+        <div class="card skill-card h-100">
+          <div class="card-body text-center">
+            <i class="fas fa-search skill-icon mb-3"></i>
+            <h5 class="card-title">Head i SEO</h5>
+            <p class="card-text">
+              Komponent <code>Head</code>, meta tagi, tytuł strony, podstawy SEO, Open Graph.
+            </p>
+          </div>
+          <div class="card-footer">
+            <span class="badge bg-warning">
+              <i class="fas fa-meh" data-bs-toggle="tooltip" title="Średni"></i>
+            </span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Middleware (pośrednik) -->
+      <div class="col">
+        <div class="card skill-card h-100">
+          <div class="card-body text-center">
+            <i class="fas fa-hand-paper skill-icon mb-3"></i>
+            <h5 class="card-title">Middleware (pośrednik)</h5>
+            <p class="card-text">
+              Tworzenie middleware (pośrednika) do kontroli ruchu, autoryzacji, przekierowań w Next.js.
+            </p>
+          </div>
+          <div class="card-footer">
+            <span class="badge bg-warning">
+              <i class="fas fa-meh" data-bs-toggle="tooltip" title="Średni"></i>
+            </span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Konfiguracja i Pliki Konfiguracyjne -->
+      <div class="col">
+        <div class="card skill-card h-100">
+          <div class="card-body text-center">
+            <i class="fas fa-cogs skill-icon mb-3"></i>
+            <h5 class="card-title">Konfiguracja Next.js</h5>
+            <p class="card-text">
+              next.config.js, optymalizacja buildu, customowy serwer, zmienne środowiskowe.
+            </p>
+          </div>
+          <div class="card-footer">
+            <span class="badge bg-warning">
+              <i class="fas fa-meh" data-bs-toggle="tooltip" title="Średni"></i>
+            </span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Autoryzacja i Sesje -->
+      <div class="col">
+        <div class="card skill-card h-100">
+          <div class="card-body text-center">
+            <i class="fas fa-lock skill-icon mb-3"></i>
+            <h5 class="card-title">Autoryzacja i Sesje</h5>
+            <p class="card-text">
+              Integracja z next-auth, przechowywanie sesji, ochrona stron (middleware).
+            </p>
+          </div>
+          <div class="card-footer">
+            <span class="badge bg-danger">
+              <i class="fas fa-frown" data-bs-toggle="tooltip" title="Słaby"></i>
+            </span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Baza Danych i ORM -->
+      <div class="col">
+        <div class="card skill-card h-100">
+          <div class="card-body text-center">
+            <i class="fas fa-database skill-icon mb-3"></i>
+            <h5 class="card-title">Baza Danych i ORM</h5>
+            <p class="card-text">
+              Podłączenie do bazy (MongoDB, PostgreSQL itp.), użycie ORM (np. Prisma) w projektach Next.js.
+            </p>
+          </div>
+          <div class="card-footer">
+            <span class="badge bg-danger">
+              <i class="fas fa-frown" data-bs-toggle="tooltip" title="Słaby"></i>
+            </span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Deploy (Vercel, Netlify) -->
+      <div class="col">
+        <div class="card skill-card h-100">
+          <div class="card-body text-center">
+            <i class="fas fa-cloud-upload-alt skill-icon mb-3"></i>
+            <h5 class="card-title">Deploy (Vercel, Netlify)</h5>
+            <p class="card-text">
+              Wdrożenie aplikacji Next.js na Vercel/Netlify, podstawy CI/CD, konfiguracja domen.
+            </p>
+          </div>
+          <div class="card-footer">
+            <span class="badge bg-danger">
+              <i class="fas fa-frown" data-bs-toggle="tooltip" title="Słaby"></i>
+            </span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Optymalizacja i Wydajność -->
+      <div class="col">
+        <div class="card skill-card h-100">
+          <div class="card-body text-center">
+            <i class="fas fa-tachometer-alt skill-icon mb-3"></i>
+            <h5 class="card-title">Optymalizacja i Wydajność</h5>
+            <p class="card-text">
+              Analiza rozmiaru bundla, lazy loading (opóźnione ładowanie), code splitting, Lighthouse.
+            </p>
+          </div>
+          <div class="card-footer">
+            <span class="badge bg-danger">
+              <i class="fas fa-frown" data-bs-toggle="tooltip" title="Słaby"></i>
+            </span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Testowanie w Next.js -->
+      <div class="col">
+        <div class="card skill-card h-100">
+          <div class="card-body text-center">
+            <i class="fas fa-vials skill-icon mb-3"></i>
+            <h5 class="card-title">Testowanie w Next.js</h5>
+            <p class="card-text">
+              Integracja z Jest, Cypress, React Testing Library, testy e2e.
+            </p>
+          </div>
+          <div class="card-footer">
+            <span class="badge bg-danger">
+              <i class="fas fa-frown" data-bs-toggle="tooltip" title="Słaby"></i>
+            </span>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <script src="../translations/translates.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+  <script src="https://kit.fontawesome.com/a076d05399.js" crossorigin="anonymous"></script>
+  <script src="skills.js"></script>
+  <script>
+    document.addEventListener('DOMContentLoaded', function () {
+      var tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'));
+      tooltipTriggerList.map(function (tooltipTriggerElement) {
+        return new bootstrap.Tooltip(tooltipTriggerElement);
+      });
+    });
+  </script>
+</body>
+</html>

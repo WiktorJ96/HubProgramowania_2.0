@@ -1,8 +1,14 @@
-/* Stylowanie ogólne */
+:root {
+    --main-color: #f7df1e; /* Żółty - charakterystyczny dla JavaScript */
+    --secondary-color: #1e1e1e; /* Ciemne tło */
+    --text-color: #eaeaea; /* Jasny tekst */
+    --accent-color: #4caf50; /* Zielony akcent - symbol poprawności */
+}
+
 body {
-    font-family: 'Roboto', sans-serif; /* Nowoczesny font */
-    background-color: #121212; /* Ciemne, minimalistyczne tło */
-    color: #e0e0e0; /* Jasnoszary kolor tekstu dla lepszej czytelności */
+    font-family: 'Inter', sans-serif;
+    background-color: var(--secondary-color);
+    color: var(--text-color);
     margin: 0;
     padding: 20px;
     line-height: 1.8;
@@ -11,164 +17,174 @@ body {
     flex-direction: column;
 }
 
-/* Stylowanie głównego kontenera */
 .container {
-    max-width: 720px;
-    background-color: #1e1e1e; /* Stonowane tło w stylu edytorów kodu */
-    padding: 30px;
-    border-radius: 15px; /* Większe zaokrąglenia dla nowoczesnego wyglądu */
-    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.5); /* Mocniejszy cień */
+    max-width: 950px;
+    background-color: #292929;
+    padding: 40px;
+    border-radius: 12px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.7);
     width: 90%;
     margin: auto;
-    transition: transform 0.2s ease-in-out; /* Dodanie płynnej animacji */
+    transition: transform 0.2s ease-in-out;
 }
 
-/* Stylowanie nagłówków */
 h1 {
-    background-color: hsla(45, 94%, 64%, 0.856); /* Żółty kolor z logo JavaScript */
-    color: #1e1e1e; /* Kontrastujący ciemny tekst */
-    padding: 15px;
+    background: linear-gradient(90deg, var(--main-color), var(--accent-color));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
     text-align: center;
-    border-radius: 12px;
+    font-size: 2.8rem;
     margin-bottom: 40px;
-    font-size: 2rem;
+    font-weight: bold;
 }
 
 h2 {
-    color: hsla(45, 94%, 64%, 0.856); /* Delikatny niebieski akcent */
-    border-bottom: 2px solid hsla(45, 94%, 64%, 0.856);
+    color: var(--main-color);
+    border-bottom: 2px solid var(--accent-color);
     padding-bottom: 10px;
     margin-bottom: 20px;
-    font-size: 1.5rem;
+    font-size: 2rem;
 }
 
-/* Stylowanie paragrafów */
+h3 {
+    color: var(--accent-color);
+    margin-top: 30px;
+    margin-bottom: 15px;
+    font-size: 1.5rem;
+    border-left: 4px solid var(--main-color);
+    padding-left: 10px;
+}
+
 p {
-    color: #b0bec5; /* Lżejszy szary kolor dla tekstu */
+    color: var(--text-color);
     line-height: 1.7;
     font-size: 1.1rem;
-    margin-bottom: 25px;
-    transition: color 0.3s ease-in-out; /* Subtelna zmiana koloru na hover */
+    margin-bottom: 20px;
+    transition: color 0.3s ease-in-out;
 }
 
 p:hover {
-    color: #d6d6d6; /* Rozjaśnienie tekstu po najechaniu */
+    color: #ffffff;
 }
 
-/* Stylowanie bloków kodu */
 pre {
-    background-color: #2d2d2d;
-    color: #f1f1f1;
+    background-color: #1f1f1f;
+    color: #f7df1e;
     padding: 20px;
-    border-radius: 12px;
+    border-radius: 8px;
     font-size: 1rem;
     overflow-x: auto;
-    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.4); /* Mocniejszy cień */
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.5);
+    margin-bottom: 25px;
 }
 
 code {
-    background-color: #37474f; /* Ciemniejsze tło dla kodu inline */
-    padding: 4px 6px;
+    background-color: var(--main-color);
+    padding: 6px 8px;
     border-radius: 6px;
-    font-size: 0.9rem;
-    color: #ffcc80; /* Ciepły odcień dla kodu inline */
+    font-size: 0.95rem;
+    color: #000000; /* Ciemny tekst na żółtym tle */
 }
 
-/* Stylowanie list */
 ul {
     padding-left: 25px;
-    color: #b0bec5;
+    color: var(--text-color);
 }
 
 ul li {
     margin-bottom: 15px;
     font-size: 1.1rem;
-    list-style: decimal;
-}
-
-ul li {
-    margin-bottom: 15px;
-    font-size: 1.1rem;
-    padding: 10px;
-    background-color: #2d2d2d; /* Tło podobne do kodu */
-    border-radius: 8px; /* Zaokrąglenia dla nowoczesnego wyglądu */
+    padding: 12px;
+    background-color: #333333;
+    border-left: 4px solid var(--main-color);
+    border-radius: 8px;
     transition: background-color 0.3s ease-in-out, transform 0.2s ease-in-out;
 }
 
 ul li:hover {
-    background-color: #37474f; /* Zmiana tła po najechaniu */
-    transform: translateX(10px); /* Lekki ruch w prawo po najechaniu */
+    background-color: #444444;
+    transform: translateX(10px);
 }
 
-/* Stylowanie linków */
 a {
-    color: #ffcc80; /* Ciepły odcień koloru dla linków */
-    text-decoration: none; /* Usunięcie podkreślenia */
-    font-weight: bold; /* Podkreślenie wizualne przez grubszy tekst */
-    transition: color 0.3s ease-in-out, transform 0.2s ease-in-out; /* Płynna animacja koloru i transformacji */
+    color: var(--main-color);
+    text-decoration: none;
+    font-weight: bold;
+    transition: color 0.3s ease-in-out, transform 0.2s ease-in-out;
 }
 
 a:hover {
-    color: #ffe0b2; /* Jaśniejszy odcień na hover */
-    transform: scale(1.05); /* Delikatne powiększenie przy najechaniu */
-    text-decoration: underline; /* Podkreślenie tekstu po najechaniu */
+    color: var(--accent-color);
+    transform: scale(1.05);
+    text-decoration: underline;
 }
 
 a:active {
-    color: #ffab40; /* Ciemniejszy odcień w momencie kliknięcia */
-    transform: scale(0.98); /* Minimalne zmniejszenie, by dać efekt kliknięcia */
+    color: #e5c700;
+    transform: scale(0.98);
 }
 
-.accordion-item {
-    margin-bottom: 10px;
-    border-radius: 5px;
-}
-
-.accordion-header {
-    padding: 10px;
-    cursor: pointer;
-    font-size: 1.2em;
-}
-
-.accordion-content {
-    padding: 0 20px;
-    max-height: 0;
-    overflow: hidden;
-    transition: max-height 0.3s ease;
-}
-
-/* Stylowanie przycisku */
 button {
-    background-color: #ffcc80; /* Ciepły, przyciągający wzrok kolor */
-    color: #1e1e1e; /* Kontrastujący ciemny tekst */
-    border: none; /* Usunięcie domyślnej ramki */
-    padding: 10px 10px; /* Dobre proporcje paddingu dla wygody użytkownika */
-    border-radius: 8px; /* Delikatne zaokrąglenia */
-    font-size:0.9rem; /* Czytelny rozmiar tekstu */
-    font-weight: bold; /* Grubszy tekst dla wyróżnienia */
-    cursor: pointer; /* Zmiana kursora na wskaźnik */
-    transition: background-color 0.3s ease-in-out, transform 0.2s ease-in-out; /* Płynna animacja */
-    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.4); /* Lekki cień dla efektu głębi */
-    outline: none; /* Usunięcie domyślnego konturu */
+    background: linear-gradient(90deg, var(--main-color), var(--accent-color));
+    color: #fff;
+    border: none;
+    padding: 14px 18px;
+    border-radius: 8px;
+    font-size: 1.1rem;
+    font-weight: bold;
+    cursor: pointer;
+    transition: background-color 0.3s ease-in-out, transform 0.2s ease-in-out;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.5);
+    outline: none;
 }
 
 button:hover {
-    background-color: #ffe0b2; /* Jaśniejszy odcień przy najechaniu */
-    transform: scale(1.05); /* Delikatne powiększenie przy najechaniu */
+    background: linear-gradient(90deg, var(--accent-color), var(--main-color));
+    transform: scale(1.05);
 }
 
 button:active {
-    background-color: #ffab40; /* Ciemniejszy odcień przy kliknięciu */
-    transform: scale(0.98); /* Minimalne zmniejszenie dla efektu kliknięcia */
+    background-color: #e5c700;
+    transform: scale(0.98);
 }
 
+.accordion-item {
+    margin-bottom: 15px;
+    border-radius: 8px;
+    background-color: #333333;
+}
 
-/* Responsywność */
+.accordion-header {
+    padding: 12px;
+    cursor: pointer;
+    font-size: 1.2em;
+    background: linear-gradient(90deg, var(--main-color), var(--accent-color));
+    color: #000;
+    border-radius: 5px;
+}
+
+.accordion-content {
+    max-height: 0;
+    overflow: hidden;
+    transition: max-height 0.3s ease;
+    background-color: #1f1f1f;
+}
+
+blockquote {
+    font-style: italic;
+    color: var(--main-color);
+    padding: 10px 20px;
+    border-left: 4px solid var(--accent-color);
+    margin: 20px 0;
+    background-color: #292929;
+    border-radius: 8px;
+}
+
 @media (min-width: 768px) {
     p, ul {
         font-size: 1.2rem;
     }
-
+    
     pre {
         font-size: 1.1rem;
     }

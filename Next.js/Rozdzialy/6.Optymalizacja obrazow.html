@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Optymalizacja Obrazów w Next.js</title>
+    <link rel="stylesheet" href="../styles.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/themes/prism-tomorrow.min.css" rel="stylesheet" />
+</head>
+<body>
+    <div class="container">
+        <h1>Optymalizacja Obrazów w Next.js</h1>
+
+        <p>Next.js oferuje wbudowaną optymalizację obrazów za pomocą komponentu <code>Image</code>. Dzięki temu obrazy są automatycznie optymalizowane pod kątem rozmiaru, formatu oraz ładowania.</p>
+
+        <h2>Komponent <code>Image</code></h2>
+        <p>Komponent <code>Image</code> jest częścią Next.js i zapewnia automatyczną optymalizację obrazów, takich jak lazy loading (leniwie ładowanie), różne formaty obrazów (np. WebP) oraz responsywne rozmiary. Przykład użycia:</p>
+        <pre><code class="language-javascript">
+import Image from 'next/image';
+
+const MyImage = () => {
+  return (
+    <div>
+      <h2>Przykład optymalizacji obrazu</h2>
+      <Image 
+        src="/example.jpg" 
+        alt="Przykładowy obraz" 
+        width={500} 
+        height={300} 
+      />
+    </div>
+  );
+};
+
+export default MyImage;
+        </code></pre>
+        <p>Parametry <code>width</code> i <code>height</code> definiują rozmiary obrazu w pikselach. Next.js automatycznie generuje optymalne wersje obrazu.</p>
+
+        <h2>Ładowanie obrazów z zewnętrznych źródeł</h2>
+        <p>Aby ładować obrazy z zewnętrznych domen, należy skonfigurować <code>next.config.js</code>. Przykład konfiguracji:</p>
+        <pre><code class="language-javascript">
+// next.config.js
+module.exports = {
+  images: {
+    domains: ['example.com'], // Dodaj domeny, z których chcesz ładować obrazy
+  },
+};
+        </code></pre>
+        <p>Po dodaniu domeny, można załadować obraz ze zewnętrznego źródła:</p>
+        <pre><code class="language-javascript">
+import Image from 'next/image';
+
+const ExternalImage = () => {
+  return (
+    <Image 
+      src="https://example.com/image.jpg" 
+      alt="Obraz z zewnętrznego źródła" 
+      width={600} 
+      height={400} 
+    />
+  );
+};
+
+export default ExternalImage;
+        </code></pre>
+
+        <h2>Responsywne rozmiary obrazów</h2>
+        <p>Next.js umożliwia łatwe ustawienie responsywnych obrazów za pomocą parametru <code>layout</code>. Możliwe wartości to:</p>
+        <ul>
+            <li><strong>fixed</strong>: Stały rozmiar obrazu (domyślne ustawienie).</li>
+            <li><strong>intrinsic</strong>: Obraz zachowuje swoje proporcje.</li>
+            <li><strong>responsive</strong>: Obraz dopasowuje się do rozmiaru rodzica.</li>
+            <li><strong>fill</strong>: Obraz wypełnia całą przestrzeń rodzica.</li>
+        </ul>
+        <pre><code class="language-javascript">
+import Image from 'next/image';
+
+const ResponsiveImage = () => {
+  return (
+    &lt;div style={{ width: '100%', maxWidth: '600px' }}&gt;
+      &lt;Image 
+        src=&quot;/responsive-example.jpg&quot; 
+        alt=&quot;Obraz responsywny&quot; 
+        layout=&quot;responsive&quot; 
+        width={16} 
+        height={9} 
+      /&gt;
+    &lt;/div&gt;
+  );
+};
+
+export default ResponsiveImage;
+
+        </code></pre>
+        <p>W przypadku layoutu <code>responsive</code>, wartości <code>width</code> i <code>height</code> definiują proporcje obrazu (np. 16:9).</p>
+
+        <h2>Lazy Loading</h2>
+        <p>Wszystkie obrazy w Next.js domyślnie korzystają z lazy loading, co oznacza, że obraz jest ładowany tylko wtedy, gdy użytkownik przewinie stronę do jego lokalizacji. Nie wymaga to dodatkowej konfiguracji.</p>
+
+        <h2>Optymalizacja obrazów SVG</h2>
+        <p>Dla obrazów SVG zaleca się stosowanie komponentów lub bezpośredniego osadzania w kodzie. Komponent <code>Image</code> nie optymalizuje plików SVG, ponieważ są one już zoptymalizowane.</p>
+
+        <h2>Podsumowanie</h2>
+        <p>Next.js ułatwia optymalizację obrazów, zapewniając lepszą wydajność i doświadczenie użytkownika. Dzięki komponentowi <code>Image</code> można automatycznie ładować obrazy responsywnie, korzystać z lazy loading oraz optymalizować obrazy z zewnętrznych źródeł. Więcej informacji znajdziesz w <a href="https://nextjs.org/docs/basic-features/image-optimization" target="_blank">dokumentacji Next.js</a>.</p>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/prism.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/components/prism-javascript.min.js"></script>
+</body>
+</html>

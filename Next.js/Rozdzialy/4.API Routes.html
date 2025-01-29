@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>API Routes w Next.js</title>
+    <link rel="stylesheet" href="../styles.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/themes/prism-tomorrow.min.css" rel="stylesheet" />
+</head>
+<body>
+    <div class="container">
+        <h1>API Routes w Next.js</h1>
+
+        <p>Next.js umożliwia tworzenie własnych endpointów API za pomocą katalogu <code>pages/api/</code>. Dzięki temu można obsługiwać żądania HTTP (GET, POST, PUT, DELETE) bez konieczności korzystania z zewnętrznego serwera backendowego.</p>
+
+        <h2>Tworzenie własnych endpointów</h2>
+        <p>Pliki umieszczone w katalogu <code>pages/api/</code> automatycznie stają się endpointami API. Każdy plik eksportuje funkcję obsługującą żądania.</p>
+        <pre><code class="language-text">
+pages/api/
+├── hello.js       <!-- Endpoint dostępny pod /api/hello -->
+├── users.js       <!-- Endpoint dostępny pod /api/users -->
+        </code></pre>
+        <p>Przykładowy plik <code>hello.js</code>:</p>
+        <pre><code class="language-javascript">
+// pages/api/hello.js
+export default function handler(req, res) {
+  res.status(200).json({ message: "Witaj w API Next.js!" });
+}
+        </code></pre>
+        <p>Teraz można uzyskać dostęp do API pod adresem <code>http://localhost:3000/api/hello</code>.</p>
+
+        <h2>Obsługa różnych metod HTTP</h2>
+        <p>W Next.js można obsługiwać różne metody HTTP w jednym endpointzie. Oto przykład:</p>
+        <pre><code class="language-javascript">
+// pages/api/users.js
+export default function handler(req, res) {
+  if (req.method === 'GET') {
+    res.status(200).json({ users: ['Jan', 'Anna', 'Tomek'] });
+  } else if (req.method === 'POST') {
+    const { name } = req.body;
+    res.status(201).json({ message: `Dodano użytkownika: ${name}` });
+  } else {
+    res.status(405).json({ message: 'Metoda niedozwolona' });
+  }
+}
+        </code></pre>
+        <p>Obsługuje on:</p>
+        <ul>
+            <li><strong>GET</strong> – zwraca listę użytkowników.</li>
+            <li><strong>POST</strong> – dodaje nowego użytkownika (przykładowo).</li>
+            <li><strong>405 Method Not Allowed</strong> – dla nieobsługiwanych metod.</li>
+        </ul>
+
+        <h2>Autoryzacja</h2>
+        <p>Next.js nie ma wbudowanego systemu autoryzacji, ale można go zaimplementować np. za pomocą nagłówków żądań (JWT) lub sesji.</p>
+        <pre><code class="language-javascript">
+// pages/api/protected.js
+export default function handler(req, res) {
+  const { authorization } = req.headers;
+
+  if (!authorization || authorization !== 'Bearer secretToken') {
+    return res.status(401).json({ message: 'Brak autoryzacji' });
+  }
+
+  res.status(200).json({ message: 'Dostęp przyznany' });
+}
+        </code></pre>
+        <p>Żądania do tego endpointu muszą zawierać poprawny token autoryzacyjny w nagłówku <code>Authorization</code>.</p>
+
+        <h2>Wywoływanie API w aplikacji</h2>
+        <p>API można wywołać np. za pomocą <code>fetch</code> lub <code>axios</code> w komponentach React:</p>
+        <pre><code class="language-javascript">
+import { useEffect, useState } from 'react';
+
+const FetchUsers = () => {
+  const [users, setUsers] = useState([]);
+
+  useEffect(() => {
+    fetch('/api/users')
+      .then(res => res.json())
+      .then(data => setUsers(data.users));
+  }, []);
+
+  return (
+    <ul>
+      {users.map((user, index) => <li key={index}>{user}</li>)}
+    </ul>
+  );
+};
+
+export default FetchUsers;
+        </code></pre>
+        <p>W tym przykładzie komponent pobiera dane z <code>/api/users</code> i wyświetla listę użytkowników.</p>
+
+        <h2>Podsumowanie</h2>
+        <p>API Routes w Next.js pozwalają na tworzenie własnych backendowych endpointów bez potrzeby korzystania z zewnętrznych serwerów. Można obsługiwać różne metody HTTP, implementować autoryzację i łatwo integrować API z aplikacją.</p>
+        <p>Więcej informacji znajdziesz w <a href="https://nextjs.org/docs/api-routes/introduction" target="_blank">dokumentacji Next.js</a>.</p>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/prism.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/components/prism-javascript.min.js"></script>
+</body>
+</html>
