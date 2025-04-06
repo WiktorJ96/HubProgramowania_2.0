@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Zarządzanie stanem w Flutterze</title>
+  <link rel="stylesheet" href="../styles.css">
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/themes/prism-tomorrow.min.css" rel="stylesheet" />
+</head>
+<body>
+  <div class="container">
+    <h1>Zarządzanie stanem w Flutterze</h1>
+
+    <p>W Flutterze istnieje wiele podejść do zarządzania stanem aplikacji – od prostego <code>setState</code>, przez dziedziczenie danych w <code>InheritedWidget</code>, po bardziej zaawansowane rozwiązania jak <code>Provider</code>, <code>Riverpod</code> i <code>Bloc</code>.</p>
+
+    <h2>setState</h2>
+    <p>Najprostszy sposób aktualizacji interfejsu użytkownika. Używany tylko w widżetach typu <code>StatefulWidget</code>.</p>
+    <pre><code class="language-dart">
+class CounterWidget extends StatefulWidget {
+  @override
+  _CounterWidgetState createState() => _CounterWidgetState();
+}
+
+class _CounterWidgetState extends State<CounterWidget> {
+  int _counter = 0;
+
+  void _increment() {
+    setState(() {
+      _counter++;
+    });
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      children: [
+        Text('Licznik: $_counter'),
+        ElevatedButton(
+          onPressed: _increment,
+          child: Text('Zwiększ'),
+        ),
+      ],
+    );
+  }
+}
+    </code></pre>
+
+    <h2>InheritedWidget</h2>
+    <p>Pozwala przekazywać dane w dół drzewa widżetów bez konieczności ich ręcznego przekazywania przez każdy widżet.</p>
+    <pre><code class="language-dart">
+class MyInherited extends InheritedWidget {
+  final int licznik;
+
+  MyInherited({required this.licznik, required Widget child}) : super(child: child);
+
+  static MyInherited? of(BuildContext context) =>
+      context.dependOnInheritedWidgetOfExactType&lt;MyInherited&gt;();
+
+  @override
+  bool updateShouldNotify(MyInherited old) => licznik != old.licznik;
+}
+    </code></pre>
+
+    <h2>Provider</h2>
+    <p>Popularne i oficjalnie wspierane rozwiązanie. Proste w użyciu, elastyczne, łatwe do testowania.</p>
+    <p>Dodaj do <code>pubspec.yaml</code>:</p>
+    <pre><code class="language-yaml">
+dependencies:
+  provider: ^6.0.0
+    </code></pre>
+    <pre><code class="language-dart">
+// model
+class Counter with ChangeNotifier {
+  int value = 0;
+  void increment() {
+    value++;
+    notifyListeners();
+  }
+}
+
+// w main
+void main() {
+  runApp(
+    ChangeNotifierProvider(
+      create: (_) => Counter(),
+      child: MyApp(),
+    ),
+  );
+}
+
+// w widżecie
+Consumer&lt;Counter&gt;(
+  builder: (context, counter, child) {
+    return Text('Licznik: ${counter.value}');
+  },
+)
+    </code></pre>
+
+    <h2>Riverpod</h2>
+    <p>Nowoczesna alternatywa dla Provider – bez kontekstu, z lepszą typowalnością i testowalnością.</p>
+    <p>Dodaj do <code>pubspec.yaml</code>:</p>
+    <pre><code class="language-yaml">
+dependencies:
+  flutter_riverpod: ^2.0.0
+    </code></pre>
+    <pre><code class="language-dart">
+final counterProvider = StateProvider&lt;int&gt;((ref) => 0);
+
+class MyApp extends ConsumerWidget {
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final count = ref.watch(counterProvider);
+    return Text('Licznik: $count');
+  }
+}
+    </code></pre>
+
+    <h2>Bloc</h2>
+    <p><code>Bloc</code> (Business Logic Component) to silna architektura oparta na zdarzeniach i stanach. Zalecana dla dużych aplikacji.</p>
+    <p>Dodaj do <code>pubspec.yaml</code>:</p>
+    <pre><code class="language-yaml">
+dependencies:
+  flutter_bloc: ^8.0.0
+    </code></pre>
+    <pre><code class="language-dart">
+// event
+abstract class CounterEvent {}
+class Increment extends CounterEvent {}
+
+// bloc
+class CounterBloc extends Bloc&lt;CounterEvent, int&gt; {
+  CounterBloc() : super(0) {
+    on&lt;Increment&gt;((event, emit) => emit(state + 1));
+  }
+}
+
+// widget
+BlocBuilder&lt;CounterBloc, int&gt;(
+  builder: (context, count) {
+    return Text('Licznik: $count');
+  },
+)
+    </code></pre>
+
+    <p>Każda z tych technik ma swoje zastosowanie. Dla małych aplikacji wystarczy <code>setState</code> lub <code>Provider</code>, a dla dużych warto sięgnąć po <code>Riverpod</code> lub <code>Bloc</code>.</p>
+
+  </div>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/prism.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/components/prism-dart.min.js"></script>
+</body>
+</html>

@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Integracja z Firebase w Flutterze</title>
+  <link rel="stylesheet" href="../styles.css">
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/themes/prism-tomorrow.min.css" rel="stylesheet" />
+</head>
+<body>
+  <div class="container">
+    <h1>Integracja z Firebase w Flutterze</h1>
+
+    <p>Firebase to platforma oferująca wiele usług backendowych, które można łatwo zintegrować z aplikacjami Flutter. Obejmuje uwierzytelnianie użytkowników, bazę danych, przechowywanie plików, powiadomienia push i inne.</p>
+
+    <h2>1. Konfiguracja Firebase z FlutterFire CLI</h2>
+    <p>Zainstaluj Firebase CLI:</p>
+    <pre><code class="language-shell">
+npm install -g firebase-tools
+    </code></pre>
+    <p>Zainstaluj FlutterFire CLI:</p>
+    <pre><code class="language-shell">
+dart pub global activate flutterfire_cli
+    </code></pre>
+    <p>Skonfiguruj projekt:</p>
+    <pre><code class="language-shell">
+flutterfire configure
+    </code></pre>
+
+    <h2>2. Firebase Authentication</h2>
+    <p>Dodaj pakiet:</p>
+    <pre><code class="language-yaml">
+dependencies:
+  firebase_auth: ^4.0.0
+    </code></pre>
+    <p>Przykład logowania:</p>
+    <pre><code class="language-dart">
+import 'package:firebase_auth/firebase_auth.dart';
+
+Future<void> signIn(String email, String password) async {
+  try {
+    await FirebaseAuth.instance.signInWithEmailAndPassword(
+      email: email,
+      password: password,
+    );
+  } catch (e) {
+    print('Błąd logowania: \$e');
+  }
+}
+    </code></pre>
+
+    <h2>3. Cloud Firestore</h2>
+    <p>Dodaj pakiet:</p>
+    <pre><code class="language-yaml">
+dependencies:
+  cloud_firestore: ^4.0.0
+    </code></pre>
+    <p>Dodawanie i pobieranie danych:</p>
+    <pre><code class="language-dart">
+import 'package:cloud_firestore/cloud_firestore.dart';
+
+// Dodanie
+await FirebaseFirestore.instance.collection('notatki').add({
+  'tytul': 'Pierwsza notatka',
+  'data': DateTime.now(),
+});
+
+// Odczyt
+final snapshot = await FirebaseFirestore.instance.collection('notatki').get();
+for (var doc in snapshot.docs) {
+  print(doc['tytul']);
+}
+    </code></pre>
+
+    <h2>4. Firebase Storage (przechowywanie plików)</h2>
+    <p>Dodaj pakiet:</p>
+    <pre><code class="language-yaml">
+dependencies:
+  firebase_storage: ^11.0.0
+    </code></pre>
+    <pre><code class="language-dart">
+import 'dart:io';
+import 'package:firebase_storage/firebase_storage.dart';
+
+Future<void> uploadFile(File file) async {
+  try {
+    final storageRef = FirebaseStorage.instance.ref('zdjecia/${file.path.split('/').last}');
+    await storageRef.putFile(file);
+    final url = await storageRef.getDownloadURL();
+    print('Plik dostępny pod URL: \$url');
+  } catch (e) {
+    print('Błąd uploadu: \$e');
+  }
+}
+    </code></pre>
+
+    <h2>5. Push Notifications (Firebase Messaging)</h2>
+    <p>Dodaj pakiet:</p>
+    <pre><code class="language-yaml">
+dependencies:
+  firebase_messaging: ^14.0.0
+    </code></pre>
+    <p>Inicjalizacja:</p>
+    <pre><code class="language-dart">
+import 'package:firebase_messaging/firebase_messaging.dart';
+
+void setupFCM() async {
+  FirebaseMessaging messaging = FirebaseMessaging.instance;
+
+  NotificationSettings settings = await messaging.requestPermission();
+  print('Zgoda: \${settings.authorizationStatus}');
+
+  FirebaseMessaging.onMessage.listen((RemoteMessage message) {
+    print('Odebrano wiadomość: \${message.notification?.title}');
+  });
+}
+    </code></pre>
+
+    <h2>6. Inicjalizacja Firebase w aplikacji</h2>
+    <pre><code class="language-dart">
+import 'package:firebase_core/firebase_core.dart';
+
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  await Firebase.initializeApp();
+  runApp(MyApp());
+}
+    </code></pre>
+
+    <p>Pamiętaj, aby dodać plik <code>google-services.json</code> (Android) i <code>GoogleService-Info.plist</code> (iOS) do odpowiednich katalogów projektu.</p>
+  </div>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/prism.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/components/prism-dart.min.js"></script>
+</body>
+</html>

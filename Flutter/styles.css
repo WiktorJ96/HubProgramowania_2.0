@@ -1,11 +1,9 @@
 :root {
-    --main-color: #4caf50; /* Zieleń - naturalne skojarzenie z "true", "false", klucze */
-    --secondary-color: #121212; /* Bardzo ciemne tło dla kontrastu */
-    --text-color: #e0e0e0; /* Jasny szary do tekstu */
-    --accent-color: #00bcd4; /* Cyjan - wyróżniający kolor akcentowy */
-    --code-string: #8bc34a; /* Jasna zieleń - tekstowe wartości */
-    --code-key: #ffeb3b; /* Żółty - klucze są dobrze widoczne */
-    --code-number: #ff9800; /* Pomarańczowy - klasyka dla liczb */
+    /* Kolory dostosowane do Fluttera */
+    --main-color: #2d6fa5; /* Niebieski - kolor Flutter */
+    --secondary-color: #1e1e1e; /* Ciemne tło */
+    --text-color: #eaeaea; /* Jasny tekst */
+    --accent-color: #0175C2; /* Niebieski akcent Flutter */
 }
 
 body {
@@ -70,9 +68,9 @@ p:hover {
     color: #ffffff;
 }
 
-/* Stylowanie dla JSON */
 pre {
     background-color: #1f1f1f;
+    color: var(--main-color);
     padding: 20px;
     border-radius: 8px;
     font-size: 1rem;
@@ -81,25 +79,12 @@ pre {
     margin-bottom: 25px;
 }
 
-/* Stylowanie kluczy, wartości i liczb w JSON */
-pre .json-key {
-    color: var(--code-key);
-}
-
-pre .json-string {
-    color: var(--code-string);
-}
-
-pre .json-number {
-    color: var(--code-number);
-}
-
 code {
     background-color: var(--accent-color);
     padding: 6px 8px;
     border-radius: 6px;
     font-size: 0.95rem;
-    color: #000000;
+    color: #ffffff;
 }
 
 ul {
@@ -118,7 +103,6 @@ ul li {
 }
 
 ul li:hover {
-    background-color: #444444;
     transform: translateX(10px);
 }
 
@@ -136,7 +120,7 @@ a:hover {
 }
 
 a:active {
-    color: #ff6d00;
+    color: #013a61;
     transform: scale(0.98);
 }
 
@@ -160,7 +144,7 @@ button:hover {
 }
 
 button:active {
-    background-color: #ff6d00;
+    background-color: #013a61;
     transform: scale(0.98);
 }
 
@@ -197,7 +181,8 @@ blockquote {
 }
 
 @media (min-width: 768px) {
-    p, ul {
+    p,
+    ul {
         font-size: 1.2rem;
     }
     

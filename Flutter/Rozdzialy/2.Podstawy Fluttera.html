@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Podstawy Fluttera</title>
+    <link rel="stylesheet" href="../styles.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/themes/prism-tomorrow.min.css" rel="stylesheet" />
+</head>
+<body>
+    <div class="container">
+        <h1>Podstawy Fluttera</h1>
+
+        <p>Flutter to framework open-source stworzony przez Google do tworzenia wieloplatformowych aplikacji mobilnych, webowych i desktopowych. Umożliwia szybki rozwój aplikacji dzięki wykorzystaniu języka Dart oraz hot-reload.</p>
+
+        <h2>Instalacja Fluttera</h2>
+        <p>Aby zacząć pracę z Flutterem, należy najpierw zainstalować środowisko. Oficjalne instrukcje znajdują się na stronie <a href="https://flutter.dev" target="_blank">flutter.dev</a>. Najlepiej pobrać stabilną wersję.</p>
+        <pre><code class="language-shell">
+# Sprawdzenie wersji Fluttera po instalacji
+flutter --version
+        </code></pre>
+        <p>Po instalacji, komenda <code>flutter --version</code> pozwoli sprawdzić, czy Flutter został poprawnie zainstalowany.</p>
+
+        <h2>Podstawowe komendy</h2>
+        <p>Flutter oferuje kilka podstawowych komend do zarządzania projektami i testowania aplikacji. Oto niektóre z nich:</p>
+        <ul>
+            <li><code>flutter create [nazwa_projektu]</code>: Tworzy nowy projekt Fluttera.</li>
+            <li><code>flutter run</code>: Uruchamia aplikację na emulatorze lub podłączonym urządzeniu.</li>
+            <li><code>flutter pub get</code>: Pobiera zależności projektu.</li>
+        </ul>
+        <pre><code class="language-shell">
+# Tworzenie nowego projektu Fluttera
+flutter create my_app
+
+# Uruchomienie aplikacji
+cd my_app
+flutter run
+
+# Pobranie zależności
+flutter pub get
+        </code></pre>
+
+        <h2>Hot Reload i Hot Restart</h2>
+        <p>Flutter oferuje funkcję <strong>hot reload</strong>, która pozwala na szybkie podglądanie zmian w kodzie bez konieczności ponownego uruchamiania aplikacji.</p>
+        <pre><code class="language-shell">
+# Uruchomienie aplikacji z obsługą hot reload
+flutter run
+        </code></pre>
+        <p>Podczas działania aplikacji można modyfikować kod i zapisać plik – zmiany zostaną natychmiast odzwierciedlone w interfejsie użytkownika.</p>
+
+        <h2>Struktura projektu Fluttera</h2>
+        <p>Typowy projekt Fluttera składa się z kilku kluczowych folderów:</p>
+        <ul>
+            <li><code>lib/</code>: Główny katalog kodu źródłowego aplikacji.</li>
+            <li><code>pubspec.yaml</code>: Plik konfiguracyjny zarządzający zależnościami.</li>
+            <li><code>android/</code> i <code>ios/</code>: Foldery zawierające natywny kod dla Androida i iOS.</li>
+        </ul>
+        
+        <h2>Przykładowa aplikacja Flutter</h2>
+        <p>Poniżej znajduje się przykład prostego kodu Fluttera, który tworzy aplikację z przyciskiem zwiększającym licznik.</p>
+        <pre><code class="language-dart">
+import 'package:flutter/material.dart';
+
+void main() {
+  runApp(MyApp());
+}
+
+class MyApp extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return MaterialApp(
+      home: Scaffold(
+        appBar: AppBar(title: Text('Flutter Demo')),
+        body: CounterWidget(),
+      ),
+    );
+  }
+}
+
+class CounterWidget extends StatefulWidget {
+  @override
+  _CounterWidgetState createState() => _CounterWidgetState();
+}
+
+class _CounterWidgetState extends State<CounterWidget> {
+  int _counter = 0;
+
+  void _incrementCounter() {
+    setState(() {
+      _counter++;
+    });
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Center(
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: <Widget>[
+          Text('Licznik:', style: TextStyle(fontSize: 24)),
+          Text('$_counter', style: TextStyle(fontSize: 32)),
+          SizedBox(height: 20),
+          ElevatedButton(
+            onPressed: _incrementCounter,
+            child: Text('Zwiększ licznik'),
+          ),
+        ],
+      ),
+    );
+  }
+}
+        </code></pre>
+        <p>Powyższy kod tworzy aplikację, w której użytkownik może nacisnąć przycisk, aby zwiększyć licznik.</p>
+    </div>
+    
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/prism.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/components/prism-dart.min.js"></script>
+</body>
+</html>

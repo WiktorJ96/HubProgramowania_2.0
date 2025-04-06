@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Nawigacja w Flutterze</title>
+  <link rel="stylesheet" href="../styles.css">
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/themes/prism-tomorrow.min.css" rel="stylesheet" />
+</head>
+<body>
+  <div class="container">
+    <h1>Nawigacja (Routing) w Flutterze</h1>
+
+    <p>Nawigacja pozwala na przechodzenie pomiędzy ekranami (widżetami) w aplikacji. Flutter oferuje kilka sposobów na realizację routingu – od prostych metod do bardziej zaawansowanych z użyciem pakietów.</p>
+
+    <h2>MaterialPageRoute i Navigator</h2>
+    <p>Podstawowy sposób nawigacji opiera się na <code>Navigator</code> i klasie <code>MaterialPageRoute</code>.</p>
+    <pre><code class="language-dart">
+Navigator.push(
+  context,
+  MaterialPageRoute(builder: (context) => SecondPage()),
+);
+    </code></pre>
+
+    <h3>Przykład pełny:</h3>
+    <pre><code class="language-dart">
+import 'package:flutter/material.dart';
+
+void main() {
+  runApp(MaterialApp(home: FirstPage()));
+}
+
+class FirstPage extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(title: Text('Pierwsza strona')),
+      body: Center(
+        child: ElevatedButton(
+          onPressed: () {
+            Navigator.push(
+              context,
+              MaterialPageRoute(builder: (context) => SecondPage()),
+            );
+          },
+          child: Text('Przejdź dalej'),
+        ),
+      ),
+    );
+  }
+}
+
+class SecondPage extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(title: Text('Druga strona')),
+      body: Center(
+        child: ElevatedButton(
+          onPressed: () => Navigator.pop(context),
+          child: Text('Wróć'),
+        ),
+      ),
+    );
+  }
+}
+    </code></pre>
+
+    <h2>Named routes</h2>
+    <p>Flutter wspiera też nazwane ścieżki (named routes), które pozwalają oddzielić logikę nawigacji od widżetów.</p>
+    <pre><code class="language-dart">
+void main() {
+  runApp(MaterialApp(
+    initialRoute: '/',
+    routes: {
+      '/': (context) => FirstPage(),
+      '/second': (context) => SecondPage(),
+    },
+  ));
+}
+
+// Nawigacja
+Navigator.pushNamed(context, '/second');
+    </code></pre>
+
+    <h2>go_router – nowoczesny pakiet do routingu</h2>
+    <p><code>go_router</code> to oficjalnie wspierany pakiet do zaawansowanej nawigacji – z wsparciem dla deep linków, przekierowań i animacji.</p>
+    <p>Dodaj do <code>pubspec.yaml</code>:</p>
+    <pre><code class="language-yaml">
+dependencies:
+  go_router: ^12.0.0
+    </code></pre>
+
+    <h3>Podstawowa konfiguracja go_router</h3>
+    <pre><code class="language-dart">
+import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
+
+void main() {
+  final router = GoRouter(
+    routes: [
+      GoRoute(path: '/', builder: (context, state) => FirstPage()),
+      GoRoute(path: '/second', builder: (context, state) => SecondPage()),
+    ],
+  );
+
+  runApp(MyApp(router: router));
+}
+
+class MyApp extends StatelessWidget {
+  final GoRouter router;
+  const MyApp({required this.router});
+
+  @override
+  Widget build(BuildContext context) {
+    return MaterialApp.router(
+      routerConfig: router,
+    );
+  }
+}
+    </code></pre>
+
+    <h3>Przejście do nowej strony:</h3>
+    <pre><code class="language-dart">
+ElevatedButton(
+  onPressed: () {
+    context.go('/second');
+  },
+  child: Text('Idź do drugiej strony'),
+)
+    </code></pre>
+
+    <p><strong>go_router</strong> ułatwia organizację większych aplikacji, pozwala tworzyć zagnieżdżone trasy, przechwytywać błędy i zarządzać przekierowaniami.</p>
+
+  </div>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/prism.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/components/prism-dart.min.js"></script>
+</body>
+</html>

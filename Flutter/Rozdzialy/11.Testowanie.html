@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Testowanie w Flutterze</title>
+  <link rel="stylesheet" href="../styles.css">
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/themes/prism-tomorrow.min.css" rel="stylesheet" />
+</head>
+<body>
+  <div class="container">
+    <h1>Testowanie w Flutterze</h1>
+
+    <p>Flutter wspiera testowanie na trzech poziomach:</p>
+    <ul>
+      <li><strong>Testy jednostkowe</strong> – testowanie logiki biznesowej.</li>
+      <li><strong>Testy widgetów</strong> – testowanie interfejsu użytkownika pojedynczych komponentów.</li>
+      <li><strong>Testy integracyjne</strong> – testowanie całej aplikacji „od początku do końca”.</li>
+    </ul>
+
+    <h2>Testy jednostkowe</h2>
+    <p>Stosowane do testowania funkcji i klas niezależnych od UI.</p>
+    <pre><code class="language-dart">
+// test/counter_test.dart
+import 'package:flutter_test/flutter_test.dart';
+
+int dodaj(int a, int b) => a + b;
+
+void main() {
+  test('powinno dodać dwie liczby', () {
+    expect(dodaj(2, 3), 5);
+  });
+}
+    </code></pre>
+
+    <h2>Testy widgetów</h2>
+    <p>Sprawdzają, czy widżety działają poprawnie w odizolowanym środowisku.</p>
+    <pre><code class="language-dart">
+// test/my_widget_test.dart
+import 'package:flutter/material.dart';
+import 'package:flutter_test/flutter_test.dart';
+import 'package:my_app/my_widget.dart';
+
+void main() {
+  testWidgets('pokazuje tekst na ekranie', (WidgetTester tester) async {
+    await tester.pumpWidget(MaterialApp(home: MyWidget()));
+    
+    expect(find.text('Kliknij mnie'), findsOneWidget);
+  });
+}
+    </code></pre>
+
+    <h2>Testy integracyjne (integration_test)</h2>
+    <p>Umożliwiają testowanie całej aplikacji na urządzeniu/emulatorze.</p>
+
+    <h3>Krok 1: Dodaj pakiety</h3>
+    <pre><code class="language-yaml">
+dev_dependencies:
+  integration_test:
+    sdk: flutter
+  flutter_test:
+    sdk: flutter
+
+flutter:
+  integration_test:
+    enabled: true
+    </code></pre>
+
+    <h3>Krok 2: Przykład testu</h3>
+    <pre><code class="language-dart">
+// integration_test/app_test.dart
+import 'package:flutter_test/flutter_test.dart';
+import 'package:integration_test/integration_test.dart';
+import 'package:my_app/main.dart' as app;
+
+void main() {
+  IntegrationTestWidgetsFlutterBinding.ensureInitialized();
+
+  testWidgets('pełny scenariusz użytkownika', (WidgetTester tester) async {
+    app.main();
+    await tester.pumpAndSettle();
+
+    final Finder button = find.text('Kliknij');
+    await tester.tap(button);
+    await tester.pump();
+
+    expect(find.text('Kliknięto!'), findsOneWidget);
+  });
+}
+    </code></pre>
+
+    <h3>Krok 3: Uruchamianie testów</h3>
+    <pre><code class="language-shell">
+flutter test integration_test/app_test.dart
+    </code></pre>
+
+    <h2>Flutter Driver (starsza metoda)</h2>
+    <p><code>Flutter Driver</code> to starszy framework testów E2E. Obecnie zaleca się używać <code>integration_test</code>, ale dla starszych projektów:</p>
+    <pre><code class="language-dart">
+// test_driver/app.dart
+import 'package:flutter_driver/driver_extension.dart';
+import 'package:my_app/main.dart' as app;
+
+void main() {
+  enableFlutterDriverExtension();
+  app.main();
+}
+    </code></pre>
+    <pre><code class="language-dart">
+// test_driver/app_test.dart
+import 'package:flutter_driver/flutter_driver.dart';
+import 'package:test/test.dart';
+
+void main() {
+  group('Test aplikacji', () {
+    late FlutterDriver driver;
+
+    setUpAll(() async {
+      driver = await FlutterDriver.connect();
+    });
+
+    tearDownAll(() async {
+      driver.close();
+    });
+
+    test('kliknięcie przycisku', () async {
+      await driver.tap(find.text('Kliknij'));
+      expect(await driver.getText(find.text('Kliknięto!')), 'Kliknięto!');
+    });
+  });
+}
+    </code></pre>
+
+    <h3>Uruchamianie testów Flutter Driver</h3>
+    <pre><code class="language-shell">
+flutter drive --target=test_driver/app.dart
+    </code></pre>
+
+  </div>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/prism.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/components/prism-dart.min.js"></script>
+</body>
+</html>

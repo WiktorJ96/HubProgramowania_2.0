@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>CI/CD dla Fluttera</title>
+  <link rel="stylesheet" href="../styles.css">
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/themes/prism-tomorrow.min.css" rel="stylesheet" />
+</head>
+<body>
+  <div class="container">
+    <h1>CI/CD dla Fluttera</h1>
+
+    <p>CI/CD (ciągła integracja i ciągłe dostarczanie) pozwala zautomatyzować proces budowania, testowania i publikowania aplikacji Flutter. Poniżej znajdziesz przykłady dla trzech popularnych narzędzi: GitHub Actions, Bitrise i Codemagic.</p>
+
+    <h2>1. GitHub Actions</h2>
+    <p>Tworzymy plik w <code>.github/workflows/flutter.yml</code>:</p>
+    <pre><code class="language-yaml">
+name: Flutter CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v3
+
+    - name: Setup Flutter
+      uses: subosito/flutter-action@v2
+      with:
+        flutter-version: '3.19.0'
+
+    - name: Install dependencies
+      run: flutter pub get
+
+    - name: Run tests
+      run: flutter test
+
+    - name: Build APK
+      run: flutter build apk --release
+    </code></pre>
+
+    <p>Można również dodać kroki do publikacji do Google Play przy użyciu <code>fastlane</code>.</p>
+
+    <h2>2. Bitrise</h2>
+    <p>Bitrise to platforma z interfejsem graficznym do konfiguracji pipeline'ów.</p>
+    <ul>
+      <li>Zarejestruj konto na <a href="https://www.bitrise.io" target="_blank">bitrise.io</a></li>
+      <li>Połącz repozytorium GitHub/GitLab</li>
+      <li>Wybierz projekt Flutter</li>
+      <li>Skonfiguruj kroki: <strong>Flutter Install</strong>, <strong>Flutter Test</strong>, <strong>Flutter Build</strong></li>
+      <li>Dodaj opcjonalnie publikację do Google Play (np. przez fastlane lub Bitrise Deploy)</li>
+    </ul>
+
+    <h3>YAML konfiguracji Bitrise (przykład fragmentu)</h3>
+    <pre><code class="language-yaml">
+workflows:
+  primary:
+    steps:
+    - flutter-installer@0:
+        inputs:
+        - is_update: true
+    - flutter-test@0: {}
+    - flutter-build@0:
+        inputs:
+        - platform: android
+        - build_mode: release
+    </code></pre>
+
+    <h2>3. Codemagic</h2>
+    <p>Codemagic to narzędzie CI stworzone specjalnie dla Fluttera.</p>
+    <ul>
+      <li>Stwórz konto na <a href="https://codemagic.io" target="_blank">codemagic.io</a></li>
+      <li>Połącz repozytorium</li>
+      <li>Wybierz platformę (Android/iOS/Web)</li>
+      <li>Skonfiguruj <code>codemagic.yaml</code> w projekcie</li>
+    </ul>
+
+    <h3>Przykład pliku codemagic.yaml</h3>
+    <pre><code class="language-yaml">
+workflows:
+  flutter-build:
+    name: Build and Test
+    environment:
+      flutter: stable
+    scripts:
+      - flutter pub get
+      - flutter test
+      - flutter build apk --release
+    artifacts:
+      - build/app/outputs/flutter-apk/app-release.apk
+    </code></pre>
+
+    <p>Codemagic umożliwia też integrację z Firebase, Google Play, App Store, Slackiem i innymi.</p>
+
+    <h2>Podsumowanie</h2>
+    <p>Wybór narzędzia zależy od potrzeb zespołu. GitHub Actions oferuje pełną kontrolę, Bitrise – prostotę konfiguracji, a Codemagic – narzędzia dedykowane Flutterowi.</p>
+
+    <ul>
+      <li><strong>GitHub Actions</strong> – dobry wybór dla projektów Open Source i kontroli nad CI</li>
+      <li><strong>Bitrise</strong> – dobra automatyzacja bez pisania YAML</li>
+      <li><strong>Codemagic</strong> – najlepsza integracja z Flutter i Firebase</li>
+    </ul>
+  </div>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/prism.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/components/prism-dart.min.js"></script>
+</body>
+</html>

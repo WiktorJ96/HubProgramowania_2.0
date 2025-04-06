@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Międzynarodowość (i18n) w Flutterze</title>
+  <link rel="stylesheet" href="../styles.css">
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/themes/prism-tomorrow.min.css" rel="stylesheet" />
+</head>
+<body>
+  <div class="container">
+    <h1>Międzynarodowość (i18n) w Flutterze</h1>
+
+    <p>Flutter umożliwia tworzenie aplikacji obsługujących wiele języków dzięki wsparciu dla międzynarodowości (i18n). Używa się do tego plików `.arb`, pakietu <code>flutter_localizations</code> oraz specjalnie generowanej klasy `AppLocalizations`.</p>
+
+    <h2>Konfiguracja pubspec.yaml</h2>
+    <pre><code class="language-yaml">
+dependencies:
+  flutter_localizations:
+    sdk: flutter
+  intl: ^0.18.0
+    </code></pre>
+
+    <h2>Dodanie obsługi języków</h2>
+    <p>W pliku <code>MaterialApp</code> należy dodać:</p>
+    <pre><code class="language-dart">
+import 'package:flutter_localizations/flutter_localizations.dart';
+import 'generated/l10n.dart';
+
+MaterialApp(
+  localizationsDelegates: [
+    S.delegate,
+    GlobalMaterialLocalizations.delegate,
+    GlobalWidgetsLocalizations.delegate,
+    GlobalCupertinoLocalizations.delegate,
+  ],
+  supportedLocales: S.delegate.supportedLocales,
+  locale: currentLocale, // np. Locale('pl')
+)
+    </code></pre>
+
+    <h2>Pliki .arb</h2>
+    <p>Dla każdego języka tworzy się plik `.arb` w folderze <code>lib/l10n/</code>.</p>
+
+    <h3>lib/l10n/intl_pl.arb</h3>
+    <pre><code class="language-json">
+{
+  "hello": "Witaj",
+  "appTitle": "Moja Aplikacja",
+  "@hello": {
+    "description": "Powitanie użytkownika"
+  }
+}
+    </code></pre>
+
+    <h3>lib/l10n/intl_en.arb</h3>
+    <pre><code class="language-json">
+{
+  "hello": "Hello",
+  "appTitle": "My App"
+}
+    </code></pre>
+
+    <h2>Generowanie plików lokalizacji</h2>
+    <p>Uruchom polecenie:</p>
+    <pre><code class="language-shell">
+flutter gen-l10n
+    </code></pre>
+
+    <p>Powstaje plik <code>l10n.dart</code> (lub <code>S.dart</code>), z którego korzystamy w aplikacji:</p>
+    <pre><code class="language-dart">
+Text(S.of(context).hello) // Witaj lub Hello w zależności od języka
+    </code></pre>
+
+    <h2>Zmiana języka w trakcie działania</h2>
+    <p>Można zmieniać język dynamicznie, np. przez <code>setState()</code> z nowym obiektem <code>Locale</code>:</p>
+    <pre><code class="language-dart">
+class MyApp extends StatefulWidget {
+  @override
+  State&lt;MyApp&gt; createState() => _MyAppState();
+}
+
+class _MyAppState extends State&lt;MyApp&gt; {
+  Locale _locale = Locale('en');
+
+  void _changeLanguage(String languageCode) {
+    setState(() {
+      _locale = Locale(languageCode);
+    });
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return MaterialApp(
+      locale: _locale,
+      supportedLocales: S.delegate.supportedLocales,
+      localizationsDelegates: [
+        S.delegate,
+        GlobalMaterialLocalizations.delegate,
+        GlobalWidgetsLocalizations.delegate,
+        GlobalCupertinoLocalizations.delegate,
+      ],
+      home: HomePage(onLanguageChange: _changeLanguage),
+    );
+  }
+}
+    </code></pre>
+
+    <p>W <code>HomePage</code> można dodać przyciski do zmiany języka:</p>
+    <pre><code class="language-dart">
+ElevatedButton(
+  onPressed: () =&gt; onLanguageChange('pl'),
+  child: Text('Polski'),
+)
+    </code></pre>
+
+    <p>Dzięki temu użytkownik może przełączyć język w czasie rzeczywistym.</p>
+  </div>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/prism.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/components/prism-dart.min.js"></script>
+</body>
+</html>

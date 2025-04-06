@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Layout i Responsywność w Flutterze</title>
+  <link rel="stylesheet" href="../styles.css">
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/themes/prism-tomorrow.min.css" rel="stylesheet" />
+</head>
+<body>
+  <div class="container">
+    <h1>Layout i Responsywność w Flutterze</h1>
+
+    <p>Flutter oferuje wiele widżetów do tworzenia responsywnego i elastycznego układu interfejsu użytkownika. Dzięki nim można tworzyć aplikacje, które dobrze wyglądają na różnych rozdzielczościach i urządzeniach.</p>
+
+    <h2>Container</h2>
+    <p><code>Container</code> to podstawowy widżet do ustawiania rozmiaru, marginesów, paddingu i tła elementu.</p>
+    <pre><code class="language-dart">
+Container(
+  padding: EdgeInsets.all(16),
+  margin: EdgeInsets.all(8),
+  color: Colors.blue,
+  child: Text('To jest kontener'),
+)
+    </code></pre>
+
+    <h2>Row i Column</h2>
+    <p><code>Row</code> układa widżety w poziomie, a <code>Column</code> w pionie.</p>
+    <pre><code class="language-dart">
+Row(
+  mainAxisAlignment: MainAxisAlignment.spaceAround,
+  children: [
+    Icon(Icons.star),
+    Icon(Icons.star),
+    Icon(Icons.star),
+  ],
+)
+
+Column(
+  mainAxisAlignment: MainAxisAlignment.center,
+  children: [
+    Text('Linia 1'),
+    Text('Linia 2'),
+  ],
+)
+    </code></pre>
+
+    <h2>Flex</h2>
+    <p><code>Flex</code> to bardziej ogólny widżet dla `Row` i `Column`, który można używać z określeniem kierunku.</p>
+    <pre><code class="language-dart">
+Flex(
+  direction: Axis.horizontal,
+  children: [
+    Expanded(child: Text('Lewa')),
+    Expanded(child: Text('Prawa')),
+  ],
+)
+    </code></pre>
+
+    <h2>Stack</h2>
+    <p><code>Stack</code> pozwala nakładać elementy jeden na drugim – przydatny przy złożonych layoutach.</p>
+    <pre><code class="language-dart">
+Stack(
+  children: [
+    Container(width: 200, height: 200, color: Colors.red),
+    Positioned(
+      top: 50,
+      left: 50,
+      child: Container(width: 100, height: 100, color: Colors.blue),
+    ),
+  ],
+)
+    </code></pre>
+
+    <h2>MediaQuery – dostosowanie do ekranu</h2>
+    <p><code>MediaQuery</code> pozwala sprawdzić szerokość i wysokość ekranu urządzenia, co umożliwia dostosowanie layoutu.</p>
+    <pre><code class="language-dart">
+Widget build(BuildContext context) {
+  double width = MediaQuery.of(context).size.width;
+
+  return width &gt; 600
+      ? Text('Duży ekran')
+      : Text('Mały ekran');
+}
+    </code></pre>
+
+    <h2>LayoutBuilder</h2>
+    <p><code>LayoutBuilder</code> umożliwia reakcję na rozmiar kontenera, w którym znajduje się widżet.</p>
+    <pre><code class="language-dart">
+LayoutBuilder(
+  builder: (context, constraints) {
+    if (constraints.maxWidth &gt; 600) {
+      return Text('Szeroki layout');
+    } else {
+      return Text('Wąski layout');
+    }
+  },
+)
+    </code></pre>
+
+    <h2>Przykład responsywnego interfejsu</h2>
+    <pre><code class="language-dart">
+import 'package:flutter/material.dart';
+
+void main() {
+  runApp(MyResponsiveApp());
+}
+
+class MyResponsiveApp extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return MaterialApp(
+      home: Scaffold(
+        appBar: AppBar(title: Text('Responsywny Flutter')),
+        body: LayoutBuilder(
+          builder: (context, constraints) {
+            if (constraints.maxWidth &gt; 600) {
+              return Row(
+                children: [
+                  Expanded(child: Container(color: Colors.red)),
+                  Expanded(child: Container(color: Colors.blue)),
+                ],
+              );
+            } else {
+              return Column(
+                children: [
+                  Expanded(child: Container(color: Colors.red)),
+                  Expanded(child: Container(color: Colors.blue)),
+                ],
+              );
+            }
+          },
+        ),
+      ),
+    );
+  }
+}
+    </code></pre>
+  </div>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/prism.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/components/prism-dart.min.js"></script>
+</body>
+</html>

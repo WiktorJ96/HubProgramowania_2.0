@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Lokalna Baza Danych w Flutterze</title>
+  <link rel="stylesheet" href="../styles.css">
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/themes/prism-tomorrow.min.css" rel="stylesheet" />
+</head>
+<body>
+  <div class="container">
+    <h1>Lokalna Baza Danych w Flutterze</h1>
+
+    <p>Flutter wspiera wiele metod przechowywania danych lokalnie – od prostych preferencji użytkownika, przez lekką bazę Hive, aż po relacyjną bazę danych SQLite. Każda z metod ma inne zastosowanie w zależności od potrzeb projektu.</p>
+
+    <h2>SharedPreferences</h2>
+    <p>Najprostszy sposób na przechowywanie małych danych, np. ustawień użytkownika.</p>
+    <pre><code class="language-yaml">
+dependencies:
+  shared_preferences: ^2.0.0
+    </code></pre>
+    <pre><code class="language-dart">
+import 'package:shared_preferences/shared_preferences.dart';
+
+Future&lt;void&gt; saveData() async {
+  final prefs = await SharedPreferences.getInstance();
+  await prefs.setString('username', 'Jan');
+}
+
+Future&lt;String?&gt; loadData() async {
+  final prefs = await SharedPreferences.getInstance();
+  return prefs.getString('username');
+}
+    </code></pre>
+
+    <h2>Hive</h2>
+    <p>Lekka i szybka baza danych NoSQL – idealna do przechowywania obiektów i offline cache.</p>
+    <pre><code class="language-yaml">
+dependencies:
+  hive: ^2.2.0
+  hive_flutter: ^1.1.0
+  path_provider: ^2.0.0
+dev_dependencies:
+  hive_generator: ^1.1.0
+  build_runner: ^2.3.0
+    </code></pre>
+    <p>Przykład z zapisem i odczytem danych:</p>
+    <pre><code class="language-dart">
+import 'package:hive_flutter/hive_flutter.dart';
+
+void main() async {
+  await Hive.initFlutter();
+  var box = await Hive.openBox('moje_dane');
+
+  await box.put('klucz', 'wartość');
+  var wynik = box.get('klucz');
+  print(wynik); // wartość
+}
+    </code></pre>
+
+    <h2>SQLite</h2>
+    <p>Relacyjna baza danych – dobry wybór przy skomplikowanych zależnościach między danymi.</p>
+    <pre><code class="language-yaml">
+dependencies:
+  sqflite: ^2.0.0
+  path: ^1.8.0
+    </code></pre>
+    <pre><code class="language-dart">
+import 'package:sqflite/sqflite.dart';
+import 'package:path/path.dart';
+
+Future&lt;Database&gt; initDB() async {
+  final path = join(await getDatabasesPath(), 'app.db');
+  return openDatabase(
+    path,
+    version: 1,
+    onCreate: (db, version) {
+      return db.execute('CREATE TABLE notatki(id INTEGER PRIMARY KEY, tytul TEXT)');
+    },
+  );
+}
+
+Future&lt;void&gt; insertNote(Database db, String tytul) async {
+  await db.insert('notatki', {'tytul': tytul});
+}
+    </code></pre>
+
+    <h2>Zarządzanie stanem offline</h2>
+    <p>Aby umożliwić działanie aplikacji bez dostępu do internetu, należy przechowywać pobrane dane lokalnie (np. w Hive lub SQLite). Można je synchronizować z API po przywróceniu połączenia.</p>
+    <pre><code class="language-dart">
+// Sprawdzenie połączenia i zapis offline
+Future&lt;void&gt; syncIfOnline() async {
+  final isOnline = true; // przykład – w praktyce: sprawdź połączenie
+  if (isOnline) {
+    final daneZApi = await fetchFromApi();
+    final box = await Hive.openBox('offline_data');
+    await box.put('cache', daneZApi);
+  }
+}
+    </code></pre>
+
+    <p>Używanie lokalnych baz danych jest kluczowe dla zapewnienia dobrego UX, gdy dostęp do internetu jest ograniczony.</p>
+
+  </div>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/prism.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/components/prism-dart.min.js"></script>
+</body>
+</html>

@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Animacje w Flutterze</title>
+  <link rel="stylesheet" href="../styles.css">
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/themes/prism-tomorrow.min.css" rel="stylesheet" />
+</head>
+<body>
+  <div class="container">
+    <h1>Animacje w Flutterze</h1>
+
+    <p>Flutter oferuje rozbudowane wsparcie dla animacji – od prostych przejść (implicit animations) do pełnej kontroli nad animacją (explicit animations). Poniżej znajdziesz podstawowe techniki animowania elementów w aplikacji.</p>
+
+    <h2>Implicit animations</h2>
+    <p>Animacje niejawne są proste do użycia – wystarczy podać właściwości i czas trwania, a Flutter sam zajmie się animacją.</p>
+    <pre><code class="language-dart">
+AnimatedContainer(
+  duration: Duration(seconds: 1),
+  width: isExpanded ? 200 : 100,
+  height: 100,
+  color: isExpanded ? Colors.blue : Colors.red,
+)
+    </code></pre>
+
+    <p>Przykładowe widżety typu implicit:</p>
+    <ul>
+      <li>AnimatedContainer</li>
+      <li>AnimatedOpacity</li>
+      <li>AnimatedAlign</li>
+      <li>AnimatedPositioned</li>
+    </ul>
+
+    <h2>Explicit animations – AnimationController</h2>
+    <p>Umożliwiają pełną kontrolę nad przebiegiem animacji. Wymagają użycia <code>AnimationController</code> i <code>TickerProviderStateMixin</code>.</p>
+    <pre><code class="language-dart">
+class MyAnimatedBox extends StatefulWidget {
+  @override
+  _MyAnimatedBoxState createState() => _MyAnimatedBoxState();
+}
+
+class _MyAnimatedBoxState extends State&lt;MyAnimatedBox&gt; with SingleTickerProviderStateMixin {
+  late AnimationController _controller;
+  late Animation&lt;double&gt; _animation;
+
+  @override
+  void initState() {
+    super.initState();
+    _controller = AnimationController(
+      duration: Duration(seconds: 1),
+      vsync: this,
+    );
+    _animation = Tween(begin: 0.0, end: 200.0).animate(_controller);
+  }
+
+  @override
+  void dispose() {
+    _controller.dispose();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      children: [
+        ElevatedButton(
+          onPressed: () => _controller.forward(),
+          child: Text('Animuj'),
+        ),
+        AnimatedBuilder(
+          animation: _animation,
+          builder: (context, child) {
+            return Container(
+              width: _animation.value,
+              height: 100,
+              color: Colors.blue,
+            );
+          },
+        ),
+      ],
+    );
+  }
+}
+    </code></pre>
+
+    <h2>Tween</h2>
+    <p><code>Tween</code> (ang. "pomiędzy") określa zakres animacji – np. od 0 do 1, od koloru do koloru, od punktu A do B.</p>
+    <pre><code class="language-dart">
+Tween&lt;double&gt;(begin: 0.0, end: 1.0).animate(controller)
+    </code></pre>
+
+    <p>Można też użyć <code>ColorTween</code>, <code>SizeTween</code>, <code>RectTween</code> itp.</p>
+
+    <h2>Hero animation</h2>
+    <p>Animacja <code>Hero</code> umożliwia płynne przejście elementów między ekranami – np. obrazek powiększający się przy przejściu do szczegółów.</p>
+    <pre><code class="language-dart">
+Hero(
+  tag: 'avatar',
+  child: Image.asset('assets/avatar.png', width: 100),
+)
+    </code></pre>
+
+    <p>Na drugiej stronie:</p>
+    <pre><code class="language-dart">
+Hero(
+  tag: 'avatar',
+  child: Image.asset('assets/avatar.png', width: 300),
+)
+    </code></pre>
+
+    <p>Ważne: tag musi być taki sam na obu ekranach.</p>
+
+  </div>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/prism.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/components/prism-dart.min.js"></script>
+</body>
+</html>

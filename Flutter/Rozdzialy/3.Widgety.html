@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Widżety w Flutterze</title>
+    <link rel="stylesheet" href="../styles.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/themes/prism-tomorrow.min.css" rel="stylesheet" />
+</head>
+<body>
+    <div class="container">
+        <h1>Widżety w Flutterze</h1>
+
+        <p>Flutter to framework umożliwiający tworzenie aplikacji na wiele platform przy użyciu jednego kodu źródłowego. Kluczowym elementem Fluttera są widżety, które budują interfejs użytkownika.</p>
+
+        <h2>StatelessWidget vs StatefulWidget</h2>
+        <p>Widżety w Flutterze dzielą się na dwa podstawowe typy:</p>
+        <ul>
+            <li><strong>StatelessWidget</strong> – widżety bezstanowe, które nie zmieniają swojego stanu po utworzeniu.</li>
+            <li><strong>StatefulWidget</strong> – widżety stanowe, których stan może się dynamicznie zmieniać.</li>
+        </ul>
+
+        <h3>Przykład StatelessWidget</h3>
+        <p>Widżet <code>StatelessWidget</code> nadaje się do statycznych komponentów, które nie wymagają zmian w trakcie działania aplikacji.</p>
+        <pre><code class="language-dart">
+import 'package:flutter/material.dart';
+
+class MyStatelessWidget extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return Center(
+      child: Text('To jest StatelessWidget'),
+    );
+  }
+}
+
+void main() {
+  runApp(MaterialApp(
+    home: Scaffold(
+      appBar: AppBar(title: Text('StatelessWidget')),
+      body: MyStatelessWidget(),
+    ),
+  ));
+}
+        </code></pre>
+
+        <h3>Przykład StatefulWidget</h3>
+        <p>Widżet <code>StatefulWidget</code> może zmieniać swój stan za pomocą metody <code>setState</code>. Przykładem jest licznik, który aktualizuje wartość po naciśnięciu przycisku.</p>
+        <pre><code class="language-dart">
+import 'package:flutter/material.dart';
+
+class MyStatefulWidget extends StatefulWidget {
+  @override
+  _MyStatefulWidgetState createState() => _MyStatefulWidgetState();
+}
+
+class _MyStatefulWidgetState extends State<MyStatefulWidget> {
+  int _counter = 0;
+
+  void _incrementCounter() {
+    setState(() {
+      _counter++;
+    });
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: [
+        Text('Licznik: $_counter', style: TextStyle(fontSize: 24)),
+        SizedBox(height: 10),
+        ElevatedButton(
+          onPressed: _incrementCounter,
+          child: Text('Zwiększ licznik'),
+        ),
+      ],
+    );
+  }
+}
+
+void main() {
+  runApp(MaterialApp(
+    home: Scaffold(
+      appBar: AppBar(title: Text('StatefulWidget')),
+      body: Center(child: MyStatefulWidget()),
+    ),
+  ));
+}
+        </code></pre>
+
+        <h2>Budowanie interfejsu użytkownika</h2>
+        <p>Flutter korzysta z hierarchii widżetów do budowania interfejsu. Można je komponować i układać, tworząc zaawansowane interfejsy.</p>
+        <pre><code class="language-dart">
+import 'package:flutter/material.dart';
+
+void main() {
+  runApp(MyApp());
+}
+
+class MyApp extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return MaterialApp(
+      home: Scaffold(
+        appBar: AppBar(title: Text('Budowanie UI w Flutterze')),
+        body: Column(
+          children: [
+            Text('Witaj w Flutter!', style: TextStyle(fontSize: 24)),
+            ElevatedButton(
+              onPressed: () {},
+              child: Text('Kliknij mnie'),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+}
+        </code></pre>
+
+        <h2>Modyfikacja stanu</h2>
+        <p>Widżety stanowe pozwalają na dynamiczną aktualizację UI. Przykładem jest zmiana tekstu po naciśnięciu przycisku.</p>
+        <pre><code class="language-dart">
+import 'package:flutter/material.dart';
+
+class TextChanger extends StatefulWidget {
+  @override
+  _TextChangerState createState() => _TextChangerState();
+}
+
+class _TextChangerState extends State<TextChanger> {
+  String _text = 'Pierwotny tekst';
+
+  void _changeText() {
+    setState(() {
+      _text = 'Nowy tekst po naciśnięciu przycisku';
+    });
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: [
+        Text(_text, style: TextStyle(fontSize: 20)),
+        SizedBox(height: 10),
+        ElevatedButton(
+          onPressed: _changeText,
+          child: Text('Zmień tekst'),
+        ),
+      ],
+    );
+  }
+}
+
+void main() {
+  runApp(MaterialApp(
+    home: Scaffold(
+      appBar: AppBar(title: Text('Modyfikacja stanu')),
+      body: Center(child: TextChanger()),
+    ),
+  ));
+}
+        </code></pre>
+
+    </div>
+    
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/prism.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/components/prism-dart.min.js"></script>
+</body>
+</html>

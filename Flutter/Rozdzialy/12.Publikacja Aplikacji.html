@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Publikacja aplikacji Flutter</title>
+  <link rel="stylesheet" href="../styles.css">
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/themes/prism-tomorrow.min.css" rel="stylesheet" />
+</head>
+<body>
+  <div class="container">
+    <h1>Publikacja Aplikacji Flutter</h1>
+
+    <p>Publikacja aplikacji Flutter wymaga zbudowania odpowiedniego pliku (APK, AAB dla Androida lub IPA dla iOS), podpisania go i przesłania do sklepu (Google Play lub App Store).</p>
+
+    <h2>Publikacja na Androida</h2>
+
+    <h3>1. Tworzenie klucza do podpisu</h3>
+    <pre><code class="language-shell">
+keytool -genkey -v -keystore ~/key.jks -keyalg RSA -keysize 2048 -validity 10000 -alias mykey
+    </code></pre>
+
+    <h3>2. Konfiguracja pliku key.properties</h3>
+    <pre><code class="language-properties">
+// android/key.properties
+storePassword=mypassword
+keyPassword=mypassword
+keyAlias=mykey
+storeFile=/Users/nazwa/key.jks
+    </code></pre>
+
+    <h3>3. Modyfikacja build.gradle</h3>
+    <p>W pliku <code>android/app/build.gradle</code> dodaj:</p>
+    <pre><code class="language-groovy">
+def keystoreProperties = new Properties()
+keystoreProperties.load(new FileInputStream(rootProject.file('key.properties')))
+
+android {
+  ...
+  signingConfigs {
+    release {
+      storeFile file(keystoreProperties['storeFile'])
+      storePassword keystoreProperties['storePassword']
+      keyAlias keystoreProperties['keyAlias']
+      keyPassword keystoreProperties['keyPassword']
+    }
+  }
+  buildTypes {
+    release {
+      signingConfig signingConfigs.release
+      shrinkResources true
+      minifyEnabled true
+      proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+    }
+  }
+}
+    </code></pre>
+
+    <h3>4. Budowanie APK lub AAB</h3>
+    <pre><code class="language-shell">
+flutter build apk --release
+flutter build appbundle --release
+    </code></pre>
+
+    <h3>5. Publikacja w Google Play</h3>
+    <ul>
+      <li>Załóż konto deweloperskie: <a href="https://play.google.com/console" target="_blank">Google Play Console</a></li>
+      <li>Dodaj aplikację i wgraj plik AAB</li>
+      <li>Wypełnij metadane (ikony, opis, polityka prywatności)</li>
+      <li>Opublikuj aplikację</li>
+    </ul>
+
+    <h2>Publikacja na iOS</h2>
+
+    <h3>1. Wymagania</h3>
+    <ul>
+      <li>MacOS i Xcode</li>
+      <li>Konto deweloperskie Apple ($99/rok)</li>
+    </ul>
+
+    <h3>2. Konfiguracja aplikacji</h3>
+    <p>W <code>Xcode &gt; Runner &gt; Signing & Capabilities</code> ustaw swój team, certyfikat i profil.</p>
+
+    <h3>3. Budowanie aplikacji</h3>
+    <pre><code class="language-shell">
+flutter build ios --release
+    </code></pre>
+
+    <h3>4. Publikacja przez Xcode</h3>
+    <ul>
+      <li>Otwórz projekt w Xcode: <code>open ios/Runner.xcworkspace</code></li>
+      <li>Wybierz produkt: "Any iOS Device"</li>
+      <li>Wybierz: Product → Archive</li>
+      <li>Po zakończeniu kliknij „Distribute App” → App Store</li>
+    </ul>
+
+    <h3>5. Publikacja w App Store</h3>
+    <ul>
+      <li>Zaloguj się na <a href="https://appstoreconnect.apple.com" target="_blank">App Store Connect</a></li>
+      <li>Dodaj nową aplikację</li>
+      <li>Wgraj plik IPA z Xcode</li>
+      <li>Dodaj ikony, opis, zrzuty ekranu</li>
+      <li>Wyślij do recenzji i opublikuj</li>
+    </ul>
+
+    <h2>Uwagi końcowe</h2>
+    <p>Warto przetestować aplikację przed publikacją używając:</p>
+    <ul>
+      <li><code>flutter test</code> – testy jednostkowe i widgetów</li>
+      <li><code>flutter build apk --release</code> i testowanie na emulatorze/urządzeniu</li>
+      <li>TestFlight (dla iOS) i wersje zamknięte w Google Play (dla Androida)</li>
+    </ul>
+
+  </div>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/prism.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/components/prism-dart.min.js"></script>
+</body>
+</html>

@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Networking i HTTP w Flutterze</title>
+  <link rel="stylesheet" href="../styles.css">
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/themes/prism-tomorrow.min.css" rel="stylesheet" />
+</head>
+<body>
+  <div class="container">
+    <h1>Networking i HTTP w Flutterze</h1>
+
+    <p>Flutter umożliwia łatwe pobieranie danych z zewnętrznych źródeł przy pomocy pakietu <code>http</code>. Używając modeli do reprezentacji danych i odpowiedniego zarządzania błędami, można zbudować stabilne aplikacje korzystające z API.</p>
+
+    <h2>Dodanie biblioteki http</h2>
+    <p>W pliku <code>pubspec.yaml</code> dodaj:</p>
+    <pre><code class="language-yaml">
+dependencies:
+  http: ^0.13.0
+    </code></pre>
+
+    <h2>Pobieranie danych z API</h2>
+    <p>Użycie funkcji <code>http.get()</code> pozwala pobrać dane z API.</p>
+    <pre><code class="language-dart">
+import 'dart:convert';
+import 'package:http/http.dart' as http;
+
+Future&lt;List&lt;Post&gt;&gt; fetchPosts() async {
+  final response = await http.get(Uri.parse('https://jsonplaceholder.typicode.com/posts'));
+
+  if (response.statusCode == 200) {
+    List jsonData = jsonDecode(response.body);
+    return jsonData.map((item) => Post.fromJson(item)).toList();
+  } else {
+    throw Exception('Błąd podczas pobierania danych');
+  }
+}
+    </code></pre>
+
+    <h2>Model danych</h2>
+    <p>Najlepszą praktyką jest stworzenie modelu danych dopasowanego do odpowiedzi API.</p>
+    <pre><code class="language-dart">
+class Post {
+  final int id;
+  final String title;
+  final String body;
+
+  Post({required this.id, required this.title, required this.body});
+
+  factory Post.fromJson(Map&lt;String, dynamic&gt; json) {
+    return Post(
+      id: json['id'],
+      title: json['title'],
+      body: json['body'],
+    );
+  }
+}
+    </code></pre>
+
+    <h2>Wyświetlanie danych w UI</h2>
+    <pre><code class="language-dart">
+class PostList extends StatelessWidget {
+  final Future&lt;List&lt;Post&gt;&gt; posts;
+
+  PostList({required this.posts});
+
+  @override
+  Widget build(BuildContext context) {
+    return FutureBuilder&lt;List&lt;Post&gt;&gt;(
+      future: posts,
+      builder: (context, snapshot) {
+        if (snapshot.connectionState == ConnectionState.waiting) {
+          return CircularProgressIndicator();
+        } else if (snapshot.hasError) {
+          return Text('Wystąpił błąd: \${snapshot.error}');
+        } else if (snapshot.hasData) {
+          final data = snapshot.data!;
+          return ListView.builder(
+            itemCount: data.length,
+            itemBuilder: (context, index) {
+              return ListTile(
+                title: Text(data[index].title),
+                subtitle: Text(data[index].body),
+              );
+            },
+          );
+        } else {
+          return Text('Brak danych');
+        }
+      },
+    );
+  }
+}
+    </code></pre>
+
+    <h2>Obsługa błędów (Error Handling)</h2>
+    <p>Podczas komunikacji z API mogą wystąpić błędy sieciowe, błędne odpowiedzi serwera itp. Należy je obsługiwać za pomocą <code>try-catch</code>.</p>
+    <pre><code class="language-dart">
+Future&lt;List&lt;Post&gt;&gt; fetchPosts() async {
+  try {
+    final response = await http.get(Uri.parse('https://jsonplaceholder.typicode.com/posts'));
+
+    if (response.statusCode == 200) {
+      List jsonData = jsonDecode(response.body);
+      return jsonData.map((item) => Post.fromJson(item)).toList();
+    } else {
+      throw Exception('Serwer zwrócił status: \${response.statusCode}');
+    }
+  } catch (e) {
+    throw Exception('Błąd połączenia: \$e');
+  }
+}
+    </code></pre>
+
+    <p>Dzięki temu aplikacja nie zawiesi się, gdy pojawi się problem z połączeniem.</p>
+
+  </div>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/prism.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/components/prism-dart.min.js"></script>
+</body>
+</html>

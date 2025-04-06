@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Optymalizacja i Wydajność Flutter</title>
+  <link rel="stylesheet" href="../styles.css">
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/themes/prism-tomorrow.min.css" rel="stylesheet" />
+</head>
+<body>
+  <div class="container">
+    <h1>Optymalizacja i Wydajność w Flutterze</h1>
+
+    <p>Dobra wydajność aplikacji Flutter zależy od płynnego renderowania i szybkiego reagowania interfejsu. Flutter udostępnia narzędzia i techniki pozwalające wykryć i zoptymalizować problemy z wydajnością.</p>
+
+    <h2>1. Profilowanie aplikacji</h2>
+    <p>Uruchom aplikację w trybie <code>profile</code> aby mierzyć czas renderowania, wykorzystanie CPU i pamięci:</p>
+    <pre><code class="language-shell">
+flutter run --profile
+    </code></pre>
+    <p>Do analizy danych użyj <a href="https://docs.flutter.dev/tools/devtools/overview" target="_blank">Flutter DevTools</a>.</p>
+
+    <h2>2. Flutter DevTools</h2>
+    <p>To zestaw narzędzi do debugowania, analizy i optymalizacji wydajności.</p>
+    <ul>
+      <li><strong>Performance</strong>: analiza klatek (frame timeline)</li>
+      <li><strong>Memory</strong>: monitorowanie zużycia pamięci</li>
+      <li><strong>CPU Profiler</strong>: analiza operacji CPU</li>
+      <li><strong>Widget Inspector</strong>: struktura i rendering UI</li>
+    </ul>
+    <p>Uruchom DevTools z terminala:</p>
+    <pre><code class="language-shell">
+flutter pub global run devtools
+    </code></pre>
+
+    <h2>3. Minimalizacja jank (opóźnień animacji)</h2>
+    <p>Jank oznacza opóźnienia w renderowaniu — np. gdy klatka trwa dłużej niż 16 ms (przy 60 FPS).</p>
+    <ul>
+      <li>Unikaj ciężkich operacji w metodzie <code>build()</code></li>
+      <li>Używaj <code>ListView.builder</code> zamiast <code>ListView(children: [...])</code></li>
+      <li>Używaj lazy loading danych</li>
+      <li>Unikaj długich obliczeń w głównym wątku</li>
+    </ul>
+
+    <h2>4. RepaintBoundary</h2>
+    <p><code>RepaintBoundary</code> to widżet, który ogranicza ponowne renderowanie do konkretnej części UI.</p>
+    <pre><code class="language-dart">
+RepaintBoundary(
+  child: SomeHeavyWidget(),
+)
+    </code></pre>
+    <p>Dzięki temu, jeśli coś innego się zmienia, `SomeHeavyWidget()` nie będzie się odrysowywać ponownie.</p>
+
+    <h2>5. Dobre praktyki wydajnościowe</h2>
+    <ul>
+      <li>Używaj const widgetów gdzie to możliwe (<code>const Text(...)</code>)</li>
+      <li>Unikaj niepotrzebnych rebuildów – rozdziel komponenty</li>
+      <li>Cache’uj obrazy (np. <code>cached_network_image</code>)</li>
+      <li>Używaj <code>shouldRepaint</code> = false w <code>CustomPainter</code>, jeśli nic się nie zmienia</li>
+    </ul>
+
+    <h2>6. Monitorowanie wydajności w produkcji</h2>
+    <p>Użyj Firebase Performance Monitoring lub narzędzi do logowania np. <code>Sentry</code>, aby śledzić spadki FPS i błędy użytkowników.</p>
+
+    <h2>7. Sprawdzanie wielkości bundla</h2>
+    <p>Analizuj wagę aplikacji:</p>
+    <pre><code class="language-shell">
+flutter build apk --analyze-size
+    </code></pre>
+    <p>Otwórz wygenerowany raport HTML w przeglądarce – zobaczysz, które pakiety zajmują najwięcej miejsca.</p>
+  </div>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/prism.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/components/prism-dart.min.js"></script>
+</body>
+</html>

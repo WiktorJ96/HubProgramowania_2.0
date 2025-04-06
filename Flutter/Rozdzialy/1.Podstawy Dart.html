@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Podstawy Dart</title>
+    <link rel="stylesheet" href="../styles.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/themes/prism-tomorrow.min.css" rel="stylesheet" />
+</head>
+<body>
+    <div class="container">
+        <h1>Podstawy Dart</h1>
+
+        <p>Dart to język programowania opracowany przez Google, który jest używany głównie do tworzenia aplikacji w frameworku Flutter. Posiada silne typowanie, wsparcie dla programowania obiektowego oraz asynchroniczności.</p>
+
+        <h2>Składnia języka</h2>
+        <p>Podstawowe elementy składni Dart obejmują deklaracje zmiennych, funkcje oraz struktury sterujące.</p>
+        <pre><code class="language-dart">
+void main() {
+  print('Witaj w Dart!');
+  int liczba = 10;
+  double przecinek = 3.14;
+  String tekst = 'Przykładowy string';
+  bool prawda = true;
+  print('$liczba, $przecinek, $tekst, $prawda');
+}
+        </code></pre>
+
+        <h2>Funkcje</h2>
+        <p>Funkcje w Dart mogą mieć opcjonalne parametry oraz wartości domyślne.</p>
+        <pre><code class="language-dart">
+int suma(int a, int b) {
+  return a + b;
+}
+
+void main() {
+  print(suma(5, 7));
+}
+        </code></pre>
+
+        <h2>Klasy i obiekty</h2>
+        <p>Dart wspiera programowanie obiektowe z użyciem klas i obiektów.</p>
+        <pre><code class="language-dart">
+class Osoba {
+  String imie;
+  int wiek;
+
+  Osoba(this.imie, this.wiek);
+
+  void przedstawSie() {
+    print('Cześć, jestem $imie i mam $wiek lat.');
+  }
+}
+
+void main() {
+  var osoba = Osoba('Jan', 25);
+  osoba.przedstawSie();
+}
+        </code></pre>
+
+        <h2>Typy danych</h2>
+        <p>Dart posiada różne typy danych, w tym liczby, napisy, listy i mapy.</p>
+        <pre><code class="language-dart">
+void main() {
+  List<int> liczby = [1, 2, 3, 4, 5];
+  Map<String, int> oceny = {'Jan': 5, 'Anna': 4};
+  print(liczby);
+  print(oceny);
+}
+        </code></pre>
+
+        <h2>Obsługa asynchroniczności (async/await)</h2>
+        <p>Dart obsługuje operacje asynchroniczne za pomocą <code>Future</code> i <code>async/await</code>.</p>
+        <pre><code class="language-dart">
+Future<String> pobierzDane() async {
+  await Future.delayed(Duration(seconds: 2));
+  return 'Dane zostały pobrane';
+}
+
+void main() async {
+  print('Rozpoczynam pobieranie...');
+  String dane = await pobierzDane();
+  print(dane);
+}
+        </code></pre>
+
+    </div>
+    
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/prism.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/components/prism-dart.min.js"></script>
+</body>
+</html>
