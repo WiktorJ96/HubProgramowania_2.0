@@ -1,0 +1,195 @@
+:root {
+  --main-color: #2684FF; /* Atlassian Blue */
+  --accent-color: #0052CC; /* Ciemniejszy niebieski */
+  --text-color: #eaeaea; /* Jasny tekst */
+  --secondary-color: #1e1e1e; /* Główne tło */
+  --card-bg: #2a2a2a; /* Tło dla kontenerów */
+  --border-color: #3a3a3a; /* Obramowania */
+  --highlight-bg: #3c3c3c; /* Tło dla list i blockquote */
+  --transition-speed: 0.3s;
+}
+
+body {
+    font-family: 'Inter', sans-serif;
+    background-color: var(--secondary-color);
+    color: var(--text-color);
+    margin: 0;
+    padding: 20px;
+    line-height: 1.8;
+    display: flex;
+    justify-content: center;
+    flex-direction: column;
+}
+
+.container {
+    max-width: 950px;
+    background-color: #292929;
+    padding: 40px;
+    border-radius: 12px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.7);
+    width: 90%;
+    margin: auto;
+    transition: transform 0.2s ease-in-out;
+}
+
+h1 {
+    background: linear-gradient(90deg, var(--main-color), var(--accent-color));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    text-align: center;
+    font-size: 2.8rem;
+    margin-bottom: 40px;
+    font-weight: bold;
+}
+
+h2 {
+    color: var(--main-color);
+    border-bottom: 2px solid var(--accent-color);
+    padding-bottom: 10px;
+    margin-bottom: 20px;
+    font-size: 2rem;
+}
+
+h3 {
+    color: var(--accent-color);
+    margin-top: 30px;
+    margin-bottom: 15px;
+    font-size: 1.5rem;
+    border-left: 4px solid var(--main-color);
+    padding-left: 10px;
+}
+
+p {
+    color: var(--text-color);
+    line-height: 1.7;
+    font-size: 1.1rem;
+    margin-bottom: 20px;
+    transition: color 0.3s ease-in-out;
+}
+
+p:hover {
+    color: #ffffff;
+}
+
+pre {
+    background-color: #1f1f1f;
+    color: var(--main-color);
+    padding: 20px;
+    border-radius: 8px;
+    font-size: 1rem;
+    overflow-x: auto;
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.5);
+    margin-bottom: 25px;
+}
+
+code {
+    background-color: var(--accent-color);
+    padding: 6px 8px;
+    border-radius: 6px;
+    font-size: 0.95rem;
+    color: #000000; /* Ciemny tekst na zielonym tle */
+}
+
+ul {
+    padding-left: 25px;
+    color: var(--text-color);
+}
+
+ul li {
+    margin-bottom: 15px;
+    font-size: 1.1rem;
+    padding: 12px;
+    background-color: #333333;
+    border-left: 4px solid var(--main-color);
+    border-radius: 8px;
+    transition: background-color 0.3s ease-in-out, transform 0.2s ease-in-out;
+}
+
+ul li:hover {
+    background-color: #444444;
+    transform: translateX(10px);
+}
+
+a {
+    color: var(--main-color);
+    text-decoration: none;
+    font-weight: bold;
+    transition: color 0.3s ease-in-out, transform 0.2s ease-in-out;
+}
+
+a:hover {
+    color: var(--accent-color);
+    transform: scale(1.05);
+    text-decoration: underline;
+}
+
+a:active {
+    color: #990000;
+    transform: scale(0.98);
+}
+
+button {
+    background: linear-gradient(90deg, var(--main-color), var(--accent-color));
+    color: #fff;
+    border: none;
+    padding: 14px 18px;
+    border-radius: 8px;
+    font-size: 1.1rem;
+    font-weight: bold;
+    cursor: pointer;
+    transition: background-color 0.3s ease-in-out, transform 0.2s ease-in-out;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.5);
+    outline: none;
+}
+
+button:hover {
+    background: linear-gradient(90deg, var(--accent-color), var(--main-color));
+    transform: scale(1.05);
+}
+
+button:active {
+    background-color: #990000;
+    transform: scale(0.98);
+}
+
+.accordion-item {
+    margin-bottom: 15px;
+    border-radius: 8px;
+    background-color: #333333;
+}
+
+.accordion-header {
+    padding: 12px;
+    cursor: pointer;
+    font-size: 1.2em;
+    background: linear-gradient(90deg, var(--main-color), var(--accent-color));
+    color: #fff;
+    border-radius: 5px;
+}
+
+.accordion-content {
+    max-height: 0;
+    overflow: hidden;
+    transition: max-height 0.3s ease;
+    background-color: #1f1f1f;
+}
+
+blockquote {
+    font-style: italic;
+    color: var(--main-color);
+    padding: 10px 20px;
+    border-left: 4px solid var(--accent-color);
+    margin: 20px 0;
+    background-color: #292929;
+    border-radius: 8px;
+}
+
+@media (min-width: 768px) {
+    p, ul {
+        font-size: 1.2rem;
+    }
+    
+    pre {
+        font-size: 1.1rem;
+    }
+}

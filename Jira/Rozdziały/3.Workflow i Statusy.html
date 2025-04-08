@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Workflow i Statusy</title>
+  <link rel="stylesheet" href="../styles.css">
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/themes/prism-tomorrow.min.css" rel="stylesheet" />
+</head>
+<body>
+  <div class="container">
+    <h1>Workflow i Statusy</h1>
+    
+    <p>W Jira workflow to schemat, który definiuje żywotność zadania – od momentu jego utworzenia, poprzez kolejne etapy, aż do zakończenia. Dzięki niemu można precyzyjnie kontrolować, w jakim stanie znajduje się każde zadanie oraz jakie zasady muszą być spełnione przy zmianie statusu.</p>
+    
+    <h2>Definiowanie Statusów</h2>
+    <p>Statusy określają aktualny stan zadania. Typowymi statusami są:</p>
+    <ul>
+      <li><strong>To Do</strong> – zadanie do wykonania</li>
+      <li><strong>In Progress</strong> – zadanie w trakcie realizacji</li>
+      <li><strong>Code Review</strong> – zadanie oczekujące na przegląd kodu</li>
+      <li><strong>Done</strong> – zadanie zakończone</li>
+    </ul>
+    <p>Możesz definiować dowolną liczbę statusów, dostosowując je do specyfiki projektu i procesu pracy.</p>
+    
+    <h2>Przejścia między Statusami</h2>
+    <p>Przejścia (transitions) określają, jak zadanie zmienia swój status. Każde przejście łączy jeden status z kolejnym, na przykład:</p>
+    <ul>
+      <li><em>Start Work:</em> zmiana statusu z <strong>To Do</strong> na <strong>In Progress</strong></li>
+      <li><em>Submit for Review:</em> zmiana statusu z <strong>In Progress</strong> na <strong>Code Review</strong></li>
+      <li><em>Mark as Done:</em> zmiana statusu z <strong>Code Review</strong> na <strong>Done</strong></li>
+    </ul>
+    <p>Przejścia umożliwiają kontrolowanie przepływu zadań oraz określają, kto i kiedy może dokonać zmiany statusu.</p>
+    
+    <h2>Konfiguracja Warunków i Reguł</h2>
+    <p>Aby przejścia były skuteczne i zgodne z wymogami procesu, Jira pozwala na dodanie:</p>
+    <ul>
+      <li><strong>Warunków (Conditions):</strong> Określających, kto może wykonać przejście, np. tylko użytkownik z rolą <code>Developer</code>.</li>
+      <li><strong>Walidatorów (Validators):</strong> Sprawdzających, czy wymagane pola (np. <code>Description</code>) są wypełnione przed zatwierdzeniem zmiany statusu.</li>
+      <li><strong>Funkcji po przejściu (Post Functions):</strong> Automatyzujących działania po wykonaniu przejścia, np. przypisanie zadania do bieżącego użytkownika czy wysłanie powiadomienia.</li>
+    </ul>
+    
+    <p>Dzięki tym ustawieniom workflow w Jira staje się narzędziem wspierającym efektywne zarządzanie procesem pracy, eliminując błędy i usprawniając komunikację w zespole.</p>
+    
+    <h2>Przykładowa Konfiguracja Przejścia</h2>
+    <p>Poniżej znajduje się przykładowy zapis konfiguracji przejścia w formacie JSON, ilustrujący najważniejsze elementy:</p>
+    <pre><code class="language-json">
+{
+  "transition": "Start Work",
+  "from": "To Do",
+  "to": "In Progress",
+  "conditions": [
+    { "role": "Developer" }
+  ],
+  "validators": [
+    { "field_required": "Description" }
+  ],
+  "post_functions": [
+    { "assign_to": "currentUser" },
+    { "send_notification": true }
+  ]
+}
+    </code></pre>
+    <p>W powyższym przykładzie:</p>
+    <ul>
+      <li>Przejście <strong>"Start Work"</strong> zmienia status zadania z <strong>"To Do"</strong> na <strong>"In Progress"</strong>.</li>
+      <li>Warunkiem jest, aby użytkownik należał do roli <code>Developer</code>.</li>
+      <li>Walidator sprawdza, czy pole <code>Description</code> nie jest puste.</li>
+      <li>Funkcje po przejściu automatycznie przypisują zadanie do aktualnego użytkownika i wysyłają powiadomienie.</li>
+    </ul>
+    
+    <p>Dzięki tak skonfigurowanemu workflow możesz mieć pewność, że przejścia w Twoim projekcie są bezpieczne i zgodne z ustalonymi zasadami.</p>
+  </div>
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/prism.min.js"></script>
+</body>
+</html>

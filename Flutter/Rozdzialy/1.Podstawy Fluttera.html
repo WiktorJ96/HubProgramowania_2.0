@@ -59,56 +59,98 @@ flutter run
         <h2>Przykładowa aplikacja Flutter</h2>
         <p>Poniżej znajduje się przykład prostego kodu Fluttera, który tworzy aplikację z przyciskiem zwiększającym licznik.</p>
         <pre><code class="language-dart">
-import 'package:flutter/material.dart';
+import 'package:flutter/material.dart'; 
+// Importujemy bibliotekę Material Design - zawiera gotowe komponenty UI (przyciski, AppBar itp.)
 
 void main() {
-  runApp(MyApp());
+  runApp(MyApp()); 
+  // Uruchamiamy aplikację i jako główny widżet ustawiamy MyApp
 }
 
-class MyApp extends StatelessWidget {
+class MyApp extends StatelessWidget { 
+  // Tworzymy klasę głównego widżetu aplikacji, który się nie zmienia (StatelessWidget)
+
   @override
   Widget build(BuildContext context) {
+    // Funkcja budująca interfejs użytkownika
+
     return MaterialApp(
+      // Tworzymy aplikację zgodną z Material Design
+
       home: Scaffold(
+        // Scaffold to szkielet strony (obsługuje AppBar, body itd.)
+
         appBar: AppBar(title: Text('Flutter Demo')),
+        // Pasek na górze z tytułem
+
         body: CounterWidget(),
+        // Wstawiamy widget, który ma swój zmienny stan (licznik)
       ),
     );
   }
 }
 
 class CounterWidget extends StatefulWidget {
+  // Tworzymy widget, który może się zmieniać w czasie działania aplikacji
+
   @override
   _CounterWidgetState createState() => _CounterWidgetState();
+  // Tworzymy instancję klasy stanu (State), która zarządza tym widgetem
 }
 
-class _CounterWidgetState extends State<CounterWidget> {
+class _CounterWidgetState extends State {
+  // Klasa, która przechowuje i zarządza zmiennym stanem dla CounterWidget
+
   int _counter = 0;
+  // Licznik, domyślnie ustawiony na 0
 
   void _incrementCounter() {
+    // Funkcja zwiększająca licznik
+
     setState(() {
+      // Informujemy Fluttera, że stan się zmienił – trzeba zaktualizować widok
+
       _counter++;
+      // Zwiększamy licznik o 1
     });
   }
 
   @override
   Widget build(BuildContext context) {
+    // Funkcja budująca widok interfejsu dla tego stanu
+
     return Center(
+      // Umieszczamy całość na środku ekranu
+
       child: Column(
+        // Ustawiamy elementy jeden pod drugim (kolumna)
+
         mainAxisAlignment: MainAxisAlignment.center,
-        children: <Widget>[
+        // Wyrównujemy elementy w pionie na środku
+
+        children: [
           Text('Licznik:', style: TextStyle(fontSize: 24)),
+          // Tekst z napisem "Licznik" i większą czcionką
+
           Text('$_counter', style: TextStyle(fontSize: 32)),
+          // Wyświetlamy aktualną wartość licznika, większą czcionką
+
           SizedBox(height: 20),
+          // Tworzymy odstęp 20 pikseli
+
           ElevatedButton(
             onPressed: _incrementCounter,
+            // Po kliknięciu przycisku wywołujemy funkcję zwiększającą licznik
+
             child: Text('Zwiększ licznik'),
+            // Tekst widoczny na przycisku
           ),
         ],
       ),
     );
   }
 }
+
         </code></pre>
         <p>Powyższy kod tworzy aplikację, w której użytkownik może nacisnąć przycisk, aby zwiększyć licznik.</p>
     </div>

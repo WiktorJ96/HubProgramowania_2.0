@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Witaj na stronie o Jira</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <div class="container">
+    <h1>Witaj na stronie o Jira</h1>
+    <p>Wybierz temat, aby dowiedzieć się więcej o różnych aspektach Jiry.</p>
+
+    <div class="accordion">
+
+      <!-- POZIOM PODSTAWOWY -->
+      <div class="accordion-item">
+        <h2 class="accordion-header">Podstawowy</h2>
+        <div class="accordion-content">
+          <ul>
+            <li><a href="./Rozdziały/1.Podstawy Jiry.html">Podstawy Jiry</a></li>
+            <li><a href="./Rozdziały/2.Projekty i Tablice.html">Projekty i Tablice</a></li>
+            <li><a href="./Rozdziały/3.Workflow i Statusy.html">Workflow i Statusy</a></li>
+            <li><a href="./Rozdziały/4.Backlog i Sprinty.html">Backlog i Sprinty</a></li>
+            <li><a href="./Rozdziały/5.Filtry i Zapytania (JQL).html">Filtry i Zapytania (JQL)</a></li>
+            <li><a href="./Rozdziały/6.Raporty.html">Raporty</a></li>
+          </ul>
+        </div>
+      </div>
+
+      <!-- POZIOM ŚREDNIO ZAAWANSOWANY -->
+      <div class="accordion-item">
+        <h2 class="accordion-header">Średnio zaawansowany</h2>
+        <div class="accordion-content">
+          <ul>
+            <li><a href="./Rozdziały/7.Użytkownicy i Uprawnienia.html">Użytkownicy i Uprawnienia</a></li>
+            <li><a href="./Rozdziały/8.Konfiguracja Projektu.html">Konfiguracja Projektu</a></li>
+            <li><a href="./Rozdziały/9.Aplikacje i Integracje.html">Aplikacje i Integracje</a></li>
+          </ul>
+        </div>
+      </div>
+
+      <!-- POZIOM ZAAWANSOWANY -->
+      <div class="accordion-item">
+        <h2 class="accordion-header">Zaawansowany</h2>
+        <div class="accordion-content">
+          <ul>
+            <li><a href="./Rozdziały/10.Administrowanie Systemem.html">Administrowanie Systemem</a></li>
+            <li><a href="./Rozdziały/11.Automatyzacja Zadań.html">Automatyzacja Zadań</a></li>
+            <li><a href="./Rozdziały/12.Migracje i Import Danych.html">Migracje i Import Danych</a></li>
+            <li><a href="./Rozdziały/13.Skrypty i Rozszerzenia.html">Skrypty i Rozszerzenia</a></li>
+            <li><a href="./Rozdziały/14.Zarządzanie Wydajnością.html">Zarządzanie Wydajnością</a></li>
+          </ul>
+        </div>
+      </div>
+
+    </div>
+  </div>
+  
+  <script>
+    document.querySelectorAll('.accordion-header').forEach(header => {
+      header.addEventListener('click', function() {
+        const accordionContent = this.nextElementSibling;
+        if (accordionContent.style.maxHeight) {
+          accordionContent.style.maxHeight = null; // Zwijanie
+        } else {
+          // Zwijamy wszystkie inne otwarte sekcje
+          document.querySelectorAll('.accordion-content').forEach(content => {
+            content.style.maxHeight = null;
+          });
+          accordionContent.style.maxHeight = accordionContent.scrollHeight + "px"; // Rozwijanie
+        }
+      });
+    });
+  </script>
+</body>
+</html>

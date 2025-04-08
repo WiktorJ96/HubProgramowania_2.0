@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Filtry i Zapytania (JQL)</title>
+  <link rel="stylesheet" href="../styles.css">
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/themes/prism-tomorrow.min.css" rel="stylesheet" />
+</head>
+<body>
+  <div class="container">
+    <h1>Filtry i Zapytania (JQL)</h1>
+    
+    <p>W Jira filtry umożliwiają wyszukiwanie zadań według różnych kryteriów. Aby tworzyć zaawansowane filtry, używany jest język zapytań JQL (Jira Query Language). Pozwala on na precyzyjne określenie, jakie zadania mają zostać wyświetlone, np. według projektu, statusu, osoby przypisanej, priorytetu czy daty.</p>
+    
+    <h2>Podstawy JQL</h2>
+    <p>JQL to język zapytań, który jest podobny do SQL, ale przeznaczony jest do wyszukiwania i filtrowania danych w Jira. Składnia JQL opiera się na:</p>
+    <ul>
+      <li><strong>Pólach:</strong> takich jak <code>project</code>, <code>status</code>, <code>assignee</code>, <code>created</code> i wiele innych.</li>
+      <li><strong>Operatorach:</strong> m.in. <code>=</code>, <code>!=</code>, <code>IN</code>, <code>~</code>, <code>&gt;</code>, <code>&lt;</code>, co umożliwia precyzyjne określenie warunków wyszukiwania.</li>
+      <li><strong>Funkcjach:</strong> przykładowo <code>currentUser()</code> — pozwala dynamicznie określić bieżącego użytkownika.</li>
+    </ul>
+    
+    <h2>Przykłady Zapytania JQL</h2>
+    <p>Oto kilka przykładów zapytań JQL:</p>
+    <pre><code class="language-jql">
+# Wszystkie zadania w projekcie "MyProject" o statusie "In Progress"
+project = "MyProject" AND status = "In Progress"
+
+# Zadania przypisane do bieżącego użytkownika
+assignee = currentUser()
+
+# Zadania stworzone w ciągu ostatnich 7 dni
+created >= -7d
+
+# Zadania zawierające słowo "bug" w podsumowaniu
+summary ~ "bug"
+    </code></pre>
+    
+    <h2>Tworzenie i Zapisywanie Filtrów</h2>
+    <p>Aby utworzyć filtr w Jira:</p>
+    <ol>
+      <li>Przejdź do zakładki <strong>"Issues"</strong> i wybierz <strong>"Search for issues"</strong>.</li>
+      <li>Przełącz widok na tryb <strong>JQL</strong> (jeśli jesteś w trybie podstawowym).</li>
+      <li>Wpisz zapytanie, np.: <code>project = "MyProject" AND status = "To Do"</code>.</li>
+      <li>Kliknij <strong>"Save as"</strong> i nadaj filtrowi unikalną nazwę.</li>
+    </ol>
+    <p>Zapisany filtr możesz znaleźć w zakładce <strong>"Filters"</strong>, a następnie udostępnić go innym osobom lub zespołom poprzez opcję <strong>"Edit permissions"</strong>.</p>
+    
+    <h2>Współdzielenie Filtrów</h2>
+    <p>Udostępnianie filtrów pozwala na wspólne korzystanie z predefiniowanych zapytań przez cały zespół. Aby udostępnić filtr:</p>
+    <ol>
+      <li>Otwórz zapisany filtr.</li>
+      <li>Kliknij ikonę ustawień (trzy kropki) i wybierz <strong>"Edit permissions"</strong>.</li>
+      <li>Wybierz, komu chcesz go udostępnić – np. określonym projektom, zespołom lub publicznie w obrębie organizacji.</li>
+      <li>Zapisz zmiany.</li>
+    </ol>
+    <p>Dzięki temu każdy, kto ma dostęp, będzie mógł korzystać z tego samego filtru oraz przeglądać wyniki wyszukiwania.</p>
+  </div>
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/prism.min.js"></script>
+</body>
+</html>

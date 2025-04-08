@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Użytkownicy i Uprawnienia</title>
+  <link rel="stylesheet" href="../styles.css">
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/themes/prism-tomorrow.min.css" rel="stylesheet" />
+</head>
+<body>
+  <div class="container">
+    <h1>Użytkownicy i Uprawnienia</h1>
+    
+    <p>W Jira zarządzanie użytkownikami i uprawnieniami to kluczowy element kontroli nad dostępem do informacji oraz możliwościami wykonywania określonych czynności. System pozwala na dodawanie nowych użytkowników, definiowanie ról, tworzenie grup oraz precyzyjne przydzielanie lub ograniczanie uprawnień.</p>
+    
+    <h2>Dodawanie Nowych Użytkowników</h2>
+    <p>Aby dodać nowego użytkownika:</p>
+    <ol>
+      <li>Zaloguj się jako administrator w Jira.</li>
+      <li>Przejdź do <strong>Ustawień Systemowych</strong> lub <strong>Administracja</strong>.</li>
+      <li>W sekcji <strong>Użytkownicy</strong> wybierz opcję <strong>"Dodaj użytkownika"</strong> (Add user).</li>
+      <li>Wprowadź dane użytkownika, takie jak adres e-mail, imię, nazwisko oraz ustaw tymczasowe hasło.</li>
+      <li>Wyślij zaproszenie, aby użytkownik mógł ustawić własne hasło i rozpocząć pracę.</li>
+    </ol>
+    
+    <h2>Role i Grupy</h2>
+    <p>W Jira uprawnienia są zarządzane poprzez przypisywanie użytkowników do ról i grup:</p>
+    <ul>
+      <li><strong>Role:</strong> Ustalają, jakie funkcje i zadania może wykonywać użytkownik w ramach projektu (np. Administrator, Developer, Tester, Menedżer). Role można konfigurować indywidualnie dla każdego projektu.</li>
+      <li><strong>Grupy:</strong> Umożliwiają zbiorcze zarządzanie użytkownikami, np. przypisanie wszystkich użytkowników działu IT do jednej grupy. Następnie na poziomie projektu można przydzielać uprawnienia całej grupie.</li>
+    </ul>
+    
+    <h2>Przydzielanie i Ograniczanie Uprawnień</h2>
+    <p>Po dodaniu użytkowników do systemu, następnym krokiem jest skonfigurowanie uprawnień:</p>
+    <ul>
+      <li><strong>Uprawnienia globalne:</strong> Określają, jakie akcje użytkownicy mogą wykonywać na poziomie całej instytucji (np. dostęp do administracji, tworzenie projektów).</li>
+      <li><strong>Uprawnienia projektowe:</strong> Są przypisywane do konkretnych projektów. Można kontrolować dostęp do działań takich jak tworzenie zadań, edycja, komentowanie czy przechodzenie przez workflow.</li>
+      <li><strong>Schematy uprawnień:</strong> Umożliwiają precyzyjne definiowanie, kto może wykonywać określone operacje w projekcie. Administratorzy mogą edytować schematy i przypisywać je do projektów.</li>
+    </ul>
+    
+    <p>Dzięki takiemu podziałowi system Jira zapewnia elastyczne i bezpieczne zarządzanie dostępem, co jest kluczowe dla utrzymania poufności danych oraz efektywnej pracy zespołu.</p>
+  </div>
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/prism.min.js"></script>
+</body>
+</html>

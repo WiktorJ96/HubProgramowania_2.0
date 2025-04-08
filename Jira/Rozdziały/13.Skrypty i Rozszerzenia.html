@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Skrypty i Rozszerzenia</title>
+  <link rel="stylesheet" href="../styles.css">
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/themes/prism-tomorrow.min.css" rel="stylesheet" />
+</head>
+<body>
+  <div class="container">
+    <h1>Skrypty i Rozszerzenia</h1>
+    
+    <p>Jira pozwala na rozbudowę swoich funkcji poprzez skrypty i rozszerzenia. Dzięki temu możesz tworzyć niestandardowe funkcje oraz integrować system z zewnętrznymi aplikacjami poprzez REST API. Wśród najpopularniejszych narzędzi znajduje się <strong>ScriptRunner</strong>.</p>
+    
+    <h2>ScriptRunner</h2>
+    <p>ScriptRunner to potężne rozszerzenie dla Jira, które umożliwia pisanie skryptów w języku <strong>Groovy</strong>. Umożliwia ono:</p>
+    <ul>
+      <li>Tworzenie niestandardowych warunków, walidatorów i akcji w workflow</li>
+      <li>Automatyzację zadań administracyjnych</li>
+      <li>Dodawanie nowych przycisków i elementów interfejsu</li>
+    </ul>
+    
+    <h2>Tworzenie Niestandardowych Funkcji</h2>
+    <p>Tworzenie niestandardowych funkcji pozwala dostosować Jira do specyficznych potrzeb Twojego zespołu. Możesz na przykład:</p>
+    <ul>
+      <li>Definiować niestandardowe pola kalkulacyjne</li>
+      <li>Rozszerzać możliwości języka zapytań JQL poprzez dodawanie własnych funkcji</li>
+      <li>Automatyzować procesy poprzez uruchamianie skryptów w określonych momentach workflow</li>
+    </ul>
+    <p>Przykładowy skrypt w ScriptRunner (Groovy), który pobiera podsumowanie zadania:</p>
+    <pre><code class="language-groovy">
+import com.atlassian.jira.component.ComponentAccessor
+
+// Pobieramy menadżera zadań
+def issueManager = ComponentAccessor.getIssueManager()
+// Pobieramy zadanie o kluczu "PROJ-123"
+def issue = issueManager.getIssueByCurrentKey("PROJ-123")
+return issue.summary
+    </code></pre>
+    <p>Powyższy skrypt zwraca podsumowanie zadania o kluczu <code>PROJ-123</code>.</p>
+    
+    <h2>Integracja z REST API Jiry</h2>
+    <p>REST API Jiry umożliwia komunikację między Jira a zewnętrznymi systemami. Dzięki niemu można wykonywać operacje takie jak:</p>
+    <ul>
+      <li>Pobieranie danych o zadaniach, projektach, użytkownikach czy workflow</li>
+      <li>Tworzenie, edytowanie i usuwanie zadań za pomocą wywołań HTTP</li>
+      <li>Integrację z narzędziami takimi jak Confluence, Slack, czy własnymi aplikacjami backend</li>
+    </ul>
+    <p>Przykładowe zapytanie CURL do pobrania danych o zadaniu:</p>
+    <pre><code class="language-shell">
+curl -u username:password -X GET -H "Content-Type: application/json" "https://your-jira-instance.atlassian.net/rest/api/2/issue/PROJ-123"
+    </code></pre>
+    <p>Takie zapytanie zwróci dane zadania w formacie JSON, które następnie można wykorzystać w innych aplikacjach lub do analizy.</p>
+    
+  </div>
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/prism.min.js"></script>
+</body>
+</html>
