@@ -1,9 +1,10 @@
 :root {
-    --main-color: #c21325; /* Czerwony - kolor Jest */
-    --secondary-color: #1e1e1e; /* Ciemne tło */
-    --text-color: #eaeaea; /* Jasny tekst */
-    --accent-color: #15c213; /* Zielony - akcent (symbol poprawnych testów) */
+    --main-color: #c21325; /* Główny kolor – czerwony, używany w nagłówkach, gradientach i elementach wyróżniających */
+    --secondary-color: #1e1e1e; /* Główne tło – ciemny, nadaje całej stronie elegancki wygląd */
+    --text-color: #eaeaea; /* Kolor tekstu – jasny, kontrastujący z ciemnym tłem */
+    --accent-color: #15c213; /* Kolor akcentowy – zielony, symbolizuje poprawne wyniki (np. testy) i jest używany w przyciskach, kodzie, podświetleniach */
 }
+
 
 body {
     font-family: 'Inter', sans-serif;
