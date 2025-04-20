@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Komponenty Niestandardowe</title>
+    <link rel="stylesheet" href="../styles.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/themes/prism-tomorrow.min.css" rel="stylesheet" />
+</head>
+<body>
+    <div class="container">
+        <h1>Komponenty Niestandardowe</h1>
+
+        <p>Komponent niestandardowy to Twoja własna kontrolka, stworzona przez dziedziczenie po klasie bazowej, np. <code>TComponent</code> lub <code>TControl</code>. Pozwala dodać unikalne funkcje i zintegrować je w Delphi IDE.</p>
+
+        <h2>Dziedziczenie z TComponent</h2>
+        <p>Utwórz nową klasę dziedziczącą po <code>TComponent</code>, aby mieć dostęp do mechanizmów właścicielstwa (Owner) i streaming (zapisu ustawień).</p>
+        <pre><code class="language-pascal">unit MyComponent;
+
+interface
+
+uses
+  System.Classes, Vcl.Controls;
+
+type
+  // Tworzymy komponent, który przechowuje wartość
+  TMyValueComponent = class(TComponent)
+  private
+    FValue: Integer;      // pole prywatne
+    procedure SetValue(AValue: Integer);
+  published
+    property Value: Integer read FValue write SetValue;
+  end;
+
+procedure Register;
+
+implementation
+
+procedure TMyValueComponent.SetValue(AValue: Integer);
+begin
+  if FValue <> AValue then
+  begin
+    FValue := AValue;
+    // tutaj możemy wywołać zdarzenie lub odświeżyć wygląd
+  end;
+end;
+
+// Rejestracja komponentu w IDE
+procedure Register;
+begin
+  RegisterComponents('MojeKomponenty', [TMyValueComponent]);
+end;
+
+end.
+</code></pre>
+
+        <h2>Rejestrowanie w IDE</h2>
+        <p>Aby komponent pojawił się na palecie Delphi, dodaj procedurę <code>Register</code> w sekcji <code>implementation</code> i użyj <code>RegisterComponents</code>. Wskazujesz zakładkę („MojeKomponenty”) i listę klas.</p>
+
+        <h2>Design‑time vs Run‑time</h2>
+        <p><strong>Design‑time</strong> to etap projektowania w IDE:</p>
+        <ul>
+            <li>Własny edytor właściwości przez <code>TPropertyEditor</code> (opcjonalnie).</li>
+            <li>Ikona komponentu (ikonka <code>.bmp</code> w folderze <code>$(BDS)Bin</code>).</li>
+        </ul>
+        <p><strong>Run‑time</strong> to kod wykonywany w aplikacji:</p>
+        <ul>
+            <li>Logika działania komponentu w metodach kluczowych.</li>
+            <li>Obsługa zdarzeń (<code>OnClick</code>, własne).</li>
+        </ul>
+        <pre><code class="language-pascal">// Rozdzielenie kodu design‑time od run‑time
+{$IFDEF IDE}
+uses DesignIntf, DesignEditors;
+// tutaj rejestrujemy edytory
+{$ENDIF}
+
+// Reszta kodu komponentu zawsze jest kompilowana
+
+// Przykład własnego zdarzenia
+type
+  TMyValueComponent = class(TComponent)
+  private
+    FOnValueChanged: TNotifyEvent;
+  published
+    property OnValueChanged: TNotifyEvent;
+  end;
+
+// W momencie zmiany wartości wywołujemy zdarzenie
+toValue := AValue;
+if Assigned(FOnValueChanged) then
+  FOnValueChanged(Self);
+</code></pre>
+
+        <h2>Wskazówki</h2>
+        <ul>
+            <li>Zawsze definiuj <code>published</code> dla właściwości, które mają być widoczne w Object Inspector.
+            <li>Używaj <code>Owner</code>, by Delphi zwalniało Twój komponent razem z formą.</li>
+            <li>Rozdzielaj kod, korzystając z <code>{$IFDEF IDE}</code> dla elementów design‑time.</li>
+            <li>Testuj komponenty zarówno w IDE (dodaj na formę), jak i w kompilowanym EXE.</li>
+            <li>Zadbaj o dokumentację i opis w palecie – tekst pomocy dla właściwości.</li>
+        </ul>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/prism.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/components/prism-pascal.min.js"></script>
+</body>
+</html>

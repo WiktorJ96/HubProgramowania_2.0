@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Debugowanie i Testy</title>
+  <link rel="stylesheet" href="../styles.css">
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/themes/prism-tomorrow.min.css" rel="stylesheet" />
+</head>
+<body>
+  <div class="container">
+    <h1>Debugowanie i Testy</h1>
+
+    <p>Delphi IDE oferuje potężne narzędzia do debugowania, a także wsparcie dla testów jednostkowych za pomocą DUnitX. Można także profilować aplikację przy pomocy zewnętrznych profilerów lub wbudowanych narzędzi.</p>
+
+    <h2>Debugger IDE</h2>
+    <ul>
+      <li><strong>Breakpoints</strong> – ustawienie punktu przerwania (klik na marginesie lub F5).</li>
+      <li><strong>Watch List</strong> – obserwacja wartości zmiennych i wyrażeń.</li>
+      <li><strong>Call Stack</strong> – śledzenie stosu wywołań metod.</li>
+      <li><strong>Evaluate/Modify</strong> (Ctrl+F7) – ocena i modyfikacja zmiennych w czasie debugowania.</li>
+      <li><strong>Step Into (F7) / Step Over (F8) / Run to Cursor (Ctrl+F9)</strong> – kontrola przepływu wykonania.</li>
+    </ul>
+
+    <h2>DUnitX</h2>
+    <p>Framework do testów jednostkowych w Delphi:</p>
+    <pre><code class="language-pascal">// Przykładowy test DUnitX
+uses DUnitX.TestFramework;
+
+type
+  [TestFixture]
+  TMyTests = class
+  public
+    [Test]
+    procedure TestAdd;
+  end;
+
+procedure TMyTests.TestAdd;
+begin
+  Assert.AreEqual(5, 2+3, '2+3 powinno być 5');
+end;
+
+initialization
+  TDUnitX.RegisterTestFixture(TMyTests);
+</code></pre>
+
+    <h2>Profile narzędzi</h2>
+    <ul>
+      <li><strong>Insight</strong> – profiler CPU dla Delphi (płatny).</li>
+      <li><strong>Sampling Profiler</strong> – wbudowane narzędzie w RAD Studio.</li>
+      <li><strong>FastMM4</strong> – kompatybilny profiler pamięci i leak-detection.</li>
+    </ul>
+
+    <h2>Wskazówki</h2>
+    <ul>
+      <li>Ustawiaj breakpointy tylko w krytycznych fragmentach, by nie spowalniać debugowania.</li>
+      <li>Testuj kluczowe metody przy użyciu DUnitX i automatyzuj uruchamianie testów w CI.</li>
+      <li>Profiluj w trybie release z informacjami debug, by uzyskać wiarygodne dane.</li>
+      <li>Użyj FastMM4 z opcją wyłapywania wycieków pamięci (<code>FullDebugMode</code>).</li>
+    </ul>
+  </div>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/prism.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/components/prism-pascal.min.js"></script>
+</body>
+</html>

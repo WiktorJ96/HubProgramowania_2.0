@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FireMonkey (FMX)</title>
+    <link rel="stylesheet" href="../styles.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/themes/prism-tomorrow.min.css" rel="stylesheet" />
+</head>
+<body>
+    <div class="container">
+        <h1>FireMonkey (FMX)</h1>
+
+        <p>FireMonkey (<em>FMX</em>) to nowoczesny framework Delphi do tworzenia wieloplatformowych aplikacji graficznych (Windows, macOS, iOS, Android). FMX oferuje elastyczny model stylów, wbudowaną obsługę animacji oraz możliwości renderowania 3D.</p>
+
+        <h2>Aplikacje wieloplatformowe</h2>
+        <ul>
+            <li><strong>Jedna baza kodu</strong> – ten sam projekt kompiluje się na różne systemy.</li>
+            <li><strong>Platform Services</strong> – dostęp do specyficznych API systemu (np. sensorów, plików).</li>
+            <li><strong>Projekt rozwiązania</strong> – pliki <code>.dproj</code> zawierają konfiguracje dla każdej platformy.</li>
+        </ul>
+        <pre><code class="language-pascal">// Przykład warunkowego kodu dla Android/iOS
+uses
+  {$IFDEF ANDROID}
+  FMX.Helpers.Android,
+  {$ENDIF}
+  {$IFDEF IOS}
+  FMX.Helpers.iOS,
+  {$ENDIF}
+  FMX.Forms;
+// ...
+</code></pre>
+
+        <h2>Style i motywy</h2>
+        <p>FMX pozwala na definiowanie stylów, które zmieniają wygląd komponentów bez modyfikowania kodu.</p>
+        <ul>
+            <li><code>TStyleBook</code> – kontener ze zdefiniowanymi stylami w pliku <code>.style</code>.</li>
+            <li><code>AssignStyleLookup</code> – dynamiczna zmiana stylu komponentu.
+            <pre><code class="language-pascal">// Załadowanie StyleBook
+StyleBook1.FileName := 'Dark.style';
+Form1.StyleBook := StyleBook1;
+
+// Zmiana stylu przycisku
+toolButton.StyleLookup := 'buttonstyle1';
+</code></pre></li>
+            <li><strong>Motywy</strong> – gotowe zestawy stylów (Material Design, iOS, macOS).</li>
+        </ul>
+
+        <h2>Animacje</h2>
+        <p>FMX ma wbudowaną bibliotekę animacji (<code>FMX.Ani</code>) do płynnego przesuwania, zmiany rozmiaru, koloru i obrotu.</p>
+        <pre><code class="language-pascal">uses FMX.Ani;
+// Prosta animacja przesunięcia komponentu
+var
+  MoveAni: TFloatAnimation;
+begin
+  MoveAni := TFloatAnimation.Create(Button1);
+  MoveAni.Parent := Button1;
+  MoveAni.PropertyName := 'Position.X';
+  MoveAni.StartValue := Button1.Position.X;
+  MoveAni.StopValue := Button1.Position.X + 100;
+  MoveAni.Duration := 0.5;
+  MoveAni.Start;
+end;
+</code></pre>
+
+        <h2>Efekty 3D</h2>
+        <p>FMX wspiera sceny 3D (<code>FMX.Types3D</code>), obiekty <code>TMesh</code> i oświetlenie.</p>
+        <ul>
+            <li><code>TViewport3D</code> – kontener sceny 3D.</li>
+            <li><code>TCamera</code> – punkt widzenia w scenie.</li>
+            <li><code>TLight</code> – źródło światła (Directional, Point, Spot).</li>
+            <li><code>TCube</code>, <code>TSphere</code> – predefiniowane siatki (mesh).</li>
+        </ul>
+        <pre><code class="language-pascal">// Prosta scena 3D
+var
+  Viewport: TViewport3D;
+  Cam: TCamera;
+  Light: TLight;
+  Cube: TCube;
+begin
+  Viewport := TViewport3D.Create(Form1);
+  Viewport.Align := TAlignLayout.Client;
+  Cam := TCamera.Create(Viewport);
+  Cam.Parent := Viewport;
+  Cam.Position.Z := -5;
+
+  Light := TLight.Create(Viewport);
+  Light.Parent := Viewport;
+  Light.Kind := TLightKind.Directional;
+
+  Cube := TCube.Create(Viewport);
+  Cube.Parent := Viewport;
+  Cube.Position.X := 0;
+end;
+</code></pre>
+
+        <h2>Wskazówki</h2>
+        <ul>
+            <li>Optymalizuj kontrole wielkości – 3D i animacje mogą być zasobożerne.</li>
+            <li>Testuj na każdej platformie – różnice DPI i zdarzeń dotykowych.</li>
+            <li>Używaj <code>StyleBook</code> do centralnego zarządzania wyglądem.</li>
+            <li>W scenach 3D dodaj cieniowanie (<code>MaterialSource</code>), by uzyskać realistyczny efekt.</li>
+        </ul>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/prism.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/components/prism-pascal.min.js"></script>
+</body>
+</html>

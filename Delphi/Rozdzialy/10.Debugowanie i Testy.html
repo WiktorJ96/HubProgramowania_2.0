@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Debugowanie i Testy</title>
+    <link rel="stylesheet" href="../styles.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/themes/prism-tomorrow.min.css" rel="stylesheet" />
+</head>
+<body>
+    <div class="container">
+        <h1>Debugowanie i Testy</h1>
+
+        <p>Skuteczne debugowanie i testowanie to klucz do stabilnych aplikacji. W Delphi masz do dyspozycji wbudowany debugger, framework testowy DUnitX, narzędzia profilujące oraz szybkie wyszukiwanie w IDE przez Insight.</p>
+
+        <h2>Debugger IDE</h2>
+        <ul>
+            <li><strong>Breakpoints</strong> – punkty przerwania (F5/F9), także warunkowe (klik prawym przyciskiem).</li>
+            <li><strong>Stepping</strong> – krok po kroku: Step Into (F7), Step Over (F8), Run to Cursor (Ctrl+F7).</li>
+            <li><strong>Watches</strong> – obserwowanie wartości zmiennych, wyrażeń, okno Local Variables.</li>
+            <li><strong>Call Stack</strong> – podgląd stosu wywołań, by śledzić skąd przyszło wywołanie.
+            </li>
+            <li><strong>Evaluate/Modify</strong> – ocena i modyfikacja wyrażeń w trakcie przerwania.</li>
+        </ul>
+        <pre><code class="language-pascal">// Przykład zmiany wartości w Evaluate
+ResultValue := 100;
+</code></pre>
+
+        <h2>DUnitX (unit tests)</h2>
+        <p>DUnitX to nowoczesny framework testów jednostkowych oparty na atrybutach.</p>
+        <pre><code class="language-pascal">unit TestMyUnit;
+
+interface
+uses
+  DUnitX.TestFramework;
+
+type
+  [TestFixture]
+  TMyTests = class
+  public
+    [Test]
+    procedure TestAdd;
+  end;
+
+implementation
+
+procedure TMyTests.TestAdd;
+begin
+  Assert.AreEqual(4, 2+2, '2+2 powinno być 4');
+end;
+
+initialization
+  TDUnitX.RegisterTestFixture(TMyTests);
+end.
+</code></pre>
+        <ul>
+            <li><strong>Atrybuty</strong> – [TestFixture], [Test], [Setup], [TearDown].</li>
+            <li><strong>Assert</strong> – sprawdzenia: AreEqual, IsTrue, IsNotNull, itp.</li>
+            <li><strong>Runner</strong> – integracja z IDE: menu Test->Run>
+        </ul>
+
+        <h2>Profilery</h2>
+        <p>Profiler pozwala znaleźć wąskie gardła w kodzie.</p>
+        <ul>
+            <li><strong>Sampling</strong> – okresowe próbkowanie stosu wywołań (niski narzut).</li>
+            <li><strong>Instrumentation</strong> – dokładny pomiar czasu każdej metody (wyższy narzut).</li>
+            <li><strong>Delphi Profiler</strong> – w menu Tools->Profiling uruchamiasz profilowanie aplikacji.</li>
+            <li><strong>Analiza wyników</strong> – identyfikacja najwolniejszych funkcji, optymalizacja kodu.</li>
+        </ul>
+
+        <h2>IDE Insight</h2>
+        <p>IDE Insight to szybkie wyszukiwanie poleceń, opcji i plików w IDE.</p>
+        <ul>
+            <li>Wywołanie: <code>Ctrl+.</code> (kropka).</li>
+            <li>Wyszukiwanie komend: wpisz fragment nazwy np. "Toggle" dla Toggle Breakpoint.</li>
+            <li>Przechodzenie do formularza lub unitu: wpisz jego nazwę.</li>
+        </ul>
+
+        <h2>Wskazówki</h2>
+        <ul>
+            <li>Ustawiaj warunkowe breakpointy, by przerwać tylko przy określonych wartościach.</li>
+            <li>Pisząc testy, dbaj o czytelne komunikaty w Assert, by szybko zdiagnozować błąd.</li>
+            <li>Profiluj kod w konfiguracji Release z debug info, by uzyskać realistyczne czasy.</li>
+            <li>Korzystaj z IDE Insight, by szybko znaleźć narzędzia debugowania i testowania.</li>
+            <li>Łącz testy jednostkowe z CI/CD, by automatycznie wykonywać je po każdej zmianie.
+        </ul>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/prism.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/components/prism-pascal.min.js"></script>
+</body>
+</html>

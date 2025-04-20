@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Generics & RTTI</title>
+    <link rel="stylesheet" href="../styles.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/themes/prism-tomorrow.min.css" rel="stylesheet" />
+</head>
+<body>
+    <div class="container">
+        <h1>Generics & RTTI</h1>
+
+        <p>Generics (typy uogólnione) pozwalają definiować klasy i metody niezależnie od konkretnego typu danych. RTTI (Run‑Time Type Information) to mechanizm pobierania informacji o typach w czasie wykonywania.</p>
+
+        <h2>Generics (typy uogólnione)</h2>
+        <p>Generics to szablony (templates), które działają jak receptury – można z nich korzystać z różnymi składnikami (typami).</p>
+        <pre><code class="language-pascal">uses System.Generics.Collections;
+
+// Lista przechowująca elementy typu Integer
+var
+  listaInt: TList<Integer>;   // <Integer> – typ parametru generycznego
+  listaStr: TList<String>;    // lista ciągów znaków
+begin
+  listaInt := TList<Integer>.Create;     
+  listaInt.Add(10);             // dodanie wartości 10
+  listaInt.Add(20);
+  ShowMessage(listaInt[0].ToString); // dostęp po indeksie
+  listaInt.Free;
+
+  // Słownik klucz->wartość: String->Integer
+  var slownik := TDictionary<String,Integer>.Create;
+  slownik.Add('jeden', 1);
+  slownik.Add('dwa', 2);
+  if slownik.TryGetValue('dwa', var val) then
+    ShowMessage(val.ToString);
+  slownik.Free;
+end;
+</code></pre>
+        <h3>Typowe kolekcje</h3>
+        <ul>
+            <li><code>TList<T></code> – lista dynamiczna,</li>
+            <li><code>TDictionary<TKey,TValue></code> – mapa klucz→wartość,</li>
+            <li><code>TQueue<T></code>, <code>TStack<T></code> – kolejka i stos,</li>
+            <li><code>TObjectList<T: class></code> – lista automatycznie zwalniająca obiekty.</li>
+        </ul>
+
+        <h2>RTTI (Run‑Time Type Information)</h2>
+        <p>RTTI pozwala analizować strukturę typów, pobierać metadane i atrybuty w czasie działania programu.</p>
+        <pre><code class="language-pascal">uses System.Rtti, System.TypInfo;
+
+// Przykład klasy z atrybutem
+type
+  [ComponentPlatformsAttribute(pidWin32 or pidWin64)]
+  TMyClass = class
+  private
+    FValue: Integer;
+  public
+    constructor Create(AValue: Integer);
+    procedure Show;
+  end;
+
+constructor TMyClass.Create(AValue: Integer);
+begin
+  FValue := AValue;
+end;
+
+procedure TMyClass.Show;
+begin
+  ShowMessage('Wartość = ' + FValue.ToString);
+end;
+
+// Pobieranie informacji o klasie i atrybutach
+gvar
+  ctx: TRttiContext;            // główny kontekst RTTI
+  rType: TRttiType;             // reprezentacja typu
+  attr: TCustomAttribute;       // atrybut
+begin
+  rType := ctx.GetType(TMyClass);    
+  ShowMessage('Nazwa klasy: ' + rType.Name);
+  for attr in rType.GetAttributes do
+    ShowMessage('Atrybut: ' + attr.ClassName);
+  ctx.Free;
+end;
+</code></pre>
+
+        <h3>Atrybuty (Attributes)</h3>
+        <p>Atrybuty to dodatkowe informacje oznaczane w kwadratowych nawiasach przed definicją typu lub metody.</p>
+        <ul>
+            <li><code>[Obsolete]</code> – oznaczenie przestarzałego elementu,</li>
+            <li><code>[ComponentPlatforms]</code> – określa platformy wspierane,</li>
+            <li>Można definiować własne atrybuty pochodzące z <code>TCustomAttribute</code>.</li>
+        </ul>
+
+        <h2>Wskazówki</h2>
+        <ul>
+            <li>Generics zwiększają bezpieczeństwo typów – unikaj rzutowań (<em>casting</em>).</li>
+            <li>Używaj <code>TObjectList<T></code> z <code>OwnsObjects</code>=True, by uniknąć ręcznego Free.</li>
+            <li>RTTI bywa zasobożerne – używaj tylko tam, gdzie naprawdę potrzebujesz metadanych.</li>
+            <li>Atrybuty ułatwiają konfigurowanie zachowania klas bez modyfikacji kodu.</li>
+        </ul>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/prism.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/components/prism-pascal.min.js"></script>
+</body>
+</html>

@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Transakcje</title>
+    <link rel="stylesheet" href="../styles.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/themes/prism-tomorrow.min.css" rel="stylesheet" />
+</head>
+<body>
+    <div class="container">
+        <h1>Transakcje</h1>
+
+        <p>Transakcja to zestaw operacji na bazie danych, które wykonują się razem lub wcale. Zapewnia to spójność i bezpieczeństwo danych.</p>
+
+        <h2>ACID</h2>
+        <ul>
+            <li><strong>Atomicity (atomowość)</strong> – wszystkie operacje w transakcji wykonują się razem albo żadna nie jest zapisana.</li>
+            <li><strong>Consistency (spójność)</strong> – transakcja przenosi bazę ze stanu prawidłowego do kolejnego stanu prawidłowego.</li>
+            <li><strong>Isolation (izolacja)</strong> – transakcje nie widzą nawzajem swoich zmian, dopóki nie zostaną zatwierdzone.</li>
+            <li><strong>Durability (trwałość)</strong> – po zatwierdzeniu (COMMIT) zmiany są trwałe, nawet po awarii.</li>
+        </ul>
+
+        <h2>START TRANSACTION, COMMIT, ROLLBACK</h2>
+        <pre><code class="language-sql">
+// Rozpoczęcie transakcji
+START TRANSACTION;
+
+// Przykładowe operacje
+UPDATE accounts
+SET balance = balance - 100
+WHERE id = 1;
+
+UPDATE accounts
+SET balance = balance + 100
+WHERE id = 2;
+
+// Zapisanie zmian
+COMMIT;
+
+// Jeśli coś poszło nie tak, wycofaj zmiany
+ROLLBACK;
+        </code></pre>
+        <p><code>COMMIT</code> zapisuje wszystkie operacje, <code>ROLLBACK</code> cofa do stanu sprzed <code>START TRANSACTION</code>.</p>
+
+        <h2>Poziomy izolacji (Isolation Levels)</h2>
+        <p>Różne poziomy izolacji decydują, jak bardzo transakcje mogą na siebie wpływać:</p>
+        <ul>
+            <li><code>READ UNCOMMITTED (odczyt niezatwierdzonych)</code> – może wystąpić <em>brudny odczyt</em>.</li>
+            <li><code>READ COMMITTED (odczyt zatwierdzonych)</code> – widzisz tylko zatwierdzone zmiany.</li>
+            <li><code>REPEATABLE READ (powtarzalny odczyt)</code> – ta sama wartość w danej transakcji się nie zmienia.</li>
+            <li><code>SERIALIZABLE (sekwencyjny)</code> – najwyższa izolacja, działa jakby transakcje były wykonywane jedna po drugiej.</li>
+        </ul>
+        <pre><code class="language-sql">
+// Ustawienie poziomu izolacji dla bieżącej transakcji
+SET TRANSACTION ISOLATION LEVEL REPEATABLE READ;
+        </code></pre>
+
+        <h2>Zarządzanie blokadami (locks)</h2>
+        <p>Bazy danych używają blokad, żeby zapewnić izolację:</p>
+        <ul>
+            <li>Blokady na wierszach – chronią konkretne rekordy (<code>FOR UPDATE</code>).</li>
+            <li>Blokady na tabelach – blokują całą tabelę (<code>LOCK TABLES</code> w MySQL).</li>
+        </ul>
+        <pre><code class="language-sql">
+// Zablokuj wiersz przed zmianą
+SELECT * 
+FROM accounts 
+WHERE id = 1
+FOR UPDATE;
+        </code></pre>
+
+        <h2>Wskazówki</h2>
+        <ul>
+            <li>Zawsze używaj <code>COMMIT</code> lub <code>ROLLBACK</code>, by transakcja się nie zawiesiła.</li>
+            <li>Dobierz poziom izolacji – wyższy to większe bezpieczeństwo, ale wolniejsze operacje.</li>
+            <li>Unikaj długich transakcji – blokady mogą spowolnić innych użytkowników.</li>
+            <li>Monitoruj blokady i deadlocki (zakleszczenia), żeby szybko reagować.</li>
+        </ul>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/prism.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/components/prism-sql.min.js"></script>
+</body>
+</html>

@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Klauzule Zaawansowane</title>
+    <link rel="stylesheet" href="../styles.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/themes/prism-tomorrow.min.css" rel="stylesheet" />
+</head>
+<body>
+    <div class="container">
+        <h1>Klauzule Zaawansowane</h1>
+
+        <p>W tej sekcji omówimy zaawansowane techniki tworzenia zapytań SQL, które pozwalają na lepszą organizację i analizę danych.</p>
+
+        <h2>WITH (CTE – Common Table Expression)</h2>
+        <p>CTE (wyrażenie wspólne dla zapytania) to nazwana, tymczasowa tabela tworzona na początku zapytania. Ułatwia czytelność i wielokrotne wykorzystanie wyniku.</p>
+        <pre><code class="language-sql">
+// Definicja CTE i wykorzystanie jej w głównym zapytaniu
+WITH recent_orders AS (
+    SELECT id, customer_id, order_date
+    FROM orders
+    WHERE order_date >= '2025-01-01'
+)
+SELECT customer_id, COUNT(*) AS count_recent
+FROM recent_orders
+GROUP BY customer_id;
+        </code></pre>
+
+        <h2>CTE rekurencyjne (Recursive CTE)</h2>
+        <p>Rekurencyjne CTE pozwalają na iteracyjne przetwarzanie hierarchii, np. drzewo organizacyjne.</p>
+        <pre><code class="language-sql">
+// Przykład: hierarchia pracowników
+WITH RECURSIVE emp_tree AS (
+    -- wkład podstawowy: szefowie bez przełożonych
+    SELECT id, name, manager_id, 1 AS level
+    FROM employees
+    WHERE manager_id IS NULL
+
+    UNION ALL
+
+    -- część rekurencyjna: podwładni
+    SELECT e.id, e.name, e.manager_id, et.level + 1
+    FROM employees e
+    JOIN emp_tree et
+      ON e.manager_id = et.id
+)
+SELECT * 
+FROM emp_tree
+ORDER BY level, manager_id;
+        </code></pre>
+
+        <h2>Funkcje okienkowe (Window Functions), OVER i PARTITION BY</h2>
+        <p>Funkcje okienkowe wykonują obliczenia w obrębie „okna” danych bez grupowania wszystkich wierszy w jeden rekord.</p>
+
+        <h3>Klauzula OVER</h3>
+        <p>OVER definiuje okno – zakres wierszy, na których działa funkcja.</p>
+        <pre><code class="language-sql">
+// Kolejny numer dla każdego klienta według daty zamówienia
+SELECT 
+    customer_id,
+    order_date,
+    ROW_NUMBER() OVER (
+        PARTITION BY customer_id 
+        ORDER BY order_date
+    ) AS rn
+FROM orders;
+        </code></pre>
+
+        <h3>PARTITION BY</h3>
+        <p>PARTITION BY dzieli dane na grupy – okna – podobnie do GROUP BY, lecz nie redukuje liczby wierszy.</p>
+        <pre><code class="language-sql">
+// Średnia wartość zamówienia w oknie klienta
+SELECT
+    id,
+    customer_id,
+    amount,
+    AVG(amount) OVER (
+        PARTITION BY customer_id
+    ) AS avg_per_customer
+FROM orders;
+        </code></pre>
+
+        <h3>Przykłady innych funkcji okienkowych</h3>
+        <pre><code class="language-sql">
+// Suma narastająca sprzedaży dla każdego działu
+SELECT
+    department,
+    sale_date,
+    sales,
+    SUM(sales) OVER (
+        PARTITION BY department 
+        ORDER BY sale_date
+        ROWS BETWEEN UNBOUNDED PRECEDING AND CURRENT ROW
+    ) AS cumulative_sales
+FROM sales_data;
+
+// Ranking top 3 sprzedawców w każdym regionie
+SELECT
+    region,
+    seller,
+    revenue,
+    RANK() OVER (
+        PARTITION BY region 
+        ORDER BY revenue DESC
+    ) AS rank_in_region
+FROM sales;
+        </code></pre>
+
+        <h2>Wskazówki</h2>
+        <ul>
+            <li>CTE poprawia czytelność długich zapytań i pozwala unikać zagnieżdżonych podzapytan.</li>
+            <li>Rekurencyjne CTE są przydatne do analizowania struktur hierarchicznych.</li>
+            <li>Funkcje okienkowe działają bez utraty szczegółów – każdy wiersz pozostaje widoczny.</li>
+            <li>Używaj PARTITION BY, by grupować wiersze w oknie, a ORDER BY wewnątrz OVER, by określić kolejność.</li>
+            <li>W dużych zbiorach rozważ indeksy na kolumnach używanych w PARTITION BY i ORDER BY.</li>
+        </ul>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/prism.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/components/prism-sql.min.js"></script>
+</body>
+</html>

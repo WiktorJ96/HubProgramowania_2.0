@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Składnia Object Pascal</title>
+    <link rel="stylesheet" href="../styles.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/themes/prism-tomorrow.min.css" rel="stylesheet" />
+</head>
+<body>
+    <div class="container">
+        <h1>Składnia Object Pascal</h1>
+
+        <p>Object Pascal to język programowania używany w Delphi. Poniżej omówimy podstawowe elementy składni: zmienne, typy, klasy, rekordy (records) i interfejsy (interfaces).</p>
+
+        <h2>Zmienne i typy danych</h2>
+        <p>Zmienne to miejsca w pamięci o nazwie, w których przechowujemy dane.</p>
+        <ul>
+            <li><code>var</code> – słowo kluczowe do deklaracji zmiennej.</li>
+            <li>Typy proste: <code>Integer</code> (liczba całkowita), <code>Real</code> (liczba rzeczywista), <code>String</code> (ciąg znaków).</li>
+        </ul>
+        <pre><code class="language-pascal">var
+  liczba: Integer;     // zmienna przechowująca liczbę całkowitą
+  tekst: String;       // zmienna przechowująca tekst
+  wynik: Real;         // zmienna przechowująca liczbę z przecinkiem
+begin
+  liczba := 10;        // przypisanie wartości do zmiennej
+  tekst := 'Witaj';    // przypisanie tekstu
+  wynik := 3.14;       // przypisanie liczby rzeczywistej
+end;
+</code></pre>
+
+        <h2>Klasy</h2>
+        <p>Klasa (class) to szablon, według którego tworzymy obiekty. Zawiera pola (zmienne) i metody (procedury/funkcje).</p>
+        <pre><code class="language-pascal">type
+  TOsoba = class
+  private
+    FImie: String;       // pole prywatne
+  public
+    constructor Create(const AImie: String); // konstruktor
+    procedure PrzedstawSie;                  // metoda
+  end;
+
+constructor TOsoba.Create(const AImie: String);
+begin
+  FImie := AImie;
+end;
+
+procedure TOsoba.PrzedstawSie;
+begin
+  ShowMessage('Cześć, jestem ' + FImie);
+end;
+
+var
+  osoba: TOsoba;
+begin
+  osoba := TOsoba.Create('Jan');  // tworzenie obiektu
+  osoba.PrzedstawSie;              // wywołanie metody
+  osoba.Free;                      // zwolnienie obiektu
+end;
+</code></pre>
+
+        <h2>Rekordy (records)</h2>
+        <p>Rekord (record) to typ złożony, który grupuje różne pola w jedną strukturę.</p>
+        <pre><code class="language-pascal">type
+  TPoint = record
+    X, Y: Integer;     // pola rekordu
+  end;
+
+var
+  punkt: TPoint;
+begin
+  punkt.X := 10;      // dostęp do pól
+  punkt.Y := 20;
+  ShowMessage('X=' + IntToStr(punkt.X) + ', Y=' + IntToStr(punkt.Y));
+end;
+</code></pre>
+
+        <h2>Interfejsy (interfaces)</h2>
+        <p>Interfejs (interface) definiuje zestaw metod, które klasa musi implementować.</p>
+        <pre><code class="language-pascal">type
+  IZwierze = interface
+    ['{D4A1F8C2-1A3B-4E8C-9A3E-123456789ABC}']    // unikalny identyfikator
+    procedure DajGlos;                            // metoda
+  end;
+
+  TPies = class(TInterfacedObject, IZwierze)
+  public
+    procedure DajGlos;                           // implementacja
+  end;
+
+procedure TPies.DajGlos;
+begin
+  ShowMessage('Hau hau!');
+end;
+
+var
+  zw: IZwierze;
+begin
+  zw := TPies.Create;    // utworzenie instancji klasy zgodnej z interfejsem
+  zw.DajGlos;            // wywołanie metody z interfejsu
+end;
+</code></pre>
+
+        <h2>Wskazówki</h2>
+        <ul>
+            <li>Używaj czytelnych nazw zmiennych i typów (np. <code>FImie</code> dla pola klasy).</li>
+            <li>Zwalniaj obiekty za pomocą <code>Free</code> lub korzystaj z <code>try…finally</code>.</li>
+            <li>Rekordy są szybsze od klas, bo przechowywane na stosie.</li>
+            <li>Interfejsy ułatwiają zarządzanie pamięcią dzięki automatycznemu odliczaniu referencji.</li>
+            <li>Stosuj komentarze pod linijkami kodu, by wyjaśniać znaczenie każdego elementu.</li>
+        </ul>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/prism.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/components/prism-pascal.min.js"></script>
+</body>
+</html>

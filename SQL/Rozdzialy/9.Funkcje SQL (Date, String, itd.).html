@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Funkcje SQL – Data, Tekst, Konwersje</title>
+    <link rel="stylesheet" href="../styles.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/themes/prism-tomorrow.min.css" rel="stylesheet" />
+</head>
+<body>
+    <div class="container">
+        <h1>Funkcje SQL – Data, Tekst, Konwersje Typów</h1>
+
+        <p>SQL oferuje wiele wbudowanych funkcji (functions) ułatwiających pracę z datami, tekstem i konwersją typów danych.</p>
+
+        <h2>Funkcje daty i czasu</h2>
+        <ul>
+            <li><code>NOW()</code> – zwraca bieżącą datę i czas (<em>timestamp</em>).</li>
+            <li><code>CURDATE()</code> / <code>CURRENT_DATE</code> – zwraca tylko datę (rok-miesiąc-dzień).</li>
+            <li><code>CURTIME()</code> / <code>CURRENT_TIME</code> – zwraca tylko czas (godzina:minuta:sekunda).</li>
+            <li><code>DATE(expr)</code> – wyciąga część daty z wyrażenia <code>expr</code> (<em>timestamp</em> → <em>date</em>).</li>
+            <li><code>TIME(expr)</code> – wyciąga część czasu z wyrażenia <code>expr</code>.</li>
+            <li><code>DATE_ADD(d, INTERVAL x unit)</code> – dodaje do daty <code>d</code> przedział czasu (np. dni, miesiące).</li>
+            <li><code>DATE_SUB(d, INTERVAL x unit)</code> – odejmuje od daty <code>d</code> przedział czasu.</li>
+            <li><code>DATEDIFF(d1, d2)</code> – różnica w dniach między <code>d1</code> a <code>d2</code>.</li>
+            <li><code>EXTRACT(unit FROM expr)</code> – wyciąga część daty (rok, miesiąc, dzień) z <code>expr</code>.</li>
+            <li><code>DATE_FORMAT(d, format)</code> – formatuje datę według wzorca (np. <code>'%Y-%m-%d'</code>).</li>
+        </ul>
+        <pre><code class="language-sql">
+// Przykłady użycia funkcji daty
+SELECT 
+    NOW() AS teraz,
+    DATE(NOW()) AS tylko_data,
+    TIME(NOW()) AS tylko_czas,
+    DATE_ADD(NOW(), INTERVAL 7 DAY) AS za_tydzien,
+    DATEDIFF('2025-05-01', '2025-04-21') AS dni_roznicy,
+    EXTRACT(MONTH FROM NOW()) AS obecny_miesiac;
+        </code></pre>
+
+        <h2>Funkcje manipulacji ciągami znaków (tekst)</h2>
+        <ul>
+            <li><code>CONCAT(a, b, …)</code> – łączy (concatenate) kilka ciągów w jeden.</li>
+            <li><code>SUBSTRING(s, start, len)</code> – wycina fragment z ciągu <code>s</code>, zaczynając od pozycji <code>start</code>, długość <code>len</code>.</li>
+            <li><code>LENGTH(s)</code> / <code>CHAR_LENGTH(s)</code> – długość ciągu <code>s</code> w znakach.</li>
+            <li><code>UPPER(s)</code> – zamienia wszystkie litery w <code>s</code> na wielkie.</li>
+            <li><code>LOWER(s)</code> – zamienia wszystkie litery w <code>s</code> na małe.</li>
+            <li><code>TRIM(s)</code> – usuwa spacje (whitespace) z początku i końca ciągu.</li>
+            <li><code>REPLACE(s, from, to)</code> – zamienia wszystkie wystąpienia <code>from</code> na <code>to</code> w ciągu <code>s</code>.</li>
+        </ul>
+        <pre><code class="language-sql">
+// Przykłady funkcji tekstowych
+SELECT
+    CONCAT(first_name, ' ', last_name) AS pelne_imie,
+    SUBSTRING(description, 1, 50) AS skrót_opisu,
+    LENGTH(description) AS dlugosc_opisu,
+    UPPER(category) AS duze_litery,
+    TRIM('\t  tekst  ') AS bez_spacji,
+    REPLACE(comment, 'stary', 'nowy') AS zmieniony_tekst
+FROM products;
+        </code></pre>
+
+        <h2>Konwersje typów (CAST i CONVERT)</h2>
+        <p>Bywa potrzeba zmienić typ danych, np. z liczby na tekst czy z tekstu na datę.</p>
+        <ul>
+            <li><code>CAST(expr AS type)</code> – standardowa konwersja zgodnie ze specyfikacją SQL.</li>
+            <li><code>CONVERT(expr, type)</code> – alternatywa w MySQL, działa podobnie.</li>
+            <li><code>TO_CHAR(d, format)</code> – w PostgreSQL: zamiana daty/liczby na ciąg według formatu.</li>
+            <li><code>TO_DATE(s, format)</code> – w PostgreSQL: zamiana ciągu <code>s</code> na datę według formatu.</li>
+        </ul>
+        <pre><code class="language-sql">
+// Przykłady konwersji
+SELECT
+    CAST(price AS CHAR)      AS cena_tekst,
+    CAST('2025-04-21' AS DATE) AS data_z_tekstu,
+    CONVERT(amount, DECIMAL(10,2)) AS kwota_dec,
+    TO_CHAR(NOW(), 'YYYY-MM-DD HH24:MI') AS data_formatowana
+FROM sales;
+        </code></pre>
+
+        <h2>Wskazówki</h2>
+        <ul>
+            <li>Sprawdzaj dokumentację swojej bazy – niektóre funkcje różnią się składnią.</li>
+            <li>Używaj <code>CAST</code>/ <code>CONVERT</code> ostrożnie, by unikać błędów konwersji.</li>
+            <li>Przy dużych tekstach użyj odpowiedniego typu (TEXT zamiast VARCHAR), by uniknąć obcięcia danych.</li>
+            <li>Funkcje daty potrafią silnie obciążyć serwer – dodaj indeksy na kolumnach datowych, gdy filtrujesz po nich.</li>
+        </ul>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/prism.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/components/prism-sql.min.js"></script>
+</body>
+</html>

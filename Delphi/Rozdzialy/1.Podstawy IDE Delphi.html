@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Podstawy IDE Delphi</title>
+    <link rel="stylesheet" href="../styles.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/themes/prism-tomorrow.min.css" rel="stylesheet" />
+</head>
+<body>
+    <div class="container">
+        <h1>Podstawy IDE Delphi</h1>
+
+        <p>Delphi to zintegrowane środowisko programistyczne (IDE) RAD Studio, które umożliwia tworzenie aplikacji w języku Object Pascal (Delphi) za pomocą komponentów wizualnych i szybkiego projektowania. Poniżej omówimy podstawowe elementy IDE i strukturę projektu.</p>
+
+        <h2>Środowisko RAD Studio</h2>
+        <ul>
+            <li><strong>Edytor kodu</strong> – piszesz tu kod źródłowy plików <code>.pas</code> i <code>.dfm</code> (formy).</li>
+            <li><strong>Form Designer</strong> – projektant formularzy, przeciągasz komponenty z palety na formę.</li>
+            <li><strong>Object Inspector</strong> – ustawiasz właściwości (<em>properties</em>) i zdarzenia (<em>events</em>) komponentów.</li>
+            <li><strong>Project Manager</strong> – widok struktury projektu: pliki, grupy, konfiguracje kompilacji (<code>Debug</code>/<code>Release</code>).</li>
+            <li><strong>Tool Palette</strong> – biblioteka komponentów VCL i FMX do szybkiego tworzenia interfejsu.</li>
+            <li><strong>Message/Output Window</strong> – wyświetla informacje o kompilacji, błędy i logi.</li>
+        </ul>
+
+        <h2>Struktura projektu Delphi</h2>
+        <p>Standardowy projekt Delphi składa się z pliku projektu <code>.dproj</code> oraz folderu zawierającego moduły (units) i formy:</p>
+        <ul>
+            <li><code>Project1.dproj</code> – główny plik projektu XML z ustawieniami kompilacji.</li>
+            <li><code>Project1.dpr</code> – plik główny <em>project source</em>, uruchamia aplikację.</li>
+            <li><code>Unit1.pas</code> i <code>Unit1.dfm</code> – moduł z definicją formularza i plikiem formy.</li>
+            <li><code>Unit2.pas</code> itd. – kolejne moduły z kodem pomocniczym lub formularzami.</li>
+        </ul>
+        <pre><code class="language-pascal">// Przykład pliku projektu: Project1.dpr
+program Project1;
+
+uses
+  Vcl.Forms,
+  Unit1 in 'Unit1.pas' {Form1};
+
+{$R *.res}
+
+begin
+  Application.Initialize;
+  Application.MainFormOnTaskbar := True;
+  Application.CreateForm(TForm1, Form1);
+  Application.Run;
+end.
+</code></pre>
+
+        <h2>Units (moduły)</h2>
+        <p>Unit to plik <code>.pas</code> zawierający kod Object Pascal. Składa się z sekcji <code>interface</code> i <code>implementation</code>:</p>
+        <pre><code class="language-pascal">unit Unit1;
+
+interface
+
+uses
+  System.Classes, Vcl.Forms;
+
+type
+  TForm1 = class(TForm)
+    // deklaracja komponentów, np. Button1: TButton;
+  private
+    // prywatne pola i metody
+  public
+    // publiczne metody i właściwości
+  end;
+
+var
+  Form1: TForm1;
+
+implementation
+
+{$R *.dfm}
+
+// implementacja metod formularza
+
+end.
+</code></pre>
+
+        <h2>Forms (formy)</h2>
+        <p>Każda forma ma dwa powiązane pliki:</p>
+        <ul>
+            <li><code>.pas</code> – kod jednostki, deklaracje klasy formularza.</li>
+            <li><code>.dfm</code> – plik binarny (lub tekstowy) z definicją rozmieszczenia komponentów.</li>
+        </ul>
+        <pre><code class="language-pascal">object Form1: TForm1
+  Left = 0
+  Top = 0
+  Caption = 'Form1'
+  ClientHeight = 300
+  ClientWidth = 400
+  object Button1: TButton
+    Left = 150
+    Top = 130
+    Width = 100
+    Height = 30
+    Caption = 'Kliknij'
+    OnClick = Button1Click
+  end
+end
+</code></pre>
+
+        <h2>Wskazówki</h2>
+        <ul>
+            <li>Zacznij od zrozumienia pliku <code>.dpr</code> – to punkt startowy aplikacji.</li>
+            <li>Unit to enkapsulacja kodu: jedna jednostka – jedna odpowiedzialność.</li>
+            <li>Formy traktuj jak widoki – przełączaj się między edycją kodu a projektantem.</li>
+            <li>Używaj Object Inspector do zmiany właściwości zamiast ręcznie edytować <code>.dfm</code>.</li>
+            <li>Przetestuj kompilację w konfiguracji Debug i Release, by uniknąć niespodzianek.</li>
+        </ul>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/prism.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/components/prism-pascal.min.js"></script>
+</body>
+</html>

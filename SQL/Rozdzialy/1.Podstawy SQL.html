@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Podstawy SQL</title>
+    <link rel="stylesheet" href="../styles.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/themes/prism-tomorrow.min.css" rel="stylesheet" />
+</head>
+<body>
+    <div class="container">
+        <h1>Podstawy SQL</h1>
+
+        <p>SQL (Structured Query Language) to standardowy język służący do komunikacji z relacyjnymi bazami danych. Umożliwia definiowanie struktury bazy, manipulację danymi oraz ich wyszukiwanie za pomocą zapytań.</p>
+
+        <h2>Podstawowa składnia SQL</h2>
+        <p>Każde zapytanie SQL może składać się z kilku klauzul, z których najważniejsze to:</p>
+        <ul>
+            <li><code>SELECT</code> – wybiera kolumny, które chcemy zobaczyć,</li>
+            <li><code>FROM</code> – określa tabelę (lub tabele), z której pobieramy dane,</li>
+            <li><code>WHERE</code> – filtruje wiersze spełniające określone warunki.</li>
+        </ul>
+
+        <h2>SELECT i FROM</h2>
+        <pre><code class="language-sql">
+// Wybranie wszystkich kolumn z tabeli users
+SELECT *
+FROM users;
+
+// Wybranie konkretnych kolumn: imię i wiek
+SELECT first_name, age
+FROM users;
+        </code></pre>
+        <p><code>SELECT</code> wskazuje, które kolumny (pola) chcemy pobrać, a <code>FROM</code> określa, z jakiej tabeli.</p>
+
+        <h2>Klauzula WHERE</h2>
+        <pre><code class="language-sql">
+// Pobranie użytkowników, których wiek jest większy niż 18
+SELECT first_name, age
+FROM users
+WHERE age &gt; 18;
+
+// Pobranie pracowników z działu 'HR'
+SELECT *
+FROM employees
+WHERE department = 'HR';
+        </code></pre>
+        <p><code>WHERE</code> pozwala ustawić warunki, dzięki którym zwrócone zostaną tylko te wiersze, które je spełniają.</p>
+
+        <h2>Zasady korzystania z bazy danych</h2>
+        <ul>
+            <li>Zawsze rób kopie zapasowe (backup) przed wprowadzeniem zmian na bazie produkcyjnej.</li>
+            <li>Stosuj klucze główne (PRIMARY KEY) i obce (FOREIGN KEY) dla integralności danych.</li>
+            <li>Normalizuj (porządkuj) dane, by unikać powtórzeń i zapewnić spójność.</li>
+            <li>Używaj transakcji (<code>BEGIN TRANSACTION</code>, <code>COMMIT</code>, <code>ROLLBACK</code>) przy operacjach wielokrokowych.</li>
+            <li>Optymalizuj zapytania poprzez indeksy na kolumnach często filtrowanych lub sortowanych.</li>
+            <li>Zamykaj połączenia do bazy (np. <code>connection.close()</code>), by nie obciążać serwera.</li>
+        </ul>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/prism.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/components/prism-sql.min.js"></script>
+</body>
+</html>

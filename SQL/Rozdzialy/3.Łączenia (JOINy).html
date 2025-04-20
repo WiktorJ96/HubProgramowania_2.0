@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Łączenia (JOINy)</title>
+    <link rel="stylesheet" href="../styles.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/themes/prism-tomorrow.min.css" rel="stylesheet" />
+</head>
+<body>
+    <div class="container">
+        <h1>Łączenia (JOINy)</h1>
+
+        <p>Łączenia (<em>joins</em>) pozwalają pobierać dane z dwóch lub więcej tabel naraz, dzięki czemu możesz łączyć informacje powiązane ze sobą przez klucze.</p>
+
+        <h2>INNER JOIN (łączenie wewnętrzne)</h2>
+        <p>Zwraca tylko te wiersze, które mają pasujące wartości w obu tabelach.</p>
+        <pre><code class="language-sql">
+// Wyświetlenie zamówień wraz z nazwą klienta
+SELECT o.id AS order_id, c.name AS customer_name
+FROM orders o
+INNER JOIN customers c
+    ON o.customer_id = c.id;
+        </code></pre>
+
+        <h2>LEFT JOIN (łączenie zewnętrzne lewe)</h2>
+        <p>Zwraca wszystkie wiersze z lewej tabeli, a jeśli nie ma dopasowania w prawej, pola z prawej będą puste (<code>NULL</code>).</p>
+        <pre><code class="language-sql">
+// Wszystkie zamówienia, nawet te bez przypisanego kuriera
+SELECT o.id AS order_id, d.name AS driver_name
+FROM orders o
+LEFT JOIN drivers d
+    ON o.driver_id = d.id;
+        </code></pre>
+
+        <h2>RIGHT JOIN (łączenie zewnętrzne prawe)</h2>
+        <p>Zwraca wszystkie wiersze z prawej tabeli, a jeśli nie ma dopasowania w lewej, pola z lewej będą puste.</p>
+        <pre><code class="language-sql">
+// Wszyscy kurierzy, nawet ci bez żadnego zamówienia
+SELECT d.name AS driver_name, o.id AS order_id
+FROM orders o
+RIGHT JOIN drivers d
+    ON o.driver_id = d.id;
+        </code></pre>
+
+        <h2>FULL JOIN (pełne łączenie zewnętrzne)</h2>
+        <p>Łączy działanie <code>LEFT JOIN</code> i <code>RIGHT JOIN</code> – zwraca wszystkie wiersze z obu tabel, a tam gdzie nie ma dopasowania, wstawia <code>NULL</code>.</p>
+        <pre><code class="language-sql">
+// Wszystkie zamówienia i wszyscy kurierzy, nawet bez wzajemnych powiązań
+SELECT o.id AS order_id, d.name AS driver_name
+FROM orders o
+FULL JOIN drivers d
+    ON o.driver_id = d.id;
+        </code></pre>
+
+        <h2>CROSS JOIN (iloczyn kartezjański)</h2>
+        <p>Łączy każdą linię z pierwszej tabeli z każdą linią z drugiej – tworzy iloczyn kartezjański (<em>cartesian product</em>).</p>
+        <pre><code class="language-sql">
+// Wszystkie możliwe pary produktów i promocji
+SELECT p.name AS product, pr.code AS promo_code
+FROM products p
+CROSS JOIN promotions pr;
+        </code></pre>
+
+        <h2>Kiedy stosować różne JOINy?</h2>
+        <ul>
+            <li><strong>INNER JOIN:</strong> gdy chcesz tylko rekordy mające wspólne klucze w obu tabelach.</li>
+            <li><strong>LEFT JOIN:</strong> gdy bazujesz na tabeli głównej (lewej) i potrzebujesz jej wszystkich wierszy, nawet bez dopasowań.</li>
+            <li><strong>RIGHT JOIN:</strong> analogicznie do <code>LEFT JOIN</code>, ale priorytetem jest prawa tabela.</li>
+            <li><strong>FULL JOIN:</strong> gdy chcesz wszystkie rekordy z obu tabel, przydatne w raportach porównawczych.</li>
+            <li><strong>CROSS JOIN:</strong> gdy potrzebujesz każdej kombinacji wierszy z dwóch tabel (np. testowanie wszystkich wariantów).</li>
+        </ul>
+
+        <h2>Wskazówki</h2>
+        <ul>
+            <li>Zawsze określ warunek łączenia w <code>ON</code>, by uniknąć niechcianych powtórzeń.</li>
+            <li>Używaj <code>INNER JOIN</code> domyślnie, chyba że potrzebujesz konkretnie wierszy bez dopasowań.</li>
+            <li>Twórz indeksy na kolumnach łączących (kluczach obcych i głównych), aby przyspieszyć łączenia.</li>
+            <li>Sprawdzaj wyniki <code>CROSS JOIN</code>, bo szybkorosnący liczebnie rezultat może obciążyć bazę.</li>
+        </ul>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/prism.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/components/prism-sql.min.js"></script>
+</body>
+</html>

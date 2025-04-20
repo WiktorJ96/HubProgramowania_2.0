@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Komunikacja Sieciowa</title>
+    <link rel="stylesheet" href="../styles.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/themes/prism-tomorrow.min.css" rel="stylesheet" />
+</head>
+<body>
+    <div class="container">
+        <h1>Komunikacja Sieciowa</h1>
+
+        <p>Delphi oferuje kilka technologii do pracy z siecią: bibliotekę Indy 10, REST Client Library, platformę WebBroker oraz wsparcie dla SOAP. Poniżej krótki przegląd i przykłady użycia.</p>
+
+        <h2>Indy 10</h2>
+        <p>Indy to zestaw komponentów TCP/IP, który udostępnia klienty i serwery dla protokołów takich jak HTTP, FTP, SMTP.</p>
+        <pre><code class="language-pascal">uses IdHTTP;
+
+var
+  Http: TIdHTTP;
+  Response: string;
+begin
+  Http := TIdHTTP.Create(nil);
+  try
+    Response := Http.Get('http://example.com/api/data');
+    ShowMessage(Response);
+  finally
+    Http.Free;
+  end;
+end;
+</code></pre>
+
+        <h2>REST Client Library</h2>
+        <p>REST Client Library to nowoczesne komponenty do wywołań REST (JSON). Zawiera <code>TRESTClient</code>, <code>TRESTRequest</code>, <code>TRESTResponse</code>.</p>
+        <pre><code class="language-pascal">uses REST.Client, REST.Types;
+
+var
+  Client: TRESTClient;
+  Request: TRESTRequest;
+  Response: TRESTResponse;
+begin
+  Client := TRESTClient.Create('https://api.example.com');
+  Request := TRESTRequest.Create(Client);
+  Response := TRESTResponse.Create(Request);
+  Request.Client := Client;
+  Request.Response := Response;
+  Request.Resource := 'users/1';
+  Request.Method := rmGET;
+  Request.Execute;
+  ShowMessage(Response.JSONValue.ToString);
+  Response.Free;
+  Request.Free;
+  Client.Free;
+end;
+</code></pre>
+
+        <h2>WebBroker</h2>
+        <p>WebBroker to framework do tworzenia aplikacji webowych w Delphi, obsługuje CGI, BPL, ISAPI.</p>
+        <ul>
+            <li><code>TWebModule</code> – jednostka obsługująca żądania HTTP.</li>
+            <li><code>TWebActionItem</code> – procedury akcji mapowane na URL.</li>
+        </ul>
+        <pre><code class="language-pascal">// Przykład akcji w WebModule
+procedure TWebModule1.WebModule1DefaultHandlerAction(
+  Sender: TObject; Request: TWebRequest; Response: TWebResponse; var Handled: Boolean);
+begin
+  Response.ContentType := 'text/plain';
+  Response.Content := 'Witaj z WebBroker!';
+  Handled := True;
+end;
+</code></pre>
+
+        <h2>SOAP</h2>
+        <p>Delphi wspiera SOAP przez komponenty <code>THTTPRIO</code> i generowane interfejsy WSDL.</p>
+        <pre><code class="language-pascal">// Wywołanie usługi SOAP wygenerowanej z WSDL
+var
+  Service: IMySoapService;
+begin
+  Service := HTTPRIO1 as IMySoapService;
+  ShowMessage(Service.GetData(123));
+end;
+</code></pre>
+
+        <h2>Wskazówki</h2>
+        <ul>
+            <li>Indy 10 jest elastyczny, ale wymaga manualnego zarządzania połączeniem.</li>
+            <li>REST Client Library upraszcza pracę z JSON i REST.</li>
+            <li>WebBroker dobrze nadaje się do prostych API lub serwisów WWW.</li>
+            <li>SOAP przydaje się w systemach korporacyjnych z wsparciem WSDL.</li>
+            <li>Zawsze zwalniaj komponenty po użyciu (<code>Free</code> lub <code>try…finally</code>).</li>
+        </ul>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/prism.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/components/prism-pascal.min.js"></script>
+</body>
+</html>

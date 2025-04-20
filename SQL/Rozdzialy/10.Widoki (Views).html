@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Widoki (Views)</title>
+    <link rel="stylesheet" href="../styles.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/themes/prism-tomorrow.min.css" rel="stylesheet" />
+</head>
+<body>
+    <div class="container">
+        <h1>Widoki (Views)</h1>
+
+        <p>Widok (view) to wirtualna tabela utworzona na podstawie zapytania. Nie przechowuje danych osobno – za każdym razem odpytywana jest tabela źródłowa.</p>
+
+        <h2>Tworzenie widoku</h2>
+        <pre><code class="language-sql">
+// Prosty widok użytkowników aktywnych
+CREATE VIEW active_users AS
+SELECT id, first_name, last_name, email
+FROM users
+WHERE is_active = TRUE;
+        </code></pre>
+        <p>Potem możesz używać widoku jak zwykłej tabeli:</p>
+        <pre><code class="language-sql">
+SELECT * 
+FROM active_users
+WHERE last_name LIKE 'K%';
+        </code></pre>
+
+        <h2>Złożone zapytania jako widok</h2>
+        <p>Widoki mogą łączyć kilka tabel i zawierać agregacje czy podzapytania.</p>
+        <pre><code class="language-sql">
+// Widok zamówień z informacją o kliencie
+CREATE VIEW order_summary AS
+SELECT 
+    o.id              AS order_id,
+    o.order_date      AS data_zamowienia,
+    c.id              AS customer_id,
+    CONCAT(c.first_name, ' ', c.last_name) AS customer_name,
+    SUM(oi.quantity * p.price) AS total_amount
+FROM orders o
+JOIN order_items oi ON oi.order_id = o.id
+JOIN products p    ON p.id = oi.product_id
+JOIN customers c   ON c.id = o.customer_id
+GROUP BY o.id, o.order_date, c.id, c.first_name, c.last_name;
+        </code></pre>
+
+        <h2>Widoki z możliwością aktualizacji (Updatable Views)</h2>
+        <p>Nie wszystkie widoki można aktualizować. Aby widok był <strong>updatable</strong> (aktualizowalny), musi spełniać zasady:</p>
+        <ul>
+            <li>Opierać się na jednej tabeli lub prostym zapytaniu bez agregacji (<code>GROUP BY</code>),</li>
+            <li>Nie zawierać <code>DISTINCT</code>, <code>UNION</code> ani podzapytań w SELECT,</li>
+            <li>Kolumny kluczowe (PRIMARY KEY) tabeli źródłowej muszą być dostępne w widoku.</li>
+        </ul>
+        <pre><code class="language-sql">
+// Przykład widoku aktualizowalnego
+CREATE VIEW user_emails AS
+SELECT id AS user_id, email
+FROM users
+WITH CHECK OPTION;  -- uniemożliwia INSERT/UPDATE łamiące definicję widoku
+        </code></pre>
+        <p>Dzięki <code>WITH CHECK OPTION</code> (warunek sprawdzania) nie można dodać ani zmienić wiersza tak, by wypadał poza filtr widoku.</p>
+
+        <h2>Wskazówki</h2>
+        <ul>
+            <li>Widoki upraszczają skomplikowane zapytania i poprawiają czytelność kodu.</li>
+            <li>Używaj widoków do nadania sensownych nazw złożonym zestawom danych.</li>
+            <li>Pamiętaj, że widoki nie przyspieszają zapytań – to nadal tabela źródłowa.</li>
+            <li>Monitoruj uprawnienia – widoki mogą ukrywać wrażliwe kolumny.</li>
+        </ul>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/prism.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/components/prism-sql.min.js"></script>
+</body>
+</html>

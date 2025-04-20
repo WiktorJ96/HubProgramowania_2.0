@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Wątki i Asynchroniczność</title>
+    <link rel="stylesheet" href="../styles.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/themes/prism-tomorrow.min.css" rel="stylesheet" />
+</head>
+<body>
+    <div class="container">
+        <h1>Wątki i Asynchroniczność</h1>
+
+        <p>Wątki i praca asynchroniczna pozwalają wykonywać operacje w tle, nie blokując interfejsu aplikacji. W Delphi mamy kilka sposobów: klasyfikowanymi mechanizmami są <code>TThread</code> oraz biblioteka PPL (<em>Parallel Programming Library</em>) z zadaniami (<code>TTask</code>).</p>
+
+        <h2>TThread</h2>
+        <p>Podstawowa klasa do tworzenia wątków:</p>
+        <pre><code class="language-pascal">type
+  TMyThread = class(TThread)
+  protected
+    procedure Execute; override;  // główna metoda wątku
+  end;
+
+procedure TMyThread.Execute;
+begin
+  // ten kod działa w tle
+  Synchronize(procedure
+  begin
+    // kod wykonywany w głównym wątku, np. aktualizacja UI
+  end);
+end;
+
+// Uruchomienie wątku:
+var
+  MyThread: TMyThread;
+begin
+  MyThread := TMyThread.Create(False); // False => od razu start
+  MyThread.FreeOnTerminate := True;     // zwolnij obiekt po zakończeniu
+end;
+</code></pre>
+
+        <h2>Task i PPL (Parallel Programming Library)</h2>
+        <p>PPL upraszcza uruchamianie zadań w tle bez definiowania własnej klasy:</p>
+        <pre><code class="language-pascal">uses System.Threading;
+
+// Proste zadanie asynchroniczne
+task := TTask.Run(procedure
+begin
+  // kod w tle
+  TThread.Queue(nil, procedure
+  begin
+    // kod aktualizujący UI w głównym wątku
+  end);
+end);
+
+// Oczekiwanie zakończenia (opcjonalne)
+task.Wait;
+</code></pre>
+
+        <h2>Synchronizacja</h2>
+        <p>Gdy wątki współdzielą dane, trzeba je chronić, by uniknąć wyścigów (race conditions).</p>
+        <ul>
+            <li><code>TCriticalSection</code> – prosty mechanizm blokady:</li>
+        </ul>
+        <pre><code class="language-pascal">var
+  CS: TCriticalSection;
+begin
+  CS := TCriticalSection.Create;
+  try
+    CS.Enter;
+    try
+      // chroniony kod
+    finally
+      CS.Leave;
+    end;
+  finally
+    CS.Free;
+  end;
+</code></pre>
+        <ul>
+            <li><code>TMonitor</code> – globalny mechanizm synchronizacji:</li>
+        </ul>
+        <pre><code class="language-pascal">// Zakleszczenie bloku na obiekcie
+TMonitor.Enter(SomeObject);
+try
+  // kod chroniony
+finally
+  TMonitor.Exit(SomeObject);
+end;
+</code></pre>
+        <ul>
+            <li><code>TEvent</code> – sygnalizacja zdarzeń między wątkami.</li>
+        </ul>
+        <pre><code class="language-pascal">var
+  Ev: TEvent;
+begin
+  Ev := TEvent.Create(nil, False, False, '');
+  try
+    // w wątku A:
+    Ev.SetEvent;        // sygnał
+
+    // w wątku B:
+    Ev.WaitFor(INFINITE);  // czekaj na sygnał
+  finally
+    Ev.Free;
+  end;
+end;
+</code></pre>
+
+        <h2>Wskazówki</h2>
+        <ul>
+            <li>Używaj <code>TThread.Queue</code> lub <code>Synchronize</code>, by aktualizować UI z wątku.</li>
+            <li>PPL (<code>TTask</code>) jest łatwiejszy niż ręczne TThread.</li>
+            <li>Dokładnie zabezpieczaj dostęp do współdzielonych zmiennych (<code>TCriticalSection</code> lub <code>TMonitor</code>).</li>
+            <li>Unikaj długotrwałych blokad – może to prowadzić do zastoju.</li>
+            <li>Testuj aplikację pod kątem deadlocków i wyścigów, używając narzędzi diagnostycznych.</li>
+        </ul>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/prism.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/components/prism-pascal.min.js"></script>
+</body>
+</html>

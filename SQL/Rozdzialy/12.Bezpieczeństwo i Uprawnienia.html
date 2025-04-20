@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bezpieczeństwo i Uprawnienia</title>
+    <link rel="stylesheet" href="../styles.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/themes/prism-tomorrow.min.css" rel="stylesheet" />
+</head>
+<body>
+    <div class="container">
+        <h1>Bezpieczeństwo i Uprawnienia</h1>
+
+        <p>Dobra praktyka to nadawanie użytkownikom tylko tych uprawnień, których naprawdę potrzebują. Obejmuje to tworzenie kont, zarządzanie prawami dostępu, szyfrowanie danych i audyt (monitorowanie zdarzeń).</p>
+
+        <h2>CREATE USER</h2>
+        <pre><code class="language-sql">
+// Tworzenie nowego użytkownika w MySQL
+CREATE USER 'jan'@'localhost'
+    IDENTIFIED BY 'SilneHaslo123!';
+
+// W PostgreSQL
+CREATE USER jan WITH
+    LOGIN
+    PASSWORD 'SilneHaslo123!';
+        </code></pre>
+
+        <h2>GRANT</h2>
+        <p>Nadaje uprawnienia (privileges) do baz, tabel lub operacji.</p>
+        <pre><code class="language-sql">
+// SELECT i INSERT na jednej tabeli
+GRANT SELECT, INSERT
+ON shop.orders
+TO 'jan'@'localhost';
+
+// Wszystkie uprawnienia na bazie
+GRANT ALL PRIVILEGES
+ON DATABASE shop
+TO jan;
+        </code></pre>
+
+        <h2>REVOKE</h2>
+        <p>Odbiera wcześniej przyznane prawa.</p>
+        <pre><code class="language-sql">
+// Usunięcie prawa INSERT
+REVOKE INSERT
+ON shop.orders
+FROM 'jan'@'localhost';
+
+// Odbiór wszystkich uprawnień
+REVOKE ALL PRIVILEGES
+ON DATABASE shop
+FROM jan;
+        </code></pre>
+
+        <h2>Kontrola dostępu (Access Control)</h2>
+        <ul>
+            <li>Zasada najmniejszych uprawnień – każdy użytkownik ma tylko niezbędne role.</li>
+            <li>Grupy i role – grupuj uprawnienia w role (ROLE w PostgreSQL, GRANT … TO ROLE w MySQL 8+).</li>
+            <li>Separacja obowiązków – różne konta do odczytu, zapisu i administracji.</li>
+        </ul>
+
+        <h2>Szyfrowanie danych</h2>
+        <p>Szyfrowanie chroni dane podczas przechowywania (at rest) i przesyłania (in transit).</p>
+        <ul>
+            <li><strong>Encryption at rest:</strong> Transparent Data Encryption (TDE) w SQL Server, MySQL Enterprise Encryption.</li>
+            <li><strong>Encryption in transit:</strong> SSL/TLS – wymuszaj połączenia z &lt;code&gt;--ssl-mode=REQUIRED&lt;/code&gt;.</li>
+        </ul>
+        <pre><code class="language-sql">
+// Włączenie szyfrowania na tabeli w MySQL 8+
+CREATE TABLE confidential (
+    id INT PRIMARY KEY,
+    secret_text TEXT
+) ENGINE=InnoDB
+  ENCRYPTION='Y';
+        </code></pre>
+
+        <h2>Audyt (Audit)</h2>
+        <p>Śledzenie działań w bazie pozwala wykrywać nadużycia i błędy.</p>
+        <ul>
+            <li>W MySQL: plugin <code>audit_log</code>, potem <code>INSTALL PLUGIN audit_log SONAME 'audit_log.so';</li>
+            <li>W PostgreSQL: rozszerzenie <code>pgaudit</code>, monitorowanie <code>log_statement</code> i <code>log_connections</code>.</li>
+            <li>Zbieraj logi działań administracyjnych i zapytań DML (INSERT/UPDATE/DELETE).</li>
+        </ul>
+
+        <h2>Wskazówki</h2>
+        <ul>
+            <li>Stosuj silne, unikalne hasła i wymuszaj ich rotację co pewien czas.</li>
+            <li>Regularnie przeglądaj listę użytkowników i uprawnienia (REMOVE nieaktywnych kont).</li>
+            <li>Wykorzystuj sieci VPN lub tunelowanie SSH dla dodatkowej ochrony ruchu do serwera bazy.</li>
+            <li>Planuj i testuj procedury przywracania uprawnień po awarii lub ataku.</li>
+        </ul>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/prism.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/components/prism-sql.min.js"></script>
+</body>
+</html>

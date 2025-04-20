@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Replikacja i Wysoka Dostępność</title>
+    <link rel="stylesheet" href="../styles.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/themes/prism-tomorrow.min.css" rel="stylesheet" />
+</head>
+<body>
+    <div class="container">
+        <h1>Replikacja i Wysoka Dostępność (HA)</h1>
+
+        <p>Replikacja pozwala kopiować dane między serwerami, by zapewnić odporność na awarie i rozłożyć obciążenie. Wysoka dostępność (High Availability – HA) to zestaw mechanizmów automatycznego przełączania i równoważenia, które minimalizują przestoje.</p>
+
+        <h2>Replikacja master‑slave (primary‑secondary)</h2>
+        <p>W modelu master‑slave (główny–zapasowy) wszystkie zapisy trafiają na master (primary), a slave (secondary) tylko odczytują kopię danych.</p>
+        <pre><code class="language-sql">
+// Konfiguracja master (my.cnf)
+[mysqld]
+server-id = 1
+log-bin = mysql-bin
+
+// Konfiguracja slave (my.cnf)
+[mysqld]
+server-id = 2
+relay-log = mysql-relay
+
+-- Na slave:
+CHANGE MASTER TO
+  MASTER_HOST='master.example.com',
+  MASTER_USER='repl_user',
+  MASTER_PASSWORD='haslo',
+  MASTER_LOG_FILE='mysql-bin.000001',
+  MASTER_LOG_POS=  107;
+START SLAVE;
+SHOW SLAVE STATUS\G;
+        </code></pre>
+
+        <h2>Failover (przełączanie awaryjne)</h2>
+        <p>Gdy master padnie, mechanizm failover automatycznie promuje jednego ze slave na nowego mastera. Można użyć narzędzi takich jak MHA lub orchestrator.</p>
+        <ul>
+            <li>Monitoruj stan mastera (np. ping lub heartbeat).</li>
+            <li>Automatycznie zmieniaj rekord DNS lub konfigurację aplikacji na nowy master.</li>
+            <li>Po przywróceniu starego mastera działa on jako nowy slave.</li>
+        </ul>
+
+        <h2>Sharding (dzielenie danych)</h2>
+        <p>Sharding to podział danych na partycje (shardy) rozproszone na wielu serwerach, by zwiększyć skalowalność.</p>
+        <pre><code class="language-sql">
+// Przykład dzielenia po kluczu klienta
+CREATE TABLE orders_shard_01 LIKE orders;
+CREATE TABLE orders_shard_02 LIKE orders;
+// Aplikacja w zależności od customer_id decyduje, do którego sharda trafi dane.
+        </code></pre>
+
+        <h2>Klastrowanie (Galera Cluster)</h2>
+        <p>Galera Cluster to rozwiązanie multi-master (wielogłówny), w którym każdy węzeł przyjmuje odczyty i zapisy, a zmiany są synchronizowane w trybie synchronicznym.</p>
+        <pre><code class="language-ini">
+# my.cnf (wszędzie tak samo)
+[mysqld]
+wsrep_on=ON
+wsrep_cluster_name="galera_cluster"
+wsrep_cluster_address="gcomm://node1,node2,node3"
+wsrep_node_address="this_node_ip"
+wsrep_sst_method=rsync
+        </code></pre>
+
+        <h2>Wskazówki</h2>
+        <ul>
+            <li>W replikacji master‑slave daj slave’owi odpowiedni delay (relay‑log‑recover), by mieć punkt przywracania.</li>
+            <li>Testuj procedurę failover, by uniknąć ręcznych operacji w kryzysie.</li>
+            <li>Przy sharding’u stosuj spójny algorytm hashujący, by uniknąć hotspotów.</li>
+            <li>Galera wymaga niskich opóźnień sieci – wdrażaj w ramach jednego centrum danych lub z szybkimi łączami.</li>
+            <li>Monitoruj replikację (SHOW SLAVE STATUS, wsrep_health) i alertuj przy lagach lub konfliktach.</li>
+        </ul>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/prism.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/components/prism-sql.min.js"></script>
+</body>
+</html>

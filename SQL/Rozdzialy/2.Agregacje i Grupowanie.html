@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Agregacje i Grupowanie</title>
+    <link rel="stylesheet" href="../styles.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/themes/prism-tomorrow.min.css" rel="stylesheet" />
+</head>
+<body>
+    <div class="container">
+        <h1>Agregacje i Grupowanie</h1>
+
+        <p>Agregacje (aggregation) to obliczenia na wielu wierszach naraz, np. policzenie, zsumowanie czy znalezienie najmniejszej wartości. Grupowanie (grouping) pozwala podzielić dane na zbiory według wybranej kolumny.</p>
+
+        <h2>Funkcje agregujące</h2>
+        <ul>
+            <li><code>COUNT()</code> – liczy wiersze (np. liczba zamówień),</li>
+            <li><code>SUM()</code> – sumuje wartości (np. łączna kwota),</li>
+            <li><code>AVG()</code> – oblicza średnią (śr. wartość),</li>
+            <li><code>MIN()</code> – zwraca najmniejszą wartość (min.),</li>
+            <li><code>MAX()</code> – zwraca największą wartość (maks.).</li>
+        </ul>
+
+        <h2>GROUP BY (grupuj według)</h2>
+        <p>Klauzula <code>GROUP BY</code> dzieli wiersze na grupy według jednej lub więcej kolumn.</p>
+        <pre><code class="language-sql">
+// Liczenie zamówień dla każdego klienta
+SELECT customer_id, COUNT(*) AS order_count
+FROM orders
+GROUP BY customer_id;
+
+// Suma sprzedaży w każdym dziale
+SELECT department, SUM(sales) AS total_sales
+FROM employees
+GROUP BY department;
+
+// Min. i maks. cena produktów wg kategorii
+SELECT category, MIN(price) AS min_price, MAX(price) AS max_price
+FROM products
+GROUP BY category;
+        </code></pre>
+
+        <h2>HAVING (filtr grup)</h2>
+        <p>Klauzula <code>HAVING</code> filtruje już pogrupowane wyniki, podobnie jak <code>WHERE</code> filtruje pojedyncze wiersze.</p>
+        <pre><code class="language-sql">
+// Klienci z więcej niż 5 zamówieniami
+SELECT customer_id, COUNT(*) AS order_count
+FROM orders
+GROUP BY customer_id
+HAVING COUNT(*) > 5;
+
+// Działy ze średnią pensją powyżej 5000
+SELECT department, AVG(salary) AS avg_salary
+FROM employees
+GROUP BY department
+HAVING AVG(salary) > 5000;
+        </code></pre>
+
+        <h2>Wskazówki</h2>
+        <ul>
+            <li>Używaj <code>GROUP BY</code> tylko gdy potrzebujesz podsumowań per grupa.</li>
+            <li><code>HAVING</code> zawsze występuje po <code>GROUP BY</code> i działa na wynikach grupowania.</li>
+            <li>Twórz indeksy na kolumnach, po których grupujesz lub filtrujesz, by przyspieszyć zapytania.</li>
+            <li>Nie mieszaj kolumn agregowanych i nieagregowanych bez <code>GROUP BY</code> – każdy element SELECT musi być albo w funkcji agregującej, albo wymieniony w <code>GROUP BY</code>.</li>
+        </ul>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/prism.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/components/prism-sql.min.js"></script>
+</body>
+</html>

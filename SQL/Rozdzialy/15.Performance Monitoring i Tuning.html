@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Performance Monitoring i Tuning</title>
+    <link rel="stylesheet" href="../styles.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/themes/prism-tomorrow.min.css" rel="stylesheet" />
+</head>
+<body>
+    <div class="container">
+        <h1>Performance Monitoring i Tuning</h1>
+
+        <p>Monitorowanie wydajności (performance monitoring) i dostrajanie (tuning) bazy danych pozwala wychwycić wąskie gardła i zoptymalizować działanie zapytań oraz konfigurację serwera.</p>
+
+        <h2>Narzędzia monitorujące</h2>
+
+        <h3>MySQL Performance Schema</h3>
+        <p>Performance Schema to wbudowany mechanizm w MySQL rejestrujący statystyki zapytań, oczekiwań i zdarzeń wewnętrznych.</p>
+        <pre><code class="language-ini">
+# Włączenie Performance Schema w my.cnf
+[mysqld]
+performance_schema=ON
+        </code></pre>
+        <pre><code class="language-sql">
+// Przykład zapytania: najwolniejsze zapytania
+SELECT 
+    EVENT_NAME,
+    COUNT_STAR AS liczba_wywołań,
+    SUM_TIMER_WAIT/1000000000000 AS czas_s  -- nanosekundy→sekundy
+FROM performance_schema.events_statements_summary_by_digest
+ORDER BY SUM_TIMER_WAIT DESC
+LIMIT 10;
+        </code></pre>
+
+        <h3>PostgreSQL pg_stat_statements</h3>
+        <p>Rozszerzenie pg_stat_statements zbiera statystyki wykonania zapytań SQL.</p>
+        <pre><code class="language-ini">
+# Włączenie w postgresql.conf
+shared_preload_libraries = 'pg_stat_statements'
+# Po restarcie:
+CREATE EXTENSION pg_stat_statements;
+        </code></pre>
+        <pre><code class="language-sql">
+// Zapytanie: najczęściej wykonywane i najwolniejsze
+SELECT
+    query,
+    calls AS liczba_wywołań,
+    total_time/calls AS avg_time_ms
+FROM pg_stat_statements
+ORDER BY total_time DESC
+LIMIT 10;
+        </code></pre>
+
+        <h2>Parametry konfiguracyjne</h2>
+        <p>Dostrajanie ustawień serwera może znacząco wpłynąć na wydajność.</p>
+        <h3>MySQL</h3>
+        <ul>
+            <li><code>innodb_buffer_pool_size</code> – rozmiar bufora InnoDB (pamięć podręczna danych).</li>
+            <li><code>innodb_log_file_size</code> – rozmiar plików dziennika transakcji.</li>
+            <li><code>query_cache_size</code> – wielkość cache zapytań (niezalecane w nowszych wersjach).</li>
+        </ul>
+        <pre><code class="language-ini">
+[mysqld]
+innodb_buffer_pool_size=4G
+innodb_log_file_size=512M
+        </code></pre>
+
+        <h3>PostgreSQL</h3>
+        <ul>
+            <li><code>shared_buffers</code> – pamięć rdzenia PostgreSQL.</li>
+            <li><code>work_mem</code> – pamięć dla sortowań i hash join (na jedno zapytanie).</li>
+            <li><code>maintenance_work_mem</code> – pamięć przy operacjach VACUUM i CREATE INDEX.</li>
+            <li><code>effective_cache_size</code> – estymowana wielkość cache systemu plików.</li>
+        </ul>
+        <pre><code class="language-ini">
+shared_buffers = 2GB
+work_mem = 64MB
+effective_cache_size = 6GB
+        </code></pre>
+
+        <h2>Analiza logów</h2>
+        <p>Logi zapytań i błędów pomagają zidentyfikować nieoptymalne operacje.</p>
+        <h3>Slow query log (MySQL)</h3>
+        <pre><code class="language-ini">
+[mysqld]
+slow_query_log = ON
+slow_query_log_file = /var/log/mysql/slow.log
+long_query_time = 1    # w sekundach
+        </code></pre>
+        <p>Następnie przeglądaj plik lub użyj narzędzi typu pt-query-digest.</p>
+
+        <h3>Log_statement (PostgreSQL)</h3>
+        <pre><code class="language-ini">
+# postgresql.conf
+log_min_duration_statement = 1000    # w milisekundach
+log_statement = 'ddl'                # loguj definicje struktur
+        </code></pre>
+        <p>Logi znajdziesz w katalogu <code>pg_log</code> lub zgodnie z ustawieniem <code>log_directory</code>.</p>
+
+        <h2>Wskazówki</h2>
+        <ul>
+            <li>Monitoruj na bieżąco – wprowadzone zmiany mogą mieć nieoczekiwane skutki.</li>
+            <li>Stosuj narzędzia wizualizacyjne (np. Percona Monitoring and Management, pgAdmin).  
+            <li>Testuj zmiany w środowisku stagingowym przed wdrożeniem na produkcji.</li>
+            <li>Analizuj zarówno statystyki narzędzi (Performance Schema, pg_stat_statements), jak i logi.</li>
+            <li>Regularnie czyść i kompresuj logi, by nie zajmowały zbyt dużo miejsca.</li>
+        </ul>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/prism.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/components/prism-ini.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/components/prism-sql.min.js"></script>
+</body>
+</html>

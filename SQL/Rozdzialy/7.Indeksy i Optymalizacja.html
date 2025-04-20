@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Indeksy i Optymalizacja</title>
+    <link rel="stylesheet" href="../styles.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/themes/prism-tomorrow.min.css" rel="stylesheet" />
+</head>
+<body>
+    <div class="container">
+        <h1>Indeksy i Optymalizacja</h1>
+
+        <p>Indeksy (indexes) to dodatkowe struktury danych, które przyspieszają wyszukiwanie i sortowanie w tabelach. Optymalizacja zapytań to zbiór technik pozwalających wykonywać je szybciej i efektywniej.</p>
+
+        <h2>Tworzenie indeksów</h2>
+        <p>Aby utworzyć indeks na jednej lub kilku kolumnach:</p>
+        <pre><code class="language-sql">
+// Prosty indeks na kolumnie
+CREATE INDEX idx_users_email
+ON users(email);
+
+// Indeks wielokolumnowy
+CREATE INDEX idx_orders_customer_date
+ON orders(customer_id, order_date);
+
+// Indeks unikatowy (zapobiega duplikatom)
+CREATE UNIQUE INDEX idx_products_sku
+ON products(sku);
+        </code></pre>
+        <p>Indeksy działają jak spis treści w książce – pozwalają szybko znaleźć potrzebne wiersze bez przeglądania całej tabeli.</p>
+
+        <h2>EXPLAIN (plan zapytania)</h2>
+        <p>EXPLAIN pokazuje, jak baza planuje wykonać zapytanie. Dzięki temu można zidentyfikować operacje skanujace całą tabelę (<code>Seq Scan</code>) zamiast użycia indeksu (<code>Index Scan</code>).</p>
+        <pre><code class="language-sql">
+// Wyświetlenie planu zapytania
+EXPLAIN
+SELECT *
+FROM orders
+WHERE customer_id = 123;
+
+// W PostgreSQL można dodać ANALYZE, by zobaczyć rzeczywiste czasy
+EXPLAIN ANALYZE
+SELECT *
+FROM orders
+WHERE customer_id = 123;
+        </code></pre>
+        <p>W planie zwróć uwagę na koszty (<em>startup cost</em>, <em>total cost</em>) i na to, czy używany jest <code>Index Scan</code>.</p>
+
+        <h2>Sposoby przyspieszania zapytań</h2>
+        <ul>
+            <li>Twórz indeksy na kolumnach często używanych w <code>WHERE</code>, <code>JOIN</code> i <code>ORDER BY</code>.</li>
+            <li>Unikaj <code>SELECT *</code> – wybieraj tylko potrzebne kolumny.</li>
+            <li>Używaj <code>LIMIT</code>, gdy potrzebujesz tylko części wyników.</li>
+            <li>Denormalizacja (dublowanie danych) dla bardzo często czytanych informacji.</li>
+            <li>Cache’owanie wyników zapytań po stronie aplikacji lub bazy.</li>
+            <li>Dziel duże tabele (partitioning) na mniejsze części według zakresów dat lub kluczy.</li>
+        </ul>
+
+        <h2>Statystyki</h2>
+        <p>Baza danych zbiera statystyki o rozkładzie wartości w kolumnach, by optymalizator mógł wybrać najlepszy plan.</p>
+        <pre><code class="language-sql">
+// Aktualizacja statystyk w PostgreSQL
+ANALYZE;
+
+// W MySQL
+ANALYZE TABLE orders;
+
+// W SQL Server
+UPDATE STATISTICS orders;
+        </code></pre>
+        <p>Regularnie odświeżaj statystyki, zwłaszcza po dużych zmianach w tabeli.</p>
+
+        <h2>Wskazówki</h2>
+        <ul>
+            <li>Monitoruj za pomocą EXPLAIN i narzędzi do profilowania (np. pg_stat_statements).</li>
+            <li>Usuń nieużywane indeksy – każdy indeks spowalnia INSERT/UPDATE/DELETE.</li>
+            <li>Stosuj indeksy częściowe (<code>WHERE</code>) np. tylko na aktywnych rekordach.</li>
+            <li>Bądź ostrożny z denormalizacją – ułatwia odczyt kosztem spójności danych.</li>
+            <li>Przy dużych zestawach danych rozważ shardowanie (rozdzielenie danych na różne serwery).</li>
+        </ul>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/prism.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/components/prism-sql.min.js"></script>
+</body>
+</html>

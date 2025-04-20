@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Zaawansowane Typy Danych</title>
+    <link rel="stylesheet" href="../styles.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/themes/prism-tomorrow.min.css" rel="stylesheet" />
+</head>
+<body>
+    <div class="container">
+        <h1>Zaawansowane Typy Danych</h1>
+
+        <p>Nowoczesne silniki SQL oferują specjalne typy, które pozwalają przechowywać złożone struktury i przyspieszają operacje na nich.</p>
+
+        <h2>JSON</h2>
+        <p>Typ <code>JSON</code> (JavaScript Object Notation) przechowuje dokumenty w formacie klucz‑wartość. Umożliwia elastyczne schematy.</p>
+        <pre><code class="language-sql">
+// Tworzenie tabeli z kolumną JSON
+CREATE TABLE products (
+    id   SERIAL PRIMARY KEY,
+    info JSON
+);
+
+// Wstawianie dokumentu JSON
+INSERT INTO products(info) VALUES (
+    '{"name":"Laptop","specs":{"ram":16,"ssd":512}}'
+);
+
+// Zapytanie po kluczu wewnętrznym
+SELECT info->>'name'    AS nazwa,
+       (info->'specs')->>'ram' AS ram
+FROM products
+WHERE info->'specs'->>'ssd' = '512';
+        </code></pre>
+        <p>Indeksowanie: <code>GIN</code> na polu JSONB (binarna wersja JSON).</p>
+        <pre><code class="language-sql">
+// Przekształcenie na JSONB i indeks
+ALTER TABLE products ALTER COLUMN info TYPE JSONB USING info::JSONB;
+CREATE INDEX idx_products_info ON products USING GIN (info);
+        </code></pre>
+
+        <h2>ARRAY (tablice)</h2>
+        <p>Tablice (<code>ARRAY</code>) przechowują listy wartości w jednej kolumnie.</p>
+        <pre><code class="language-sql">
+// Tabela z polem tablicowym
+CREATE TABLE surveys (
+    id      SERIAL PRIMARY KEY,
+    answers TEXT[]
+);
+
+// Wstawianie kilku odpowiedzi
+INSERT INTO surveys(answers) VALUES (
+    ARRAY['Tak','Nie','Nie wiem']
+);
+
+// Zapytanie po elemencie tablicy
+SELECT *
+FROM surveys
+WHERE 'Tak' = ANY(answers);
+        </code></pre>
+        <p>Indeksowanie: <code>GIN</code> lub <code>GiST</code> dla szybkiego wyszukiwania w tablicy.</p>
+        <pre><code class="language-sql">
+CREATE INDEX idx_surveys_answers ON surveys USING GIN (answers);
+        </code></pre>
+
+        <h2>ENUM (wyliczeniowy)</h2>
+        <p><code>ENUM</code> pozwala zdefiniować listę dozwolonych wartości, np. statusy.</p>
+        <pre><code class="language-sql">
+// Definicja typu ENUM
+CREATE TYPE order_status AS ENUM (
+    'pending',
+    'shipped',
+    'delivered',
+    'canceled'
+);
+
+// Użycie w tabeli
+CREATE TABLE orders (
+    id     SERIAL PRIMARY KEY,
+    status order_status
+);
+
+// Wstawianie
+INSERT INTO orders(status) VALUES ('shipped');
+        </code></pre>
+
+        <h2>Typy przestrzenne (GIS – Geospatial)</h2>
+        <p>Typy GIS przechowują dane geometryczne, np. punkty, linie, wielokąty.</p>
+        <pre><code class="language-sql">
+// Tabela z kolumną punktową
+CREATE TABLE places (
+    id   SERIAL PRIMARY KEY,
+    name TEXT,
+    location GEOMETRY(Point,4326)  -- SRID 4326 = WGS84
+);
+
+// Wstawianie punktu
+INSERT INTO places(name,location) VALUES (
+    'Rynek', ST_GeomFromText('POINT(21.012229 52.229676)',4326)
+);
+
+// Zapytanie w promieniu 1 km
+SELECT name
+FROM places
+WHERE ST_DWithin(
+    location,
+    ST_MakePoint(21.012229,52.229676)::geography,
+    1000
+);
+        </code></pre>
+        <p>Indeksowanie: <code>GiST</code> lub <code>SP-GiST</code> dla szybkich zapytań przestrzennych.</p>
+        <pre><code class="language-sql">
+CREATE INDEX idx_places_location ON places USING GIST (location);
+        </code></pre>
+
+        <h2>Wskazówki</h2>
+        <ul>
+            <li>JSONB zamiast JSON – lepsza wydajność i wsparcie indeksów.</li>
+            <li>Używaj <code>GIN</code> dla przeszukiwania elementów w JSON/ARRAY.</li>
+            <li>ENUM gwarantuje poprawność wartości, ale zmianę listy wymaga ALTER TYPE.</li>
+            <li>Przy GIS dbaj o poprawny SRID – określa układ współrzędnych.</li>
+            <li>Monitoruj rozmiary kolumn z JSON i ARRAY – duże dokumenty mogą spowolnić kopie zapasowe.</li>
+        </ul>
+
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/prism.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/components/prism-sql.min.js"></script>
+</body>
+</html>

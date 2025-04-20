@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dostęp do Baz Danych</title>
+    <link rel="stylesheet" href="../styles.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/themes/prism-tomorrow.min.css" rel="stylesheet" />
+</head>
+<body>
+    <div class="container">
+        <h1>Dostęp do Baz Danych</h1>
+
+        <p>Delphi oferuje różne technologie do komunikacji z bazami danych. Poniżej omówimy najpopularniejsze: FireDAC, dbExpress, zestawy danych (TDataSet) i mechanizm LiveBindings.</p>
+
+        <h2>FireDAC</h2>
+        <p>FireDAC to bogaty framework dostępu do wielu silników baz danych (m.in. MySQL, PostgreSQL, SQLite, Oracle).</p>
+        <ul>
+            <li><code>TFDConnection</code> – konfiguracja połączenia (ConnectionDefName lub parametry w kodzie),</li>
+            <li><code>TFDQuery</code> – wykonywanie zapytań SQL,</li>
+            <li><code>TFDTable</code> – dostęp do całej tabeli,</li>
+            <li><code>TFDTransaction</code> – kontrola transakcji.</li>
+        </ul>
+        <pre><code class="language-pascal">// Przykład: FireDAC
+FDConnection1.Params.DriverID := 'MySQL';
+FDConnection1.Params.Database := 'shop';
+FDConnection1.Params.UserName := 'root';
+FDConnection1.Params.Password := 'pass';
+FDConnection1.Connected := True;
+
+FDQuery1.Connection := FDConnection1;
+FDQuery1.SQL.Text := 'SELECT * FROM products';
+FDQuery1.Open;
+ShowMessage('Liczba produktów: ' + IntToStr(FDQuery1.RecordCount));
+</code></pre>
+
+        <h2>dbExpress</h2>
+        <p>dbExpress to lekki, warstwy-oddzielne API do różnych baz, ale mniej zaawansowane niż FireDAC.</p>
+        <ul>
+            <li><code>TSQLConnection</code> – konfiguracja i połączenie,</li>
+            <li><code>TSQLQuery</code> – zapytania SQL i sterownik specyficzny,</li>
+            <li><code>TDataSetProvider</code> + <code>TClientDataSet</code> – praca z danymi w pamięci.</li>
+        </ul>
+        <pre><code class="language-pascal">// Przykład: dbExpress
+SQLConnection1.DriverName := 'MSSQL';
+SQLConnection1.Params.Values['Database'] := 'Northwind';
+SQLConnection1.Connected := True;
+
+SQLQuery1.SQL.Text := 'SELECT * FROM Customers';
+SQLQuery1.Open;
+
+ClientDataSet1.SetProvider(SQLDataSet1);
+ClientDataSet1.Open;
+ShowMessage('Klienci: ' + IntToStr(ClientDataSet1.RecordCount));
+</code></pre>
+
+        <h2>Zestawy danych (TDataSet)</h2>
+        <p>W Delphi <code>TDataSet</code> to podstawowa klasa dla zestawów danych. FireDAC i dbExpress dziedziczą z <code>TDataSet</code>.</p>
+        <ul>
+            <li><code>FieldDefs</code> i <code>Fields</code> – definicja kolumn,</li>
+            <li><code>Open/Close</code> – otwieranie i zamykanie,</li>
+            <li><code>Edit/Insert/Append/Post</code> – operacje modyfikacji,</li>
+            <li><code>First/Next</code> – nawigacja w rekordach.</li>
+        </ul>
+        <pre><code class="language-pascal">// Nawigacja po rekordach
+FDQuery1.First;
+while not FDQuery1.Eof do
+begin
+  ShowMessage(FDQuery1.FieldByName('Name').AsString);
+  FDQuery1.Next;
+end;
+</code></pre>
+
+        <h2>LiveBindings</h2>
+        <p>LiveBindings pozwalają wiązać dane z <code>TDataSet</code> z kontrolkami bez kodu, korzystając z mechanismu powiązań.</p>
+        <ul>
+            <li><code>TBindSourceDB</code> – źródło danych dla LiveBindings,</li>
+            <li><code>TLinkControlToField</code> – wiązanie kontrolki z polem datasetu,</li>
+            <li>Designer LiveBindings – graficzny edytor powiązań.</li>
+        </ul>
+        <pre><code class="language-pascal">// Przykład w kodzie (opcjonalnie)
+LinkControlToField1.Control := EditName;
+LinkControlToField1.FieldName := 'Name';
+LinkControlToField1.Category := 'QuickBind';
+LinkSource1.DataSource := DataSource1;
+</code></pre>
+
+        <h2>Wskazówki</h2>
+        <ul>
+            <li>FireDAC to najbardziej kompleksowa technologia – stosuj ją w nowych projektach.</li>
+            <li>DbExpress przydaje się, gdy zależy ci na minimalnym narzucie biblioteki.</li>
+            <li>Zrozum <code>TDataSet</code> – większość operacji CRUD wykonasz metodami tej klasy.</li>
+            <li>LiveBindings ułatwia szybkie wiązanie danych, ale testuj wydajność przy dużych zestawach.</li>
+        </ul>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/prism.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/components/prism-pascal.min.js"></script>
+</body>
+</html>

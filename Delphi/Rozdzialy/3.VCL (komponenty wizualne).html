@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>VCL (komponenty wizualne)</title>
+    <link rel="stylesheet" href="../styles.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/themes/prism-tomorrow.min.css" rel="stylesheet" />
+</head>
+<body>
+    <div class="container">
+        <h1>VCL (komponenty wizualne)</h1>
+
+        <p>VCL (<em>Visual Component Library</em> – biblioteka komponentów wizualnych) to zestaw gotowych kontrolek i klas, które pozwalają szybko tworzyć interfejsy graficzne dla aplikacji desktopowych na Windows.</p>
+
+        <h2>Form Designer</h2>
+        <p>Form Designer to wizualny edytor formularzy. Przeciągasz komponenty z palety na formę (<code>.dfm</code>), ustawiasz ich właściwości (<em>properties</em>) i zdarzenia (<em>events</em>) w Object Inspectorze.</p>
+        <ul>
+            <li><strong>Przeciągnij–upuść</strong> – wybierz komponent z palety, przeciągnij na formę.</li>
+            <li><strong>Object Inspector</strong> – zmieniaj właściwości jak <code>Caption</code> (tekst), <code>Width</code>, <code>Height</code>.</li>
+            <li><strong>Układ</strong> – wyrównuj i grupuj kontrolki za pomocą siatki i linii pomocniczych.</li>
+        </ul>
+
+        <h2>Zdarzenia (Events)</h2>
+        <p>Każdy komponent generuje zdarzenia, np. kliknięcie przycisku. W Object Inspectorze wybierz zakładkę <code>Events</code> i dwuklik w <code>OnClick</code>, aby utworzyć procedurę obsługi w kodzie.</p>
+        <pre><code class="language-pascal">// Obsługa zdarzenia OnClick przycisku Button1
+procedure TForm1.Button1Click(Sender: TObject);
+begin
+  ShowMessage('Kliknięto przycisk!');
+end;
+</code></pre>
+
+        <h2>Standardowe komponenty</h2>
+        <ul>
+            <li><code>TButton</code> – przycisk, generuje <code>OnClick</code>.</li>
+            <li><code>TLabel</code> – etykieta tekstowa.</li>
+            <li><code>TEdit</code> – pole edycji pojedynczej linii.</li>
+            <li><code>TMemo</code> – wieloliniowe pole tekstowe.</li>
+            <li><code>TListBox</code> – lista wyboru.</li>
+            <li><code>TComboBox</code> – lista rozwijana.</li>
+            <li><code>TCheckBox</code> – pole wyboru (checkbox).</li>
+            <li><code>TRadioButton</code> – przycisk radiowy w grupie.</li>
+            <li><code>TPanel</code> – kontener do grupowania komponentów.</li>
+            <li><code>TStringGrid</code> – siatka do wyświetlania danych w tabeli.</li>
+        </ul>
+
+        <h2>Wskazówki</h2>
+        <ul>
+            <li>Używaj Object Inspector, by nie zmieniać ręcznie <code>.dfm</code>.</li>
+            <li>Grupuj powiązane kontrolki w <code>TPanel</code> dla lepszego układu.</li>
+            <li>Testuj obsługę zdarzeń, by upewnić się, że wszystkie komponenty działają poprawnie.</li>
+            <li>Dbaj o czytelność – nadaj sensowne nazwy komponentom (np. <code>btnSave</code>, <code>edtName</code>).</li>
+            <li>Przy dużej liczbie kontrolek rozważ użycie <code>TFrame</code> do modularizacji form.</li>
+        </ul>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/prism.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/components/prism-pascal.min.js"></script>
+</body>
+</html>

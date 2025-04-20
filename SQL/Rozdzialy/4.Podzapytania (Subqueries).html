@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Podzapytania (Subqueries)</title>
+    <link rel="stylesheet" href="../styles.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/themes/prism-tomorrow.min.css" rel="stylesheet" />
+</head>
+<body>
+    <div class="container">
+        <h1>Podzapytania (Subqueries)</h1>
+
+        <p>Podzapytanie (subquery) to zapytanie osadzone wewnątrz innego zapytania. Działa jak «zapytanie w zapytaniu» i zwraca wynik, który używamy w klauzulach <code>SELECT</code>, <code>FROM</code> lub <code>WHERE</code>.</p>
+
+        <h2>Subquery w klauzuli SELECT</h2>
+        <p>Możesz wstawić pojedynczą wartość obliczoną dla każdego wiersza.</p>
+        <pre><code class="language-sql">
+// Dodanie kolumny z liczbą zamówień danego klienta
+SELECT 
+    c.id,
+    c.name,
+    (
+        SELECT COUNT(*)       -- zlicza
+        FROM orders o
+        WHERE o.customer_id = c.id
+    ) AS order_count
+FROM customers c;
+        </code></pre>
+
+        <h2>Subquery w klauzuli FROM</h2>
+        <p>Traktowane jak tymczasowa tabela (derived table).</p>
+        <pre><code class="language-sql">
+// Pobranie średniej sprzedaży na klienta, a potem wybór tych powyżej progu
+SELECT sub.customer_id, sub.avg_sales
+FROM (
+    SELECT customer_id, AVG(amount) AS avg_sales
+    FROM orders
+    GROUP BY customer_id
+) AS sub                -- alias dla podzapytania
+WHERE sub.avg_sales > 100;
+        </code></pre>
+
+        <h2>Subquery w klauzuli WHERE</h2>
+        <p>Filtruje główne zapytanie na podstawie wyniku podzapytania.</p>
+        <pre><code class="language-sql">
+// Klienci, którzy złożyli zamówienie powyżej 1000
+SELECT *
+FROM customers c
+WHERE c.id IN (
+    SELECT customer_id
+    FROM orders
+    WHERE amount > 1000
+);
+
+// Produkty, które nie były sprzedane (EXISTS = istnieje)
+SELECT *
+FROM products p
+WHERE NOT EXISTS (
+    SELECT 1
+    FROM order_items oi
+    WHERE oi.product_id = p.id
+);
+        </code></pre>
+
+        <h2>Użycie EXISTS (istnieje) i IN (w)</h2>
+        <ul>
+            <li><code>IN</code> – sprawdza, czy wartość znajduje się w liście zwróconej przez subquery.</li>
+            <li><code>EXISTS</code> – zwraca <code>TRUE</code>, jeśli podzapytanie zwróci choć jeden wiersz.</li>
+        </ul>
+        <pre><code class="language-sql">
+// Wybranie klientów z co najmniej jednym zamówieniem
+SELECT *
+FROM customers c
+WHERE EXISTS (
+    SELECT 1
+    FROM orders o
+    WHERE o.customer_id = c.id
+);
+
+// Produkty z kategoriami z listy
+SELECT *
+FROM products
+WHERE category_id IN (
+    SELECT id
+    FROM categories
+    WHERE name LIKE 'Elektronika%'
+);
+        </code></pre>
+
+        <h2>Wskazówki</h2>
+        <ul>
+            <li>Subquery w <code>SELECT</code> musi zwracać pojedynczą wartość na wiersz.</li>
+            <li>W <code>FROM</code> używaj aliasu (AS sub), by odnieść się do wyniku.</li>
+            <li><code>EXISTS</code> bywa szybsze niż <code>IN</code>, gdy lista może być duża.</li>
+            <li>Unikaj zagnieżdżania wielu poziomów subquery – lepiej użyć <code>JOIN</code> lub widoków (views).</li>
+        </ul>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/prism.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/components/prism-sql.min.js"></script>
+</body>
+</html>

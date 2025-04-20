@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Procedury i Funkcje Użytkownika</title>
+    <link rel="stylesheet" href="../styles.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/themes/prism-tomorrow.min.css" rel="stylesheet" />
+</head>
+<body>
+    <div class="container">
+        <h1>Procedury i Funkcje Użytkownika</h1>
+
+        <p>Procedury składowane (stored procedures) i funkcje użytkownika (user-defined functions) pozwalają przenieść część logiki aplikacji do bazy danych, dzięki czemu operacje są szybsze i bezpieczniejsze.</p>
+
+        <h2>Tworzenie procedury (CREATE PROCEDURE)</h2>
+        <pre><code class="language-sql">
+// Przykład prostej procedury dodającej konto
+DELIMITER //
+CREATE PROCEDURE add_account(
+    IN p_name VARCHAR(50),   -- parametr wejściowy
+    IN p_balance DECIMAL(10,2)
+)
+BEGIN
+    INSERT INTO accounts(name, balance)
+    VALUES (p_name, p_balance);
+END;
+//
+DELIMITER ;
+        </code></pre>
+
+        <h2>Tworzenie funkcji (CREATE FUNCTION)</h2>
+        <pre><code class="language-sql">
+// Przykład funkcji zwracającej sumę sald
+CREATE FUNCTION total_balance()
+RETURNS DECIMAL(15,2)
+DETERMINISTIC
+BEGIN
+    DECLARE v_sum DECIMAL(15,2);
+    SELECT SUM(balance) INTO v_sum FROM accounts;
+    RETURN v_sum;
+END;
+        </code></pre>
+
+        <h2>Parametry</h2>
+        <ul>
+            <li><code>IN</code> – tylko do odczytu,</li>
+            <li><code>OUT</code> – wynik zwracany przez procedurę,</li>
+            <li><code>INOUT</code> – wejście i wyjście w jednym parametrze.</li>
+        </ul>
+
+        <h2>Pętle (Loops)</h2>
+        <pre><code class="language-sql">
+// Przykład pętli WHILE w procedurze
+CREATE PROCEDURE loop_example()
+BEGIN
+    DECLARE i INT DEFAULT 1;
+    WHILE i &lt;= 5 DO
+        INSERT INTO log_messages(msg) VALUES(CONCAT('Wiadomość ', i));
+        SET i = i + 1;
+    END WHILE;
+END;
+        </code></pre>
+
+        <h2>Warunki (Conditions)</h2>
+        <pre><code class="language-sql">
+// IF … THEN … ELSE w procedurze
+CREATE PROCEDURE adjust_balance(
+    IN p_id INT,
+    IN p_amount DECIMAL(10,2)
+)
+BEGIN
+    DECLARE current_balance DECIMAL(10,2);
+    SELECT balance INTO current_balance FROM accounts WHERE id = p_id;
+
+    IF current_balance + p_amount &lt; 0 THEN
+        SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'Niewystarczające środki';
+    ELSE
+        UPDATE accounts
+        SET balance = current_balance + p_amount
+        WHERE id = p_id;
+    END IF;
+END;
+        </code></pre>
+
+        <h2>Zarządzanie logiką po stronie bazy</h2>
+        <ul>
+            <li>Używaj procedur do operacji wieloetapowych (transakcje).</li>
+            <li>Funkcje nadają się do obliczeń zwracających jedną wartość.</li>
+            <li>Obsługuj błędy za pomocą <code>SIGNAL</code> i <code>HANDLER</code>.</li>
+            <li>Testuj procedury niezależnie, by mieć pewność poprawności.</li>
+        </ul>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/prism.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/components/prism-sql.min.js"></script>
+</body>
+</html>

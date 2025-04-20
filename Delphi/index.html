@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Delphi - Strona Główna</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="container">
+        <h1>Witaj na stronie o Delphi</h1>
+        <p>Wybierz temat, aby dowiedzieć się więcej o różnych aspektach Delphi.</p>
+
+        <div class="accordion">
+
+            <div class="accordion-item">
+                <h2 class="accordion-header">Początkujący</h2>
+                <div class="accordion-content">
+                    <ul>
+                        <li><a href="./Rozdzialy/1.Podstawy IDE Delphi.html">Podstawy IDE Delphi</a></li>
+                        <li><a href="./Rozdzialy/2.Składnia Object Pascal.html">Składnia Object Pascal</a></li>
+                        <li><a href="./Rozdzialy/3.VCL (komponenty wizualne).html">VCL (komponenty wizualne)</a></li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="accordion-item">
+                <h2 class="accordion-header">Średnio zaawansowany</h2>
+                <div class="accordion-content">
+                    <ul>
+                        <li><a href="./Rozdzialy/4.FireMonkey (FMX).html">FireMonkey (FMX)</a></li>
+                        <li><a href="./Rozdzialy/5.Dostęp do Baz Danych.html">Dostęp do Baz Danych</a></li>
+                        <li><a href="./Rozdzialy/6.Wątki i Asynchroniczność.html">Wątki i Asynchroniczność</a></li>
+                        <li><a href="./Rozdzialy/7.Generics & RTTI.html">Generics & RTTI</a></li>
+                        <li><a href="./Rozdzialy/8.Komponenty Niestandardowe.html">Komponenty Niestandardowe</a></li>
+                        <li><a href="./Rozdzialy/9.Komunikacja Sieciowa.html">Komunikacja Sieciowa</a></li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="accordion-item">
+                <h2 class="accordion-header">Zaawansowany</h2>
+                <div class="accordion-content">
+                    <ul>
+                        <li><a href="./Rozdzialy/10.Debugowanie i Testy.html">Debugowanie i Testy</a></li>
+                        <li><a href="./Rozdzialy/11.Kompilacja Mobilna.html">Kompilacja Mobilna</a></li>
+                        <li><a href="./Rozdzialy/12.Optymalizacja i Profilowanie.html">Optymalizacja i Profilowanie</a></li>
+                    </ul>
+                </div>
+            </div>
+
+        </div>
+
+    </div>
+    
+    <script>
+        document.querySelectorAll('.accordion-header').forEach(header => {
+            header.addEventListener('click', function() {
+                const accordionContent = this.nextElementSibling;
+
+                if (accordionContent.style.maxHeight) {
+                    accordionContent.style.maxHeight = null; // Zwijanie
+                } else {
+                    accordionContent.style.maxHeight = accordionContent.scrollHeight + "px"; // Rozwijanie
+                }
+            });
+        });
+    </script>
+</body>
+</html>

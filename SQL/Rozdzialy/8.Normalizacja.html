@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Normalizacja</title>
+    <link rel="stylesheet" href="../styles.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/themes/prism-tomorrow.min.css" rel="stylesheet" />
+</head>
+<body>
+    <div class="container">
+        <h1>Normalizacja</h1>
+
+        <p>Normalizacja to proces organizacji danych w relacyjnej bazie tak, aby unikać nadmiernej duplikacji i zapewnić spójność. Stosuje się kolejne formy normalne (normal forms), każda wprowadza nowe zasady.</p>
+
+        <h2>1NF (Pierwsza forma normalna)</h2>
+        <p>Wszystkie kolumny muszą przechowywać wartości atomowe (pojedyncze, niepodzielne).</p>
+        <ul>
+            <li>Brak list czy tablic w jednej kolumnie.</li>
+            <li>Każda komórka zawiera dokładnie jedną wartość.</li>
+        </ul>
+
+        <h2>2NF (Druga forma normalna)</h2>
+        <p>Spełniona 1NF i każda kolumna niekluczowa zależy w pełni od całego klucza głównego.</p>
+        <ul>
+            <li>Dotyczy tabel z kluczem złożonym – usuń zależności częściowe.</li>
+            <li>Rozdziel dane zależne tylko od części klucza do osobnych tabel.</li>
+        </ul>
+
+        <h2>3NF (Trzecia forma normalna)</h2>
+        <p>Spełniona 2NF i żadna kolumna niekluczowa nie zależy od innej kolumny niekluczowej.</p>
+        <ul>
+            <li>Usuń zależności przechodnie (A → B i B → C → przenieś C do oddzielnej tabeli).</li>
+        </ul>
+
+        <h2>BCNF (Boyce–Codd Normal Form)</h2>
+        <p>Wzmocniona 3NF – każda determinanta (kolumna lub zestaw kolumn) musi być kluczem kandydującym.</p>
+        <ul>
+            <li>Usuwa rzadkie przypadki, gdy 3NF nadal dopuszcza pewne zależności.</li>
+        </ul>
+
+        <h2>Przykład projektu</h2>
+        <p>Załóżmy, że chcemy przechowywać informacje o zamówieniach i produktach:</p>
+        <pre><code class="language-sql">
+// Niepoprawnie (duplikacja nazwy produktu w każdym wierszu order_items)
+CREATE TABLE order_items (
+    order_id   INT,
+    product_id INT,
+    product_name VARCHAR(100),
+    quantity   INT
+);
+
+// Po normalizacji:
+// Tabela products
+CREATE TABLE products (
+    id   INT PRIMARY KEY,
+    name VARCHAR(100)
+);
+
+// Tabela order_items
+CREATE TABLE order_items (
+    order_id   INT,
+    product_id INT,
+    quantity   INT,
+    FOREIGN KEY (product_id) REFERENCES products(id)
+);
+        </code></pre>
+
+        <h2>Zasady projektowania</h2>
+        <ul>
+            <li>Używaj kluczy głównych (PRIMARY KEY) do jednoznacznej identyfikacji wiersza.</li>
+            <li>Używaj kluczy obcych (FOREIGN KEY) do łączenia tabel zamiast powtarzać dane.</li>
+            <li>Stosuj formy normalne do momentu, gdy dalsza normalizacja nie przynosi realnych korzyści wydajnościowych.</li>
+            <li>Pamiętaj, że zbyt głęboka normalizacja może wydłużać zapytania <em>(joiny)</em> – znajdź złoty środek.</li>
+        </ul>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/prism.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/components/prism-sql.min.js"></script>
+</body>
+</html>

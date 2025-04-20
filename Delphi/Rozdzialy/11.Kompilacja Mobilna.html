@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Debugowanie i Testy</title>
+    <link rel="stylesheet" href="../styles.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/themes/prism-tomorrow.min.css" rel="stylesheet" />
+</head>
+<body>
+    <div class="container">
+        <h1>Debugowanie i Testy</h1>
+
+        <p>Skuteczne debugowanie i automatyczne testy to klucz do stabilnego i wysokiej jakości kodu. Delphi oferuje wbudowany debugger, framework DUnitX do testów jednostkowych, a także narzędzia do profilowania i analizowania kodu.</p>
+
+        <h2>Debugger IDE</h2>
+        <ul>
+            <li><strong>Breakpoints</strong> – kliknij w marginesie edytora, aby zatrzymać wykonanie w danym miejscu.</li>
+            <li><strong>Watches</strong> – monitoruj zmienne i wyrażenia w czasie zatrzymania.</li>
+            <li><strong>Call Stack</strong> – przeglądaj wywołania funkcji prowadzące do bieżącej linii.</li>
+            <li><strong>Evaluate/Modify</strong> – wykonuj lub zmieniaj kod w trakcie debugowania.</li>
+        </ul>
+
+        <h2>DUnitX</h2>
+        <p>DUnitX to framework do testów jednostkowych wzorowany na NUnit. Pozwala pisać testy w Pascalu i uruchamiać je w IDE lub z linii komend.</p>
+        <pre><code class="language-pascal">uses DUnitX.TestFramework;
+
+type
+  [TestFixture]
+  TMathTests = class
+  public
+    [Test]
+    procedure TestAdd;
+  end;
+
+procedure TMathTests.TestAdd;
+begin
+  Assert.AreEqual(4, 2 + 2, '2+2 powinno dać 4');
+end;
+
+initialization
+  TDUnitX.RegisterTestFixture(TMathTests);
+</code></pre>
+
+        <h2>Profilery (Profilers)</h2>
+        <p>Narzędzia profilujące pomagają znaleźć fragmenty kodu, które zajmują najwięcej czasu.</p>
+        <ul>
+            <li><strong>Delphi Profiler</strong> (w wyższych edycjach) – wbudowany profiler CPU.</li>
+            <li><strong>AQtime</strong> – zaawansowany profiler pamięci i CPU.</li>
+            <li><strong>Sampling vs Instrumentation</strong> – pomiar z próbkowaniem lub wstawianie punktów pomiaru.</li>
+        </ul>
+
+        <h2>Insight</h2>
+        <p>Insight to narzędzie w IDE (Ctrl+Shift+I) do szybkiej nawigacji po kodzie i dokumentacji RTTI.</p>
+        <ul>
+            <li>Użyj <code>Ctrl+Click</code> na nazwie funkcji, by przejść do definicji.</li>
+            <li>Okno <em>Structure</em> – przeglądaj strukturę klasy i metody.</li>
+        </ul>
+
+        <h2>Wskazówki</h2>
+        <ul>
+            <li>Stawiaj breakpointy warunkowe, by debugować w specyficznych sytuacjach.</li>
+            <li>Pisz testy jednostkowe przy pomocy DUnitX dla krytycznych funkcji.</li>
+            <li>Profiluj aplikację w trybie Release z zachowaniem symboli debugowania.</li>
+            <li>Regularnie analizuj call stack, by szybciej rozumieć przebieg programu.</li>
+        </ul>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/prism.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/components/prism-pascal.min.js"></script>
+</body>
+</html>
