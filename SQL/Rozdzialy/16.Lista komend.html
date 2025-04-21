@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Komendy SQL - Pełna Lista</title>
+    <link rel="stylesheet" href="../styles.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/themes/prism-tomorrow.min.css" rel="stylesheet" />
+    <style>
+        #sortButton {
+            margin: 1rem 0;
+            padding: 0.5rem 1rem;
+            background-color: #444;
+            color: #fff;
+            border: none;
+            cursor: pointer;
+            border-radius: 4px;
+        }
+        #sortButton:hover {
+            background-color: #666;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Lista Komend SQL</h1>
+        <p>SQL (Structured Query Language) to język zapytań służący do zarządzania relacyjnymi bazami danych. Poniżej znajduje się lista najważniejszych komend SQL wraz z krótkimi opisami ich zastosowania.</p>
+
+        <button id="sortButton">Sortuj alfabetycznie</button>
+
+        <ul id="sqlList">
+            <li><strong>SELECT</strong> – wybiera dane z tabeli.</li>
+            <li><strong>FROM</strong> – określa tabelę, z której pobierane są dane.</li>
+            <li><strong>WHERE</strong> – filtruje dane na podstawie warunku.</li>
+            <li><strong>INSERT INTO</strong> – dodaje nowe dane do tabeli.</li>
+            <li><strong>UPDATE</strong> – aktualizuje istniejące dane w tabeli.</li>
+            <li><strong>DELETE</strong> – usuwa dane z tabeli.</li>
+            <li><strong>ORDER BY</strong> – sortuje wyniki według kolumny (rosnąco lub malejąco).</li>
+            <li><strong>LIMIT</strong> – ogranicza liczbę zwracanych wierszy.</li>
+            <li><strong>JOIN</strong> – łączy dane z wielu tabel.
+                <ul>
+                    <li><code>INNER JOIN</code> – tylko dopasowane wiersze w obu tabelach.</li>
+                    <li><code>LEFT JOIN</code> – wszystkie wiersze z lewej tabeli + dopasowane z prawej.</li>
+                    <li><code>RIGHT JOIN</code> – wszystkie z prawej tabeli + dopasowane z lewej.</li>
+                    <li><code>FULL JOIN</code> – wszystkie wiersze z obu tabel.</li>
+                </ul>
+            </li>
+            <li><strong>GROUP BY</strong> – grupuje dane na podstawie kolumny.</li>
+            <li><strong>HAVING</strong> – filtruje grupy utworzone przez GROUP BY.</li>
+            <li><strong>AS</strong> – tworzy alias dla kolumny lub tabeli.</li>
+            <li><strong>IN</strong> – sprawdza, czy wartość znajduje się w podanym zestawie.</li>
+            <li><strong>BETWEEN</strong> – sprawdza, czy wartość mieści się w podanym zakresie.</li>
+            <li><strong>LIKE</strong> – wyszukiwanie według wzorca (np. 'A%').</li>
+            <li><strong>IS NULL</strong> / <strong>IS NOT NULL</strong> – sprawdza czy wartość jest (lub nie jest) NULL.</li>
+            <li><strong>DISTINCT</strong> – usuwa duplikaty z wyników.</li>
+            <li><strong>CREATE TABLE</strong> – tworzy nową tabelę.</li>
+            <li><strong>ALTER TABLE</strong> – zmienia strukturę istniejącej tabeli.</li>
+            <li><strong>DROP TABLE</strong> – usuwa tabelę.</li>
+            <li><strong>TRUNCATE TABLE</strong> – usuwa wszystkie wiersze z tabeli, ale zostawia jej strukturę.</li>
+            <li><strong>PRIMARY KEY</strong> – ustala główny klucz tabeli.</li>
+            <li><strong>FOREIGN KEY</strong> – ustala klucz obcy, który wskazuje na inną tabelę.</li>
+            <li><strong>UNIQUE</strong> – zapewnia unikalność wartości w kolumnie.</li>
+            <li><strong>DEFAULT</strong> – ustawia domyślną wartość kolumny.</li>
+            <li><strong>CHECK</strong> – ograniczenie warunków dla wartości w kolumnie.</li>
+            <li><strong>INDEX</strong> – tworzy indeks w celu przyspieszenia zapytań.</li>
+            <li><strong>VIEW</strong> – tworzy widok (wirtualną tabelę na podstawie zapytania SELECT).</li>
+            <li><strong>BEGIN TRANSACTION</strong> / <strong>COMMIT</strong> / <strong>ROLLBACK</strong> – zarządzanie transakcjami.</li>
+        </ul>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/prism.min.js"></script>
+    <script>
+        document.getElementById('sortButton').addEventListener('click', () => {
+            const list = document.getElementById('sqlList');
+            const items = Array.from(list.querySelectorAll('li'));
+            const sorted = items.sort((a, b) => {
+                const aText = a.textContent.trim().toLowerCase();
+                const bText = b.textContent.trim().toLowerCase();
+                return aText.localeCompare(bText);
+            });
+            list.innerHTML = '';
+            sorted.forEach(item => list.appendChild(item));
+        });
+    </script>
+</body>
+</html>
