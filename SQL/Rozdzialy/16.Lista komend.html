@@ -66,9 +66,47 @@
             <li><strong>VIEW</strong> – tworzy widok (wirtualną tabelę na podstawie zapytania SELECT).</li>
             <li><strong>BEGIN TRANSACTION</strong> / <strong>COMMIT</strong> / <strong>ROLLBACK</strong> – zarządzanie transakcjami.</li>
         </ul>
-    </div>
 
+        <h2>Przykłady użycia kombinacji komend</h2>
+
+        <pre><code class="language-sql">-- Przykład 1: Pobranie danych pracowników z działu HR, posortowanych według nazwiska
+SELECT first_name, last_name
+FROM employees
+WHERE department = 'HR'
+ORDER BY last_name ASC;
+-- Użyto: SELECT, FROM, WHERE, ORDER BY
+-- Zastosowanie: Kiedy chcesz wyświetlić dane tylko z konkretnego działu i mieć je uporządkowane alfabetycznie</code></pre>
+
+        <pre><code class="language-sql">-- Przykład 2: Średnie wynagrodzenie w każdym dziale, tylko jeśli liczba pracowników > 5
+SELECT department, AVG(salary) AS avg_salary
+FROM employees
+GROUP BY department
+HAVING COUNT(*) > 5;
+-- Użyto: SELECT, GROUP BY, HAVING, funkcji agregujących
+-- Zastosowanie: Do analizy danych zbiorczych, np. płac w dużych działach</code></pre>
+
+        <pre><code class="language-sql">-- Przykład 3: Połączenie tabel employees i departments, by pokazać nazwiska i nazwy działów
+SELECT e.last_name, d.name AS department_name
+FROM employees e
+INNER JOIN departments d ON e.department_id = d.id;
+-- Użyto: SELECT, JOIN, aliasów AS
+-- Zastosowanie: Gdy dane są rozdzielone w różnych tabelach i trzeba je powiązać</code></pre>
+
+        <pre><code class="language-sql">-- Przykład 4: Aktualizacja adresu e-mail tylko dla użytkowników z Polski
+UPDATE users
+SET email = 'nowy@email.pl'
+WHERE country = 'Polska';
+-- Użyto: UPDATE, SET, WHERE
+-- Zastosowanie: Kiedy trzeba zmienić dane tylko dla konkretnej grupy użytkowników</code></pre>
+
+        <pre><code class="language-sql">-- Przykład 5: Usunięcie kont użytkowników nieaktywnych przez ponad 2 lata
+DELETE FROM users
+WHERE last_login &lt; NOW() - INTERVAL 2 YEAR;
+-- Użyto: DELETE, WHERE, funkcji daty
+-- Zastosowanie: Do czyszczenia nieaktualnych danych</code></pre>
+    </div>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/prism.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/components/prism-sql.min.js"></script>
     <script>
         document.getElementById('sortButton').addEventListener('click', () => {
             const list = document.getElementById('sqlList');
