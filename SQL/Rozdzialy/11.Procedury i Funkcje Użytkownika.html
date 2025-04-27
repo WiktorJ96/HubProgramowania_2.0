@@ -1,98 +1,142 @@
 <!DOCTYPE html>
 <html lang="pl">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Procedury i Funkcje Użytkownika</title>
-    <link rel="stylesheet" href="../styles.css">
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/themes/prism-tomorrow.min.css" rel="stylesheet" />
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Procedury i Funkcje Użytkownika</title>
+  <link rel="stylesheet" href="../styles.css">
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/themes/prism-tomorrow.min.css" rel="stylesheet" />
 </head>
 <body>
-    <div class="container">
-        <h1>Procedury i Funkcje Użytkownika</h1>
+  <div class="container">
+    <h1>Procedury i Funkcje Użytkownika w SQL</h1>
 
-        <p>Procedury składowane (stored procedures) i funkcje użytkownika (user-defined functions) pozwalają przenieść część logiki aplikacji do bazy danych, dzięki czemu operacje są szybsze i bezpieczniejsze.</p>
+    <p>Procedury (<em>stored procedures</em>) i funkcje (<em>user-defined functions</em>) pozwalają zapisać fragmenty logiki bezpośrednio w bazie danych. Dzięki temu:</p>
+    <ul>
+      <li>Operacje są <strong>szybsze</strong> (bo mniej komunikacji z aplikacją).</li>
+      <li>Operacje są <strong>bezpieczniejsze</strong> (bo trudniej popełnić błędy).</li>
+      <li>Logika bazy jest <strong>łatwiejsza w utrzymaniu</strong>.</li>
+    </ul>
 
-        <h2>Tworzenie procedury (CREATE PROCEDURE)</h2>
-        <pre><code class="language-sql">
-// Przykład prostej procedury dodającej konto
+    <h2>Jak stworzyć procedurę? (CREATE PROCEDURE)</h2>
+
+    <p><strong>Przykład: dodawanie nowego konta</strong></p>
+
+    <pre><code class="language-sql">
+-- Zmieniamy znak końca polecenia, bo procedura będzie zawierać średniki
 DELIMITER //
+
 CREATE PROCEDURE add_account(
-    IN p_name VARCHAR(50),   -- parametr wejściowy
-    IN p_balance DECIMAL(10,2)
+    IN p_name VARCHAR(50),     -- parametr wejściowy: nazwa konta
+    IN p_balance DECIMAL(10,2) -- parametr wejściowy: początkowe saldo
 )
 BEGIN
+    -- Wstawiamy nowe konto do tabeli
     INSERT INTO accounts(name, balance)
     VALUES (p_name, p_balance);
 END;
 //
+
+-- Przywracamy standardowy znak końca (;)
 DELIMITER ;
-        </code></pre>
+    </code></pre>
 
-        <h2>Tworzenie funkcji (CREATE FUNCTION)</h2>
-        <pre><code class="language-sql">
-// Przykład funkcji zwracającej sumę sald
+    <h3>Jak to działa krok po kroku?</h3>
+    <ul>
+      <li><strong>DELIMITER //</strong> – zmieniamy znak końca, żeby wewnętrzne średniki nie kończyły za wcześnie definicji.</li>
+      <li><strong>CREATE PROCEDURE</strong> – tworzymy procedurę o nazwie <code>add_account</code>.</li>
+      <li><strong>IN</strong> – parametry wejściowe: dane, które podajemy przy wywoływaniu procedury.</li>
+      <li><strong>BEGIN...END</strong> – zawierają wszystkie instrukcje procedury.</li>
+      <li><strong>INSERT INTO</strong> – dodajemy nowe konto na podstawie parametrów.</li>
+      <li><strong>DELIMITER ;</strong> – wracamy do zwykłego średnika na końcu poleceń.</li>
+    </ul>
+
+    <h2>Jak stworzyć funkcję? (CREATE FUNCTION)</h2>
+
+    <p><strong>Przykład: funkcja licząca łączną sumę sald kont</strong></p>
+
+    <pre><code class="language-sql">
 CREATE FUNCTION total_balance()
-RETURNS DECIMAL(15,2)
-DETERMINISTIC
+RETURNS DECIMAL(15,2)       -- Funkcja zwraca wartość liczbową z dwoma miejscami po przecinku
+DETERMINISTIC               -- Funkcja zawsze dla tych samych danych zwraca ten sam wynik
 BEGIN
-    DECLARE v_sum DECIMAL(15,2);
-    SELECT SUM(balance) INTO v_sum FROM accounts;
-    RETURN v_sum;
+    DECLARE v_sum DECIMAL(15,2); -- Tworzymy zmienną lokalną
+    SELECT SUM(balance) INTO v_sum FROM accounts; -- Liczymy sumę wszystkich sald
+    RETURN v_sum; -- Zwracamy wynik
 END;
-        </code></pre>
+    </code></pre>
 
-        <h2>Parametry</h2>
-        <ul>
-            <li><code>IN</code> – tylko do odczytu,</li>
-            <li><code>OUT</code> – wynik zwracany przez procedurę,</li>
-            <li><code>INOUT</code> – wejście i wyjście w jednym parametrze.</li>
-        </ul>
+    <h3>Jak to działa krok po kroku?</h3>
+    <ul>
+      <li><strong>CREATE FUNCTION</strong> – tworzymy funkcję.</li>
+      <li><strong>RETURNS</strong> – określamy, jaki typ danych funkcja zwraca.</li>
+      <li><strong>DETERMINISTIC</strong> – funkcja zawsze zwróci ten sam wynik dla tych samych danych (ważne przy optymalizacji).</li>
+      <li><strong>DECLARE</strong> – tworzymy zmienną w funkcji.</li>
+      <li><strong>SELECT INTO</strong> – przypisujemy wynik zapytania do zmiennej.</li>
+      <li><strong>RETURN</strong> – zwracamy wynik funkcji.</li>
+    </ul>
 
-        <h2>Pętle (Loops)</h2>
-        <pre><code class="language-sql">
-// Przykład pętli WHILE w procedurze
+    <h2>Rodzaje parametrów w procedurach</h2>
+    <ul>
+      <li><strong>IN</strong> – parametr wejściowy (przekazujemy wartość do procedury).</li>
+      <li><strong>OUT</strong> – parametr wyjściowy (procedura zapisze wynik do parametru).</li>
+      <li><strong>INOUT</strong> – parametr działa jako wejście i wyjście jednocześnie (przekazujemy wartość, ale procedura może ją zmodyfikować).</li>
+    </ul>
+
+    <h2>Pętle w procedurach (Loops)</h2>
+
+    <p><strong>Przykład: prosta pętla WHILE</strong></p>
+
+    <pre><code class="language-sql">
 CREATE PROCEDURE loop_example()
 BEGIN
-    DECLARE i INT DEFAULT 1;
-    WHILE i &lt;= 5 DO
-        INSERT INTO log_messages(msg) VALUES(CONCAT('Wiadomość ', i));
-        SET i = i + 1;
+    DECLARE i INT DEFAULT 1; -- Tworzymy zmienną licznika i ustawiamy ją na 1
+
+    WHILE i <= 5 DO -- Dopóki i jest mniejsze lub równe 5
+        INSERT INTO log_messages(msg)
+        VALUES(CONCAT('Wiadomość ', i)); -- Dodajemy wiadomość z numerem
+        SET i = i + 1; -- Zwiększamy licznik o 1
     END WHILE;
 END;
-        </code></pre>
+    </code></pre>
 
-        <h2>Warunki (Conditions)</h2>
-        <pre><code class="language-sql">
-// IF … THEN … ELSE w procedurze
+    <h2>Warunki w procedurach (IF...THEN...ELSE)</h2>
+
+    <p><strong>Przykład: sprawdzanie, czy można zmniejszyć saldo</strong></p>
+
+    <pre><code class="language-sql">
 CREATE PROCEDURE adjust_balance(
-    IN p_id INT,
-    IN p_amount DECIMAL(10,2)
+    IN p_id INT,              -- ID konta
+    IN p_amount DECIMAL(10,2)  -- Kwota do dodania lub odjęcia
 )
 BEGIN
     DECLARE current_balance DECIMAL(10,2);
+
+    -- Pobieramy aktualne saldo
     SELECT balance INTO current_balance FROM accounts WHERE id = p_id;
 
-    IF current_balance + p_amount &lt; 0 THEN
-        SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'Niewystarczające środki';
+    -- Sprawdzamy, czy nowe saldo nie będzie ujemne
+    IF current_balance + p_amount < 0 THEN
+        SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'Niewystarczające środki'; -- Błąd: brak środków
     ELSE
         UPDATE accounts
         SET balance = current_balance + p_amount
-        WHERE id = p_id;
+        WHERE id = p_id; -- Aktualizujemy saldo
     END IF;
 END;
-        </code></pre>
+    </code></pre>
 
-        <h2>Zarządzanie logiką po stronie bazy</h2>
-        <ul>
-            <li>Używaj procedur do operacji wieloetapowych (transakcje).</li>
-            <li>Funkcje nadają się do obliczeń zwracających jedną wartość.</li>
-            <li>Obsługuj błędy za pomocą <code>SIGNAL</code> i <code>HANDLER</code>.</li>
-            <li>Testuj procedury niezależnie, by mieć pewność poprawności.</li>
-        </ul>
-    </div>
+    <h2>Podsumowanie</h2>
+    <ul>
+      <li>Procedury zapisują wiele operacji i można je wywołać jednym poleceniem.</li>
+      <li>Funkcje zwracają pojedyncze wartości i mogą być używane w zapytaniach SELECT.</li>
+      <li>Obsługuj błędy za pomocą <code>SIGNAL</code> i reaguj na sytuacje awaryjne.</li>
+      <li>Procedury i funkcje ułatwiają organizację i bezpieczeństwo kodu w bazie.</li>
+    </ul>
 
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/prism.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/components/prism-sql.min.js"></script>
+  </div>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/prism.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/components/prism-sql.min.js"></script>
 </body>
 </html>
