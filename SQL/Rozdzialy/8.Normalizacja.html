@@ -1,81 +1,182 @@
 <!DOCTYPE html>
 <html lang="pl">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Normalizacja</title>
-    <link rel="stylesheet" href="../styles.css">
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/themes/prism-tomorrow.min.css" rel="stylesheet" />
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Normalizacja</title>
+  <link rel="stylesheet" href="../styles.css">
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/themes/prism-tomorrow.min.css" rel="stylesheet" />
 </head>
 <body>
-    <div class="container">
-        <h1>Normalizacja</h1>
+  <div class="container">
+    <h1>Normalizacja</h1>
 
-        <p>Normalizacja to proces organizacji danych w relacyjnej bazie tak, aby unikać nadmiernej duplikacji i zapewnić spójność. Stosuje się kolejne formy normalne (normal forms), każda wprowadza nowe zasady.</p>
+    <p>Normalizacja to sposób na <strong>uporządkowanie danych</strong> w bazie tak, aby:</p>
+    <ul>
+      <li>Nie powtarzać tych samych informacji wiele razy</li>
+      <li>Unikać błędów w danych (np. literówek, niezgodności)</li>
+      <li>Łatwiej aktualizować dane (np. zmienić nazwę produktu w jednym miejscu zamiast w 100 miejscach)</li>
+    </ul>
 
-        <h2>1NF (Pierwsza forma normalna)</h2>
-        <p>Wszystkie kolumny muszą przechowywać wartości atomowe (pojedyncze, niepodzielne).</p>
-        <ul>
-            <li>Brak list czy tablic w jednej kolumnie.</li>
-            <li>Każda komórka zawiera dokładnie jedną wartość.</li>
-        </ul>
+    <h2>1NF (Pierwsza Forma Normalna)</h2>
+    <p><strong>Zasada:</strong> Każda komórka tabeli musi zawierać <strong>tylko jedną, niepodzielną wartość</strong>.</p>
+    <p>Nie wolno w jednej komórce zapisywać listy rzeczy!</p>
 
-        <h2>2NF (Druga forma normalna)</h2>
-        <p>Spełniona 1NF i każda kolumna niekluczowa zależy w pełni od całego klucza głównego.</p>
-        <ul>
-            <li>Dotyczy tabel z kluczem złożonym – usuń zależności częściowe.</li>
-            <li>Rozdziel dane zależne tylko od części klucza do osobnych tabel.</li>
-        </ul>
+    <p><strong>Źle (brak 1NF):</strong></p>
+    <pre><code class="language-sql">
+student_id | subjects
+-----------|----------------
+1          | Matematyka, Fizyka
+2          | Biologia, Chemia
+    </code></pre>
+    <p>❌ W jednej komórce są dwa przedmioty! Tak nie można.</p>
 
-        <h2>3NF (Trzecia forma normalna)</h2>
-        <p>Spełniona 2NF i żadna kolumna niekluczowa nie zależy od innej kolumny niekluczowej.</p>
-        <ul>
-            <li>Usuń zależności przechodnie (A → B i B → C → przenieś C do oddzielnej tabeli).</li>
-        </ul>
+    <p><strong>Dobrze (spełniona 1NF):</strong></p>
+    <pre><code class="language-sql">
+student_id | subject
+-----------|---------
+1          | Matematyka
+1          | Fizyka
+2          | Biologia
+2          | Chemia
+    </code></pre>
+    <p>✅ Każdy przedmiot ma osobny wiersz.</p>
 
-        <h2>BCNF (Boyce–Codd Normal Form)</h2>
-        <p>Wzmocniona 3NF – każda determinanta (kolumna lub zestaw kolumn) musi być kluczem kandydującym.</p>
-        <ul>
-            <li>Usuwa rzadkie przypadki, gdy 3NF nadal dopuszcza pewne zależności.</li>
-        </ul>
+    <p><em>Analogią:</em> To tak, jakbyś w zeszycie w kratce mógł zapisać tylko jedną cyfrę, a nie całą liczbę z przecinkami.</p>
 
-        <h2>Przykład projektu</h2>
-        <p>Załóżmy, że chcemy przechowywać informacje o zamówieniach i produktach:</p>
-        <pre><code class="language-sql">
-// Niepoprawnie (duplikacja nazwy produktu w każdym wierszu order_items)
+    <h2>2NF (Druga Forma Normalna)</h2>
+    <p><strong>Zasada:</strong> Spełniasz 1NF i dbasz o to, by wszystkie dane zależały od <strong>całego klucza głównego</strong>.</p>
+
+    <p>Problem pojawia się, gdy klucz główny ma więcej niż jedną kolumnę (klucz złożony).</p>
+
+    <p><strong>Źle (brak 2NF):</strong></p>
+    <pre><code class="language-sql">
+student_id | subject_id | student_name
+-----------|------------|--------------
+1          | 10         | Jan Kowalski
+1          | 20         | Jan Kowalski
+    </code></pre>
+    <p>❌ Student_name zależy tylko od student_id, a nie od student_id i subject_id razem.</p>
+
+    <p><strong>Dobrze (spełniona 2NF):</strong></p>
+    <pre><code class="language-sql">
+-- Tabela studenci
+student_id | student_name
+-----------|--------------
+1          | Jan Kowalski
+
+-- Tabela przypisania przedmiotów
+student_id | subject_id
+-----------|------------
+1          | 10
+1          | 20
+    </code></pre>
+    <p>✅ Rozdzieliliśmy dane: osobno uczniów, osobno ich przedmioty.</p>
+
+    <p><em>Analogią:</em> To jak klucz do zamka: musisz znać cały kod, a nie tylko jego fragment.</p>
+
+    <h2>3NF (Trzecia Forma Normalna)</h2>
+    <p><strong>Zasada:</strong> Spełniasz 2NF i dbasz, żeby kolumny nie były od siebie zależne poza kluczem.</p>
+
+    <p>Chodzi o tzw. <strong>zależności przechodnie</strong>: A → B → C.</p>
+
+    <p><strong>Źle (brak 3NF):</strong></p>
+    <pre><code class="language-sql">
+emp_id | department_id | department_name
+-------|---------------|----------------
+1      | 10            | IT
+2      | 20            | HR
+    </code></pre>
+    <p>❌ department_name zależy od department_id, a nie od emp_id bezpośrednio.</p>
+
+    <p><strong>Dobrze (spełniona 3NF):</strong></p>
+    <pre><code class="language-sql">
+-- Tabela employees
+emp_id | department_id
+-------|---------------
+1      | 10
+
+-- Tabela departments
+department_id | department_name
+--------------|-----------------
+10            | IT
+20            | HR
+    </code></pre>
+    <p>✅ Dane są rozdzielone: najpierw przypisanie działu, osobno nazwy działów.</p>
+
+    <p><em>Analogią:</em> Jeśli ktoś jest przypisany do kasy nr 3, a kasa do działu \"Warzywa\", to informacje o dziale powinny być w tabeli kas, nie pracowników.</p>
+
+    <h2>BCNF (Forma Boyce’a-Codda)</h2>
+    <p><strong>Zasada:</strong> Spełniasz 3NF i dodatkowo każda kolumna określająca inne dane <strong>musi być kluczem</strong>.</p>
+
+    <p>Czasem 3NF przepuszcza ukryte błędy — BCNF je poprawia.</p>
+
+    <p><strong>Przykład:</strong></p>
+    <pre><code class="language-sql">
+course_name | instructor | room_number
+------------|------------|------------
+SQL         | Smith      | 101
+Python      | Smith      | 101
+    </code></pre>
+    <p>❌ Instructor wyznacza room_number, ale instructor nie jest kluczem głównym — błąd!</p>
+
+    <p><strong>Poprawione:</strong></p>
+    <pre><code class="language-sql">
+-- Tabela instruktorzy
+instructor | room_number
+-----------|-------------
+Smith      | 101
+
+-- Tabela kursy
+course_name | instructor
+------------|------------
+SQL         | Smith
+Python      | Smith
+    </code></pre>
+
+    <p><em>Analogią:</em> Jeśli nauczyciel zawsze siedzi w jednym pokoju, to pokój należy do nauczyciela, a nie do zajęć.</p>
+
+    <h2>Przykład: Zamówienia i Produkty</h2>
+
+    <h3>Przed normalizacją (duplikacja danych)</h3>
+    <pre><code class="language-sql">
 CREATE TABLE order_items (
-    order_id   INT,
+    order_id INT,
     product_id INT,
     product_name VARCHAR(100),
-    quantity   INT
+    quantity INT
 );
+    </code></pre>
+    <p>❌ Problem: \"Jabłko\" może być wpisane 100 razy w różnych wierszach. Trudno potem coś zmieniać.</p>
 
-// Po normalizacji:
-// Tabela products
+    <h3>Po normalizacji (dane uporządkowane)</h3>
+    <pre><code class="language-sql">
+-- Produkty
 CREATE TABLE products (
-    id   INT PRIMARY KEY,
+    id INT PRIMARY KEY,
     name VARCHAR(100)
 );
 
-// Tabela order_items
+-- Pozycje zamówień
 CREATE TABLE order_items (
-    order_id   INT,
+    order_id INT,
     product_id INT,
-    quantity   INT,
+    quantity INT,
     FOREIGN KEY (product_id) REFERENCES products(id)
 );
-        </code></pre>
+    </code></pre>
+    <p>✅ Produkt zapisany tylko raz w tabeli <code>products</code>. W zamówieniu wskazujemy tylko jego <code>product_id</code>.</p>
 
-        <h2>Zasady projektowania</h2>
-        <ul>
-            <li>Używaj kluczy głównych (PRIMARY KEY) do jednoznacznej identyfikacji wiersza.</li>
-            <li>Używaj kluczy obcych (FOREIGN KEY) do łączenia tabel zamiast powtarzać dane.</li>
-            <li>Stosuj formy normalne do momentu, gdy dalsza normalizacja nie przynosi realnych korzyści wydajnościowych.</li>
-            <li>Pamiętaj, że zbyt głęboka normalizacja może wydłużać zapytania <em>(joiny)</em> – znajdź złoty środek.</li>
-        </ul>
-    </div>
+    <h2>Podsumowanie</h2>
+    <ul>
+      <li><strong>1NF</strong> - Każda komórka ma tylko jedną wartość</li>
+      <li><strong>2NF</strong> - Każda kolumna zależy od całego klucza</li>
+      <li><strong>3NF</strong> - Brak zależności między zwykłymi kolumnami</li>
+      <li><strong>BCNF</strong> - Każda kolumna \"rządząca\" innymi musi być kluczem</li>
+    </ul>
+  </div>
 
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/prism.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/components/prism-sql.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/prism.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/components/prism-sql.min.js"></script>
 </body>
 </html>
