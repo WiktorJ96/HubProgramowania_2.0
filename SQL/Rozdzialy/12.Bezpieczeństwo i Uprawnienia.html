@@ -1,98 +1,153 @@
 <!DOCTYPE html>
 <html lang="pl">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Bezpieczeństwo i Uprawnienia</title>
-    <link rel="stylesheet" href="../styles.css">
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/themes/prism-tomorrow.min.css" rel="stylesheet" />
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Bezpieczeństwo i Uprawnienia w SQL - Proste Wytłumaczenie</title>
+  <link rel="stylesheet" href="../styles.css">
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/themes/prism-tomorrow.min.css" rel="stylesheet" />
 </head>
 <body>
-    <div class="container">
-        <h1>Bezpieczeństwo i Uprawnienia</h1>
+  <div class="container">
+    <h1>Bezpieczeństwo i Uprawnienia w Bazie Danych (Prosto Wyjaśnione)</h1>
 
-        <p>Dobra praktyka to nadawanie użytkownikom tylko tych uprawnień, których naprawdę potrzebują. Obejmuje to tworzenie kont, zarządzanie prawami dostępu, szyfrowanie danych i audyt (monitorowanie zdarzeń).</p>
+    <p>Bezpieczeństwo w bazie danych to dbanie o to, kto może robić jakie operacje i jak są chronione dane. Najważniejsze zasady to:</p>
+    <ul>
+      <li>Nadawaj tylko potrzebne uprawnienia.</li>
+      <li>Szyfruj dane.</li>
+      <li>Monitoruj działania użytkowników.</li>
+    </ul>
 
-        <h2>CREATE USER</h2>
-        <pre><code class="language-sql">
-// Tworzenie nowego użytkownika w MySQL
+    <h2>Tworzenie użytkownika (CREATE USER)</h2>
+
+    <p>Tworzymy nowe konto użytkownika w bazie danych.</p>
+
+    <pre><code class="language-sql">
+-- MySQL
 CREATE USER 'jan'@'localhost'
-    IDENTIFIED BY 'SilneHaslo123!';
+  IDENTIFIED BY 'SilneHaslo123!';
 
-// W PostgreSQL
+-- PostgreSQL
 CREATE USER jan WITH
-    LOGIN
-    PASSWORD 'SilneHaslo123!';
-        </code></pre>
+  LOGIN
+  PASSWORD 'SilneHaslo123!';
+    </code></pre>
 
-        <h2>GRANT</h2>
-        <p>Nadaje uprawnienia (privileges) do baz, tabel lub operacji.</p>
-        <pre><code class="language-sql">
-// SELECT i INSERT na jednej tabeli
+    <p><strong>Jak to działa?</strong></p>
+    <ul>
+      <li><strong>CREATE USER</strong> – tworzy konto w bazie danych.</li>
+      <li><strong>LOGIN</strong> – pozwala użytkownikowi się logować (PostgreSQL).</li>
+      <li><strong>PASSWORD</strong> – ustawia hasło użytkownika.</li>
+    </ul>
+
+    <h2>Nadawanie uprawnień (GRANT)</h2>
+
+    <p>GRANT pozwala przydzielać użytkownikowi dostęp do baz, tabel albo operacji.</p>
+
+    <pre><code class="language-sql">
+-- Przyznanie prawa odczytu i zapisu do jednej tabeli
 GRANT SELECT, INSERT
 ON shop.orders
 TO 'jan'@'localhost';
 
-// Wszystkie uprawnienia na bazie
+-- Przyznanie wszystkich praw do całej bazy danych
 GRANT ALL PRIVILEGES
 ON DATABASE shop
 TO jan;
-        </code></pre>
+    </code></pre>
 
-        <h2>REVOKE</h2>
-        <p>Odbiera wcześniej przyznane prawa.</p>
-        <pre><code class="language-sql">
-// Usunięcie prawa INSERT
+    <p><strong>Jak to działa?</strong></p>
+    <ul>
+      <li><strong>GRANT</strong> – dajemy uprawnienia.</li>
+      <li><strong>SELECT</strong> – prawo do odczytu danych.</li>
+      <li><strong>INSERT</strong> – prawo do dodawania nowych danych.</li>
+      <li><strong>ALL PRIVILEGES</strong> – wszystkie możliwe uprawnienia.</li>
+    </ul>
+
+    <h2>Odbieranie uprawnień (REVOKE)</h2>
+
+    <p>REVOKE służy do zabierania wcześniej przyznanych uprawnień.</p>
+
+    <pre><code class="language-sql">
+-- Odebranie prawa do dodawania nowych danych
 REVOKE INSERT
 ON shop.orders
 FROM 'jan'@'localhost';
 
-// Odbiór wszystkich uprawnień
+-- Odebranie wszystkich uprawnień do bazy
 REVOKE ALL PRIVILEGES
 ON DATABASE shop
 FROM jan;
-        </code></pre>
+    </code></pre>
 
-        <h2>Kontrola dostępu (Access Control)</h2>
-        <ul>
-            <li>Zasada najmniejszych uprawnień – każdy użytkownik ma tylko niezbędne role.</li>
-            <li>Grupy i role – grupuj uprawnienia w role (ROLE w PostgreSQL, GRANT … TO ROLE w MySQL 8+).</li>
-            <li>Separacja obowiązków – różne konta do odczytu, zapisu i administracji.</li>
-        </ul>
+    <p><strong>Jak to działa?</strong></p>
+    <ul>
+      <li><strong>REVOKE</strong> – odbieramy uprawnienia.</li>
+      <li>Możemy zabrać jedno konkretne uprawnienie lub wszystkie naraz.</li>
+    </ul>
 
-        <h2>Szyfrowanie danych</h2>
-        <p>Szyfrowanie chroni dane podczas przechowywania (at rest) i przesyłania (in transit).</p>
-        <ul>
-            <li><strong>Encryption at rest:</strong> Transparent Data Encryption (TDE) w SQL Server, MySQL Enterprise Encryption.</li>
-            <li><strong>Encryption in transit:</strong> SSL/TLS – wymuszaj połączenia z &lt;code&gt;--ssl-mode=REQUIRED&lt;/code&gt;.</li>
-        </ul>
-        <pre><code class="language-sql">
-// Włączenie szyfrowania na tabeli w MySQL 8+
+    <h2>Kontrola dostępu (Access Control)</h2>
+
+    <p>Chodzi o to, aby każdy użytkownik miał dostęp tylko do tego, czego naprawdę potrzebuje. Jak?</p>
+
+    <ul>
+      <li><strong>Zasada najmniejszych uprawnień</strong> – przyznaj tylko minimalne potrzebne prawa.</li>
+      <li><strong>Grupy i role</strong> – łatwiej zarządzać wieloma użytkownikami poprzez wspólne role (np. grupa „czytający”).</li>
+      <li><strong>Separacja obowiązków</strong> – osobne konta do odczytu, zapisu i administracji.</li>
+    </ul>
+
+    <h2>Szyfrowanie danych</h2>
+
+    <p>Szyfrowanie chroni dane przed nieautoryzowanym dostępem. Są dwa główne rodzaje:</p>
+
+    <ul>
+      <li><strong>Encryption at rest</strong> – szyfrowanie danych zapisanych na dysku (np. Transparent Data Encryption w SQL Server, MySQL Enterprise).</li>
+      <li><strong>Encryption in transit</strong> – szyfrowanie danych przesyłanych przez sieć (np. SSL/TLS).</li>
+    </ul>
+
+    <pre><code class="language-sql">
+-- Przykład: szyfrowanie tabeli w MySQL 8+
 CREATE TABLE confidential (
     id INT PRIMARY KEY,
     secret_text TEXT
 ) ENGINE=InnoDB
   ENCRYPTION='Y';
-        </code></pre>
+    </code></pre>
 
-        <h2>Audyt (Audit)</h2>
-        <p>Śledzenie działań w bazie pozwala wykrywać nadużycia i błędy.</p>
-        <ul>
-            <li>W MySQL: plugin <code>audit_log</code>, potem <code>INSTALL PLUGIN audit_log SONAME 'audit_log.so';</li>
-            <li>W PostgreSQL: rozszerzenie <code>pgaudit</code>, monitorowanie <code>log_statement</code> i <code>log_connections</code>.</li>
-            <li>Zbieraj logi działań administracyjnych i zapytań DML (INSERT/UPDATE/DELETE).</li>
-        </ul>
+    <p><strong>Jak to działa?</strong></p>
+    <ul>
+      <li><strong>ENGINE=InnoDB</strong> – silnik bazy danych.</li>
+      <li><strong>ENCRYPTION='Y'</strong> – tabela będzie szyfrowana na dysku.</li>
+    </ul>
 
-        <h2>Wskazówki</h2>
-        <ul>
-            <li>Stosuj silne, unikalne hasła i wymuszaj ich rotację co pewien czas.</li>
-            <li>Regularnie przeglądaj listę użytkowników i uprawnienia (REMOVE nieaktywnych kont).</li>
-            <li>Wykorzystuj sieci VPN lub tunelowanie SSH dla dodatkowej ochrony ruchu do serwera bazy.</li>
-            <li>Planuj i testuj procedury przywracania uprawnień po awarii lub ataku.</li>
-        </ul>
-    </div>
+    <h2>Audyt działań w bazie danych (Audit)</h2>
 
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/prism.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/components/prism-sql.min.js"></script>
+    <p>Audyt polega na śledzeniu, kto co robi w bazie. Dzięki temu można szybko wykryć błędy lub próby włamania.</p>
+
+    <ul>
+      <li><strong>W MySQL:</strong> użyj pluginu <code>audit_log</code> – np. <code>INSTALL PLUGIN audit_log SONAME 'audit_log.so';</code>.</li>
+      <li><strong>W PostgreSQL:</strong> użyj rozszerzenia <code>pgaudit</code> do szczegółowego monitorowania działań.</li>
+      <li>Opcjonalnie: możesz też monitorować ogólne logi przez <code>log_statement</code> i <code>log_connections</code> (dla podstawowych informacji).</li>
+    </ul>
+
+    <p><strong>Co zbierać?</strong></p>
+    <ul>
+      <li>Logi działań administracyjnych (kto zmienił hasło, kto tworzył nowe konta).</li>
+      <li>Logi operacji DML (INSERT, UPDATE, DELETE – czyli zmiany danych).</li>
+    </ul>
+
+    <h2>Wskazówki bezpieczeństwa</h2>
+
+    <ul>
+      <li>Używaj <strong>silnych haseł</strong> i wymuszaj ich regularną zmianę.</li>
+      <li><strong>Regularnie sprawdzaj</strong> listę użytkowników i usuwaj nieaktywne konta.</li>
+      <li>Stosuj <strong>VPN lub SSH</strong> do bezpiecznego łączenia się z serwerem bazy.</li>
+      <li><strong>Planuj procedury odzyskiwania</strong> – w przypadku awarii musisz wiedzieć, jak szybko przywrócić uprawnienia i dostęp.</li>
+    </ul>
+
+  </div>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/prism.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/components/prism-sql.min.js"></script>
 </body>
 </html>
