@@ -11,113 +11,306 @@
     <div class="container">
         <h1>Klauzule Zaawansowane</h1>
 
-        <p>W tej sekcji omówimy zaawansowane techniki tworzenia zapytań SQL, które pozwalają na lepszą organizację i analizę danych.</p>
+        <p>
+          W tej sekcji omówimy techniki, które czynią zapytania **czytelniejszymi** (CTE),
+          pozwalają pracować z **hierarchiami** (CTE rekurencyjne) oraz liczyć rzeczy
+          „**po sąsiedzku**” bez sklejania wierszy (funkcje okienkowe).
+        </p>
+
+        <div class="note">
+          <strong>Analogią</strong> możesz myśleć tak: <em>CTE</em> to kartka z obliczeniami wstępnymi
+          przypięta spinaczem do głównego zadania; <em>funkcje okienkowe</em> to linijka przesuwana po tabeli
+          („okno”), w obrębie której liczysz sumy, średnie, numery wierszy itd.
+        </div>
+
+        <!-- =================== DANE WEJŚCIOWE DO PRZYKŁADÓW =================== -->
+        <details open>
+          <summary class="table-title">Dane wejściowe: <code>orders</code></summary>
+          <table class="db-table">
+            <thead>
+              <tr><th>id</th><th>customer_id</th><th>order_date</th><th>amount</th></tr>
+            </thead>
+            <tbody>
+              <tr><td>201</td><td>1</td><td>2024-12-30</td><td>100</td></tr>
+              <tr><td>202</td><td>1</td><td>2025-01-02</td><td>250</td></tr>
+              <tr><td>203</td><td>2</td><td>2025-01-03</td><td>80</td></tr>
+              <tr><td>204</td><td>3</td><td>2025-01-10</td><td>300</td></tr>
+              <tr><td>205</td><td>1</td><td>2025-01-15</td><td>450</td></tr>
+              <tr><td>206</td><td>1</td><td>2025-02-01</td><td>1200</td></tr>
+            </tbody>
+          </table>
+        </details>
+
+        <details open>
+          <summary class="table-title">Dane wejściowe: <code>employees</code> (do CTE rekurencyjnego)</summary>
+          <table class="db-table">
+            <thead>
+              <tr><th>id</th><th>name</th><th>manager_id</th></tr>
+            </thead>
+            <tbody>
+              <tr><td>10</td><td>CEO</td><td class="null">NULL</td></tr>
+              <tr><td>11</td><td>Anna</td><td>10</td></tr>
+              <tr><td>12</td><td>Bartek</td><td>10</td></tr>
+              <tr><td>13</td><td>Celina</td><td>11</td></tr>
+              <tr><td>14</td><td>Darek</td><td>11</td></tr>
+              <tr><td>15</td><td>Ewa</td><td>12</td></tr>
+            </tbody>
+          </table>
+        </details>
+
+        <details open>
+          <summary class="table-title">Dane wejściowe: <code>sales_data</code> oraz <code>sales</code></summary>
+          <div style="display:grid;gap:.5rem">
+            <table class="db-table">
+              <caption class="mini" style="caption-side:top;text-align:left">sales_data</caption>
+              <thead><tr><th>department</th><th>sale_date</th><th>sales</th></tr></thead>
+              <tbody>
+                <tr><td>IT</td><td>2025-01-01</td><td>100</td></tr>
+                <tr><td>IT</td><td>2025-01-05</td><td>200</td></tr>
+                <tr><td>IT</td><td>2025-01-07</td><td>150</td></tr>
+                <tr><td>HR</td><td>2025-01-02</td><td>50</td></tr>
+                <tr><td>HR</td><td>2025-01-06</td><td>70</td></tr>
+              </tbody>
+            </table>
+
+            <table class="db-table">
+              <caption class="mini" style="caption-side:top;text-align:left">sales</caption>
+              <thead><tr><th>region</th><th>seller</th><th>revenue</th></tr></thead>
+              <tbody>
+                <tr><td>North</td><td>Ada</td><td>900</td></tr>
+                <tr><td>North</td><td>Bartek</td><td>900</td></tr>
+                <tr><td>North</td><td>Celina</td><td>600</td></tr>
+                <tr><td>South</td><td>Darek</td><td>1200</td></tr>
+                <tr><td>South</td><td>Ewa</td><td>800</td></tr>
+              </tbody>
+            </table>
+          </div>
+        </details>
+        <!-- ==================================================================== -->
 
         <h2>WITH (CTE – Common Table Expression)</h2>
-        <p>CTE (wyrażenie wspólne dla zapytania) to nazwana, tymczasowa tabela tworzona na początku zapytania. Ułatwia czytelność i wielokrotne wykorzystanie wyniku.</p>
-        <pre><code class="language-sql">
-// Definicja CTE i wykorzystanie jej w głównym zapytaniu
-WITH recent_orders AS (
-    SELECT id, customer_id, order_date
-    FROM orders
-    WHERE order_date >= '2025-01-01'
+        <p>
+          CTE to „tymczasowa nazwana tabela” z wynikiem pośrednim. **Czytelność** i możliwość
+          **wielokrotnego użycia** są tu kluczowe.
+        </p>
+        <pre><code class="language-sql">WITH recent_orders AS (
+  SELECT id, customer_id, order_date
+  -- wybierz podstawowe kolumny
+  FROM orders
+  -- z tabeli orders
+  WHERE order_date &gt;= '2025-01-01'
+  -- filtr: tylko zamówienia od 2025-01-01
 )
 SELECT customer_id, COUNT(*) AS count_recent
+-- policz ile „świeżych” zamówień ma każdy klient
 FROM recent_orders
+-- korzystamy z nazwanego wyniku CTE
 GROUP BY customer_id;
-        </code></pre>
+-- grupowanie po kliencie → jeden wiersz na klienta</code></pre>
+
+        <details open>
+          <summary class="table-title">Wynik (CTE: zamówienia od 2025-01-01)</summary>
+          <table class="db-table">
+            <thead><tr><th>customer_id</th><th>count_recent</th></tr></thead>
+            <tbody>
+              <tr><td>1</td><td>3</td></tr>
+              <tr><td>2</td><td>1</td></tr>
+              <tr><td>3</td><td>1</td></tr>
+            </tbody>
+          </table>
+          <p class="mini">Zgodnie z danymi: id=202,205,206 (customer 1), 203 (customer 2), 204 (customer 3).</p>
+        </details>
 
         <h2>CTE rekurencyjne (Recursive CTE)</h2>
-        <p>Rekurencyjne CTE pozwalają na iteracyjne przetwarzanie hierarchii, np. drzewo organizacyjne.</p>
-        <pre><code class="language-sql">
-// Przykład: hierarchia pracowników
-WITH RECURSIVE emp_tree AS (
-    -- wkład podstawowy: szefowie bez przełożonych
-    SELECT id, name, manager_id, 1 AS level
-    FROM employees
-    WHERE manager_id IS NULL
+        <p>
+          Umożliwia przejście po **hierarchii** (np. drzewo organizacyjne). Część **bazowa** startuje
+          od korzeni (np. osoby bez przełożonego), część **rekurencyjna** dołącza dzieci, dzieci dzieci, itd.
+        </p>
+        <pre><code class="language-sql">WITH RECURSIVE emp_tree AS (
+  -- część bazowa: osoby bez przełożonych
+  SELECT id, name, manager_id, 1 AS level
+  FROM employees
+  WHERE manager_id IS NULL
 
-    UNION ALL
+  UNION ALL
 
-    -- część rekurencyjna: podwładni
-    SELECT e.id, e.name, e.manager_id, et.level + 1
-    FROM employees e
-    JOIN emp_tree et
-      ON e.manager_id = et.id
+  -- część rekurencyjna: znajdź podwładnych tych z emp_tree
+  SELECT e.id, e.name, e.manager_id, et.level + 1
+  FROM employees e
+  JOIN emp_tree et
+    ON e.manager_id = et.id
 )
-SELECT * 
+SELECT *
 FROM emp_tree
-ORDER BY level, manager_id;
-        </code></pre>
+ORDER BY level, manager_id, id;
+-- porządek od góry do dołu</code></pre>
+
+        <details>
+          <summary class="table-title">Wynik (emp_tree: hierarchia z poziomami)</summary>
+          <table class="db-table">
+            <thead><tr><th>id</th><th>name</th><th>manager_id</th><th>level</th></tr></thead>
+            <tbody>
+              <tr><td>10</td><td>CEO</td><td class="null">NULL</td><td>1</td></tr>
+              <tr><td>11</td><td>Anna</td><td>10</td><td>2</td></tr>
+              <tr><td>12</td><td>Bartek</td><td>10</td><td>2</td></tr>
+              <tr><td>13</td><td>Celina</td><td>11</td><td>3</td></tr>
+              <tr><td>14</td><td>Darek</td><td>11</td><td>3</td></tr>
+              <tr><td>15</td><td>Ewa</td><td>12</td><td>3</td></tr>
+            </tbody>
+          </table>
+          <p class="mini">Poziom rośnie o 1 przy każdym „zejściu” w dół drzewa.</p>
+        </details>
 
         <h2>Funkcje okienkowe (Window Functions), OVER i PARTITION BY</h2>
-        <p>Funkcje okienkowe wykonują obliczenia w obrębie „okna” danych bez grupowania wszystkich wierszy w jeden rekord.</p>
+        <p>
+          Funkcja okienkowa liczy po **oknie** (zestawie wierszy), ale nie „spłaszcza” wyniku do jednego wiersza
+          jak <code>GROUP BY</code>. Każdy wiersz pozostaje widoczny — dostaje tylko dodatkową kolumnę z wynikiem.
+        </p>
 
         <h3>Klauzula OVER</h3>
-        <p>OVER definiuje okno – zakres wierszy, na których działa funkcja.</p>
-        <pre><code class="language-sql">
-// Kolejny numer dla każdego klienta według daty zamówienia
-SELECT 
-    customer_id,
-    order_date,
-    ROW_NUMBER() OVER (
-        PARTITION BY customer_id 
-        ORDER BY order_date
-    ) AS rn
-FROM orders;
-        </code></pre>
+        <p><code>OVER</code> definiuje okno — np. „wszystkie wiersze klienta, w kolejności dat”.</p>
+        <pre><code class="language-sql">SELECT
+  customer_id,
+  order_date,
+  ROW_NUMBER() OVER (
+    PARTITION BY customer_id
+    -- rozbij na „okna” po kliencie
+    ORDER BY order_date
+    -- numeruj wewnątrz okna po dacie
+  ) AS rn
+FROM orders;</code></pre>
+
+        <details open>
+          <summary class="table-title">Wynik (ROW_NUMBER po kliencie, rosnąco po dacie)</summary>
+          <table class="db-table">
+            <thead><tr><th>customer_id</th><th>order_date</th><th>rn</th></tr></thead>
+            <tbody>
+              <tr><td>1</td><td>2024-12-30</td><td>1</td></tr>
+              <tr><td>1</td><td>2025-01-02</td><td>2</td></tr>
+              <tr><td>1</td><td>2025-01-15</td><td>3</td></tr>
+              <tr><td>1</td><td>2025-02-01</td><td>4</td></tr>
+              <tr><td>2</td><td>2025-01-03</td><td>1</td></tr>
+              <tr><td>3</td><td>2025-01-10</td><td>1</td></tr>
+            </tbody>
+          </table>
+        </details>
 
         <h3>PARTITION BY</h3>
-        <p>PARTITION BY dzieli dane na grupy – okna – podobnie do GROUP BY, lecz nie redukuje liczby wierszy.</p>
-        <pre><code class="language-sql">
-// Średnia wartość zamówienia w oknie klienta
-SELECT
-    id,
-    customer_id,
-    amount,
-    AVG(amount) OVER (
-        PARTITION BY customer_id
-    ) AS avg_per_customer
-FROM orders;
-        </code></pre>
+        <p>
+          <code>PARTITION BY</code> dzieli wynik na „pudełka” (okna), a funkcja liczy **w każdym pudełku osobno**.
+        </p>
+        <pre><code class="language-sql">SELECT
+  id,
+  customer_id,
+  amount,
+  AVG(amount) OVER (
+    PARTITION BY customer_id
+    -- policz średnią kwotę zamówienia osobno dla każdego klienta
+  ) AS avg_per_customer
+FROM orders;</code></pre>
+
+        <details>
+          <summary class="table-title">Wynik (AVG per customer_id)</summary>
+          <table class="db-table">
+            <thead><tr><th>id</th><th>customer_id</th><th>amount</th><th>avg_per_customer</th></tr></thead>
+            <tbody>
+              <tr><td>201</td><td>1</td><td>100</td><td>500.00</td></tr>
+              <tr><td>202</td><td>1</td><td>250</td><td>500.00</td></tr>
+              <tr><td>205</td><td>1</td><td>450</td><td>500.00</td></tr>
+              <tr><td>206</td><td>1</td><td>1200</td><td>500.00</td></tr>
+              <tr><td>203</td><td>2</td><td>80</td><td>80.00</td></tr>
+              <tr><td>204</td><td>3</td><td>300</td><td>300.00</td></tr>
+            </tbody>
+          </table>
+          <p class="mini">Dla klienta 1 średnia = (100+250+450+1200)/4 = 500.</p>
+        </details>
 
         <h3>Przykłady innych funkcji okienkowych</h3>
-        <pre><code class="language-sql">
-// Suma narastająca sprzedaży dla każdego działu
+        <pre><code class="language-sql">-- Suma narastająca sprzedaży dla każdego działu
 SELECT
-    department,
-    sale_date,
-    sales,
-    SUM(sales) OVER (
-        PARTITION BY department 
-        ORDER BY sale_date
-        ROWS BETWEEN UNBOUNDED PRECEDING AND CURRENT ROW
-    ) AS cumulative_sales
-FROM sales_data;
+  department,
+  sale_date,
+  sales,
+  SUM(sales) OVER (
+    PARTITION BY department
+    -- oddzielne „bieżące sumy” per dział
+    ORDER BY sale_date
+    -- rosnąco po dacie
+    ROWS BETWEEN UNBOUNDED PRECEDING AND CURRENT ROW
+    -- okno od początku działu do bieżącego wiersza
+  ) AS cumulative_sales
+FROM sales_data;</code></pre>
 
-// Ranking top 3 sprzedawców w każdym regionie
+        <details>
+          <summary class="table-title">Wynik (SUM narastająco per department)</summary>
+          <table class="db-table">
+            <thead><tr><th>department</th><th>sale_date</th><th>sales</th><th>cumulative_sales</th></tr></thead>
+            <tbody>
+              <tr><td>HR</td><td>2025-01-02</td><td>50</td><td>50</td></tr>
+              <tr><td>HR</td><td>2025-01-06</td><td>70</td><td>120</td></tr>
+              <tr><td>IT</td><td>2025-01-01</td><td>100</td><td>100</td></tr>
+              <tr><td>IT</td><td>2025-01-05</td><td>200</td><td>300</td></tr>
+              <tr><td>IT</td><td>2025-01-07</td><td>150</td><td>450</td></tr>
+            </tbody>
+          </table>
+        </details>
+
+        <pre><code class="language-sql">-- Ranking top 3 sprzedawców w każdym regionie
 SELECT
-    region,
-    seller,
-    revenue,
-    RANK() OVER (
-        PARTITION BY region 
-        ORDER BY revenue DESC
-    ) AS rank_in_region
-FROM sales;
-        </code></pre>
+  region,
+  seller,
+  revenue,
+  RANK() OVER (
+    PARTITION BY region
+    -- ranking per region
+    ORDER BY revenue DESC
+    -- największy revenue = rank 1
+  ) AS rank_in_region
+FROM sales;</code></pre>
+
+        <details>
+          <summary class="table-title">Wynik (RANK per region, uwaga na remisy)</summary>
+          <table class="db-table">
+            <thead><tr><th>region</th><th>seller</th><th>revenue</th><th>rank_in_region</th></tr></thead>
+            <tbody>
+              <tr><td>North</td><td>Ada</td><td>900</td><td>1</td></tr>
+              <tr><td>North</td><td>Bartek</td><td>900</td><td>1</td></tr>
+              <tr><td>North</td><td>Celina</td><td>600</td><td>3</td></tr>
+              <tr><td>South</td><td>Darek</td><td>1200</td><td>1</td></tr>
+              <tr><td>South</td><td>Ewa</td><td>800</td><td>2</td></tr>
+            </tbody>
+          </table>
+          <p class="mini">
+            <code>RANK()</code> przy remisie „dziurkuje” (1,1,3). Jeśli chcesz 1,1,2 — użyj <code>DENSE_RANK()</code>.
+          </p>
+        </details>
 
         <h2>Wskazówki</h2>
         <ul>
-            <li>CTE poprawia czytelność długich zapytań i pozwala unikać zagnieżdżonych podzapytan.</li>
-            <li>Rekurencyjne CTE są przydatne do analizowania struktur hierarchicznych.</li>
-            <li>Funkcje okienkowe działają bez utraty szczegółów – każdy wiersz pozostaje widoczny.</li>
-            <li>Używaj PARTITION BY, by grupować wiersze w oknie, a ORDER BY wewnątrz OVER, by określić kolejność.</li>
-            <li>W dużych zbiorach rozważ indeksy na kolumnach używanych w PARTITION BY i ORDER BY.</li>
+            <li><strong>CTE</strong> poprawia czytelność i pozwala dzielić zapytanie na logiczne kroki.</li>
+            <li><strong>Rekurencyjne CTE</strong> świetne do hierarchii (organizacje, kategorie, grafy).</li>
+            <li><strong>Window functions</strong> nie zmniejszają liczby wierszy — dodają kolumnę z wynikiem „po oknie”.</li>
+            <li><code>PARTITION BY</code> = zrób wynik osobno dla każdej „grupy w oknie”, <code>ORDER BY</code> w <code>OVER</code> = kolejność w oknie.</li>
+            <li>Przy dużych tabelach indeksuj kolumny używane w <code>PARTITION BY</code>/<code>ORDER BY</code> (i filtry), by uniknąć wolnych skanów.</li>
         </ul>
     </div>
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/prism.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/components/prism-sql.min.js"></script>
+
+    <!-- Styl TYLKO do wizualizacji wyników; nie nadpisuje Twojego styles.css -->
+    <style>
+      .db-table{width:100%;border-collapse:collapse;margin:.5rem 0}
+      .db-table th,.db-table td{border:1px solid #1f2937;padding:.5rem .65rem;text-align:left}
+      .db-table th{background:#0e1729;color:#dbe2ea}
+      .null{color:#9ca3af;font-style:italic}
+      details{margin:.75rem 0;border:1px solid #1f2937;border-radius:.5rem;padding:.25rem .5rem;background:#0e1729}
+      details[open]{background:#111827}
+      summary{cursor:pointer;list-style:none}
+      summary::-webkit-details-marker{display:none}
+      .table-title{font-weight:600;margin:.25rem 0}
+      .mini{color:#a7b0be;font-size:.95rem;margin:.25rem 0 .5rem}
+      .note{border-left:4px solid #10b981;padding:.75rem 1rem;background:#0e1729;border-radius:.5rem;margin:1rem 0;color:#cfe3d8}
+    </style>
 </body>
 </html>

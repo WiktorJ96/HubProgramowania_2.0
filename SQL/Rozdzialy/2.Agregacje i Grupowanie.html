@@ -1,72 +1,288 @@
 <!DOCTYPE html>
 <html lang="pl">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Agregacje i Grupowanie</title>
-    <link rel="stylesheet" href="../styles.css">
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/themes/prism-tomorrow.min.css" rel="stylesheet" />
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Agregacje i Grupowanie</title>
+  <link rel="stylesheet" href="../styles.css">
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/themes/prism-tomorrow.min.css" rel="stylesheet" />
 </head>
 <body>
-    <div class="container">
-        <h1>Agregacje i Grupowanie</h1>
+  <div class="container">
+    <h1>Agregacje i Grupowanie</h1>
 
-        <p>Agregacje (aggregation) to obliczenia na wielu wierszach naraz, np. policzenie, zsumowanie czy znalezienie najmniejszej wartości. Grupowanie (grouping) pozwala podzielić dane na zbiory według wybranej kolumny.</p>
+    <p>
+      <strong>Agregacje</strong> (podsumowania) to obliczenia na wielu wierszach naraz, np. policzenie, zsumowanie, średnia.
+      <strong>Grupowanie</strong> dzieli dane na „pudełka” według wybranych kolumn, a następnie liczymy coś dla każdego pudełka.
+    </p>
 
-        <h2>Funkcje agregujące</h2>
-        <ul>
-            <li><code>COUNT()</code> – liczy wiersze (np. liczba zamówień),</li>
-            <li><code>SUM()</code> – sumuje wartości (np. łączna kwota),</li>
-            <li><code>AVG()</code> – oblicza średnią (śr. wartość),</li>
-            <li><code>MIN()</code> – zwraca najmniejszą wartość (min.),</li>
-            <li><code>MAX()</code> – zwraca największą wartość (maks.).</li>
-        </ul>
+    <div class="note">
+      <strong>Analogia:</strong> Wyobraź sobie paragony z całego miesiąca. Najpierw wrzucasz je do pudełek „według sklepu”
+      (<code>GROUP BY sklep</code>), a potem liczysz w każdym pudełku: ile paragonów (<code>COUNT</code>), jaka suma wydatków (<code>SUM</code>), jaka średnia kwota (<code>AVG</code>).
+    </div>
 
-        <h2>GROUP BY (grupuj według)</h2>
-        <p>Klauzula <code>GROUP BY</code> dzieli wiersze na grupy według jednej lub więcej kolumn.</p>
-        <pre><code class="language-sql">
-// Liczenie zamówień dla każdego klienta
+    <!-- =================== DANE WEJŚCIOWE (dla tabel wynikowych) =================== -->
+    <details open>
+      <summary class="table-title">Dane wejściowe: <code>orders</code></summary>
+      <table class="db-table">
+        <thead>
+          <tr><th>id</th><th>customer_id</th><th>driver_id</th><th>total_amount</th><th>created_at</th></tr>
+        </thead>
+        <tbody>
+          <tr><td>101</td><td>1</td><td>10</td><td>120.00</td><td>2025-01-05</td></tr>
+          <tr><td>102</td><td>2</td><td class="null">NULL</td><td>50.00</td><td>2025-01-05</td></tr>
+          <tr><td>103</td><td>1</td><td>11</td><td>70.00</td><td>2025-01-06</td></tr>
+          <tr><td>104</td><td>3</td><td>12</td><td>200.00</td><td>2025-01-10</td></tr>
+          <tr><td>105</td><td>1</td><td>10</td><td>40.00</td><td>2025-01-15</td></tr>
+          <tr><td>106</td><td>1</td><td>13</td><td>60.00</td><td>2025-01-20</td></tr>
+          <tr><td>107</td><td>1</td><td>11</td><td>80.00</td><td>2024-12-28</td></tr>
+          <tr><td>108</td><td>1</td><td>12</td><td>90.00</td><td>2025-02-01</td></tr>
+        </tbody>
+      </table>
+    </details>
+
+    <details open>
+      <summary class="table-title">Dane wejściowe: <code>employees</code></summary>
+      <table class="db-table">
+        <thead>
+          <tr><th>id</th><th>department</th><th>city</th><th>sales</th><th>salary</th></tr>
+        </thead>
+        <tbody>
+          <tr><td>1</td><td>HR</td><td>Warszawa</td><td>1000</td><td>5000</td></tr>
+          <tr><td>2</td><td>HR</td><td>Warszawa</td><td>1500</td><td>5200</td></tr>
+          <tr><td>3</td><td>IT</td><td>Kraków</td><td>2000</td><td>7000</td></tr>
+          <tr><td>4</td><td>IT</td><td>Warszawa</td><td>1800</td><td>6800</td></tr>
+          <tr><td>5</td><td>Sales</td><td>Gdańsk</td><td>2500</td><td>4500</td></tr>
+          <tr><td>6</td><td>Sales</td><td>Gdańsk</td><td>3000</td><td>4800</td></tr>
+        </tbody>
+      </table>
+    </details>
+
+    <details open>
+      <summary class="table-title">Dane wejściowe: <code>products</code></summary>
+      <table class="db-table">
+        <thead>
+          <tr><th>id</th><th>category</th><th>price</th><th>sales</th></tr>
+        </thead>
+        <tbody>
+          <tr><td>1</td><td>Electronics</td><td>1200</td><td>3000</td></tr>
+          <tr><td>2</td><td>Electronics</td><td>800</td><td>2000</td></tr>
+          <tr><td>3</td><td>Books</td><td>40</td><td>500</td></tr>
+          <tr><td>4</td><td>Books</td><td>60</td><td>800</td></tr>
+          <tr><td>5</td><td>Home</td><td>150</td><td>1200</td></tr>
+          <tr><td>6</td><td>Home</td><td>100</td><td>700</td></tr>
+        </tbody>
+      </table>
+    </details>
+
+    <h2>1) Funkcje agregujące</h2>
+    <ul>
+      <li><code>COUNT(*)</code> – liczy wiersze (wszystkie),</li>
+      <li><code>COUNT(kolumna)</code> – liczy tylko wiersze z <em>nie-NULL</em> w tej kolumnie,</li>
+      <li><code>SUM(kolumna)</code> – suma wartości (NULL-e są pomijane),</li>
+      <li><code>AVG(kolumna)</code> – średnia (NULL-e pomijane),</li>
+      <li><code>MIN(kolumna)</code>/<code>MAX(kolumna)</code> – najmniejsza/największa (NULL-e pomijane).</li>
+    </ul>
+
+    <h2>2) GROUP BY – podstawy</h2>
+    <pre><code class="language-sql">
+-- Liczba zamówień na klienta
 SELECT customer_id, COUNT(*) AS order_count
 FROM orders
 GROUP BY customer_id;
 
-// Suma sprzedaży w każdym dziale
+-- Suma sprzedaży na dział
 SELECT department, SUM(sales) AS total_sales
 FROM employees
 GROUP BY department;
 
-// Min. i maks. cena produktów wg kategorii
+-- Min. i maks. cena na kategorię
 SELECT category, MIN(price) AS min_price, MAX(price) AS max_price
 FROM products
 GROUP BY category;
-        </code></pre>
+</code></pre>
 
-        <h2>HAVING (filtr grup)</h2>
-        <p>Klauzula <code>HAVING</code> filtruje już pogrupowane wyniki, podobnie jak <code>WHERE</code> filtruje pojedyncze wiersze.</p>
-        <pre><code class="language-sql">
-// Klienci z więcej niż 5 zamówieniami
+    <!-- WYNIK: GROUP BY podstawy (3 osobne wyniki) -->
+    <details open>
+      <summary class="table-title">Wynik 1: liczba zamówień na klienta</summary>
+      <table class="db-table">
+        <thead><tr><th>customer_id</th><th>order_count</th></tr></thead>
+        <tbody>
+          <tr><td>1</td><td>6</td></tr>
+          <tr><td>2</td><td>1</td></tr>
+          <tr><td>3</td><td>1</td></tr>
+        </tbody>
+      </table>
+    </details>
+
+    <details>
+      <summary class="table-title">Wynik 2: suma sprzedaży na dział</summary>
+      <table class="db-table">
+        <thead><tr><th>department</th><th>total_sales</th></tr></thead>
+        <tbody>
+          <tr><td>HR</td><td>2500</td></tr>
+          <tr><td>IT</td><td>3800</td></tr>
+          <tr><td>Sales</td><td>5500</td></tr>
+        </tbody>
+      </table>
+    </details>
+
+    <details>
+      <summary class="table-title">Wynik 3: min/max cena na kategorię</summary>
+      <table class="db-table">
+        <thead><tr><th>category</th><th>min_price</th><th>max_price</th></tr></thead>
+        <tbody>
+          <tr><td>Electronics</td><td>800</td><td>1200</td></tr>
+          <tr><td>Books</td><td>40</td><td>60</td></tr>
+          <tr><td>Home</td><td>100</td><td>150</td></tr>
+        </tbody>
+      </table>
+    </details>
+
+    <h3>Grupowanie po kilku kolumnach</h3>
+    <pre><code class="language-sql">
+-- Liczba pracowników według działu i miasta
+SELECT department, city, COUNT(*) AS employees_count
+FROM employees
+GROUP BY department, city;
+</code></pre>
+    <details>
+      <summary class="table-title">Wynik: pracownicy wg działu i miasta</summary>
+      <table class="db-table">
+        <thead><tr><th>department</th><th>city</th><th>employees_count</th></tr></thead>
+        <tbody>
+          <tr><td>HR</td><td>Warszawa</td><td>2</td></tr>
+          <tr><td>IT</td><td>Kraków</td><td>1</td></tr>
+          <tr><td>IT</td><td>Warszawa</td><td>1</td></tr>
+          <tr><td>Sales</td><td>Gdańsk</td><td>2</td></tr>
+        </tbody>
+      </table>
+    </details>
+
+    <h2>3) WHERE vs HAVING</h2>
+    <div class="note">
+      <strong>Prosto:</strong> <code>WHERE</code> filtruje <em>przed</em> grupowaniem (pojedyncze wiersze),
+      <code>HAVING</code> filtruje <em>po</em> grupowaniu (całe grupy).
+    </div>
+    <pre><code class="language-sql">
+-- Najpierw wybierz tylko zamówienia z 2025 (mniej pracy), potem grupuj:
+SELECT customer_id, COUNT(*) AS order_count
+FROM orders
+WHERE created_at &gt;= '2025-01-01' AND created_at &lt; '2026-01-01'
+GROUP BY customer_id;
+
+-- Pokaż tylko klientów z &ge; 5 zamówieniami (filtrowanie grup):
 SELECT customer_id, COUNT(*) AS order_count
 FROM orders
 GROUP BY customer_id
-HAVING COUNT(*) > 5;
+HAVING COUNT(*) &gt;= 5;
+</code></pre>
 
-// Działy ze średnią pensją powyżej 5000
-SELECT department, AVG(salary) AS avg_salary
-FROM employees
-GROUP BY department
-HAVING AVG(salary) > 5000;
-        </code></pre>
+    <!-- WYNIK: WHERE vs HAVING (2 osobne wyniki) -->
+    <details open>
+      <summary class="table-title">Wynik: tylko zamówienia z 2025 → liczba na klienta</summary>
+      <table class="db-table">
+        <thead><tr><th>customer_id</th><th>order_count</th></tr></thead>
+        <tbody>
+          <tr><td>1</td><td>5</td></tr>
+          <tr><td>2</td><td>1</td></tr>
+          <tr><td>3</td><td>1</td></tr>
+        </tbody>
+      </table>
+    </details>
 
-        <h2>Wskazówki</h2>
-        <ul>
-            <li>Używaj <code>GROUP BY</code> tylko gdy potrzebujesz podsumowań per grupa.</li>
-            <li><code>HAVING</code> zawsze występuje po <code>GROUP BY</code> i działa na wynikach grupowania.</li>
-            <li>Twórz indeksy na kolumnach, po których grupujesz lub filtrujesz, by przyspieszyć zapytania.</li>
-            <li>Nie mieszaj kolumn agregowanych i nieagregowanych bez <code>GROUP BY</code> – każdy element SELECT musi być albo w funkcji agregującej, albo wymieniony w <code>GROUP BY</code>.</li>
-        </ul>
-    </div>
+    <details>
+      <summary class="table-title">Wynik: klienci z liczbą zamówień ≥ 5</summary>
+      <table class="db-table">
+        <thead><tr><th>customer_id</th><th>order_count</th></tr></thead>
+        <tbody>
+          <tr><td>1</td><td>6</td></tr>
+        </tbody>
+      </table>
+    </details>
 
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/prism.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/components/prism-sql.min.js"></script>
+    <h2>4) Sortowanie wyników zagregowanych</h2>
+    <pre><code class="language-sql">
+-- Top 10 kategorii po sumie sprzedaży
+SELECT category, SUM(sales) AS total_sales
+FROM products
+GROUP BY category
+ORDER BY total_sales DESC   -- można użyć aliasu z SELECT
+LIMIT 10;
+</code></pre>
+    <details>
+      <summary class="table-title">Wynik: kategorie posortowane po SUM(sales)</summary>
+      <table class="db-table">
+        <thead><tr><th>category</th><th>total_sales</th></tr></thead>
+        <tbody>
+          <tr><td>Electronics</td><td>5000</td></tr>
+          <tr><td>Home</td><td>1900</td></tr>
+          <tr><td>Books</td><td>1300</td></tr>
+        </tbody>
+      </table>
+    </details>
+
+    <h2>5) DISTINCT z agregacją</h2>
+    <pre><code class="language-sql">
+-- Ilu unikalnych klientów kupiło w danym dniu?
+SELECT order_date, COUNT(DISTINCT customer_id) AS unique_customers
+FROM orders
+GROUP BY order_date
+ORDER BY order_date;
+</code></pre>
+    <details>
+      <summary class="table-title">Wynik: unikalni klienci na dzień</summary>
+      <table class="db-table">
+        <thead><tr><th>order_date</th><th>unique_customers</th></tr></thead>
+        <tbody>
+          <tr><td>2024-12-28</td><td>1</td></tr>
+          <tr><td>2025-01-05</td><td>2</td></tr>
+          <tr><td>2025-01-06</td><td>1</td></tr>
+          <tr><td>2025-01-10</td><td>1</td></tr>
+          <tr><td>2025-01-15</td><td>1</td></tr>
+          <tr><td>2025-01-20</td><td>1</td></tr>
+          <tr><td>2025-02-01</td><td>1</td></tr>
+        </tbody>
+      </table>
+      <p class="mini">Założyliśmy, że <code>order_date</code> to data (bez czasu) z kolumny <code>created_at</code>.</p>
+    </details>
+
+    <h2>6) Częste pułapki</h2>
+    <ul>
+      <li><strong>Kolumny w SELECT:</strong> każda musi być w funkcji agregującej <em>albo</em> wymieniona w <code>GROUP BY</code>.</li>
+      <li><strong>NULL a COUNT:</strong> <code>COUNT(kolumna)</code> nie liczy wierszy, gdzie kolumna jest <code>NULL</code>;
+        jeśli chcesz policzyć wszystkie – użyj <code>COUNT(*)</code>.</li>
+      <li><strong>Filtruj wcześnie:</strong> ciężkie warunki przenieś do <code>WHERE</code> (zmniejszysz dane przed grupowaniem).</li>
+    </ul>
+
+    <h2>7) Mini-ćwiczenia</h2>
+    <ol>
+      <li>Policz liczbę zamówień na klienta i pokaż tylko tych z <code>&ge; 3</code> zamówieniami.</li>
+      <li>Pokaż średnią cenę produktu w każdej kategorii, posortuj malejąco po średniej.</li>
+      <li>Policz ilu <em>unikalnych</em> klientów kupiło w każdym miesiącu (podpowiedź: zgrupuj po dacie przekształconej do „miesiąca”).</li>
+      <li>Policz minimalną i maksymalną pensję w każdym dziale, ale pokaż tylko działy z co najmniej 5 pracownikami.</li>
+    </ol>
+
+    <p class="small">
+      Uwaga: funkcje daty (np. „wyciągnij miesiąc z daty”) różnią się między silnikami (PostgreSQL, MySQL, SQL Server, SQLite).
+      Przykładowo: Postgres <code>DATE_TRUNC('month', created_at)</code>, MySQL <code>DATE_FORMAT(created_at, '%Y-%m-01')</code>.
+    </p>
+  </div>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/prism.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/components/prism-sql.min.js"></script>
+
+  <!-- Styl tylko dla wizualizacji tabel (nie rusza Twojego styles.css) -->
+  <style>
+    .db-table{width:100%;border-collapse:collapse;margin:.5rem 0}
+    .db-table th,.db-table td{border:1px solid #1f2937;padding:.5rem .65rem;text-align:left}
+    .db-table th{background:#0e1729;color:#dbe2ea}
+    .null{color:#9ca3af;font-style:italic}
+    details{margin:.75rem 0;border:1px solid #1f2937;border-radius:.5rem;padding:.25rem .5rem;background:#0e1729}
+    details[open]{background:#111827}
+    summary{cursor:pointer;list-style:none}
+    summary::-webkit-details-marker{display:none}
+    .table-title{font-weight:600;margin:.25rem 0}
+  </style>
 </body>
 </html>

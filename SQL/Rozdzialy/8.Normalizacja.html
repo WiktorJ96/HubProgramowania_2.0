@@ -13,170 +13,275 @@
 
     <p>Normalizacja to sposób na <strong>uporządkowanie danych</strong> w bazie tak, aby:</p>
     <ul>
-      <li>Nie powtarzać tych samych informacji wiele razy</li>
-      <li>Unikać błędów w danych (np. literówek, niezgodności)</li>
-      <li>Łatwiej aktualizować dane (np. zmienić nazwę produktu w jednym miejscu zamiast w 100 miejscach)</li>
+      <li>Nie powtarzać tych samych informacji wiele razy,</li>
+      <li>Unikać błędów w danych (literówki, niezgodności),</li>
+      <li>Łatwiej aktualizować dane (zmiana w jednym miejscu zamiast w 100 miejscach).</li>
     </ul>
 
+    <div class="note">
+      <strong>Analogia:</strong> Wyobraź sobie segregator. Każda kartka dotyczy tylko jednej rzeczy (1NF),
+      każda informacja zależy od całego „numeru kartki” (2NF), a opisy nie powtarzają się w wielu miejscach (3NF/BCNF).
+    </div>
+
     <h2>1NF (Pierwsza Forma Normalna)</h2>
-    <p><strong>Zasada:</strong> Każda komórka tabeli musi zawierać <strong>tylko jedną, niepodzielną wartość</strong>.</p>
-    <p>Nie wolno w jednej komórce zapisywać listy rzeczy!</p>
+    <p><strong>Zasada:</strong> Każda komórka tabeli ma <strong>jedną, niepodzielną wartość</strong>. Nie zapisujemy list w jednej komórce.</p>
 
     <p><strong>Źle (brak 1NF):</strong></p>
-    <pre><code class="language-sql">
-student_id | subjects
+    <pre><code class="language-sql">student_id | subjects
 -----------|----------------
 1          | Matematyka, Fizyka
-2          | Biologia, Chemia
-    </code></pre>
-    <p>❌ W jednej komórce są dwa przedmioty! Tak nie można.</p>
+2          | Biologia, Chemia</code></pre>
 
-    <p><strong>Dobrze (spełniona 1NF):</strong></p>
-    <pre><code class="language-sql">
-student_id | subject
------------|---------
-1          | Matematyka
-1          | Fizyka
-2          | Biologia
-2          | Chemia
-    </code></pre>
-    <p>✅ Każdy przedmiot ma osobny wiersz.</p>
-
-    <p><em>Analogią:</em> To tak, jakbyś w zeszycie w kratce mógł zapisać tylko jedną cyfrę, a nie całą liczbę z przecinkami.</p>
+    <details open>
+      <summary class="table-title">Wizualizacja: <em>brak 1NF</em> vs <em>spełniona 1NF</em></summary>
+      <div class="grid-two">
+        <table class="db-table">
+          <caption class="mini">❌ Brak 1NF</caption>
+          <thead><tr><th>student_id</th><th>subjects</th></tr></thead>
+          <tbody>
+            <tr><td>1</td><td>Matematyka, Fizyka</td></tr>
+            <tr><td>2</td><td>Biologia, Chemia</td></tr>
+          </tbody>
+        </table>
+        <table class="db-table">
+          <caption class="mini">✅ Spełniona 1NF</caption>
+          <thead><tr><th>student_id</th><th>subject</th></tr></thead>
+          <tbody>
+            <tr><td>1</td><td>Matematyka</td></tr>
+            <tr><td>1</td><td>Fizyka</td></tr>
+            <tr><td>2</td><td>Biologia</td></tr>
+            <tr><td>2</td><td>Chemia</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <p class="mini">Każdy przedmiot ma osobny wiersz → koniec „listy w komórce”.</p>
+    </details>
 
     <h2>2NF (Druga Forma Normalna)</h2>
-    <p><strong>Zasada:</strong> Spełniasz 1NF i dbasz o to, by wszystkie dane zależały od <strong>całego klucza głównego</strong>.</p>
-
-    <p>Problem pojawia się, gdy klucz główny ma więcej niż jedną kolumnę (klucz złożony).</p>
+    <p><strong>Zasada:</strong> Spełniasz 1NF i <strong>wszystkie kolumny</strong> zależą od <strong>całego klucza głównego</strong> (gdy klucz jest złożony).</p>
 
     <p><strong>Źle (brak 2NF):</strong></p>
-    <pre><code class="language-sql">
-student_id | subject_id | student_name
+    <pre><code class="language-sql">student_id | subject_id | student_name
 -----------|------------|--------------
 1          | 10         | Jan Kowalski
-1          | 20         | Jan Kowalski
-    </code></pre>
-    <p>❌ Student_name zależy tylko od student_id, a nie od student_id i subject_id razem.</p>
+1          | 20         | Jan Kowalski</code></pre>
 
-    <p><strong>Dobrze (spełniona 2NF):</strong></p>
-    <pre><code class="language-sql">
--- Tabela studenci
-student_id | student_name
------------|--------------
-1          | Jan Kowalski
-
--- Tabela przypisania przedmiotów
-student_id | subject_id
------------|------------
-1          | 10
-1          | 20
-    </code></pre>
-    <p>✅ Rozdzieliliśmy dane: osobno uczniów, osobno ich przedmioty.</p>
-
-    <p><em>Analogią:</em> To jak klucz do zamka: musisz znać cały kod, a nie tylko jego fragment.</p>
+    <details>
+      <summary class="table-title">Wizualizacja: rozbicie na tabele (2NF)</summary>
+      <div class="grid-two">
+        <table class="db-table">
+          <caption class="mini">❌ Jedna tabela z nadmiarem</caption>
+          <thead><tr><th>student_id</th><th>subject_id</th><th>student_name</th></tr></thead>
+          <tbody>
+            <tr><td>1</td><td>10</td><td>Jan Kowalski</td></tr>
+            <tr><td>1</td><td>20</td><td>Jan Kowalski</td></tr>
+          </tbody>
+        </table>
+        <div class="grid-two">
+          <table class="db-table">
+            <caption class="mini">✅ students</caption>
+            <thead><tr><th>student_id</th><th>student_name</th></tr></thead>
+            <tbody>
+              <tr><td>1</td><td>Jan Kowalski</td></tr>
+            </tbody>
+          </table>
+          <table class="db-table">
+            <caption class="mini">✅ student_subject</caption>
+            <thead><tr><th>student_id</th><th>subject_id</th></tr></thead>
+            <tbody>
+              <tr><td>1</td><td>10</td></tr>
+              <tr><td>1</td><td>20</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+      <p class="mini">Nazwisko zależy od <code>student_id</code>, a nie od pary <code>(student_id, subject_id)</code> → przenosimy do tabeli <code>students</code>.</p>
+    </details>
 
     <h2>3NF (Trzecia Forma Normalna)</h2>
-    <p><strong>Zasada:</strong> Spełniasz 2NF i dbasz, żeby kolumny nie były od siebie zależne poza kluczem.</p>
-
-    <p>Chodzi o tzw. <strong>zależności przechodnie</strong>: A → B → C.</p>
+    <p><strong>Zasada:</strong> Spełniasz 2NF i <strong>brak zależności przechodnich</strong> (A→B→C) między kolumnami niebędącymi kluczem.</p>
 
     <p><strong>Źle (brak 3NF):</strong></p>
-    <pre><code class="language-sql">
-emp_id | department_id | department_name
+    <pre><code class="language-sql">emp_id | department_id | department_name
 -------|---------------|----------------
 1      | 10            | IT
-2      | 20            | HR
-    </code></pre>
-    <p>❌ department_name zależy od department_id, a nie od emp_id bezpośrednio.</p>
+2      | 20            | HR</code></pre>
 
-    <p><strong>Dobrze (spełniona 3NF):</strong></p>
-    <pre><code class="language-sql">
--- Tabela employees
-emp_id | department_id
--------|---------------
-1      | 10
+    <details>
+      <summary class="table-title">Wizualizacja: rozdzielenie danych (3NF)</summary>
+      <div class="grid-two">
+        <table class="db-table">
+          <caption class="mini">❌ Jedna tabela z zależnością przechodnią</caption>
+          <thead><tr><th>emp_id</th><th>department_id</th><th>department_name</th></tr></thead>
+          <tbody>
+            <tr><td>1</td><td>10</td><td>IT</td></tr>
+            <tr><td>2</td><td>20</td><td>HR</td></tr>
+          </tbody>
+        </table>
+        <div class="grid-two">
+          <table class="db-table">
+            <caption class="mini">✅ employees</caption>
+            <thead><tr><th>emp_id</th><th>department_id</th></tr></thead>
+            <tbody>
+              <tr><td>1</td><td>10</td></tr>
+              <tr><td>2</td><td>20</td></tr>
+            </tbody>
+          </table>
+          <table class="db-table">
+            <caption class="mini">✅ departments</caption>
+            <thead><tr><th>department_id</th><th>department_name</th></tr></thead>
+            <tbody>
+              <tr><td>10</td><td>IT</td></tr>
+              <tr><td>20</td><td>HR</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+      <p class="mini"><code>department_name</code> zależy od <code>department_id</code>, nie od <code>emp_id</code> → przenosimy do osobnej tabeli.</p>
+    </details>
 
--- Tabela departments
-department_id | department_name
---------------|-----------------
-10            | IT
-20            | HR
-    </code></pre>
-    <p>✅ Dane są rozdzielone: najpierw przypisanie działu, osobno nazwy działów.</p>
+    <h2>BCNF (Forma Boyce’a–Codda)</h2>
+    <p><strong>Zasada:</strong> Spełniasz 3NF i dodatkowo <strong>każdy atrybut determinujący</strong> (wyznaczający inne kolumny) jest kluczem.</p>
 
-    <p><em>Analogią:</em> Jeśli ktoś jest przypisany do kasy nr 3, a kasa do działu \"Warzywa\", to informacje o dziale powinny być w tabeli kas, nie pracowników.</p>
-
-    <h2>BCNF (Forma Boyce’a-Codda)</h2>
-    <p><strong>Zasada:</strong> Spełniasz 3NF i dodatkowo każda kolumna określająca inne dane <strong>musi być kluczem</strong>.</p>
-
-    <p>Czasem 3NF przepuszcza ukryte błędy — BCNF je poprawia.</p>
-
-    <p><strong>Przykład:</strong></p>
-    <pre><code class="language-sql">
-course_name | instructor | room_number
+    <p><strong>Przykład problemu:</strong></p>
+    <pre><code class="language-sql">course_name | instructor | room_number
 ------------|------------|------------
 SQL         | Smith      | 101
-Python      | Smith      | 101
-    </code></pre>
-    <p>❌ Instructor wyznacza room_number, ale instructor nie jest kluczem głównym — błąd!</p>
+Python      | Smith      | 101</code></pre>
 
-    <p><strong>Poprawione:</strong></p>
-    <pre><code class="language-sql">
--- Tabela instruktorzy
-instructor | room_number
------------|-------------
-Smith      | 101
-
--- Tabela kursy
-course_name | instructor
-------------|------------
-SQL         | Smith
-Python      | Smith
-    </code></pre>
-
-    <p><em>Analogią:</em> Jeśli nauczyciel zawsze siedzi w jednym pokoju, to pokój należy do nauczyciela, a nie do zajęć.</p>
+    <details>
+      <summary class="table-title">Wizualizacja: rozbicie do BCNF</summary>
+      <div class="grid-two">
+        <table class="db-table">
+          <caption class="mini">❌ Jedna tabela (instruktor ⇒ pokój)</caption>
+          <thead><tr><th>course_name</th><th>instructor</th><th>room_number</th></tr></thead>
+          <tbody>
+            <tr><td>SQL</td><td>Smith</td><td>101</td></tr>
+            <tr><td>Python</td><td>Smith</td><td>101</td></tr>
+          </tbody>
+        </table>
+        <div class="grid-two">
+          <table class="db-table">
+            <caption class="mini">✅ instructors</caption>
+            <thead><tr><th>instructor</th><th>room_number</th></tr></thead>
+            <tbody>
+              <tr><td>Smith</td><td>101</td></tr>
+            </tbody>
+          </table>
+          <table class="db-table">
+            <caption class="mini">✅ courses</caption>
+            <thead><tr><th>course_name</th><th>instructor</th></tr></thead>
+            <tbody>
+              <tr><td>SQL</td><td>Smith</td></tr>
+              <tr><td>Python</td><td>Smith</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+      <p class="mini">Skoro <code>instructor → room_number</code>, to <code>instructor</code> musi być kluczem (albo robimy osobną tabelę z kluczem na instruktora).</p>
+    </details>
 
     <h2>Przykład: Zamówienia i Produkty</h2>
 
     <h3>Przed normalizacją (duplikacja danych)</h3>
-    <pre><code class="language-sql">
-CREATE TABLE order_items (
-    order_id INT,
-    product_id INT,
-    product_name VARCHAR(100),
-    quantity INT
-);
-    </code></pre>
-    <p>❌ Problem: \"Jabłko\" może być wpisane 100 razy w różnych wierszach. Trudno potem coś zmieniać.</p>
+    <pre><code class="language-sql">CREATE TABLE order_items (
+  order_id   INT,
+  product_id INT,
+  product_name VARCHAR(100),
+  quantity   INT
+);</code></pre>
+    <p>❌ Problem: „Jabłko” zapisane w wielu wierszach → trudna aktualizacja nazwy/atrybutów.</p>
 
-    <h3>Po normalizacji (dane uporządkowane)</h3>
-    <pre><code class="language-sql">
--- Produkty
-CREATE TABLE products (
-    id INT PRIMARY KEY,
-    name VARCHAR(100)
-);
+    <details>
+      <summary class="table-title">Wizualizacja: <em>przed</em> vs <em>po</em> normalizacji</summary>
+      <div class="grid-two">
+        <table class="db-table">
+          <caption class="mini">❌ order_items (przed)</caption>
+          <thead><tr><th>order_id</th><th>product_id</th><th>product_name</th><th>quantity</th></tr></thead>
+          <tbody>
+            <tr><td>5001</td><td>10</td><td>Jabłko</td><td>2</td></tr>
+            <tr><td>5001</td><td>11</td><td>Gruszka</td><td>1</td></tr>
+            <tr><td>5002</td><td>10</td><td>Jabłko</td><td>5</td></tr>
+          </tbody>
+        </table>
+        <div class="grid-two">
+          <table class="db-table">
+            <caption class="mini">✅ products</caption>
+            <thead><tr><th>id</th><th>name</th></tr></thead>
+            <tbody>
+              <tr><td>10</td><td>Jabłko</td></tr>
+              <tr><td>11</td><td>Gruszka</td></tr>
+            </tbody>
+          </table>
+          <table class="db-table">
+            <caption class="mini">✅ order_items</caption>
+            <thead><tr><th>order_id</th><th>product_id</th><th>quantity</th></tr></thead>
+            <tbody>
+              <tr><td>5001</td><td>10</td><td>2</td></tr>
+              <tr><td>5001</td><td>11</td><td>1</td></tr>
+              <tr><td>5002</td><td>10</td><td>5</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+      <p class="mini">Po normalizacji nazwa produktu żyje w jednym miejscu (<code>products</code>). W zamówieniu trzymamy tylko <code>product_id</code>.</p>
+    </details>
 
--- Pozycje zamówień
-CREATE TABLE order_items (
-    order_id INT,
-    product_id INT,
-    quantity INT,
-    FOREIGN KEY (product_id) REFERENCES products(id)
-);
-    </code></pre>
-    <p>✅ Produkt zapisany tylko raz w tabeli <code>products</code>. W zamówieniu wskazujemy tylko jego <code>product_id</code>.</p>
+    <details>
+      <summary class="table-title">Typowe anomalie <em>przed</em> normalizacją</summary>
+      <table class="db-table">
+        <thead><tr><th>Typ</th><th>Opis</th><th>Przykład</th></tr></thead>
+        <tbody>
+          <tr>
+            <td>Aktualizacji</td>
+            <td>Zmiana nazwy w jednym miejscu nie zmienia innych kopii.</td>
+            <td>„Jabłko” → „Jabłko BIO” trzeba poprawić w wielu wierszach.</td>
+          </tr>
+          <tr>
+            <td>Wstawienia</td>
+            <td>Nie wstawisz produktu bez powiązanego zamówienia (brak miejsca na sam produkt).</td>
+            <td>Chcesz dodać nowy produkt do katalogu – nie ma gdzie.</td>
+          </tr>
+          <tr>
+            <td>Usunięcia</td>
+            <td>Usuwając ostatnie zamówienie na produkt, „gubisz” też informację o samym produkcie.</td>
+            <td>Kasujesz order 5002 → tracisz wiedzę, że istniał produkt „Jabłko”.</td>
+          </tr>
+        </tbody>
+      </table>
+    </details>
 
     <h2>Podsumowanie</h2>
     <ul>
-      <li><strong>1NF</strong> - Każda komórka ma tylko jedną wartość</li>
-      <li><strong>2NF</strong> - Każda kolumna zależy od całego klucza</li>
-      <li><strong>3NF</strong> - Brak zależności między zwykłymi kolumnami</li>
-      <li><strong>BCNF</strong> - Każda kolumna \"rządząca\" innymi musi być kluczem</li>
+      <li><strong>1NF</strong> — jedna wartość w komórce (koniec list w polach),</li>
+      <li><strong>2NF</strong> — wszystkie kolumny zależą od całego klucza złożonego,</li>
+      <li><strong>3NF</strong> — brak zależności przechodnich między kolumnami nie-kluczowymi,</li>
+      <li><strong>BCNF</strong> — każdy determinujący atrybut jest kluczem (doprecyzowanie 3NF).</li>
     </ul>
+
+    <p class="small">Uwaga: W praktyce czasem świadomie odchodzimy od „idealnej” normalizacji (np. dla wydajności odczytu),
+      ale <em>domyślnie</em> warto startować od dobrze znormalizowanego modelu.</p>
   </div>
 
   <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/prism.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/components/prism-sql.min.js"></script>
+
+  <!-- Styl TYLKO do wizualizacji; nie rusza Twojego styles.css -->
+  <style>
+    .db-table{width:100%;border-collapse:collapse;margin:.5rem 0}
+    .db-table th,.db-table td{border:1px solid #1f2937;padding:.5rem .65rem;text-align:left;vertical-align:top}
+    .db-table th{background:#0e1729;color:#dbe2ea}
+    .null{color:#9ca3af;font-style:italic}
+    details{margin:.75rem 0;border:1px solid #1f2937;border-radius:.5rem;padding:.25rem .5rem;background:#0e1729}
+    details[open]{background:#111827}
+    summary{cursor:pointer;list-style:none}
+    summary::-webkit-details-marker{display:none}
+    .table-title{font-weight:600;margin:.25rem 0}
+    .mini{color:#a7b0be;font-size:.95rem;margin:.25rem 0 .5rem}
+    .note{border-left:4px solid #10b981;padding:.75rem 1rem;background:#0e1729;border-radius:.5rem;margin:1rem 0;color:#cfe3d8}
+    .small{color:#a7b0be;font-size:.95rem}
+    .grid-two{display:grid;grid-template-columns:1fr 1fr;gap:.75rem}
+    @media (max-width: 900px){.grid-two{grid-template-columns:1fr}}
+  </style>
 </body>
 </html>

@@ -8,124 +8,268 @@
     <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/themes/prism-tomorrow.min.css" rel="stylesheet" />
 </head>
 <body>
-    <div class="container">
-        <h1>Zaawansowane Typy Danych</h1>
+  <div class="container">
+    <h1>Zaawansowane Typy Danych</h1>
 
-        <p>Nowoczesne silniki SQL oferują specjalne typy, które pozwalają przechowywać złożone struktury i przyspieszają operacje na nich.</p>
+    <p>
+      Nowoczesne silniki SQL oferują specjalne typy, które pozwalają przechowywać złożone struktury i szybciej je przeszukiwać.
+    </p>
 
-        <h2>JSON</h2>
-        <p>Typ <code>JSON</code> (JavaScript Object Notation) przechowuje dokumenty w formacie klucz‑wartość. Umożliwia elastyczne schematy.</p>
-        <pre><code class="language-sql">
-// Tworzenie tabeli z kolumną JSON
+    <div class="note">
+      <strong>Analogie:</strong> JSON to jak „pudełko” z opisem produktu; ARRAY to „lista w jednym polu”;
+      ENUM to „zamknięte pudełko z kilkoma dozwolonymi etykietami”; typy GIS to „współrzędne na mapie”.
+    </div>
+
+    <!-- ======================== JSON ======================== -->
+    <h2>JSON</h2>
+    <p>
+      Typ <code>JSON</code> przechowuje dokumenty klucz-wartość. W PostgreSQL warto używać <code>JSONB</code> (binarna forma) dla indeksów i wydajności.
+    </p>
+
+    <pre><code class="language-sql">-- 🧱 Tworzenie tabeli z kolumną JSON
 CREATE TABLE products (
-    id   SERIAL PRIMARY KEY,
-    info JSON
+  id   SERIAL PRIMARY KEY,  -- unikalny identyfikator
+  info JSON                 -- dokument z danymi produktu
 );
 
-// Wstawianie dokumentu JSON
-INSERT INTO products(info) VALUES (
-    '{"name":"Laptop","specs":{"ram":16,"ssd":512}}'
+-- ➕ Wstawienie dokumentu JSON
+INSERT INTO products(info)
+VALUES (
+  '{"name":"Laptop","specs":{"ram":16,"ssd":512}}'
 );
 
-// Zapytanie po kluczu wewnętrznym
-SELECT info->>'name'    AS nazwa,
-       (info->'specs')->>'ram' AS ram
+-- 🔎 Zapytanie po kluczach wewnętrznych (PostgreSQL)
+SELECT
+  info-&gt;&gt;'name'                 AS nazwa,     -- operator -&gt;&gt;: wyciąga tekst
+  (info-&gt;'specs')-&gt;&gt;'ram'       AS ram        -- operator -&gt;: zwraca pod-JSON
 FROM products
-WHERE info->'specs'->>'ssd' = '512';
-        </code></pre>
-        <p>Indeksowanie: <code>GIN</code> na polu JSONB (binarna wersja JSON).</p>
-        <pre><code class="language-sql">
-// Przekształcenie na JSONB i indeks
-ALTER TABLE products ALTER COLUMN info TYPE JSONB USING info::JSONB;
-CREATE INDEX idx_products_info ON products USING GIN (info);
-        </code></pre>
+WHERE (info-&gt;'specs')-&gt;&gt;'ssd' = '512';        -- filtr po wartości w dokumencie</code></pre>
 
-        <h2>ARRAY (tablice)</h2>
-        <p>Tablice (<code>ARRAY</code>) przechowują listy wartości w jednej kolumnie.</p>
-        <pre><code class="language-sql">
-// Tabela z polem tablicowym
+    <details open>
+      <summary class="table-title">Dane wejściowe / wynik (poglądowe)</summary>
+      <div class="grid-two">
+        <table class="db-table">
+          <caption class="mini">products (fragment)</caption>
+          <thead><tr><th>id</th><th>info</th></tr></thead>
+          <tbody>
+            <tr><td>1</td><td>{"name":"Laptop","specs":{"ram":16,"ssd":512}}</td></tr>
+            <tr><td>2</td><td>{"name":"Telefon","specs":{"ram":8,"ssd":128}}</td></tr>
+          </tbody>
+        </table>
+
+        <table class="db-table">
+          <caption class="mini">Wynik SELECT</caption>
+          <thead><tr><th>nazwa</th><th>ram</th></tr></thead>
+          <tbody>
+            <tr><td>Laptop</td><td>16</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <p class="mini">Operator <code>-&gt;</code> daje JSON, <code>-&gt;&gt;</code> daje tekst (konwersja).</p>
+    </details>
+
+    <p>Indeksowanie: załóż <code>GIN</code> na <code>JSONB</code> (szybkie szukanie po kluczach/ścieżkach).</p>
+
+    <pre><code class="language-sql">-- 🔁 Konwersja na JSONB i indeks GIN (PostgreSQL)
+ALTER TABLE products
+  ALTER COLUMN info TYPE JSONB USING info::JSONB;
+
+CREATE INDEX idx_products_info
+  ON products USING GIN (info);</code></pre>
+
+    <details>
+      <summary class="table-title">Co daje indeks GIN na JSONB?</summary>
+      <table class="db-table">
+        <thead><tr><th>cecha</th><th>efekt</th></tr></thead>
+        <tbody>
+          <tr><td>przeszukiwanie po kluczach</td><td>szybsze filtry po ścieżkach (np. specs→ssd)</td></tr>
+          <tr><td>dopasowanie fragmentów</td><td>możliwe zapytania typu <code>info @&gt; '{...}'</code></td></tr>
+        </tbody>
+      </table>
+    </details>
+
+    <!-- ======================== ARRAY ======================== -->
+    <h2>ARRAY (tablice)</h2>
+    <p>Przechowują listy wartości w jednej kolumnie. Wygodne, gdy „kilka odpowiedzi” należy do jednego rekordu.</p>
+
+    <pre><code class="language-sql">-- 🧱 Tabela z polem tablicowym (PostgreSQL)
 CREATE TABLE surveys (
-    id      SERIAL PRIMARY KEY,
-    answers TEXT[]
+  id      SERIAL PRIMARY KEY,
+  answers TEXT[]               -- tablica tekstów
 );
 
-// Wstawianie kilku odpowiedzi
-INSERT INTO surveys(answers) VALUES (
-    ARRAY['Tak','Nie','Nie wiem']
-);
+-- ➕ Wstawienie kilku odpowiedzi
+INSERT INTO surveys(answers)
+VALUES (ARRAY['Tak','Nie','Nie wiem']);
 
-// Zapytanie po elemencie tablicy
+-- 🔎 Zapytanie: czy w tablicy jest 'Tak'?
 SELECT *
 FROM surveys
-WHERE 'Tak' = ANY(answers);
-        </code></pre>
-        <p>Indeksowanie: <code>GIN</code> lub <code>GiST</code> dla szybkiego wyszukiwania w tablicy.</p>
-        <pre><code class="language-sql">
-CREATE INDEX idx_surveys_answers ON surveys USING GIN (answers);
-        </code></pre>
+WHERE 'Tak' = ANY(answers);     -- ANY: sprawdź członkostwo w tablicy</code></pre>
 
-        <h2>ENUM (wyliczeniowy)</h2>
-        <p><code>ENUM</code> pozwala zdefiniować listę dozwolonych wartości, np. statusy.</p>
-        <pre><code class="language-sql">
-// Definicja typu ENUM
-CREATE TYPE order_status AS ENUM (
-    'pending',
-    'shipped',
-    'delivered',
-    'canceled'
-);
+    <details open>
+      <summary class="table-title">Dane wejściowe / wynik (poglądowe)</summary>
+      <div class="grid-two">
+        <table class="db-table">
+          <caption class="mini">surveys</caption>
+          <thead><tr><th>id</th><th>answers</th></tr></thead>
+          <tbody>
+            <tr><td>1</td><td>{"Tak","Nie","Nie wiem"}</td></tr>
+            <tr><td>2</td><td>{"Nie"}</td></tr>
+          </tbody>
+        </table>
 
-// Użycie w tabeli
+        <table class="db-table">
+          <caption class="mini">Wynik SELECT (WHERE 'Tak' = ANY)</caption>
+          <thead><tr><th>id</th><th>answers</th></tr></thead>
+          <tbody>
+            <tr><td>1</td><td>{"Tak","Nie","Nie wiem"}</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <p class="mini"><code>ANY</code> działa jak „czy element jest w tej tablicy?”.</p>
+    </details>
+
+    <p>Indeksowanie tablic: <code>GIN</code> lub <code>GiST</code> przyspiesza wyszukiwanie elementów.</p>
+
+    <pre><code class="language-sql">-- ⚡ Indeks GIN (PostgreSQL)
+CREATE INDEX idx_surveys_answers
+  ON surveys USING GIN (answers);</code></pre>
+
+    <details>
+      <summary class="table-title">Efekt indeksu na ARRAY</summary>
+      <table class="db-table">
+        <thead><tr><th>zapytanie</th><th>z indeksami</th><th>bez indeksów</th></tr></thead>
+        <tbody>
+          <tr><td><code>WHERE 'Tak' = ANY(answers)</code></td><td>szybko</td><td>wolniej (skan)</td></tr>
+        </tbody>
+      </table>
+    </details>
+
+    <!-- ======================== ENUM ======================== -->
+    <h2>ENUM (wyliczeniowy)</h2>
+    <p><code>ENUM</code> ogranicza kolumnę do z góry ustalonych wartości (np. statusy).</p>
+
+    <pre><code class="language-sql">-- 🧱 Definicja typu ENUM (PostgreSQL)
+CREATE TYPE order_status AS ENUM ('pending','shipped','delivered','canceled');
+
+-- ➕ Użycie w tabeli
 CREATE TABLE orders (
-    id     SERIAL PRIMARY KEY,
-    status order_status
+  id     SERIAL PRIMARY KEY,
+  status order_status
 );
 
-// Wstawianie
-INSERT INTO orders(status) VALUES ('shipped');
-        </code></pre>
+-- ➕ Wstaw poprawną wartość
+INSERT INTO orders(status) VALUES ('shipped');  -- OK
 
-        <h2>Typy przestrzenne (GIS – Geospatial)</h2>
-        <p>Typy GIS przechowują dane geometryczne, np. punkty, linie, wielokąty.</p>
-        <pre><code class="language-sql">
-// Tabela z kolumną punktową
+-- ✖ Próba wstawienia wartości spoza listy
+-- INSERT INTO orders(status) VALUES ('unknown'); -- błąd</code></pre>
+
+    <details open>
+      <summary class="table-title">Wynik (poglądowy)</summary>
+      <table class="db-table">
+        <thead><tr><th>id</th><th>status</th></tr></thead>
+        <tbody>
+          <tr><td>1</td><td>shipped</td></tr>
+        </tbody>
+      </table>
+      <p class="mini"><strong>Zaleta:</strong> gwarancja poprawnych wartości. <strong>Uwaga:</strong> zmiana listy wymaga <code>ALTER TYPE ... ADD VALUE</code>.</p>
+    </details>
+
+    <!-- ======================== GIS ======================== -->
+    <h2>Typy przestrzenne (GIS – Geospatial)</h2>
+    <p>Przechowują geometrię: punkty, linie, wielokąty. Wymagają rozszerzeń (np. PostGIS w PostgreSQL).</p>
+
+    <pre><code class="language-sql">-- 🧱 Punkt na mapie (PostgreSQL + PostGIS)
 CREATE TABLE places (
-    id   SERIAL PRIMARY KEY,
-    name TEXT,
-    location GEOMETRY(Point,4326)  -- SRID 4326 = WGS84
+  id   SERIAL PRIMARY KEY,
+  name TEXT,
+  location GEOMETRY(Point, 4326)     -- SRID 4326 = WGS84 (lat/lon)
 );
 
-// Wstawianie punktu
-INSERT INTO places(name,location) VALUES (
-    'Rynek', ST_GeomFromText('POINT(21.012229 52.229676)',4326)
-);
+-- ➕ Wstaw punkt
+INSERT INTO places(name, location)
+VALUES ('Rynek', ST_GeomFromText('POINT(21.012229 52.229676)', 4326));
 
-// Zapytanie w promieniu 1 km
+-- 🔎 Znajdź miejsca w promieniu 1 km od punktu odniesienia
 SELECT name
 FROM places
 WHERE ST_DWithin(
-    location,
-    ST_MakePoint(21.012229,52.229676)::geography,
-    1000
-);
-        </code></pre>
-        <p>Indeksowanie: <code>GiST</code> lub <code>SP-GiST</code> dla szybkich zapytań przestrzennych.</p>
-        <pre><code class="language-sql">
-CREATE INDEX idx_places_location ON places USING GIST (location);
-        </code></pre>
+  location::geography,                      -- rzutuj na geographię (metry)
+  ST_MakePoint(21.012229, 52.229676)::geography,
+  1000                                      -- promień 1000 m
+);</code></pre>
 
-        <h2>Wskazówki</h2>
-        <ul>
-            <li>JSONB zamiast JSON – lepsza wydajność i wsparcie indeksów.</li>
-            <li>Używaj <code>GIN</code> dla przeszukiwania elementów w JSON/ARRAY.</li>
-            <li>ENUM gwarantuje poprawność wartości, ale zmianę listy wymaga ALTER TYPE.</li>
-            <li>Przy GIS dbaj o poprawny SRID – określa układ współrzędnych.</li>
-            <li>Monitoruj rozmiary kolumn z JSON i ARRAY – duże dokumenty mogą spowolnić kopie zapasowe.</li>
-        </ul>
+    <details open>
+      <summary class="table-title">Dane wejściowe / wynik (poglądowe)</summary>
+      <div class="grid-two">
+        <table class="db-table">
+          <caption class="mini">places</caption>
+          <thead><tr><th>id</th><th>name</th><th>location (WKT)</th></tr></thead>
+          <tbody>
+            <tr><td>1</td><td>Rynek</td><td>POINT(21.012229 52.229676)</td></tr>
+            <tr><td>2</td><td>Muzeum</td><td>POINT(21.000000 52.230000)</td></tr>
+          </tbody>
+        </table>
 
-    </div>
+        <table class="db-table">
+          <caption class="mini">Wynik ST_DWithin (1 km)</caption>
+          <thead><tr><th>name</th></tr></thead>
+          <tbody>
+            <tr><td>Rynek</td></tr>
+            <tr><td>Muzeum</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <p class="mini"><code>ST_DWithin</code> na <em>geography</em> liczy odległości w metrach. Na <em>geometry</em> — w jednostkach układu współrzędnych.</p>
+    </details>
 
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/prism.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/components/prism-sql.min.js"></script>
+    <p>Indeksowanie przestrzenne przyspiesza zapytania z warunkami „w pobliżu / w poligonie”.</p>
+
+    <pre><code class="language-sql">-- ⚡ Indeks przestrzenny (PostgreSQL + PostGIS)
+CREATE INDEX idx_places_location
+  ON places USING GIST (location);</code></pre>
+
+    <details>
+      <summary class="table-title">Efekt indeksu przestrzennego</summary>
+      <table class="db-table">
+        <thead><tr><th>zapytanie</th><th>z indeksem</th><th>bez indeksu</th></tr></thead>
+        <tbody>
+          <tr><td><code>ST_DWithin(location,...)</code></td><td>szybko</td><td>wolno (skan)</td></tr>
+          <tr><td><code>ST_Within(location, polygon)</code></td><td>szybko</td><td>wolno</td></tr>
+        </tbody>
+      </table>
+    </details>
+
+    <!-- ======================== WSKAZÓWKI ======================== -->
+    <h2>Wskazówki</h2>
+    <ul>
+      <li><strong>JSONB &gt; JSON</strong> (PostgreSQL) — lepsza wydajność i indeksy.</li>
+      <li><strong>GIN</strong> do przeszukiwania elementów w JSON/ARRAY; <strong>GiST/SP-GiST</strong> dla geometrii.</li>
+      <li><strong>ENUM</strong> gwarantuje poprawność wartości; zmiany listy przez <code>ALTER TYPE</code>.</li>
+      <li>W GIS pilnuj właściwego <strong>SRID</strong> i konwersji <em>geometry</em> ↔ <em>geography</em>.</li>
+      <li>Monitoruj rozmiary dokumentów JSON/ARRAY — bardzo duże rekordy utrudnią backupy i I/O.</li>
+    </ul>
+  </div>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/prism.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/components/prism-sql.min.js"></script>
+
+  <!-- Styl TYLKO do wizualizacji; nie rusza Twojego styles.css -->
+  <style>
+    .db-table{width:100%;border-collapse:collapse;margin:.5rem 0}
+    .db-table th,.db-table td{border:1px solid #1f2937;padding:.5rem .65rem;text-align:left;vertical-align:top}
+    .db-table th{background:#0e1729;color:#dbe2ea}
+    .null{color:#9ca3af;font-style:italic}
+    details{margin:.75rem 0;border:1px solid #1f2937;border-radius:.5rem;padding:.25rem .5rem;background:#0e1729}
+    details[open]{background:#111827}
+    summary{cursor:pointer;list-style:none}
+    summary::-webkit-details-marker{display:none}
+    .table-title{font-weight:600;margin:.25rem 0}
+    .mini{color:#a7b0be;font-size:.95rem;margin:.25rem 0 .5rem}
+    .note{border-left:4px solid #10b981;padding:.75rem 1rem;background:#0e1729;border-radius:.5rem;margin:1rem 0;color:#cfe3d8}
+    .grid-two{display:grid;grid-template-columns:1fr 1fr;gap:.75rem}
+    @media (max-width: 900px){.grid-two{grid-template-columns:1fr}}
+  </style>
 </body>
 </html>

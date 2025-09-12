@@ -11,75 +11,202 @@
     <div class="container">
         <h1>Transakcje</h1>
 
-        <p>Transakcja to zestaw operacji na bazie danych, które wykonują się razem lub wcale. Zapewnia to spójność i bezpieczeństwo danych.</p>
+        <p>
+          Transakcja to zestaw operacji, które <strong>albo wykonują się w całości</strong>, albo <strong>nie wykonują się wcale</strong>.
+          Dzięki temu dane są spójne.
+        </p>
+
+        <div class="note">
+          <strong>Analogia:</strong> Przelew między dwoma kontami = <em>dwa kroki</em>:
+          z jednego konta odejmij 100 zł, na drugie dodaj 100 zł. Transakcja to „pudełko”
+          obejmujące oba kroki naraz. Jeśli któryś krok się nie uda – cofamy całość.
+        </div>
+
+        <!-- =================== DANE WEJŚCIOWE DO WIZUALIZACJI =================== -->
+        <details open>
+          <summary class="table-title">Dane wejściowe: <code>accounts</code></summary>
+          <table class="db-table">
+            <thead><tr><th>id</th><th>owner</th><th>balance</th></tr></thead>
+            <tbody>
+              <tr><td>1</td><td>Ala</td><td>1000</td></tr>
+              <tr><td>2</td><td>Bartek</td><td>500</td></tr>
+            </tbody>
+          </table>
+          <p class="mini">Użyjemy tych danych w przykładach niżej.</p>
+        </details>
 
         <h2>ACID</h2>
         <ul>
-            <li><strong>Atomicity (atomowość)</strong> – wszystkie operacje w transakcji wykonują się razem albo żadna nie jest zapisana.</li>
-            <li><strong>Consistency (spójność)</strong> – transakcja przenosi bazę ze stanu prawidłowego do kolejnego stanu prawidłowego.</li>
-            <li><strong>Isolation (izolacja)</strong> – transakcje nie widzą nawzajem swoich zmian, dopóki nie zostaną zatwierdzone.</li>
-            <li><strong>Durability (trwałość)</strong> – po zatwierdzeniu (COMMIT) zmiany są trwałe, nawet po awarii.</li>
+            <li><strong>Atomicity (atomowość)</strong> – wszystko albo nic (pudełko 2-krokowego przelewu).</li>
+            <li><strong>Consistency (spójność)</strong> – dane przechodzą między stanami prawidłowymi (np. suma środków się zgadza).</li>
+            <li><strong>Isolation (izolacja)</strong> – równoległe transakcje nie „mieszają” sobie niezatwierdzonych zmian.</li>
+            <li><strong>Durability (trwałość)</strong> – po <code>COMMIT</code> zmiany przetrwają awarię.</li>
         </ul>
 
         <h2>START TRANSACTION, COMMIT, ROLLBACK</h2>
-        <pre><code class="language-sql">
-// Rozpoczęcie transakcji
+        <pre><code class="language-sql">-- Rozpoczęcie transakcji
 START TRANSACTION;
 
-// Przykładowe operacje
+-- Krok 1: z konta 1 zabierz 100
 UPDATE accounts
 SET balance = balance - 100
 WHERE id = 1;
 
+-- Krok 2: na konto 2 dodaj 100
 UPDATE accounts
 SET balance = balance + 100
 WHERE id = 2;
 
-// Zapisanie zmian
+-- Zatwierdzenie zmian
 COMMIT;
 
-// Jeśli coś poszło nie tak, wycofaj zmiany
-ROLLBACK;
-        </code></pre>
-        <p><code>COMMIT</code> zapisuje wszystkie operacje, <code>ROLLBACK</code> cofa do stanu sprzed <code>START TRANSACTION</code>.</p>
+-- (Alternatywnie) Gdyby coś się nie udało:
+-- ROLLBACK;  -- cofnięcie całości do stanu sprzed START TRANSACTION</code></pre>
+
+        <!-- Wizualizacja: COMMIT -->
+        <details open>
+          <summary class="table-title">Wynik transakcji – ścieżka z <code>COMMIT</code></summary>
+          <table class="db-table">
+            <thead><tr><th>id</th><th>owner</th><th>balance (PRZED)</th><th>balance (PO)</th></tr></thead>
+            <tbody>
+              <tr><td>1</td><td>Ala</td><td>1000</td><td>900</td></tr>
+              <tr><td>2</td><td>Bartek</td><td>500</td><td>600</td></tr>
+            </tbody>
+          </table>
+          <p class="mini">Oba kroki poszły OK → zatwierdzamy, stan „PO” staje się trwały.</p>
+        </details>
+
+        <!-- Wizualizacja: ROLLBACK -->
+        <details>
+          <summary class="table-title">Wynik transakcji – ścieżka z <code>ROLLBACK</code></summary>
+          <table class="db-table">
+            <thead><tr><th>id</th><th>owner</th><th>balance (PRZED)</th><th>balance (PO)</th></tr></thead>
+            <tbody>
+              <tr><td>1</td><td>Ala</td><td>1000</td><td>1000</td></tr>
+              <tr><td>2</td><td>Bartek</td><td>500</td><td>500</td></tr>
+            </tbody>
+          </table>
+          <p class="mini">Jeśli drugi krok się nie udał → cofamy całość, jakby transakcji nie było.</p>
+        </details>
 
         <h2>Poziomy izolacji (Isolation Levels)</h2>
-        <p>Różne poziomy izolacji decydują, jak bardzo transakcje mogą na siebie wpływać:</p>
+        <p>
+          Poziom izolacji decyduje, jak bardzo równoległe transakcje „widzą” swoje zmiany. Niższy poziom = większa wydajność,
+          ale możliwe anomalie (błędy odczytu). Wyższy = bezpieczniej, ale wolniej.
+        </p>
         <ul>
-            <li><code>READ UNCOMMITTED (odczyt niezatwierdzonych)</code> – może wystąpić <em>brudny odczyt</em>.</li>
-            <li><code>READ COMMITTED (odczyt zatwierdzonych)</code> – widzisz tylko zatwierdzone zmiany.</li>
-            <li><code>REPEATABLE READ (powtarzalny odczyt)</code> – ta sama wartość w danej transakcji się nie zmienia.</li>
-            <li><code>SERIALIZABLE (sekwencyjny)</code> – najwyższa izolacja, działa jakby transakcje były wykonywane jedna po drugiej.</li>
+            <li><code>READ UNCOMMITTED</code> – możliwy <em>brudny odczyt</em> (zobaczysz dane niezatwierdzone).</li>
+            <li><code>READ COMMITTED</code> – widzisz tylko zatwierdzone dane (eliminuje brudny odczyt).</li>
+            <li><code>REPEATABLE READ</code> – ten sam wiersz czytany wielokrotnie w transakcji ma tę samą wartość (eliminuje niepowtarzalny odczyt).</li>
+            <li><code>SERIALIZABLE</code> – jakby transakcje szły jedna po drugiej (eliminuje też „fantomy”).</li>
         </ul>
-        <pre><code class="language-sql">
-// Ustawienie poziomu izolacji dla bieżącej transakcji
-SET TRANSACTION ISOLATION LEVEL REPEATABLE READ;
-        </code></pre>
+        <pre><code class="language-sql">-- Ustaw poziom izolacji dla BIEŻĄCEJ transakcji
+SET TRANSACTION ISOLATION LEVEL REPEATABLE READ;</code></pre>
+
+        <!-- Wizualizacja: brudny odczyt -->
+        <details>
+          <summary class="table-title">Symulacja: brudny odczyt (READ UNCOMMITTED)</summary>
+          <table class="db-table">
+            <thead><tr><th>Krok</th><th>Sesja</th><th>Akcja</th><th>Widoczny balans konta 1</th></tr></thead>
+            <tbody>
+              <tr><td>1</td><td>A</td><td>START; UPDATE accounts SET balance = 900 WHERE id=1;  -- bez COMMIT</td><td>900 (lokalnie)</td></tr>
+              <tr><td>2</td><td>B</td><td>SELECT balance FROM accounts WHERE id=1;  -- READ UNCOMMITTED</td><td><strong>900 (brudny)</strong></td></tr>
+              <tr><td>3</td><td>A</td><td>ROLLBACK;</td><td>1000 (wraca)</td></tr>
+            </tbody>
+          </table>
+          <p class="mini">Sesja B zobaczyła „tymczasową” wartość 900, która została cofnięta → to brudny odczyt.</p>
+        </details>
+
+        <!-- Wizualizacja: niepowtarzalny odczyt -->
+        <details>
+          <summary class="table-title">Symulacja: niepowtarzalny odczyt (READ COMMITTED)</summary>
+          <table class="db-table">
+            <thead><tr><th>Krok</th><th>Sesja</th><th>Akcja</th><th>Wartość u B</th></tr></thead>
+            <tbody>
+              <tr><td>1</td><td>B</td><td>START; SELECT balance FROM accounts WHERE id=1;</td><td>1000</td></tr>
+              <tr><td>2</td><td>A</td><td>START; UPDATE ... = 900 WHERE id=1; COMMIT;</td><td>—</td></tr>
+              <tr><td>3</td><td>B</td><td>SELECT balance FROM accounts WHERE id=1;  -- drugi raz w tej samej transakcji B</td><td><strong>900</strong></td></tr>
+            </tbody>
+          </table>
+          <p class="mini">W READ COMMITTED kolejne odczyty mogą zwrócić różne wartości (niepowtarzalny odczyt).</p>
+        </details>
+
+        <!-- Wizualizacja: phantom read -->
+        <details>
+          <summary class="table-title">Symulacja: fantomy (REPEATABLE READ vs SERIALIZABLE)</summary>
+          <table class="db-table">
+            <thead><tr><th>Krok</th><th>Sesja</th><th>Akcja</th><th>Wynik</th></tr></thead>
+            <tbody>
+              <tr><td>1</td><td>B</td><td>START (REPEATABLE READ); SELECT COUNT(*) FROM accounts WHERE balance &gt;= 1000;</td><td>1</td></tr>
+              <tr><td>2</td><td>A</td><td>START; INSERT INTO accounts(id,owner,balance) VALUES(3,'Iza',1500); COMMIT;</td><td>—</td></tr>
+              <tr><td>3</td><td>B</td><td>SELECT COUNT(*) FROM accounts WHERE balance &gt;= 1000;  -- drugi raz</td><td><strong>1 lub 2*</strong></td></tr>
+            </tbody>
+          </table>
+          <p class="mini">
+            W niektórych silnikach przy REPEATABLE READ <em>możesz</em> zobaczyć nowy wiersz (phantom).
+            Poziom SERIALIZABLE blokuje także „fantomy” (drugi SELECT zwróci tę samą liczbę co pierwszy).
+          </p>
+        </details>
 
         <h2>Zarządzanie blokadami (locks)</h2>
-        <p>Bazy danych używają blokad, żeby zapewnić izolację:</p>
+        <p>
+          Blokady chronią dane przed równoczesną modyfikacją. Najczęstsze:
+        </p>
         <ul>
-            <li>Blokady na wierszach – chronią konkretne rekordy (<code>FOR UPDATE</code>).</li>
-            <li>Blokady na tabelach – blokują całą tabelę (<code>LOCK TABLES</code> w MySQL).</li>
+            <li><strong>Blokady na wierszach</strong> – np. <code>FOR UPDATE</code> (zablokuj ten rekord, bo będę go zmieniać).</li>
+            <li><strong>Blokady na tabelach</strong> – rzadziej, blokują całą tabelę (np. <code>LOCK TABLES</code> w MySQL).</li>
         </ul>
-        <pre><code class="language-sql">
-// Zablokuj wiersz przed zmianą
+
+        <pre><code class="language-sql">-- Zablokuj wybrany wiersz do końca transakcji (inni muszą poczekać)
+START TRANSACTION;
 SELECT * 
 FROM accounts 
 WHERE id = 1
 FOR UPDATE;
-        </code></pre>
+
+-- ...bezpieczne zmiany na rekordzie id=1...
+UPDATE accounts SET balance = balance - 100 WHERE id = 1;
+
+COMMIT;  -- zwolni blokadę</code></pre>
+
+        <details>
+          <summary class="table-title">Efekt blokady wiersza (<code>FOR UPDATE</code>)</summary>
+          <table class="db-table">
+            <thead><tr><th>Sesja</th><th>Akcja</th><th>Co się dzieje?</th></tr></thead>
+            <tbody>
+              <tr><td>A</td><td>SELECT ... WHERE id=1 FOR UPDATE</td><td>Rekord 1 zablokowany do COMMIT/ROLLBACK</td></tr>
+              <tr><td>B</td><td>UPDATE accounts SET balance=... WHERE id=1</td><td><strong>CZEKA</strong> (blokada u A)</td></tr>
+              <tr><td>A</td><td>COMMIT</td><td>Blokada schodzi → B kontynuuje</td></tr>
+            </tbody>
+          </table>
+        </details>
 
         <h2>Wskazówki</h2>
         <ul>
-            <li>Zawsze używaj <code>COMMIT</code> lub <code>ROLLBACK</code>, by transakcja się nie zawiesiła.</li>
-            <li>Dobierz poziom izolacji – wyższy to większe bezpieczeństwo, ale wolniejsze operacje.</li>
-            <li>Unikaj długich transakcji – blokady mogą spowolnić innych użytkowników.</li>
-            <li>Monitoruj blokady i deadlocki (zakleszczenia), żeby szybko reagować.</li>
+            <li>Zawsze kończ transakcję <code>COMMIT</code> lub <code>ROLLBACK</code> (nie zostawiaj otwartych).</li>
+            <li>Dobieraj poziom izolacji: wyższy = bezpieczniej, ale wolniej; niższy = szybciej, ale możliwe anomalie.</li>
+            <li>Unikaj długich transakcji – długie blokady blokują innych.</li>
+            <li>Trzymaj <strong>stałą kolejność aktualizacji</strong> zasobów (np. zawsze aktualizuj id rosnąco), zmniejszysz ryzyko <em>deadlocków</em> (zakleszczeń).</li>
+            <li>Monitoruj blokady i deadlocki – logi serwera zwykle wskazują konflikty.</li>
         </ul>
     </div>
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/prism.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/components/prism-sql.min.js"></script>
+
+    <!-- Styl TYLKO do wizualizacji; nie rusza Twojego styles.css -->
+    <style>
+      .db-table{width:100%;border-collapse:collapse;margin:.5rem 0}
+      .db-table th,.db-table td{border:1px solid #1f2937;padding:.5rem .65rem;text-align:left}
+      .db-table th{background:#0e1729;color:#dbe2ea}
+      .null{color:#9ca3af;font-style:italic}
+      details{margin:.75rem 0;border:1px solid #1f2937;border-radius:.5rem;padding:.25rem .5rem;background:#0e1729}
+      details[open]{background:#111827}
+      summary{cursor:pointer;list-style:none}
+      summary::-webkit-details-marker{display:none}
+      .table-title{font-weight:600;margin:.25rem 0}
+      .mini{color:#a7b0be;font-size:.95rem;margin:.25rem 0 .5rem}
+      .note{border-left:4px solid #10b981;padding:.75rem 1rem;background:#0e1729;border-radius:.5rem;margin:1rem 0;color:#cfe3d8}
+    </style>
 </body>
 </html>

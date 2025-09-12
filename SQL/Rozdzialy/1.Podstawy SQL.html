@@ -1,64 +1,303 @@
 <!DOCTYPE html>
 <html lang="pl">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Podstawy SQL</title>
-    <link rel="stylesheet" href="../styles.css">
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/themes/prism-tomorrow.min.css" rel="stylesheet" />
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Podstawy SQL</title>
+  <link rel="stylesheet" href="../styles.css">
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/themes/prism-tomorrow.min.css" rel="stylesheet" />
 </head>
 <body>
-    <div class="container">
-        <h1>Podstawy SQL</h1>
+  <div class="container">
+    <h1>Podstawy SQL</h1>
 
-        <p>SQL (Structured Query Language) to standardowy język służący do komunikacji z relacyjnymi bazami danych. Umożliwia definiowanie struktury bazy, manipulację danymi oraz ich wyszukiwanie za pomocą zapytań.</p>
+    <p><strong>SQL</strong> (Structured Query Language) to język do pracy z relacyjnymi bazami danych.
+      Pozwala <em>pobrać</em> dane (<code>SELECT</code>), <em>dodać</em> (<code>INSERT</code>), <em>zmienić</em> (<code>UPDATE</code>) i <em>usunąć</em> (<code>DELETE</code>).</p>
 
-        <h2>Podstawowa składnia SQL</h2>
-        <p>Każde zapytanie SQL może składać się z kilku klauzul, z których najważniejsze to:</p>
-        <ul>
-            <li><code>SELECT</code> – wybiera kolumny, które chcemy zobaczyć,</li>
-            <li><code>FROM</code> – określa tabelę (lub tabele), z której pobieramy dane,</li>
-            <li><code>WHERE</code> – filtruje wiersze spełniające określone warunki.</li>
-        </ul>
+    <div class="note">
+      <strong>Analogia:</strong> Baza danych = <em>segregator</em>. Tabela = <em>arkusz</em> w segregatorze.
+      Kolumna = nagłówek kolumny, wiersz = rekord. <code>SELECT</code> mówi „co chcesz zobaczyć”, <code>FROM</code> – „z którego arkusza”, a <code>WHERE</code> – „które wiersze”.
+    </div>
 
-        <h2>SELECT i FROM</h2>
-        <pre><code class="language-sql">
-// Wybranie wszystkich kolumn z tabeli users
+    <!-- =================== DANE WEJŚCIOWE (do wizualizacji wyników) =================== -->
+    <details open>
+      <summary class="table-title">Dane wejściowe: <code>users</code></summary>
+      <table class="db-table">
+        <thead><tr><th>id</th><th>first_name</th><th>last_name</th><th>age</th></tr></thead>
+        <tbody>
+          <tr><td>1</td><td>Anna</td><td>Kowalska</td><td>25</td></tr>
+          <tr><td>2</td><td>Jan</td><td>Nowak</td><td>17</td></tr>
+          <tr><td>3</td><td>Ola</td><td>Lis</td><td>19</td></tr>
+          <tr><td>4</td><td>Piotr</td><td>Kozak</td><td>34</td></tr>
+          <tr><td>5</td><td>Ewa</td><td>Komor</td><td>22</td></tr>
+          <tr><td>6</td><td>Marek</td><td>Zielinski</td><td>16</td></tr>
+        </tbody>
+      </table>
+    </details>
+
+    <details open>
+      <summary class="table-title">Dane wejściowe: <code>employees</code></summary>
+      <table class="db-table">
+        <thead><tr><th>id</th><th>first_name</th><th>last_name</th><th>department</th><th>manager_id</th></tr></thead>
+        <tbody>
+          <tr><td>101</td><td>Adam</td><td>Krawczyk</td><td>HR</td><td class="null">NULL</td></tr>
+          <tr><td>102</td><td>Beata</td><td>Nowicka</td><td>HR</td><td>101</td></tr>
+          <tr><td>103</td><td>Celina</td><td>Milewska</td><td>IT</td><td>110</td></tr>
+          <tr><td>104</td><td>Damian</td><td>Wróbel</td><td>Sales</td><td>111</td></tr>
+          <tr><td>105</td><td>Emilia</td><td>Zając</td><td>Sales</td><td>111</td></tr>
+          <tr><td>106</td><td>Filip</td><td>Górski</td><td>IT</td><td>110</td></tr>
+          <tr><td>110</td><td>Piotr</td><td>Lewandowski</td><td>IT</td><td class="null">NULL</td></tr>
+          <tr><td>111</td><td>Karol</td><td>Nowak</td><td>Sales</td><td class="null">NULL</td></tr>
+        </tbody>
+      </table>
+    </details>
+    <!-- =============================================================================== -->
+
+    <h2>1. Szkielet zapytania</h2>
+    <pre><code class="language-sql">
+-- Wszystkie kolumny z tabeli users
 SELECT *
 FROM users;
 
-// Wybranie konkretnych kolumn: imię i wiek
+-- Tylko wybrane kolumny
 SELECT first_name, age
 FROM users;
-        </code></pre>
-        <p><code>SELECT</code> wskazuje, które kolumny (pola) chcemy pobrać, a <code>FROM</code> określa, z jakiej tabeli.</p>
+</code></pre>
 
-        <h2>Klauzula WHERE</h2>
-        <pre><code class="language-sql">
-// Pobranie użytkowników, których wiek jest większy niż 18
+    <!-- WYNIKI: SELECT -->
+    <details open>
+      <summary class="table-title">Wynik: <code>SELECT * FROM users</code></summary>
+      <table class="db-table">
+        <thead><tr><th>id</th><th>first_name</th><th>last_name</th><th>age</th></tr></thead>
+        <tbody>
+          <tr><td>1</td><td>Anna</td><td>Kowalska</td><td>25</td></tr>
+          <tr><td>2</td><td>Jan</td><td>Nowak</td><td>17</td></tr>
+          <tr><td>3</td><td>Ola</td><td>Lis</td><td>19</td></tr>
+          <tr><td>4</td><td>Piotr</td><td>Kozak</td><td>34</td></tr>
+          <tr><td>5</td><td>Ewa</td><td>Komor</td><td>22</td></tr>
+          <tr><td>6</td><td>Marek</td><td>Zielinski</td><td>16</td></tr>
+        </tbody>
+      </table>
+    </details>
+
+    <details>
+      <summary class="table-title">Wynik: <code>SELECT first_name, age FROM users</code></summary>
+      <table class="db-table">
+        <thead><tr><th>first_name</th><th>age</th></tr></thead>
+        <tbody>
+          <tr><td>Anna</td><td>25</td></tr>
+          <tr><td>Jan</td><td>17</td></tr>
+          <tr><td>Ola</td><td>19</td></tr>
+          <tr><td>Piotr</td><td>34</td></tr>
+          <tr><td>Ewa</td><td>22</td></tr>
+          <tr><td>Marek</td><td>16</td></tr>
+        </tbody>
+      </table>
+    </details>
+
+    <p><code>SELECT</code> – wybór kolumn; <code>FROM</code> – źródłowa tabela.</p>
+
+    <h2>2. Filtrowanie – <code>WHERE</code></h2>
+    <pre><code class="language-sql">
+-- Pełnoletni użytkownicy
 SELECT first_name, age
 FROM users
-WHERE age &gt; 18;
+WHERE age &gt;= 18;
 
-// Pobranie pracowników z działu 'HR'
+-- Pracownicy z działu 'HR'
 SELECT *
 FROM employees
 WHERE department = 'HR';
-        </code></pre>
-        <p><code>WHERE</code> pozwala ustawić warunki, dzięki którym zwrócone zostaną tylko te wiersze, które je spełniają.</p>
+</code></pre>
 
-        <h2>Zasady korzystania z bazy danych</h2>
-        <ul>
-            <li>Zawsze rób kopie zapasowe (backup) przed wprowadzeniem zmian na bazie produkcyjnej.</li>
-            <li>Stosuj klucze główne (PRIMARY KEY) i obce (FOREIGN KEY) dla integralności danych.</li>
-            <li>Normalizuj (porządkuj) dane, by unikać powtórzeń i zapewnić spójność.</li>
-            <li>Używaj transakcji (<code>BEGIN TRANSACTION</code>, <code>COMMIT</code>, <code>ROLLBACK</code>) przy operacjach wielokrokowych.</li>
-            <li>Optymalizuj zapytania poprzez indeksy na kolumnach często filtrowanych lub sortowanych.</li>
-            <li>Zamykaj połączenia do bazy (np. <code>connection.close()</code>), by nie obciążać serwera.</li>
-        </ul>
+    <!-- WYNIKI: WHERE -->
+    <details open>
+      <summary class="table-title">Wynik: pełnoletni użytkownicy (<code>age &ge; 18</code>)</summary>
+      <table class="db-table">
+        <thead><tr><th>first_name</th><th>age</th></tr></thead>
+        <tbody>
+          <tr><td>Anna</td><td>25</td></tr>
+          <tr><td>Ola</td><td>19</td></tr>
+          <tr><td>Piotr</td><td>34</td></tr>
+          <tr><td>Ewa</td><td>22</td></tr>
+        </tbody>
+      </table>
+    </details>
+
+    <details>
+      <summary class="table-title">Wynik: pracownicy działu <code>HR</code></summary>
+      <table class="db-table">
+        <thead><tr><th>id</th><th>first_name</th><th>last_name</th><th>department</th><th>manager_id</th></tr></thead>
+        <tbody>
+          <tr><td>101</td><td>Adam</td><td>Krawczyk</td><td>HR</td><td class="null">NULL</td></tr>
+          <tr><td>102</td><td>Beata</td><td>Nowicka</td><td>HR</td><td>101</td></tr>
+        </tbody>
+      </table>
+    </details>
+
+    <ul>
+      <li>Łańcuchy znaków zapisujemy w <code>'pojedynczych cudzysłowach'</code>.</li>
+      <li>Najczęstsze operatory: <code>=</code>, <code>&lt;&gt;</code> (lub <code>!=</code>), <code>&gt;</code>, <code>&gt;=</code>, <code>&lt;</code>, <code>&lt;=</code>, <code>AND</code>, <code>OR</code>, <code>NOT</code>, <code>IN (...)</code>, <code>BETWEEN a AND b</code>, <code>LIKE</code>.</li>
+    </ul>
+
+    <h2>3. Sortowanie, limit, unikalne</h2>
+    <pre><code class="language-sql">
+-- Sortowanie po wieku malejąco
+SELECT first_name, age
+FROM users
+ORDER BY age DESC;
+
+-- Ogranicz liczbę wyników do 10
+SELECT first_name, age
+FROM users
+ORDER BY age DESC
+LIMIT 10;
+
+-- Unikalne wartości (bez duplikatów)
+SELECT DISTINCT department
+FROM employees;
+</code></pre>
+
+    <!-- WYNIKI: ORDER BY / LIMIT / DISTINCT -->
+    <details open>
+      <summary class="table-title">Wynik: sortowanie po <code>age DESC</code></summary>
+      <table class="db-table">
+        <thead><tr><th>first_name</th><th>age</th></tr></thead>
+        <tbody>
+          <tr><td>Piotr</td><td>34</td></tr>
+          <tr><td>Anna</td><td>25</td></tr>
+          <tr><td>Ewa</td><td>22</td></tr>
+          <tr><td>Ola</td><td>19</td></tr>
+          <tr><td>Jan</td><td>17</td></tr>
+          <tr><td>Marek</td><td>16</td></tr>
+        </tbody>
+      </table>
+    </details>
+
+    <details>
+      <summary class="table-title">Wynik: <code>LIMIT 10</code> po sortowaniu</summary>
+      <table class="db-table">
+        <thead><tr><th>first_name</th><th>age</th></tr></thead>
+        <tbody>
+          <tr><td>Piotr</td><td>34</td></tr>
+          <tr><td>Anna</td><td>25</td></tr>
+          <tr><td>Ewa</td><td>22</td></tr>
+          <tr><td>Ola</td><td>19</td></tr>
+          <tr><td>Jan</td><td>17</td></tr>
+          <tr><td>Marek</td><td>16</td></tr>
+        </tbody>
+      </table>
+      <p class="mini">Mamy tylko 6 wierszy, więc <code>LIMIT 10</code> zwraca wszystkie.</p>
+    </details>
+
+    <details>
+      <summary class="table-title">Wynik: <code>SELECT DISTINCT department FROM employees</code></summary>
+      <table class="db-table">
+        <thead><tr><th>department</th></tr></thead>
+        <tbody>
+          <tr><td>HR</td></tr>
+          <tr><td>IT</td></tr>
+          <tr><td>Sales</td></tr>
+        </tbody>
+      </table>
+    </details>
+
+    <h2>4. <code>LIKE</code> i wyszukiwanie wzorców</h2>
+    <pre><code class="language-sql">
+-- Nazwisko zaczyna się na 'Ko'
+SELECT *
+FROM users
+WHERE last_name LIKE 'Ko%';
+
+-- Podkreślnik (_) = dokładnie jeden znak
+-- 'Kow_lski' dopasuje np. 'Kowalski'
+</code></pre>
+
+    <!-- WYNIK: LIKE -->
+    <details open>
+      <summary class="table-title">Wynik: <code>last_name LIKE 'Ko%'</code></summary>
+      <table class="db-table">
+        <thead><tr><th>id</th><th>first_name</th><th>last_name</th><th>age</th></tr></thead>
+        <tbody>
+          <tr><td>1</td><td>Anna</td><td>Kowalska</td><td>25</td></tr>
+          <tr><td>4</td><td>Piotr</td><td>Kozak</td><td>34</td></tr>
+          <tr><td>5</td><td>Ewa</td><td>Komor</td><td>22</td></tr>
+        </tbody>
+      </table>
+    </details>
+
+    <h2>5. Uwaga na <code>NULL</code></h2>
+    <div class="note">
+      <strong>NULL</strong> = „brak wartości”. Nie porównujemy go <code>= NULL</code>, tylko używamy <code>IS NULL</code> / <code>IS NOT NULL</code>.
     </div>
+    <pre><code class="language-sql">
+-- Rekordy bez przypisanego managera
+SELECT *
+FROM employees
+WHERE manager_id IS NULL;
+</code></pre>
 
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/prism.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/components/prism-sql.min.js"></script>
+    <!-- WYNIK: IS NULL -->
+    <details open>
+      <summary class="table-title">Wynik: pracownicy bez managera (<code>manager_id IS NULL</code>)</summary>
+      <table class="db-table">
+        <thead><tr><th>id</th><th>first_name</th><th>last_name</th><th>department</th><th>manager_id</th></tr></thead>
+        <tbody>
+          <tr><td>101</td><td>Adam</td><td>Krawczyk</td><td>HR</td><td class="null">NULL</td></tr>
+          <tr><td>110</td><td>Piotr</td><td>Lewandowski</td><td>IT</td><td class="null">NULL</td></tr>
+          <tr><td>111</td><td>Karol</td><td>Nowak</td><td>Sales</td><td class="null">NULL</td></tr>
+        </tbody>
+      </table>
+    </details>
+
+    <h2>6. Zasady korzystania (podstawy)</h2>
+    <ul>
+      <li>Rób kopie zapasowe (backup) przed zmianami na produkcji.</li>
+      <li>Używaj kluczy: <strong>PRIMARY KEY</strong> (unikalny identyfikator) i <strong>FOREIGN KEY</strong> (powiązanie tabel) – dla integralności danych.</li>
+      <li>Normalizuj dane (porządkuj tabelami), by unikać duplikatów.</li>
+      <li>Operacje wielokrokowe rób w transakcjach (<code>BEGIN</code> / <code>COMMIT</code> / <code>ROLLBACK</code>).</li>
+      <li>Twórz indeksy na kolumnach często używanych w <code>WHERE</code> lub <code>ORDER BY</code> (przyspieszają odczyt).</li>
+      <li>Zamykaj połączenia (np. <code>connection.close()</code>), by nie obciążać serwera.</li>
+    </ul>
+
+    <h2>7. Najczęstsze błędy początkujących</h2>
+    <ul>
+      <li>Użycie <code>//</code> zamiast <code>--</code> w komentarzach SQL.</li>
+      <li>Porównywanie <code>NULL</code> przez <code>=</code> zamiast <code>IS NULL</code>/<code>IS NOT NULL</code>.</li>
+      <li>Nadmierne <code>SELECT *</code> – lepiej wybierać konkretne kolumny.</li>
+      <li>Brak <code>WHERE</code> przy aktualizacji/usuwaniu (ryzyko zmian wszystkich wierszy).</li>
+    </ul>
+
+    <h2>8. Mini-ćwiczenia</h2>
+    <ol>
+      <li>Wypisz imię i wiek wszystkich użytkowników, posortuj po wieku rosnąco.</li>
+      <li>Pokaż unikalne działy z tabeli <code>employees</code>.</li>
+      <li>Znajdź użytkowników, których nazwisko zaczyna się na „Ko”.</li>
+      <li>Wyświetl pracowników bez przypisanego <code>manager_id</code>.</li>
+    </ol>
+ 
+    <p class="small">Uwaga: składnia może się minimalnie różnić między silnikami (PostgreSQL, MySQL, SQL Server, SQLite), ale powyższe podstawy są wspólne.</p>
+  </div>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/prism.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/components/prism-sql.min.js"></script>
+
+  <style>
+    /* Delikatne, opcjonalne wzmocnienie czytelności – możesz usunąć, jeśli masz własne style */
+    .note{border-left:4px solid #10b981;padding:.75rem 1rem;background:#0e1729;border-radius:.5rem;margin:1rem 0;color:#cfe3d8}
+    .small{color:#a7b0be;font-size:.95rem}
+    pre[class*="language-"]{margin:.75rem 0}
+
+    /* Styl TYLKO dla wizualizacji tabel (nie rusza reszty) */
+    .db-table{width:100%;border-collapse:collapse;margin:.5rem 0}
+    .db-table th,.db-table td{border:1px solid #1f2937;padding:.5rem .65rem;text-align:left}
+    .db-table th{background:#0e1729;color:#dbe2ea}
+    .null{color:#9ca3af;font-style:italic}
+    details{margin:.75rem 0;border:1px solid #1f2937;border-radius:.5rem;padding:.25rem .5rem;background:#0e1729}
+    details[open]{background:#111827}
+    summary{cursor:pointer;list-style:none}
+    summary::-webkit-details-marker{display:none}
+    .table-title{font-weight:600;margin:.25rem 0}
+  </style>
 </body>
 </html>

@@ -8,75 +8,211 @@
     <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/themes/prism-tomorrow.min.css" rel="stylesheet" />
 </head>
 <body>
-    <div class="container">
-        <h1>Replikacja i Wysoka Dostępność (HA)</h1>
+  <div class="container">
+    <h1>Replikacja i Wysoka Dostępność (HA)</h1>
 
-        <p>Replikacja pozwala kopiować dane między serwerami, by zapewnić odporność na awarie i rozłożyć obciążenie. Wysoka dostępność (High Availability – HA) to zestaw mechanizmów automatycznego przełączania i równoważenia, które minimalizują przestoje.</p>
+    <p>
+      <strong>Replikacja</strong> kopiuje dane między serwerami, aby mieć zapas i rozłożyć obciążenie.
+      <strong>HA (High Availability)</strong> to mechanizmy, które <em>automatycznie</em> przełączają ruch, gdy coś padnie.
+    </p>
 
-        <h2>Replikacja master‑slave (primary‑secondary)</h2>
-        <p>W modelu master‑slave (główny–zapasowy) wszystkie zapisy trafiają na master (primary), a slave (secondary) tylko odczytują kopię danych.</p>
-        <pre><code class="language-sql">
-// Konfiguracja master (my.cnf)
-[mysqld]
-server-id = 1
-log-bin = mysql-bin
-
-// Konfiguracja slave (my.cnf)
-[mysqld]
-server-id = 2
-relay-log = mysql-relay
-
--- Na slave:
-CHANGE MASTER TO
-  MASTER_HOST='master.example.com',
-  MASTER_USER='repl_user',
-  MASTER_PASSWORD='haslo',
-  MASTER_LOG_FILE='mysql-bin.000001',
-  MASTER_LOG_POS=  107;
-START SLAVE;
-SHOW SLAVE STATUS\G;
-        </code></pre>
-
-        <h2>Failover (przełączanie awaryjne)</h2>
-        <p>Gdy master padnie, mechanizm failover automatycznie promuje jednego ze slave na nowego mastera. Można użyć narzędzi takich jak MHA lub orchestrator.</p>
-        <ul>
-            <li>Monitoruj stan mastera (np. ping lub heartbeat).</li>
-            <li>Automatycznie zmieniaj rekord DNS lub konfigurację aplikacji na nowy master.</li>
-            <li>Po przywróceniu starego mastera działa on jako nowy slave.</li>
-        </ul>
-
-        <h2>Sharding (dzielenie danych)</h2>
-        <p>Sharding to podział danych na partycje (shardy) rozproszone na wielu serwerach, by zwiększyć skalowalność.</p>
-        <pre><code class="language-sql">
-// Przykład dzielenia po kluczu klienta
-CREATE TABLE orders_shard_01 LIKE orders;
-CREATE TABLE orders_shard_02 LIKE orders;
-// Aplikacja w zależności od customer_id decyduje, do którego sharda trafi dane.
-        </code></pre>
-
-        <h2>Klastrowanie (Galera Cluster)</h2>
-        <p>Galera Cluster to rozwiązanie multi-master (wielogłówny), w którym każdy węzeł przyjmuje odczyty i zapisy, a zmiany są synchronizowane w trybie synchronicznym.</p>
-        <pre><code class="language-ini">
-# my.cnf (wszędzie tak samo)
-[mysqld]
-wsrep_on=ON
-wsrep_cluster_name="galera_cluster"
-wsrep_cluster_address="gcomm://node1,node2,node3"
-wsrep_node_address="this_node_ip"
-wsrep_sst_method=rsync
-        </code></pre>
-
-        <h2>Wskazówki</h2>
-        <ul>
-            <li>W replikacji master‑slave daj slave’owi odpowiedni delay (relay‑log‑recover), by mieć punkt przywracania.</li>
-            <li>Testuj procedurę failover, by uniknąć ręcznych operacji w kryzysie.</li>
-            <li>Przy sharding’u stosuj spójny algorytm hashujący, by uniknąć hotspotów.</li>
-            <li>Galera wymaga niskich opóźnień sieci – wdrażaj w ramach jednego centrum danych lub z szybkimi łączami.</li>
-            <li>Monitoruj replikację (SHOW SLAVE STATUS, wsrep_health) i alertuj przy lagach lub konfliktach.</li>
-        </ul>
+    <div class="note">
+      <strong>Analogia:</strong> Replikacja to jak kserokopie ważnego zeszytu (zapas). HA to opiekun,
+      który <em>od razu</em> poda Ci kopię, gdy oryginał wypadnie z rąk.
     </div>
 
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/prism.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/components/prism-sql.min.js"></script>
+    <!-- =================== MASTER-SLAVE =================== -->
+    <h2>Replikacja master-slave (primary-secondary)</h2>
+    <p>Wzorzec: wszystkie <strong>zapisy</strong> na master (primary), a slave (secondary) ma kopię do <strong>odczytu</strong>.</p>
+
+    <pre><code class="language-sql">-- Konfiguracja master (MySQL: my.cnf)
+[mysqld]
+server-id = 1                 -- unikalny ID serwera
+log-bin = mysql-bin           -- włącz binlog (dziennik zmian)
+
+-- Konfiguracja slave (MySQL: my.cnf)
+[mysqld]
+server-id = 2                 -- inny ID
+relay-log = mysql-relay       -- dziennik pośredni na slave
+
+-- Na slave: wskaż źródło (master) i od którego pliku/pozycji czytać
+CHANGE MASTER TO
+  MASTER_HOST='master.example.com',
+  MASTER_USER='repl_user',            -- konto do repliki
+  MASTER_PASSWORD='haslo',
+  MASTER_LOG_FILE='mysql-bin.000001', -- plik binloga
+  MASTER_LOG_POS = 107;               -- pozycja startowa
+
+START SLAVE;                          -- start replikacji
+SHOW SLAVE STATUS\G;                  -- diagnostyka (IO/SQL Running, lag)</code></pre>
+
+    <details open>
+      <summary class="table-title">Wizualizacja: przepływ i uprawnienia</summary>
+      <div class="grid-two">
+        <table class="db-table">
+          <caption class="mini">Rola serwerów</caption>
+          <thead><tr><th>serwer</th><th>rola</th><th>zapis</th><th>odczyt</th></tr></thead>
+          <tbody>
+            <tr><td>db-1</td><td>master / primary</td><td>✅</td><td>✅</td></tr>
+            <tr><td>db-2</td><td>slave / secondary</td><td>❌</td><td>✅</td></tr>
+          </tbody>
+        </table>
+
+        <table class="db-table">
+          <caption class="mini">Kluczowe metryki (<code>SHOW SLAVE STATUS</code>)</caption>
+          <thead><tr><th>pole</th><th>przykład</th><th>znaczenie</th></tr></thead>
+          <tbody>
+            <tr><td>Slave_IO_Running</td><td>Yes</td><td>czy wątek pobiera binlog z mastera</td></tr>
+            <tr><td>Slave_SQL_Running</td><td>Yes</td><td>czy wątek stosuje zmiany lokalnie</td></tr>
+            <tr><td>Seconds_Behind_Master</td><td>0–2</td><td>lag (sekundy opóźnienia)</td></tr>
+            <tr><td>Last_IO_Error</td><td>(puste)</td><td>błędy IO (sieć, auth)</td></tr>
+            <tr><td>Last_SQL_Error</td><td>(puste)</td><td>błędy odtwarzania zmian</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <p class="mini">Gdy <code>Seconds_Behind_Master</code> rośnie, odczyty ze slave mogą być lekko „wczorajsze”.</p>
+    </details>
+
+    <!-- =================== FAILOVER =================== -->
+    <h2>Failover (przełączanie awaryjne)</h2>
+    <p>
+      Gdy master padnie, narzędzie do HA promuje jednego ze slave na nowego mastera i <em>przełącza ruch</em> aplikacji.
+      Przykłady: MySQL MHA, Orchestrator, ProxySQL (warstwa połączeń).
+    </p>
+    <ul>
+      <li>Monitoruj mastera (heartbeat/ping, test zapisu).</li>
+      <li>Przełącz DNS/virtual IP/konfigurację połączeń na nowy master.</li>
+      <li>Stary master po powrocie włącz jako nowego slave (rejoin).</li>
+    </ul>
+
+    <details>
+      <summary class="table-title">Wizualizacja: przed/po failover</summary>
+      <div class="grid-two">
+        <table class="db-table">
+          <caption class="mini">Przed awarią</caption>
+          <thead><tr><th>serwer</th><th>rola</th><th>zapis</th></tr></thead>
+          <tbody>
+            <tr><td>db-1</td><td>master</td><td>✅</td></tr>
+            <tr><td>db-2</td><td>slave</td><td>❌</td></tr>
+          </tbody>
+        </table>
+        <table class="db-table">
+          <caption class="mini">Po failover</caption>
+          <thead><tr><th>serwer</th><th>rola</th><th>zapis</th></tr></thead>
+          <tbody>
+            <tr><td>db-1</td><td>down</td><td>—</td></tr>
+            <tr><td>db-2</td><td><strong>nowy master</strong></td><td>✅</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <p class="mini">Automat powinien też przepiąć pozostałe slave’y, aby zaczęły replikować z nowego mastera.</p>
+    </details>
+
+    <!-- =================== SHARDING =================== -->
+    <h2>Sharding (dzielenie danych)</h2>
+    <p>
+      Sharding = podział dużej tabeli na <em>shardy</em> (kawałki) na wielu serwerach. Aplikacja decyduje,
+      gdzie trafi rekord (np. zakresami ID lub konsystentnym haszowaniem).
+    </p>
+
+    <pre><code class="language-sql">-- Przykład: dzielenie po kluczu klienta (zakresy)
+CREATE TABLE orders_shard_01 LIKE orders;  -- np. klienci 1..1 000 000
+CREATE TABLE orders_shard_02 LIKE orders;  -- np. klienci 1 000 001..2 000 000
+-- Aplikacja na podstawie customer_id wybiera shard docelowy</code></pre>
+
+    <details>
+      <summary class="table-title">Wizualizacja: routing zapisu/odczytu</summary>
+      <div class="grid-two">
+        <table class="db-table">
+          <caption class="mini">Mapowanie zakresów</caption>
+          <thead><tr><th>customer_id</th><th>tabela</th><th>serwer</th></tr></thead>
+          <tbody>
+            <tr><td>1 — 1 000 000</td><td>orders_shard_01</td><td>db-shard-01</td></tr>
+            <tr><td>1 000 001 — 2 000 000</td><td>orders_shard_02</td><td>db-shard-02</td></tr>
+          </tbody>
+        </table>
+        <table class="db-table">
+          <caption class="mini">Zalety / uwagi</caption>
+          <thead><tr><th>plus</th><th>minus</th></tr></thead>
+          <tbody>
+            <tr><td>rośnie równolegle pojemność i throughput</td><td>zapytań cross-shard nie zrobisz prostym JOINem</td></tr>
+            <tr><td>mniej hotspotów przy dobrym kluczu</td><td>skomplikowany routing i migracje danych</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <p class="mini">Przy konsystentnym haszowaniu (consistent hashing) łatwiej dodać nowy shard bez masowej migracji.</p>
+    </details>
+
+    <!-- =================== GALERA =================== -->
+    <h2>Klastrowanie (Galera Cluster)</h2>
+    <p>
+      <strong>Galera</strong> — multi-master: każdy węzeł przyjmuje zapisy/odczyty, zmiany są replikowane <em>synchronicznie</em>.
+      Wymaga dobrego łącza (niski RTT).
+    </p>
+
+    <pre><code class="language-ini"># my.cnf (na każdym węźle)
+[mysqld]
+wsrep_on=ON
+wsrep_cluster_name="galera_cluster"          # nazwa klastra
+wsrep_cluster_address="gcomm://node1,node2,node3"  # lista węzłów
+wsrep_node_address="this_node_ip"            # IP bieżącego węzła
+wsrep_sst_method=rsync                        # sposób synchronizacji (SST)</code></pre>
+
+    <details>
+      <summary class="table-title">Wizualizacja: stan klastra</summary>
+      <div class="grid-two">
+        <table class="db-table">
+          <caption class="mini">Zmienne wsrep (przykładowe)</caption>
+          <thead><tr><th>zmienna</th><th>wartość</th><th>znaczenie</th></tr></thead>
+          <tbody>
+            <tr><td>wsrep_cluster_size</td><td>3</td><td>liczba węzłów w klastrze</td></tr>
+            <tr><td>wsrep_ready</td><td>ON</td><td>węzeł gotowy do ruchu</td></tr>
+            <tr><td>wsrep_local_state_comment</td><td>Synced</td><td>węzeł zsynchronizowany</td></tr>
+          </tbody>
+        </table>
+
+        <table class="db-table">
+          <caption class="mini">Zachowanie przy awarii</caption>
+          <thead><tr><th>scenariusz</th><th>efekt</th></tr></thead>
+          <tbody>
+            <tr><td>padnie 1 z 3 węzłów</td><td>klaster działa (quorum jest)</td></tr>
+            <tr><td>podział sieci (split brain)</td><td>mniejsza część traci quorum → blokuje zapisy</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <p class="mini">W Galerze <em>większość</em> (quorum) decyduje, kto może pisać — to chroni spójność.</p>
+    </details>
+
+    <!-- =================== WSKAZÓWKI =================== -->
+    <h2>Wskazówki</h2>
+    <ul>
+      <li>W replikacji master-slave monitoruj <code>Seconds_Behind_Master</code> i błędy IO/SQL.</li>
+      <li>Testuj procedury <strong>failover</strong> (symulacje!), aby wyeliminować ręczne kroki w kryzysie.</li>
+      <li>Przy <strong>shardingu</strong> wybierz klucz podziału, który równomiernie rozkłada obciążenie.</li>
+      <li>Galera wymaga <strong>niskich opóźnień</strong> — najlepiej w jednym DC lub z bardzo szybłymi łączami.</li>
+      <li>Alertuj na: lag replikacji, brak quorum, konflikt zapisu, odchylenia opóźnień sieci.</li>
+      <li>Regularnie testuj odtwarzanie backupów i rejoin węzłów.</li>
+    </ul>
+  </div>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/prism.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/components/prism-sql.min.js"></script>
+
+  <!-- Styl TYLKO do wizualizacji; nie rusza Twojego styles.css -->
+  <style>
+    .db-table{width:100%;border-collapse:collapse;margin:.5rem 0}
+    .db-table th,.db-table td{border:1px solid #1f2937;padding:.5rem .65rem;text-align:left;vertical-align:top}
+    .db-table th{background:#0e1729;color:#dbe2ea}
+    .null{color:#9ca3af;font-style:italic}
+    details{margin:.75rem 0;border:1px solid #1f2937;border-radius:.5rem;padding:.25rem .5rem;background:#0e1729}
+    details[open]{background:#111827}
+    summary{cursor:pointer;list-style:none}
+    summary::-webkit-details-marker{display:none}
+    .table-title{font-weight:600;margin:.25rem 0}
+    .mini{color:#a7b0be;font-size:.95rem;margin:.25rem 0 .5rem}
+    .note{border-left:4px solid #10b981;padding:.75rem 1rem;background:#0e1729;border-radius:.5rem;margin:1rem 0;color:#cfe3d8}
+    .grid-two{display:grid;grid-template-columns:1fr 1fr;gap:.75rem}
+    @media (max-width: 900px){.grid-two{grid-template-columns:1fr}}
+  </style>
 </body>
 </html>

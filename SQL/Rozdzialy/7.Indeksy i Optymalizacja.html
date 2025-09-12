@@ -11,77 +11,292 @@
     <div class="container">
         <h1>Indeksy i Optymalizacja</h1>
 
-        <p>Indeksy (indexes) to dodatkowe struktury danych, które przyspieszają wyszukiwanie i sortowanie w tabelach. Optymalizacja zapytań to zbiór technik pozwalających wykonywać je szybciej i efektywniej.</p>
+        <p>
+          <strong>Indeks</strong> to dodatkowa struktura danych (jak <em>spis treści</em> w książce), która pozwala
+          szybciej znaleźć wiersze bez przeglądania całej tabeli. <strong>Optymalizacja</strong> to zestaw praktyk,
+          które pomagają bazie wybrać szybki plan wykonania zapytania.
+        </p>
+
+        <div class="note">
+          <strong>Analogia:</strong> Tabela bez indeksu to książka bez spisu treści – żeby znaleźć nazwisko, musisz
+          przewertować wszystkie strony (pełny skan). Z indeksem skaczesz od razu do litery i do konkretnej strony.
+        </div>
+
+        <!-- =================== DANE WEJŚCIOWE DO WIZUALIZACJI =================== -->
+        <details open>
+          <summary class="table-title">Dane wejściowe: <code>users</code></summary>
+          <table class="db-table">
+            <thead><tr><th>id</th><th>email</th><th>first_name</th><th>last_name</th></tr></thead>
+            <tbody>
+              <tr><td>1</td><td>anna@example.com</td><td>Anna</td><td>Kowalska</td></tr>
+              <tr><td>2</td><td>jan@example.com</td><td>Jan</td><td>Nowak</td></tr>
+              <tr><td>3</td><td>ola@example.com</td><td>Ola</td><td>Lis</td></tr>
+              <tr><td>...</td><td>...</td><td>...</td><td>...</td></tr>
+            </tbody>
+          </table>
+        </details>
+
+        <details open>
+          <summary class="table-title">Dane wejściowe: <code>orders</code></summary>
+          <table class="db-table">
+            <thead><tr><th>id</th><th>customer_id</th><th>order_date</th><th>status</th><th>amount</th></tr></thead>
+            <tbody>
+              <tr><td>101</td><td>1</td><td>2025-01-05</td><td>ACTIVE</td><td>120.00</td></tr>
+              <tr><td>102</td><td>2</td><td>2025-01-05</td><td>CANCELLED</td><td>50.00</td></tr>
+              <tr><td>103</td><td>1</td><td>2025-01-06</td><td>ACTIVE</td><td>70.00</td></tr>
+              <tr><td>104</td><td>3</td><td>2025-01-10</td><td>ACTIVE</td><td>200.00</td></tr>
+              <tr><td>105</td><td>1</td><td>2025-01-15</td><td>ACTIVE</td><td>40.00</td></tr>
+            </tbody>
+          </table>
+        </details>
+
+        <details open>
+          <summary class="table-title">Dane wejściowe: <code>products</code></summary>
+          <table class="db-table">
+            <thead><tr><th>id</th><th>sku</th><th>name</th><th>price</th></tr></thead>
+            <tbody>
+              <tr><td>1</td><td>SKU-001</td><td>Telefon</td><td>1200</td></tr>
+              <tr><td>2</td><td>SKU-002</td><td>Laptop</td><td>4000</td></tr>
+              <tr><td>3</td><td>SKU-003</td><td>Czajnik</td><td>150</td></tr>
+            </tbody>
+          </table>
+        </details>
+        <!-- ==================================================================== -->
 
         <h2>Tworzenie indeksów</h2>
         <p>Aby utworzyć indeks na jednej lub kilku kolumnach:</p>
-        <pre><code class="language-sql">
-// Prosty indeks na kolumnie
+        <pre><code class="language-sql">-- Prosty indeks na kolumnie
 CREATE INDEX idx_users_email
 ON users(email);
+--                                     ^^^^^^^^^ klucz indeksu (po czym szukamy)
 
-// Indeks wielokolumnowy
+-- Indeks wielokolumnowy (kompozytowy)
 CREATE INDEX idx_orders_customer_date
 ON orders(customer_id, order_date);
+--            lewy-prefiks: (customer_id) działa też samodzielnie
 
-// Indeks unikatowy (zapobiega duplikatom)
+-- Indeks unikatowy (gwarantuje brak duplikatów)
 CREATE UNIQUE INDEX idx_products_sku
-ON products(sku);
-        </code></pre>
-        <p>Indeksy działają jak spis treści w książce – pozwalają szybko znaleźć potrzebne wiersze bez przeglądania całej tabeli.</p>
+ON products(sku);</code></pre>
+
+        <!-- Wizualizacja: efekt użycia indeksu pojedynczego -->
+        <details open>
+          <summary class="table-title">Wynik: wyszukiwanie po <code>users.email</code> przed/po indeksie</summary>
+          <table class="db-table">
+            <thead><tr><th>Zapytanie</th><th>Plan uproszczony</th><th>Opis</th></tr></thead>
+            <tbody>
+              <tr>
+                <td><code>SELECT * FROM users WHERE email='anna@example.com'</code></td>
+                <td><strong>Seq Scan</strong> (pełny skan)</td>
+                <td>Bez indeksu: przegląda całą tabelę w poszukiwaniu dopasowania.</td>
+              </tr>
+              <tr>
+                <td>to samo (po utworzeniu <code>idx_users_email</code>)</td>
+                <td><strong>Index Scan</strong> po <code>idx_users_email</code></td>
+                <td>Z indeksem: skok do odpowiedniego wpisu w strukturze indeksu.</td>
+              </tr>
+            </tbody>
+          </table>
+        </details>
+
+        <!-- Kompozyt + reguła lewego prefiksu -->
+        <details>
+          <summary class="table-title">Indeks kompozytowy i reguła „lewego prefiksu”</summary>
+          <table class="db-table">
+            <thead><tr><th>Zapytanie</th><th>Czy skorzysta z <code>(customer_id, order_date)</code>?</th><th>Uwagi</th></tr></thead>
+            <tbody>
+              <tr>
+                <td><code>WHERE customer_id=1 AND order_date &gt;= '2025-01-01'</code></td>
+                <td>Tak</td>
+                <td>Pełne dopasowanie do obu kolumn indeksu.</td>
+              </tr>
+              <tr>
+                <td><code>WHERE customer_id=1</code></td>
+                <td>Tak</td>
+                <td>Lewy prefiks: można użyć samego <code>customer_id</code> z początku indeksu.</td>
+              </tr>
+              <tr>
+                <td><code>WHERE order_date &gt;= '2025-01-01'</code></td>
+                <td>Często nie</td>
+                <td>Brak lewego prefiksu – indeks zaczyna się od <code>customer_id</code>.</td>
+              </tr>
+            </tbody>
+          </table>
+        </details>
+
+        <!-- Unikalny indeks -->
+        <details>
+          <summary class="table-title">Indeks unikatowy (walidacja duplikatów)</summary>
+          <table class="db-table">
+            <thead><tr><th>Operacja</th><th>Wynik</th><th>Opis</th></tr></thead>
+            <tbody>
+              <tr>
+                <td><code>INSERT INTO products(sku,name,price) VALUES ('SKU-002','Tablet',2000);</code></td>
+                <td><strong>Błąd</strong></td>
+                <td><code>SKU-002</code> już istnieje → unikalny indeks blokuje duplikat.</td>
+              </tr>
+              <tr>
+                <td><code>INSERT INTO products(sku,name,price) VALUES ('SKU-004','Tablet',2000);</code></td>
+                <td><strong>OK</strong></td>
+                <td>Nowy <code>sku</code> → wstawienie dozwolone.</td>
+              </tr>
+            </tbody>
+          </table>
+        </details>
 
         <h2>EXPLAIN (plan zapytania)</h2>
-        <p>EXPLAIN pokazuje, jak baza planuje wykonać zapytanie. Dzięki temu można zidentyfikować operacje skanujace całą tabelę (<code>Seq Scan</code>) zamiast użycia indeksu (<code>Index Scan</code>).</p>
-        <pre><code class="language-sql">
-// Wyświetlenie planu zapytania
+        <p>
+          <code>EXPLAIN</code> pokazuje, jak baza planuje wykonać zapytanie (który indeks, jaki typ skanu).
+          W PostgreSQL <code>EXPLAIN ANALYZE</code> uruchamia zapytanie i pokazuje rzeczywiste czasy.
+        </p>
+        <pre><code class="language-sql">-- Plan wykonania:
 EXPLAIN
 SELECT *
 FROM orders
-WHERE customer_id = 123;
+WHERE customer_id = 1;
 
-// W PostgreSQL można dodać ANALYZE, by zobaczyć rzeczywiste czasy
+-- Plan + rzeczywiste czasy (PostgreSQL):
 EXPLAIN ANALYZE
 SELECT *
 FROM orders
-WHERE customer_id = 123;
-        </code></pre>
-        <p>W planie zwróć uwagę na koszty (<em>startup cost</em>, <em>total cost</em>) i na to, czy używany jest <code>Index Scan</code>.</p>
+WHERE customer_id = 1;</code></pre>
+
+        <!-- Wizualizacja: przykład planu (uproszczony) -->
+        <details>
+          <summary class="table-title">Uproszczony plan: przed vs po indeksie</summary>
+          <table class="db-table">
+            <thead><tr><th>Wersja</th><th>Typ skanu</th><th>Użyty indeks</th><th>Szac. wiersze</th><th>Filtr</th></tr></thead>
+            <tbody>
+              <tr><td>Przed</td><td>Seq Scan</td><td class="null">NULL</td><td>~N</td><td><code>customer_id=1</code></td></tr>
+              <tr><td>Po</td><td>Index Scan</td><td><code>idx_orders_customer_date</code></td><td>~kilka</td><td><code>customer_id=1</code></td></tr>
+            </tbody>
+          </table>
+          <p class="mini">Wyniki i nazwy mogą się różnić w zależności od silnika i statystyk.</p>
+        </details>
 
         <h2>Sposoby przyspieszania zapytań</h2>
         <ul>
             <li>Twórz indeksy na kolumnach często używanych w <code>WHERE</code>, <code>JOIN</code> i <code>ORDER BY</code>.</li>
-            <li>Unikaj <code>SELECT *</code> – wybieraj tylko potrzebne kolumny.</li>
+            <li>Unikaj <code>SELECT *</code> – wybieraj tylko potrzebne kolumny (mniej danych = mniej I/O).</li>
             <li>Używaj <code>LIMIT</code>, gdy potrzebujesz tylko części wyników.</li>
-            <li>Denormalizacja (dublowanie danych) dla bardzo często czytanych informacji.</li>
-            <li>Cache’owanie wyników zapytań po stronie aplikacji lub bazy.</li>
-            <li>Dziel duże tabele (partitioning) na mniejsze części według zakresów dat lub kluczy.</li>
+            <li>Rozważ <strong>partycjonowanie</strong> (dzielenie tabeli na części po dacie/zakresie).</li>
+            <li>Cache’uj wyniki po stronie aplikacji, jeśli dane zmieniają się rzadko.</li>
+            <li>Rozważ <strong>denormalizację</strong> wybranych pól tylko tam, gdzie <em>bardzo</em> często czytasz.</li>
         </ul>
 
+        <!-- Wizualizacja: przykład ORDER BY z indeksem -->
+        <details>
+          <summary class="table-title">Sortowanie a indeks</summary>
+          <table class="db-table">
+            <thead><tr><th>Zapytanie</th><th>Plan</th><th>Uwagi</th></tr></thead>
+            <tbody>
+              <tr>
+                <td><code>SELECT * FROM orders WHERE customer_id=1 ORDER BY order_date;</code></td>
+                <td>Index Scan po <code>(customer_id, order_date)</code></td>
+                <td>Indeks pasuje do filtra i kolejności → może uniknąć kosztownego sortowania.</td>
+              </tr>
+              <tr>
+                <td><code>SELECT * FROM orders ORDER BY order_date;</code></td>
+                <td>Seq Scan + Sort <span class="mini">(lub Index Scan po indeksie na samym <code>order_date</code>)</span></td>
+                <td>Bez filtra często i tak trzeba przeskanować dużo danych.</td>
+              </tr>
+            </tbody>
+          </table>
+        </details>
+
         <h2>Statystyki</h2>
-        <p>Baza danych zbiera statystyki o rozkładzie wartości w kolumnach, by optymalizator mógł wybrać najlepszy plan.</p>
-        <pre><code class="language-sql">
-// Aktualizacja statystyk w PostgreSQL
+        <p>
+          Optymalizator korzysta ze <strong>statystyk</strong> (rozkład wartości, kardynalność), aby wybrać plan.
+          Po dużych zmianach w tabeli odśwież statystyki:
+        </p>
+        <pre><code class="language-sql">-- PostgreSQL
 ANALYZE;
 
-// W MySQL
+-- MySQL
 ANALYZE TABLE orders;
 
-// W SQL Server
-UPDATE STATISTICS orders;
-        </code></pre>
-        <p>Regularnie odświeżaj statystyki, zwłaszcza po dużych zmianach w tabeli.</p>
+-- SQL Server
+UPDATE STATISTICS orders;</code></pre>
+
+        <!-- Wizualizacja: wpływ statystyk -->
+        <details>
+          <summary class="table-title">Gdy statystyki są nieaktualne</summary>
+          <table class="db-table">
+            <thead><tr><th>Sytuacja</th><th>Skutek</th><th>Rozwiązanie</th></tr></thead>
+            <tbody>
+              <tr>
+                <td>Mocno zmienił się rozkład <code>customer_id</code></td>
+                <td>Zły wybór planu (np. Seq Scan zamiast Index Scan)</td>
+                <td><code>ANALYZE</code> / aktualizacja statystyk</td>
+              </tr>
+            </tbody>
+          </table>
+        </details>
+
+        <h2>Indeksy częściowe i warunkowe</h2>
+        <p>
+          <em>Indeks częściowy</em> (partial index) obejmuje tylko część wierszy spełniających warunek (np. tylko aktywne).
+          Mniejszy indeks = szybsze wstawianie i tańsza pamięć.
+        </p>
+        <pre><code class="language-sql">-- PostgreSQL: indeks tylko na aktywnych zamówieniach
+CREATE INDEX idx_orders_active_date
+ON orders(order_date)
+WHERE status = 'ACTIVE';  -- warunek indeksu (tylko te wiersze trafią do indeksu)</code></pre>
+
+        <details>
+          <summary class="table-title">Kiedy zadziała indeks częściowy?</summary>
+          <table class="db-table">
+            <thead><tr><th>Zapytanie</th><th>Czy użyje indeksu?</th><th>Dlaczego</th></tr></thead>
+            <tbody>
+              <tr>
+                <td><code>WHERE status='ACTIVE' AND order_date &gt;= '2025-01-01'</code></td>
+                <td>Tak</td>
+                <td>Warunek zapytania pokrywa warunek indeksu.</td>
+              </tr>
+              <tr>
+                <td><code>WHERE status='CANCELLED' AND order_date &gt;= '2025-01-01'</code></td>
+                <td>Nie</td>
+                <td>Wiersze z <code>CANCELLED</code> nie są w indeksie częściowym.</td>
+              </tr>
+            </tbody>
+          </table>
+        </details>
+
+        <h2>Częste pułapki (i jak ich uniknąć)</h2>
+        <ul>
+          <li><strong>Funkcja po lewej stronie</strong>: <code>WHERE LOWER(email)='...'</code> zwykle uniemożliwia użycie indeksu po <code>email</code>.
+            Rozwiązanie: indeks funkcyjny (jeśli silnik wspiera) lub normalizacja danych.</li>
+          <li><strong>Niezgodny typ</strong>: porównywanie tekstu z liczbą może wyłączyć indeks.</li>
+          <li><strong>Za dużo indeksów</strong>: każdy indeks spowalnia <code>INSERT/UPDATE/DELETE</code> (trzeba go utrzymywać).</li>
+          <li><strong>Kolejność kolumn w indeksie</strong>: dopasuj do najczęstszych filtrów i sortowań (lewy prefiks).</li>
+        </ul>
 
         <h2>Wskazówki</h2>
         <ul>
-            <li>Monitoruj za pomocą EXPLAIN i narzędzi do profilowania (np. pg_stat_statements).</li>
-            <li>Usuń nieużywane indeksy – każdy indeks spowalnia INSERT/UPDATE/DELETE.</li>
-            <li>Stosuj indeksy częściowe (<code>WHERE</code>) np. tylko na aktywnych rekordach.</li>
-            <li>Bądź ostrożny z denormalizacją – ułatwia odczyt kosztem spójności danych.</li>
-            <li>Przy dużych zestawach danych rozważ shardowanie (rozdzielenie danych na różne serwery).</li>
+            <li>Profiluj zapytania: <code>EXPLAIN</code> (+ <code>ANALYZE</code> w Postgresie) i metryki (np. czas, I/O).</li>
+            <li>Usuwaj nieużywane indeksy – generują koszt przy modyfikacjach.</li>
+            <li>Rozważ indeksy częściowe i filtrowane pod dominujące przypadki użycia.</li>
+            <li>Indeksuj kolumny <code>JOIN</code>/<code>WHERE</code>/<code>ORDER BY</code> – to zwykle największy zysk.</li>
+            <li>Przy dużych tabelach: partycjonowanie (po dacie/zakresie) + świeże statystyki.</li>
         </ul>
     </div>
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/prism.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/components/prism-sql.min.js"></script>
+
+    <!-- Styl TYLKO do wizualizacji; nie rusza Twojego styles.css -->
+    <style>
+      .db-table{width:100%;border-collapse:collapse;margin:.5rem 0}
+      .db-table th,.db-table td{border:1px solid #1f2937;padding:.5rem .65rem;text-align:left}
+      .db-table th{background:#0e1729;color:#dbe2ea}
+      .null{color:#9ca3af;font-style:italic}
+      details{margin:.75rem 0;border:1px solid #1f2937;border-radius:.5rem;padding:.25rem .5rem;background:#0e1729}
+      details[open]{background:#111827}
+      summary{cursor:pointer;list-style:none}
+      summary::-webkit-details-marker{display:none}
+      .table-title{font-weight:600;margin:.25rem 0}
+      .mini{color:#a7b0be;font-size:.95rem;margin:.25rem 0 .5rem}
+      .note{border-left:4px solid #10b981;padding:.75rem 1rem;background:#0e1729;border-radius:.5rem;margin:1rem 0;color:#cfe3d8}
+    </style>
 </body>
 </html>

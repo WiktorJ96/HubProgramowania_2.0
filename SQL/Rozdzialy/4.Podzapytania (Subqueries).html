@@ -1,103 +1,272 @@
 <!DOCTYPE html>
 <html lang="pl">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Podzapytania (Subqueries)</title>
-    <link rel="stylesheet" href="../styles.css">
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/themes/prism-tomorrow.min.css" rel="stylesheet" />
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Podzapytania (Subqueries)</title>
+  <link rel="stylesheet" href="../styles.css">
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/themes/prism-tomorrow.min.css" rel="stylesheet" />
 </head>
 <body>
-    <div class="container">
-        <h1>Podzapytania (Subqueries)</h1>
+  <div class="container">
+    <h1>Podzapytania (Subqueries)</h1>
 
-        <p>Podzapytanie (subquery) to zapytanie osadzone wewnątrz innego zapytania. Działa jak «zapytanie w zapytaniu» i zwraca wynik, który używamy w klauzulach <code>SELECT</code>, <code>FROM</code> lub <code>WHERE</code>.</p>
+    <p>Podzapytanie (<em>subquery</em>) to „zapytanie w zapytaniu”. Działa jak mały kalkulator,
+      który najpierw coś policzy/znajdzie, a jego wynik wykorzystujesz w <code>SELECT</code>, <code>FROM</code> lub <code>WHERE</code>.</p>
 
-        <h2>Subquery w klauzuli SELECT</h2>
-        <p>Możesz wstawić pojedynczą wartość obliczoną dla każdego wiersza.</p>
-        <pre><code class="language-sql">
-// Dodanie kolumny z liczbą zamówień danego klienta
-SELECT 
-    c.id,
-    c.name,
-    (
-        SELECT COUNT(*)       -- zlicza
-        FROM orders o
-        WHERE o.customer_id = c.id
-    ) AS order_count
+    <div class="note">
+      <strong>Analogia:</strong> Masz dwa kroki. Najpierw pytasz „pomocnika” o liczbę/parę ID (to jest subquery),
+      a potem używasz tej odpowiedzi w zapytaniu głównym. Jak karteczka-post-it przyklejona do głównego zadania.
+    </div>
+
+    <!-- =================== DANE WEJŚCIOWE (na nich opierają się wyniki) =================== -->
+    <details open>
+      <summary class="table-title">Dane wejściowe: <code>customers</code></summary>
+      <table class="db-table">
+        <thead><tr><th>id</th><th>name</th></tr></thead>
+        <tbody>
+          <tr><td>1</td><td>Anna Kowalska</td></tr>
+          <tr><td>2</td><td>Jan Nowak</td></tr>
+          <tr><td>3</td><td>Ola Lis</td></tr>
+        </tbody>
+      </table>
+    </details>
+
+    <details open>
+      <summary class="table-title">Dane wejściowe: <code>orders</code></summary>
+      <table class="db-table">
+        <thead><tr><th>id</th><th>customer_id</th><th>amount</th></tr></thead>
+        <tbody>
+          <tr><td>201</td><td>1</td><td>1200</td></tr>
+          <tr><td>202</td><td>1</td><td>200</td></tr>
+          <tr><td>203</td><td>2</td><td>80</td></tr>
+          <tr><td>204</td><td>3</td><td>50</td></tr>
+          <tr><td>205</td><td>3</td><td>300</td></tr>
+          <tr><td>206</td><td>1</td><td>900</td></tr>
+        </tbody>
+      </table>
+    </details>
+
+    <details open>
+      <summary class="table-title">Dane wejściowe: <code>products</code>, <code>order_items</code>, <code>categories</code></summary>
+      <div style="display:grid;gap:.5rem">
+        <table class="db-table">
+          <caption class="mini" style="caption-side:top;text-align:left">products</caption>
+          <thead><tr><th>id</th><th>name</th><th>category_id</th></tr></thead>
+          <tbody>
+            <tr><td>1</td><td>Telefon</td><td>10</td></tr>
+            <tr><td>2</td><td>Laptop</td><td>10</td></tr>
+            <tr><td>3</td><td>Książka</td><td>20</td></tr>
+            <tr><td>4</td><td>Czajnik</td><td>30</td></tr>
+          </tbody>
+        </table>
+
+        <table class="db-table">
+          <caption class="mini" style="caption-side:top;text-align:left">order_items</caption>
+          <thead><tr><th>order_id</th><th>product_id</th></tr></thead>
+          <tbody>
+            <tr><td>201</td><td>1</td></tr>
+            <tr><td>203</td><td>3</td></tr>
+            <tr><td>206</td><td>2</td></tr>
+          </tbody>
+        </table>
+
+        <table class="db-table">
+          <caption class="mini" style="caption-side:top;text-align:left">categories</caption>
+          <thead><tr><th>id</th><th>name</th></tr></thead>
+          <tbody>
+            <tr><td>10</td><td>Elektronika</td></tr>
+            <tr><td>20</td><td>Książki</td></tr>
+            <tr><td>30</td><td>Dom</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </details>
+    <!-- =============================================================================== -->
+
+    <!-- =================== 1) SUBQUERY W SELECT (skalarne, skorelowane) =================== -->
+    <h2>1) Subquery w klauzuli <code>SELECT</code> (skalarne, skorelowane)</h2>
+    <pre><code class="language-sql">SELECT 
+  c.id,
+  -- id klienta z tabeli głównej (c)
+  c.name,
+  -- nazwa klienta
+
+  (
+    SELECT COUNT(*)
+    -- policz liczbę zamówień...
+    FROM orders o
+    -- ...w tabeli orders (alias o)
+    WHERE o.customer_id = c.id
+    -- WAŻNE: warunek łączy „wewnętrzne” subquery z bieżącym wierszem zewnętrznego SELECT (c.id)
+  ) AS order_count
+  -- wynik subquery (pojedyncza liczba) jako kolumna order_count
+
 FROM customers c;
-        </code></pre>
+-- tabela główna: customers (alias c)</code></pre>
 
-        <h2>Subquery w klauzuli FROM</h2>
-        <p>Traktowane jak tymczasowa tabela (derived table).</p>
-        <pre><code class="language-sql">
-// Pobranie średniej sprzedaży na klienta, a potem wybór tych powyżej progu
-SELECT sub.customer_id, sub.avg_sales
+    <details open>
+      <summary class="table-title">Wynik (subquery w SELECT → liczba zamówień klienta)</summary>
+      <table class="db-table">
+        <thead><tr><th>id</th><th>name</th><th>order_count</th></tr></thead>
+        <tbody>
+          <tr><td>1</td><td>Anna Kowalska</td><td>3</td></tr>
+          <tr><td>2</td><td>Jan Nowak</td><td>1</td></tr>
+          <tr><td>3</td><td>Ola Lis</td><td>2</td></tr>
+        </tbody>
+      </table>
+      <p class="mini">Skalarne subquery musi zwrócić **jedną wartość** dla <em>każdego</em> wiersza zewnętrznego SELECT.</p>
+    </details>
+
+    <!-- =================== 2) SUBQUERY W FROM (tabela pochodna) =================== -->
+    <h2>2) Subquery w klauzuli <code>FROM</code> (tabela pochodna, <em>derived table</em>)</h2>
+    <pre><code class="language-sql">SELECT sub.customer_id, sub.avg_sales
+-- sięgamy do „tymczasowej tabeli” sub z policzonymi średnimi
+
 FROM (
-    SELECT customer_id, AVG(amount) AS avg_sales
-    FROM orders
-    GROUP BY customer_id
-) AS sub                -- alias dla podzapytania
-WHERE sub.avg_sales > 100;
-        </code></pre>
+  SELECT customer_id, AVG(amount) AS avg_sales
+  -- policz średnią kwotę zamówienia per klient
+  FROM orders
+  GROUP BY customer_id
+  -- grupowanie „do środka”, aby wynik (customer_id, avg_sales) był gotowy
+) AS sub
+-- nadaj alias (wymagane), aby móc używać kolumn sub.avg_sales
 
-        <h2>Subquery w klauzuli WHERE</h2>
-        <p>Filtruje główne zapytanie na podstawie wyniku podzapytania.</p>
-        <pre><code class="language-sql">
-// Klienci, którzy złożyli zamówienie powyżej 1000
+WHERE sub.avg_sales > 100;
+-- filtrujemy już po agregacji: zostają klienci ze średnią > 100</code></pre>
+
+    <details>
+      <summary class="table-title">Wynik (FROM-subquery → średnia sprzedaż &gt; 100)</summary>
+      <table class="db-table">
+        <thead><tr><th>customer_id</th><th>avg_sales</th></tr></thead>
+        <tbody>
+          <tr><td>1</td><td>766.67</td></tr>
+          <tr><td>3</td><td>175.00</td></tr>
+        </tbody>
+      </table>
+      <p class="mini">Zaokrąglono do 2 miejsc. Dla Jana (id=2) średnia to 80 → nie spełnia warunku.</p>
+    </details>
+
+    <!-- =================== 3) SUBQUERY W WHERE (IN / EXISTS / NOT EXISTS) =================== -->
+    <h2>3) Subquery w klauzuli <code>WHERE</code> (IN / EXISTS / NOT EXISTS)</h2>
+    <pre><code class="language-sql">-- Klienci, którzy złożyli zamówienie powyżej 1000
 SELECT *
 FROM customers c
 WHERE c.id IN (
-    SELECT customer_id
-    FROM orders
-    WHERE amount > 1000
+  SELECT customer_id
+  FROM orders
+  WHERE amount > 1000
 );
+-- Subquery zwraca listę customer_id; IN sprawdza „czy c.id jest na tej liście”.</code></pre>
 
-// Produkty, które nie były sprzedane (EXISTS = istnieje)
+    <details open>
+      <summary class="table-title">Wynik: klienci z zamówieniem &gt; 1000</summary>
+      <table class="db-table">
+        <thead><tr><th>id</th><th>name</th></tr></thead>
+        <tbody>
+          <tr><td>1</td><td>Anna Kowalska</td></tr>
+        </tbody>
+      </table>
+    </details>
+
+    <pre><code class="language-sql">-- Produkty, które NIE były sprzedane (NOT EXISTS)
 SELECT *
 FROM products p
 WHERE NOT EXISTS (
-    SELECT 1
-    FROM order_items oi
-    WHERE oi.product_id = p.id
+  SELECT 1
+  FROM order_items oi
+  WHERE oi.product_id = p.id
 );
-        </code></pre>
+-- NOT EXISTS jest TRUE, gdy subquery nie znajdzie żadnego wiersza (brak zakupu produktu).</code></pre>
 
-        <h2>Użycie EXISTS (istnieje) i IN (w)</h2>
-        <ul>
-            <li><code>IN</code> – sprawdza, czy wartość znajduje się w liście zwróconej przez subquery.</li>
-            <li><code>EXISTS</code> – zwraca <code>TRUE</code>, jeśli podzapytanie zwróci choć jeden wiersz.</li>
-        </ul>
-        <pre><code class="language-sql">
-// Wybranie klientów z co najmniej jednym zamówieniem
-SELECT *
-FROM customers c
-WHERE EXISTS (
-    SELECT 1
-    FROM orders o
-    WHERE o.customer_id = c.id
-);
+    <details>
+      <summary class="table-title">Wynik: produkty niesprzedane (NOT EXISTS)</summary>
+      <table class="db-table">
+        <thead><tr><th>id</th><th>name</th><th>category_id</th></tr></thead>
+        <tbody>
+          <tr><td>4</td><td>Czajnik</td><td>30</td></tr>
+        </tbody>
+      </table>
+    </details>
 
-// Produkty z kategoriami z listy
+    <!-- =================== 4) EXISTS vs IN =================== -->
+    <h2>4) <code>EXISTS</code> vs <code>IN</code> — kiedy którego używać?</h2>
+    <ul>
+      <li><code>IN</code> — porównujesz wartość do **listy** zwróconej przez subquery (np. lista ID).</li>
+      <li><code>EXISTS</code> — pytasz: „czy **istnieje** choć jeden pasujący wiersz?”. Często szybsze przy dużych listach.</li>
+    </ul>
+
+    <pre><code class="language-sql">-- Produkty w kategoriach zaczynających się od „Elektronika”
 SELECT *
 FROM products
 WHERE category_id IN (
-    SELECT id
-    FROM categories
-    WHERE name LIKE 'Elektronika%'
+  SELECT id
+  FROM categories
+  WHERE name LIKE 'Elektronika%'
 );
-        </code></pre>
+-- Subquery zwraca np. [10]; warunek to: products.category_id IN [10].</code></pre>
 
-        <h2>Wskazówki</h2>
-        <ul>
-            <li>Subquery w <code>SELECT</code> musi zwracać pojedynczą wartość na wiersz.</li>
-            <li>W <code>FROM</code> używaj aliasu (AS sub), by odnieść się do wyniku.</li>
-            <li><code>EXISTS</code> bywa szybsze niż <code>IN</code>, gdy lista może być duża.</li>
-            <li>Unikaj zagnieżdżania wielu poziomów subquery – lepiej użyć <code>JOIN</code> lub widoków (views).</li>
-        </ul>
-    </div>
+    <details>
+      <summary class="table-title">Wynik: produkty z kategorii „Elektronika%”</summary>
+      <table class="db-table">
+        <thead><tr><th>id</th><th>name</th><th>category_id</th></tr></thead>
+        <tbody>
+          <tr><td>1</td><td>Telefon</td><td>10</td></tr>
+          <tr><td>2</td><td>Laptop</td><td>10</td></tr>
+        </tbody>
+      </table>
+    </details>
 
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/prism.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/components/prism-sql.min.js"></script>
+    <pre><code class="language-sql">-- Klienci, którzy mają co najmniej jedno zamówienie (EXISTS)
+SELECT *
+FROM customers c
+WHERE EXISTS (
+  SELECT 1
+  FROM orders o
+  WHERE o.customer_id = c.id
+);
+-- EXISTS nie zwraca listy – po prostu sprawdza, czy znajdzie się JAKIKOLWIEK wiersz.</code></pre>
+
+    <details>
+      <summary class="table-title">Wynik: klienci z przynajmniej jednym zamówieniem (EXISTS)</summary>
+      <table class="db-table">
+        <thead><tr><th>id</th><th>name</th></tr></thead>
+        <tbody>
+          <tr><td>1</td><td>Anna Kowalska</td></tr>
+          <tr><td>2</td><td>Jan Nowak</td></tr>
+          <tr><td>3</td><td>Ola Lis</td></tr>
+        </tbody>
+      </table>
+    </details>
+
+    <!-- =================== 5) Dobre praktyki i pułapki =================== -->
+    <h2>5) Wskazówki i pułapki</h2>
+    <ul>
+      <li><strong>Subquery w SELECT</strong> musi zwracać **jedną wartość** (skalar). Jeśli zwróci więcej → błąd.</li>
+      <li><strong>Alias w FROM</strong> jest obowiązkowy (np. <code>AS sub</code>), inaczej nie odwołasz się do kolumn.</li>
+      <li><strong>EXISTS</strong> zwykle wygrywa, gdy „lista” byłaby ogromna (sprawdza tylko „czy jest jakiś” wiersz).</li>
+      <li>Głębokie zagnieżdżanie subquery utrudnia czytanie — czasem lepszy jest <code>JOIN</code> lub widok.</li>
+      <li>Jeśli subquery liczy się dla **każdego** wiersza (skorelowane), rozważ przeniesienie do <code>JOIN + GROUP BY</code> — bywa szybciej.</li>
+    </ul>
+
+    <p class="small">Składnia drobno różni się między systemami (PostgreSQL, MySQL, SQL Server, SQLite), ale pojęcia i logika są takie same.</p>
+  </div>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/prism.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/components/prism-sql.min.js"></script>
+
+  <!-- Styl tylko dla wizualizacji tabel (nie rusza Twojego styles.css) -->
+  <style>
+    .db-table{width:100%;border-collapse:collapse;margin:.5rem 0}
+    .db-table th,.db-table td{border:1px solid #1f2937;padding:.5rem .65rem;text-align:left}
+    .db-table th{background:#0e1729;color:#dbe2ea}
+    .null{color:#9ca3af;font-style:italic}
+    details{margin:.75rem 0;border:1px solid #1f2937;border-radius:.5rem;padding:.25rem .5rem;background:#0e1729}
+    details[open]{background:#111827}
+    summary{cursor:pointer;list-style:none}
+    summary::-webkit-details-marker{display:none}
+    .table-title{font-weight:600;margin:.25rem 0}
+    .mini{color:#a7b0be;font-size:.95rem;margin:.25rem 0 .5rem}
+  </style>
 </body>
 </html>

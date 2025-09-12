@@ -1,153 +1,285 @@
 <!DOCTYPE html>
 <html lang="pl">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Bezpieczeństwo i Uprawnienia w SQL - Proste Wytłumaczenie</title>
-  <link rel="stylesheet" href="../styles.css">
+  <link rel="stylesheet" href="../styles.css" />
   <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/themes/prism-tomorrow.min.css" rel="stylesheet" />
 </head>
 <body>
   <div class="container">
     <h1>Bezpieczeństwo i Uprawnienia w Bazie Danych (Prosto Wyjaśnione)</h1>
 
-    <p>Bezpieczeństwo w bazie danych to dbanie o to, kto może robić jakie operacje i jak są chronione dane. Najważniejsze zasady to:</p>
+    <p>
+      Bezpieczeństwo to kontrola <em>kto</em> może zrobić <em>co</em> i <em>z jakimi danymi</em>.
+      Zasada numer 1: <strong>przyznawaj tylko to, co konieczne</strong> (zasada najmniejszych uprawnień).
+    </p>
+
+    <div class="note">
+      <strong>Analogia:</strong> Baza to budynek. <em>Użytkownicy</em> to osoby, <em>role</em> to rodzaje przepustek,
+      <em>GRANT/REVOKE</em> to przyznawanie/odbieranie dostępu do pokoi (tabele, bazy).
+    </div>
+
     <ul>
       <li>Nadawaj tylko potrzebne uprawnienia.</li>
-      <li>Szyfruj dane.</li>
-      <li>Monitoruj działania użytkowników.</li>
+      <li>Szyfruj dane (na dysku i w sieci).</li>
+      <li>Monitoruj działania (audyt).</li>
     </ul>
+
+    <!-- =================== DANE WEJŚCIOWE DO WIZUALIZACJI =================== -->
+    <details open>
+      <summary class="table-title">Dane wejściowe (poglądowe)</summary>
+      <div class="grid-two">
+        <table class="db-table">
+          <caption class="mini">Użytkownicy / Role (koncepcyjnie)</caption>
+          <thead><tr><th>obiekt</th><th>typ</th><th>opis</th></tr></thead>
+          <tbody>
+            <tr><td>jan</td><td>user</td><td>Pracownik sklepu</td></tr>
+            <tr><td>r_reader</td><td>role</td><td>Tylko odczyt</td></tr>
+            <tr><td>r_writer</td><td>role</td><td>Odczyt + insert</td></tr>
+          </tbody>
+        </table>
+
+        <table class="db-table">
+          <caption class="mini">Obiekty danych</caption>
+          <thead><tr><th>obiekt</th><th>typ</th><th>przykład</th></tr></thead>
+          <tbody>
+            <tr><td>shop</td><td>database</td><td>baza sklepu</td></tr>
+            <tr><td>shop.orders</td><td>table</td><td>zamówienia</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <p class="mini">To ma tylko pomóc „zobaczyć” efekty GRANT/REVOKE.</p>
+    </details>
+    <!-- ===================================================================== -->
 
     <h2>Tworzenie użytkownika (CREATE USER)</h2>
+    <p>Tworzymy nowe konto w bazie.</p>
 
-    <p>Tworzymy nowe konto użytkownika w bazie danych.</p>
-
-    <pre><code class="language-sql">
--- MySQL
+    <pre><code class="language-sql">-- MySQL
 CREATE USER 'jan'@'localhost'
-  IDENTIFIED BY 'SilneHaslo123!';
+  IDENTIFIED BY 'SilneHaslo123!';   -- ustaw hasło
 
 -- PostgreSQL
-CREATE USER jan WITH
-  LOGIN
-  PASSWORD 'SilneHaslo123!';
-    </code></pre>
+CREATE USER jan
+  WITH LOGIN
+  PASSWORD 'SilneHaslo123!';        -- hasło użytkownika</code></pre>
 
-    <p><strong>Jak to działa?</strong></p>
-    <ul>
-      <li><strong>CREATE USER</strong> – tworzy konto w bazie danych.</li>
-      <li><strong>LOGIN</strong> – pozwala użytkownikowi się logować (PostgreSQL).</li>
-      <li><strong>PASSWORD</strong> – ustawia hasło użytkownika.</li>
-    </ul>
+    <details open>
+      <summary class="table-title">Efekt (koncepcyjnie)</summary>
+      <table class="db-table">
+        <thead><tr><th>użytkownik</th><th>może się zalogować?</th><th>ma uprawnienia?</th></tr></thead>
+        <tbody>
+          <tr><td>jan</td><td>Tak</td><td><strong>Na razie nie</strong> (sam CREATE USER nie daje praw)</td></tr>
+        </tbody>
+      </table>
+      <p class="mini">Samo utworzenie konta nie daje dostępu do tabel. Potrzebny <code>GRANT</code>.</p>
+    </details>
+
+    <h2>Role (grupy uprawnień)</h2>
+    <p>Lepsza praktyka: nadaj uprawnienia <em>roli</em>, a rolę przypisz użytkownikowi.</p>
+
+    <pre><code class="language-sql">-- MySQL 8+
+CREATE ROLE r_reader, r_writer;
+
+-- Przykładowe uprawnienia do tabeli
+GRANT SELECT                    ON shop.orders TO r_reader;            -- czytanie
+GRANT SELECT, INSERT           ON shop.orders TO r_writer;            -- czytanie + wstawianie
+
+-- Przypisanie roli użytkownikowi
+GRANT r_reader TO 'jan'@'localhost';
+
+-- (opcjonalnie) ustaw rolę domyślną po zalogowaniu
+SET DEFAULT ROLE r_reader TO 'jan'@'localhost';
+
+-- PostgreSQL (analogicznie)
+CREATE ROLE r_reader;
+GRANT SELECT ON TABLE shop.orders TO r_reader;
+GRANT r_reader TO jan;  -- jan dziedziczy prawa roli</code></pre>
+
+    <details>
+      <summary class="table-title">Efekt przypisania roli</summary>
+      <table class="db-table">
+        <thead><tr><th>użytkownik</th><th>role</th><th>co realnie może</th></tr></thead>
+        <tbody>
+          <tr><td>jan</td><td>r_reader</td><td><code>SELECT</code> na <code>shop.orders</code></td></tr>
+        </tbody>
+      </table>
+      <p class="mini">Zmieniając rolę, zmieniasz prawa wielu użytkownikom naraz.</p>
+    </details>
 
     <h2>Nadawanie uprawnień (GRANT)</h2>
+    <p><code>GRANT</code> przydziela dostęp do obiektów (bazy, schematu, tabeli, widoku, funkcji...).</p>
 
-    <p>GRANT pozwala przydzielać użytkownikowi dostęp do baz, tabel albo operacji.</p>
-
-    <pre><code class="language-sql">
--- Przyznanie prawa odczytu i zapisu do jednej tabeli
+    <pre><code class="language-sql">-- MySQL: przyznaj czytanie i wstawianie do jednej tabeli
 GRANT SELECT, INSERT
 ON shop.orders
 TO 'jan'@'localhost';
 
--- Przyznanie wszystkich praw do całej bazy danych
+-- PostgreSQL: wszystkie uprawnienia do całej bazy (uwaga: szerokie!)
 GRANT ALL PRIVILEGES
 ON DATABASE shop
 TO jan;
-    </code></pre>
 
-    <p><strong>Jak to działa?</strong></p>
-    <ul>
-      <li><strong>GRANT</strong> – dajemy uprawnienia.</li>
-      <li><strong>SELECT</strong> – prawo do odczytu danych.</li>
-      <li><strong>INSERT</strong> – prawo do dodawania nowych danych.</li>
-      <li><strong>ALL PRIVILEGES</strong> – wszystkie możliwe uprawnienia.</li>
-    </ul>
+-- PostgreSQL: granularnie do tabeli
+GRANT SELECT, INSERT
+ON TABLE shop.orders
+TO jan;</code></pre>
+
+    <details>
+      <summary class="table-title">Wizualizacja „przed/po” (tabela orders)</summary>
+      <div class="grid-two">
+        <table class="db-table">
+          <caption class="mini">Przed GRANT</caption>
+          <thead><tr><th>użytkownik</th><th>SELECT</th><th>INSERT</th></tr></thead>
+          <tbody>
+            <tr><td>jan</td><td>❌</td><td>❌</td></tr>
+          </tbody>
+        </table>
+        <table class="db-table">
+          <caption class="mini">Po GRANT</caption>
+          <thead><tr><th>użytkownik</th><th>SELECT</th><th>INSERT</th></tr></thead>
+          <tbody>
+            <tr><td>jan</td><td>✅</td><td>✅</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <p class="mini">Po GRANT użytkownik ma dokładnie te prawa, które wymieniono.</p>
+    </details>
 
     <h2>Odbieranie uprawnień (REVOKE)</h2>
+    <p><code>REVOKE</code> zabiera wcześniej nadane prawa.</p>
 
-    <p>REVOKE służy do zabierania wcześniej przyznanych uprawnień.</p>
-
-    <pre><code class="language-sql">
--- Odebranie prawa do dodawania nowych danych
+    <pre><code class="language-sql">-- MySQL
 REVOKE INSERT
 ON shop.orders
 FROM 'jan'@'localhost';
 
--- Odebranie wszystkich uprawnień do bazy
-REVOKE ALL PRIVILEGES
-ON DATABASE shop
-FROM jan;
-    </code></pre>
+-- PostgreSQL (do tabeli)
+REVOKE INSERT
+ON TABLE shop.orders
+FROM jan;</code></pre>
 
-    <p><strong>Jak to działa?</strong></p>
-    <ul>
-      <li><strong>REVOKE</strong> – odbieramy uprawnienia.</li>
-      <li>Możemy zabrać jedno konkretne uprawnienie lub wszystkie naraz.</li>
-    </ul>
+    <details>
+      <summary class="table-title">Wizualizacja „przed/po” REVOKE</summary>
+      <div class="grid-two">
+        <table class="db-table">
+          <caption class="mini">Przed REVOKE</caption>
+          <thead><tr><th>użytkownik</th><th>SELECT</th><th>INSERT</th></tr></thead>
+          <tbody>
+            <tr><td>jan</td><td>✅</td><td>✅</td></tr>
+          </tbody>
+        </table>
+        <table class="db-table">
+          <caption class="mini">Po REVOKE</caption>
+          <thead><tr><th>użytkownik</th><th>SELECT</th><th>INSERT</th></tr></thead>
+          <tbody>
+            <tr><td>jan</td><td>✅</td><td>❌</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <p class="mini">REVOKE nie dotyka innych praw (np. <code>SELECT</code> zostaje).</p>
+    </details>
 
     <h2>Kontrola dostępu (Access Control)</h2>
-
-    <p>Chodzi o to, aby każdy użytkownik miał dostęp tylko do tego, czego naprawdę potrzebuje. Jak?</p>
-
     <ul>
-      <li><strong>Zasada najmniejszych uprawnień</strong> – przyznaj tylko minimalne potrzebne prawa.</li>
-      <li><strong>Grupy i role</strong> – łatwiej zarządzać wieloma użytkownikami poprzez wspólne role (np. grupa „czytający”).</li>
-      <li><strong>Separacja obowiązków</strong> – osobne konta do odczytu, zapisu i administracji.</li>
+      <li><strong>Zasada najmniejszych uprawnień</strong> — dawaj tylko to, co potrzebne do pracy.</li>
+      <li><strong>Role</strong> — grupuj uprawnienia i przypisuj role ludziom (łatwiejsze zarządzanie).</li>
+      <li><strong>Separacja obowiązków</strong> — osobne konta do czytania, pisania i administracji.</li>
     </ul>
+
+    <details>
+      <summary class="table-title">Przykład polityki ról</summary>
+      <table class="db-table">
+        <thead><tr><th>rola</th><th>SELECT</th><th>INSERT</th><th>UPDATE</th><th>DELETE</th></tr></thead>
+        <tbody>
+          <tr><td>r_reader</td><td>✅</td><td>❌</td><td>❌</td><td>❌</td></tr>
+          <tr><td>r_writer</td><td>✅</td><td>✅</td><td>✅</td><td>❌</td></tr>
+          <tr><td>r_admin</td><td>✅</td><td>✅</td><td>✅</td><td>✅</td></tr>
+        </tbody>
+      </table>
+      <p class="mini">Przypisujesz rolę zamiast setek indywidualnych GRANT-ów.</p>
+    </details>
 
     <h2>Szyfrowanie danych</h2>
+    <p><em>Encryption at rest</em> — szyfrowanie danych na dysku; <em>in transit</em> — szyfrowanie transmisji (SSL/TLS).</p>
 
-    <p>Szyfrowanie chroni dane przed nieautoryzowanym dostępem. Są dwa główne rodzaje:</p>
-
-    <ul>
-      <li><strong>Encryption at rest</strong> – szyfrowanie danych zapisanych na dysku (np. Transparent Data Encryption w SQL Server, MySQL Enterprise).</li>
-      <li><strong>Encryption in transit</strong> – szyfrowanie danych przesyłanych przez sieć (np. SSL/TLS).</li>
-    </ul>
-
-    <pre><code class="language-sql">
--- Przykład: szyfrowanie tabeli w MySQL 8+
+    <pre><code class="language-sql">-- MySQL 8+: przykład tabeli z włączonym szyfrowaniem na dysku*
 CREATE TABLE confidential (
-    id INT PRIMARY KEY,
-    secret_text TEXT
+  id INT PRIMARY KEY,
+  secret_text TEXT
 ) ENGINE=InnoDB
-  ENCRYPTION='Y';
-    </code></pre>
+  ENCRYPTION='Y';  -- *wymaga odpowiedniej konfiguracji serwera</code></pre>
 
-    <p><strong>Jak to działa?</strong></p>
+    <details>
+      <summary class="table-title">Co daje szyfrowanie?</summary>
+      <table class="db-table">
+        <thead><tr><th>warstwa</th><th>co chroni</th><th>przykład</th></tr></thead>
+        <tbody>
+          <tr><td>at rest</td><td>pliki na dysku/backupy</td><td>kradzież dysku ≠ odczyt danych</td></tr>
+          <tr><td>in transit</td><td>połączenia sieciowe</td><td>podsłuch Wi-Fi ≠ odczyt treści</td></tr>
+        </tbody>
+      </table>
+      <p class="mini">W praktyce włącz oba (dysk + TLS) i rotuj klucze.</p>
+    </details>
+
+    <h2>Audyt działań (Audit)</h2>
+    <p>Audyt to śledzenie „kto, co i kiedy” w bazie.</p>
+
     <ul>
-      <li><strong>ENGINE=InnoDB</strong> – silnik bazy danych.</li>
-      <li><strong>ENCRYPTION='Y'</strong> – tabela będzie szyfrowana na dysku.</li>
+      <li><strong>MySQL:</strong> plugin <code>audit_log</code></li>
+      <li><strong>PostgreSQL:</strong> rozszerzenie <code>pgaudit</code> (lub podstawowe logi: <code>log_statement</code>, <code>log_connections</code>)</li>
     </ul>
 
-    <h2>Audyt działań w bazie danych (Audit)</h2>
+    <pre><code class="language-sql">-- (MySQL) przykład instalacji pluginu (zależnie od dystrybucji)
+-- INSTALL PLUGIN audit_log SONAME 'audit_log.so';
 
-    <p>Audyt polega na śledzeniu, kto co robi w bazie. Dzięki temu można szybko wykryć błędy lub próby włamania.</p>
+-- (PostgreSQL) w postgresql.conf:
+-- shared_preload_libraries = 'pgaudit'
+-- pgaudit.log = 'write, ddl, role'</code></pre>
 
-    <ul>
-      <li><strong>W MySQL:</strong> użyj pluginu <code>audit_log</code> – np. <code>INSTALL PLUGIN audit_log SONAME 'audit_log.so';</code>.</li>
-      <li><strong>W PostgreSQL:</strong> użyj rozszerzenia <code>pgaudit</code> do szczegółowego monitorowania działań.</li>
-      <li>Opcjonalnie: możesz też monitorować ogólne logi przez <code>log_statement</code> i <code>log_connections</code> (dla podstawowych informacji).</li>
-    </ul>
-
-    <p><strong>Co zbierać?</strong></p>
-    <ul>
-      <li>Logi działań administracyjnych (kto zmienił hasło, kto tworzył nowe konta).</li>
-      <li>Logi operacji DML (INSERT, UPDATE, DELETE – czyli zmiany danych).</li>
-    </ul>
+    <details>
+      <summary class="table-title">Co warto logować?</summary>
+      <table class="db-table">
+        <thead><tr><th>kategoria</th><th>przykłady</th></tr></thead>
+        <tbody>
+          <tr><td>Administracja</td><td>tworzenie/kasowanie kont, zmiany ról</td></tr>
+          <tr><td>DML</td><td>INSERT/UPDATE/DELETE na wrażliwych tabelach</td></tr>
+          <tr><td>Dostęp</td><td>nieudane logowania, połączenia z zewnątrz</td></tr>
+        </tbody>
+      </table>
+      <p class="mini">Zadbaj o retencję logów i bezpieczne przechowywanie.</p>
+    </details>
 
     <h2>Wskazówki bezpieczeństwa</h2>
-
     <ul>
-      <li>Używaj <strong>silnych haseł</strong> i wymuszaj ich regularną zmianę.</li>
-      <li><strong>Regularnie sprawdzaj</strong> listę użytkowników i usuwaj nieaktywne konta.</li>
-      <li>Stosuj <strong>VPN lub SSH</strong> do bezpiecznego łączenia się z serwerem bazy.</li>
-      <li><strong>Planuj procedury odzyskiwania</strong> – w przypadku awarii musisz wiedzieć, jak szybko przywrócić uprawnienia i dostęp.</li>
+      <li>Wymuszaj <strong>silne hasła</strong> i rotację haseł/kluczy.</li>
+      <li><strong>Regularnie przeglądaj</strong> konta i role; usuwaj nieużywane.</li>
+      <li>Korzystaj z <strong>VPN / SSH</strong> i włącz <strong>TLS</strong> do połączeń.</li>
+      <li>Miej plan <strong>odtwarzania</strong> (backup/restore uprawnień i danych).</li>
+      <li>Rozważ <strong>maskowanie danych</strong> lub widoki do ukrycia wrażliwych kolumn.</li>
     </ul>
-
   </div>
 
   <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/prism.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/components/prism-sql.min.js"></script>
+
+  <!-- Styl TYLKO do wizualizacji; nie rusza Twojego styles.css -->
+  <style>
+    .db-table{width:100%;border-collapse:collapse;margin:.5rem 0}
+    .db-table th,.db-table td{border:1px solid #1f2937;padding:.5rem .65rem;text-align:left;vertical-align:top}
+    .db-table th{background:#0e1729;color:#dbe2ea}
+    .null{color:#9ca3af;font-style:italic}
+    details{margin:.75rem 0;border:1px solid #1f2937;border-radius:.5rem;padding:.25rem .5rem;background:#0e1729}
+    details[open]{background:#111827}
+    summary{cursor:pointer;list-style:none}
+    summary::-webkit-details-marker{display:none}
+    .table-title{font-weight:600;margin:.25rem 0}
+    .mini{color:#a7b0be;font-size:.95rem;margin:.25rem 0 .5rem}
+    .note{border-left:4px solid #10b981;padding:.75rem 1rem;background:#0e1729;border-radius:.5rem;margin:1rem 0;color:#cfe3d8}
+    .grid-two{display:grid;grid-template-columns:1fr 1fr;gap:.75rem}
+    @media (max-width: 900px){.grid-two{grid-template-columns:1fr}}
+  </style>
 </body>
 </html>

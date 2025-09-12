@@ -8,85 +8,253 @@
     <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/themes/prism-tomorrow.min.css" rel="stylesheet" />
 </head>
 <body>
-    <div class="container">
-        <h1>Funkcje SQL – Data, Tekst, Konwersje Typów</h1>
+  <div class="container">
+    <h1>Funkcje SQL – Data, Tekst, Konwersje Typów</h1>
 
-        <p>SQL oferuje wiele wbudowanych funkcji (functions) ułatwiających pracę z datami, tekstem i konwersją typów danych.</p>
+    <p>
+      SQL ma zestaw „narzędzi”: <strong>kalendarz</strong> (funkcje daty/czasu), <strong>nożyczki do tekstu</strong> (funkcje łańcuchów)
+      i <strong>adaptery</strong> (konwersje typów). Poniżej praktyczne przykłady.
+    </p>
 
-        <h2>Funkcje daty i czasu</h2>
-        <ul>
-            <li><code>NOW()</code> – zwraca bieżącą datę i czas (<em>timestamp</em>).</li>
-            <li><code>CURDATE()</code> / <code>CURRENT_DATE</code> – zwraca tylko datę (rok-miesiąc-dzień).</li>
-            <li><code>CURTIME()</code> / <code>CURRENT_TIME</code> – zwraca tylko czas (godzina:minuta:sekunda).</li>
-            <li><code>DATE(expr)</code> – wyciąga część daty z wyrażenia <code>expr</code> (<em>timestamp</em> → <em>date</em>).</li>
-            <li><code>TIME(expr)</code> – wyciąga część czasu z wyrażenia <code>expr</code>.</li>
-            <li><code>DATE_ADD(d, INTERVAL x unit)</code> – dodaje do daty <code>d</code> przedział czasu (np. dni, miesiące).</li>
-            <li><code>DATE_SUB(d, INTERVAL x unit)</code> – odejmuje od daty <code>d</code> przedział czasu.</li>
-            <li><code>DATEDIFF(d1, d2)</code> – różnica w dniach między <code>d1</code> a <code>d2</code>.</li>
-            <li><code>EXTRACT(unit FROM expr)</code> – wyciąga część daty (rok, miesiąc, dzień) z <code>expr</code>.</li>
-            <li><code>DATE_FORMAT(d, format)</code> – formatuje datę według wzorca (np. <code>'%Y-%m-%d'</code>).</li>
-        </ul>
-        <pre><code class="language-sql">
-// Przykłady użycia funkcji daty
-SELECT 
-    NOW() AS teraz,
-    DATE(NOW()) AS tylko_data,
-    TIME(NOW()) AS tylko_czas,
-    DATE_ADD(NOW(), INTERVAL 7 DAY) AS za_tydzien,
-    DATEDIFF('2025-05-01', '2025-04-21') AS dni_roznicy,
-    EXTRACT(MONTH FROM NOW()) AS obecny_miesiac;
-        </code></pre>
-
-        <h2>Funkcje manipulacji ciągami znaków (tekst)</h2>
-        <ul>
-            <li><code>CONCAT(a, b, …)</code> – łączy (concatenate) kilka ciągów w jeden.</li>
-            <li><code>SUBSTRING(s, start, len)</code> – wycina fragment z ciągu <code>s</code>, zaczynając od pozycji <code>start</code>, długość <code>len</code>.</li>
-            <li><code>LENGTH(s)</code> / <code>CHAR_LENGTH(s)</code> – długość ciągu <code>s</code> w znakach.</li>
-            <li><code>UPPER(s)</code> – zamienia wszystkie litery w <code>s</code> na wielkie.</li>
-            <li><code>LOWER(s)</code> – zamienia wszystkie litery w <code>s</code> na małe.</li>
-            <li><code>TRIM(s)</code> – usuwa spacje (whitespace) z początku i końca ciągu.</li>
-            <li><code>REPLACE(s, from, to)</code> – zamienia wszystkie wystąpienia <code>from</code> na <code>to</code> w ciągu <code>s</code>.</li>
-        </ul>
-        <pre><code class="language-sql">
-// Przykłady funkcji tekstowych
-SELECT
-    CONCAT(first_name, ' ', last_name) AS pelne_imie,
-    SUBSTRING(description, 1, 50) AS skrót_opisu,
-    LENGTH(description) AS dlugosc_opisu,
-    UPPER(category) AS duze_litery,
-    TRIM('\t  tekst  ') AS bez_spacji,
-    REPLACE(comment, 'stary', 'nowy') AS zmieniony_tekst
-FROM products;
-        </code></pre>
-
-        <h2>Konwersje typów (CAST i CONVERT)</h2>
-        <p>Bywa potrzeba zmienić typ danych, np. z liczby na tekst czy z tekstu na datę.</p>
-        <ul>
-            <li><code>CAST(expr AS type)</code> – standardowa konwersja zgodnie ze specyfikacją SQL.</li>
-            <li><code>CONVERT(expr, type)</code> – alternatywa w MySQL, działa podobnie.</li>
-            <li><code>TO_CHAR(d, format)</code> – w PostgreSQL: zamiana daty/liczby na ciąg według formatu.</li>
-            <li><code>TO_DATE(s, format)</code> – w PostgreSQL: zamiana ciągu <code>s</code> na datę według formatu.</li>
-        </ul>
-        <pre><code class="language-sql">
-// Przykłady konwersji
-SELECT
-    CAST(price AS CHAR)      AS cena_tekst,
-    CAST('2025-04-21' AS DATE) AS data_z_tekstu,
-    CONVERT(amount, DECIMAL(10,2)) AS kwota_dec,
-    TO_CHAR(NOW(), 'YYYY-MM-DD HH24:MI') AS data_formatowana
-FROM sales;
-        </code></pre>
-
-        <h2>Wskazówki</h2>
-        <ul>
-            <li>Sprawdzaj dokumentację swojej bazy – niektóre funkcje różnią się składnią.</li>
-            <li>Używaj <code>CAST</code>/ <code>CONVERT</code> ostrożnie, by unikać błędów konwersji.</li>
-            <li>Przy dużych tekstach użyj odpowiedniego typu (TEXT zamiast VARCHAR), by uniknąć obcięcia danych.</li>
-            <li>Funkcje daty potrafią silnie obciążyć serwer – dodaj indeksy na kolumnach datowych, gdy filtrujesz po nich.</li>
-        </ul>
+    <div class="note">
+      <strong>Uwaga o różnicach między silnikami:</strong> Składnia bywa nieco inna w PostgreSQL / MySQL / SQL Server.
+      Zaznaczam to w komentarzach, a wyniki tabelaryczne są poglądowe.
     </div>
 
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/prism.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/components/prism-sql.min.js"></script>
+    <!-- =================== DANE WEJŚCIOWE =================== -->
+    <details open>
+      <summary class="table-title">Dane wejściowe: <code>users</code></summary>
+      <table class="db-table">
+        <thead><tr><th>id</th><th>first_name</th><th>last_name</th><th>created_at (timestamp)</th></tr></thead>
+        <tbody>
+          <tr><td>1</td><td>Anna</td><td>Kowalska</td><td>2025-01-05 09:15:00</td></tr>
+          <tr><td>2</td><td>Jan</td><td>Nowak</td><td>2025-03-21 14:02:10</td></tr>
+          <tr><td>3</td><td>Ola</td><td>Lis</td><td>2024-12-31 23:59:00</td></tr>
+        </tbody>
+      </table>
+    </details>
+
+    <details open>
+      <summary class="table-title">Dane wejściowe: <code>products</code></summary>
+      <table class="db-table">
+        <thead><tr><th>id</th><th>name</th><th>description</th><th>category</th><th>price</th></tr></thead>
+        <tbody>
+          <tr><td>1</td><td>Telefon</td><td>Nowy telefon z 5G</td><td>Elektronika</td><td>1200.00</td></tr>
+          <tr><td>2</td><td>Laptop</td><td>Laptop 15" dla graczy</td><td>Elektronika</td><td>4000.00</td></tr>
+          <tr><td>3</td><td>Czajnik</td><td>Czajnik stalowy 1.7L</td><td>Dom</td><td>150.00</td></tr>
+        </tbody>
+      </table>
+    </details>
+
+    <details open>
+      <summary class="table-title">Dane wejściowe: <code>sales</code></summary>
+      <table class="db-table">
+        <thead><tr><th>id</th><th>amount_text (VARCHAR)</th><th>sold_at (timestamp)</th></tr></thead>
+        <tbody>
+          <tr><td>5001</td><td>1234.5</td><td>2025-01-05 10:30:00</td></tr>
+          <tr><td>5002</td><td>89.99</td><td>2025-04-21 16:45:00</td></tr>
+        </tbody>
+      </table>
+    </details>
+    <!-- ====================================================== -->
+
+    <!-- =================== DATY I CZAS =================== -->
+    <h2>Funkcje daty i czasu</h2>
+    <ul>
+      <li><code>NOW()</code> – bieżąca data i czas (<em>timestamp</em> — znacznik czasu),</li>
+      <li><code>CURDATE()</code>/<code>CURRENT_DATE</code> – sama data, <code>CURTIME()</code>/<code>CURRENT_TIME</code> – sam czas,</li>
+      <li><code>DATE(expr)</code> / <code>TIME(expr)</code> – wyciąga tylko część daty/czasu,</li>
+      <li><code>DATE_ADD(d, INTERVAL x unit)</code> / <code>DATE_SUB(...)</code> – dodaj/odejmij okres,</li>
+      <li><code>DATEDIFF(d1,d2)</code> – różnica dni, <code>EXTRACT(part FROM expr)</code> – rok/miesiąc/dzień,</li>
+      <li><code>DATE_FORMAT(d, fmt)</code> (MySQL) / <code>TO_CHAR(d, fmt)</code> (Postgres) – formatowanie.</li>
+    </ul>
+
+    <pre><code class="language-sql">-- 🗓️ Przegląd bazowych funkcji daty/czasu (MySQL/PostgreSQL)
+SELECT
+  NOW()                               AS teraz,         -- bieżący timestamp
+  DATE(NOW())                         AS tylko_data,    -- część daty
+  TIME(NOW())                         AS tylko_czas,    -- część czasu
+  DATE_ADD(NOW(), INTERVAL 7 DAY)     AS za_tydzien,    -- +7 dni (MySQL)
+  DATEDIFF('2025-05-01','2025-04-21') AS dni_roznicy,   -- 10
+  EXTRACT(MONTH FROM NOW())           AS miesiac;       -- numer miesiąca</code></pre>
+
+    <details open>
+      <summary class="table-title">Wynik (przykładowy, poglądowy)</summary>
+      <table class="db-table">
+        <thead><tr><th>teraz</th><th>tylko_data</th><th>tylko_czas</th><th>za_tydzien</th><th>dni_roznicy</th><th>miesiac</th></tr></thead>
+        <tbody>
+          <tr>
+            <td>2025-09-12 11:00:00</td>
+            <td>2025-09-12</td>
+            <td>11:00:00</td>
+            <td>2025-09-19 11:00:00</td>
+            <td>10</td>
+            <td>9</td>
+          </tr>
+        </tbody>
+      </table>
+      <p class="mini">Czasy są przykładowe (zależne od systemu/strefy). Liczby i formaty służą nauce.</p>
+    </details>
+
+    <h3>Wyciąganie części daty z kolumny</h3>
+    <pre><code class="language-sql">-- 🗂️ Rozbij timestamp na rok/miesiąc/dzień (uniwersalnie)
+SELECT
+  id,
+  sold_at,
+  DATE(sold_at)                         AS tylko_dzien,         -- 2025-01-05
+  EXTRACT(YEAR  FROM sold_at)           AS rok,                 -- 2025
+  EXTRACT(MONTH FROM sold_at)           AS miesiac,             -- 1
+  EXTRACT(DAY   FROM sold_at)           AS dzien                -- 5
+FROM sales;</code></pre>
+
+    <details>
+      <summary class="table-title">Wynik</summary>
+      <table class="db-table">
+        <thead><tr><th>id</th><th>sold_at</th><th>tylko_dzien</th><th>rok</th><th>miesiac</th><th>dzien</th></tr></thead>
+        <tbody>
+          <tr><td>5001</td><td>2025-01-05 10:30:00</td><td>2025-01-05</td><td>2025</td><td>1</td><td>5</td></tr>
+          <tr><td>5002</td><td>2025-04-21 16:45:00</td><td>2025-04-21</td><td>2025</td><td>4</td><td>21</td></tr>
+        </tbody>
+      </table>
+    </details>
+
+    <!-- =================== TEKST =================== -->
+    <h2>Funkcje manipulacji tekstem</h2>
+    <ul>
+      <li><code>CONCAT(a,b,...)</code> – sklejanie, <code>SUBSTRING(s, start, len)</code> – wycinek,</li>
+      <li><code>LENGTH(s)</code>/<code>CHAR_LENGTH(s)</code> – długość, <code>UPPER</code>/<code>LOWER</code> – wielkość liter,</li>
+      <li><code>TRIM(s)</code> – usuwa spacje/taby z początku i końca, <code>REPLACE(s, from, to)</code> – zamiana.</li>
+    </ul>
+
+    <h3>Pełne imię z dwóch kolumn (users)</h3>
+    <pre><code class="language-sql">-- 👤 Sklejenie imienia i nazwiska + mała normalizacja
+SELECT
+  id,                           -- identyfikator
+  CONCAT(first_name,' ',last_name)          AS full_name,  -- Anna Kowalska
+  UPPER(last_name)                           AS nazwisko_caps,   -- KOWALSKA
+  LOWER(first_name)                           AS imie_lower       -- anna
+FROM users;</code></pre>
+
+    <details open>
+      <summary class="table-title">Wynik</summary>
+      <table class="db-table">
+        <thead><tr><th>id</th><th>full_name</th><th>nazwisko_caps</th><th>imie_lower</th></tr></thead>
+        <tbody>
+          <tr><td>1</td><td>Anna Kowalska</td><td>KOWALSKA</td><td>anna</td></tr>
+          <tr><td>2</td><td>Jan Nowak</td><td>NOWAK</td><td>jan</td></tr>
+          <tr><td>3</td><td>Ola Lis</td><td>LIS</td><td>ola</td></tr>
+        </tbody>
+      </table>
+    </details>
+
+    <h3>Przycinanie i skracanie opisu (products)</h3>
+    <pre><code class="language-sql">-- 📝 Skrót opisu + zamiana fragmentu + TRIM białych znaków
+SELECT
+  id,
+  name,
+  SUBSTRING(description,1,12)            AS skrot,                -- pierwsze 12 znaków
+  LENGTH(description)                     AS dlugosc,              -- ile znaków
+  REPLACE(category,'Elektronika','AGD/RTV') AS kategoria_zmieniona, -- zamiana fragmentu
+  TRIM('   tekst z odstępami   ')        AS przyciete              -- przykład TRIM na stałym stringu
+FROM products;</code></pre>
+
+    <details>
+      <summary class="table-title">Wynik</summary>
+      <table class="db-table">
+        <thead><tr><th>id</th><th>name</th><th>skrot</th><th>dlugosc</th><th>kategoria_zmieniona</th><th>przyciete</th></tr></thead>
+        <tbody>
+          <tr><td>1</td><td>Telefon</td><td>Nowy telefon</td><td>16</td><td>AGD/RTV</td><td>tekst z odstępami</td></tr>
+          <tr><td>2</td><td>Laptop</td><td>Laptop 15" </td><td>19</td><td>AGD/RTV</td><td>tekst z odstępami</td></tr>
+          <tr><td>3</td><td>Czajnik</td><td>Czajnik stalo</td><td>18</td><td>Dom</td><td>tekst z odstępami</td></tr>
+        </tbody>
+      </table>
+      <p class="mini">Długości zależą od faktycznych tekstów; tu wartości są poglądowe.</p>
+    </details>
+
+    <!-- =================== KONWERSJE TYPÓW =================== -->
+    <h2>Konwersje typów (CAST/CONVERT)</h2>
+    <p>
+      Czasem musisz „przelać” dane do innego naczynia (typu). <code>CAST(expr AS type)</code> to standard SQL.
+      W MySQL istnieje też <code>CONVERT(expr, type)</code>. W Postgresie do formatowania użyjesz <code>TO_CHAR</code>, a do parsowania dat – <code>TO_DATE</code>.
+    </p>
+
+    <h3>CAST/CONVERT — przykłady</h3>
+    <pre><code class="language-sql">-- 🔁 Różne konwersje
+-- 1) liczba → tekst (np. dla łączenia z innymi stringami)
+SELECT
+  id,
+  name,
+  CAST(price AS CHAR)          AS cena_jako_tekst   -- MySQL: CHAR; Postgres: ::text / CAST(price AS text)
+FROM products;
+
+-- 2) tekst → liczba o zadanej precyzji (MySQL)
+SELECT
+  id,
+  CONVERT(amount_text, DECIMAL(10,2)) AS kwota_dec  -- '1234.5' → 1234.50
+FROM sales;
+
+-- 3) tekst → data oraz timestamp → sformatowany tekst (PostgreSQL)
+SELECT
+  TO_DATE('2025-04-21','YYYY-MM-DD')                            AS data_z_tekstu,
+  TO_CHAR(TIMESTAMP '2025-04-21 16:45','YYYY-MM-DD HH24:MI')    AS data_formatowana;</code></pre>
+
+    <details open>
+      <summary class="table-title">Wynik (poglądowy)</summary>
+      <table class="db-table">
+        <thead><tr><th>Przykład</th><th>Wynik</th></tr></thead>
+        <tbody>
+          <tr><td>CAST(1200.00 AS CHAR)</td><td>"1200"</td></tr>
+          <tr><td>CONVERT('1234.5', DECIMAL(10,2))</td><td>1234.50</td></tr>
+          <tr><td>TO_DATE('2025-04-21','YYYY-MM-DD')</td><td>2025-04-21</td></tr>
+          <tr><td>TO_CHAR('2025-04-21 16:45','YYYY-MM-DD HH24:MI')</td><td>2025-04-21 16:45</td></tr>
+        </tbody>
+      </table>
+      <p class="mini">Dobierz typ docelowy do kontekstu (np. <code>DECIMAL(10,2)</code> dla kwot).</p>
+    </details>
+
+    <h3>Formatowanie dat — MySQL vs PostgreSQL</h3>
+    <pre><code class="language-sql">-- MySQL: DATE_FORMAT
+SELECT DATE_FORMAT(NOW(), '%Y-%m-%d %H:%i') AS ts_fmt;
+
+-- PostgreSQL: TO_CHAR
+SELECT TO_CHAR(NOW(), 'YYYY-MM-DD HH24:MI')  AS ts_fmt;</code></pre>
+
+    <details>
+      <summary class="table-title">Wynik (poglądowy)</summary>
+      <table class="db-table">
+        <thead><tr><th>Silnik</th><th>Wynik</th></tr></thead>
+        <tbody>
+          <tr><td>MySQL</td><td>2025-09-12 11:00</td></tr>
+          <tr><td>PostgreSQL</td><td>2025-09-12 11:00</td></tr>
+        </tbody>
+      </table>
+    </details>
+
+    <h2>Wskazówki</h2>
+    <ul>
+      <li>Sprawdzaj dokumentację swojego silnika – nazwy/formaty potrafią się różnić.</li>
+      <li>Konwersje mogą wyłączyć użycie indeksu (np. <code>WHERE CAST(col AS ...)=...</code>) – lepiej przechowywać już w dobrym typie.</li>
+      <li>Przy dużych tekstach używaj typów odpowiedniej wielkości (np. <code>TEXT</code>), aby uniknąć obcięć.</li>
+      <li>Filtrowanie po dacie bywa kosztowne – indeksuj kolumny datowe i porównuj do wartości tego samego typu (bez funkcji po lewej stronie).</li>
+    </ul>
+  </div>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/prism.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/components/prism-sql.min.js"></script>
+
+  <!-- Styl TYLKO do wizualizacji; nie rusza Twojego styles.css -->
+  <style>
+    .db-table{width:100%;border-collapse:collapse;margin:.5rem 0}
+    .db-table th,.db-table td{border:1px solid #1f2937;padding:.5rem .65rem;text-align:left;vertical-align:top}
+    .db-table th{background:#0e1729;color:#dbe2ea}
+    .null{color:#9ca3af;font-style:italic}
+    details{margin:.75rem 0;border:1px solid #1f2937;border-radius:.5rem;padding:.25rem .5rem;background:#0e1729}
+    details[open]{background:#111827}
+    summary{cursor:pointer;list-style:none}
+    summary::-webkit-details-marker{display:none}
+    .table-title{font-weight:600;margin:.25rem 0}
+    .mini{color:#a7b0be;font-size:.95rem;margin:.25rem 0 .5rem}
+    .note{border-left:4px solid #10b981;padding:.75rem 1rem;background:#0e1729;border-radius:.5rem;margin:1rem 0;color:#cfe3d8}
+  </style>
 </body>
 </html>

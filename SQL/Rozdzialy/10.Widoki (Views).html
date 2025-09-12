@@ -1,77 +1,219 @@
 <!DOCTYPE html>
 <html lang="pl">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Widoki (Views)</title>
-    <link rel="stylesheet" href="../styles.css">
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/themes/prism-tomorrow.min.css" rel="stylesheet" />
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Widoki (Views)</title>
+  <link rel="stylesheet" href="../styles.css" />
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/themes/prism-tomorrow.min.css" rel="stylesheet" />
 </head>
 <body>
-    <div class="container">
-        <h1>Widoki (Views)</h1>
+  <div class="container">
+    <h1>Widoki (Views)</h1>
 
-        <p>Widok (view) to wirtualna tabela utworzona na podstawie zapytania. Nie przechowuje danych osobno – za każdym razem odpytywana jest tabela źródłowa.</p>
+    <p>
+      <strong>Widok</strong> to <em>wirtualna tabela</em> zdefiniowana przez zapytanie. Nie przechowuje własnych danych —
+      za każdym razem odwołuje się do tabel źródłowych.
+    </p>
 
-        <h2>Tworzenie widoku</h2>
-        <pre><code class="language-sql">
-// Prosty widok użytkowników aktywnych
-CREATE VIEW active_users AS
-SELECT id, first_name, last_name, email
-FROM users
-WHERE is_active = TRUE;
-        </code></pre>
-        <p>Potem możesz używać widoku jak zwykłej tabeli:</p>
-        <pre><code class="language-sql">
-SELECT * 
-FROM active_users
-WHERE last_name LIKE 'K%';
-        </code></pre>
-
-        <h2>Złożone zapytania jako widok</h2>
-        <p>Widoki mogą łączyć kilka tabel i zawierać agregacje czy podzapytania.</p>
-        <pre><code class="language-sql">
-// Widok zamówień z informacją o kliencie
-CREATE VIEW order_summary AS
-SELECT 
-    o.id              AS order_id,
-    o.order_date      AS data_zamowienia,
-    c.id              AS customer_id,
-    CONCAT(c.first_name, ' ', c.last_name) AS customer_name,
-    SUM(oi.quantity * p.price) AS total_amount
-FROM orders o
-JOIN order_items oi ON oi.order_id = o.id
-JOIN products p    ON p.id = oi.product_id
-JOIN customers c   ON c.id = o.customer_id
-GROUP BY o.id, o.order_date, c.id, c.first_name, c.last_name;
-        </code></pre>
-
-        <h2>Widoki z możliwością aktualizacji (Updatable Views)</h2>
-        <p>Nie wszystkie widoki można aktualizować. Aby widok był <strong>updatable</strong> (aktualizowalny), musi spełniać zasady:</p>
-        <ul>
-            <li>Opierać się na jednej tabeli lub prostym zapytaniu bez agregacji (<code>GROUP BY</code>),</li>
-            <li>Nie zawierać <code>DISTINCT</code>, <code>UNION</code> ani podzapytań w SELECT,</li>
-            <li>Kolumny kluczowe (PRIMARY KEY) tabeli źródłowej muszą być dostępne w widoku.</li>
-        </ul>
-        <pre><code class="language-sql">
-// Przykład widoku aktualizowalnego
-CREATE VIEW user_emails AS
-SELECT id AS user_id, email
-FROM users
-WITH CHECK OPTION;  -- uniemożliwia INSERT/UPDATE łamiące definicję widoku
-        </code></pre>
-        <p>Dzięki <code>WITH CHECK OPTION</code> (warunek sprawdzania) nie można dodać ani zmienić wiersza tak, by wypadał poza filtr widoku.</p>
-
-        <h2>Wskazówki</h2>
-        <ul>
-            <li>Widoki upraszczają skomplikowane zapytania i poprawiają czytelność kodu.</li>
-            <li>Używaj widoków do nadania sensownych nazw złożonym zestawom danych.</li>
-            <li>Pamiętaj, że widoki nie przyspieszają zapytań – to nadal tabela źródłowa.</li>
-            <li>Monitoruj uprawnienia – widoki mogą ukrywać wrażliwe kolumny.</li>
-        </ul>
+    <div class="note">
+      <strong>Analogia:</strong> Widok to „okno” z gotowym ujęciem danych (np. tylko aktywni użytkownicy),
+      żeby nie pisać w kółko tego samego złożonego SELECT-a.
     </div>
 
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/prism.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/components/prism-sql.min.js"></script>
+    <!-- =================== DANE WEJŚCIOWE DO WIZUALIZACJI =================== -->
+    <details open>
+      <summary class="table-title">Dane wejściowe (przykładowe)</summary>
+      <div class="grid-two">
+        <table class="db-table">
+          <caption class="mini">users</caption>
+          <thead><tr><th>id</th><th>first_name</th><th>last_name</th><th>email</th><th>is_active</th></tr></thead>
+          <tbody>
+            <tr><td>1</td><td>Anna</td><td>Kowalska</td><td>anna@example.com</td><td>TRUE</td></tr>
+            <tr><td>2</td><td>Jan</td><td>Nowak</td><td>jan@example.com</td><td>FALSE</td></tr>
+            <tr><td>3</td><td>Ola</td><td>Lis</td><td>ola@example.com</td><td>TRUE</td></tr>
+          </tbody>
+        </table>
+
+        <table class="db-table">
+          <caption class="mini">customers</caption>
+          <thead><tr><th>id</th><th>first_name</th><th>last_name</th></tr></thead>
+          <tbody>
+            <tr><td>10</td><td>Adam</td><td>Zieliński</td></tr>
+            <tr><td>11</td><td>Beata</td><td>Kruk</td></tr>
+          </tbody>
+        </table>
+
+        <table class="db-table">
+          <caption class="mini">orders</caption>
+          <thead><tr><th>id</th><th>customer_id</th><th>order_date</th></tr></thead>
+          <tbody>
+            <tr><td>1001</td><td>10</td><td>2025-01-05</td></tr>
+            <tr><td>1002</td><td>10</td><td>2025-01-10</td></tr>
+            <tr><td>1003</td><td>11</td><td>2025-01-12</td></tr>
+          </tbody>
+        </table>
+
+        <table class="db-table">
+          <caption class="mini">order_items</caption>
+          <thead><tr><th>order_id</th><th>product_id</th><th>quantity</th></tr></thead>
+          <tbody>
+            <tr><td>1001</td><td>501</td><td>2</td></tr>
+            <tr><td>1001</td><td>502</td><td>1</td></tr>
+            <tr><td>1002</td><td>501</td><td>1</td></tr>
+            <tr><td>1003</td><td>503</td><td>3</td></tr>
+          </tbody>
+        </table>
+
+        <table class="db-table">
+          <caption class="mini">products</caption>
+          <thead><tr><th>id</th><th>name</th><th>price</th></tr></thead>
+          <tbody>
+            <tr><td>501</td><td>Telefon</td><td>1200.00</td></tr>
+            <tr><td>502</td><td>Laptop</td><td>4000.00</td></tr>
+            <tr><td>503</td><td>Czajnik</td><td>150.00</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <p class="mini">To tylko dane poglądowe do zrozumienia wyników widoków.</p>
+    </details>
+    <!-- ===================================================================== -->
+
+    <h2>Tworzenie widoku</h2>
+    <pre><code class="language-sql">-- Prosty widok: tylko aktywni użytkownicy
+CREATE VIEW active_users AS
+SELECT
+  id,               -- kolumny, które chcemy udostępnić
+  first_name,
+  last_name,
+  email
+FROM users
+WHERE is_active = TRUE;  -- filtr widoku
+</code></pre>
+
+    <p>Potem używasz go jak tabeli:</p>
+    <pre><code class="language-sql">SELECT *
+FROM active_users
+WHERE last_name LIKE 'K%';  -- nazwiska na K</code></pre>
+
+    <details open>
+      <summary class="table-title">Wynik (dla danych powyżej)</summary>
+      <table class="db-table">
+        <thead><tr><th>id</th><th>first_name</th><th>last_name</th><th>email</th></tr></thead>
+        <tbody>
+          <tr><td>1</td><td>Anna</td><td>Kowalska</td><td>anna@example.com</td></tr>
+        </tbody>
+      </table>
+      <p class="mini">Widok działa jak filtr zapisany „na stałe”. Aktualizacja tabeli <code>users</code> zmieni też wynik widoku.</p>
+    </details>
+
+    <h2>Złożone zapytania jako widok</h2>
+    <p>Widok może zawierać JOIN-y i agregacje — ułatwia wielokrotne użycie złożonej logiki.</p>
+    <pre><code class="language-sql">-- Widok z podsumowaniem zamówienia (kwota łączna)
+CREATE VIEW order_summary AS
+SELECT
+  o.id                           AS order_id,        -- identyfikator zamówienia
+  o.order_date                   AS data_zamowienia, -- data
+  c.id                           AS customer_id,     -- klient
+  CONCAT(c.first_name,' ',c.last_name) AS customer_name, -- pełne imię i nazwisko
+  SUM(oi.quantity * p.price)     AS total_amount     -- suma pozycji
+FROM orders        AS o
+JOIN order_items   AS oi ON oi.order_id  = o.id
+JOIN products      AS p  ON p.id         = oi.product_id
+JOIN customers     AS c  ON c.id         = o.customer_id
+GROUP BY o.id, o.order_date, c.id, c.first_name, c.last_name;  -- grupa = zamówienie</code></pre>
+
+    <details>
+      <summary class="table-title">Wynik (dla danych powyżej)</summary>
+      <table class="db-table">
+        <thead><tr><th>order_id</th><th>data_zamowienia</th><th>customer_id</th><th>customer_name</th><th>total_amount</th></tr></thead>
+        <tbody>
+          <tr><td>1001</td><td>2025-01-05</td><td>10</td><td>Adam Zieliński</td><td>6400.00</td></tr>
+          <tr><td>1002</td><td>2025-01-10</td><td>10</td><td>Adam Zieliński</td><td>1200.00</td></tr>
+          <tr><td>1003</td><td>2025-01-12</td><td>11</td><td>Beata Kruk</td><td>450.00</td></tr>
+        </tbody>
+      </table>
+      <p class="mini">
+        Obliczenia: #1001 → (2×1200) + (1×4000) = 6400; #1002 → (1×1200) = 1200; #1003 → (3×150) = 450.
+      </p>
+    </details>
+
+    <h2>Widoki z możliwością aktualizacji (Updatable Views)</h2>
+    <p>
+      Nie każdy widok da się aktualizować. Ogólnie — aktualizowalne są proste widoki oparte na <em>jednej tabeli</em>, bez
+      <code>GROUP BY</code>/<code>DISTINCT</code>/<code>UNION</code> ani zagnieżdżonych podzapytań w SELECT.
+      (Szczegóły zależą od silnika; np. PostgreSQL potrafi aktualizować proste widoki albo przez reguły/trigger.)
+    </p>
+
+    <pre><code class="language-sql">-- Przykład prostego, aktualizowalnego widoku
+CREATE VIEW user_emails AS
+SELECT
+  id AS user_id,
+  email
+FROM users
+WHERE is_active = TRUE
+WITH CHECK OPTION;  -- zabrania zmian, które łamią warunek widoku
+</code></pre>
+
+    <details>
+      <summary class="table-title">Co pozwala / czego nie pozwala taki widok?</summary>
+      <table class="db-table">
+        <thead><tr><th>Operacja</th><th>Dozwolone?</th><th>Dlaczego</th></tr></thead>
+        <tbody>
+          <tr>
+            <td><code>UPDATE user_emails SET email='nowy@x.com' WHERE user_id=1;</code></td>
+            <td>Tak</td>
+            <td>Prosta zmiana kolumny pochodzącej wprost z <code>users</code>.</td>
+          </tr>
+          <tr>
+            <td><code>UPDATE user_emails SET email='y@x.com' WHERE user_id=2;</code></td>
+            <td>Nie</td>
+            <td>Wiersz z <code>user_id=2</code> nie przechodzi filtra <code>is_active=TRUE</code> → nie jest w widoku.</td>
+          </tr>
+          <tr>
+            <td><code>UPDATE user_emails SET email='z@x.com' WHERE user_id=3;</code></td>
+            <td>Tak</td>
+            <td>Wiersz jest aktywny, zmiana nie łamie warunku.</td>
+          </tr>
+          <tr>
+            <td><code>UPDATE user_emails SET email='u@x.com', is_active=FALSE WHERE user_id=1;</code></td>
+            <td>Nie</td>
+            <td><code>is_active</code> nie jest w widoku; dodatkowo <code>WITH CHECK OPTION</code> nie dopuści,
+                by wynik aktualizacji „wypadł” poza filtr.</td>
+          </tr>
+        </tbody>
+      </table>
+      <p class="mini">W praktyce zasady różnią się między systemami (MySQL, PostgreSQL, SQL Server). Sprawdzaj dokumentację silnika.</p>
+    </details>
+
+    <h2>Wskazówki</h2>
+    <ul>
+      <li>Widoki upraszczają złożone SELECT-y i nadają sensowne, stabilne nazwy danym.</li>
+      <li>Widok sam w sobie zwykle <em>nie przyspiesza</em> zapytania (to dalej SELECT do tabel źródłowych).</li>
+      <li>Chcesz przyspieszenia? Rozważ <em>materializowane widoki</em> (tam, gdzie dostępne) i ich okresowe odświeżanie.</li>
+      <li>Widoki mogą ukrywać wrażliwe kolumny — połącz je z uprawnieniami użytkowników.</li>
+      <li>Zmiana danych w tabelach źródłowych natychmiast wpływa na wynik widoku.</li>
+    </ul>
+  </div>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/prism.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/components/prism-sql.min.js"></script>
+
+  <!-- Styl TYLKO do wizualizacji; nie rusza Twojego styles.css -->
+  <style>
+    .db-table{width:100%;border-collapse:collapse;margin:.5rem 0}
+    .db-table th,.db-table td{border:1px solid #1f2937;padding:.5rem .65rem;text-align:left;vertical-align:top}
+    .db-table th{background:#0e1729;color:#dbe2ea}
+    .null{color:#9ca3af;font-style:italic}
+    details{margin:.75rem 0;border:1px solid #1f2937;border-radius:.5rem;padding:.25rem .5rem;background:#0e1729}
+    details[open]{background:#111827}
+    summary{cursor:pointer;list-style:none}
+    summary::-webkit-details-marker{display:none}
+    .table-title{font-weight:600;margin:.25rem 0}
+    .mini{color:#a7b0be;font-size:.95rem;margin:.25rem 0 .5rem}
+    .note{border-left:4px solid #10b981;padding:.75rem 1rem;background:#0e1729;border-radius:.5rem;margin:1rem 0;color:#cfe3d8}
+    .grid-two{display:grid;grid-template-columns:1fr 1fr;gap:.75rem}
+    @media (max-width: 900px){.grid-two{grid-template-columns:1fr}}
+  </style>
 </body>
 </html>

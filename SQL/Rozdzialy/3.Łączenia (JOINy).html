@@ -1,86 +1,512 @@
 <!DOCTYPE html>
 <html lang="pl">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Łączenia (JOINy)</title>
-    <link rel="stylesheet" href="../styles.css">
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/themes/prism-tomorrow.min.css" rel="stylesheet" />
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Łączenia (JOINy)</title>
+  <link rel="stylesheet" href="../styles.css" />
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/themes/prism-tomorrow.min.css" rel="stylesheet" />
 </head>
 <body>
-    <div class="container">
-        <h1>Łączenia (JOINy)</h1>
+  <div class="container">
+    <h1>Łączenia (JOINy) — wyjaśnienia linia po linii</h1>
 
-        <p>Łączenia (<em>joins</em>) pozwalają pobierać dane z dwóch lub więcej tabel naraz, dzięki czemu możesz łączyć informacje powiązane ze sobą przez klucze.</p>
+    <p>
+      <strong>JOIN</strong> łączy wiersze z dwóch (lub więcej) tabel na podstawie wspólnej kolumny (klucza).
+      <br><em>Analogia:</em> Masz dwa arkusze w segregatorze. W obu jest kolumna „<code>customer_id</code>”.
+      Zszywasz wiersze z obu arkuszy tam, gdzie wartości w tych kolumnach są równe.
+    </p>
 
-        <h2>INNER JOIN (łączenie wewnętrzne)</h2>
-        <p>Zwraca tylko te wiersze, które mają pasujące wartości w obu tabelach.</p>
-        <pre><code class="language-sql">
-// Wyświetlenie zamówień wraz z nazwą klienta
-SELECT o.id AS order_id, c.name AS customer_name
-FROM orders o
-INNER JOIN customers c
-    ON o.customer_id = c.id;
-        </code></pre>
-
-        <h2>LEFT JOIN (łączenie zewnętrzne lewe)</h2>
-        <p>Zwraca wszystkie wiersze z lewej tabeli, a jeśli nie ma dopasowania w prawej, pola z prawej będą puste (<code>NULL</code>).</p>
-        <pre><code class="language-sql">
-// Wszystkie zamówienia, nawet te bez przypisanego kuriera
-SELECT o.id AS order_id, d.name AS driver_name
-FROM orders o
-LEFT JOIN drivers d
-    ON o.driver_id = d.id;
-        </code></pre>
-
-        <h2>RIGHT JOIN (łączenie zewnętrzne prawe)</h2>
-        <p>Zwraca wszystkie wiersze z prawej tabeli, a jeśli nie ma dopasowania w lewej, pola z lewej będą puste.</p>
-        <pre><code class="language-sql">
-// Wszyscy kurierzy, nawet ci bez żadnego zamówienia
-SELECT d.name AS driver_name, o.id AS order_id
-FROM orders o
-RIGHT JOIN drivers d
-    ON o.driver_id = d.id;
-        </code></pre>
-
-        <h2>FULL JOIN (pełne łączenie zewnętrzne)</h2>
-        <p>Łączy działanie <code>LEFT JOIN</code> i <code>RIGHT JOIN</code> – zwraca wszystkie wiersze z obu tabel, a tam gdzie nie ma dopasowania, wstawia <code>NULL</code>.</p>
-        <pre><code class="language-sql">
-// Wszystkie zamówienia i wszyscy kurierzy, nawet bez wzajemnych powiązań
-SELECT o.id AS order_id, d.name AS driver_name
-FROM orders o
-FULL JOIN drivers d
-    ON o.driver_id = d.id;
-        </code></pre>
-
-        <h2>CROSS JOIN (iloczyn kartezjański)</h2>
-        <p>Łączy każdą linię z pierwszej tabeli z każdą linią z drugiej – tworzy iloczyn kartezjański (<em>cartesian product</em>).</p>
-        <pre><code class="language-sql">
-// Wszystkie możliwe pary produktów i promocji
-SELECT p.name AS product, pr.code AS promo_code
-FROM products p
-CROSS JOIN promotions pr;
-        </code></pre>
-
-        <h2>Kiedy stosować różne JOINy?</h2>
-        <ul>
-            <li><strong>INNER JOIN:</strong> gdy chcesz tylko rekordy mające wspólne klucze w obu tabelach.</li>
-            <li><strong>LEFT JOIN:</strong> gdy bazujesz na tabeli głównej (lewej) i potrzebujesz jej wszystkich wierszy, nawet bez dopasowań.</li>
-            <li><strong>RIGHT JOIN:</strong> analogicznie do <code>LEFT JOIN</code>, ale priorytetem jest prawa tabela.</li>
-            <li><strong>FULL JOIN:</strong> gdy chcesz wszystkie rekordy z obu tabel, przydatne w raportach porównawczych.</li>
-            <li><strong>CROSS JOIN:</strong> gdy potrzebujesz każdej kombinacji wierszy z dwóch tabel (np. testowanie wszystkich wariantów).</li>
-        </ul>
-
-        <h2>Wskazówki</h2>
-        <ul>
-            <li>Zawsze określ warunek łączenia w <code>ON</code>, by uniknąć niechcianych powtórzeń.</li>
-            <li>Używaj <code>INNER JOIN</code> domyślnie, chyba że potrzebujesz konkretnie wierszy bez dopasowań.</li>
-            <li>Twórz indeksy na kolumnach łączących (kluczach obcych i głównych), aby przyspieszyć łączenia.</li>
-            <li>Sprawdzaj wyniki <code>CROSS JOIN</code>, bo szybkorosnący liczebnie rezultat może obciążyć bazę.</li>
-        </ul>
+    <div class="note">
+      <strong>Założenia do przykładów (dla wyobraźni):</strong><br>
+      <code>orders(id, customer_id, driver_id, created_at, total_amount)</code><br>
+      <code>customers(id, name, email)</code><br>
+      <code>drivers(id, name, active)</code><br>
+      <span class="small">Nie musisz ich tworzyć – to tylko kontekst, żeby łatwiej „zobaczyć” co łączymy.</span>
     </div>
 
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/prism.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/components/prism-sql.min.js"></script>
+    <!-- Dane wejściowe (referencyjne) -->
+    <details open>
+      <summary class="table-title">Dane wejściowe: <code>customers</code></summary>
+      <table class="db-table">
+        <thead><tr><th>id</th><th>name</th><th>email</th></tr></thead>
+        <tbody>
+          <tr><td>1</td><td>Anna Kowalska</td><td>anna@example.com</td></tr>
+          <tr><td>2</td><td>Jan Nowak</td><td>jan@example.com</td></tr>
+          <tr><td>3</td><td>Ola Lis</td><td>ola@example.com</td></tr>
+        </tbody>
+      </table>
+    </details>
+    <details open>
+      <summary class="table-title">Dane wejściowe: <code>orders</code></summary>
+      <table class="db-table">
+        <thead><tr><th>id</th><th>customer_id</th><th>driver_id</th><th>total_amount</th></tr></thead>
+        <tbody>
+          <tr><td>101</td><td>1</td><td>10</td><td>120.00</td></tr>
+          <tr><td>102</td><td>2</td><td class="null">NULL</td><td>50.00</td></tr>
+          <tr><td>103</td><td>1</td><td>11</td><td>70.00</td></tr>
+          <tr><td>104</td><td>3</td><td>12</td><td>200.00</td></tr>
+        </tbody>
+      </table>
+    </details>
+    <details open>
+      <summary class="table-title">Dane wejściowe: <code>drivers</code></summary>
+      <table class="db-table">
+        <thead><tr><th>id</th><th>name</th><th>active</th></tr></thead>
+        <tbody>
+          <tr><td>10</td><td>Kamil</td><td>TRUE</td></tr>
+          <tr><td>11</td><td>Magda</td><td>FALSE</td></tr>
+          <tr><td>12</td><td>Tomek</td><td>TRUE</td></tr>
+          <tr><td>13</td><td>Robert</td><td>TRUE</td></tr> <!-- kurier bez zamówień -->
+        </tbody>
+      </table>
+    </details>
+
+    <!-- =============== 1) INNER JOIN =============== -->
+    <h2>1) INNER JOIN — tylko dopasowane wiersze</h2>
+    <pre><code class="language-sql">
+SELECT o.id AS order_id, c.name AS customer_name
+-- SELECT: mówisz bazie, które kolumny chcesz w wyniku.
+--   o.id: bierzemy kolumnę id z tabeli, którą nazwiemy o (orders).
+--   AS order_id: nadajemy czytelną nazwę kolumnie w wyniku (alias kolumny).
+--   c.name: bierzemy kolumnę name z tabeli c (customers).
+--   AS customer_name: alias, żeby wynik był zrozumiały.
+
+FROM orders AS o
+-- FROM: startujemy z głównej tabeli - orders.
+-- AS o: nadajemy alias "o", żeby pisać krócej: o.id zamiast orders.id.
+
+INNER JOIN customers AS c
+-- INNER JOIN: dołącz wiersze z tabeli customers (alias "c"),
+--   ale TYLKO takie, które mają dopasowanie do bieżącego wiersza z "o".
+-- Innymi słowy: wynik zawiera wyłącznie pary (o, c), które spełnią warunek ON.
+
+  ON o.customer_id = c.id;
+-- ON: warunek łączenia.
+--   o.customer_id: klucz obcy w orders.
+--   c.id         : klucz główny w customers.
+-- Wiersz z orders "pasuje" do wiersza z customers, gdy customer_id == id.
+</code></pre>
+    <details open>
+      <summary class="table-title">Wynik (INNER JOIN)</summary>
+      <table class="db-table">
+        <thead><tr><th>order_id</th><th>customer_name</th></tr></thead>
+        <tbody>
+          <tr><td>101</td><td>Anna Kowalska</td></tr>
+          <tr><td>102</td><td>Jan Nowak</td></tr>
+          <tr><td>103</td><td>Anna Kowalska</td></tr>
+          <tr><td>104</td><td>Ola Lis</td></tr>
+        </tbody>
+      </table>
+    </details>
+
+    <!-- =============== 2) LEFT JOIN =============== -->
+    <h2>2) LEFT JOIN — zachowaj wszystko z lewej tabeli</h2>
+    <pre><code class="language-sql">
+SELECT o.id AS order_id, d.name AS driver_name
+-- Chcemy widzieć każde zamówienie (nawet jeśli nie ma kuriera),
+--   oraz nazwę kuriera, jeśli istnieje dopasowanie.
+
+FROM orders AS o
+-- Zaczynamy od zamówień: każdy wiersz z "o" ma trafić do wyniku.
+
+LEFT JOIN drivers AS d
+-- LEFT JOIN: dołączamy kurierów (d),
+--   ale "zachowujemy" wszystkie wiersze z lewej strony, czyli z "o".
+-- Jeżeli brak dopasowania po prawej (w "d"), to pola z "d" będą NULL.
+
+  ON o.driver_id = d.id;
+-- Warunek łączenia: jeśli o.driver_id równa się d.id, to dopasuj te wiersze.
+-- Jeśli o.driver_id jest NULL lub nie ma pasującego d.id, to d.* = NULL w wyniku.
+</code></pre>
+    <details open>
+      <summary class="table-title">Wynik (LEFT JOIN)</summary>
+      <table class="db-table">
+        <thead><tr><th>order_id</th><th>driver_name</th></tr></thead>
+        <tbody>
+          <tr><td>101</td><td>Kamil</td></tr>
+          <tr><td>102</td><td class="null">NULL</td></tr>
+          <tr><td>103</td><td>Magda</td></tr>
+          <tr><td>104</td><td>Tomek</td></tr>
+        </tbody>
+      </table>
+    </details>
+
+    <!-- =============== 3) LEFT JOIN + filtr w ON =============== -->
+    <h2>3) LEFT JOIN + filtr po prawej stronie w <code>ON</code> (zachowuje brak dopasowania)</h2>
+    <pre><code class="language-sql">
+SELECT o.id, d.name, d.active
+-- Pokaż ID zamówienia, imię kuriera (jeśli jest) i jego status "active" (jeśli jest).
+
+FROM orders AS o
+-- Każde zamówienie ma szansę trafić do wyniku.
+
+LEFT JOIN drivers AS d
+-- Łączymy kurierów, ale niczego nie "gubimy" z lewej tabeli (orders).
+
+  ON d.id = o.driver_id
+-- Klasyczny warunek dopasowania po kluczu.
+
+  AND d.active = TRUE;
+-- DODATKOWY filtr po prawej stronie, ale zapisany w ON:
+--   Jeśli kurier jest NIEaktywny (active = FALSE),
+--   to traktuj to tak, jakby dopasowania nie było => d.* = NULL.
+-- Efekt: zamówienia BEZ aktywnego kuriera nadal są w wyniku,
+--         tylko kolumny d.* mają NULL (czyli "brak dopasowania").
+</code></pre>
+    <details open>
+      <summary class="table-title">Wynik (LEFT JOIN + ON d.active = TRUE)</summary>
+      <table class="db-table">
+        <thead><tr><th>id</th><th>name</th><th>active</th></tr></thead>
+        <tbody>
+          <tr><td>101</td><td>Kamil</td><td>TRUE</td></tr>
+          <tr><td>102</td><td class="null">NULL</td><td class="null">NULL</td></tr>
+          <tr><td>103</td><td class="null">NULL</td><td class="null">NULL</td></tr>
+          <tr><td>104</td><td>Tomek</td><td>TRUE</td></tr>
+        </tbody>
+      </table>
+    </details>
+
+    <!-- =============== 4) LEFT JOIN + filtr w WHERE =============== -->
+    <h2>4) LEFT JOIN + filtr w <code>WHERE</code> (uwaga: działa jak INNER)</h2>
+    <pre><code class="language-sql">
+SELECT o.id, d.name, d.active
+-- Chcemy podobny podgląd jak wyżej...
+
+FROM orders AS o
+LEFT JOIN drivers AS d
+  ON d.id = o.driver_id
+-- Najpierw wykonuje się LEFT JOIN (d.* może być NULL dla braku dopasowania).
+
+WHERE d.active = TRUE;
+-- A TERAZ filtrujemy już gotowy wynik po WHERE:
+--   warunek "d.active = TRUE" odrzuca wiersze, w których d.* jest NULL.
+-- Skutek uboczny: usuwamy też wiersze bez kuriera => efekt jak INNER JOIN.
+-- Meritum: filtr po prawej stronie przy LEFT JOIN dawaj w ON,
+--   jeśli chcesz zachować wiersze bez dopasowania.
+</code></pre>
+    <details open>
+      <summary class="table-title">Wynik (LEFT + WHERE d.active = TRUE ⇒ jak INNER)</summary>
+      <table class="db-table">
+        <thead><tr><th>id</th><th>name</th><th>active</th></tr></thead>
+        <tbody>
+          <tr><td>101</td><td>Kamil</td><td>TRUE</td></tr>
+          <tr><td>104</td><td>Tomek</td><td>TRUE</td></tr>
+        </tbody>
+      </table>
+    </details>
+
+    <!-- =============== 5) RIGHT JOIN =============== -->
+    <h2>5) RIGHT JOIN — odwrotność LEFT (rzadziej potrzebny)</h2>
+    <pre><code class="language-sql">
+SELECT d.name AS driver_name, o.id AS order_id
+-- Pokazujemy kierowców i ewentualne przypisane im zamówienia.
+
+FROM orders AS o
+-- Tabela po lewej: orders (nie jest "uprzywilejowana" w RIGHT).
+
+RIGHT JOIN drivers AS d
+-- RIGHT JOIN: zachowaj WSZYSTKIE wiersze z prawej tabeli (drivers),
+--   nawet jeśli nie ma dopasowania w orders.
+
+  ON o.driver_id = d.id;
+-- Jeśli kierowca nie ma zamówień, to kolumny z "o" będą NULL,
+--   ale "d" i tak trafi do wyniku (bo to RIGHT JOIN).
+</code></pre>
+    <details>
+      <summary class="table-title">Wynik (RIGHT JOIN)</summary>
+      <table class="db-table">
+        <thead><tr><th>driver_name</th><th>order_id</th></tr></thead>
+        <tbody>
+          <tr><td>Kamil</td><td>101</td></tr>
+          <tr><td>Magda</td><td>103</td></tr>
+          <tr><td>Tomek</td><td>104</td></tr>
+          <tr><td>Robert</td><td class="null">NULL</td></tr>
+        </tbody>
+      </table>
+    </details>
+
+    <!-- =============== 6) FULL JOIN =============== -->
+    <h2>6) FULL JOIN — suma LEFT i RIGHT</h2>
+    <pre><code class="language-sql">
+SELECT o.id AS order_id, d.name AS driver_name
+-- Chcemy wszystkie zamówienia ORAZ wszystkich kierowców,
+--   niezależnie od dopasowania.
+
+FROM orders AS o
+FULL JOIN drivers AS d
+-- FULL JOIN: weź wiersze, które dopasowały się (jak w INNER),
+--   plus wiersze tylko z lewej (jak w LEFT),
+--   plus wiersze tylko z prawej (jak w RIGHT).
+
+  ON o.driver_id = d.id;
+-- Gdzie brak dopasowania, po tej stronie zobaczysz NULL.
+</code></pre>
+    <p class="small">
+      <strong>MySQL:</strong> nie obsługuje natywnego <code>FULL JOIN</code>. Częsta sztuczka: <code>LEFT JOIN</code> ∪ <code>RIGHT JOIN</code> przez <code>UNION</code> (uważaj na duplikaty).
+    </p>
+    <details>
+      <summary class="table-title">Wynik (FULL JOIN)</summary>
+      <table class="db-table">
+        <thead><tr><th>order_id</th><th>driver_name</th></tr></thead>
+        <tbody>
+          <tr><td>101</td><td>Kamil</td></tr>
+          <tr><td>102</td><td class="null">NULL</td></tr>
+          <tr><td>103</td><td>Magda</td></tr>
+          <tr><td>104</td><td>Tomek</td></tr>
+          <tr><td class="null">NULL</td><td>Robert</td></tr>
+        </tbody>
+      </table>
+    </details>
+
+    <!-- =============== 7) CROSS JOIN =============== -->
+    <h2>7) CROSS JOIN — iloczyn kartezjański</h2>
+    <pre><code class="language-sql">
+SELECT p.name AS product, pr.code AS promo_code
+-- Dla każdego produktu pokaż każdą promocję (wszystkie kombinacje).
+
+FROM products AS p
+-- Pierwsza tabela.
+
+CROSS JOIN promotions AS pr;
+-- Druga tabela.
+-- Brak warunku ON => każda para (p, pr) trafi do wyniku.
+-- Jeśli masz 100 produktów i 50 promocji, dostaniesz 5000 wierszy.
+</code></pre>
+    <details>
+      <summary class="table-title">Wynik (CROSS JOIN) — przykład</summary>
+      <table class="db-table">
+        <thead><tr><th>product</th><th>promo_code</th></tr></thead>
+        <tbody>
+          <tr><td>Produkt A</td><td>WINTER10</td></tr>
+          <tr><td>Produkt A</td><td>SPRING5</td></tr>
+          <tr><td>Produkt B</td><td>WINTER10</td></tr>
+          <tr><td>Produkt B</td><td>SPRING5</td></tr>
+        </tbody>
+      </table>
+    </details>
+
+    <!-- =============== 8) USING i NATURAL JOIN =============== -->
+    <h2>8) USING (wspólna nazwa kolumny) i uwaga o NATURAL JOIN</h2>
+    <pre><code class="language-sql">
+SELECT o.id, c.name
+-- Bierzemy ID zamówienia i nazwę klienta.
+
+FROM orders AS o
+JOIN customers AS c
+-- Zamiast "ON o.customer_id = c.customer_id" użyjemy USING:
+
+USING (customer_id);
+-- USING działa TYLKO, gdy kolumna łącząca ma dokładnie tę samą nazwę
+--   w obu tabelach. Upraszcza zapis; wynik też ma jedną kolumnę customer_id.
+</code></pre>
+    <p class="small">
+      <strong>NATURAL JOIN</strong> automatycznie łączy po wszystkich kolumnach o tych samych nazwach. <br>
+      Bywa nieprzewidywalny (zmiana schematu = zmiana logiki łączenia). Zwykle lepiej go <em>unikać</em>.
+    </p>
+    <details>
+      <summary class="table-title">Wynik (JOIN USING)</summary>
+      <table class="db-table">
+        <thead><tr><th>id</th><th>name</th></tr></thead>
+        <tbody>
+          <tr><td>101</td><td>Anna Kowalska</td></tr>
+          <tr><td>102</td><td>Jan Nowak</td></tr>
+          <tr><td>103</td><td>Anna Kowalska</td></tr>
+          <tr><td>104</td><td>Ola Lis</td></tr>
+        </tbody>
+      </table>
+    </details>
+
+    <!-- =============== 9) Self-join =============== -->
+    <h2>9) Self-join — łączenie tabeli z samą sobą</h2>
+    <pre><code class="language-sql">
+SELECT e.employee_name, m.employee_name AS manager_name
+-- Po lewej: pracownik (e.employee_name),
+-- Po prawej: jego menedżer (m.employee_name).
+
+FROM employees AS e
+-- Pierwsza "instancja" tabeli employees – traktujemy ją jako pracowników.
+
+LEFT JOIN employees AS m
+-- Druga "instancja" tej samej tabeli – traktujemy ją jako menedżerów.
+-- LEFT JOIN, bo chcemy również pracowników bez menedżera (np. CEO).
+
+  ON m.id = e.manager_id;
+-- Dopasowanie: manager_id w wierszu pracownika wskazuje na id menedżera.
+-- Jeśli manager_id jest NULL, to m.* = NULL (czyli brak menedżera).
+</code></pre>
+    <details>
+      <summary class="table-title">Wynik (self-join)</summary>
+      <table class="db-table">
+        <thead><tr><th>employee_name</th><th>manager_name</th></tr></thead>
+        <tbody>
+          <tr><td>Ada</td><td>Piotr</td></tr>
+          <tr><td>Kasia</td><td>Piotr</td></tr>
+          <tr><td>Piotr</td><td class="null">NULL</td></tr>
+        </tbody>
+      </table>
+    </details>
+
+    <!-- =============== 10) Łączenie wielu tabel =============== -->
+    <h2>10) Łączenie wielu tabel — „łańcuch” JOINów</h2>
+    <pre><code class="language-sql">
+SELECT o.id AS order_id, c.name AS customer, d.name AS driver
+-- W jednym widoku pokazujemy 3 źródła: zamówienie, klient, kurier.
+
+FROM orders AS o
+-- Start od orders.
+
+JOIN customers AS c
+-- Dołączamy klientów (INNER: wymagamy dopasowania klienta do zamówienia).
+
+  ON c.id = o.customer_id
+-- Warunek łączenia: customer_id wskazuje na customers.id.
+
+LEFT JOIN drivers AS d
+-- Kurier jest opcjonalny, dlatego LEFT (zachowaj zamówienie bez kuriera).
+
+  ON d.id = o.driver_id;
+-- Warunek łączenia dla kuriera.
+</code></pre>
+    <details>
+      <summary class="table-title">Wynik (JOIN 3 tabel)</summary>
+      <table class="db-table">
+        <thead><tr><th>order_id</th><th>customer</th><th>driver</th></tr></thead>
+        <tbody>
+          <tr><td>101</td><td>Anna Kowalska</td><td>Kamil</td></tr>
+          <tr><td>102</td><td>Jan Nowak</td><td class="null">NULL</td></tr>
+          <tr><td>103</td><td>Anna Kowalska</td><td>Magda</td></tr>
+          <tr><td>104</td><td>Ola Lis</td><td>Tomek</td></tr>
+        </tbody>
+      </table>
+    </details>
+
+    <!-- =============== 11) Anti-join =============== -->
+    <h2>11) Anti-join — wiersze bez dopasowania (technika z <code>LEFT JOIN ... WHERE ... IS NULL</code>)</h2>
+    <pre><code class="language-sql">
+SELECT o.*
+-- Chcemy zamówienia, które NIE MAJĄ przypisanego kuriera.
+
+FROM orders AS o
+LEFT JOIN drivers AS d
+-- Dołącz kurierów, jeśli są.
+
+  ON d.id = o.driver_id
+
+WHERE d.id IS NULL;
+-- Zostaw tylko te wiersze, w których nie znaleziono dopasowania (d.id = NULL).
+-- To "anti-join": pokaż elementy z lewej, które nie mają pary po prawej.
+</code></pre>
+    <details>
+      <summary class="table-title">Wynik (anti-join)</summary>
+      <table class="db-table">
+        <thead><tr><th>id</th><th>customer_id</th><th>driver_id</th><th>total_amount</th></tr></thead>
+        <tbody>
+          <tr><td>102</td><td>2</td><td class="null">NULL</td><td>50.00</td></tr>
+        </tbody>
+      </table>
+    </details>
+
+    <!-- =============== 12) Semi-join =============== -->
+    <h2>12) Semi-join — „istnieje dopasowanie” (z <code>EXISTS</code>)</h2>
+    <pre><code class="language-sql">
+SELECT c.*
+-- Chcemy klientów, którzy mają przynajmniej jedno zamówienie.
+
+FROM customers AS c
+WHERE EXISTS (
+  SELECT 1
+  FROM orders AS o
+  WHERE o.customer_id = c.id
+);
+-- EXISTS zwraca TRUE, jeśli podzapytanie znajdzie choć jeden wiersz.
+-- Nie łączymy danych klientów z zamówieniami w jednym wierszu,
+--   tylko testujemy "czy istnieje dopasowanie" (semi-join).
+</code></pre>
+    <details>
+      <summary class="table-title">Wynik (semi-join / EXISTS)</summary>
+      <table class="db-table">
+        <thead><tr><th>id</th><th>name</th><th>email</th></tr></thead>
+        <tbody>
+          <tr><td>1</td><td>Anna Kowalska</td><td>anna@example.com</td></tr>
+          <tr><td>2</td><td>Jan Nowak</td><td>jan@example.com</td></tr>
+          <tr><td>3</td><td>Ola Lis</td><td>ola@example.com</td></tr>
+        </tbody>
+      </table>
+    </details>
+
+    <!-- =============== 13) Duplikacje 1→N =============== -->
+    <h2>13) Duplikacje przy relacji 1→N (i jak je usunąć)</h2>
+    <pre><code class="language-sql">
+SELECT c.id, c.name
+-- Uwaga: każdy klient pojawi się tyle razy, ile ma zamówień.
+
+FROM customers AS c
+JOIN orders    AS o
+  ON o.customer_id = c.id;
+-- Jeśli klient ma 5 zamówień, zobaczysz 5 wierszy z tym samym c.id, c.name.
+</code></pre>
+    <details>
+      <summary class="table-title">Wynik (JOIN 1→N — zduplikowani klienci)</summary>
+      <table class="db-table">
+        <thead><tr><th>id</th><th>name</th></tr></thead>
+        <tbody>
+          <tr><td>1</td><td>Anna Kowalska</td></tr>
+          <tr><td>2</td><td>Jan Nowak</td></tr>
+          <tr><td>1</td><td>Anna Kowalska</td></tr>
+          <tr><td>3</td><td>Ola Lis</td></tr>
+        </tbody>
+      </table>
+    </details>
+
+    <pre><code class="language-sql">
+-- Jeśli potrzebujesz listy unikalnych klientów z zamówieniami:
+SELECT DISTINCT c.id, c.name
+FROM customers AS c
+JOIN orders    AS o
+  ON o.customer_id = c.id;
+-- DISTINCT "spłaszcza" duplikaty do jednego wiersza na klienta.
+</code></pre>
+    <details>
+      <summary class="table-title">Wynik (DISTINCT — unikalni klienci)</summary>
+      <table class="db-table">
+        <thead><tr><th>id</th><th>name</th></tr></thead>
+        <tbody>
+          <tr><td>1</td><td>Anna Kowalska</td></tr>
+          <tr><td>2</td><td>Jan Nowak</td></tr>
+          <tr><td>3</td><td>Ola Lis</td></tr>
+        </tbody>
+      </table>
+    </details>
+
+    <h2>Checklist — jak nie zgubić się w JOINach</h2>
+    <ul>
+      <li><strong>Zawsze</strong> określ warunek łączenia w <code>ON</code>/<code>USING</code> — inaczej zrobisz iloczyn (mnóstwo wierszy).</li>
+      <li>Dla <code>LEFT JOIN</code>: filtry po prawej dawaj w <code>ON</code>, jeśli chcesz zachować wiersze bez dopasowania.</li>
+      <li>Gdy widzisz niespodziewanie mało wyników: sprawdź czy filtr w <code>WHERE</code> nie „zmienił” Ci <code>LEFT</code> w <code>INNER</code>.</li>
+      <li>Przy relacjach 1→N licz się z multiplikacją wierszy; użyj <code>DISTINCT</code> lub agregacji, jeśli chcesz unikalne rekordy.</li>
+      <li>Indeksuj kolumny łączenia (klucze obce i główne) — joiny będą dużo szybsze.</li>
+    </ul>
+
+    <p class="small">
+      Składnia (np. <code>USING</code>, <code>FULL JOIN</code>) może się różnić między silnikami (PostgreSQL, MySQL, SQL Server, SQLite). Logika JOIN pozostaje taka sama.
+    </p>
+  </div>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/prism.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/components/prism-sql.min.js"></script>
+
+  <!-- DODANE: stylowanie TYLKO dla tabelek z wizualizacjami -->
+  <style>
+    .db-table{width:100%;border-collapse:collapse;margin:.5rem 0}
+    .db-table th,.db-table td{border:1px solid #1f2937;padding:.5rem .65rem;text-align:left}
+    .db-table th{background:#0e1729;color:#dbe2ea}
+    .null{color:#9ca3af;font-style:italic}
+    details{margin:.75rem 0;border:1px solid #1f2937;border-radius:.5rem;padding:.25rem .5rem;background:#0e1729}
+    details[open]{background:#111827}
+    summary{cursor:pointer;list-style:none}
+    summary::-webkit-details-marker{display:none}
+    .table-title{font-weight:600;margin:.25rem 0}
+  </style>
 </body>
 </html>
