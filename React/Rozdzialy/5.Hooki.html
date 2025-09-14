@@ -11,10 +11,11 @@
     <div class="container">
         <h1>React - Hooki</h1>
         
-        <p>Hooki to funkcje, które pozwalają "zaczepiać" (ang. hook) funkcjonalności Reacta, takie jak stan i cykl życia komponentu, w komponentach funkcyjnych. Poniżej przedstawiono wbudowane hooki <code>useState</code> i <code>useEffect</code> oraz sposób tworzenia własnych hooków.</p>
+        <p>Hooki to funkcje, które pozwalają „zaczepiać” (hook) mechanizmy Reacta (stan, efekty, itp.) w komponentach funkcyjnych. Poniżej: <code>useState</code>, <code>useEffect</code> oraz własny hook.</p>
 
+        <!-- ======================= useState ======================= -->
         <h2>useState</h2>
-        <p><code>useState</code> jest hookiem, który pozwala na zarządzanie stanem w komponentach funkcyjnych. Zwraca parę wartości: bieżący stan i funkcję do jego aktualizacji.</p>
+        <p><code>useState</code> zwraca parę: <strong>stan</strong> i <strong>setter</strong>. Setter zmienia stan i powoduje ponowny render.</p>
 
         <pre><code class="language-javascript">
 import React, { useState } from 'react';
@@ -31,10 +32,85 @@ function Counter() {
 }
         </code></pre>
 
-        <p>W powyższym przykładzie użyto <code>useState</code>, aby utworzyć stan <code>count</code> z wartością początkową 0, który zwiększa się o 1 przy każdym kliknięciu przycisku.</p>
+        <!-- Wizualizacja useState -->
+        <details open>
+          <summary class="viz-title">📈 Wizualizacja działania: <strong>useState – Counter</strong></summary>
+          <div class="viz-wrap">
+            <svg viewBox="0 0 1000 360" class="viz-svg">
+              <defs>
+                <marker id="arrow" markerWidth="12" markerHeight="12" refX="10" refY="6" orient="auto">
+                  <path d="M0,0 L12,6 L0,12 Z" fill="#94a3b8"></path>
+                </marker>
+              </defs>
 
+              <g class="lane" transform="translate(10,10)">
+                <rect width="480" height="340" rx="12"></rect>
+                <text x="16" y="28" class="lane-title">Klik → setCount → re-render</text>
+
+                <g class="node" transform="translate(20,60)">
+                  <rect width="440" height="54" rx="10"></rect>
+                  <text x="12" y="22">onClick={() =&gt; setCount(count + 1)}</text>
+                  <text x="12" y="40" class="muted">zdarzenie z przycisku</text>
+                </g>
+
+                <path d="M240,114 L240,148" class="arrow"/>
+                <g class="pill" transform="translate(20,150)">
+                  <rect width="440" height="54" rx="10"></rect>
+                  <text x="12" y="22">setCount(count + 1)</text>
+                  <text x="12" y="40" class="muted">aktualizacja stanu</text>
+                </g>
+
+                <path d="M240,204 L240,238" class="arrow"/>
+                <g class="ok" transform="translate(20,240)">
+                  <rect width="440" height="54" rx="10"></rect>
+                  <text x="12" y="22">Re-render komponentu</text>
+                  <text x="12" y="40" class="muted">nowy count widoczny w UI</text>
+                </g>
+              </g>
+
+              <g class="lane" transform="translate(510,10)">
+                <rect width="480" height="340" rx="12"></rect>
+                <text x="16" y="28" class="lane-title">Powiązanie UI ↔ stan</text>
+
+                <g class="node" transform="translate(20,60)">
+                  <rect width="440" height="54" rx="10"></rect>
+                  <text x="12" y="22">&lt;p&gt;Licznik: { '{count}' }&lt;/p&gt;</text>
+                  <text x="12" y="40" class="muted">czyta aktualny stan</text>
+                </g>
+
+                <g class="node" transform="translate(20,130)">
+                  <rect width="440" height="54" rx="10"></rect>
+                  <text x="12" y="22">&lt;button onClick=...&gt;</text>
+                  <text x="12" y="40" class="muted">wywołuje setCount</text>
+                </g>
+
+                <g class="ok" transform="translate(20,210)">
+                  <rect width="440" height="54" rx="10"></rect>
+                  <text x="12" y="32">UI aktualizuje tekst „Licznik: X”</text>
+                </g>
+              </g>
+            </svg>
+
+            <div class="grid-two">
+              <table class="db-table">
+                <caption class="mini">Stan początkowy</caption>
+                <thead><tr><th>count</th></tr></thead>
+                <tbody><tr><td>0</td></tr></tbody>
+              </table>
+              <table class="db-table">
+                <caption class="mini">Po 2 kliknięciach</caption>
+                <thead><tr><th>count</th></tr></thead>
+                <tbody><tr><td>2</td></tr></tbody>
+              </table>
+            </div>
+          </div>
+        </details>
+
+        <p>Tu setter (<code>setCount</code>) zmienia stan i wywołuje ponowny render. UI „czyta” nową wartość i pokazuje ją.</p>
+
+        <!-- ======================= useEffect ======================= -->
         <h2>useEffect</h2>
-        <p><code>useEffect</code> to hook, który pozwala wykonywać efekty uboczne (ang. side effects) w komponentach, takie jak pobieranie danych, ustawianie timera czy aktualizacja DOM. Można go skonfigurować tak, aby uruchamiał się po każdej aktualizacji lub tylko po określonych zmianach.</p>
+        <p><code>useEffect</code> uruchamia efekty uboczne po renderze (np. subskrypcje, timery). Może zwrócić funkcję sprzątającą.</p>
 
         <pre><code class="language-javascript">
 import React, { useState, useEffect } from 'react';
@@ -46,16 +122,90 @@ function Timer() {
         const timerID = setInterval(() => setTime(new Date()), 1000);
         
         return () => clearInterval(timerID); // Czyszczenie timera przy odmontowywaniu
-    }, []); // Pusta tablica jako drugi argument sprawia, że efekt uruchamia się tylko raz, po zamontowaniu komponentu
+    }, []); // Pusta tablica = uruchom efekt tylko raz (po zamontowaniu)
 
     return &lt;h2&gt;Aktualna godzina: {time.toLocaleTimeString()}&lt;/h2&gt;;
 }
         </code></pre>
 
-        <p>W przykładzie powyżej <code>useEffect</code> ustawia timer, który co sekundę aktualizuje stan <code>time</code>. Funkcja zwracana z <code>useEffect</code> usuwa timer, gdy komponent jest odmontowywany.</p>
+        <!-- Wizualizacja useEffect -->
+        <details>
+          <summary class="viz-title">📈 Wizualizacja działania: <strong>useEffect – Timer</strong></summary>
+          <div class="viz-wrap">
+            <svg viewBox="0 0 1000 420" class="viz-svg">
+              <defs>
+                <marker id="arrow2" markerWidth="12" markerHeight="12" refX="10" refY="6" orient="auto">
+                  <path d="M0,0 L12,6 L0,12 Z" fill="#94a3b8"></path>
+                </marker>
+              </defs>
 
+              <g class="lane" transform="translate(10,10)">
+                <rect width="480" height="400" rx="12"></rect>
+                <text x="16" y="28" class="lane-title">Montaż → efekt → sprzątanie</text>
+
+                <g class="node" transform="translate(20,60)">
+                  <rect width="440" height="54" rx="10"></rect>
+                  <text x="12" y="22">Render + useEffect(() =&gt; {{...}}, [])</text>
+                  <text x="12" y="40" class="muted">[] → uruchom raz</text>
+                </g>
+
+                <path d="M240,114 L240,148" class="arrow2"/>
+                <g class="ok" transform="translate(20,150)">
+                  <rect width="440" height="54" rx="10"></rect>
+                  <text x="12" y="22">setInterval(() =&gt; setTime(new Date()), 1000)</text>
+                  <text x="12" y="40" class="muted">co sekundę aktualizuj stan</text>
+                </g>
+
+                <path d="M240,204 L240,238" class="arrow2"/>
+                <g class="warn" transform="translate(20,240)">
+                  <rect width="440" height="54" rx="10"></rect>
+                  <text x="12" y="22">return () =&gt; clearInterval(timerID)</text>
+                  <text x="12" y="40" class="muted">sprzątanie przy odmontowaniu</text>
+                </g>
+              </g>
+
+              <g class="lane" transform="translate(510,10)">
+                <rect width="480" height="400" rx="12"></rect>
+                <text x="16" y="28" class="lane-title">Tick → setTime → re-render</text>
+
+                <g class="node" transform="translate(20,60)">
+                  <rect width="440" height="54" rx="10"></rect>
+                  <text x="12" y="22">Tick (co 1000 ms)</text>
+                  <text x="12" y="40" class="muted">callback z setInterval</text>
+                </g>
+
+                <g class="pill" transform="translate(20,130)">
+                  <rect width="440" height="54" rx="10"></rect>
+                  <text x="12" y="32">setTime(new Date())</text>
+                </g>
+
+                <g class="ok" transform="translate(20,200)">
+                  <rect width="440" height="54" rx="10"></rect>
+                  <text x="12" y="32">Re-render → wyświetl nowy czas</text>
+                </g>
+              </g>
+            </svg>
+
+            <div class="grid-two">
+              <table class="db-table">
+                <caption class="mini">Stan po montażu</caption>
+                <thead><tr><th>time</th></tr></thead>
+                <tbody><tr><td>np. 12:00:00</td></tr></tbody>
+              </table>
+              <table class="db-table">
+                <caption class="mini">Po 2 sekundach</caption>
+                <thead><tr><th>time</th></tr></thead>
+                <tbody><tr><td>np. 12:00:02</td></tr></tbody>
+              </table>
+            </div>
+          </div>
+        </details>
+
+        <p><em>Meritum:</em> efekt tworzy subskrypcję/timer, a funkcja zwracana sprząta zasoby, gdy komponent znika.</p>
+
+        <!-- ======================= Własny hook ======================= -->
         <h2>Tworzenie Własnych Hooków</h2>
-        <p>Możemy także tworzyć własne hooki, aby ponownie wykorzystywać logikę w różnych komponentach. Własny hook to po prostu funkcja, która może używać innych hooków i zawsze rozpoczyna się od prefiksu <code>use</code>.</p>
+        <p>Własny hook to funkcja zaczynająca się od <code>use</code>, która może używać innych hooków i kapsułkuje wspólną logikę.</p>
 
         <pre><code class="language-javascript">
 // Importujemy niezbędne funkcje z React
@@ -87,16 +237,395 @@ function WindowWidthDisplay() {
     // Wywołujemy useWindowWidth, aby uzyskać aktualną szerokość okna
     const width = useWindowWidth();
     
-    // Renderujemy element <p> z bieżącą szerokością okna przeglądarki
-    return <p>Szerokość okna: {width}px</p>;
+    // Renderujemy element &lt;p&gt; z bieżącą szerokością okna przeglądarki
+    return &lt;p&gt;Szerokość okna: {width}px&lt;/p&gt;;
 }
-
         </code></pre>
 
-        <p>W tym przykładzie własny hook <code>useWindowWidth</code> śledzi szerokość okna przeglądarki i zwraca ją, umożliwiając jej łatwe użycie w dowolnym komponencie.</p>
+        <!-- Wizualizacja własnego hooka -->
+        <details>
+          <summary class="viz-title">📈 Wizualizacja działania: <strong>useWindowWidth (custom hook)</strong></summary>
+          <div class="viz-wrap">
+            <svg viewBox="0 0 1000 500" class="viz-svg">
+              <defs>
+                <marker id="arrow3" markerWidth="12" markerHeight="12" refX="10" refY="6" orient="auto">
+                  <path d="M0,0 L12,6 L0,12 Z" fill="#94a3b8"></path>
+                </marker>
+              </defs>
+
+              <g class="lane" transform="translate(10,10)">
+                <rect width="480" height="480" rx="12"></rect>
+                <text x="16" y="28" class="lane-title">Wnętrze hooka (useWindowWidth)</text>
+
+                <g class="node" transform="translate(20,60)">
+                  <rect width="440" height="54" rx="10"></rect>
+                  <text x="12" y="22">const [width, setWidth] = useState(window.innerWidth)</text>
+                  <text x="12" y="40" class="muted">początkowy stan</text>
+                </g>
+
+                <g class="node" transform="translate(20,130)">
+                  <rect width="440" height="54" rx="10"></rect>
+                  <text x="12" y="22">useEffect(() =&gt; {{ addEventListener('resize', handleResize) }}</text>
+                  <text x="12" y="40" class="muted">subskrypcja resize</text>
+                </g>
+
+                <g class="pill" transform="translate(20,200)">
+                  <rect width="440" height="54" rx="10"></rect>
+                  <text x="12" y="32">handleResize =&gt; setWidth(window.innerWidth)</text>
+                </g>
+
+                <g class="warn" transform="translate(20,270)">
+                  <rect width="440" height="54" rx="10"></rect>
+                  <text x="12" y="22">return () =&gt; removeEventListener('resize', handleResize)</text>
+                  <text x="12" y="40" class="muted">sprzątanie</text>
+                </g>
+
+                <g class="ok" transform="translate(20,340)">
+                  <rect width="440" height="54" rx="10"></rect>
+                  <text x="12" y="32">return width</text>
+                </g>
+              </g>
+
+              <g class="lane" transform="translate(510,10)">
+                <rect width="480" height="480" rx="12"></rect>
+                <text x="16" y="28" class="lane-title">Komponent używający hooka</text>
+
+                <g class="node" transform="translate(20,60)">
+                  <rect width="440" height="54" rx="10"></rect>
+                  <text x="12" y="22">const width = useWindowWidth()</text>
+                  <text x="12" y="40" class="muted">pobiera wartość z hooka</text>
+                </g>
+
+                <g class="ok" transform="translate(20,130)">
+                  <rect width="440" height="54" rx="10"></rect>
+                  <text x="12" y="32">&lt;p&gt;Szerokość okna: { '{width}' }px&lt;/p&gt;</text>
+                </g>
+
+                <g class="node" transform="translate(20,210)">
+                  <rect width="440" height="54" rx="10"></rect>
+                  <text x="12" y="22">Zdarzenie: window.resize</text>
+                  <text x="12" y="40" class="muted">triggeruje handleResize</text>
+                </g>
+
+                <g class="pill" transform="translate(20,280)">
+                  <rect width="440" height="54" rx="10"></rect>
+                  <text x="12" y="32">setWidth(...) → re-render komponentu</text>
+                </g>
+
+                <g class="ok" transform="translate(20,350)">
+                  <rect width="440" height="54" rx="10"></rect>
+                  <text x="12" y="32">UI pokazuje nową szerokość</text>
+                </g>
+              </g>
+            </svg>
+
+            <div class="grid-two">
+              <table class="db-table">
+                <caption class="mini">Stan początkowy</caption>
+                <thead><tr><th>width</th></tr></thead>
+                <tbody><tr><td>np. 1366</td></tr></tbody>
+              </table>
+              <table class="db-table">
+                <caption class="mini">Po zmianie rozmiaru okna</caption>
+                <thead><tr><th>width</th></tr></thead>
+                <tbody><tr><td>np. 1024</td></tr></tbody>
+              </table>
+            </div>
+          </div>
+        </details>
+
+        <p><em>Idea:</em> hook „pakuje” logikę subskrypcji i aktualizacji w jedną funkcję, którą potem używasz w wielu komponentach.</p>
+   
+   
+              <hr style="margin:2rem 0;border:0;border-top:1px solid #1f2937" />
+
+      <h2>useMemo vs useCallback (prosto + analogia)</h2>
+
+      <p><strong>Analogia:</strong> Wyobraź sobie kuchnię.</p>
+      <ul>
+        <li><strong>useMemo</strong> = gotowe <em>danie</em> odłożone do lodówki. Raz je liczysz/gotujesz, a potem bierzesz gotowy wynik, dopóki składniki się nie zmienią.</li>
+        <li><strong>useCallback</strong> = kartka z <em>przepisem</em>. To ta sama kartka (ta sama referencja), więc pomocnik (dziecko/komponent potomny) nie myśli, że masz nowy przepis przy każdym wejściu do kuchni.</li>
+      </ul>
+
+      <table class="db-table">
+        <thead>
+          <tr><th>Cecha</th><th>useMemo</th><th>useCallback</th></tr>
+        </thead>
+        <tbody>
+          <tr><td>Co zapamiętuje?</td><td>Wynik obliczeń (wartość)</td><td>Samą funkcję (referencję)</td></tr>
+          <tr><td>Kiedy używać?</td><td>Gdy obliczenia są kosztowne lub wynik jest używany wielokrotnie</td><td>Gdy przekazujesz funkcję do dzieci (np. z <code>React.memo</code>) lub do zależności efektów</td></tr>
+          <tr><td>Sygnatura</td><td><code>useMemo(() =&gt; wynik, [deps])</code></td><td><code>useCallback(() =&gt; fn, [deps])</code></td></tr>
+          <tr><td>Pułapka</td><td>Nie ma sensu dla banalnych obliczeń</td><td>Nie ma sensu, jeśli dziecko i tak się zawsze renderuje</td></tr>
+        </tbody>
+      </table>
+
+      <div class="grid-two">
+        <div>
+          <h3>Przykład 1 – <code>useMemo</code> (zapamiętaj wynik)</h3>
+          <p>Liczymy sumę koszyka tylko, gdy zmieni się lista pozycji.</p>
+          <pre><code class="language-javascript">
+import React, { useMemo, useState } from 'react';
+
+function CartTotal({ items }) {
+  // items: [{ price: number, qty: number }]
+  const total = useMemo(() =&gt; {
+    // Tu może być drogie liczenie (filtrowanie, sortowanie, redukcja)
+    return items.reduce((sum, it) =&gt; sum + it.price * it.qty, 0);
+  }, [items]);
+
+  return (
+    &lt;p&gt;Suma: {total.toFixed(2)} zł&lt;/p&gt;
+  );
+}
+          </code></pre>
+          <details open>
+  <summary class="viz-title">📈 Wizualizacja działania: <strong>useMemo – CartTotal</strong></summary>
+  <div class="viz-wrap">
+    <svg viewBox="0 0 1000 420" class="viz-svg">
+      <defs>
+        <marker id="arrow" markerWidth="12" markerHeight="12" refX="10" refY="6" orient="auto">
+          <path d="M0,0 L12,6 L0,12 Z" fill="#94a3b8"></path>
+        </marker>
+      </defs>
+
+      <!-- Lewy tor: zmiana deps → przelicz -->
+      <g class="lane" transform="translate(10,10)">
+        <rect width="480" height="400" rx="12"></rect>
+        <text x="16" y="28" class="lane-title">Gdy <tspan class="muted">items</tspan> się zmienia</text>
+
+        <g class="node" transform="translate(20,60)">
+          <rect width="440" height="54" rx="10"></rect>
+          <text x="12" y="22">Render → useMemo(fn, [items])</text>
+          <text x="12" y="40" class="muted">porównanie zależności</text>
+        </g>
+
+        <path d="M240,114 L240,148" class="arrow"/>
+        <g class="warn" transform="translate(20,150)">
+          <rect width="440" height="54" rx="10"></rect>
+          <text x="12" y="22">deps ZMIENIONE → uruchom fn()</text>
+          <text x="12" y="40" class="muted">liczymy sumę koszyka</text>
+        </g>
+
+        <path d="M240,204 L240,238" class="arrow"/>
+        <g class="pill" transform="translate(20,240)">
+          <rect width="440" height="54" rx="10"></rect>
+          <text x="12" y="22">total = items.reduce(...)</text>
+          <text x="12" y="40" class="muted">zapisz w pamięci (cache)</text>
+        </g>
+
+        <path d="M240,294 L240,328" class="arrow"/>
+        <g class="ok" transform="translate(20,330)">
+          <rect width="440" height="54" rx="10"></rect>
+          <text x="12" y="22">UI: „Suma: {total} zł”</text>
+          <text x="12" y="40" class="muted">użycie nowego wyniku</text>
+        </g>
+      </g>
+
+      <!-- Prawy tor: brak zmiany deps → użyj cache -->
+      <g class="lane" transform="translate(510,10)">
+        <rect width="480" height="400" rx="12"></rect>
+        <text x="16" y="28" class="lane-title">Gdy <tspan class="muted">items</tspan> jest takie samo (referencja)</text>
+
+        <g class="node" transform="translate(20,60)">
+          <rect width="440" height="54" rx="10"></rect>
+          <text x="12" y="22">Render → useMemo(fn, [items])</text>
+          <text x="12" y="40" class="muted">zależności bez zmian</text>
+        </g>
+
+        <path d="M240,114 L240,148" class="arrow"/>
+        <g class="ok" transform="translate(20,150)">
+          <rect width="440" height="54" rx="10"></rect>
+          <text x="12" y="22">Zwróć WARTOŚĆ z cache</text>
+          <text x="12" y="40" class="muted">fn nie jest wywoływana</text>
+        </g>
+
+        <path d="M240,204 L240,238" class="arrow"/>
+        <g class="ok" transform="translate(20,240)">
+          <rect width="440" height="54" rx="10"></rect>
+          <text x="12" y="22">UI: „Suma: {total} zł”</text>
+          <text x="12" y="40" class="muted">bez kosztownego liczenia</text>
+        </g>
+      </g>
+    </svg>
+
+    <div class="grid-two">
+      <table class="db-table">
+        <caption class="mini">Zmiana listy (nowa referencja)</caption>
+        <thead><tr><th>items (ref)</th><th>total</th><th>przelicz?</th></tr></thead>
+        <tbody><tr><td>0xA1 → 0xB2</td><td>obliczony na nowo</td><td>TAK</td></tr></tbody>
+      </table>
+      <table class="db-table">
+        <caption class="mini">Brak zmiany (ta sama referencja)</caption>
+        <thead><tr><th>items (ref)</th><th>total</th><th>przelicz?</th></tr></thead>
+        <tbody><tr><td>0xA1 → 0xA1</td><td>z cache</td><td>NIE</td></tr></tbody>
+      </table>
+    </div>
+
+    <p class="small">Uwaga: jeśli „mutujesz” tablicę bez zmiany referencji (np. <code>push</code>), <code>useMemo</code> może się nie przeliczyć – przekazuj nową tablicę.</p>
+  </div>
+</details>
+        </div>
+        
+<br>
+        <div>
+          <h3>Przykład 2 – <code>useCallback</code> (zapamiętaj funkcję)</h3>
+          <p>Przekazujemy stabilny handler do dziecka, żeby <code>React.memo</code> mógł pominąć zbędny render.</p>
+          <pre><code class="language-javascript">
+import React, { useCallback } from 'react';
+
+const AddButton = React.memo(function AddButton({ onClick }) {
+  return &lt;button onClick={onClick}&gt;Dodaj&lt;/button&gt;;
+});
+
+function ProductRow({ productId, onAdd }) {
+  // Bez useCallback ta funkcja byłaby tworzona na nowo przy każdym renderze.
+  const handleAdd = useCallback(() =&gt; {
+    onAdd(productId);
+  }, [onAdd, productId]);
+
+  return (
+    &lt;div&gt;
+      &lt;span&gt;Produkt {productId}&lt;/span&gt;
+      &lt;AddButton onClick={handleAdd} /&gt;
+    &lt;/div&gt;
+  );
+}
+          </code></pre>
+        </div>
+        
+      </div>
+      <details>
+  <summary class="viz-title">📈 Wizualizacja działania: <strong>useCallback – ProductRow / AddButton</strong></summary>
+  <div class="viz-wrap">
+    <svg viewBox="0 0 1000 500" class="viz-svg">
+      <defs>
+        <marker id="arrow2" markerWidth="12" markerHeight="12" refX="10" refY="6" orient="auto">
+          <path d="M0,0 L12,6 L0,12 Z" fill="#94a3b8"></path>
+        </marker>
+      </defs>
+
+      <!-- Rodzic -->
+      <g class="lane" transform="translate(10,10)">
+        <rect width="480" height="480" rx="12"></rect>
+        <text x="16" y="28" class="lane-title">Komponent rodzic – stabilna funkcja</text>
+
+        <g class="node" transform="translate(20,60)">
+          <rect width="440" height="54" rx="10"></rect>
+          <text x="12" y="22">const handleAdd = useCallback(() =&gt; onAdd(productId), [onAdd, productId])</text>
+          <text x="12" y="40" class="muted">tworzy/utrzymuje referencję</text>
+        </g>
+
+        <path d="M240,114 L240,148" class="arrow2"/>
+        <g class="ok" transform="translate(20,150)">
+          <rect width="440" height="54" rx="10"></rect>
+          <text x="12" y="22">Gdy deps BEZ zmian → ta SAMA referencja</text>
+          <text x="12" y="40" class="muted">handleAdd === poprzedni</text>
+        </g>
+
+        <path d="M240,204 L240,238" class="arrow2"/>
+        <g class="warn" transform="translate(20,240)">
+          <rect width="440" height="54" rx="10"></rect>
+          <text x="12" y="22">Gdy deps ZMIENIONE → NOWA referencja</text>
+          <text x="12" y="40" class="muted">odśwież prop dla dziecka</text>
+        </g>
+
+        <path d="M240,294 L240,328" class="arrow2"/>
+        <g class="node" transform="translate(20,330)">
+          <rect width="440" height="54" rx="10"></rect>
+          <text x="12" y="22">&lt;AddButton onClick={handleAdd} /&gt;</text>
+          <text x="12" y="40" class="muted">przekazanie do dziecka</text>
+        </g>
+      </g>
+
+      <!-- Dziecko (React.memo) -->
+      <g class="lane" transform="translate(510,10)">
+        <rect width="480" height="480" rx="12"></rect>
+        <text x="16" y="28" class="lane-title">Dziecko – <tspan class="muted">React.memo</tspan></text>
+
+        <g class="node" transform="translate(20,60)">
+          <rect width="440" height="54" rx="10"></rect>
+          <text x="12" y="22">Porównanie props (płytkie)</text>
+          <text x="12" y="40" class="muted">onClick: ref stara vs nowa</text>
+        </g>
+
+        <path d="M240,114 L240,148" class="arrow2"/>
+        <g class="ok" transform="translate(20,150)">
+          <rect width="440" height="54" rx="10"></rect>
+          <text x="12" y="22">Ta sama referencja → POMIŃ render</text>
+          <text x="12" y="40" class="muted">optimum zachowane</text>
+        </g>
+
+        <path d="M240,204 L240,238" class="arrow2"/>
+        <g class="warn" transform="translate(20,240)">
+          <rect width="440" height="54" rx="10"></rect>
+          <text x="12" y="22">Nowa referencja → RENDER dziecka</text>
+          <text x="12" y="40" class="muted">bo props się zmienił</text>
+        </g>
+
+        <path d="M240,294 L240,328" class="arrow2"/>
+        <g class="node" transform="translate(20,330)">
+          <rect width="440" height="54" rx="10"></rect>
+          <text x="12" y="22">&lt;button onClick={onClick}&gt;Dodaj&lt;/button&gt;</text>
+          <text x="12" y="40" class="muted">klik → onAdd(productId)</text>
+        </g>
+      </g>
+    </svg>
+
+    <div class="grid-two">
+      <table class="db-table">
+        <caption class="mini">2 kolejne rendery (bez zmian deps)</caption>
+        <thead><tr><th>render</th><th>handleAdd ref</th><th>dziecko re-render?</th></tr></thead>
+        <tbody>
+          <tr><td>R1</td><td>0xF0</td><td>TAK (pierwszy raz)</td></tr>
+          <tr><td>R2</td><td>0xF0 (ta sama)</td><td>NIE</td></tr>
+        </tbody>
+      </table>
+      <table class="db-table">
+        <caption class="mini">Zmiana deps (np. inny productId)</caption>
+        <thead><tr><th>render</th><th>handleAdd ref</th><th>dziecko re-render?</th></tr></thead>
+        <tbody>
+          <tr><td>R3</td><td>0xAB (nowa)</td><td>TAK</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <p class="small">Tip: jeśli dziecko i tak zawsze się renderuje, <code>useCallback</code> nie da zysku. Zyski są głównie z <code>React.memo</code> / memoized props.</p>
+  </div>
+</details>
+
+      <ul>
+        <li><strong>Użyj <code>useMemo</code></strong>, gdy wynik liczenia jest kosztowny albo wykorzystywany w wielu miejscach (np. filtrowanie dużych list, agregacje).</li>
+        <li><strong>Użyj <code>useCallback</code></strong>, gdy funkcję przekazujesz do komponentów potomnych optymalizowanych przez <code>React.memo</code> lub gdy trafia do tablicy zależności w <code>useEffect</code>/<code>useMemo</code>/<code>useCallback</code>.</li>
+      </ul>
+
+      <p><strong>Reguła na skróty:</strong> jeśli chcesz „zapamiętać liczbę/tablicę/obiekt” → <code>useMemo</code>. Jeśli chcesz „zapamiętać handler” → <code>useCallback</code>.</p>
+
     </div>
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/prism.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/components/prism-javascript.min.js"></script>
+
+    <!-- Lekki, izolowany CSS tylko dla wizualizacji -->
+    <style>
+      .viz-title{cursor:pointer;font-weight:600}
+      .viz-wrap{padding:.5rem .25rem}
+      .viz-svg{width:100%;height:auto;background:#0e1729;border-radius:12px}
+      .lane rect{fill:#0f172a;stroke:#1f2937}
+      .lane-title{fill:#cbd5e1;font-weight:600}
+      .node rect{fill:#111827;stroke:#334155}
+      .pill rect{fill:#0b3b2e;stroke:#14532d}
+      .ok rect{fill:#0b2a3b;stroke:#0e7490}
+      .warn rect{fill:#3b0b0b;stroke:#7f1d1d}
+      .node text,.pill text,.ok text,.warn text{fill:#e2e8f0;font-size:14px}
+      .muted{fill:#94a3b8;font-size:12px}
+      .arrow{stroke:#94a3b8;stroke-width:2;fill:none;marker-end:url(#arrow)}
+      .arrow2{stroke:#94a3b8;stroke-width:2;fill:none;marker-end:url(#arrow2)}
+      .arrow3{stroke:#94a3b8;stroke-width:2;fill:none;marker-end:url(#arrow3)}
+      .db-table{width:100%;border-collapse:collapse;margin:.5rem 0}
+      .db-table th,.db-table td{border:1px solid #aeaeae;padding:.5rem .65rem;text-align:left;vertical-align:top}
+      .db-table th{background:#0e1729;color:#dbe2ea}
+  
+      @media (max-width: 900px){.grid-two{grid-template-columns:1fr}}
+    </style>
 </body>
 </html>

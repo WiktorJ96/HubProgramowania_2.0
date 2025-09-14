@@ -45,6 +45,70 @@ function SimpleForm() {
 export default SimpleForm;
         </code></pre>
 
+        <!-- Wizualizacja: SimpleForm -->
+        <details open>
+          <summary class="viz-title">📈 Wizualizacja działania: <strong>SimpleForm</strong></summary>
+          <div class="viz-wrap">
+            <!-- Diagram onChange/onSubmit -->
+            <svg viewBox="0 0 1000 400" class="viz-svg">
+              <defs>
+                <marker id="arrow" markerWidth="12" markerHeight="12" refX="10" refY="6" orient="auto">
+                  <path d="M0,0 L12,6 L0,12 Z" fill="#94a3b8"></path>
+                </marker>
+              </defs>
+              <g class="lane" transform="translate(10,10)">
+                <rect width="480" height="380" rx="12"></rect>
+                <text x="16" y="28" class="lane-title">onChange → setName → re-render</text>
+
+                <g class="node" transform="translate(20,60)"><rect width="180" height="54" rx="10"></rect><text x="12" y="22">Użytkownik pisze</text><text x="12" y="40" class="muted">klawiatura</text></g>
+                <g class="node" transform="translate(220,60)"><rect width="255" height="54" rx="10"></rect><text x="12" y="22">&lt;input value={name} onChange={...}/&gt;</text><text x="12" y="40" class="muted">pole kontrolowane</text></g>
+                <path d="M200,87 L218,87" class="arrow"/>
+                <text x="190" y="50" class="muted">onChange</text>
+
+                <g class="node" transform="translate(220,130)"><rect width="230" height="54" rx="10"></rect><text x="12" y="22">handleChange(event)</text><text x="12" y="40" class="muted">value = event.target.value</text></g>
+                <path d="M335,114 L335,128" class="arrow"/>
+
+                <g class="pill" transform="translate(220,200)"><rect width="230" height="54" rx="10"></rect><text x="12" y="32">setName(value)</text></g>
+                <path d="M335,184 L335,198" class="arrow"/>
+
+                <g class="ok" transform="translate(220,270)"><rect width="230" height="54" rx="10"></rect><text x="12" y="32">Re-render (value={name})</text></g>
+                <path d="M335,254 L335,268" class="arrow"/>
+              </g>
+
+              <g class="lane" transform="translate(510,10)">
+                <rect width="480" height="380" rx="12"></rect>
+                <text x="16" y="28" class="lane-title">onSubmit → preventDefault → alert</text>
+
+                <g class="node" transform="translate(20,60)"><rect width="180" height="54" rx="10"></rect><text x="12" y="32">Klik „Wyślij”</text></g>
+                <g class="node" transform="translate(220,60)"><rect width="230" height="54" rx="10"></rect><text x="12" y="32">onSubmit={handleSubmit}</text></g>
+                <path d="M200,87 L218,87" class="arrow"/>
+
+                <g class="node" transform="translate(220,130)"><rect width="230" height="54" rx="10"></rect><text x="12" y="32">handleSubmit(event)</text></g>
+                <path d="M335,114 L335,128" class="arrow"/>
+
+                <g class="warn" transform="translate(220,200)"><rect width="230" height="54" rx="10"></rect><text x="12" y="22">event.preventDefault()</text><text x="12" y="40" class="muted">bez przeładowania</text></g>
+                <path d="M335,184 L335,198" class="arrow"/>
+
+                <g class="ok" transform="translate(220,270)"><rect width="230" height="54" rx="10"></rect><text x="12" y="32">alert(`Witaj, ${name}!`)</text></g>
+                <path d="M335,254 L335,268" class="arrow"/>
+              </g>
+            </svg>
+
+            <div class="grid-two">
+              <table class="db-table">
+                <caption class="mini">Stan przed wpisaniem</caption>
+                <thead><tr><th>name</th><th>input</th></tr></thead>
+                <tbody><tr><td>''</td><td>''</td></tr></tbody>
+              </table>
+              <table class="db-table">
+                <caption class="mini">Po onChange („Ala”)</caption>
+                <thead><tr><th>name</th><th>input</th></tr></thead>
+                <tbody><tr><td>'Ala'</td><td>'Ala'</td></tr></tbody>
+              </table>
+            </div>
+          </div>
+        </details>
+
         <p>W tym przykładzie <code>handleChange</code> aktualizuje stan <code>name</code> po każdej zmianie w polu tekstowym, a <code>handleSubmit</code> wyświetla alert z wpisanym imieniem, zapobiegając jednocześnie przeładowaniu strony.</p>
 
         <h2>Walidacja Formularza</h2>
@@ -88,6 +152,65 @@ function ValidatedForm() {
 export default ValidatedForm;
         </code></pre>
 
+        <!-- Wizualizacja: ValidatedForm -->
+        <details>
+          <summary class="viz-title">📈 Wizualizacja działania: <strong>ValidatedForm</strong></summary>
+          <div class="viz-wrap">
+            <svg viewBox="0 0 1000 440" class="viz-svg">
+              <defs>
+                <marker id="arrow2" markerWidth="12" markerHeight="12" refX="10" refY="6" orient="auto">
+                  <path d="M0,0 L12,6 L0,12 Z" fill="#94a3b8"></path>
+                </marker>
+              </defs>
+
+              <g class="lane" transform="translate(10,10)">
+                <rect width="480" height="420" rx="12"></rect>
+                <text x="16" y="28" class="lane-title">onChange → setEmail + walidacja → render</text>
+
+                <g class="node" transform="translate(20,60)"><rect width="210" height="54" rx="10"></rect><text x="12" y="22">handleEmailChange(e)</text><text x="12" y="40" class="muted">email = e.target.value</text></g>
+                <path d="M235,87 L248,87" class="arrow2"/>
+
+                <g class="pill" transform="translate(260,60)"><rect width="210" height="54" rx="10"></rect><text x="12" y="32">setEmail(value)</text></g>
+                <path d="M365,114 L365,160" class="arrow2"/>
+
+                <g class="warn" transform="translate(20,140)"><rect width="450" height="54" rx="10"></rect><text x="12" y="22">if (!value.includes('@')) setError('brak @')</text><text x="12" y="40" class="muted">else setError('')</text></g>
+                <path d="M245,194 L245,238" class="arrow2"/>
+
+                <g class="ok" transform="translate(20,240)"><rect width="450" height="54" rx="10"></rect><text x="12" y="32">Re-render (pokazuj komunikat błędu)</text></g>
+              </g>
+
+              <g class="lane" transform="translate(510,10)">
+                <rect width="480" height="420" rx="12"></rect>
+                <text x="16" y="28" class="lane-title">onSubmit → preventDefault → decyzja</text>
+
+                <g class="node" transform="translate(20,60)"><rect width="210" height="54" rx="10"></rect><text x="12" y="32">handleSubmit(e)</text></g>
+                <g class="warn" transform="translate(240,60)"><rect width="220" height="54" rx="10"></rect><text x="12" y="22">e.preventDefault()</text><text x="12" y="40" class="muted">bez refresh</text></g>
+                <path d="M230,87 L238,87" class="arrow2"/>
+
+                <g class="node" transform="translate(20,140)"><rect width="440" height="54" rx="10"></rect><text x="12" y="22">if (error === '')</text><text x="12" y="40" class="muted">walidacja przeszła?</text></g>
+                <path d="M240,114 L240,138" class="arrow2"/>
+
+                <g class="ok" transform="translate(20,220)"><rect width="210" height="54" rx="10"></rect><text x="12" y="32">alert('wysłano')</text></g>
+                <g class="warn" transform="translate(250,220)"><rect width="210" height="54" rx="10"></rect><text x="12" y="22">alert('popraw błędy')</text><text x="12" y="40" class="muted">blokuj wysyłkę</text></g>
+                <path d="M240,194 L240,218" class="arrow2"/>
+              </g>
+            </svg>
+
+            <div class="grid-two">
+              <table class="db-table">
+                <caption class="mini">Stan (błędny)</caption>
+                <thead><tr><th>email</th><th>error</th></tr></thead>
+                <tbody><tr><td>"alaexample.com"</td><td>"Email musi zawierać znak '@'"</td></tr></tbody>
+              </table>
+              <table class="db-table">
+                <caption class="mini">Stan (poprawny)</caption>
+                <thead><tr><th>email</th><th>error</th></tr></thead>
+                <tbody><tr><td>"ala@example.com"</td><td>""</td></tr></tbody>
+              </table>
+            </div>
+          </div>
+        </details>
+
         <p>W powyższym przykładzie walidacja sprawdza, czy w polu <code>email</code> znajduje się znak <code>@</code>. Jeśli go brakuje, wyświetla komunikat o błędzie, a przy próbie wysłania formularza użytkownik otrzyma ostrzeżenie.</p>
 
         <h2>Obsługa Wielu Pól Formularza</h2>
@@ -125,10 +248,177 @@ function MultiFieldForm() {
 export default MultiFieldForm;
         </code></pre>
 
-        <p>W tym przykładzie <code>handleChange</code> aktualizuje stan <code>formData</code> na podstawie <code>name</code> pola, co pozwala obsługiwać wiele pól w jednym obiekcie stanu.</p>
+        <!-- Wizualizacja: MultiFieldForm -->
+        <details>
+          <summary class="viz-title">📈 Wizualizacja działania: <strong>MultiFieldForm</strong></summary>
+          <div class="viz-wrap">
+            <svg viewBox="0 0 1000 420" class="viz-svg">
+              <defs>
+                <marker id="arrow3" markerWidth="12" markerHeight="12" refX="10" refY="6" orient="auto">
+                  <path d="M0,0 L12,6 L0,12 Z" fill="#94a3b8"></path>
+                </marker>
+              </defs>
+
+              <g class="lane" transform="translate(10,10)">
+                <rect width="480" height="400" rx="12"></rect>
+                <text x="16" y="28" class="lane-title">onChange (wiele pól) → setFormData → render</text>
+
+                <g class="node" transform="translate(20,60)"><rect width="440" height="54" rx="10"></rect><text x="12" y="22">handleChange(e)</text><text x="12" y="40" class="muted">const {{name, value}} = e.target</text></g>
+                <g class="pill" transform="translate(20,130)"><rect width="440" height="54" rx="10"></rect><text x="12" y="22">setFormData({ ...formData, [name]: value })</text><text x="12" y="40" class="muted">aktualizuje tylko 1 pole</text></g>
+                <g class="ok" transform="translate(20,200)"><rect width="440" height="54" rx="10"></rect><text x="12" y="32">Re-render (value zaktualizowane)</text></g>
+
+                <g class="node" transform="translate(20,270)"><rect width="210" height="54" rx="10"></rect><text x="12" y="22">username = ...</text><text x="12" y="40" class="muted">value={formData.username}</text></g>
+                <g class="node" transform="translate(250,270)"><rect width="210" height="54" rx="10"></rect><text x="12" y="22">age = ...</text><text x="12" y="40" class="muted">value={formData.age}</text></g>
+              </g>
+
+              <g class="lane" transform="translate(510,10)">
+                <rect width="480" height="400" rx="12"></rect>
+                <text x="16" y="28" class="lane-title">onSubmit → preventDefault → alert</text>
+
+                <g class="node" transform="translate(20,60)"><rect width="440" height="54" rx="10"></rect><text x="12" y="32">handleSubmit(e)</text></g>
+                <g class="warn" transform="translate(20,130)"><rect width="440" height="54" rx="10"></rect><text x="12" y="22">e.preventDefault()</text><text x="12" y="40" class="muted">bez przeładowania</text></g>
+                <g class="ok" transform="translate(20,200)"><rect width="440" height="54" rx="10"></rect><text x="12" y="32">alert(`Użytkownik: ${formData.username}, Wiek: ${formData.age}`)</text></g>
+              </g>
+            </svg>
+
+            <div class="grid-two">
+              <table class="db-table">
+                <caption class="mini">Stan początkowy</caption>
+                <thead><tr><th>username</th><th>age</th></tr></thead>
+                <tbody><tr><td>''</td><td>''</td></tr></tbody>
+              </table>
+              <table class="db-table">
+                <caption class="mini">Po zmianach</caption>
+                <thead><tr><th>username</th><th>age</th></tr></thead>
+                <tbody><tr><td>'ola'</td><td>'23'</td></tr></tbody>
+              </table>
+            </div>
+          </div>
+        </details>
+
+        
+      <p>W tym przykładzie <code>handleChange</code> aktualizuje stan <code>formData</code> na podstawie <code>name</code> pola, co pozwala obsługiwać wiele pól w jednym obiekcie stanu.</p>
+    
+          <hr style="margin:2rem 0;border:0;border-top:1px solid #1f2937" />
+
+      <h2>Komponenty kontrolowane vs niekontrolowane (prosto & z analogią)</h2>
+
+      <p><strong>Analogią będzie „zamówienie w restauracji”:</strong></p>
+      <ul>
+        <li><strong>Kontrolowany</strong> – mówisz kelnerowi (React) na bieżąco, co wpisujesz do zamówienia. Kelner zapisuje to w swoim notesie (<code>state</code>) i cały czas pilnuje zgodności z kartą. Gdy coś zmienisz, kelner natychmiast poprawia w notesie – masz pełną kontrolę i natychmiastową walidację.</li>
+        <li><strong>Niekontrolowany</strong> – sam wypisujesz zamówienie na kartce (wartość trzyma <strong>DOM</strong>). Kelner (React) nie patrzy, co tam piszesz. Dopiero przy oddaniu kartki (np. <code>onSubmit</code>) kelner odczytuje treść przez <code>ref</code> (uchwyt do elementu) i przetwarza.</li>
+      </ul>
+
+      <h3>Jak to rozpoznać w kodzie?</h3>
+      <table class="db-table">
+        <thead>
+          <tr>
+            <th>Cecha</th>
+            <th>Kontrolowany</th>
+            <th>Niekontrolowany</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>Gdzie jest „prawda” o wartości?</td>
+            <td>W <code>state</code> Reacta</td>
+            <td>W polu w DOM</td>
+          </tr>
+          <tr>
+            <td>Wzorzec w &lt;input&gt;</td>
+            <td><code>value=...</code> + <code>onChange</code></td>
+            <td><code>defaultValue=...</code> + <code>ref</code> (odczyt przy wysyłce)</td>
+          </tr>
+          <tr>
+            <td>Walidacja</td>
+            <td>„Na żywo” podczas pisania</td>
+            <td>Najczęściej dopiero przy wysłaniu</td>
+          </tr>
+          <tr>
+            <td>Plusy</td>
+            <td>Pełna kontrola, spójny stan, łatwe reguły i maski</td>
+            <td>Mniej kodu przy prostych formularzach</td>
+          </tr>
+          <tr>
+            <td>Minusy</td>
+            <td>Więcej renderów przy setkach pól</td>
+            <td>Mniej kontroli, trudniejsza natychmiastowa walidacja</td>
+          </tr>
+        </tbody>
+      </table>
+
+      <div class="grid-two">
+        <div>
+          <h3>Przykład – kontrolowany (kelner notuje wszystko)</h3>
+          <pre><code class="language-javascript">
+function Controlled() {
+  const [name, setName] = useState('');
+  return (
+    &lt;input
+      value={name}
+      onChange={(e) =&gt; setName(e.target.value)}  // mówimy kelnerowi na bieżąco
+      placeholder="Imię"
+/&gt;
+  );
+}
+          </code></pre>
+        </div>
+<br>
+        <div>
+          <h3>Przykład – niekontrolowany (piszesz na kartce)</h3>
+          <pre><code class="language-javascript">
+function Uncontrolled() {
+  const inputRef = useRef(null); // "uchwyt" do pola (ref)
+
+  const handleSubmit = (e) =&gt; {
+    e.preventDefault();
+    alert('Wartość: ' + inputRef.current.value); // kelner czyta kartkę dopiero teraz
+  };
+
+  return (
+    &lt;form onSubmit={handleSubmit}&gt;
+      &lt;input defaultValue="Ala" ref={inputRef} /&gt;  {/* wartość trzyma DOM */}
+      &lt;button type="submit"&gt;OK&lt;/button&gt;
+    &lt;/form&gt;
+  );
+}
+          </code></pre>
+        </div>
+      </div>
+
+      <ul>
+        <li><strong>Użyj kontrolowanych</strong>, gdy chcesz natychmiast sprawdzać błędy, stosować maski (np. numer telefonu), blokować wysyłkę i mieć „żywy” podgląd.</li>
+        <li><strong>Użyj niekontrolowanych</strong>, gdy formularz jest prosty/jednorazowy lub dla pól takich jak <code>&lt;input type="file"&gt;</code> (z natury niekontrolowane).</li>
+      </ul>
+
+      <p><strong>Wskazówka:</strong> w jednym polu nie mieszaj <code>value</code> i <code>defaultValue</code> – wybierz jeden tryb.</p>
+
     </div>
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/prism.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/components/prism-javascript.min.js"></script>
+
+    <!-- Lekki, izolowany CSS dla wizualizacji -->
+    <style>
+      .viz-title{cursor:pointer;font-weight:600}
+      .viz-wrap{padding:.5rem .25rem}
+      .viz-svg{width:100%;height:auto;background:#0e1729;border-radius:12px}
+      .lane rect{fill:#0f172a;stroke:#1f2937}
+      .lane-title{fill:#cbd5e1;font-weight:600}
+      .node rect{fill:#111827;stroke:#334155}
+      .pill rect{fill:#0b3b2e;stroke:#14532d}
+      .ok rect{fill:#0b2a3b;stroke:#0e7490}
+      .warn rect{fill:#3b0b0b;stroke:#7f1d1d}
+      .node text,.pill text,.ok text,.warn text{fill:#e2e8f0;font-size:14px}
+      .muted{fill:#94a3b8;font-size:12px}
+      .arrow,.arrow2,.arrow3{stroke:#94a3b8;stroke-width:2;fill:none;marker-end:url(#arrow)}
+      .arrow2{marker-end:url(#arrow2)}
+      .arrow3{marker-end:url(#arrow3)}
+      .db-table{width:100%;border-collapse:collapse;margin:.5rem 0}
+      .db-table th,.db-table td{border:1px solid #9d9d9d;padding:.5rem .65rem;text-align:left;vertical-align:top}
+      .db-table th{background:#0e1729;color:#dbe2ea}
+      .grid-two{display:grid;grid-template-columns:1fr 1fr;gap:.75rem}
+      @media (max-width: 900px){.grid-two{grid-template-columns:1fr}}
+    </style>
 </body>
 </html>
