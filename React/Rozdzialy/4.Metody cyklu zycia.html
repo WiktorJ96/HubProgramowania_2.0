@@ -33,6 +33,76 @@ class ExampleComponent extends Component {
 }
         </code></pre>
 
+        <!-- Wizualizacja: componentDidMount -->
+        <details open>
+          <summary class="viz-title">🧩 Wizualizacja: Montowanie → <code>componentDidMount</code></summary>
+          <div class="viz-wrap">
+            <svg viewBox="0 0 1000 380" class="viz-svg" aria-label="Diagram componentDidMount">
+              <defs>
+                <marker id="arrowMount" markerWidth="12" markerHeight="12" refX="10" refY="6" orient="auto">
+                  <path d="M0,0 L12,6 L0,12 Z" fill="#94a3b8"></path>
+                </marker>
+              </defs>
+
+              <g class="lane" transform="translate(10,10)">
+                <rect width="980" height="360" rx="12"></rect>
+                <text x="16" y="28" class="lane-title">Mounting: constructor → render → commit → componentDidMount</text>
+
+                <g class="node" transform="translate(20,60)">
+                  <rect width="280" height="60" rx="10"></rect>
+                  <text x="12" y="24">constructor(props)</text>
+                  <text x="12" y="44" class="muted">inicjalizacja stanu</text>
+                </g>
+
+                <path d="M300,90 L360,90" class="arrowM"/>
+                <g class="node" transform="translate(360,60)">
+                  <rect width="260" height="60" rx="10"></rect>
+                  <text x="12" y="24">render()</text>
+                  <text x="12" y="44" class="muted">tworzy wirtualny DOM</text>
+                </g>
+
+                <path d="M620,90 L680,90" class="arrowM"/>
+                <g class="ok" transform="translate(680,60)">
+                  <rect width="290" height="60" rx="10"></rect>
+                  <text x="12" y="24">commit do DOM</text>
+                  <text x="12" y="44" class="muted">UI widoczne</text>
+                </g>
+
+                <path d="M170,170 L830,170" class="arrowM"/>
+                <g class="pill" transform="translate(260,140)">
+                  <rect width="480" height="60" rx="10"></rect>
+                  <text x="12" y="24">componentDidMount()</text>
+                  <text x="12" y="44" class="muted">start efektów: fetch/timer/subskrypcja</text>
+                </g>
+
+                <g class="warn" transform="translate(260,240)">
+                  <rect width="480" height="60" rx="10"></rect>
+                  <text x="12" y="24">Uwaga</text>
+                  <text x="12" y="44" class="muted">setState tutaj → kolejny render</text>
+                </g>
+              </g>
+            </svg>
+
+            <div class="grid-two">
+              <table class="db-table">
+                <caption class="mini">Co robić?</caption>
+                <thead><tr><th>Akcja</th><th>Dlaczego</th></tr></thead>
+                <tbody>
+                  <tr><td>fetch/subscribe</td><td>elementy DOM już są</td></tr>
+                  <tr><td>setInterval</td><td>timer działa po pokazaniu UI</td></tr>
+                </tbody>
+              </table>
+              <table class="db-table">
+                <caption class="mini">Czego unikać?</caption>
+                <thead><tr><th>Anty-wzorzec</th><th>Skutek</th></tr></thead>
+                <tbody>
+                  <tr><td>Ciężkie obliczenia</td><td>UI pojawi się później</td></tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </details>
+
         <h3><code>componentDidUpdate</code></h3>
         <p>Metoda <code>componentDidUpdate</code> jest wywoływana po każdej aktualizacji komponentu, gdy zmienią się jego <code>props</code> lub <code>state</code>. Można jej używać do reagowania na te zmiany, na przykład aktualizując dane lub zmieniając DOM.</p>
 
@@ -52,6 +122,76 @@ class ExampleComponent extends Component {
 }
         </code></pre>
 
+        <!-- Wizualizacja: componentDidUpdate -->
+        <details>
+          <summary class="viz-title">🔁 Wizualizacja: Aktualizacja → <code>componentDidUpdate</code></summary>
+          <div class="viz-wrap">
+            <svg viewBox="0 0 1000 420" class="viz-svg" aria-label="Diagram componentDidUpdate">
+              <defs>
+                <marker id="arrowUpdate" markerWidth="12" markerHeight="12" refX="10" refY="6" orient="auto">
+                  <path d="M0,0 L12,6 L0,12 Z" fill="#94a3b8"></path>
+                </marker>
+              </defs>
+
+              <g class="lane" transform="translate(10,10)">
+                <rect width="980" height="400" rx="12"></rect>
+                <text x="16" y="28" class="lane-title">setState/nowe props → render → commit → componentDidUpdate</text>
+
+                <g class="node" transform="translate(20,60)">
+                  <rect width="300" height="60" rx="10"></rect>
+                  <text x="12" y="24">Zmiana state/props</text>
+                  <text x="12" y="44" class="muted">np. setState()</text>
+                </g>
+
+                <path d="M320,90 L380,90" class="arrowU"/>
+                <g class="node" transform="translate(380,60)">
+                  <rect width="240" height="60" rx="10"></rect>
+                  <text x="12" y="24">render()</text>
+                  <text x="12" y="44" class="muted">nowy wirtualny DOM</text>
+                </g>
+
+                <path d="M620,90 L680,90" class="arrowU"/>
+                <g class="ok" transform="translate(680,60)">
+                  <rect width="290" height="60" rx="10"></rect>
+                  <text x="12" y="24">commit</text>
+                  <text x="12" y="44" class="muted">aktualizacja DOM</text>
+                </g>
+
+                <g class="pill" transform="translate(20,160)">
+                  <rect width="950" height="60" rx="10"></rect>
+                  <text x="12" y="24">componentDidUpdate(prevProps, prevState)</text>
+                  <text x="12" y="44" class="muted">reakcja po renderze</text>
+                </g>
+
+                <g class="warn" transform="translate(20,240)">
+                  <rect width="950" height="60" rx="10"></rect>
+                  <text x="12" y="24">Uwaga na zapętlenia</text>
+                  <text x="12" y="44" class="muted">setState bez warunku → nieskończona pętla</text>
+                </g>
+              </g>
+            </svg>
+
+            <div class="grid-two">
+              <table class="db-table">
+                <caption class="mini">Dobre praktyki</caption>
+                <thead><tr><th>Wzorzec</th><th>Opis</th></tr></thead>
+                <tbody>
+                  <tr><td>Porównuj prevProps/prevState</td><td>warunkuj setState/akcje</td></tr>
+                  <tr><td>Efekty uboczne po commit</td><td>DOM już zaktualizowany</td></tr>
+                </tbody>
+              </table>
+              <table class="db-table">
+                <caption class="mini">Przykłady użycia</caption>
+                <thead><tr><th>Sytuacja</th><th>Akcja</th></tr></thead>
+                <tbody>
+                  <tr><td>Zmiana ID</td><td>pobierz nowe dane</td></tr>
+                  <tr><td>Zmiana rozmiaru</td><td>przelicz layout</td></tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </details>
+
         <h3><code>componentWillUnmount</code></h3>
         <p>Metoda <code>componentWillUnmount</code> jest wywoływana tuż przed odmontowaniem komponentu z DOM. Używana jest do czyszczenia zasobów, takich jak anulowanie timerów lub zakończenie nasłuchów zdarzeń.</p>
 
@@ -67,6 +207,71 @@ class ExampleComponent extends Component {
     }
 }
         </code></pre>
+
+        <!-- Wizualizacja: componentWillUnmount -->
+        <details>
+          <summary class="viz-title">🧹 Wizualizacja: Odmontowanie → <code>componentWillUnmount</code></summary>
+          <div class="viz-wrap">
+            <svg viewBox="0 0 1000 320" class="viz-svg" aria-label="Diagram componentWillUnmount">
+              <defs>
+                <marker id="arrowUnmount" markerWidth="12" markerHeight="12" refX="10" refY="6" orient="auto">
+                  <path d="M0,0 L12,6 L0,12 Z" fill="#94a3b8"></path>
+                </marker>
+              </defs>
+
+              <g class="lane" transform="translate(10,10)">
+                <rect width="980" height="300" rx="12"></rect>
+                <text x="16" y="28" class="lane-title">Unmounting: usuwanie z DOM → cleanup</text>
+
+                <g class="node" transform="translate(20,60)">
+                  <rect width="360" height="60" rx="10"></rect>
+                  <text x="12" y="24">Rozpoczęcie odmontowania</text>
+                  <text x="12" y="44" class="muted">komponent znika z UI</text>
+                </g>
+
+                <path d="M380,90 L460,90" class="arrowUM"/>
+                <g class="pill" transform="translate(460,60)">
+                  <rect width="280" height="60" rx="10"></rect>
+                  <text x="12" y="24">componentWillUnmount()</text>
+                  <text x="12" y="44" class="muted">usuń timery/subskrypcje</text>
+                </g>
+
+                <path d="M740,90 L820,90" class="arrowUM"/>
+                <g class="ok" transform="translate(820,60)">
+                  <rect width="170" height="60" rx="10"></rect>
+                  <text x="12" y="24">DOM -</text>
+                  <text x="12" y="44" class="muted">poza drzewem</text>
+                </g>
+
+                <g class="warn" transform="translate(20,160)">
+                  <rect width="950" height="60" rx="10"></rect>
+                  <text x="12" y="24">Uwaga</text>
+                  <text x="12" y="44" class="muted">wycieki pamięci, gdy nie wyczyścisz</text>
+                </g>
+              </g>
+            </svg>
+
+            <div class="grid-two">
+              <table class="db-table">
+                <caption class="mini">Czyść zawsze</caption>
+                <thead><tr><th>Co</th><th>Jak</th></tr></thead>
+                <tbody>
+                  <tr><td>Timer</td><td><code>clearInterval</code></td></tr>
+                  <tr><td>Event listener</td><td><code>removeEventListener</code></td></tr>
+                  <tr><td>Subskrypcja</td><td><code>unsubscribe</code></td></tr>
+                </tbody>
+              </table>
+              <table class="db-table">
+                <caption class="mini">Objawy braku cleanup</caption>
+                <thead><tr><th>Objaw</th><th>Przyczyna</th></tr></thead>
+                <tbody>
+                  <tr><td>Błędy „setState on unmounted”</td><td>timer/subskrypcja żyje dalej</td></tr>
+                  <tr><td>Wysokie zużycie CPU</td><td>nieusunięte interwały</td></tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </details>
 
         <h2>Przykład: Timer z Metodami Cyklu Życia</h2>
         <p>Poniższy przykład demonstruje użycie metod <code>componentDidMount</code> i <code>componentWillUnmount</code> do ustawienia i czyszczenia timera w komponencie klasowym.</p>
@@ -104,32 +309,147 @@ class Timer extends Component {
 }
         </code></pre>
         
+        <!-- Wizualizacja: Timer -->
+        <details>
+          <summary class="viz-title">⏲️ Wizualizacja: Timer – mount → tick → unmount</summary>
+          <div class="viz-wrap">
+            <svg viewBox="0 0 1000 460" class="viz-svg" aria-label="Diagram timera">
+              <defs>
+                <marker id="arrowTimer" markerWidth="12" markerHeight="12" refX="10" refY="6" orient="auto">
+                  <path d="M0,0 L12,6 L0,12 Z" fill="#94a3b8"></path>
+                </marker>
+              </defs>
+
+              <g class="lane" transform="translate(10,10)">
+                <rect width="980" height="440" rx="12"></rect>
+                <text x="16" y="28" class="lane-title">Mount → uruchom interval → co 1s setState → render → Unmount → clearInterval</text>
+
+                <g class="node" transform="translate(20,60)">
+                  <rect width="270" height="60" rx="10"></rect>
+                  <text x="12" y="24">componentDidMount()</text>
+                  <text x="12" y="44" class="muted">start setInterval</text>
+                </g>
+
+                <path d="M290,90 L360,90" class="arrowT"/>
+                <g class="ok" transform="translate(360,60)">
+                  <rect width="250" height="60" rx="10"></rect>
+                  <text x="12" y="24">tick() co 1s</text>
+                  <text x="12" y="44" class="muted">this.setState({time:...})</text>
+                </g>
+
+                <path d="M610,90 L680,90" class="arrowT"/>
+                <g class="pill" transform="translate(680,60)">
+                  <rect width="290" height="60" rx="10"></rect>
+                  <text x="12" y="24">render()</text>
+                  <text x="12" y="44" class="muted">UI: aktualna godzina</text>
+                </g>
+
+                <g class="warn" transform="translate(20,160)">
+                  <rect width="950" height="70" rx="10"></rect>
+                  <text x="12" y="28">componentWillUnmount()</text>
+                  <text x="12" y="50" class="muted">clearInterval(this.timerID)</text>
+                </g>
+
+                <g class="node" transform="translate(20,260)">
+                  <rect width="950" height="60" rx="10"></rect>
+                  <text x="12" y="24">Po unmount: brak dalszych tick()</text>
+                  <text x="12" y="44" class="muted">koniec aktualizacji</text>
+                </g>
+              </g>
+            </svg>
+
+            <div class="grid-two">
+              <table class="db-table">
+                <caption class="mini">Oś czasu (sekundy)</caption>
+                <thead><tr><th>t</th><th>Zdarzenie</th><th>UI</th></tr></thead>
+                <tbody>
+                  <tr><td>t=0</td><td>mount → start interval</td><td>pokazuje czas</td></tr>
+                  <tr><td>t=1</td><td>tick → setState</td><td>nowy czas</td></tr>
+                  <tr><td>t=2</td><td>tick → setState</td><td>nowy czas</td></tr>
+                  <tr><td>…</td><td>…</td><td>…</td></tr>
+                  <tr><td>t=n</td><td>unmount → clearInterval</td><td>brak dalszych zmian</td></tr>
+                </tbody>
+              </table>
+              <table class="db-table">
+                <caption class="mini">Typowe pułapki</caption>
+                <thead><tr><th>Problem</th><th>Naprawa</th></tr></thead>
+                <tbody>
+                  <tr><td>zostawiony interval</td><td>wyczyść w <code>componentWillUnmount</code></td></tr>
+                  <tr><td>kilka intervali</td><td>trzymaj id w <code>this.timerID</code>, nie dubluj</td></tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </details>
+        
         <p>W tym przykładzie <code>componentDidMount</code> ustawia timer, który aktualizuje czas co sekundę, a <code>componentWillUnmount</code> usuwa ten timer, gdy komponent jest odmontowywany.</p>
-    <h2>Podsumowanie</h2>
-    <!-- Montowanie -->
-<p><strong>Montowanie (Mounting):</strong></p>
-<ul>
-  <li>Wywoływane, gdy komponent jest dodawany do DOM.</li>
-  <li>Przykładowa metoda: <code>componentDidMount</code>.</li>
-</ul>
 
-<!-- Aktualizowanie -->
-<p><strong>Aktualizowanie (Updating):</strong></p>
-<ul>
-  <li>Wywoływane, gdy komponent otrzymuje nowe props lub zmienia się jego state.</li>
-  <li>Przykładowa metoda: <code>componentDidUpdate</code>.</li>
-</ul>
+        <h2>Podsumowanie</h2>
+        <!-- Montowanie -->
+        <p><strong>Montowanie (Mounting):</strong></p>
+        <ul>
+          <li>Wywoływane, gdy komponent jest dodawany do DOM.</li>
+          <li>Przykładowa metoda: <code>componentDidMount</code>.</li>
+        </ul>
 
-<!-- Odmontowanie -->
-<p><strong>Odmontowanie (Unmounting):</strong></p>
-<ul>
-  <li>Wywoływane, gdy komponent jest usuwany z DOM.</li>
-  <li>Przykładowa metoda: <code>componentWillUnmount</code>.</li>
-</ul>
+        <!-- Aktualizowanie -->
+        <p><strong>Aktualizowanie (Updating):</strong></p>
+        <ul>
+          <li>Wywoływane, gdy komponent otrzymuje nowe props lub zmienia się jego state.</li>
+          <li>Przykładowa metoda: <code>componentDidUpdate</code>.</li>
+        </ul>
+
+        <!-- Odmontowanie -->
+        <p><strong>Odmontowanie (Unmounting):</strong></p>
+        <ul>
+          <li>Wywoływane, gdy komponent jest usuwany z DOM.</li>
+          <li>Przykładowa metoda: <code>componentWillUnmount</code>.</li>
+        </ul>
 
     </div>
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/prism.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/components/prism-javascript.min.js"></script>
+
+    <!-- Izolowany CSS dla wizualizacji: pełna szerokość + responsywność -->
+    <style>
+      /* pełna szerokość w obrębie .container */
+      details, .viz-wrap { width: 100%; max-width: none !important; }
+      .viz-svg{display:block;width:100% !important;max-width:100% !important;height:auto !important;background:#0e1729;border-radius:12px}
+
+      /* Tytuły i wrapper */
+      .viz-title{cursor:pointer;font-weight:600}
+      .viz-wrap{padding:.5rem .25rem}
+
+      /* Siatka i tabelki */
+      .grid-two{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:.75rem;width:100%;max-width:none}
+      .grid-two>*{min-width:0}
+      @media (max-width: 900px){.grid-two{grid-template-columns:1fr}}
+      .db-table{width:100% !important;max-width:100% !important;border-collapse:collapse;margin:.5rem 0;table-layout:fixed}
+      .db-table th,.db-table td{border:1px solid #aeaeae;padding:.5rem .65rem;text-align:left;vertical-align:top;word-break:break-word}
+      .db-table th{background:#0e1729;color:#dbe2ea}
+      .mini{color:#a7b0be;font-size:.95rem}
+
+      /* Styl kafelków w SVG */
+      .lane rect{fill:#0f172a;stroke:#1f2937}
+      .lane-title{fill:#cbd5e1;font-weight:600}
+      .node rect{fill:#111827;stroke:#334155}
+      .pill rect{fill:#0b3b2e;stroke:#14532d}
+      .ok rect{fill:#0b2a3b;stroke:#0e7490}
+      .warn rect{fill:#3b0b0b;stroke:#7f1d1d}
+      .node text,.pill text,.ok text,.warn text{fill:#e2e8f0;font-size:14px}
+      .muted{fill:#94a3b8;font-size:12px}
+
+      /* Strzałki */
+      .arrowM,.arrowU,.arrowUM,.arrowT{stroke:#94a3b8;stroke-width:2;fill:none}
+      .arrowM{marker-end:url(#arrowMount)}
+      .arrowU{marker-end:url(#arrowUpdate)}
+      .arrowUM{marker-end:url(#arrowUnmount)}
+      .arrowT{marker-end:url(#arrowTimer)}
+
+      /* Kod – pełna szerokość + przewijanie */
+      pre[class*="language-"]{width:100% !important;max-width:none !important;box-sizing:border-box;overflow-x:auto;white-space:pre}
+      code[class*="language-"]{white-space:pre}
+    </style>
 </body>
 </html>

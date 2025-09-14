@@ -37,6 +37,71 @@ test('Dodaje 1 + 2, aby uzyskać 3', () => {
 });
         </code></pre>
 
+        <!-- WIZ: JEST -->
+        <details open>
+          <summary class="viz-title">🧪 Wizualizacja przepływu: <strong>Jest</strong> (Arrange → Act → Assert)</summary>
+          <div class="viz-wrap">
+            <svg viewBox="0 0 1000 360" class="viz-svg" aria-label="Jest AAA">
+              <defs>
+                <marker id="arr-jest" markerWidth="12" markerHeight="12" refX="10" refY="6" orient="auto">
+                  <path d="M0,0 L12,6 L0,12 Z" fill="#94a3b8"></path>
+                </marker>
+              </defs>
+              <g class="lane" transform="translate(10,10)">
+                <rect width="980" height="340" rx="12"></rect>
+                <text x="16" y="28" class="lane-title">Arrange → Act → Assert → Wynik testu</text>
+
+                <g class="node" transform="translate(20,60)">
+                  <rect width="260" height="70" rx="10"></rect>
+                  <text x="12" y="28">Arrange (przygotowanie)</text>
+                  <text x="12" y="48" class="muted">import { sum } / dane wejściowe</text>
+                </g>
+                <path class="arrow" d="M280,95 L460,95" marker-end="url(#arr-jest)"/>
+
+                <g class="pill" transform="translate(460,60)">
+                  <rect width="220" height="70" rx="10"></rect>
+                  <text x="12" y="28">Act (wykonanie)</text>
+                  <text x="12" y="48" class="muted">sum(1,2)</text>
+                </g>
+                <path class="arrow" d="M680,95 L920,95" marker-end="url(#arr-jest)"/>
+
+                <g class="ok" transform="translate(700,60)">
+                  <rect width="260" height="70" rx="10"></rect>
+                  <text x="12" y="28">Assert (sprawdzenie)</text>
+                  <text x="12" y="48" class="muted">expect(wynik).toBe(3)</text>
+                </g>
+
+                <g transform="translate(20,160)">
+                  <foreignObject width="940" height="170">
+                    <div xmlns="http://www.w3.org/1999/xhtml">
+                      <div class="grid-two">
+                        <table class="db-table">
+                          <caption class="mini">Przykłady matcherów</caption>
+                          <thead><tr><th>Matcher</th><th>Opis</th></tr></thead>
+                          <tbody>
+                            <tr><td><code>toBe</code></td><td>Porównanie ścisłe (===) liczby/napisy/boolean</td></tr>
+                            <tr><td><code>toEqual</code></td><td>Głębokie porównanie obiektów/tablic</td></tr>
+                            <tr><td><code>toBeTruthy/Falsy</code></td><td>Prawdziwość/fałszywość</td></tr>
+                          </tbody>
+                        </table>
+                        <table class="db-table">
+                          <caption class="mini">Skrócony raport</caption>
+                          <thead><tr><th>Wejście</th><th>Oczekiwane</th><th>Wynik</th></tr></thead>
+                          <tbody>
+                            <tr><td>1 + 2</td><td>3</td><td>✅ PASS</td></tr>
+                            <tr><td>0 + 0</td><td>0</td><td>✅ PASS</td></tr>
+                            <tr><td>2 + 2</td><td>5</td><td>❌ FAIL (4 ≠ 5)</td></tr>
+                          </tbody>
+                        </table>
+                      </div>
+                    </div>
+                  </foreignObject>
+                </g>
+              </g>
+            </svg>
+          </div>
+        </details>
+
         <p>W powyższym przykładzie <code>test</code> sprawdza, czy funkcja <code>sum</code> zwraca poprawny wynik dla podanych wartości.</p>
 
         <h2>Testowanie Komponentów za pomocą React Testing Library</h2>
@@ -64,6 +129,69 @@ test('Wyświetla powitanie z imieniem', () => {
     expect(greetingElement).toBeInTheDocument();
 });
         </code></pre>
+
+        <!-- WIZ: RTL render/getByText -->
+        <details>
+          <summary class="viz-title">🧩 Wizualizacja: <strong>render → query → asercja</strong> (RTL)</summary>
+          <div class="viz-wrap">
+            <svg viewBox="0 0 1000 360" class="viz-svg" aria-label="RTL render query">
+              <defs>
+                <marker id="arr-rtl" markerWidth="12" markerHeight="12" refX="10" refY="6" orient="auto">
+                  <path d="M0,0 L12,6 L0,12 Z" fill="#94a3b8"></path>
+                </marker>
+              </defs>
+              <g class="lane" transform="translate(10,10)">
+                <rect width="980" height="340" rx="12"></rect>
+                <text x="16" y="28" class="lane-title">render() ⇒ screen.getByText() ⇒ expect(...)</text>
+
+                <g class="node" transform="translate(20,60)">
+                  <rect width="300" height="70" rx="10"></rect>
+                  <text x="12" y="28">render(&lt;Greeting name="Jan"/&gt;)</text>
+                  <text x="12" y="48" class="muted">wirtualny DOM testowy</text>
+                </g>
+                <path class="arrow" d="M320,95 L520,95" marker-end="url(#arr-rtl)"/>
+
+                <g class="pill" transform="translate(520,60)">
+                  <rect width="220" height="70" rx="10"></rect>
+                  <text x="12" y="28">screen.getByText(/Hello, Jan!/i)</text>
+                  <text x="12" y="48" class="muted">wyszukiwanie elementu</text>
+                </g>
+                <path class="arrow" d="M740,95 L940,95" marker-end="url(#arr-rtl)"/>
+
+                <g class="ok" transform="translate(760,60)">
+                  <rect width="210" height="70" rx="10"></rect>
+                  <text x="12" y="28">expect(...).toBeInTheDocument()</text>
+                </g>
+
+                <g transform="translate(20,160)">
+                  <foreignObject width="940" height="160">
+                    <div xmlns="http://www.w3.org/1999/xhtml">
+                      <div class="grid-two">
+                        <table class="db-table">
+                          <caption class="mini">Rodziny zapytań (skrót)</caption>
+                          <thead><tr><th>Metoda</th><th>Kiedy</th></tr></thead>
+                          <tbody>
+                            <tr><td><code>getBy*</code></td><td>Element MUSI istnieć (rzuca, gdy brak)</td></tr>
+                            <tr><td><code>queryBy*</code></td><td>Element MOŻE nie istnieć (zwraca null)</td></tr>
+                            <tr><td><code>findBy*</code></td><td>Asynchroniczne czekanie na element</td></tr>
+                          </tbody>
+                        </table>
+                        <table class="db-table">
+                          <caption class="mini">Dobre praktyki</caption>
+                          <thead><tr><th>Punkt</th><th>Dlaczego</th></tr></thead>
+                          <tbody>
+                            <tr><td>Preferuj role/label</td><td>Bliżej realnego UX: <code>getByRole('heading',{name:/hello/i})</code></td></tr>
+                            <tr><td>Unikaj testów implementacji</td><td>Testuj zachowanie, nie szczegóły DOM</td></tr>
+                          </tbody>
+                        </table>
+                      </div>
+                    </div>
+                  </foreignObject>
+                </g>
+              </g>
+            </svg>
+          </div>
+        </details>
 
         <p>Test <code>Greeting</code> sprawdza, czy komponent renderuje się poprawnie z przekazanym <code>name</code>. Funkcja <code>getByText</code> szuka tekstu "Hello, Jan!" w komponencie.</p>
 
@@ -101,6 +229,68 @@ test('Zwiększa licznik po kliknięciu', () => {
 });
         </code></pre>
 
+        <!-- WIZ: fireEvent -->
+        <details>
+          <summary class="viz-title">🖱️ Wizualizacja: klik → setState → re-render → asercja</summary>
+          <div class="viz-wrap">
+            <svg viewBox="0 0 1000 380" class="viz-svg" aria-label="fireEvent flow">
+              <defs>
+                <marker id="arr-fire" markerWidth="12" markerHeight="12" refX="10" refY="6" orient="auto">
+                  <path d="M0,0 L12,6 L0,12 Z" fill="#94a3b8"></path>
+                </marker>
+              </defs>
+              <g class="lane" transform="translate(10,10)">
+                <rect width="980" height="360" rx="12"></rect>
+                <text x="16" y="28" class="lane-title">Interakcja użytkownika i aktualizacja stanu</text>
+
+                <g class="node" transform="translate(20,60)">
+                  <rect width="260" height="70" rx="10"></rect>
+                  <text x="12" y="28">render(&lt;Button/&gt;)</text>
+                  <text x="12" y="48" class="muted">DOM: „Kliknięcia: 0”</text>
+                </g>
+                <path class="arrow" d="M280,95 L460,95" marker-end="url(#arr-fire)"/>
+
+                <g class="pill" transform="translate(460,60)">
+                  <rect width="240" height="70" rx="10"></rect>
+                  <text x="12" y="28">fireEvent.click(button)</text>
+                  <text x="12" y="48" class="muted">onClick → setCount(1)</text>
+                </g>
+                <path class="arrow" d="M700,95 L920,95" marker-end="url(#arr-fire)"/>
+
+                <g class="ok" transform="translate(720,60)">
+                  <rect width="240" height="70" rx="10"></rect>
+                  <text x="12" y="28">ponowny render</text>
+                  <text x="12" y="48" class="muted">DOM: „Kliknięcia: 1”</text>
+                </g>
+
+                <g transform="translate(20,160)">
+                  <foreignObject width="940" height="170">
+                    <div xmlns="http://www.w3.org/1999/xhtml">
+                      <div class="grid-two">
+                        <table class="db-table">
+                          <caption class="mini">Zdarzenia (skrót)</caption>
+                          <thead><tr><th>Metoda</th><th>Przykład</th></tr></thead>
+                          <tbody>
+                            <tr><td><code>fireEvent.click</code></td><td>klik, <code>fireEvent.change</code>, <code>fireEvent.keyDown</code>…</td></tr>
+                            <tr><td><code>userEvent</code></td><td>Bardziej realistyczne (opóźnienia, selekcja, wpisywanie)</td></tr>
+                          </tbody>
+                        </table>
+                        <table class="db-table">
+                          <caption class="mini">Asercja</caption>
+                          <thead><tr><th>Krok</th><th>Spodziewany wynik</th></tr></thead>
+                          <tbody>
+                            <tr><td>Po kliknięciu</td><td><code>screen.getByText(/Kliknięcia: 1/)</code> → ✅</td></tr>
+                          </tbody>
+                        </table>
+                      </div>
+                    </div>
+                  </foreignObject>
+                </g>
+              </g>
+            </svg>
+          </div>
+        </details>
+
         <p>W powyższym przykładzie test sprawdza, czy kliknięcie przycisku powoduje zwiększenie licznika. <code>fireEvent.click</code> symuluje kliknięcie na przycisk.</p>
 
         <h2>Testowanie Asynchroniczne</h2>
@@ -136,10 +326,106 @@ test('Załadowano dane po upływie czasu', async () => {
 });
         </code></pre>
 
+        <!-- WIZ: async waitFor/findBy -->
+        <details>
+          <summary class="viz-title">⏳ Wizualizacja: stan „Ładowanie…” → dane (asynchronicznie)</summary>
+          <div class="viz-wrap">
+            <svg viewBox="0 0 1000 380" class="viz-svg" aria-label="Async flow">
+              <defs>
+                <marker id="arr-async" markerWidth="12" markerHeight="12" refX="10" refY="6" orient="auto">
+                  <path d="M0,0 L12,6 L0,12 Z" fill="#94a3b8"></path>
+                </marker>
+              </defs>
+              <g class="lane" transform="translate(10,10)">
+                <rect width="980" height="360" rx="12"></rect>
+                <text x="16" y="28" class="lane-title">Efekt → opóźnienie → aktualizacja → asercja</text>
+
+                <g class="node" transform="translate(20,60)">
+                  <rect width="300" height="70" rx="10"></rect>
+                  <text x="12" y="28">render(&lt;AsyncComponent/&gt;)</text>
+                  <text x="12" y="48" class="muted">„Ładowanie…”</text>
+                </g>
+                <path class="arrow" d="M320,95 L520,95" marker-end="url(#arr-async)"/>
+
+                <g class="pill" transform="translate(520,60)">
+                  <rect width="200" height="70" rx="10"></rect>
+                  <text x="12" y="28">useEffect → setTimeout</text>
+                  <text x="12" y="48" class="muted">1000 ms</text>
+                </g>
+                <path class="arrow" d="M720,95 L920,95" marker-end="url(#arr-async)"/>
+
+                <g class="ok" transform="translate(740,60)">
+                  <rect width="230" height="70" rx="10"></rect>
+                  <text x="12" y="28">setData("Załadowano dane!")</text>
+                  <text x="12" y="48" class="muted">ponowny render</text>
+                </g>
+
+                <g transform="translate(20,160)">
+                  <foreignObject width="940" height="170">
+                    <div xmlns="http://www.w3.org/1999/xhtml">
+                      <div class="grid-two">
+                        <table class="db-table">
+                          <caption class="mini">findBy vs waitFor</caption>
+                          <thead><tr><th>Metoda</th><th>Użycie</th></tr></thead>
+                          <tbody>
+                            <tr><td><code>findBy*</code></td><td>Bezpośrednio czeka na element (np. <code>await screen.findByText(...)</code>)</td></tr>
+                            <tr><td><code>waitFor</code></td><td>Czeka na spełnienie dowolnego warunku w callbacku</td></tr>
+                          </tbody>
+                        </table>
+                        <table class="db-table">
+                          <caption class="mini">Asercja końcowa</caption>
+                          <thead><tr><th>Po 1s</th><th>Spodziewany DOM</th></tr></thead>
+                          <tbody>
+                            <tr><td>render po setState</td><td>„Załadowano dane!” w dokumencie → ✅</td></tr>
+                          </tbody>
+                        </table>
+                      </div>
+                    </div>
+                  </foreignObject>
+                </g>
+              </g>
+            </svg>
+          </div>
+        </details>
+
         <p>W tym przykładzie <code>waitFor</code> czeka, aż komponent <code>AsyncComponent</code> załaduje dane, a następnie sprawdza, czy tekst "Załadowano dane!" jest wyświetlony.</p>
     </div>
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/prism.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/components/prism-javascript.min.js"></script>
+
+    <!-- CSS: wizualizacje responsywne i pełna szerokość -->
+    <style>
+      /* Blok wizualizacji */
+      details, .viz-wrap { width:100%; max-width:none !important; }
+      .viz-title{cursor:pointer;font-weight:600}
+      .viz-wrap{padding:.5rem .25rem}
+
+      /* SVG: pełna szerokość, responsywne */
+      .viz-svg{display:block;width:100% !important;max-width:100% !important;height:auto !important;background:#0e1729;border-radius:12px}
+
+      /* Schemat kolorów bloków */
+      .lane rect{fill:#0f172a;stroke:#1f2937}
+      .lane-title{fill:#cbd5e1;font-weight:600}
+      .node rect{fill:#111827;stroke:#334155}
+      .pill rect{fill:#0b3b2e;stroke:#14532d}
+      .ok rect{fill:#0b2a3b;stroke:#0e7490}
+      .warn rect{fill:#3b0b0b;stroke:#7f1d1d}
+      .node text,.pill text,.ok text,.warn text{fill:#e2e8f0;font-size:14px}
+      .muted{fill:#94a3b8;font-size:12px}
+      .arrow{stroke:#94a3b8;stroke-width:2;fill:none}
+
+      /* Layout / tabele */
+      .grid-two{display:grid;grid-template-columns:1fr 1fr;gap:.75rem}
+      @media (max-width: 900px){.grid-two{grid-template-columns:1fr}}
+      .db-table{width:100% !important;max-width:100% !important;border-collapse:collapse;margin:.5rem 0;table-layout:fixed}
+      .db-table th,.db-table td{border:1px solid #aeaeae;padding:.5rem .65rem;text-align:left;vertical-align:top;word-break:break-word}
+      .db-table th{background:#0e1729;color:#dbe2ea}
+      .mini{color:#a7b0be;font-size:.95rem}
+
+      /* Kod – pełna szerokość + poziomy scroll, gdy trzeba */
+      pre[class*="language-"]{width:100% !important;max-width:none !important;box-sizing:border-box;overflow-x:auto;white-space:pre}
+      code[class*="language-"]{white-space:pre}
+    </style>
 </body>
 </html>

@@ -26,6 +26,71 @@ const greeting = &lt;h2&gt;Witaj, {user}!&lt;/h2&gt;;
 console.log(greeting);
         </code></pre>
 
+        <!-- Wizualizacja: JSX -> Babel -> React.createElement -> DOM -->
+        <details open>
+          <summary class="viz-title">🧭 Jak JSX zamienia się w DOM (krok po kroku)</summary>
+          <div class="viz-wrap">
+            <svg viewBox="0 0 1000 300" class="viz-svg">
+              <defs>
+                <marker id="arrow" markerWidth="12" markerHeight="12" refX="10" refY="6" orient="auto">
+                  <path d="M0,0 L12,6 L0,12 Z" fill="#94a3b8"></path>
+                </marker>
+              </defs>
+
+              <g class="lane" transform="translate(10,10)">
+                <rect width="980" height="280" rx="12"></rect>
+                <text x="16" y="28" class="lane-title">Przepływ: JSX → Babel → React → DOM</text>
+
+                <g class="node" transform="translate(20,60)">
+                  <rect width="220" height="70" rx="10"></rect>
+                  <text x="12" y="28">&lt;h1&gt;Witaj, świecie!&lt;/h1&gt;</text>
+                  <text x="12" y="50" class="muted">JSX (czytelny zapis)</text>
+                </g>
+
+                <path d="M260,95 L330,95" class="arrow"/>
+                <g class="pill" transform="translate(330,60)">
+                  <rect width="260" height="70" rx="10"></rect>
+                  <text x="12" y="28">Babel transpiler</text>
+                  <text x="12" y="50" class="muted">zamienia JSX → JS</text>
+                </g>
+
+                <path d="M600,95 L670,95" class="arrow"/>
+                <g class="node" transform="translate(670,60)">
+                  <rect width="300" height="70" rx="10"></rect>
+                  <text x="12" y="28">React.createElement('h1', …, 'Witaj, świecie!')</text>
+                  <text x="12" y="50" class="muted">Virtual DOM node</text>
+                </g>
+
+                <g class="ok" transform="translate(330,160)">
+                  <rect width="630" height="70" rx="10"></rect>
+                  <text x="12" y="28">Renderer (np. ReactDOM) → tworzy prawdziwy &lt;h1&gt; w drzewie DOM</text>
+                  <text x="12" y="50" class="muted">przeglądarka wyświetla nagłówek</text>
+                </g>
+              </g>
+            </svg>
+
+            <div class="grid-two">
+              <table class="db-table">
+                <caption class="mini">Wyrażenia w { }</caption>
+                <thead><tr><th>JS</th><th>Wynik</th></tr></thead>
+                <tbody>
+                  <tr><td>{user}</td><td>"Jan"</td></tr>
+                  <tr><td>{2 + 2}</td><td>4</td></tr>
+                </tbody>
+              </table>
+
+              <table class="db-table">
+                <caption class="mini">Co NIE działa w { }</caption>
+                <thead><tr><th>Próba</th><th>Powód</th></tr></thead>
+                <tbody>
+                  <tr><td>{if (x) …}</td><td>Instrukcje nie są wyrażeniami</td></tr>
+                  <tr><td>{for (…) …}</td><td>Użyj mapowania: <code>{list.map(...)}</code></td></tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </details>
+
         <h2>Pisanie komponentów w JSX</h2>
         <p>Komponenty w React można tworzyć jako funkcje lub klasy. Funkcja komponentu jest prostą funkcją JavaScript, która zwraca JSX. Oto przykład:</p>
         
@@ -39,6 +104,61 @@ function Welcome(props) {
 const element = &lt;Welcome name="Jan" /&gt;;
 console.log(element);
         </code></pre>
+
+        <!-- Wizualizacja: Props przepływ -->
+        <details>
+          <summary class="viz-title">📦 Przepływ props → komponent → JSX → DOM</summary>
+          <div class="viz-wrap">
+            <svg viewBox="0 0 1000 320" class="viz-svg">
+              <defs>
+                <marker id="arrow2" markerWidth="12" markerHeight="12" refX="10" refY="6" orient="auto">
+                  <path d="M0,0 L12,6 L0,12 Z" fill="#94a3b8"></path>
+                </marker>
+              </defs>
+
+              <g class="lane" transform="translate(10,10)">
+                <rect width="980" height="300" rx="12"></rect>
+                <text x="16" y="28" class="lane-title">&lt;Welcome name="Jan" /&gt; – co się dzieje?</text>
+
+                <g class="node" transform="translate(20,60)">
+                  <rect width="260" height="70" rx="10"></rect>
+                  <text x="12" y="28">Props: {"{ name: 'Jan' }"}</text>
+                  <text x="12" y="50" class="muted">tworzone przy wywołaniu JSX</text>
+                </g>
+
+                <path d="M290,95 L360,95" class="arrow2"/>
+                <g class="ok" transform="translate(360,60)">
+                  <rect width="300" height="70" rx="10"></rect>
+                  <text x="12" y="28">Wywołanie Welcome(props)</text>
+                  <text x="12" y="50" class="muted">funkcja zwraca JSX</text>
+                </g>
+
+                <path d="M660,95 L730,95" class="arrow2"/>
+                <g class="node" transform="translate(730,60)">
+                  <rect width="240" height="70" rx="10"></rect>
+                  <text x="12" y="28">&lt;h1&gt;Witaj, Jan!&lt;/h1&gt;</text>
+                  <text x="12" y="50" class="muted">wirtualny element</text>
+                </g>
+
+                <g class="pill" transform="translate(360,160)">
+                  <rect width="610" height="70" rx="10"></rect>
+                  <text x="12" y="28">Renderer → tworzy &lt;h1&gt; w DOM</text>
+                  <text x="12" y="50" class="muted">tekst zagnieżdżony „Witaj, Jan!”</text>
+                </g>
+              </g>
+            </svg>
+
+            <table class="db-table">
+              <caption class="mini">Props vs State (skrót)</caption>
+              <thead><tr><th>Cechy</th><th>Props</th><th>State</th></tr></thead>
+              <tbody>
+                <tr><td>Kto ustawia?</td><td>Rodzic</td><td>Komponent (setState/useState)</td></tr>
+                <tr><td>Mutowalne?</td><td>Nie (read-only)</td><td>Tak (przez seter)</td></tr>
+                <tr><td>Cel</td><td>Konfiguracja</td><td>Dane zmienne w czasie</td></tr>
+              </tbody>
+            </table>
+          </div>
+        </details>
 
         <h2>Wstawianie wyrażeń JavaScript w JSX</h2>
         <p>W JSX można wstawiać wyrażenia JavaScript w nawiasach klamrowych <code>{}</code>. Jest to przydatne, gdy chcemy dynamicznie generować zawartość.</p>
@@ -55,6 +175,60 @@ const element = &lt;h1&gt;Witaj, {formatName(user)}!&lt;/h1&gt;;
 console.log(element);
         </code></pre>
 
+        <!-- Wizualizacja: Evaluacja wyrażenia w klamrach -->
+        <details>
+          <summary class="viz-title">🧮 Co robią klamry { } w JSX?</summary>
+          <div class="viz-wrap">
+            <svg viewBox="0 0 1000 320" class="viz-svg">
+              <defs>
+                <marker id="arrow3" markerWidth="12" markerHeight="12" refX="10" refY="6" orient="auto">
+                  <path d="M0,0 L12,6 L0,12 Z" fill="#94a3b8"></path>
+                </marker>
+              </defs>
+
+              <g class="lane" transform="translate(10,10)">
+                <rect width="980" height="300" rx="12"></rect>
+                <text x="16" y="28" class="lane-title">&lt;h1&gt;Witaj, { '{formatName(user)}' }!&lt;/h1&gt;</text>
+
+                <g class="node" transform="translate(20,60)">
+                  <rect width="300" height="70" rx="10"></rect>
+                  <text x="12" y="28">formatName(user)</text>
+                  <text x="12" y="50" class="muted">wywołanie JS</text>
+                </g>
+
+                <path d="M320,95 L390,95" class="arrow3"/>
+                <g class="ok" transform="translate(390,60)">
+                  <rect width="280" height="70" rx="10"></rect>
+                  <text x="12" y="28">Zwraca: "Anna Kowalska"</text>
+                  <text x="12" y="50" class="muted">wartość tekstowa</text>
+                </g>
+
+                <path d="M670,95 L740,95" class="arrow3"/>
+                <g class="node" transform="translate(740,60)">
+                  <rect width="240" height="70" rx="10"></rect>
+                  <text x="12" y="28">&lt;h1&gt;Witaj, Anna Kowalska!&lt;/h1&gt;</text>
+                  <text x="12" y="50" class="muted">wirtualny element</text>
+                </g>
+
+                <g class="pill" transform="translate(390,160)">
+                  <rect width="590" height="70" rx="10"></rect>
+                  <text x="12" y="28">Renderer → aktualizuje tekst węzła</text>
+                  <text x="12" y="50" class="muted">wynik wstrzyknięty w miejsce { }</text>
+                </g>
+              </g>
+            </svg>
+
+            <table class="db-table">
+              <caption class="mini">Dozwolone w { }</caption>
+              <thead><tr><th>Rodzaj</th><th>Przykład</th></tr></thead>
+              <tbody>
+                <tr><td>Literal / wyrażenie</td><td><code>{42}</code>, <code>{user.name}</code>, <code>{arr.map(...)}</code></td></tr>
+                <tr><td>Warunek</td><td><code>{isOk ? 'OK' : 'NO'}</code></td></tr>
+              </tbody>
+            </table>
+          </div>
+        </details>
+
         <h2>Atrybuty w JSX</h2>
         <p>Podobnie jak w HTML, w JSX można używać atrybutów, ale niektóre z nich mają inne nazwy, jak na przykład <code>className</code> zamiast <code>class</code>.</p>
         
@@ -63,9 +237,111 @@ console.log(element);
 const element = &lt;img src="zdjecie.jpg" alt="Przykładowe zdjęcie" className="obrazek" /&gt;;
         </code></pre>
 
+        <!-- Wizualizacja: Mapowanie atrybutów JSX -> DOM -->
+        <details>
+          <summary class="viz-title">🔗 Mapowanie atrybutów JSX → DOM</summary>
+          <div class="viz-wrap">
+            <svg viewBox="0 0 1000 360" class="viz-svg">
+              <defs>
+                <marker id="arrow4" markerWidth="12" markerHeight="12" refX="10" refY="6" orient="auto">
+                  <path d="M0,0 L12,6 L0,12 Z" fill="#94a3b8"></path>
+                </marker>
+              </defs>
+
+              <g class="lane" transform="translate(10,10)">
+                <rect width="980" height="340" rx="12"></rect>
+                <text x="16" y="28" class="lane-title">Przykład: &lt;img src="..." className="obrazek" /&gt;</text>
+
+                <g class="node" transform="translate(20,60)">
+                  <rect width="300" height="70" rx="10"></rect>
+                  <text x="12" y="28">JSX props</text>
+                  <text x="12" y="50" class="muted">src, alt, className</text>
+                </g>
+
+                <path d="M320,95 L390,95" class="arrow"/>
+                <g class="ok" transform="translate(390,60)">
+                  <rect width="300" height="70" rx="10"></rect>
+                  <text x="12" y="28">React → ustawia atrybuty DOM</text>
+                  <text x="12" y="50" class="muted">className → class</text>
+                </g>
+
+                <path d="M690,95 L760,95" class="arrow"/>
+                <g class="node" transform="translate(760,60)">
+                  <rect width="210" height="70" rx="10"></rect>
+                  <text x="12" y="28">&lt;img class="obrazek" …&gt;</text>
+                  <text x="12" y="50" class="muted">realny węzeł DOM</text>
+                </g>
+
+                <g class="pill" transform="translate(390,160)">
+                  <rect width="580" height="56" rx="10"></rect>
+                  <text x="12" y="22">Zdarzenia: JSX używa camelCase (np. onClick)</text>
+                  <text x="12" y="40" class="muted">DOM otrzymuje listener</text>
+                </g>
+              </g>
+            </svg>
+
+            <div class="grid-two">
+              <table class="db-table">
+                <caption class="mini">HTML vs JSX (najczęstsze)</caption>
+                <thead><tr><th>HTML</th><th>JSX</th></tr></thead>
+                <tbody>
+                  <tr><td><code>class</code></td><td><code>className</code></td></tr>
+                  <tr><td><code>for</code></td><td><code>htmlFor</code></td></tr>
+                  <tr><td><em>zdarzenia</em></td><td>camelCase: <code>onClick</code>, <code>onChange</code></td></tr>
+                </tbody>
+              </table>
+
+              <table class="db-table">
+                <caption class="mini">Wartości atrybutów</caption>
+                <thead><tr><th>Rodzaj</th><th>JSX</th></tr></thead>
+                <tbody>
+                  <tr><td>Łańcuch</td><td><code>&lt;div title="tekst" /&gt;</code></td></tr>
+                  <tr><td>JS (np. zmienna)</td><td><code>&lt;div title={msg} /&gt;</code></td></tr>
+                  <tr><td>Boolean (true)</td><td><code>&lt;input disabled /&gt;</code> lub <code>disabled={true}</code></td></tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </details>
+
     </div>
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/prism.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/components/prism-javascript.min.js"></script>
+
+    <!-- Izolowany CSS dla wizualizacji (pełna szerokość + spójny styl) -->
+    <style>
+      /* Pełna szerokość dla wrapperów i SVG */
+      details, .viz-wrap { width: 100%; max-width: none !important; }
+      .viz-title{cursor:pointer;font-weight:600}
+      .viz-wrap{padding:.5rem .25rem}
+      .viz-svg{display:block;width:100% !important;max-width:100% !important;height:auto !important;background:#0e1729;border-radius:12px}
+
+      /* Siatka i tabele – responsywne, pełna szerokość */
+      .grid-two{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:.75rem;width:100%;max-width:none}
+      .grid-two>*{min-width:0}
+      @media (max-width: 900px){.grid-two{grid-template-columns:1fr}}
+
+      .db-table{width:100% !important;max-width:100% !important;border-collapse:collapse;margin:.5rem 0;table-layout:fixed}
+      .db-table th,.db-table td{border:1px solid #aeaeae;padding:.5rem .65rem;text-align:left;vertical-align:top;word-break:break-word}
+      .db-table th{background:#0e1729;color:#dbe2ea}
+
+      /* Bloki SVG (kafelki) */
+      .lane rect{fill:#0f172a;stroke:#1f2937}
+      .lane-title{fill:#cbd5e1;font-weight:600}
+      .node rect{fill:#111827;stroke:#334155}
+      .pill rect{fill:#0b3b2e;stroke:#14532d}
+      .ok rect{fill:#0b2a3b;stroke:#0e7490}
+      .warn rect{fill:#3b0b0b;stroke:#7f1d1d}
+      .node text,.pill text,.ok text,.warn text{fill:#e2e8f0;font-size:14px}
+      .muted{fill:#94a3b8;font-size:12px}
+      .arrow,.arrow2,.arrow3,.arrow4{stroke:#94a3b8;stroke-width:2;fill:none}
+      .arrow{marker-end:url(#arrow)} .arrow2{marker-end:url(#arrow2)} .arrow3{marker-end:url(#arrow3)} .arrow4{marker-end:url(#arrow4)}
+
+      /* Kody Prism – szerokość 100% + przewijanie w poziomie przy długich liniach */
+      pre[class*="language-"]{width:100% !important;max-width:none !important;box-sizing:border-box;overflow-x:auto;white-space:pre}
+      code[class*="language-"]{white-space:pre}
+      .mini{color:#a7b0be;font-size:.95rem}
+    </style>
 </body>
 </html>

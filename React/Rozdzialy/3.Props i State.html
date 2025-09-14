@@ -28,10 +28,74 @@ function ChildComponent(props) {
 }
         </code></pre>
 
+        <!-- Wizualizacja: przepływ props Parent -> Child -->
+        <details open>
+          <summary class="viz-title">🧭 Wizualizacja „Props” – przepływ danych rodzic ➜ dziecko</summary>
+          <div class="viz-wrap">
+            <svg viewBox="0 0 1000 340" class="viz-svg" aria-label="Diagram przepływu props">
+              <defs>
+                <marker id="arrowProps" markerWidth="12" markerHeight="12" refX="10" refY="6" orient="auto">
+                  <path d="M0,0 L12,6 L0,12 Z" fill="#94a3b8"></path>
+                </marker>
+              </defs>
+
+              <g class="lane" transform="translate(10,10)">
+                <rect width="980" height="320" rx="12"></rect>
+                <text x="16" y="28" class="lane-title">ParentComponent (render) → ChildComponent(props) → UI</text>
+
+                <g class="node" transform="translate(20,60)">
+                  <rect width="280" height="70" rx="10"></rect>
+                  <text x="12" y="28">&lt;ChildComponent message="Witaj, świecie!" /&gt;</text>
+                  <text x="12" y="50" class="muted">JSX w rodzicu</text>
+                </g>
+
+                <path d="M300,95 L360,95" class="arrowP"/>
+                <g class="ok" transform="translate(360,60)">
+                  <rect width="300" height="70" rx="10"></rect>
+                  <text x="12" y="28">Tworzenie props {"{ message: 'Witaj, świecie!' }"}</text>
+                  <text x="12" y="50" class="muted">React buduje obiekt props</text>
+                </g>
+
+                <path d="M660,95 L720,95" class="arrowP"/>
+                <g class="node" transform="translate(720,60)">
+                  <rect width="250" height="70" rx="10"></rect>
+                  <text x="12" y="28">ChildComponent(props)</text>
+                  <text x="12" y="50" class="muted">odczyt: props.message</text>
+                </g>
+
+                <g class="pill" transform="translate(360,160)">
+                  <rect width="610" height="70" rx="10"></rect>
+                  <text x="12" y="28">Zwracany JSX: &lt;h1&gt;Witaj, świecie!&lt;/h1&gt;</text>
+                  <text x="12" y="50" class="muted">renderer → DOM</text>
+                </g>
+              </g>
+            </svg>
+
+            <div class="grid-two">
+              <table class="db-table">
+                <caption class="mini">Zasady props</caption>
+                <thead><tr><th>Cecha</th><th>Opis</th></tr></thead>
+                <tbody>
+                  <tr><td>Kierunek</td><td>Jednokierunkowy: rodzic ➜ dziecko</td></tr>
+                  <tr><td>Modyfikacja</td><td>Dziecko <em>nie</em> zmienia props</td></tr>
+                  <tr><td>Cel</td><td>Przekaz danych/handlerów</td></tr>
+                </tbody>
+              </table>
+              <table class="db-table">
+                <caption class="mini">Analogią</caption>
+                <thead><tr><th>Rola</th><th>Porównanie</th></tr></thead>
+                <tbody>
+                  <tr><td>Rodzic</td><td>Nauczyciel daje kartkę z tekstem</td></tr>
+                  <tr><td>Dziecko</td><td>Odczytuje i wyświetla</td></tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </details>
+
         <p>W powyższym przykładzie komponent rodzica <code>ParentComponent</code> przekazuje wartość <code>"Witaj, świecie!"</code> do komponentu dziecka <code>ChildComponent</code> za pomocą mechanizmu <code>props</code>. W React <code>props</code> pozwala na przesyłanie danych między komponentami, umożliwiając komponentowi nadrzędnemu (rodzicowi) przekazanie informacji do komponentu podrzędnego (dziecka).</p>
         <p>W <code>ParentComponent</code> wartość <code>"Witaj, świecie!"</code> jest przypisana do atrybutu JSX o nazwie <code>message</code>. W momencie renderowania React automatycznie tworzy obiekt <code>props</code> dla <code>ChildComponent</code>, zawierający wszystkie przekazane atrybuty. W tym przypadku <code>props</code> zawiera właściwość <code>message</code> z wartością <code>"Witaj, świecie!"</code>.</p>
         <p>W <code>ChildComponent</code> dostęp do <code>props</code> uzyskujemy poprzez argument funkcji. Komponent dziecka może odczytać wartość przekazaną z rodzica, wywołując <code>props.message</code>. Ta wartość jest następnie wyświetlana wewnątrz elementu <code>&lt;h1&gt;</code>, co powoduje renderowanie tekstu <code>"Witaj, świecie!"</code> na stronie.</p>
-
 
         <h2>State</h2>
         <p><code>State</code> jest wewnętrznym stanem komponentu, który może być zmieniany w trakcie jego cyklu życia. Zmiana stanu powoduje ponowne renderowanie komponentu, aby zaktualizować jego wygląd lub dane wyświetlane w interfejsie.</p>
@@ -51,10 +115,81 @@ function Counter() {
 }
         </code></pre>
 
-        <p>W powyższym przykładzie użyto funkcji <code>useState</code>, aby utworzyć stan o nazwie <code>count</code> i przypisać mu wartość początkową 0. <code>useState</code> to funkcja React, która pozwala komponentowi na przechowywanie i zarządzanie danymi, które mogą się zmieniać w trakcie działania aplikacji. Funkcja ta zwraca tablicę dwóch elementów: aktualną wartość stanu (<code>count</code>) i funkcję do aktualizacji tego stanu.</p>
-    <p>Kiedy użytkownik kliknie przycisk, wywoływana jest funkcja, która zwiększa wartość <code>count</code> o 1, używając funkcji aktualizującej stan (zwróconej przez <code>useState</code>). Dzięki temu komponent zostaje ponownie wyrenderowany z nową, zwiększoną wartością <code>count</code>.</p>
-    <p>Podsumowując: <code>useState</code> umożliwia komponentowi przechowywanie dynamicznych danych, a każda zmiana tych danych powoduje ponowne wyrenderowanie komponentu, aby wyświetlić aktualną wartość.</p>
+        <!-- Wizualizacja: cykl setState -> kolejka -> re-render -->
+        <details>
+          <summary class="viz-title">⏱️ Wizualizacja „State” – aktualizacja i render</summary>
+          <div class="viz-wrap">
+            <svg viewBox="0 0 1000 420" class="viz-svg" aria-label="Diagram aktualizacji state">
+              <defs>
+                <marker id="arrowState" markerWidth="12" markerHeight="12" refX="10" refY="6" orient="auto">
+                  <path d="M0,0 L12,6 L0,12 Z" fill="#94a3b8"></path>
+                </marker>
+              </defs>
 
+              <g class="lane" transform="translate(10,10)">
+                <rect width="980" height="400" rx="12"></rect>
+                <text x="16" y="28" class="lane-title">Klik → setCount(n+1) → kolejka aktualizacji → nowy render → UI</text>
+
+                <g class="node" transform="translate(20,60)">
+                  <rect width="280" height="70" rx="10"></rect>
+                  <text x="12" y="28">Stan początkowy</text>
+                  <text x="12" y="50" class="muted">count = 0</text>
+                </g>
+
+                <path d="M300,95 L360,95" class="arrowS"/>
+                <g class="ok" transform="translate(360,60)">
+                  <rect width="280" height="70" rx="10"></rect>
+                  <text x="12" y="28">onClick → setCount(count+1)</text>
+                  <text x="12" y="50" class="muted">dodanie do kolejki</text>
+                </g>
+
+                <path d="M640,95 L700,95" class="arrowS"/>
+                <g class="pill" transform="translate(700,60)">
+                  <rect width="270" height="70" rx="10"></rect>
+                  <text x="12" y="28">Batching</text>
+                  <text x="12" y="50" class="muted">scalenie wielu setState</text>
+                </g>
+
+                <g class="node" transform="translate(360,160)">
+                  <rect width="610" height="70" rx="10"></rect>
+                  <text x="12" y="28">Obliczenie nowego stanu</text>
+                  <text x="12" y="50" class="muted">count = 1</text>
+                </g>
+
+                <g class="ok" transform="translate(20,250)">
+                  <rect width="950" height="70" rx="10"></rect>
+                  <text x="12" y="28">Nowy render komponentu</text>
+                  <text x="12" y="50" class="muted">UI: „Licznik: 1”</text>
+                </g>
+              </g>
+            </svg>
+
+            <div class="grid-two">
+              <table class="db-table">
+                <caption class="mini">Ważne fakty</caption>
+                <thead><tr><th>Co</th><th>Dlaczego</th></tr></thead>
+                <tbody>
+                  <tr><td>Asynchroniczność</td><td>React łączy aktualizacje (batching)</td></tr>
+                  <tr><td>Re-render</td><td>następuje po zmianie stanu</td></tr>
+                  <tr><td>Funkcyjny set</td><td><code>setCount(c =&gt; c+1)</code> bezpieczny przy wielu klikach</td></tr>
+                </tbody>
+              </table>
+
+              <table class="db-table">
+                <caption class="mini">Anti-patterny</caption>
+                <thead><tr><th>Co unikać</th><th>Dlaczego</th></tr></thead>
+                <tbody>
+                  <tr><td>Bezpośrednia modyfikacja</td><td>np. <code>count++</code> nie zmienia UI</td></tr>
+                  <tr><td>Wielokrotne set na podstawie starego <code>count</code></td><td>użyj funkcji: <code>setCount(c =&gt; c+1)</code></td></tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </details>
+
+        <p>W powyższym przykładzie użyto funkcji <code>useState</code>, aby utworzyć stan o nazwie <code>count</code> i przypisać mu wartość początkową 0. <code>useState</code> to funkcja React, która pozwala komponentowi na przechowywanie i zarządzanie danymi, które mogą się zmieniać w trakcie działania aplikacji. Funkcja ta zwraca tablicę dwóch elementów: aktualną wartość stanu (<code>count</code>) i funkcję do aktualizacji tego stanu.</p>
+        <p>Kiedy użytkownik kliknie przycisk, wywoływana jest funkcja, która zwiększa wartość <code>count</code> o 1, używając funkcji aktualizującej stan (zwróconej przez <code>useState</code>). Dzięki temu komponent zostaje ponownie wyrenderowany z nową, zwiększoną wartością <code>count</code>.</p>
+        <p>Podsumowując: <code>useState</code> umożliwia komponentowi przechowywanie dynamicznych danych, a każda zmiana tych danych powoduje ponowne wyrenderowanie komponentu, aby wyświetlić aktualną wartość.</p>
 
         <h2>Props i State razem</h2>
         <p>Możemy także łączyć <code>props</code> i <code>state</code>, przekazując stan komponentu rodzica jako <code>props</code> do komponentu dziecka. To pozwala na kontrolowanie stanu przez komponent nadrzędny i aktualizację widoku komponentu podrzędnego.</p>
@@ -78,26 +213,143 @@ function ChildComponent(props) {
 }
         </code></pre>
 
-        <p>W tym przykładzie <code>ParentComponent</code> działa jak nauczyciel, który zarządza tablicą (stanem <code>message</code>) i przekazuje jej zawartość do <code>ChildComponent</code>, czyli ucznia, który odczytuje tę wiadomość. Kliknięcie przycisku sprawia, że nauczyciel zmienia wiadomość na tablicy, co automatycznie powoduje, że uczeń widzi nową treść. Dzięki temu <code>ChildComponent</code> zawsze pokazuje aktualną wiadomość przekazaną z <code>ParentComponent</code>.</p>
-<h2>Podsumowanie</h2>
-        <!-- Props -->
-<p><strong>Props:</strong></p>
-<ul>
-  <li>Dane przekazywane z rodzica do dziecka jako argumenty.</li>
-  <li>Tylko do odczytu (niemodyfikowalne przez komponent).</li>
-</ul>
+        <!-- Wizualizacja: rodzic kontroluje dziecko poprzez props -->
+        <details>
+          <summary class="viz-title">🔗 Wizualizacja „Props + State” – rodzic steruje dzieckiem</summary>
+          <div class="viz-wrap">
+            <svg viewBox="0 0 1000 460" class="viz-svg" aria-label="Diagram props + state">
+              <defs>
+                <marker id="arrowPS" markerWidth="12" markerHeight="12" refX="10" refY="6" orient="auto">
+                  <path d="M0,0 L12,6 L0,12 Z" fill="#94a3b8"></path>
+                </marker>
+              </defs>
 
-<!-- State -->
-<p><strong>State:</strong></p>
-<ul>
-  <li>Lokalny stan komponentu, który można modyfikować.</li>
-  <li>Używany do dynamicznego zarządzania danymi.</li>
-  <li>W komponentach funkcyjnych zarządzany za pomocą hooka <code>useState</code>.</li>
-</ul>
+              <g class="lane" transform="translate(10,10)">
+                <rect width="980" height="440" rx="12"></rect>
+                <text x="16" y="28" class="lane-title">Parent: state(message) → props → Child → UI (klik = setMessage = nowy render)</text>
+
+                <g class="node" transform="translate(20,60)">
+                  <rect width="320" height="70" rx="10"></rect>
+                  <text x="12" y="28">Parent useState</text>
+                  <text x="12" y="50" class="muted">message = "Początkowa wiadomość"</text>
+                </g>
+
+                <path d="M340,95 L400,95" class="arrowPS"/>
+                <g class="ok" transform="translate(400,60)">
+                  <rect width="280" height="70" rx="10"></rect>
+                  <text x="12" y="28">Przekazanie props</text>
+                  <text x="12" y="50" class="muted">{ message }</text>
+                </g>
+
+                <path d="M680,95 L740,95" class="arrowPS"/>
+                <g class="node" transform="translate(740,60)">
+                  <rect width="230" height="70" rx="10"></rect>
+                  <text x="12" y="28">Child render</text>
+                  <text x="12" y="50" class="muted">&lt;h1&gt;{message}&lt;/h1&gt;</text>
+                </g>
+
+                <g class="pill" transform="translate(400,160)">
+                  <rect width="570" height="70" rx="10"></rect>
+                  <text x="12" y="28">UI pokazuje: „Początkowa wiadomość”</text>
+                  <text x="12" y="50" class="muted">props sterują wyjściem</text>
+                </g>
+
+                <g class="warn" transform="translate(20,250)">
+                  <rect width="950" height="70" rx="10"></rect>
+                  <text x="12" y="28">Klik: setMessage("Zaktualizowana wiadomość")</text>
+                  <text x="12" y="50" class="muted">nowy stan w rodzicu</text>
+                </g>
+
+                <g class="ok" transform="translate(20,330)">
+                  <rect width="950" height="70" rx="10"></rect>
+                  <text x="12" y="28">Nowy render → nowe props → nowe UI</text>
+                  <text x="12" y="50" class="muted">„Zaktualizowana wiadomość”</text>
+                </g>
+              </g>
+            </svg>
+
+            <div class="grid-two">
+              <table class="db-table">
+                <caption class="mini">Wzorzec „kontrolowany”</caption>
+                <thead><tr><th>Element</th><th>Rola</th></tr></thead>
+                <tbody>
+                  <tr><td>Rodzic</td><td>posiada stan, zmienia go</td></tr>
+                  <tr><td>Dziecko</td><td>wyświetla to, co dostało w props</td></tr>
+                </tbody>
+              </table>
+              <table class="db-table">
+                <caption class="mini">Częste błędy</caption>
+                <thead><tr><th>Problem</th><th>Jak naprawić</th></tr></thead>
+                <tbody>
+                  <tr><td>Dziecko próbuje zmienić props</td><td>zamiast tego wywołuj handler z rodzica</td></tr>
+                  <tr><td>Desynchronizacja</td><td>źródło prawdy = stan rodzica</td></tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </details>
+
+        <p>W tym przykładzie <code>ParentComponent</code> działa jak nauczyciel, który zarządza tablicą (stanem <code>message</code>) i przekazuje jej zawartość do <code>ChildComponent</code>, czyli ucznia, który odczytuje tę wiadomość. Kliknięcie przycisku sprawia, że nauczyciel zmienia wiadomość na tablicy, co automatycznie powoduje, że uczeń widzi nową treść. Dzięki temu <code>ChildComponent</code> zawsze pokazuje aktualną wiadomość przekazaną z <code>ParentComponent</code>.</p>
+
+        <h2>Podsumowanie</h2>
+        <!-- Props -->
+        <p><strong>Props:</strong></p>
+        <ul>
+          <li>Dane przekazywane z rodzica do dziecka jako argumenty.</li>
+          <li>Tylko do odczytu (niemodyfikowalne przez komponent).</li>
+        </ul>
+
+        <!-- State -->
+        <p><strong>State:</strong></p>
+        <ul>
+          <li>Lokalny stan komponentu, który można modyfikować.</li>
+          <li>Używany do dynamicznego zarządzania danymi.</li>
+          <li>W komponentach funkcyjnych zarządzany za pomocą hooka <code>useState</code>.</li>
+        </ul>
 
     </div>
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/prism.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/components/prism-javascript.min.js"></script>
+
+    <!-- Izolowany CSS dla wizualizacji: pełna szerokość + responsywność -->
+    <style>
+      /* Upewnij się, że bloki korzystają z pełnej szerokości kontenera */
+      details, .viz-wrap { width: 100%; max-width: none !important; }
+      .viz-svg{display:block;width:100% !important;max-width:100% !important;height:auto !important;background:#0e1729;border-radius:12px}
+
+      /* Tytuły i wrapper */
+      .viz-title{cursor:pointer;font-weight:600}
+      .viz-wrap{padding:.5rem .25rem}
+
+      /* Siatka i tabelki */
+      .grid-two{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:.75rem;width:100%;max-width:none}
+      .grid-two>*{min-width:0}
+      @media (max-width: 900px){.grid-two{grid-template-columns:1fr}}
+      .db-table{width:100% !important;max-width:100% !important;border-collapse:collapse;margin:.5rem 0;table-layout:fixed}
+      .db-table th,.db-table td{border:1px solid #aeaeae;padding:.5rem .65rem;text-align:left;vertical-align:top;word-break:break-word}
+      .db-table th{background:#0e1729;color:#dbe2ea}
+      .mini{color:#a7b0be;font-size:.95rem}
+
+      /* Styl kafelków w SVG */
+      .lane rect{fill:#0f172a;stroke:#1f2937}
+      .lane-title{fill:#cbd5e1;font-weight:600}
+      .node rect{fill:#111827;stroke:#334155}
+      .pill rect{fill:#0b3b2e;stroke:#14532d}
+      .ok rect{fill:#0b2a3b;stroke:#0e7490}
+      .warn rect{fill:#3b0b0b;stroke:#7f1d1d}
+      .node text,.pill text,.ok text,.warn text{fill:#e2e8f0;font-size:14px}
+      .muted{fill:#94a3b8;font-size:12px}
+
+      /* Strzałki */
+      .arrowP,.arrowS,.arrowPS{stroke:#94a3b8;stroke-width:2;fill:none}
+      .arrowP{marker-end:url(#arrowProps)}
+      .arrowS{marker-end:url(#arrowState)}
+      .arrowPS{marker-end:url(#arrowPS)}
+
+      /* Kod – pełna szerokość + przewijanie */
+      pre[class*="language-"]{width:100% !important;max-width:none !important;box-sizing:border-box;overflow-x:auto;white-space:pre}
+      code[class*="language-"]{white-space:pre}
+    </style>
 </body>
 </html>

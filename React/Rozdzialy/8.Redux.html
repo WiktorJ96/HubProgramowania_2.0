@@ -20,6 +20,48 @@
 npm install redux react-redux
         </code></pre>
 
+        <details>
+          <summary class="viz-title">📦 Wizualizacja: instalacja i zależności</summary>
+          <div class="viz-wrap">
+            <svg viewBox="0 0 1000 260" class="viz-svg" aria-label="Instalacja redux/react-redux">
+              <defs>
+                <marker id="arr-install" markerWidth="12" markerHeight="12" refX="10" refY="6" orient="auto">
+                  <path d="M0,0 L12,6 L0,12 Z" fill="#94a3b8"></path>
+                </marker>
+              </defs>
+              <g class="lane" transform="translate(10,10)">
+                <rect width="980" height="240" rx="12"></rect>
+                <text x="16" y="28" class="lane-title">npm install redux react-redux</text>
+
+                <g class="node" transform="translate(20,60)">
+                  <rect width="300" height="70" rx="10"></rect>
+                  <text x="12" y="26">Twoja aplikacja (React)</text>
+                  <text x="12" y="48" class="muted">src/*</text>
+                </g>
+
+                <path class="arrow" d="M320,95 L470,95" marker-end="url(#arr-install)"/>
+                <g class="pill" transform="translate(470,60)">
+                  <rect width="220" height="70" rx="10"></rect>
+                  <text x="12" y="26">redux</text>
+                  <text x="12" y="48" class="muted">createStore / reducer</text>
+                </g>
+
+                <path class="arrow" d="M690,95 L920,95" marker-end="url(#arr-install)"/>
+                <g class="ok" transform="translate(700,60)">
+                  <rect width="260" height="70" rx="10"></rect>
+                  <text x="12" y="26">react-redux</text>
+                  <text x="12" y="48" class="muted">Provider / useSelector / useDispatch</text>
+                </g>
+
+                <g class="warn" transform="translate(20,150)">
+                  <rect width="940" height="60" rx="10"></rect>
+                  <text x="12" y="24">Po instalacji opakowujesz aplikację w &lt;Provider store={store} /&gt; i używasz hooków w komponentach.</text>
+                </g>
+              </g>
+            </svg>
+          </div>
+        </details>
+
         <h2>Tworzenie Store</h2>
         <p><code>Store</code> to centralny magazyn, w którym przechowywany jest stan aplikacji. Jest tworzony za pomocą funkcji <code>createStore</code> i przyjmuje reducer jako argument.</p>
 
@@ -31,6 +73,62 @@ const store = createStore(counterReducer);
 
 export default store;
         </code></pre>
+
+        <details open>
+          <summary class="viz-title">🏪 Wizualizacja: Store + Reducer + State</summary>
+          <div class="viz-wrap">
+            <svg viewBox="0 0 1000 360" class="viz-svg" aria-label="Struktura store">
+              <defs>
+                <marker id="arr-store" markerWidth="12" markerHeight="12" refX="10" refY="6" orient="auto">
+                  <path d="M0,0 L12,6 L0,12 Z" fill="#94a3b8"></path>
+                </marker>
+              </defs>
+
+              <g class="lane" transform="translate(10,10)">
+                <rect width="980" height="340" rx="12"></rect>
+                <text x="16" y="28" class="lane-title">createStore(counterReducer) → jeden źródłowy stan</text>
+
+                <g class="node" transform="translate(20,60)">
+                  <rect width="300" height="80" rx="10"></rect>
+                  <text x="12" y="26">counterReducer(state, action)</text>
+                  <text x="12" y="48" class="muted">funkcja czysta</text>
+                </g>
+
+                <path class="arrow" d="M320,100 L450,100" marker-end="url(#arr-store)"/>
+
+                <g class="pill" transform="translate(450,60)">
+                  <rect width="200" height="80" rx="10"></rect>
+                  <text x="12" y="26">createStore</text>
+                  <text x="12" y="48" class="muted">Redux</text>
+                </g>
+
+                <path class="arrow" d="M650,100 L900,100" marker-end="url(#arr-store)"/>
+
+                <g class="ok" transform="translate(670,60)">
+                  <rect width="300" height="80" rx="10"></rect>
+                  <text x="12" y="26">store</text>
+                  <text x="12" y="48" class="muted">getState / dispatch / subscribe</text>
+                </g>
+
+                <g transform="translate(20,170)">
+                  <foreignObject width="940" height="150">
+                    <div xmlns="http://www.w3.org/1999/xhtml">
+                      <table class="db-table">
+                        <caption class="mini">Co posiada <code>store</code>?</caption>
+                        <thead><tr><th>Metoda</th><th>Opis</th></tr></thead>
+                        <tbody>
+                          <tr><td>getState()</td><td>Zwraca aktualny stan</td></tr>
+                          <tr><td>dispatch(action)</td><td>Wysyła akcję do reducera → nowy stan</td></tr>
+                          <tr><td>subscribe(listener)</td><td>Rejestruje listener wywoływany przy zmianie stanu</td></tr>
+                        </tbody>
+                      </table>
+                    </div>
+                  </foreignObject>
+                </g>
+              </g>
+            </svg>
+          </div>
+        </details>
 
         <p>W tym przykładzie store jest tworzony z użyciem <code>counterReducer</code>, który zarządza stanem licznika.</p>
 
@@ -48,6 +146,41 @@ export const decrement = () => ({
     type: 'DECREMENT'
 });
         </code></pre>
+
+        <details>
+          <summary class="viz-title">🎯 Wizualizacja: kształt akcji</summary>
+          <div class="viz-wrap">
+            <svg viewBox="0 0 1000 260" class="viz-svg" aria-label="Akcja Redux">
+              <g class="lane" transform="translate(10,10)">
+                <rect width="980" height="240" rx="12"></rect>
+                <text x="16" y="28" class="lane-title">Action = zwykły obiekt JS</text>
+
+                <g transform="translate(20,60)">
+                  <foreignObject width="460" height="160">
+                    <div xmlns="http://www.w3.org/1999/xhtml">
+                      <table class="db-table">
+                        <thead><tr><th>Pole</th><th>Opis</th></tr></thead>
+                        <tbody>
+                          <tr><td>type</td><td>Obowiązkowy string identyfikujący akcję, np. <code>'INCREMENT'</code></td></tr>
+                          <tr><td>payload</td><td>(opcjonalnie) dane potrzebne do aktualizacji stanu</td></tr>
+                          <tr><td>meta/error</td><td>(opcjonalnie) metadane / flaga błędu</td></tr>
+                        </tbody>
+                      </table>
+                    </div>
+                  </foreignObject>
+                </g>
+
+                <g class="ok" transform="translate(520,60)">
+                  <rect width="450" height="160" rx="10"></rect>
+                  <text x="12" y="30">Przykłady</text>
+                  <text x="12" y="60" class="muted">{ type: 'INCREMENT' }</text>
+                  <text x="12" y="90" class="muted">{ type: 'ADD_TODO', payload: { id: 1, text: 'Naucz się Redux' } }</text>
+                  <text x="12" y="120" class="muted">{ type: 'SET_FILTER', payload: 'active' }</text>
+                </g>
+              </g>
+            </svg>
+          </div>
+        </details>
 
         <p>W powyższym przykładzie mamy dwie akcje: <code>increment</code> i <code>decrement</code>, które służą do zmiany stanu licznika.</p>
 
@@ -71,6 +204,57 @@ function counterReducer(state = initialState, action) {
 export default counterReducer;
         </code></pre>
 
+        <details>
+          <summary class="viz-title">⚙️ Wizualizacja: czysta funkcja reducer</summary>
+          <div class="viz-wrap">
+            <svg viewBox="0 0 1000 360" class="viz-svg" aria-label="Reducer pure function">
+              <defs>
+                <marker id="arr-reducer" markerWidth="12" markerHeight="12" refX="10" refY="6" orient="auto">
+                  <path d="M0,0 L12,6 L0,12 Z" fill="#94a3b8"></path>
+                </marker>
+              </defs>
+              <g class="lane" transform="translate(10,10)">
+                <rect width="980" height="340" rx="12"></rect>
+                <text x="16" y="28" class="lane-title">state + action → reducer → newState</text>
+
+                <g class="node" transform="translate(20,80)">
+                  <rect width="240" height="60" rx="10"></rect>
+                  <text x="12" y="24">state: { count: 0 }</text>
+                </g>
+                <g class="node" transform="translate(20,170)">
+                  <rect width="240" height="60" rx="10"></rect>
+                  <text x="12" y="24">action: { type: 'INCREMENT' }</text>
+                </g>
+
+                <path class="arrow" d="M260,110 L430,110" marker-end="url(#arr-reducer)"/>
+                <path class="arrow" d="M260,200 L430,200" marker-end="url(#arr-reducer)"/>
+
+                <g class="pill" transform="translate(430,80)">
+                  <rect width="220" height="150" rx="10"></rect>
+                  <text x="12" y="26">counterReducer</text>
+                  <text x="12" y="52" class="muted">switch(action.type)</text>
+                  <text x="12" y="78" class="muted">zwróć NOWY obiekt stanu</text>
+                </g>
+
+                <path class="arrow" d="M650,155 L920,155" marker-end="url(#arr-reducer)"/>
+                <g class="ok" transform="translate(680,120)">
+                  <rect width="280" height="70" rx="10"></rect>
+                  <text x="12" y="26">newState: { count: 1 }</text>
+                  <text x="12" y="48" class="muted">immutability</text>
+                </g>
+
+                <g transform="translate(20,260)">
+                  <foreignObject width="940" height="60">
+                    <div xmlns="http://www.w3.org/1999/xhtml">
+                      <p class="small">Reducer jest <strong>czysty</strong>: bez efektów ubocznych, nie mutuje argumentów, ten sam input → ten sam output.</p>
+                    </div>
+                  </foreignObject>
+                </g>
+              </g>
+            </svg>
+          </div>
+        </details>
+
         <p>W powyższym przykładzie <code>counterReducer</code> zwiększa lub zmniejsza wartość <code>count</code> w zależności od typu akcji.</p>
 
         <h2>Łączenie Redux z React</h2>
@@ -92,6 +276,50 @@ function App() {
 
 export default App;
         </code></pre>
+
+        <details>
+          <summary class="viz-title">🌳 Wizualizacja: Provider przekazuje store w dół drzewa</summary>
+          <div class="viz-wrap">
+            <svg viewBox="0 0 1000 420" class="viz-svg" aria-label="Provider context">
+              <g class="lane" transform="translate(10,10)">
+                <rect width="980" height="400" rx="12"></rect>
+                <text x="16" y="28" class="lane-title">&lt;Provider store={store}&gt; … &lt;/Provider&gt;</text>
+
+                <g class="ok" transform="translate(20,60)">
+                  <rect width="940" height="70" rx="10"></rect>
+                  <text x="12" y="26">Provider (Context)</text>
+                  <text x="12" y="48" class="muted">udostępnia jeden store dla całej aplikacji</text>
+                </g>
+
+                <g class="node" transform="translate(40,160)">
+                  <rect width="260" height="60" rx="10"></rect>
+                  <text x="12" y="24">Navbar</text>
+                </g>
+                <g class="node" transform="translate(370,160)">
+                  <rect width="260" height="60" rx="10"></rect>
+                  <text x="12" y="24">Counter</text>
+                </g>
+                <g class="node" transform="translate(700,160)">
+                  <rect width="260" height="60" rx="10"></rect>
+                  <text x="12" y="24">OtherPage</text>
+                </g>
+
+                <g class="pill" transform="translate(370,250)">
+                  <rect width="260" height="60" rx="10"></rect>
+                  <text x="12" y="24">useSelector / useDispatch</text>
+                </g>
+
+                <g transform="translate(40,330)">
+                  <foreignObject width="920" height="60">
+                    <div xmlns="http://www.w3.org/1999/xhtml">
+                      <p class="small">Każdy komponent w drzewie może pobrać stan i wysłać akcję, bez ręcznego przekazywania props.</p>
+                    </div>
+                  </foreignObject>
+                </g>
+              </g>
+            </svg>
+          </div>
+        </details>
 
         <p>Komponent <code>Provider</code> dostarcza store do wszystkich komponentów wewnątrz aplikacji.</p>
 
@@ -119,10 +347,115 @@ function Counter() {
 export default Counter;
         </code></pre>
 
+        <details open>
+          <summary class="viz-title">🔁 Wizualizacja: pełny cykl – klik → dispatch → reducer → UI</summary>
+          <div class="viz-wrap">
+            <svg viewBox="0 0 1000 520" class="viz-svg" aria-label="Przepływ Redux">
+              <defs>
+                <marker id="arr-flow" markerWidth="12" markerHeight="12" refX="10" refY="6" orient="auto">
+                  <path d="M0,0 L12,6 L0,12 Z" fill="#94a3b8"></path>
+                </marker>
+              </defs>
+
+              <g class="lane" transform="translate(10,10)">
+                <rect width="980" height="500" rx="12"></rect>
+                <text x="16" y="28" class="lane-title">Interakcja użytkownika aktualizuje stan i odświeża UI</text>
+
+                <g class="node" transform="translate(20,70)">
+                  <rect width="300" height="60" rx="10"></rect>
+                  <text x="12" y="24">UI: klik „Zwiększ”</text>
+                </g>
+
+                <path class="arrow" d="M320,100 L500,100" marker-end="url(#arr-flow)"/>
+
+                <g class="pill" transform="translate(500,70)">
+                  <rect width="220" height="60" rx="10"></rect>
+                  <text x="12" y="24">dispatch({type:'INCREMENT'})</text>
+                </g>
+
+                <path class="arrow" d="M720,100 L900,100" marker-end="url(#arr-flow)"/>
+
+                <g class="ok" transform="translate(720,160)">
+                  <rect width="260" height="60" rx="10"></rect>
+                  <text x="12" y="24">store → reducer</text>
+                </g>
+
+                <path class="arrow" d="M850,220 L850,280" marker-end="url(#arr-flow)"/>
+
+                <g class="ok" transform="translate(680,280)">
+                  <rect width="300" height="60" rx="10"></rect>
+                  <text x="12" y="24">newState: { count: 1 }</text>
+                </g>
+
+                <path class="arrow" d="M680,310 L500,310" marker-end="url(#arr-flow)"/>
+                <g class="node" transform="translate(420,270)">
+                  <rect width="240" height="60" rx="10"></rect>
+                  <text x="12" y="24">react-redux powiadamia subskrybentów</text>
+                </g>
+
+                <path class="arrow" d="M420,300 L200,300" marker-end="url(#arr-flow)"/>
+                <g class="ok" transform="translate(20,270)">
+                  <rect width="180" height="60" rx="10"></rect>
+                  <text x="12" y="24">UI re-render</text>
+                </g>
+
+                <g transform="translate(20,360)">
+                  <foreignObject width="940" height="120">
+                    <div xmlns="http://www.w3.org/1999/xhtml">
+                      <table class="db-table">
+                        <caption class="mini">Hooki w akcji</caption>
+                        <thead><tr><th>Hook</th><th>Co robi?</th><th>Wskazówka</th></tr></thead>
+                        <tbody>
+                          <tr><td>useSelector(sel)</td><td>Subskrybuje store i zwraca wycinek stanu</td><td>Selector powinien być czysty i szybki</td></tr>
+                          <tr><td>useDispatch()</td><td>Zwraca funkcję do dispatchowania akcji</td><td>Możesz bindować action creatory</td></tr>
+                        </tbody>
+                      </table>
+                    </div>
+                  </foreignObject>
+                </g>
+              </g>
+            </svg>
+          </div>
+        </details>
+
         <p>W przykładzie powyżej <code>useSelector</code> pobiera wartość licznika, a <code>useDispatch</code> umożliwia wysłanie akcji <code>increment</code> lub <code>decrement</code>.</p>
     </div>
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/prism.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/components/prism-javascript.min.js"></script>
+
+    <!-- Lekki, izolowany CSS do wizualizacji (pełna szerokość + responsywność) -->
+    <style>
+      /* Pełna szerokość dla sekcji wizualizacji */
+      details, .viz-wrap { width:100%; max-width:none !important; }
+      .viz-title{cursor:pointer;font-weight:600}
+      .viz-wrap{padding:.5rem .25rem}
+
+      /* Responsywne SVG */
+      .viz-svg{display:block;width:100% !important;max-width:100% !important;height:auto !important;background:#0e1729;border-radius:12px}
+
+      /* Bloki / kolory */
+      .lane rect{fill:#0f172a;stroke:#1f2937}
+      .lane-title{fill:#cbd5e1;font-weight:600}
+      .node rect{fill:#111827;stroke:#334155}
+      .pill rect{fill:#0b3b2e;stroke:#14532d}
+      .ok rect{fill:#0b2a3b;stroke:#0e7490}
+      .warn rect{fill:#3b0b0b;stroke:#7f1d1d}
+      .node text,.pill text,.ok text,.warn text{fill:#e2e8f0;font-size:14px}
+      .muted{fill:#94a3b8;font-size:12px}
+
+      /* Strzałki */
+      .arrow{stroke:#94a3b8;stroke-width:2;fill:none}
+
+      /* Tabele i layout */
+      .db-table{width:100% !important;max-width:100% !important;border-collapse:collapse;margin:.5rem 0;table-layout:fixed}
+      .db-table th,.db-table td{border:1px solid #aeaeae;padding:.5rem .65rem;text-align:left;vertical-align:top;word-break:break-word}
+      .db-table th{background:#0e1729;color:#dbe2ea}
+      .mini{color:#a7b0be;font-size:.95rem}
+
+      /* Kod – pełna szerokość + przewijanie poziome w razie potrzeby */
+      pre[class*="language-"]{width:100% !important;max-width:none !important;box-sizing:border-box;overflow-x:auto;white-space:pre}
+      code[class*="language-"]{white-space:pre}
+    </style>
 </body>
 </html>

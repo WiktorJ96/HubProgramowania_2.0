@@ -26,6 +26,72 @@ function Welcome(props) {
 const element = &lt;Welcome name="Jan" /&gt;;
         </code></pre>
 
+        <!-- Wizualizacja: Funkcyjny przepływ props -> funkcja -> JSX -> DOM -->
+        <details open>
+          <summary class="viz-title">🧭 Jak działa komponent funkcyjny (krok po kroku)</summary>
+          <div class="viz-wrap">
+            <svg viewBox="0 0 1000 320" class="viz-svg">
+              <defs>
+                <marker id="arrowA" markerWidth="12" markerHeight="12" refX="10" refY="6" orient="auto">
+                  <path d="M0,0 L12,6 L0,12 Z" fill="#94a3b8"></path>
+                </marker>
+              </defs>
+
+              <g class="lane" transform="translate(10,10)">
+                <rect width="980" height="300" rx="12"></rect>
+                <text x="16" y="28" class="lane-title">&lt;Welcome name="Jan" /&gt; → render funkcji → JSX → DOM</text>
+
+                <g class="node" transform="translate(20,60)">
+                  <rect width="260" height="70" rx="10"></rect>
+                  <text x="12" y="28">Props: {"{ name: 'Jan' }"}</text>
+                  <text x="12" y="50" class="muted">tworzone przy użyciu JSX</text>
+                </g>
+
+                <path d="M290,95 L360,95" class="arrowA"/>
+                <g class="ok" transform="translate(360,60)">
+                  <rect width="300" height="70" rx="10"></rect>
+                  <text x="12" y="28">Wywołanie Welcome(props)</text>
+                  <text x="12" y="50" class="muted">funkcja zwraca JSX</text>
+                </g>
+
+                <path d="M660,95 L730,95" class="arrowA"/>
+                <g class="node" transform="translate(730,60)">
+                  <rect width="240" height="70" rx="10"></rect>
+                  <text x="12" y="28">&lt;h1&gt;Witaj, Jan!&lt;/h1&gt;</text>
+                  <text x="12" y="50" class="muted">element wirtualny</text>
+                </g>
+
+                <g class="pill" transform="translate(360,160)">
+                  <rect width="610" height="70" rx="10"></rect>
+                  <text x="12" y="28">Renderer → tworzy &lt;h1&gt; w DOM</text>
+                  <text x="12" y="50" class="muted">UI pokazuje tekst</text>
+                </g>
+              </g>
+            </svg>
+
+            <div class="grid-two">
+              <table class="db-table">
+                <caption class="mini">Plusy komponentów funkcyjnych</caption>
+                <thead><tr><th>Cecha</th><th>Opis</th></tr></thead>
+                <tbody>
+                  <tr><td>Prostota</td><td>to zwykłe funkcje</td></tr>
+                  <tr><td>Hooki</td><td><code>useState</code>, <code>useEffect</code>, itd.</td></tr>
+                  <tr><td>Wydajność</td><td>mniej „szumu” niż klasy</td></tr>
+                </tbody>
+              </table>
+
+              <table class="db-table">
+                <caption class="mini">Kiedy wybrać?</caption>
+                <thead><tr><th>Przypadek</th><th>Dlaczego</th></tr></thead>
+                <tbody>
+                  <tr><td>Nowy kod</td><td>API hooków jest standardem</td></tr>
+                  <tr><td>Prosta logika</td><td>czytelny, krótki komponent</td></tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </details>
+
         <h2>Komponenty Klasowe</h2>
         <p>Komponenty klasowe to starszy sposób tworzenia komponentów w React. Muszą dziedziczyć po <code>React.Component</code> i zawierać metodę <code>render()</code>, która zwraca JSX.</p>
 
@@ -43,9 +109,124 @@ class Welcome extends Component {
 const element = &lt;Welcome name="Jan" /&gt;;
         </code></pre>
 
+        <!-- Wizualizacja: Klasowy cykl życia i render -->
+        <details>
+          <summary class="viz-title">🏗️ Jak działa komponent klasowy (instancja + render)</summary>
+          <div class="viz-wrap">
+            <svg viewBox="0 0 1000 420" class="viz-svg">
+              <defs>
+                <marker id="arrowB" markerWidth="12" markerHeight="12" refX="10" refY="6" orient="auto">
+                  <path d="M0,0 L12,6 L0,12 Z" fill="#94a3b8"></path>
+                </marker>
+              </defs>
+
+              <g class="lane" transform="translate(10,10)">
+                <rect width="980" height="400" rx="12"></rect>
+                <text x="16" y="28" class="lane-title">„new Welcome(props)” → metody cyklu → render()</text>
+
+                <g class="node" transform="translate(20,60)">
+                  <rect width="300" height="70" rx="10"></rect>
+                  <text x="12" y="28">Tworzenie instancji klasy</text>
+                  <text x="12" y="50" class="muted">this.props = {"{ name: 'Jan' }"}</text>
+                </g>
+
+                <path d="M330,95 L400,95" class="arrowB"/>
+                <g class="ok" transform="translate(400,60)">
+                  <rect width="260" height="70" rx="10"></rect>
+                  <text x="12" y="28">Wywołanie render()</text>
+                  <text x="12" y="50" class="muted">zwraca JSX</text>
+                </g>
+
+                <path d="M660,95 L730,95" class="arrowB"/>
+                <g class="node" transform="translate(730,60)">
+                  <rect width="240" height="70" rx="10"></rect>
+                  <text x="12" y="28">&lt;h1&gt;Witaj, Jan!&lt;/h1&gt;</text>
+                  <text x="12" y="50" class="muted">element wirtualny</text>
+                </g>
+
+                <g class="pill" transform="translate(400,160)">
+                  <rect width="570" height="70" rx="10"></rect>
+                  <text x="12" y="28">Renderer → aktualizacja/utworzenie w DOM</text>
+                  <text x="12" y="50" class="muted">po zamontowaniu: componentDidMount()</text>
+                </g>
+
+                <g class="warn" transform="translate(20,250)">
+                  <rect width="950" height="70" rx="10"></rect>
+                  <text x="12" y="28">Zmiana props/state → render() ponownie</text>
+                  <text x="12" y="50" class="muted">po aktualizacji: componentDidUpdate()</text>
+                </g>
+
+                <g class="ok" transform="translate(20,330)">
+                  <rect width="950" height="60" rx="10"></rect>
+                  <text x="12" y="24">Odmontowanie</text>
+                  <text x="12" y="44" class="muted">componentWillUnmount()</text>
+                </g>
+              </g>
+            </svg>
+
+            <div class="grid-two">
+              <table class="db-table">
+                <caption class="mini">Klasa vs Funkcja – skrót</caption>
+                <thead><tr><th>Cecha</th><th>Klasa</th><th>Funkcja</th></tr></thead>
+                <tbody>
+                  <tr><td>Stan</td><td><code>this.state</code> + <code>setState()</code></td><td><code>useState()</code></td></tr>
+                  <tr><td>Cykl życia</td><td>metody (DidMount/Update/Unmount)</td><td><code>useEffect()</code> z deps</td></tr>
+                  <tr><td>Dziedziczenie</td><td><code>extends Component</code></td><td>kompozycja + hooki</td></tr>
+                </tbody>
+              </table>
+
+              <table class="db-table">
+                <caption class="mini">Mapowanie „stare→nowe”</caption>
+                <thead><tr><th>Klasa</th><th>Hook</th></tr></thead>
+                <tbody>
+                  <tr><td>componentDidMount</td><td><code>useEffect(fn, [])</code></td></tr>
+                  <tr><td>componentDidUpdate</td><td><code>useEffect(fn, [deps])</code></td></tr>
+                  <tr><td>componentWillUnmount</td><td><code>useEffect(() =&gt; () =&gt; cleanup, [])</code></td></tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </details>
+
     </div>
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/prism.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/components/prism-javascript.min.js"></script>
+
+    <!-- Izolowany CSS dla wizualizacji: pełna szerokość + spójny wygląd -->
+    <style>
+      /* Pełna szerokość wrapperów i SVG */
+      details, .viz-wrap { width: 100%; max-width: none !important; }
+      .viz-title{cursor:pointer;font-weight:600}
+      .viz-wrap{padding:.5rem .25rem}
+      .viz-svg{display:block;width:100% !important;max-width:100% !important;height:auto !important;background:#0e1729;border-radius:12px}
+
+      /* Siatka i tabele – responsywne */
+      .grid-two{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:.75rem;width:100%;max-width:none}
+      .grid-two>*{min-width:0}
+      @media (max-width: 900px){.grid-two{grid-template-columns:1fr}}
+
+      .db-table{width:100% !important;max-width:100% !important;border-collapse:collapse;margin:.5rem 0;table-layout:fixed}
+      .db-table th,.db-table td{border:1px solid #aeaeae;padding:.5rem .65rem;text-align:left;vertical-align:top;word-break:break-word}
+      .db-table th{background:#0e1729;color:#dbe2ea}
+      .mini{color:#a7b0be;font-size:.95rem}
+
+      /* Kafelki SVG */
+      .lane rect{fill:#0f172a;stroke:#1f2937}
+      .lane-title{fill:#cbd5e1;font-weight:600}
+      .node rect{fill:#111827;stroke:#334155}
+      .pill rect{fill:#0b3b2e;stroke:#14532d}
+      .ok rect{fill:#0b2a3b;stroke:#0e7490}
+      .warn rect{fill:#3b0b0b;stroke:#7f1d1d}
+      .node text,.pill text,.ok text,.warn text{fill:#e2e8f0;font-size:14px}
+      .muted{fill:#94a3b8;font-size:12px}
+      .arrowA,.arrowB{stroke:#94a3b8;stroke-width:2;fill:none}
+      .arrowA{marker-end:url(#arrowA)}
+      .arrowB{marker-end:url(#arrowB)}
+
+      /* Kod – pełna szerokość + przewijanie w poziomie przy długich liniach */
+      pre[class*="language-"]{width:100% !important;max-width:none !important;box-sizing:border-box;overflow-x:auto;white-space:pre}
+      code[class*="language-"]{white-space:pre}
+    </style>
 </body>
 </html>

@@ -1,99 +1,338 @@
 <!DOCTYPE html>
 <html lang="pl">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>React - Error Boundaries</title>
-    <link rel="stylesheet" href="../styles.css">
+    <link rel="stylesheet" href="../styles.css" />
     <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/themes/prism-tomorrow.min.css" rel="stylesheet" />
 </head>
 <body>
-    <div class="container">
-        <h1>React - Error Boundaries</h1>
-        
-        <p>Error Boundaries to mechanizm wprowadzony w React 16, który pozwala przechwytywać błędy w komponentach podrzędnych. Dzięki nim możemy zapobiec awarii całej aplikacji, wyświetlając zamiast tego komunikat o błędzie lub zastępczy interfejs.</p>
+  <div class="container">
+    <h1>React - Error Boundaries</h1>
 
-        <h2>Tworzenie Error Boundary</h2>
-        <p>Error Boundary to komponent klasowy, który implementuje dwie specjalne metody: <code>componentDidCatch</code> do przechwytywania błędów i <code>getDerivedStateFromError</code> do aktualizacji stanu w przypadku błędu.</p>
+    <p>Error Boundaries to mechanizm wprowadzony w React 16, który pozwala przechwytywać błędy w komponentach podrzędnych. Dzięki nim możemy zapobiec awarii całej aplikacji, wyświetlając zamiast tego komunikat o błędzie lub zastępczy interfejs.</p>
 
-        <pre><code class="language-javascript">
+    <h2>Tworzenie Error Boundary</h2>
+    <p>Error Boundary to komponent klasowy, który implementuje dwie specjalne metody: <code>componentDidCatch</code> do przechwytywania błędów i <code>getDerivedStateFromError</code> do aktualizacji stanu w przypadku błędu.</p>
+
+<pre><code class="language-javascript">
 import React, { Component } from 'react';
 
 class ErrorBoundary extends Component {
-    constructor(props) {
-        super(props);
-        this.state = { hasError: false };
-    }
+  constructor(props) {
+    super(props);
+    this.state = { hasError: false };
+  }
 
-    static getDerivedStateFromError(error) {
-        // Ustawia stan na true w przypadku błędu
-        return { hasError: true };
-    }
+  static getDerivedStateFromError(error) {
+    // Ustawia stan na true w przypadku błędu
+    return { hasError: true };
+  }
 
-    componentDidCatch(error, info) {
-        // Możemy tutaj zalogować błąd do systemu monitorowania błędów
-        console.error("Błąd:", error, info);
-    }
+  componentDidCatch(error, info) {
+    // Możemy tu zalogować błąd do systemu monitorowania
+    console.error("Błąd:", error, info);
+  }
 
-    render() {
-        if (this.state.hasError) {
-            return &lt;h2&gt;Coś poszło nie tak.&lt;/h2&gt;;
-        }
-        return this.props.children;
+  render() {
+    if (this.state.hasError) {
+      return &lt;h2&gt;Coś poszło nie tak.&lt;/h2&gt;;
     }
+    return this.props.children;
+  }
 }
 
 export default ErrorBoundary;
-        </code></pre>
+</code></pre>
 
-        <p>W tym przykładzie, jeśli dowolny komponent wewnątrz <code>ErrorBoundary</code> wyrzuci błąd, zostanie on przechwycony, a komponent wyświetli komunikat <code>"Coś poszło nie tak."</code> zamiast zawartości.</p>
+    <!-- WIZ 1: przepływ błędu -->
+    <details open>
+      <summary class="viz-title">🛡️ Wizualizacja: Przepływ błędu → przechwycenie → fallback UI</summary>
+      <div class="viz-wrap">
+        <svg viewBox="0 0 1100 420" class="viz-svg" aria-label="Error boundary flow">
+          <defs>
+            <marker id="arr-eb" markerWidth="12" markerHeight="12" refX="10" refY="6" orient="auto">
+              <path d="M0,0 L12,6 L0,12 Z" fill="#94a3b8"></path>
+            </marker>
+          </defs>
 
-        <h2>Użycie Error Boundary</h2>
-        <p>Error Boundary należy opakować wokół komponentów, które mogą potencjalnie wywołać błąd, tak aby zminimalizować wpływ błędów na inne części aplikacji.</p>
+          <g class="lane" transform="translate(10,10)">
+            <rect width="1080" height="400" rx="12"></rect>
+            <text x="16" y="28" class="lane-title">Render drzewa → błąd w dziecku → boundary reaguje → fallback</text>
 
-        <pre><code class="language-javascript">
+            <g class="node" transform="translate(20,60)">
+              <rect width="320" height="70" rx="10"></rect>
+              <text x="12" y="28">Render &lt;FaultyComponent /&gt;</text>
+              <text x="12" y="48" class="muted">throw new Error(...)</text>
+            </g>
+
+            <path class="arrow" d="M340,95 L540,95" marker-end="url(#arr-eb)" />
+
+            <g class="warn" transform="translate(540,60)">
+              <rect width="280" height="70" rx="10"></rect>
+              <text x="12" y="26">BŁĄD propaguje w górę</text>
+              <text x="12" y="46" class="muted">szuka najbliższego ErrorBoundary</text>
+            </g>
+
+            <path class="arrow" d="M820,95 L1040,95" marker-end="url(#arr-eb)" />
+
+            <g class="pill" transform="translate(20,170)">
+              <rect width="500" height="90" rx="10"></rect>
+              <text x="12" y="30">static getDerivedStateFromError(error)</text>
+              <text x="12" y="52" class="muted">ustawia hasError = true (synchronizuje stan)</text>
+            </g>
+
+            <path class="arrow" d="M520,215 L740,215" marker-end="url(#arr-eb)" />
+
+            <g class="ok" transform="translate(740,170)">
+              <rect width="330" height="90" rx="10"></rect>
+              <text x="12" y="30">componentDidCatch(error, info)</text>
+              <text x="12" y="52" class="muted">logowanie/raportowanie błędu</text>
+            </g>
+
+            <g class="node" transform="translate(20,300)">
+              <rect width="1050" height="70" rx="10"></rect>
+              <text x="12" y="28">render() → jeśli hasError: pokaż fallback (np. „Coś poszło nie tak.”)</text>
+              <text x="12" y="48" class="muted">aplikacja działa dalej, błąd izolowany do poddrzewa</text>
+            </g>
+          </g>
+        </svg>
+      </div>
+    </details>
+
+    <p>W tym przykładzie, jeśli dowolny komponent wewnątrz <code>ErrorBoundary</code> wyrzuci błąd, zostanie on przechwycony, a komponent wyświetli komunikat <code>"Coś poszło nie tak."</code> zamiast zawartości.</p>
+
+    <h2>Użycie Error Boundary</h2>
+    <p>Opakuj komponenty, które mogą potencjalnie wywołać błąd, możliwie nisko w drzewie, aby zminimalizować wpływ błędu na resztę aplikacji.</p>
+
+<pre><code class="language-javascript">
 import React from 'react';
 import ErrorBoundary from './ErrorBoundary';
 import FaultyComponent from './FaultyComponent';
 
 function App() {
-    return (
-        &lt;div&gt;
-            &lt;h1&gt;Aplikacja React z Error Boundary&lt;/h1&gt;
-            &lt;ErrorBoundary&gt;
-                &lt;FaultyComponent /&gt;
-            &lt;/ErrorBoundary&gt;
-        &lt;/div&gt;
-    );
+  return (
+    &lt;div&gt;
+      &lt;h1&gt;Aplikacja React z Error Boundary&lt;/h1&gt;
+      &lt;ErrorBoundary&gt;
+        &lt;FaultyComponent /&gt;
+      &lt;/ErrorBoundary&gt;
+    &lt;/div&gt;
+  );
 }
 
 export default App;
-        </code></pre>
+</code></pre>
 
-        <p>W powyższym przykładzie, jeśli <code>FaultyComponent</code> wyrzuci błąd, zostanie on przechwycony przez <code>ErrorBoundary</code>, który wyświetli komunikat o błędzie zamiast przerwać działanie aplikacji.</p>
+    <!-- WIZ 2: wiele boundary -->
+    <details>
+      <summary class="viz-title">🧩 Wizualizacja: Wiele Error Boundaries (izolacja poddrzew)</summary>
+      <div class="viz-wrap">
+        <svg viewBox="0 0 1100 520" class="viz-svg" aria-label="Multiple boundaries tree">
+          <defs>
+            <marker id="arr-eb2" markerWidth="12" markerHeight="12" refX="10" refY="6" orient="auto">
+              <path d="M0,0 L12,6 L0,12 Z" fill="#94a3b8"></path>
+            </marker>
+          </defs>
 
-        <h2>Ograniczenia Error Boundaries</h2>
-        <p>Error Boundaries działają tylko dla błędów, które występują w czasie renderowania, w metodach cyklu życia, i w konstruktorze komponentu. Nie przechwytują błędów występujących w zdarzeniach asynchronicznych, takich jak wywołania <code>setTimeout</code> czy <code>Promise</code>. W takich przypadkach należy stosować odpowiednie obsługi błędów asynchronicznych.</p>
+          <g class="lane" transform="translate(10,10)">
+            <rect width="1080" height="500" rx="12"></rect>
+            <text x="16" y="28" class="lane-title">Struktura: App → Sekcje A/B z osobnymi boundary</text>
 
-        <h2>Przykład komponentu z błędem</h2>
-        <p>Aby zobaczyć Error Boundary w akcji, poniżej znajduje się przykład komponentu, który celowo wyrzuca błąd:</p>
+            <!-- Schemat drzewa -->
+            <g class="node" transform="translate(40,70)">
+              <rect width="220" height="60" rx="10"></rect>
+              <text x="12" y="36">App</text>
+            </g>
 
-        <pre><code class="language-javascript">
+            <path class="arrow" d="M150,130 L150,180" marker-end="url(#arr-eb2)" />
+            <g class="pill" transform="translate(40,180)">
+              <rect width="220" height="60" rx="10"></rect>
+              <text x="12" y="36">Header</text>
+            </g>
+
+            <path class="arrow" d="M150,240 L150,300" marker-end="url(#arr-eb2)" />
+            <g class="ok" transform="translate(40,300)">
+              <rect width="220" height="60" rx="10"></rect>
+              <text x="12" y="36">Footer</text>
+            </g>
+
+            <!-- Kolumna A -->
+            <g class="node" transform="translate(360,70)">
+              <rect width="320" height="60" rx="10"></rect>
+              <text x="12" y="36">ErrorBoundary (Sekcja A)</text>
+            </g>
+            <path class="arrow" d="M520,130 L520,180" marker-end="url(#arr-eb2)" />
+            <g class="pill" transform="translate(360,180)">
+              <rect width="320" height="60" rx="10"></rect>
+              <text x="12" y="36">A: &lt;Chart /&gt;</text>
+            </g>
+            <path class="arrow" d="M520,240 L520,300" marker-end="url(#arr-eb2)" />
+            <g class="warn" transform="translate(360,300)">
+              <rect width="320" height="60" rx="10"></rect>
+              <text x="12" y="30">A: &lt;FaultyWidget /&gt; ❌</text>
+              <text x="12" y="50" class="muted">rzuca błąd</text>
+            </g>
+            <g class="node" transform="translate(360,380)">
+              <rect width="320" height="60" rx="10"></rect>
+              <text x="12" y="36">Fallback A: „Ups, widżet niedostępny”</text>
+            </g>
+
+            <!-- Kolumna B -->
+            <g class="node" transform="translate(740,70)">
+              <rect width="320" height="60" rx="10"></rect>
+              <text x="12" y="36">ErrorBoundary (Sekcja B)</text>
+            </g>
+            <path class="arrow" d="M900,130 L900,180" marker-end="url(#arr-eb2)" />
+            <g class="pill" transform="translate(740,180)">
+              <rect width="320" height="60" rx="10"></rect>
+              <text x="12" y="36">B: &lt;List /&gt; (działa)</text>
+            </g>
+            <path class="arrow" d="M900,240 L900,300" marker-end="url(#arr-eb2)" />
+            <g class="pill" transform="translate(740,300)">
+              <rect width="320" height="60" rx="10"></rect>
+              <text x="12" y="36">B: &lt;Details /&gt; (działa)</text>
+            </g>
+
+            <g transform="translate(40,440)">
+              <foreignObject width="1000" height="50">
+                <div xmlns="http://www.w3.org/1999/xhtml" class="muted">
+                  Błąd w Sekcji A nie wyłącza Sekcji B, Headera ani Footera – każdy obszar z własnym boundary pozostaje niezależny.
+                </div>
+              </foreignObject>
+            </g>
+          </g>
+        </svg>
+      </div>
+    </details>
+
+    <h2>Ograniczenia Error Boundaries</h2>
+    <p>Error Boundaries działają tylko dla błędów, które występują w czasie renderowania, w metodach cyklu życia i w konstruktorze komponentu. Nie przechwytują błędów występujących w zdarzeniach asynchronicznych (np. <code>setTimeout</code>, <code>Promise</code>) ani w handlerach zdarzeń (te należy łapać lokalnie). W takich przypadkach stosuj własne <code>try/catch</code>, <code>.catch()</code> i obsługę odrzuceń.</p>
+
+    <!-- WIZ 3: co boundary łapie, a czego nie -->
+    <details>
+      <summary class="viz-title">🧭 Wizualizacja: Co łapie Error Boundary, a czego nie</summary>
+      <div class="viz-wrap">
+        <svg viewBox="0 0 1100 520" class="viz-svg" aria-label="Boundary limitations">
+          <defs>
+            <marker id="arr-eb3" markerWidth="12" markerHeight="12" refX="10" refY="6" orient="auto">
+              <path d="M0,0 L12,6 L0,12 Z" fill="#94a3b8"></path>
+            </marker>
+          </defs>
+
+          <g class="lane" transform="translate(10,10)">
+            <rect width="1080" height="500" rx="12"></rect>
+            <text x="16" y="28" class="lane-title">Łapane vs nielapane</text>
+
+            <!-- Kolumna: ŁAPANE -->
+            <g class="ok" transform="translate(30,60)">
+              <rect width="500" height="120" rx="10"></rect>
+              <text x="12" y="28">✅ ŁAPANE przez Error Boundary</text>
+              <text x="12" y="52" class="muted">• Błędy podczas renderu</text>
+              <text x="12" y="72" class="muted">• Błędy w lifecycle (componentDidMount/Update)</text>
+              <text x="12" y="92" class="muted">• Błędy w konstruktorze komponentu</text>
+            </g>
+
+            <!-- Kolumna: NIEŁAPANE -->
+            <g class="warn" transform="translate(560,60)">
+              <rect width="500" height="120" rx="10"></rect>
+              <text x="12" y="28">❌ NIE ŁAPANE przez Error Boundary</text>
+              <text x="12" y="52" class="muted">• Błędy w handlerach zdarzeń (onClick, onChange)</text>
+              <text x="12" y="72" class="muted">• Błędy asynchroniczne (setTimeout, Promise)</text>
+              <text x="12" y="92" class="muted">• Błędy poza React (np. w czystym kodzie poza drzewem)</text>
+            </g>
+
+            <g transform="translate(30,220)">
+              <foreignObject width="1030" height="250">
+                <div xmlns="http://www.w3.org/1999/xhtml" class="grid-two">
+                  <table class="db-table">
+                    <caption class="mini">Jak łapać nielapane</caption>
+                    <thead><tr><th>Sytuacja</th><th>Strategia</th></tr></thead>
+                    <tbody>
+                      <tr>
+                        <td>Handler zdarzenia</td>
+                        <td><code>try { ... } catch(e) { setError(e) }</code> i lokalny fallback UI</td>
+                      </tr>
+                      <tr>
+                        <td>Promise / fetch</td>
+                        <td><code>fetch(...).catch(e =&gt; setError(e))</code> lub <code>await</code> w <code>try/catch</code></td>
+                      </tr>
+                      <tr>
+                        <td>Globalne nieobsłużone</td>
+                        <td><code>window.addEventListener('unhandledrejection', ...)</code> + raportowanie</td>
+                      </tr>
+                    </tbody>
+                  </table>
+                  <table class="db-table">
+                    <caption class="mini">Dobre praktyki</caption>
+                    <thead><tr><th>Wskazówka</th><th>Dlaczego</th></tr></thead>
+                    <tbody>
+                      <tr><td>Boundary blisko ryzyka</td><td>Izoluje tylko wadliwy fragment UI</td></tr>
+                      <tr><td>Fallback przyjazny</td><td>Krótki opis i opcja „spróbuj ponownie”</td></tr>
+                      <tr><td>Loguj błędy</td><td>Łatwiejsze debugowanie (Sentry, LogRocket…)</td></tr>
+                    </tbody>
+                  </table>
+                </div>
+              </foreignObject>
+            </g>
+          </g>
+        </svg>
+      </div>
+    </details>
+
+    <h2>Przykład komponentu z błędem</h2>
+    <p>Aby zobaczyć Error Boundary w akcji, poniżej znajduje się przykład komponentu, który celowo wyrzuca błąd:</p>
+
+<pre><code class="language-javascript">
 // FaultyComponent.js
 import React from 'react';
 
 function FaultyComponent() {
-    throw new Error("Ups! Wystąpił błąd.");
+  throw new Error("Ups! Wystąpił błąd.");
 }
 
 export default FaultyComponent;
-        </code></pre>
+</code></pre>
 
-        <p>Gdy <code>FaultyComponent</code> zostanie załadowany w <code>ErrorBoundary</code>, komunikat błędu zostanie wyświetlony bez przerywania działania reszty aplikacji.</p>
+    <p>Gdy <code>FaultyComponent</code> zostanie załadowany w <code>ErrorBoundary</code>, komunikat błędu zostanie wyświetlony bez przerywania działania reszty aplikacji.</p>
+  </div>
 
-    </div>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/prism.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/components/prism-javascript.min.js"></script>
 
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/prism.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/components/prism-javascript.min.js"></script>
+  <!-- STYLE: responsywne wizualizacje i pełna szerokość -->
+  <style>
+    /* bloki wizualizacji */
+    details, .viz-wrap { width:100%; max-width:none !important; }
+    .viz-title{cursor:pointer;font-weight:600}
+    .viz-wrap{padding:.5rem .25rem}
+
+    /* SVG pełna szerokość */
+    .viz-svg{display:block;width:100% !important;max-width:100% !important;height:auto !important;background:#0e1729;border-radius:12px}
+
+    /* schemat kolorów */
+    .lane rect{fill:#0f172a;stroke:#1f2937}
+    .lane-title{fill:#cbd5e1;font-weight:600}
+    .node rect{fill:#111827;stroke:#334155}
+    .pill rect{fill:#0b3b2e;stroke:#14532d}
+    .ok rect{fill:#0b2a3b;stroke:#0e7490}
+    .warn rect{fill:#3b0b0b;stroke:#7f1d1d}
+    .node text,.pill text,.ok text,.warn text{fill:#e2e8f0;font-size:14px}
+    .muted{fill:#94a3b8;font-size:12px}
+    .arrow{stroke:#94a3b8;stroke-width:2;fill:none}
+
+    /* tabele i layout */
+    .grid-two{display:grid;grid-template-columns:1fr 1fr;gap:.75rem}
+    @media (max-width: 900px){.grid-two{grid-template-columns:1fr}}
+    .db-table{width:100% !important;max-width:100% !important;border-collapse:collapse;margin:.5rem 0;table-layout:fixed}
+    .db-table th,.db-table td{border:1px solid #aeaeae;padding:.5rem .65rem;text-align:left;vertical-align:top;word-break:break-word}
+    .db-table th{background:#0e1729;color:#dbe2ea}
+    .mini{color:#a7b0be;font-size:.95rem}
+
+    /* kod – pełna szerokość + scroll poziomy, gdy trzeba */
+    pre[class*="language-"]{width:100% !important;max-width:none !important;box-sizing:border-box;overflow-x:auto;white-space:pre}
+    code[class*="language-"]{white-space:pre}
+  </style>
 </body>
 </html>

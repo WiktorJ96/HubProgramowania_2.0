@@ -27,6 +27,73 @@ const MyComponent = React.memo(function MyComponent({ value }) {
 export default MyComponent;
         </code></pre>
 
+        <details open>
+          <summary class="viz-title">⚡ Wizualizacja: jak <strong>React.memo</strong> ogranicza render</summary>
+          <div class="viz-wrap">
+            <svg viewBox="0 0 1000 420" class="viz-svg" aria-label="React.memo">
+              <defs>
+                <marker id="arr-memo" markerWidth="12" markerHeight="12" refX="10" refY="6" orient="auto">
+                  <path d="M0,0 L12,6 L0,12 Z" fill="#94a3b8"></path>
+                </marker>
+              </defs>
+              <g class="lane" transform="translate(10,10)">
+                <rect width="980" height="400" rx="12"></rect>
+                <text x="16" y="28" class="lane-title">Porównanie props (płytkie) → decyzja o renderze</text>
+
+                <g class="node" transform="translate(20,60)">
+                  <rect width="300" height="60" rx="10"></rect>
+                  <text x="12" y="24">Rodzic renderuje</text>
+                </g>
+
+                <path class="arrow" d="M320,90 L470,90" marker-end="url(#arr-memo)"/>
+
+                <g class="pill" transform="translate(470,60)">
+                  <rect width="220" height="60" rx="10"></rect>
+                  <text x="12" y="24">React.memo(Child)</text>
+                </g>
+
+                <path class="arrow" d="M690,90 L920,90" marker-end="url(#arr-memo)"/>
+
+                <g class="ok" transform="translate(700,50)">
+                  <rect width="260" height="60" rx="10"></rect>
+                  <text x="12" y="24">props bez zmian → POMIŃ render</text>
+                </g>
+
+                <g class="warn" transform="translate(700,150)">
+                  <rect width="260" height="60" rx="10"></rect>
+                  <text x="12" y="24">props się zmieniły → render</text>
+                </g>
+
+                <g transform="translate(20,240)">
+                  <foreignObject width="940" height="140">
+                    <div xmlns="http://www.w3.org/1999/xhtml">
+                      <div class="grid-two">
+                        <table class="db-table">
+                          <caption class="mini">Przykład A — prymitywy</caption>
+                          <thead><tr><th>props</th><th>porównanie</th><th>render?</th></tr></thead>
+                          <tbody>
+                            <tr><td>{ value: 5 } → { value: 5 }</td><td>5 === 5</td><td>NIE</td></tr>
+                            <tr><td>{ value: 5 } → { value: 6 }</td><td>5 !== 6</td><td>TAK</td></tr>
+                          </tbody>
+                        </table>
+                        <table class="db-table">
+                          <caption class="mini">Przykład B — obiekty</caption>
+                          <thead><tr><th>props</th><th>porównanie</th><th>render?</th></tr></thead>
+                          <tbody>
+                            <tr><td>{ obj: A } → { obj: A }</td><td>A === A</td><td>NIE</td></tr>
+                            <tr><td>{ obj: A } → { obj: B }</td><td>A !== B</td><td>TAK</td></tr>
+                          </tbody>
+                        </table>
+                      </div>
+                      <p class="small">Uwaga: zmieniaj referencje stabilnie (np. przez <code>useMemo</code>/<code>useCallback</code>), jeśli przekazujesz obiekty/funkcje.</p>
+                    </div>
+                  </foreignObject>
+                </g>
+              </g>
+            </svg>
+          </div>
+        </details>
+
         <p>W tym przykładzie <code>MyComponent</code> nie będzie renderowany ponownie, jeśli wartość <code>value</code> nie zmieni się, co poprawia wydajność.</p>
 
         <h2>Lazy Loading (ładowanie na żądanie)</h2>
@@ -50,6 +117,74 @@ function App() {
 export default App;
         </code></pre>
 
+        <details>
+          <summary class="viz-title">🧩 Wizualizacja: Lazy + Suspense</summary>
+          <div class="viz-wrap">
+            <svg viewBox="0 0 1000 440" class="viz-svg" aria-label="Lazy loading i Suspense">
+              <defs>
+                <marker id="arr-lazy" markerWidth="12" markerHeight="12" refX="10" refY="6" orient="auto">
+                  <path d="M0,0 L12,6 L0,12 Z" fill="#94a3b8"></path>
+                </marker>
+              </defs>
+
+              <g class="lane" transform="translate(10,10)">
+                <rect width="980" height="420" rx="12"></rect>
+                <text x="16" y="28" class="lane-title">Przepływ: żądanie komponentu → fallback → załadowany chunk</text>
+
+                <g class="node" transform="translate(20,60)">
+                  <rect width="260" height="60" rx="10"></rect>
+                  <text x="12" y="24">render &lt;LazyComponent/&gt;</text>
+                </g>
+
+                <path class="arrow" d="M280,90 L460,90" marker-end="url(#arr-lazy)"/>
+
+                <g class="pill" transform="translate(460,60)">
+                  <rect width="240" height="60" rx="10"></rect>
+                  <text x="12" y="24">żądanie chunku (dynamic import)</text>
+                </g>
+
+                <path class="arrow" d="M700,90 L920,90" marker-end="url(#arr-lazy)"/>
+
+                <g class="ok" transform="translate(700,50)">
+                  <rect width="260" height="60" rx="10"></rect>
+                  <text x="12" y="24">Suspense: pokaż fallback</text>
+                </g>
+
+                <g class="node" transform="translate(20,160)">
+                  <rect width="940" height="90" rx="10"></rect>
+                  <text x="12" y="32">Po pobraniu chunku</text>
+                  <text x="12" y="58" class="muted">fallback znika → render właściwego komponentu</text>
+                </g>
+
+                <g transform="translate(20,270)">
+                  <foreignObject width="940" height="130">
+                    <div xmlns="http://www.w3.org/1999/xhtml">
+                      <div class="grid-two">
+                        <table class="db-table">
+                          <caption class="mini">Zalety</caption>
+                          <thead><tr><th>Punkt</th><th>Dlaczego</th></tr></thead>
+                          <tbody>
+                            <tr><td>Krótszy TTI</td><td>mniejszy bundle początkowy</td></tr>
+                            <tr><td>Lepsze LCP</td><td>ładowanie tylko potrzebnych widoków</td></tr>
+                          </tbody>
+                        </table>
+                        <table class="db-table">
+                          <caption class="mini">Wskazówki</caption>
+                          <thead><tr><th>Tip</th><th>Opis</th></tr></thead>
+                          <tbody>
+                            <tr><td>Fallback</td><td>lekki (tekst/szkielet), bez ciężkich efektów</td></tr>
+                            <tr><td>Granulacja</td><td>dziel wg. tras/podscreensów</td></tr>
+                          </tbody>
+                        </table>
+                      </div>
+                    </div>
+                  </foreignObject>
+                </g>
+              </g>
+            </svg>
+          </div>
+        </details>
+
         <p>W powyższym przykładzie <code>LazyComponent</code> jest ładowany tylko wtedy, gdy jest potrzebny, a w trakcie ładowania wyświetlana jest zawartość <code>fallback</code>.</p>
 
         <h2>Code Splitting</h2>
@@ -72,6 +207,51 @@ function App() {
 
 export default App;
         </code></pre>
+
+        <details>
+          <summary class="viz-title">📦 Wizualizacja: bundle → chanki</summary>
+          <div class="viz-wrap">
+            <svg viewBox="0 0 1000 380" class="viz-svg" aria-label="Code splitting">
+              <g class="lane" transform="translate(10,10)">
+                <rect width="980" height="360" rx="12"></rect>
+                <text x="16" y="28" class="lane-title">Zamiast jednego wielkiego bundle, kilka mniejszych</text>
+
+                <g class="node" transform="translate(20,60)">
+                  <rect width="300" height="80" rx="10"></rect>
+                  <text x="12" y="26">main.bundle.js</text>
+                  <text x="12" y="48" class="muted">rdzeń aplikacji</text>
+                </g>
+
+                <g class="ok" transform="translate(360,60)">
+                  <rect width="280" height="80" rx="10"></rect>
+                  <text x="12" y="26">chunk-home.js</text>
+                  <text x="12" y="48" class="muted">/home</text>
+                </g>
+
+                <g class="ok" transform="translate(660,60)">
+                  <rect width="280" height="80" rx="10"></rect>
+                  <text x="12" y="26">chunk-admin.js</text>
+                  <text x="12" y="48" class="muted">/admin</text>
+                </g>
+
+                <g transform="translate(20,170)">
+                  <foreignObject width="940" height="160">
+                    <div xmlns="http://www.w3.org/1999/xhtml">
+                      <table class="db-table">
+                        <thead><tr><th>Strategia</th><th>Co dzielić?</th><th>Efekt</th></tr></thead>
+                        <tbody>
+                          <tr><td>Per-route</td><td>ekrany routingu</td><td>szybszy start</td></tr>
+                          <tr><td>Per-feature</td><td>duże moduły (edytor, raporty)</td><td>mniejszy narzut przy pierwszym użyciu</td></tr>
+                          <tr><td>Per-vendor</td><td>ciężkie biblioteki</td><td>lepsze cache przeglądarki</td></tr>
+                        </tbody>
+                      </table>
+                    </div>
+                  </foreignObject>
+                </g>
+              </g>
+            </svg>
+          </div>
+        </details>
 
         <p>W tym przykładzie <code>LargeComponent</code> jest ładowany oddzielnie od reszty aplikacji, co zmniejsza początkowy czas ładowania.</p>
 
@@ -100,11 +280,118 @@ function ExampleComponent({ propValue }) {
 export default React.memo(ExampleComponent);
         </code></pre>
 
+        <details>
+          <summary class="viz-title">🧠 Wizualizacja: zależności efektu i memo</summary>
+          <div class="viz-wrap">
+            <svg viewBox="0 0 1000 460" class="viz-svg" aria-label="Unikanie rerenderów">
+              <defs>
+                <marker id="arr-eff" markerWidth="12" markerHeight="12" refX="10" refY="6" orient="auto">
+                  <path d="M0,0 L12,6 L0,12 Z" fill="#94a3b8"></path>
+                </marker>
+              </defs>
+
+              <g class="lane" transform="translate(10,10)">
+                <rect width="980" height="440" rx="12"></rect>
+                <text x="16" y="28" class="lane-title">Co wywołuje render i efekt?</text>
+
+                <g class="node" transform="translate(20,60)">
+                  <rect width="280" height="60" rx="10"></rect>
+                  <text x="12" y="24">Zmiana props</text>
+                </g>
+                <g class="node" transform="translate(20,140)">
+                  <rect width="280" height="60" rx="10"></rect>
+                  <text x="12" y="24">setState()</text>
+                </g>
+
+                <path class="arrow" d="M300,90 L470,90" marker-end="url(#arr-eff)"/>
+                <path class="arrow" d="M300,170 L470,170" marker-end="url(#arr-eff)"/>
+
+                <g class="pill" transform="translate(470,60)">
+                  <rect width="220" height="140" rx="10"></rect>
+                  <text x="12" y="26">Render komponentu</text>
+                  <text x="12" y="52" class="muted">porównanie props (React.memo)</text>
+                </g>
+
+                <path class="arrow" d="M690,130 L920,130" marker-end="url(#arr-eff)"/>
+
+                <g class="ok" transform="translate(700,90)">
+                  <rect width="260" height="80" rx="10"></rect>
+                  <text x="12" y="28">useEffect([...deps])</text>
+                  <text x="12" y="52" class="muted">uruchamia się, gdy deps się zmienią</text>
+                </g>
+
+                <g transform="translate(20,250)">
+                  <foreignObject width="940" height="170">
+                    <div xmlns="http://www.w3.org/1999/xhtml">
+                      <div class="grid-two">
+                        <table class="db-table">
+                          <caption class="mini">Dobre praktyki</caption>
+                          <thead><tr><th>Technika</th><th>Dlaczego pomaga</th></tr></thead>
+                          <tbody>
+                            <tr><td>React.memo</td><td>Pomija render przy identycznych props</td></tr>
+                            <tr><td>Stabilne referencje</td><td><code>useCallback</code>/<code>useMemo</code> dla funkcji/obiektów</td></tr>
+                            <tr><td>Czyste dependencje</td><td>W <code>useEffect</code> tylko faktyczne zależności</td></tr>
+                          </tbody>
+                        </table>
+                        <table class="db-table">
+                          <caption class="mini">Typowe pułapki</caption>
+                          <thead><tr><th>Antywzorzec</th><th>Skutek</th></tr></thead>
+                          <tbody>
+                            <tr><td>Tworzenie funkcji inline</td><td>Zmiana referencji → rerender dziecka</td></tr>
+                            <tr><td>Mutowanie obiektów</td><td>Brak zmiany referencji → brak efektu/porównania</td></tr>
+                            <tr><td>Złe depsy</td><td>Efekt odpala się „co render” albo nigdy</td></tr>
+                          </tbody>
+                        </table>
+                      </div>
+                    </div>
+                  </foreignObject>
+                </g>
+              </g>
+            </svg>
+          </div>
+        </details>
+
         <p>W powyższym przykładzie <code>useEffect</code> uruchomi się tylko wtedy, gdy <code>propValue</code> się zmieni, a komponent <code>ExampleComponent</code> nie zostanie ponownie renderowany, jeśli jego <code>props</code> pozostaną bez zmian dzięki <code>React.memo</code>.</p>
 
     </div>
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/prism.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/components/prism-javascript.min.js"></script>
+
+    <!-- Izolowany CSS dla wizualizacji (pełna szerokość + responsywność) -->
+    <style>
+      /* Sekcje wizualizacji */
+      details, .viz-wrap { width:100%; max-width:none !important; }
+      .viz-title{cursor:pointer;font-weight:600}
+      .viz-wrap{padding:.5rem .25rem}
+
+      /* Responsywne SVG */
+      .viz-svg{display:block;width:100% !important;max-width:100% !important;height:auto !important;background:#0e1729;border-radius:12px}
+
+      /* Bloki / kolory */
+      .lane rect{fill:#0f172a;stroke:#1f2937}
+      .lane-title{fill:#cbd5e1;font-weight:600}
+      .node rect{fill:#111827;stroke:#334155}
+      .pill rect{fill:#0b3b2e;stroke:#14532d}
+      .ok rect{fill:#0b2a3b;stroke:#0e7490}
+      .warn rect{fill:#3b0b0b;stroke:#7f1d1d}
+      .node text,.pill text,.ok text,.warn text{fill:#e2e8f0;font-size:14px}
+      .muted{fill:#94a3b8;font-size:12px}
+      .arrow{stroke:#94a3b8;stroke-width:2;fill:none}
+
+      /* Tabele i layout */
+      .db-table{width:100% !important;max-width:100% !important;border-collapse:collapse;margin:.5rem 0;table-layout:fixed}
+      .db-table th,.db-table td{border:1px solid #aeaeae;padding:.5rem .65rem;text-align:left;vertical-align:top;word-break:break-word}
+      .db-table th{background:#0e1729;color:#dbe2ea}
+      .mini{color:#a7b0be;font-size:.95rem}
+
+      /* Kod – pełna szerokość + poziomy scroll w razie potrzeby */
+      pre[class*="language-"]{width:100% !important;max-width:none !important;box-sizing:border-box;overflow-x:auto;white-space:pre}
+      code[class*="language-"]{white-space:pre}
+
+      /* Siatka */
+      .grid-two{display:grid;grid-template-columns:1fr 1fr;gap:.75rem}
+      @media (max-width: 900px){.grid-two{grid-template-columns:1fr}}
+    </style>
 </body>
 </html>

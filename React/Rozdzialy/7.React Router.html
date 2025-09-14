@@ -20,6 +20,46 @@
 npm install react-router-dom
         </code></pre>
 
+        <details>
+          <summary class="viz-title">📦 Wizualizacja: instalacja i zależności</summary>
+          <div class="viz-wrap">
+            <svg viewBox="0 0 1000 260" class="viz-svg" aria-label="Instalacja react-router-dom">
+              <defs>
+                <marker id="rr-arr-install" markerWidth="12" markerHeight="12" refX="10" refY="6" orient="auto">
+                  <path d="M0,0 L12,6 L0,12 Z" fill="#94a3b8"></path>
+                </marker>
+              </defs>
+              <g class="lane" transform="translate(10,10)">
+                <rect width="980" height="240" rx="12"></rect>
+                <text x="16" y="28" class="lane-title">npm install react-router-dom</text>
+
+                <g class="node" transform="translate(20,60)">
+                  <rect width="280" height="70" rx="10"></rect>
+                  <text x="12" y="26">Twoja aplikacja</text>
+                  <text x="12" y="48" class="muted">src/App.jsx</text>
+                </g>
+                <path class="arrow" d="M300,95 L470,95" marker-end="url(#rr-arr-install)"/>
+                <g class="pill" transform="translate(470,60)">
+                  <rect width="240" height="70" rx="10"></rect>
+                  <text x="12" y="26">react-router-dom</text>
+                  <text x="12" y="48" class="muted">API przeglądarkowe</text>
+                </g>
+                <path class="arrow" d="M710,95 L910,95" marker-end="url(#rr-arr-install)"/>
+                <g class="ok" transform="translate(730,60)">
+                  <rect width="240" height="70" rx="10"></rect>
+                  <text x="12" y="26">History API</text>
+                  <text x="12" y="48" class="muted">pushState/replaceState</text>
+                </g>
+
+                <g class="warn" transform="translate(20,150)">
+                  <rect width="940" height="60" rx="10"></rect>
+                  <text x="12" y="24">Po instalacji importujesz tylko potrzebne elementy: <tspan class="muted">{ BrowserRouter, Routes, Route, Link, Navigate }</tspan></text>
+                </g>
+              </g>
+            </svg>
+          </div>
+        </details>
+
         <h2>Podstawowa Konfiguracja</h2>
         <p>Podstawowe elementy React Router to <code>BrowserRouter</code>, <code>Routes</code>, i <code>Route</code>. <code>BrowserRouter</code> jest kontenerem dla całej aplikacji, a <code>Routes</code> zawiera poszczególne <code>Route</code>, które określają, jakie komponenty mają być renderowane dla określonych ścieżek.</p>
 
@@ -45,6 +85,78 @@ function App() {
 export default App;
         </code></pre>
 
+        <details open>
+          <summary class="viz-title">🗺️ Wizualizacja: dopasowanie ścieżki → komponent</summary>
+          <div class="viz-wrap">
+            <svg viewBox="0 0 1000 460" class="viz-svg" aria-label="Mapowanie ścieżek do komponentów">
+              <defs>
+                <marker id="rr-arr-map" markerWidth="12" markerHeight="12" refX="10" refY="6" orient="auto">
+                  <path d="M0,0 L12,6 L0,12 Z" fill="#94a3b8"></path>
+                </marker>
+              </defs>
+
+              <g class="lane" transform="translate(10,10)">
+                <rect width="980" height="440" rx="12"></rect>
+                <text x="16" y="28" class="lane-title">Router sprawdza URL i renderuje właściwy element</text>
+
+                <!-- URL box -->
+                <g class="node" transform="translate(20,60)">
+                  <rect width="360" height="70" rx="10"></rect>
+                  <text x="12" y="26">Aktualny URL</text>
+                  <text x="12" y="48" class="muted">np. /about</text>
+                </g>
+
+                <!-- Routes box -->
+                <g class="pill" transform="translate(420,60)">
+                  <rect width="540" height="150" rx="10"></rect>
+                  <text x="12" y="30">&lt;Routes&gt;</text>
+                  <text x="12" y="54" class="muted">Reguły dopasowania</text>
+
+                  <g transform="translate(12,72)">
+                    <rect width="516" height="30" rx="6" fill="#111827" stroke="#334155"></rect>
+                    <text x="12" y="20" fill="#e2e8f0">/ → &lt;Home /&gt;</text>
+                  </g>
+                  <g transform="translate(12,108)">
+                    <rect width="516" height="30" rx="6" fill="#111827" stroke="#334155"></rect>
+                    <text x="12" y="20" fill="#e2e8f0">/about → &lt;About /&gt;</text>
+                  </g>
+                  <g transform="translate(12,144)">
+                    <rect width="516" height="30" rx="6" fill="#111827" stroke="#334155"></rect>
+                    <text x="12" y="20" fill="#e2e8f0">/contact → &lt;Contact /&gt;</text>
+                  </g>
+                </g>
+
+                <path class="arrow" d="M380,95 L420,95" marker-end="url(#rr-arr-map)"/>
+                <path class="arrow" d="M690,210 L690,290" marker-end="url(#rr-arr-map)"/>
+
+                <!-- Rendered component -->
+                <g class="ok" transform="translate(540,290)">
+                  <rect width="300" height="70" rx="10"></rect>
+                  <text x="12" y="26">Render: &lt;About /&gt;</text>
+                  <text x="12" y="48" class="muted">bo URL = /about</text>
+                </g>
+
+                <!-- Table -->
+                <g transform="translate(20,290)">
+                  <foreignObject width="480" height="140">
+                    <div xmlns="http://www.w3.org/1999/xhtml">
+                      <table class="db-table">
+                        <caption class="mini">Przykładowe URL → wynik</caption>
+                        <thead><tr><th>URL</th><th>Wynik</th></tr></thead>
+                        <tbody>
+                          <tr><td>/</td><td>Home</td></tr>
+                          <tr><td>/about</td><td>About</td></tr>
+                          <tr><td>/contact</td><td>Contact</td></tr>
+                        </tbody>
+                      </table>
+                    </div>
+                  </foreignObject>
+                </g>
+              </g>
+            </svg>
+          </div>
+        </details>
+
         <p>W powyższym przykładzie każda ścieżka (<code>path</code>) renderuje inny komponent. <code>"/"</code> wyświetla komponent <code>Home</code>, <code>"/about"</code> wyświetla <code>About</code>, a <code>"/contact"</code> wyświetla <code>Contact</code>.</p>
 
         <h2>Nawigacja</h2>
@@ -69,6 +181,62 @@ function Navbar() {
 export default Navbar;
         </code></pre>
 
+        <details>
+          <summary class="viz-title">🔗 Wizualizacja: <code>Link</code> → zmiana URL bez przeładowania</summary>
+          <div class="viz-wrap">
+            <svg viewBox="0 0 1000 420" class="viz-svg" aria-label="Link i płynna nawigacja">
+              <defs>
+                <marker id="rr-arr-link" markerWidth="12" markerHeight="12" refX="10" refY="6" orient="auto">
+                  <path d="M0,0 L12,6 L0,12 Z" fill="#94a3b8"></path>
+                </marker>
+              </defs>
+
+              <g class="lane" transform="translate(10,10)">
+                <rect width="980" height="400" rx="12"></rect>
+                <text x="16" y="28" class="lane-title">Klik w &lt;Link to="/about"&gt; → pushState → Router renderuje &lt;About /&gt;</text>
+
+                <g class="node" transform="translate(20,60)">
+                  <rect width="260" height="60" rx="10"></rect>
+                  <text x="12" y="24">Użytkownik klika Link</text>
+                </g>
+                <path class="arrow" d="M280,90 L460,90" marker-end="url(#rr-arr-link)"/>
+
+                <g class="pill" transform="translate(460,60)">
+                  <rect width="260" height="60" rx="10"></rect>
+                  <text x="12" y="24">History.pushState('/about')</text>
+                </g>
+                <path class="arrow" d="M720,90 L900,90" marker-end="url(#rr-arr-link)"/>
+
+                <g class="ok" transform="translate(720,150)">
+                  <rect width="240" height="60" rx="10"></rect>
+                  <text x="12" y="24">Routes match → About</text>
+                </g>
+
+                <g class="warn" transform="translate(20,150)">
+                  <rect width="660" height="60" rx="10"></rect>
+                  <text x="12" y="24">Brak przeładowania strony</text>
+                  <text x="12" y="44" class="muted">Single Page Application (SPA)</text>
+                </g>
+
+                <g transform="translate(20,230)">
+                  <foreignObject width="940" height="150">
+                    <div xmlns="http://www.w3.org/1999/xhtml">
+                      <table class="db-table">
+                        <caption class="mini">Link vs &lt;a&gt;</caption>
+                        <thead><tr><th>Element</th><th>Zachowanie</th><th>Użycie</th></tr></thead>
+                        <tbody>
+                          <tr><td>&lt;Link to="/about"&gt;</td><td>pushState, bez przeładowania</td><td>Nawigacja wewnątrz SPA</td></tr>
+                          <tr><td>&lt;a href="/about"&gt;</td><td>pełne przejście/odświeżenie</td><td>Link do zewnętrznej strony/SSR</td></tr>
+                        </tbody>
+                      </table>
+                    </div>
+                  </foreignObject>
+                </g>
+              </g>
+            </svg>
+          </div>
+        </details>
+
         <p>Komponent <code>Link</code> zmienia adres URL i renderuje odpowiedni komponent, bez odświeżania całej strony.</p>
 
         <h2>Komponent <code>Navigate</code></h2>
@@ -83,11 +251,95 @@ function RedirectToHome() {
 }
         </code></pre>
 
-        <p>W tym przykładzie komponent <code>RedirectToHome</code> automatycznie przekieruje użytkownika na stronę główną (<code>"/"</code>).</p>
+        <details>
+          <summary class="viz-title">➡️ Wizualizacja: <code>Navigate</code> – przekierowanie programistyczne</summary>
+          <div class="viz-wrap">
+            <svg viewBox="0 0 1000 380" class="viz-svg" aria-label="Navigate redirect">
+              <defs>
+                <marker id="rr-arr-nav" markerWidth="12" markerHeight="12" refX="10" refY="6" orient="auto">
+                  <path d="M0,0 L12,6 L0,12 Z" fill="#94a3b8"></path>
+                </marker>
+              </defs>
+
+              <g class="lane" transform="translate(10,10)">
+                <rect width="980" height="360" rx="12"></rect>
+                <text x="16" y="28" class="lane-title">&lt;Navigate to="/" /&gt; → replaceState → render Home</text>
+
+                <g class="node" transform="translate(20,60)">
+                  <rect width="380" height="60" rx="10"></rect>
+                  <text x="12" y="24">Komponent zwraca &lt;Navigate to="/" /&gt;</text>
+                </g>
+                <path class="arrow" d="M400,90 L600,90" marker-end="url(#rr-arr-nav)"/>
+
+                <g class="pill" transform="translate(600,60)">
+                  <rect width="300" height="60" rx="10"></rect>
+                  <text x="12" y="24">History.replaceState('/', ...)</text>
+                </g>
+
+                <g class="ok" transform="translate(20,150)">
+                  <rect width="940" height="60" rx="10"></rect>
+                  <text x="12" y="24">Router dopasowuje „/” → render &lt;Home /&gt;</text>
+                </g>
+
+                <g transform="translate(20,230)">
+                  <foreignObject width="940" height="110">
+                    <div xmlns="http://www.w3.org/1999/xhtml">
+                      <table class="db-table">
+                        <caption class="mini">Navigate – kiedy?</caption>
+                        <thead><tr><th>Przypadek</th><th>Opis</th></tr></thead>
+                        <tbody>
+                          <tr><td>Po akcji</td><td>np. po udanym logowaniu przenieś na „/dashboard”</td></tr>
+                          <tr><td>Ochrona tras</td><td>brak uprawnień → przekieruj na „/login”</td></tr>
+                        </tbody>
+                      </table>
+                    </div>
+                  </foreignObject>
+                </g>
+              </g>
+            </svg>
+          </div>
+        </details>
         
     </div>
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/prism.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/components/prism-javascript.min.js"></script>
+
+    <!-- Izolowany CSS dla wizualizacji: pełna szerokość + responsywność -->
+    <style>
+      /* Pełna szerokość dla sekcji wizualizacji */
+      details, .viz-wrap { width:100%; max-width:none !important; }
+      .viz-title{cursor:pointer;font-weight:600}
+      .viz-wrap{padding:.5rem .25rem}
+
+      /* Responsywne SVG */
+      .viz-svg{display:block;width:100% !important;max-width:100% !important;height:auto !important;background:#0e1729;border-radius:12px}
+
+      /* Layout i tabele */
+      .grid-two{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:.75rem;width:100%;max-width:none}
+      .grid-two>*{min-width:0}
+      @media (max-width: 900px){.grid-two{grid-template-columns:1fr}}
+      .db-table{width:100% !important;max-width:100% !important;border-collapse:collapse;margin:.5rem 0;table-layout:fixed}
+      .db-table th,.db-table td{border:1px solid #aeaeae;padding:.5rem .65rem;text-align:left;vertical-align:top;word-break:break-word}
+      .db-table th{background:#0e1729;color:#dbe2ea}
+      .mini{color:#a7b0be;font-size:.95rem}
+
+      /* Bloki / kolory */
+      .lane rect{fill:#0f172a;stroke:#1f2937}
+      .lane-title{fill:#cbd5e1;font-weight:600}
+      .node rect{fill:#111827;stroke:#334155}
+      .pill rect{fill:#0b3b2e;stroke:#14532d}
+      .ok rect{fill:#0b2a3b;stroke:#0e7490}
+      .warn rect{fill:#3b0b0b;stroke:#7f1d1d}
+      .node text,.pill text,.ok text,.warn text{fill:#e2e8f0;font-size:14px}
+      .muted{fill:#94a3b8;font-size:12px}
+
+      /* Strzałki */
+      .arrow{stroke:#94a3b8;stroke-width:2;fill:none}
+
+      /* Kod – pełna szerokość + przewijanie poziome w razie potrzeby */
+      pre[class*="language-"]{width:100% !important;max-width:none !important;box-sizing:border-box;overflow-x:auto;white-space:pre}
+      code[class*="language-"]{white-space:pre}
+    </style>
 </body>
 </html>
